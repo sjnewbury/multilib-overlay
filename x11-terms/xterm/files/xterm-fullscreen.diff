@@ -1,0 +1,397 @@
+diff -ru xterm-235/charproc.c xterm.patched/charproc.c
+--- xterm-235/charproc.c	2008-04-20 17:08:42.000000000 -0500
++++ xterm.patched/charproc.c	2008-05-19 08:36:09.000000000 -0500
+@@ -204,6 +204,7 @@
+ 
+ static char defaultTranslations[] =
+ "\
++          Alt <Key>Return: fullscreen()\n\
+           Shift <KeyPress> Prior:scroll-back(1,halfpage) \n\
+            Shift <KeyPress> Next:scroll-forw(1,halfpage) \n\
+          Shift <KeyPress> Select:select-cursor-start() select-cursor-end(SELECT, CUT_BUFFER0) \n\
+@@ -253,6 +254,7 @@
+ ";				/* PROCURA added "Meta <Btn2Down>:clear-saved-lines()" */
+ /* *INDENT-OFF* */
+ static XtActionsRec actionsList[] = {
++    { "fullscreen",		HandleFullscreen },
+     { "allow-send-events",	HandleAllowSends },
+     { "bell",			HandleBell },
+     { "clear-saved-lines",	HandleClearSavedLines },
+@@ -6188,6 +6190,11 @@
+ 
+     xw->hints.x = xpos;
+     xw->hints.y = ypos;
++    /* assure single-increment resize for fullscreen */
++    if (term->screen.fullscreen) {
++        xw->hints.width_inc = 1;
++        xw->hints.height_inc = 1;
++    }
+     if ((XValue & pr) || (YValue & pr)) {
+ 	xw->hints.flags |= USSize | USPosition;
+ 	xw->hints.flags |= PWinGravity;
+diff -ru xterm-235/menu.c xterm.patched/menu.c
+--- xterm-235/menu.c	2008-01-20 09:16:43.000000000 -0600
++++ xterm.patched/menu.c	2008-05-19 09:01:43.000000000 -0500
+@@ -151,6 +151,7 @@
+ static void do_titeInhibit     PROTO_XT_CALLBACK_ARGS;
+ static void do_visualbell      PROTO_XT_CALLBACK_ARGS;
+ static void do_vtfont          PROTO_XT_CALLBACK_ARGS;
++static void do_fullscreen      PROTO_XT_CALLBACK_ARGS;
+ 
+ #ifdef ALLOWLOGGING
+ static void do_logging         PROTO_XT_CALLBACK_ARGS;
+@@ -242,6 +243,7 @@
+ #if OPT_TOOLBAR
+     { "toolbar",	do_toolbar,	NULL },
+ #endif
++    { "fullscreen",	do_fullscreen,	NULL },
+     { "securekbd",	do_securekbd,	NULL },
+     { "allowsends",	do_allowsends,	NULL },
+     { "redraw",		do_redraw,	NULL },
+@@ -589,6 +591,7 @@
+     switch (me) {
+     case mainMenu:
+ 	if (created) {
++        update_fullscreen();
+ 	    update_toolbar();
+ 	    update_securekbd();
+ 	    update_allowsends();
+@@ -796,6 +799,219 @@
+  * action routines
+  */
+ 
++/********************************************************************/
++/* BEGIN: Simmons Fullscreen Hack                                   */
++/********************************************************************/
++
++#include <X11/Xatom.h>
++
++static void
++set_resize_increments() {
++	int min_width = (2 * term->screen.border) + term->screen.fullVwin.sb_info.width;
++	int min_height = (2 * term->screen.border);
++
++	XSizeHints sizehints;
++	memset(&sizehints, 0, sizeof(XSizeHints));
++	sizehints.width_inc = FontWidth(&term->screen);
++	sizehints.height_inc = FontHeight(&term->screen);
++	sizehints.flags = PResizeInc;
++	XSetWMNormalHints(term->screen.display, XtWindow(XtParent(term)), &sizehints);
++
++	XtVaSetValues(
++		XtParent(term),
++		XtNbaseWidth, min_width,
++		XtNbaseHeight, min_height,
++		XtNminWidth, min_width + FontWidth(&term->screen),
++		XtNminHeight, min_height + FontHeight(&term->screen),
++		XtNwidthInc, FontWidth(&term->screen),
++		XtNheightInc, FontHeight(&term->screen),
++		(XtPointer) 0
++	);
++
++	XFlush(XtDisplay(term));
++}
++
++static void
++unset_resize_increments() {
++	XSizeHints sizehints;
++	memset(&sizehints, 0, sizeof(XSizeHints));
++	sizehints.width_inc = 1;
++	sizehints.height_inc = 1;
++	sizehints.flags = PResizeInc;
++	XSetWMNormalHints(term->screen.display, XtWindow(XtParent(term)), &sizehints);
++
++	XtVaSetValues(
++		XtParent(term),
++		XtNwidthInc, 1,
++		XtNheightInc, 1,
++		(XtPointer) 0
++	);
++
++	XFlush(XtDisplay(term));
++}
++
++static void
++netwm_fullscreen(int enable) {
++	XEvent e;
++	Display *display = term->screen.display;
++	Window  window = XtWindow(XtParent(term));
++	int operation = enable ? 1 : 0;
++	Atom atom_fullscreen = XInternAtom(term->screen.display, "_NET_WM_STATE_FULLSCREEN",  False);
++	Atom atom_state      = XInternAtom(term->screen.display, "_NET_WM_STATE",  False);
++
++	memset(&e,0,sizeof(e));
++	e.xclient.type = ClientMessage;
++	e.xclient.message_type = atom_state;
++	e.xclient.display = display;
++	e.xclient.window = window;
++	e.xclient.format = 32;
++	e.xclient.data.l[0] = operation;
++	e.xclient.data.l[1] = atom_fullscreen;
++
++	XSendEvent(display, DefaultRootWindow(display), False,
++		SubstructureRedirectMask, &e);
++}
++
++static int
++probe_netwm_fullscreen_capability() {
++	Atom atom_fullscreen = XInternAtom(term->screen.display, "_NET_WM_STATE_FULLSCREEN",  False);
++	Atom atom_supported  = XInternAtom(term->screen.display, "_NET_SUPPORTED",  False);
++	Atom            type;
++	int             format;
++	unsigned int    i;
++	unsigned long   nitems, bytesafter;
++	unsigned char   *args;
++	unsigned long   *ldata;
++	char            *name;
++	int             retval = -1;
++	int		netwm_fullscreen_capability = 0;
++
++	if (Success != XGetWindowProperty(
++		term->screen.display,			/* display */
++		DefaultRootWindow(term->screen.display),/* window */
++		atom_supported,				/* property */
++		0,					/* long_offset */
++		(65536 / sizeof(long)),			/* long_length */
++		False,					/* delete */
++		AnyPropertyType,			/* req_type */
++		&type,					/* actual_type_return */
++		&format,				/* actual_format_return */
++		&nitems,				/* nitems_return */
++		&bytesafter,				/* bytes_after_return */
++		&args					/* prop_return */
++	)) {
++		netwm_fullscreen_capability = 0;
++	} else if (type != XA_ATOM) {
++		netwm_fullscreen_capability = 0;
++	} else {
++		ldata = (unsigned long*)args;
++		for (i = 0; i < nitems; i++) {
++			if (ldata[i] == atom_fullscreen) {
++				netwm_fullscreen_capability = 1;
++			}
++		}
++		XFree(ldata);
++	}
++
++	return netwm_fullscreen_capability;
++}
++
++static void
++do_fullscreen(Widget gw GCC_UNUSED,
++	     XtPointer closure GCC_UNUSED,
++	     XtPointer data GCC_UNUSED)
++{
++	register TScreen *screen = &term->screen;
++	Time now = CurrentTime;	/* XXX - wrong */
++	Dimension width;
++	Dimension height;
++	Dimension replyWidth;
++	Dimension replyHeight;
++	XtGeometryResult stat;
++	XtWidgetGeometry geometry;
++
++	static int have_probed = 0;
++	static int netwm_fullscreen_capability = 0;
++
++	if (have_probed == 0) {
++		have_probed = 1;
++		netwm_fullscreen_capability = probe_netwm_fullscreen_capability();
++	}
++
++	/* at this time, there is no support for lame window managers */
++	if (! netwm_fullscreen_capability) {
++		Bell(XkbBI_MinorError, 100);
++		return;
++	}
++
++	Screen *xscreen = DefaultScreenOfDisplay(term->screen.display);
++
++    if (! screen->fullscreen) {
++
++	/* ENABLE FULLSCREEN */
++
++	if (netwm_fullscreen_capability) {
++		unset_resize_increments();
++		netwm_fullscreen(1);
++	} else {
++		/* no support yet */
++	}
++
++#if 0
++	memset(&geometry, 0, sizeof(XtWidgetGeometry));
++
++	width = WidthOfScreen(xscreen);
++	height = HeightOfScreen(xscreen);
++
++	stat = XtMakeResizeRequest(
++		(Widget) term,
++		width,
++		height,
++		&replyWidth,
++		&replyHeight
++	);
++
++	if (stat == XtGeometryYes || stat == XtGeometryDone) {
++		term->core.width = replyWidth;
++		term->core.height = replyHeight;
++
++		XMoveWindow(XtDisplay(term), XtWindow(XtParent(term)), 0, 0);
++		ScreenResize(&term->screen, replyWidth, replyHeight,
++			     &term->flags);
++	}
++#endif
++	screen->fullscreen = TRUE;
++
++    } else {
++                                                                                
++	/* DISABLE FULLSCREEN */
++
++	if (netwm_fullscreen_capability) {
++		set_resize_increments();
++		netwm_fullscreen(0);
++	} else {
++		/* no support yet */
++	}
++
++	screen->fullscreen = FALSE;
++    }
++    update_fullscreen();
++}
++
++/* ARGSUSED */
++void
++HandleFullscreen(Widget w,
++		XEvent * event GCC_UNUSED,
++		String * params GCC_UNUSED,
++		Cardinal * param_count GCC_UNUSED)
++{
++    do_fullscreen(w, (XtPointer) 0, (XtPointer) 0);
++}
++
++/********************************************************************/
++/* END: Simmons Fullscreen Hack                                     */
++/********************************************************************/
++
+ static void
+ do_securekbd(Widget gw GCC_UNUSED,
+ 	     XtPointer closure GCC_UNUSED,
+@@ -2749,6 +2965,16 @@
+ }
+ #endif /* OPT_TOOLBAR */
+ 
++
++void
++update_fullscreen(void)
++{
++    UpdateCheckbox("update_fullscreen",
++          mainMenuEntries,
++		  mainMenu_fullscreen,
++		  term->screen.fullscreen);
++}
++
+ void
+ update_securekbd(void)
+ {
+diff -ru xterm-235/menu.h xterm.patched/menu.h
+--- xterm-235/menu.h	2007-11-26 12:09:53.000000000 -0600
++++ xterm.patched/menu.h	2008-05-19 09:02:49.000000000 -0500
+@@ -67,6 +67,7 @@
+ extern MenuEntry tekMenuEntries[];
+ #endif
+ 
++extern void HandleFullscreen       PROTO_XT_ACTIONS_ARGS;
+ extern void Handle8BitControl      PROTO_XT_ACTIONS_ARGS;
+ extern void HandleAllow132         PROTO_XT_ACTIONS_ARGS;
+ extern void HandleAllowSends       PROTO_XT_ACTIONS_ARGS;
+@@ -144,6 +145,7 @@
+ #if OPT_TOOLBAR
+     mainMenu_toolbar,
+ #endif
++    mainMenu_fullscreen,
+     mainMenu_securekbd,
+     mainMenu_allowsends,
+     mainMenu_redraw,
+@@ -275,7 +277,6 @@
+     fontMenu_LAST
+ } fontMenuIndices;
+ 
+-
+ /*
+  * items in tek4014 mode menu
+  */
+@@ -313,6 +314,7 @@
+ #define update_toolbar() /* nothing */
+ #endif
+ 
++extern void update_fullscreen(void);
+ extern void update_securekbd(void);
+ extern void update_allowsends(void);
+ 
+diff -ru xterm-235/ptyx.h xterm.patched/ptyx.h
+--- xterm-235/ptyx.h	2008-04-20 15:26:33.000000000 -0500
++++ xterm.patched/ptyx.h	2008-05-19 08:33:28.000000000 -0500
+@@ -1413,6 +1413,7 @@
+ 	Boolean		allowWindowOp0;	/* initial WindowOps mode	*/
+ 	Boolean		awaitInput;	/* select-timeout mode		*/
+ 	Boolean		grabbedKbd;	/* keyboard is grabbed		*/
++	Boolean		fullscreen;	/* terminal is fullscreen	*/
+ #ifdef ALLOWLOGGING
+ 	int		logging;	/* logging mode			*/
+ 	int		logfd;		/* file descriptor of log	*/
+diff -ru xterm-235/scrollbar.c xterm.patched/scrollbar.c
+--- xterm-235/scrollbar.c	2008-04-17 18:23:17.000000000 -0500
++++ xterm.patched/scrollbar.c	2008-05-19 08:41:19.000000000 -0500
+@@ -168,18 +168,31 @@
+     /* These are obsolete, but old clients may use them */
+     xw->hints.width = MaxCols(screen) * FontWidth(screen) + xw->hints.min_width;
+     xw->hints.height = MaxRows(screen) * FontHeight(screen) + xw->hints.min_height;
++    /* assure single-increment resize for fullscreen */
++    if (term->screen.fullscreen) {
++        xw->hints.width_inc = 1;
++        xw->hints.height_inc = 1;
++    }
+ #endif
+ 
+     XSetWMNormalHints(screen->display, XtWindow(SHELL_OF(xw)), &xw->hints);
+ 
+-    reqWidth = MaxCols(screen) * FontWidth(screen) + min_wide;
+-    reqHeight = MaxRows(screen) * FontHeight(screen) + min_high;
++    reqWidth  = MaxCols(screen) * (term->screen.fullscreen ? 1 : FontWidth(screen))  + min_wide;
++    reqHeight = MaxRows(screen) * (term->screen.fullscreen ? 1 : FontHeight(screen))  + min_high;
+ 
+     TRACE(("...requesting screensize chars %dx%d, pixels %dx%d\n",
+ 	   MaxRows(screen),
+ 	   MaxCols(screen),
+ 	   reqHeight, reqWidth));
+ 
++    /* compensate for fullscreen mode */
++    if (screen->fullscreen) {
++	Screen *xscreen = DefaultScreenOfDisplay(term->screen.display);
++	reqWidth = WidthOfScreen(xscreen);
++	reqHeight = HeightOfScreen(xscreen);
++	ScreenResize(screen, reqWidth, reqHeight, &term->flags);
++    }
++
+     geomreqresult = XtMakeResizeRequest((Widget) xw, reqWidth, reqHeight,
+ 					&repWidth, &repHeight);
+     TRACE(("scrollbar.c XtMakeResizeRequest %dx%d -> %dx%d (status %d)\n",
+diff -ru xterm-235/XTerm.ad xterm.patched/XTerm.ad
+--- xterm-235/XTerm.ad	2007-11-26 12:42:37.000000000 -0600
++++ xterm.patched/XTerm.ad	2008-05-19 08:42:37.000000000 -0500
+@@ -11,6 +11,7 @@
+ *SimpleMenu*Cursor: left_ptr
+ 
+ *mainMenu.Label:  Main Options
++*mainMenu*fullscreen*Label: Full Screen
+ *mainMenu*toolbar*Label:  Toolbar
+ *mainMenu*securekbd*Label:  Secure Keyboard
+ *mainMenu*allowsends*Label:  Allow SendEvents
+@@ -187,3 +188,7 @@
+ !
+ ! Alternatively,
+ !*on2Clicks: regex [[:alpha:]]+://([[:alnum:]!#+,./=?@_~-]|(%[[:xdigit:]][[:xdigit:]]))+
++
++*VT100.translations:   #override \
++Alt                   <Key>Return:        fullscreen()
++
