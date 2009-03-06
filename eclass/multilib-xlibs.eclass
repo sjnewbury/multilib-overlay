@@ -104,8 +104,8 @@ multilib-xlibs_src_compile_sub() {
 		local OCXXFLAGS=""
 		local OCHOST=""
 		local OSPATH=""
-		CC="$(tc-getCC)"
-		CXX="$(tc-getCXX)"
+		export CC="$(tc-getCC)"
+		export CXX="$(tc-getCXX)"
 
 		if has_multilib_profile ; then
 			OCFLAGS="${CFLAGS}"
