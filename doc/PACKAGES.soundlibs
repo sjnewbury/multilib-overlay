@@ -1,0 +1,11 @@
+dev-libs/liboil
+media-libs/alsa-lib
+media-libs/audiofile
+media-libs/flac
+media-libs/libmikmod
+media-libs/libmodplug
+media-libs/libogg
+media-libs/libsndfile
+media-libs/libvorbis
+media-sound/esound
+media-sound/pulseaudio

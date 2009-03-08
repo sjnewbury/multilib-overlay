@@ -1,0 +1,6 @@
+dev-libs/atk
+x11-libs/cairo
+x11-libs/gtk+
+x11-libs/pango
+x11-themes/gtk-engines
+x11-themes/gtk-engines-xfce
