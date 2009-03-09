@@ -1,0 +1,12 @@
+diff -ur java.old/misc/Makefile.am java/misc/Makefile.am
+--- java.old/misc/Makefile.am	2007-04-24 19:59:49.000000000 +0300
++++ java/misc/Makefile.am	2007-04-24 20:00:02.000000000 +0300
+@@ -18,7 +18,7 @@
+ # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
+ 
+ JAVAROOT = $(top_builddir)/java/misc
+-JAVACFLAGS = -classpath $(top_builddir)/java/libidn-@VERSION@.jar:$(top_srcdir)/java/libidn-@VERSION@.jar
++AM_JAVACFLAGS = -classpath $(top_builddir)/java/libidn-@VERSION@.jar:$(top_srcdir)/java/libidn-@VERSION@.jar
+ 
+ if JAVA
+ dist_noinst_JAVA = GenerateRFC3454.java GenerateNFKC.java	\

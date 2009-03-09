@@ -1,0 +1,8 @@
+app-arch/bzip2
+dev-libs/glib
+media-libs/jpeg
+media-libs/libmng
+media-libs/libpng
+media-libs/tiff
+net-dns/libidn
+sys-devel/libtool
