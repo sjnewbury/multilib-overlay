@@ -6,7 +6,6 @@
 #SNAPSHOT="yes"
 
 XMODULAR_MULTILIB="yes"
-XMODULAR_SUPRESS_TESTS="yes"
 inherit x-modular toolchain-funcs flag-o-matic multilib-xlibs
 
 DESCRIPTION="X.Org X11 library"

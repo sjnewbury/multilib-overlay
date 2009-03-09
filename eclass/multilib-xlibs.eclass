@@ -22,11 +22,6 @@ inherit multilib
 # If set to 'yes' if the package dont support building of both trees on the same dir (currently only needed with mesa package)
 # Set before inheriting this eclass.
 
-# @ECLASS-VARIABLE: XMODULAR_SUPRESS_TESTS
-# @DESCRIPTION:
-# If set to 'yes' the malloc test on the configure phrase is skipped (only needed with some x-modular packages)
-# Set before inheriting this eclass.
-
 # @FUNCTION: multilib-xlibs_src_compile
 # @USAGE:
 # @DESCRIPTION:
@@ -135,6 +130,9 @@ multilib-xlibs_src_compile_sub() {
 				esac
 			fi
 		fi
+
+		#Nice way to avoid the "cannot run test program while cross compiling" :)
+		CBUILD=$CHOST
 
 		if [[ -n ${MULTILIB_SPLITTREE} ]]; then
 			cp -al ${S} ${WORKDIR}/builddir.${ABI}

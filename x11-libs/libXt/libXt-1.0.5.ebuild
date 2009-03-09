@@ -6,7 +6,6 @@
 # SNAPSHOT="yes"
 
 XMODULAR_MULTILIB="yes"
-XMODULAR_SUPRESS_TESTS="yes"
 inherit x-modular flag-o-matic multilib-xlibs
 
 DESCRIPTION="X.Org Xt library"
