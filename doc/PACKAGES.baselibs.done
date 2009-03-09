@@ -1,4 +1,5 @@
 app-arch/bzip2
+app-text/libpaper
 dev-libs/glib
 media-libs/jpeg
 media-libs/libmng
