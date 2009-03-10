@@ -7,3 +7,5 @@ media-libs/libpng
 media-libs/tiff
 net-dns/libidn
 sys-devel/libtool
+sys-libs/db
+sys-libs/zlib
