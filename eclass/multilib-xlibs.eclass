@@ -144,10 +144,6 @@ multilib-xlibs_src_compile_sub() {
 			ECONF_SOURCE=".."
 		fi
 
-		if [[ -n ${XMODULAR_SUPRESS_TESTS} ]]; then
-			CONFIGURE_OPTIONS="${CONFIGURE_OPTIONS} --enable-malloc0returnsnull=yes"
-		fi
-
 		PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 	fi
 	if [[ -n ${XMODULAR_MULTILIB} ]]; then
