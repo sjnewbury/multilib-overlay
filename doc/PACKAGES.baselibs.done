@@ -1,6 +1,9 @@
 app-arch/bzip2
 app-text/libpaper
+dev-libs/expat
 dev-libs/glib
+dev-libs/libgcrypt
+dev-libs/libgpg-error
 media-libs/jpeg
 media-libs/libmng
 media-libs/libpng
