@@ -1,2 +1,5 @@
+media-libs/audiofile
+media-libs/libmikmod
+media-libs/libmodplug
 media-libs/libogg
 media-libs/libvorbis
