@@ -2,7 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/libgcrypt/libgcrypt-1.4.0-r1.ebuild,v 1.12 2008/12/07 12:05:47 vapier Exp $
 
-#MULTILIB_SPLITTREE="yes"
 inherit eutils autotools multilib-xlibs
 
 DESCRIPTION="general purpose crypto library based on the code used in GnuPG"
