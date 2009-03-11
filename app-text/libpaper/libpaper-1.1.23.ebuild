@@ -23,7 +23,8 @@ src_unpack() {
 
 multilib-xlibs_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
-	dodoc ../README ../ChangeLog ../debian/changelog ../debian/NEWS
+	cd "${S}"
+	dodoc README ChangeLog debian/changelog debian/NEWS
 	dodir /etc
 	(paperconf 2>/dev/null || echo a4) > "${D}"/etc/papersize
 }
