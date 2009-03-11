@@ -1,5 +1,5 @@
-media-libs/audiofile
-media-libs/libmikmod
-media-libs/libmodplug
-media-libs/libogg
-media-libs/libvorbis
+media-libs/audiofile[lib32]
+media-libs/libmikmod[lib32]
+media-libs/libmodplug[lib32]
+media-libs/libogg[lib32]
+media-libs/libvorbis[lib32]

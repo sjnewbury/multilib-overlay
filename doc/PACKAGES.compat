@@ -1,1 +1,1 @@
-sys-libs/glibc
+sys-libs/glibc[lib32]
