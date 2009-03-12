@@ -2,7 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-libs/e2fsprogs-libs/e2fsprogs-libs-1.41.4.ebuild,v 1.1 2009/01/28 05:43:32 vapier Exp $
 
-inherit flag-o-matic toolchain-funcs
+MULTILIB_SPLITTREE="yes"
+inherit flag-o-matic toolchain-funcs multilib-xlibs
 
 EAPI="2"
 DESCRIPTION="e2fsprogs libraries (common error, subsystem, uuid, block id)"
@@ -25,7 +26,7 @@ set_env() {
 	export CC=$(tc-getCC)
 }
 
-multilib-xlibs_configure_internal() {
+multilib-xlibs_src_configure_internal() {
 	set_env
 
 	# We want to use the "bsd" libraries while building on Darwin, but while
@@ -43,12 +44,12 @@ multilib-xlibs_configure_internal() {
 		|| die
 }
 
-multilib-xlibs_compile_internal() {
+multilib-xlibs_src_compile_internal() {
 	set_env
 	emake STRIP=/bin/true || die
 }
 
-multilib-xlibs_install_internal() {
+multilib-xlibs_src_install_internal() {
 	set_env
 	emake STRIP=/bin/true DESTDIR="${D}" install || die
 
