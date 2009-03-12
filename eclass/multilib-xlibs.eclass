@@ -36,7 +36,7 @@ multilib-xlibs_src_configure() {
 			local abilist=""
 			if has_multilib_profile ; then
 				abilist=$(get_install_abis)
-				einfo "Configureing multilib ${PN} for ABIs: ${abilist}"
+				einfo "Configuring multilib ${PN} for ABIs: ${abilist}"
 			elif is_crosscompile || tc-is-cross-compiler ; then
 				abilist=${DEFAULT_ABI}
 			fi
@@ -64,7 +64,7 @@ multilib-xlibs_src_compile() {
 			local abilist=""
 			if has_multilib_profile ; then
 				abilist=$(get_install_abis)
-				einfo "Compileing multilib ${PN} for ABIs: ${abilist}"
+				einfo "Compiling multilib ${PN} for ABIs: ${abilist}"
 			elif is_crosscompile || tc-is-cross-compiler ; then
 				abilist=${DEFAULT_ABI}
 			fi
@@ -160,6 +160,7 @@ set_environment() {
 		CBUILD=$CHOST
 
 		if [[ -n ${MULTILIB_SPLITTREE} ]]; then
+			einfo "Copying source tree to ${WORKDIR}/builddir.${ABI}"
 			cp -al ${S} ${WORKDIR}/builddir.${ABI}
 			cd ${WORKDIR}/builddir.${ABI}
 			S=${WORKDIR}/builddir.${ABI}
@@ -221,8 +222,7 @@ multilib-xlibs_src_configure_internal() {
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_compile.
 # @DESCRIPTION:
 multilib-xlibs_src_compile_internal() {
-	if [[ EAPI -lt 2 ]]
-	then
+	if [[ EAPI -lt 2 ]]; then
 		econf || die
 	fi
 	emake || die
