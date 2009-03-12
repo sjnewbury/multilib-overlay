@@ -1,0 +1,95 @@
+# ChangeLog for sys-libs/e2fsprogs-libs
+# Copyright 1999-2009 Gentoo Foundation; Distributed under the GPL v2
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/e2fsprogs-libs/ChangeLog,v 1.22 2009/01/28 05:43:32 vapier Exp $
+
+*e2fsprogs-libs-1.41.4 (28 Jan 2009)
+
+  28 Jan 2009; Mike Frysinger <vapier@gentoo.org>
+  +e2fsprogs-libs-1.41.4.ebuild:
+  Version bump.
+
+*e2fsprogs-libs-1.41.3-r1 (30 Dec 2008)
+
+  30 Dec 2008; Panagiotis Christopoulos <pchrist@gentoo.org>
+  +e2fsprogs-libs-1.41.3-r1.ebuild:
+  RevBump, ebuild written in EAPI-2 in order to resolve old blockers
+  automatically, fixes bug #234907 , bug #249663
+
+  29 Dec 2008; Tobias Scherbaum <dertobi123@gentoo.org>
+  e2fsprogs-libs-1.41.3.ebuild:
+  ppc stable, bug #251808
+
+  29 Dec 2008; Brent Baude <ranger@gentoo.org> e2fsprogs-libs-1.41.3.ebuild:
+  Marking e2fsprogs-libs-1.41.3 ppc64 for bug 251808
+
+  29 Dec 2008; Friedrich Oslage <bluebird@gentoo.org>
+  e2fsprogs-libs-1.41.3.ebuild:
+  Stable on sparc, bug #251808
+
+  27 Dec 2008; Jeremy Olexa <darkside@gentoo.org>
+  e2fsprogs-libs-1.41.3.ebuild:
+  amd64 stable, bug 251808
+
+  26 Dec 2008; Raúl Porcel <armin76@gentoo.org>
+  e2fsprogs-libs-1.41.3.ebuild:
+  ia64/x86 stable wrt #251808
+
+  26 Dec 2008; Tobias Klausmann <klausman@gentoo.org>
+  e2fsprogs-libs-1.41.3.ebuild:
+  Stable on alpha, bug #251808
+
+  25 Dec 2008; Guy Martin <gmsoft@gentoo.org> e2fsprogs-libs-1.41.3.ebuild:
+  hppa stable, #251808
+
+  15 Nov 2008; Mike Frysinger <vapier@gentoo.org>
+  e2fsprogs-libs-1.41.2.ebuild, e2fsprogs-libs-1.41.3.ebuild:
+  Do not export STRIP as portage uses that when stripping things ... just
+  pass it along to the build system directly.
+
+  08 Nov 2008; Raúl Porcel <armin76@gentoo.org>
+  e2fsprogs-libs-1.41.2.ebuild:
+  alpha/ia64 stable wrt #244511
+
+  02 Nov 2008; Tobias Scherbaum <dertobi123@gentoo.org>
+  e2fsprogs-libs-1.41.2.ebuild:
+  ppc stable, bug #242696
+
+  28 Oct 2008; Brent Baude <ranger@gentoo.org> e2fsprogs-libs-1.41.2.ebuild:
+  Marking e2fsprogs-libs-1.41.2 ppc64 for bug 242740
+
+  27 Oct 2008; Markus Meier <maekke@gentoo.org>
+  e2fsprogs-libs-1.41.2.ebuild:
+  amd64/x86 stable, bug #244511
+
+  27 Oct 2008; Jeroen Roovers <jer@gentoo.org> e2fsprogs-libs-1.41.2.ebuild:
+  Stable for HPPA (bug #244511).
+
+*e2fsprogs-libs-1.41.3 (18 Oct 2008)
+
+  18 Oct 2008; Mike Frysinger <vapier@gentoo.org>
+  +e2fsprogs-libs-1.41.3.ebuild:
+  Version bump.
+
+*e2fsprogs-libs-1.41.2 (02 Oct 2008)
+
+  02 Oct 2008; Mike Frysinger <vapier@gentoo.org>
+  +e2fsprogs-libs-1.41.2.ebuild:
+  Version bump.
+
+*e2fsprogs-libs-1.41.1 (01 Sep 2008)
+
+  01 Sep 2008; Mike Frysinger <vapier@gentoo.org>
+  +files/e2fsprogs-libs-1.41.1-subs.patch, +e2fsprogs-libs-1.41.1.ebuild:
+  Version bump.
+
+  16 Aug 2008; Mike Frysinger <vapier@gentoo.org>
+  +files/e2fsprogs-libs-1.41.0-null-blkid.patch,
+  e2fsprogs-libs-1.41.0.ebuild:
+  Add fix from upstream for NULL blkids.
+
+*e2fsprogs-libs-1.41.0 (16 Aug 2008)
+
+  16 Aug 2008; Mike Frysinger <vapier@gentoo.org>
+  +files/e2fsprogs-libs-1.41.0-makefile.patch, +metadata.xml,
+  +e2fsprogs-libs-1.41.0.ebuild:
+  Version bump (merge ss/com_err).
