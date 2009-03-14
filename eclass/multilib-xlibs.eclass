@@ -27,72 +27,38 @@ EMULTILIB_OSPATH=""
 # If set to 'yes' if the package dont support building of both trees on the same dir (currently only needed with mesa package)
 # Set before inheriting this eclass.
 
+
 # @FUNCTION: multilib-xlibs_src_configure
 # @USAGE:
 # @DESCRIPTION:
 multilib-xlibs_src_configure() {
-	if [[ -n ${EMULTILIB_PKG} ]]; then
-		if [[ -z ${OABI} ]] ; then
-			local abilist=""
-			if has_multilib_profile ; then
-				abilist=$(get_install_abis)
-				einfo "Configuring multilib ${PN} for ABIs: ${abilist}"
-			elif is_crosscompile || tc-is-cross-compiler ; then
-				abilist=${DEFAULT_ABI}
-			fi
-			if [[ -n ${abilist} ]] ; then
-				OABI=${ABI}
-				for ABI in ${abilist} ; do
-					export ABI
-					multilib-xlibs_src_configure
-				done
-				ABI=${OABI}
-				unset OABI
-				return 0
-			fi
-		fi
-	fi
-	multilib-xlibs_src_configure_sub
+	multilib-xlibs_src_generic configure
 }
 
 # @FUNCTION: multilib-xlibs_src_compile
 # @USAGE:
 # @DESCRIPTION:
 multilib-xlibs_src_compile() {
-	if [[ -n ${EMULTILIB_PKG} ]]; then
-		if [[ -z ${OABI} ]] ; then
-			local abilist=""
-			if has_multilib_profile ; then
-				abilist=$(get_install_abis)
-				einfo "Compiling multilib ${PN} for ABIs: ${abilist}"
-			elif is_crosscompile || tc-is-cross-compiler ; then
-				abilist=${DEFAULT_ABI}
-			fi
-			if [[ -n ${abilist} ]] ; then
-				OABI=${ABI}
-				for ABI in ${abilist} ; do
-					export ABI
-					multilib-xlibs_src_compile
-				done
-				ABI=${OABI}
-				unset OABI
-				return 0
-			fi
-		fi
-	fi
-	multilib-xlibs_src_compile_sub
+	multilib-xlibs_src_generic compile
 }
 
 # @FUNCTION: multilib-xlibs_src_install
 # @USAGE:
 # @DESCRIPTION:
 multilib-xlibs_src_install() {
+	multilib-xlibs_src_generic install
+}
+
+# @FUNCTION: multilib-xlibs_src_generic
+# @USAGE:
+# @DESCRIPTION:
+multilib-xlibs_src_generic() {
 	if [[ -n ${EMULTILIB_PKG} ]]; then
 		if [[ -z ${OABI} ]] ; then
 			local abilist=""
 			if has_multilib_profile ; then
 				abilist=$(get_install_abis)
-				einfo "Installing multilib ${PN} for ABIs: ${abilist}"
+				einfo "${1}ing multilib ${PN} for ABIs: ${abilist}"
 			elif is_crosscompile || tc-is-cross-compiler ; then
 				abilist=${DEFAULT_ABI}
 			fi
@@ -100,29 +66,21 @@ multilib-xlibs_src_install() {
 				OABI=${ABI}
 				for ABI in ${abilist} ; do
 					export ABI
-					multilib-xlibs_src_install
+					multilib-xlibs_src_generic ${1}
 				done
 				ABI=${OABI}
 				unset OABI
 				return 0
 			fi
 		fi
-		einfo "Installing ${PN} ${ABI} ..."
-
-		if [[ -n ${MULTILIB_SPLITTREE} ]]; then
-			cd ${WORKDIR}/builddir.${ABI}
-		else
-			cd "${S}/objdir-${ABI}"
-		fi
 	fi
-	if [[ -n ${XMODULAR_MULTILIB} ]]; then
-		x-modular_src_install
-	else
-		multilib-xlibs_src_install_internal
-	fi
+	multilib-xlibs_src_generic_sub ${1}
 }
 
-set_environment() {
+# @FUNCTION: multilib-xlibs_src_generic_sub
+# @USAGE:
+# @DESCRIPTION:
+multilib-xlibs_src_generic_sub() {
 	if [[ -n ${EMULTILIB_PKG} ]]; then
 		export CC="$(tc-getCC)"
 		export CXX="$(tc-getCXX)"
@@ -172,9 +130,11 @@ set_environment() {
 
 		PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 	fi
-}
-
-unset_environment() {
+	if [[ -n ${XMODULAR_MULTILIB} ]]; then
+		x-modular_src_${1}
+	else
+		multilib-xlibs_src_${1}_internal
+	fi
 	if [[ -n ${EMULTILIB_PKG} ]]; then
 		if has_multilib_profile; then
 			CFLAGS="${EMULTILIB_OCFLAGS}"
@@ -183,32 +143,6 @@ unset_environment() {
 			S="${EMULTILIB_OSPATH}"
 		fi
 	fi
-}
-
-# @FUNCTION: multilib-xlibs_src_configure_sub
-# @USAGE:
-# @DESCRIPTION:
-multilib-xlibs_src_configure_sub() {
-	set_environment
-	if [[ -n ${XMODULAR_MULTILIB} ]]; then
-		x-modular_src_configure
-	else
-		multilib-xlibs_src_configure_internal
-	fi
-	unset_environment
-}
-
-# @FUNCTION: multilib-xlibs_src_compile_sub
-# @USAGE:
-# @DESCRIPTION:
-multilib-xlibs_src_compile_sub() {
-	set_environment
-	if [[ -n ${XMODULAR_MULTILIB} ]]; then
-		x-modular_src_compile
-	else
-		multilib-xlibs_src_compile_internal
-	fi
-	unset_environment
 }
 
 # @FUNCTION: multilib-xlibs_src_configure_internal
@@ -235,4 +169,4 @@ multilib-xlibs_src_install_internal() {
 	src_install
 }
 
-EXPORT_FUNCTIONS src_configure src_compile src_install 
+EXPORT_FUNCTIONS src_configure src_compile src_install
