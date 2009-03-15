@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libmodplug/libmodplug-0.7.ebuild,v 1.20 2006/08/28 02:00:55 kumba Exp $
 
-MULTILIB_SPLITTREE="true"
+MULTILIB_SPLITTREE="yes"
 inherit eutils multilib-xlibs
 
 DESCRIPTION="Library for playing MOD-like music files"

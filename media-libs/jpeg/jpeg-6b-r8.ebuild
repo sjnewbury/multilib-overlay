@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/jpeg/jpeg-6b-r8.ebuild,v 1.14 2008/08/16 14:46:39 vapier Exp $
 
-MULTILIB_SPLITTREE="true"
+MULTILIB_SPLITTREE="yes"
 inherit libtool eutils toolchain-funcs multilib-xlibs
 
 PATCH_VER="1.6"

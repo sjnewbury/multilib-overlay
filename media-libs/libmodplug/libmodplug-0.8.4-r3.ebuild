@@ -4,7 +4,7 @@
 
 WANT_AUTOCONF="latest"
 WANT_AUTOMAKE="latest"
-MULTILIB_SPLITTREE="true"
+MULTILIB_SPLITTREE="yes"
 
 inherit eutils autotools multilib-xlibs
 

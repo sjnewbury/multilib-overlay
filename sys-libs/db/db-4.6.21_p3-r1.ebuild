@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-libs/db/db-4.6.21_p3-r1.ebuild,v 1.6 2009/02/24 16:16:43 kumba Exp $
 
-MULTILIB_SPLITTREE="true"
+MULTILIB_SPLITTREE="yes"
 inherit eutils db flag-o-matic java-pkg-opt-2 autotools libtool multilib-xlibs
 
 #Number of official patches

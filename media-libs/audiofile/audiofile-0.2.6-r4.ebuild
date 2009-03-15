@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/audiofile/audiofile-0.2.6-r4.ebuild,v 1.3 2009/03/06 15:54:33 ranger Exp $
 
-MULTILIB_SPLITTREE="true"
+MULTILIB_SPLITTREE="yes"
 inherit libtool autotools base multilib-xlibs
 
 DESCRIPTION="An elegant API for accessing audio files"
