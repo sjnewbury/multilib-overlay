@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-dns/libidn/libidn-1.11.ebuild,v 1.1 2008/11/27 21:33:35 jer Exp $
 
+MULTILIB_SPLITTREE="yes"
 inherit java-pkg-opt-2 mono elisp-common multilib-xlibs
 
 DESCRIPTION="Internationalized Domain Names (IDN) implementation"
@@ -43,7 +44,7 @@ multilib-xlibs_src_compile_internal() {
 
 multilib-xlibs_src_install_internal() {
 	emake install DESTDIR="${D}" || die
-	dodoc ../AUTHORS ../ChangeLog ../FAQ ../NEWS ../README ../THANKS ../TODO || die
+	dodoc AUTHORS ChangeLog FAQ NEWS README THANKS TODO || die
 
 	if use emacs; then
 		# *.el are installed by the build system

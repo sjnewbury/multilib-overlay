@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-dns/libidn/libidn-1.8.ebuild,v 1.1 2008/06/26 09:58:29 bangert Exp $
 
+MULTILIB_SPLITTREE="yes"
 inherit java-pkg-opt-2 mono autotools elisp-common multilib-xlibs
 
 DESCRIPTION="Internationalized Domain Names (IDN) implementation"
@@ -42,7 +43,7 @@ multilib-xlibs_src_compile_internal() {
 
 multilib-xlibs_src_install_internal() {
 	emake install DESTDIR="${D}" || die
-	dodoc ../AUTHORS ../ChangeLog ../FAQ ../NEWS ../README ../THANKS ../TODO || die
+	dodoc AUTHORS ChangeLog FAQ NEWS README THANKS TODO || die
 
 	use emacs || rm -rf "${D}/usr/share/emacs"
 	#use xemacs || rm -rf "${D}/usr/lib/xemacs"
