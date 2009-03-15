@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [[ -n $1 && -n $2 ]]; then
+
+mkdir -p $1/$2
+cp -a /usr/portage/$1/$2 $1
+
+find $1 -name "*.ebuild" -exec sh bin/make_multilib {} \;
+
+ebuild $(ls sys-libs/cracklib/*.ebuild | grep \. | head -n1) manifest
+
+else
+
+echo usage: 
+echo add_to_overlay category package
+fi
+
