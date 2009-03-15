@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.18.4.ebuild,v 1.3 2009/03/06 15:29:15 ranger Exp $
 
+MULTILIB_SPLITTREE="yes"
 inherit gnome.org libtool eutils flag-o-matic multilib-xlibs
 
 DESCRIPTION="The GLib library of C routines"
