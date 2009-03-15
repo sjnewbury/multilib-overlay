@@ -10,11 +10,16 @@ LICENSE="GPL-2"
 
 KEYWORDS="-* amd64"
 SLOT="0"
-IUSE="opengl"
+IUSE="opengl -nodep"
 
-DEPEND="opengl? ( app-admin/eselect-opengl )"
+DEPEND="
+!nodep? ( 
+	opengl? ( app-admin/eselect-opengl ) 
+)"
 
-RDEPEND=">=app-emulation/emul-linux-x86-baselibs-20071114
+RDEPEND="
+!nodep? (
+	>=app-emulation/emul-linux-x86-baselibs-20071114
 	media-libs/fontconfig[lib32]
 	media-libs/freetype[lib32]
 	opengl? ( media-libs/mesa[lib32]
@@ -46,7 +51,8 @@ RDEPEND=">=app-emulation/emul-linux-x86-baselibs-20071114
 	x11-libs/libXvMC[lib32]
 	x11-libs/libXxf86dga[lib32]
 	x11-libs/libXxf86vm[lib32]
-	x11-libs/pixman[lib32]"
+	x11-libs/pixman[lib32]
+)"
 
 pkg_postinst() {
         #update GL symlinks
