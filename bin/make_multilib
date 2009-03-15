@@ -6,3 +6,4 @@ make_multilib() {
 }
 
 make_multilib $1
+ebuild $1 manifest
