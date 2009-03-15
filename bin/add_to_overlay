@@ -5,7 +5,7 @@ if [[ -n $1 && -n $2 ]]; then
 mkdir -p $1/$2
 cp -a /usr/portage/$1/$2 $1
 
-find $1 -name "*.ebuild" -exec sh bin/make_multilib {} \;
+find $1/$2 -name "*.ebuild" -exec sh bin/make_multilib {} \;
 
 else
 
