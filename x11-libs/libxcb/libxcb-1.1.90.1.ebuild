@@ -5,6 +5,8 @@
 # Must be before x-modular eclass is inherited
 #SNAPSHOT="yes"
 
+EAPI="2"
+
 XMODULAR_MULTILIB="yes"
 inherit x-modular multilib-xlibs
 
@@ -14,8 +16,8 @@ SRC_URI="http://xcb.freedesktop.org/dist/${P}.tar.bz2"
 LICENSE="X11"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc selinux"
-RDEPEND="x11-libs/libXau
-	x11-libs/libXdmcp
+RDEPEND="x11-libs/libXau[lib32?]
+	x11-libs/libXdmcp[lib32?]
 	dev-libs/libpthread-stubs"
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )
