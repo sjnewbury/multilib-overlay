@@ -22,11 +22,6 @@ EMULTILIB_OSPATH=""
 # If set to 'yes' the eclass uses the x-modular_src_compile and x-modular_src_install functions of the x-modular eclass
 # Set before inheriting this eclass and use only if you are inheriting the x-modular eclass (i dont find a way to check this yet)
 
-# @ECLASS-VARIABLE: MULTILIB_SPLITTREE
-# @DESCRIPTION:
-# If set to 'yes' if the package dont support building of both trees on the same dir (currently only needed with mesa package)
-# Set before inheriting this eclass.
-
 
 # @FUNCTION: multilib-xlibs_src_configure
 # @USAGE:
@@ -124,16 +119,10 @@ multilib-xlibs_src_generic_sub() {
 		#Nice way to avoid the "cannot run test program while cross compiling" :)
 		CBUILD=$CHOST
 
-		if [[ -n ${MULTILIB_SPLITTREE} ]]; then
-			einfo "Copying source tree to ${WORKDIR}/builddir.${ABI}"
-			cp -al ${S} ${WORKDIR}/builddir.${ABI}
-			cd ${WORKDIR}/builddir.${ABI}
-			S=${WORKDIR}/builddir.${ABI}
-		else
-			mkdir -p "${S}/objdir-${ABI}"
-			cd "${S}/objdir-${ABI}"
-			ECONF_SOURCE=".."
-		fi
+		einfo "Copying source tree to ${WORKDIR}/builddir.${ABI}"
+		cp -al ${S} ${WORKDIR}/builddir.${ABI}
+		cd ${WORKDIR}/builddir.${ABI}
+		S=${WORKDIR}/builddir.${ABI}
 
 		PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 	fi
