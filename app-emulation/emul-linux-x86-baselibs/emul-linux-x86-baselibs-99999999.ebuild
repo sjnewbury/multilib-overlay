@@ -10,13 +10,13 @@ LICENSE="GPL-2"
 
 KEYWORDS="-* amd64"
 SLOT="0"
-IUSE="-nodep"
+IUSE="-nodep kerberos"
 
 
 RDEPEND="
 !nodep? (
+    kerberos? ( app-crypt/mit-krb5[lib32] )
 	app-arch/bzip2[lib32]
-    app-crypt/mit-krb5[lib32]
     app-text/libpaper[lib32]
     dev-libs/dbus-glib[lib32]
     dev-libs/expat[lib32]
