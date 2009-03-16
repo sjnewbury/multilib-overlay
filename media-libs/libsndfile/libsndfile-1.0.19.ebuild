@@ -39,6 +39,10 @@ src_unpack() {
 	"${S}/examples/Makefile.am" || die "failed to remove forced build of test and example programs"
 	epatch "${FILESDIR}/${PN}-1.0.17-regtests-need-sqlite.patch"
 	epatch "${FILESDIR}/${PN}-1.0.18-less_strict_tests.patch"
+	
+	# cheap fix for multilib
+	use lib32 && epatch "${FILESDIR}/${P}-no-jack-revdep.patch"
+	
 	rm M4/libtool.m4 M4/lt*.m4 || die "rm failed"
 
 	AT_M4DIR=M4 eautoreconf
