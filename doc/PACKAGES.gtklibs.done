@@ -1,0 +1,4 @@
+dev-libs/atk[lib32]
+x11-libs/cairo[lib32]
+x11-libs/gtk+[lib32]
+x11-libs/pango[lib32]
