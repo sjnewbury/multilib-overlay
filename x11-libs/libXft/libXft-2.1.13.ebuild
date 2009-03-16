@@ -5,6 +5,8 @@
 # Must be before x-modular eclass is inherited
 #SNAPSHOT="yes"
 
+EAPI="2"
+
 XMODULAR_MULTILIB="yes"
 inherit x-modular flag-o-matic multilib-xlibs
 
@@ -12,12 +14,12 @@ DESCRIPTION="X.Org Xft library"
 
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 
-RDEPEND="x11-libs/libXrender
-	x11-libs/libX11
-	x11-libs/libXext
+RDEPEND="x11-libs/libXrender[lib32?]
+	x11-libs/libX11[lib32?]
+	x11-libs/libXext[lib32?]
 	x11-proto/xproto
-	media-libs/freetype
-	>=media-libs/fontconfig-2.2"
+	media-libs/freetype[lib32?]
+	>=media-libs/fontconfig-2.2[lib32?]"
 DEPEND="${RDEPEND}"
 
 pkg_setup() {

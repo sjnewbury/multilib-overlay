@@ -32,21 +32,28 @@ EMULTILIB_OSPATH=""
 # @USAGE:
 # @DESCRIPTION:
 multilib-xlibs_src_configure() {
-	multilib-xlibs_src_generic configure
+	multilib-xlibs_src_generic src_configure
 }
 
 # @FUNCTION: multilib-xlibs_src_compile
 # @USAGE:
 # @DESCRIPTION:
 multilib-xlibs_src_compile() {
-	multilib-xlibs_src_generic compile
+	multilib-xlibs_src_generic src_compile
 }
 
 # @FUNCTION: multilib-xlibs_src_install
 # @USAGE:
 # @DESCRIPTION:
 multilib-xlibs_src_install() {
-	multilib-xlibs_src_generic install
+	multilib-xlibs_src_generic src_install
+}
+
+# @FUNCTION: multilib-xlibs_pkg_postinst
+# @USAGE:
+# @DESCRIPTION:
+multilib-xlibs_pkg_postinst() {
+	multilib-xlibs_src_generic pkg_postinst
 }
 
 # @FUNCTION: multilib-xlibs_src_generic
@@ -123,7 +130,7 @@ multilib-xlibs_src_generic_sub() {
 			cd ${WORKDIR}/builddir.${ABI}
 			S=${WORKDIR}/builddir.${ABI}
 		else
-			mkdir "${S}/objdir-${ABI}"
+			mkdir -p "${S}/objdir-${ABI}"
 			cd "${S}/objdir-${ABI}"
 			ECONF_SOURCE=".."
 		fi
@@ -131,9 +138,9 @@ multilib-xlibs_src_generic_sub() {
 		PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 	fi
 	if [[ -n ${XMODULAR_MULTILIB} ]]; then
-		x-modular_src_${1}
+		x-modular_${1}
 	else
-		multilib-xlibs_src_${1}_internal
+		multilib-xlibs_${1}_internal
 	fi
 	if [[ -n ${EMULTILIB_PKG} ]]; then
 		if has_multilib_profile; then
@@ -169,4 +176,8 @@ multilib-xlibs_src_install_internal() {
 	src_install
 }
 
-EXPORT_FUNCTIONS src_configure src_compile src_install
+multilib-xlibs_pkg_postinst_internal() {
+	:;	
+}
+
+EXPORT_FUNCTIONS src_configure src_compile src_install pkg_postinst

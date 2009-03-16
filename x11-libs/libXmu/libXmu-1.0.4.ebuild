@@ -5,6 +5,8 @@
 # Must be before x-modular eclass is inherited
 #SNAPSHOT="yes"
 
+EAPI="2"
+
 XMODULAR_MULTILIB="yes"
 inherit x-modular multilib-xlibs
 
@@ -13,9 +15,9 @@ DESCRIPTION="X.Org Xmu library"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="ipv6"
 
-RDEPEND="x11-libs/libXt
-	x11-libs/libXext
-	x11-libs/libX11
+RDEPEND="x11-libs/libXt[lib32?]
+	x11-libs/libXext[lib32?]
+	x11-libs/libX11[lib32?]
 	x11-proto/xproto"
 DEPEND="${RDEPEND}"
 
