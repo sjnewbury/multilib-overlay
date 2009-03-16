@@ -2,7 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/jbigkit/jbigkit-1.6-r1.ebuild,v 1.20 2007/07/12 08:53:33 uberlord Exp $
 
-MULTILIB_SPLITTREE="yes"
 inherit eutils multilib toolchain-funcs multilib-xlibs
 
 DESCRIPTION="highly effective data compression algorithm for bi-level high-resolution images such as fax pages or scanned documents"

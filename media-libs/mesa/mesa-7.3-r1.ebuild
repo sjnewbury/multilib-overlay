@@ -7,7 +7,6 @@ EAPI="2"
 GIT=$([[ ${PV} = 9999* ]] && echo "git")
 EGIT_REPO_URI="git://anongit.freedesktop.org/mesa/mesa"
 
-MULTILIB_SPLITTREE="yes"
 inherit autotools multilib flag-o-matic ${GIT} portability multilib-xlibs
 
 OPENGL_DIR="xorg-x11"

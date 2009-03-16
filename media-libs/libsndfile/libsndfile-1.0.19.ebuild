@@ -4,7 +4,6 @@
 
 EAPI="2"
 
-MULTILIB_SPLITTREE="yes"
 inherit eutils libtool autotools multilib-xlibs
 
 MY_P=${P/_pre/pre}

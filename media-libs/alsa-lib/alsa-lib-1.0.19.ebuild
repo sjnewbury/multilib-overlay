@@ -2,7 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/alsa-lib/alsa-lib-1.0.19.ebuild,v 1.1 2009/01/19 15:06:06 chainsaw Exp $
 
-MULTILIB_SPLITTREE="yes"
 inherit eutils libtool multilib-xlibs
 
 MY_P="${P/_rc/rc}"

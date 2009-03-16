@@ -4,7 +4,6 @@
 
 EAPI="2"
 
-MULTILIB_SPLITTREE="yes"
 inherit autotools eutils base multilib-xlibs
 
 DESCRIPTION="free lossless audio encoder and decoder"
