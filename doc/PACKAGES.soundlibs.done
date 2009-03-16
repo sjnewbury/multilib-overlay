@@ -1,3 +1,4 @@
+dev-libs/liboil[lib32]
 media-libs/audiofile[lib32]
 media-libs/libmikmod[lib32]
 media-libs/libmodplug[lib32]
