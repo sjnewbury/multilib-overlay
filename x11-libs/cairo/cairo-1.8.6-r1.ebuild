@@ -4,7 +4,6 @@
 
 EAPI="2"
 
-MULTILIB_SPLITTREE="yes"
 inherit eutils flag-o-matic libtool multilib-xlibs
 
 DESCRIPTION="A vector graphics library with cross-device output support"

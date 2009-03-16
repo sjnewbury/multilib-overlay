@@ -8,7 +8,6 @@ EAPI="2"
 #SNAPSHOT="yes"
 
 XMODULAR_MULTILIB="yes"
-MULTILIB_SPLITTREE="yes"
 inherit x-modular multilib-xlibs
 
 DESCRIPTION="X C-language Bindings library"
