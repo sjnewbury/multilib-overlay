@@ -23,6 +23,13 @@ EMULTILIB_OSPATH=""
 # Set before inheriting this eclass and use only if you are inheriting the x-modular eclass (i dont find a way to check this yet)
 
 
+# @FUNCTION: multilib-xlibs_src_prepare
+# @USAGE:
+# @DESCRIPTION:
+multilib-xlibs_src_prepare() {
+	multilib-xlibs_src_generic src_prepare
+}
+
 # @FUNCTION: multilib-xlibs_src_configure
 # @USAGE:
 # @DESCRIPTION:
@@ -49,6 +56,13 @@ multilib-xlibs_src_install() {
 # @DESCRIPTION:
 multilib-xlibs_pkg_postinst() {
 	multilib-xlibs_src_generic pkg_postinst
+}
+
+# @FUNCTION: multilib-xlibs_pkg_postrm
+# @USAGE:
+# @DESCRIPTION:
+multilib-xlibs_pkg_postrm() {
+	multilib-xlibs_src_generic pkg_postrm
 }
 
 # @FUNCTION: multilib-xlibs_src_generic
@@ -119,15 +133,18 @@ multilib-xlibs_src_generic_sub() {
 		#Nice way to avoid the "cannot run test program while cross compiling" :)
 		CBUILD=$CHOST
 
-		einfo "Copying source tree to ${WORKDIR}/builddir.${ABI}"
-		cp -al ${S} ${WORKDIR}/builddir.${ABI}
+		if [[ ! -d "${WORKDIR}/builddir.${ABI}" ]]; then
+			einfo "Copying source tree to ${WORKDIR}/builddir.${ABI}"
+			cp -al ${S} ${WORKDIR}/builddir.${ABI}
+		fi
+
 		cd ${WORKDIR}/builddir.${ABI}
 		S=${WORKDIR}/builddir.${ABI}
 
 		PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 	fi
-	if [[ -n ${XMODULAR_MULTILIB} ]]; then
-		x-modular_${1}
+	if [[ -n ${MULTILIBX86_ECLASS} ]]; then
+		${MULTILIBX86_ECLASS}_${1}
 	else
 		multilib-xlibs_${1}_internal
 	fi
@@ -139,6 +156,13 @@ multilib-xlibs_src_generic_sub() {
 			S="${EMULTILIB_OSPATH}"
 		fi
 	fi
+}
+
+# @FUNCTION: multilib-xlibs_src_prepare_internal
+# @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_configure.
+# @DESCRIPTION:
+multilib-xlibs_src_prepare_internal() {
+	:;
 }
 
 # @FUNCTION: multilib-xlibs_src_configure_internal
@@ -162,11 +186,15 @@ multilib-xlibs_src_compile_internal() {
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_install
 # @DESCRIPTION:
 multilib-xlibs_src_install_internal() {
-	src_install
+	emake install || die	
 }
 
 multilib-xlibs_pkg_postinst_internal() {
 	:;	
 }
 
-EXPORT_FUNCTIONS src_configure src_compile src_install pkg_postinst
+multilib-xlibs_pkg_postrm_internal() {
+	:;
+}
+
+EXPORT_FUNCTIONS src_prepare src_configure src_compile src_install pkg_postinst
