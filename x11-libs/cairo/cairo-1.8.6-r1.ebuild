@@ -24,7 +24,7 @@ RDEPEND="media-libs/fontconfig[lib32?]
 	media-libs/libpng
 	>=x11-libs/pixman-0.12.0[lib32?]
 	directfb? ( >=dev-libs/DirectFB-0.9.24 )
-	glitz? ( >=media-libs/glitz-0.5.1 )
+	glitz? ( >=media-libs/glitz-0.5.1[lib32?] )
 	svg? ( dev-libs/libxml2 )
 	X? ( 	>=x11-libs/libXrender-0.6[lib32?]
 		x11-libs/libXext[lib32?]
@@ -73,8 +73,15 @@ multilib-xlibs_src_configure_internal() {
 		export glitz_LIBS=$(pkg-config --libs glitz-glx)
 	fi
 
+	local myconf
+	if use lib32 && [[ "${ABI}" == "x86" ]]; then
+		myconf="--enable-directfb=no"
+	else
+		myconf="$(use_enable directfb)"
+	fi
+
 	econf $(use_enable X xlib) $(use_enable doc gtk-doc) \
-		$(use_enable directfb) $(use_enable xcb) \
+		${myconf} $(use_enable xcb) \
 		$(use_enable svg) $(use_enable glitz) $(use_enable X xlib-xrender) \
 		$(use_enable debug test-surfaces) --enable-pdf  --enable-png \
 		--enable-ft --enable-ps \

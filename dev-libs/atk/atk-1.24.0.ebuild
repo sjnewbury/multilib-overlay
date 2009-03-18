@@ -21,9 +21,3 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1 )"
 
 DOCS="AUTHORS ChangeLog NEWS README"
-
-multilib-xlibs_src_install_internal() {
-	make DESTDIR="${D}" install || die
-	cd "${S}"
-	dodoc ${DOCS}
-}

@@ -19,10 +19,10 @@ inherit base multilib
 
 case "${EAPI:-0}" in
 	2)
-		EXPORT_FUNCTIONS src_prepare src_configure src_compile src_install pkg_postinst
+		EXPORT_FUNCTIONS pkg_setup src_prepare src_configure src_compile src_install pkg_postinst
 		;;
 	*)
-		EXPORT_FUNCTIONS src_compile src_install pkg_postinst
+		EXPORT_FUNCTIONS pkg_setup src_compile src_install pkg_postinst
 		;;
 esac
 
@@ -30,6 +30,13 @@ EMULTILIB_OCFLAGS=""
 EMULTILIB_OCXXFLAGS=""
 EMULTILIB_OCHOST=""
 EMULTILIB_OSPATH=""
+
+# @FUNCTION: multilib-xlibs_pkg_setup
+# @USAGE:
+# @DESCRIPTION:
+multilib-xlibs_pkg_setup() {
+	multilib-xlibs_src_generic pkg_setup
+}
 
 # @FUNCTION: multilib-xlibs_src_prepare
 # @USAGE:
@@ -196,6 +203,14 @@ multilib-xlibs_check_inherited_funcs() {
 	fi
 
 	echo ${declared_func}
+}
+
+# @FUNCTION: multilib-xlibs_pkg_setup_internal
+# @USAGE: override this function if you arent using x-modules eclass and want to use a custom pkg_setup.
+# @DESCRIPTION: needed for gnome2
+multilib-xlibs_pkg_setup_internal() {
+	[[ "${ECLASS_DEBUG}" == "yes" ]] && einfo "Using $(multilib-xlibs_check_inherited_funcs pkg_setup) ..."
+	$(multilib-xlibs_check_inherited_funcs pkg_setup)
 }
 
 # @FUNCTION: multilib-xlibs_src_prepare_internal
