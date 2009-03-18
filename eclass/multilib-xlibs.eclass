@@ -4,13 +4,26 @@
 #
 # @ECLASS: multilib-xlibs.eclass
 
+# temporary stuff to work on eclass inhertance
+ECLASS_DEBUG="yes"
+
 IUSE="${IUSE} lib32"
 
 if use lib32; then
 	EMULTILIB_PKG="true"
 fi
 
-inherit base multilib
+MY_ECLASSES="base multilib"
+inherit ${MY_ECLASSES}
+
+case "${EAPI:-0}" in
+	2)
+		EXPORT_FUNCTIONS src_prepare src_configure src_compile src_install pkg_postinst
+		;;
+	*)
+		EXPORT_FUNCTIONS src_compile src_install pkg_postinst
+		;;
+esac
 
 EMULTILIB_OCFLAGS=""
 EMULTILIB_OCXXFLAGS=""
@@ -158,6 +171,24 @@ multilib-xlibs_src_generic_sub() {
 	fi
 }
 
+# @internal-function check_inherited_funcs
+# @USAGE: call it in the phases
+# @DESCRIPTION: checks for commonly used eclasses und uses the phase funtions
+check_inherited_funcs() {
+	# only return the last available function of all eclasses, default on base
+	# if none provides that function
+	local declared_func
+	for func in ${INHERITED/${MY_ECLASSES}-xlibs/}; do
+		if [[ -n $(declare -f ${func}_${1}) ]]; then
+			declared_func="${func}_${1}"
+		else
+			declared_func="base_${1}"
+		fi
+	done
+
+	echo ${declared_func}
+}
+
 # @FUNCTION: multilib-xlibs_src_prepare_internal
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_configure.
 # @DESCRIPTION:
@@ -169,21 +200,24 @@ multilib-xlibs_src_prepare_internal() {
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_configure.
 # @DESCRIPTION:
 multilib-xlibs_src_configure_internal() {
-	base_src_configure
+	einfo "Using $(check_inherited_funcs src_configure) ..."
+	$(check_inherited_funcs src_configure)
 }
 
 # @FUNCTION: multilib-xlibs_src_compile_internal
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_compile.
 # @DESCRIPTION:
 multilib-xlibs_src_compile_internal() {
-	base_src_compile
+	einfo "Using $(check_inherited_funcs src_compile) ..."
+	$(check_inherited_funcs src_compile)
 }
 
 # @FUNCTION: multilib-xlibs_src_install_internal
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_install
 # @DESCRIPTION:
 multilib-xlibs_src_install_internal() {
-	base_src_install
+	einfo "Using $(check_inherited_funcs src_install) ..."
+	$(check_inherited_funcs src_install)
 }
 
 multilib-xlibs_pkg_postinst_internal() {
@@ -193,12 +227,3 @@ multilib-xlibs_pkg_postinst_internal() {
 multilib-xlibs_pkg_postrm_internal() {
 	:;
 }
-
-case "${EAPI:-0}" in
-	2)
-		EXPORT_FUNCTIONS src_prepare src_configure src_compile src_install pkg_postinst
-		;;
-	*)
-		EXPORT_FUNCTIONS src_compile src_install pkg_postinst
-		;;
-esac
