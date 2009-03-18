@@ -4,7 +4,9 @@
 #
 # @ECLASS: multilib-xlibs.eclass
 
-# temporary stuff to work on eclass inhertance
+# temporary stuff to to have some debug info what's going on with
+# check_inherited_funcs() and maybe other stuff. Remove this var and 
+# the stuff in the phase functions when done...
 ECLASS_DEBUG="yes"
 
 IUSE="${IUSE} lib32"
@@ -13,6 +15,7 @@ if use lib32; then
 	EMULTILIB_PKG="true"
 fi
 
+# this var is used in check_inherited_funcs(), take care!
 MY_ECLASSES="base multilib"
 inherit ${MY_ECLASSES}
 
@@ -173,18 +176,22 @@ multilib-xlibs_src_generic_sub() {
 
 # @internal-function check_inherited_funcs
 # @USAGE: call it in the phases
-# @DESCRIPTION: checks for commonly used eclasses und uses the phase funtions
+# @DESCRIPTION: checks all inherited eclasses for requested phase function
 check_inherited_funcs() {
-	# only return the last available function of all eclasses, default on base
-	# if none provides that function
-	local declared_func
+	# check all eclasses for given function, in order of inheritance.
+	# if none provides it, the var stays empty. If more have it, the last one wins.
+	local declared_func=""
 	for func in ${INHERITED/${MY_ECLASSES}-xlibs/}; do
 		if [[ -n $(declare -f ${func}_${1}) ]]; then
 			declared_func="${func}_${1}"
-		else
-			declared_func="base_${1}"
 		fi
 	done
+
+	# now if $declared_func is still empty, none of the inherited eclasses
+	# provides it, so default on base.eclass
+	if [[ -z "${declared_func}" ]]; then
+		declared_func="base_${1}"
+	fi
 
 	echo ${declared_func}
 }
@@ -200,7 +207,7 @@ multilib-xlibs_src_prepare_internal() {
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_configure.
 # @DESCRIPTION:
 multilib-xlibs_src_configure_internal() {
-	einfo "Using $(check_inherited_funcs src_configure) ..."
+	[[ "${ECLASS_DEBUG}" == "yes" ]] && einfo "Using $(check_inherited_funcs src_configure) ..."
 	$(check_inherited_funcs src_configure)
 }
 
@@ -208,7 +215,7 @@ multilib-xlibs_src_configure_internal() {
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_compile.
 # @DESCRIPTION:
 multilib-xlibs_src_compile_internal() {
-	einfo "Using $(check_inherited_funcs src_compile) ..."
+	[[ "${ECLASS_DEBUG}" == "yes" ]] && einfo "Using $(check_inherited_funcs src_compile) ..."
 	$(check_inherited_funcs src_compile)
 }
 
@@ -216,7 +223,7 @@ multilib-xlibs_src_compile_internal() {
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_install
 # @DESCRIPTION:
 multilib-xlibs_src_install_internal() {
-	einfo "Using $(check_inherited_funcs src_install) ..."
+	[[ "${ECLASS_DEBUG}" == "yes" ]] && einfo "Using $(check_inherited_funcs src_install) ..."
 	$(check_inherited_funcs src_install)
 }
 
