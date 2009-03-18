@@ -10,7 +10,7 @@ if use lib32; then
 	EMULTILIB_PKG="true"
 fi
 
-inherit multilib
+inherit base multilib
 
 EMULTILIB_OCFLAGS=""
 EMULTILIB_OCXXFLAGS=""
@@ -162,31 +162,28 @@ multilib-xlibs_src_generic_sub() {
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_configure.
 # @DESCRIPTION:
 multilib-xlibs_src_prepare_internal() {
-	:;
+	base_src_prepare
 }
 
 # @FUNCTION: multilib-xlibs_src_configure_internal
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_configure.
 # @DESCRIPTION:
 multilib-xlibs_src_configure_internal() {
-	econf || die
+	base_src_configure
 }
 
 # @FUNCTION: multilib-xlibs_src_compile_internal
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_compile.
 # @DESCRIPTION:
 multilib-xlibs_src_compile_internal() {
-	if [[ EAPI -lt 2 ]]; then
-		econf || die
-	fi
-	emake || die
+	base_src_compile
 }
 
 # @FUNCTION: multilib-xlibs_src_install_internal
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_install
 # @DESCRIPTION:
 multilib-xlibs_src_install_internal() {
-	einstall || die	
+	base_src_install
 }
 
 multilib-xlibs_pkg_postinst_internal() {
@@ -197,4 +194,11 @@ multilib-xlibs_pkg_postrm_internal() {
 	:;
 }
 
-EXPORT_FUNCTIONS src_prepare src_configure src_compile src_install pkg_postinst
+case "${EAPI:-0}" in
+	2)
+		EXPORT_FUNCTIONS src_prepare src_configure src_compile src_install pkg_postinst
+		;;
+	*)
+		EXPORT_FUNCTIONS src_compile src_install pkg_postinst
+		;;
+esac
