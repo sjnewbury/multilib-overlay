@@ -5,7 +5,6 @@
 # Must be before x-modular eclass is inherited
 #SNAPSHOT="yes"
 
-XMODULAR_MULTILIB="yes"
 inherit x-modular toolchain-funcs versionator multilib-xlibs
 
 DESCRIPTION="Low-level pixel manipulation routines"

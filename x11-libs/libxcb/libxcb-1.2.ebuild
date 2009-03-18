@@ -7,7 +7,6 @@ EAPI="2"
 # Must be before x-modular eclass is inherited
 #SNAPSHOT="yes"
 
-XMODULAR_MULTILIB="yes"
 inherit x-modular multilib-xlibs
 
 DESCRIPTION="X C-language Bindings library"

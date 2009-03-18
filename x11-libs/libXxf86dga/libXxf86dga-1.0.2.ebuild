@@ -7,7 +7,6 @@
 
 EAPI="2"
 
-XMODULAR_MULTILIB="yes"
 inherit x-modular multilib-xlibs
 
 DESCRIPTION="X.Org Xxf86dga library"

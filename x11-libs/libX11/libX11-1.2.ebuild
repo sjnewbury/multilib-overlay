@@ -7,7 +7,6 @@
 
 EAPI="2"
 
-XMODULAR_MULTILIB="yes"
 inherit x-modular toolchain-funcs flag-o-matic multilib-xlibs
 
 DESCRIPTION="X.Org X11 library"
