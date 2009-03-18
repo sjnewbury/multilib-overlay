@@ -19,10 +19,10 @@ inherit base multilib
 
 case "${EAPI:-0}" in
 	2)
-		EXPORT_FUNCTIONS src_prepare src_configure src_compile src_install pkg_postinst
+		EXPORT_FUNCTIONS src_prepare src_configure src_compile src_install pkg_preinst pkg_postinst pkg_postrm
 		;;
 	*)
-		EXPORT_FUNCTIONS src_compile src_install pkg_postinst
+		EXPORT_FUNCTIONS src_compile src_install pkg_preinst pkg_postinst pkg_postrm
 		;;
 esac
 
@@ -59,6 +59,13 @@ multilib-xlibs_src_install() {
 	multilib-xlibs_src_generic src_install
 }
 
+# @FUNCTION: multilib-xlibs_pkg_preinst
+# @USAGE:
+# @DESCRIPTION:
+multilib-xlibs_pkg_preinst() {
+	multilib-xlibs_src_generic pkg_preinst
+}
+
 # @FUNCTION: multilib-xlibs_pkg_postinst
 # @USAGE:
 # @DESCRIPTION:
@@ -82,7 +89,9 @@ multilib-xlibs_src_generic() {
 			local abilist=""
 			if has_multilib_profile ; then
 				abilist=$(get_install_abis)
-				einfo "${1}ing multilib ${PN} for ABIs: ${abilist}"
+				if [[ -z "$(echo ${1}|grep pkg)" ]]; then
+					einfo "${1/src_/}ing multilib ${PN} for ABIs: ${abilist}"
+				fi
 			elif is_crosscompile || tc-is-cross-compiler ; then
 				abilist=${DEFAULT_ABI}
 			fi
@@ -226,6 +235,10 @@ multilib-xlibs_src_compile_internal() {
 multilib-xlibs_src_install_internal() {
 	[[ "${ECLASS_DEBUG}" == "yes" ]] && einfo "Using $(multilib-xlibs_check_inherited_funcs src_install) ..."
 	$(multilib-xlibs_check_inherited_funcs src_install)
+}
+
+multilib-xlibs_pkg_preinst_internal() {
+	$(multilib-xlibs_check_inherited_funcs pkg_preinst)
 }
 
 multilib-xlibs_pkg_postinst_internal() {
