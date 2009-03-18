@@ -19,10 +19,10 @@ inherit base multilib
 
 case "${EAPI:-0}" in
 	2)
-		EXPORT_FUNCTIONS pkg_setup src_prepare src_configure src_compile src_install pkg_postinst
+		EXPORT_FUNCTIONS src_prepare src_configure src_compile src_install pkg_postinst
 		;;
 	*)
-		EXPORT_FUNCTIONS pkg_setup src_compile src_install pkg_postinst
+		EXPORT_FUNCTIONS src_compile src_install pkg_postinst
 		;;
 esac
 
@@ -30,13 +30,6 @@ EMULTILIB_OCFLAGS=""
 EMULTILIB_OCXXFLAGS=""
 EMULTILIB_OCHOST=""
 EMULTILIB_OSPATH=""
-
-# @FUNCTION: multilib-xlibs_pkg_setup
-# @USAGE:
-# @DESCRIPTION:
-multilib-xlibs_pkg_setup() {
-	multilib-xlibs_src_generic pkg_setup
-}
 
 # @FUNCTION: multilib-xlibs_src_prepare
 # @USAGE:
@@ -152,17 +145,15 @@ multilib-xlibs_src_generic_sub() {
 			einfo "Copying source tree to ${WORKDIR}/builddir.${ABI}"
 			cp -al ${S} ${WORKDIR}/builddir.${ABI}
 		fi
-
+		
 		cd ${WORKDIR}/builddir.${ABI}
 		S=${WORKDIR}/builddir.${ABI}
 
 		PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 	fi
-	if [[ -n ${MULTILIBX86_ECLASS} ]]; then
-		${MULTILIBX86_ECLASS}_${1}
-	else
-		multilib-xlibs_${1}_internal
-	fi
+	
+	multilib-xlibs_${1}_internal
+	
 	if [[ -n ${EMULTILIB_PKG} ]]; then
 		if has_multilib_profile; then
 			CFLAGS="${EMULTILIB_OCFLAGS}"
@@ -198,19 +189,11 @@ multilib-xlibs_check_inherited_funcs() {
 		if [[ -z "$(echo ${1}|grep src)" ]]; then
 			declared_func=":;"
 		else
-			declared_func="base_${1}"
+			declared_func="base_${1}"egrep '(prepare|configure|compile)'
 		fi
 	fi
 
 	echo ${declared_func}
-}
-
-# @FUNCTION: multilib-xlibs_pkg_setup_internal
-# @USAGE: override this function if you arent using x-modules eclass and want to use a custom pkg_setup.
-# @DESCRIPTION: needed for gnome2
-multilib-xlibs_pkg_setup_internal() {
-	[[ "${ECLASS_DEBUG}" == "yes" ]] && einfo "Using $(multilib-xlibs_check_inherited_funcs pkg_setup) ..."
-	$(multilib-xlibs_check_inherited_funcs pkg_setup)
 }
 
 # @FUNCTION: multilib-xlibs_src_prepare_internal
