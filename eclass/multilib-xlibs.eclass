@@ -15,9 +15,7 @@ if use lib32; then
 	EMULTILIB_PKG="true"
 fi
 
-# this var is used in multilib-xlibs_check_inherited_funcs(), take care!
-MY_ECLASSES="base multilib"
-inherit ${MY_ECLASSES}
+inherit base multilib
 
 case "${EAPI:-0}" in
 	2)
@@ -177,7 +175,11 @@ multilib-xlibs_check_inherited_funcs() {
 	# Ignore the ones we inherit ourselves, base doesn't matter, as we default
 	# on it
 	local declared_func=""
-	for func in ${INHERITED/${MY_ECLASSES}-xlibs/}; do
+	local eclasses=""
+	eclasses="${INHERITED/base/}"
+	eclasses="${eclasses/multilib-xlibs}"
+
+	for func in ${eclasses}; do
 		if [[ -n $(declare -f ${func}_${1}) ]]; then
 			declared_func="${func}_${1}"
 		fi
@@ -231,3 +233,4 @@ multilib-xlibs_pkg_postinst_internal() {
 multilib-xlibs_pkg_postrm_internal() {
 	:;
 }
+
