@@ -186,7 +186,7 @@ multilib-xlibs_src_compile_internal() {
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_install
 # @DESCRIPTION:
 multilib-xlibs_src_install_internal() {
-	emake install || die	
+	einstall || die	
 }
 
 multilib-xlibs_pkg_postinst_internal() {
