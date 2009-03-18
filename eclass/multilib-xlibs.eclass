@@ -189,7 +189,7 @@ multilib-xlibs_check_inherited_funcs() {
 		if [[ -z "$(echo ${1}|grep src)" ]]; then
 			declared_func=":;"
 		else
-			declared_func="base_${1}"egrep '(prepare|configure|compile)'
+			declared_func="base_${1}"
 		fi
 	fi
 
