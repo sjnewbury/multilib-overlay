@@ -177,7 +177,7 @@ multilib-xlibs_check_inherited_funcs() {
 	local declared_func=""
 	local eclasses=""
 	eclasses="${INHERITED/base/}"
-	eclasses="${eclasses/multilib-xlibs}"
+	eclasses="${eclasses/multilib-xlibs/}"
 
 	for func in ${eclasses}; do
 		if [[ -n $(declare -f ${func}_${1}) ]]; then
