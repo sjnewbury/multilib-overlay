@@ -180,6 +180,8 @@ multilib-xlibs_src_generic_sub() {
 check_inherited_funcs() {
 	# check all eclasses for given function, in order of inheritance.
 	# if none provides it, the var stays empty. If more have it, the last one wins.
+	# Ignore the ones we inherit ourselves, base doesn't matter, as we default
+	# on it
 	local declared_func=""
 	for func in ${INHERITED/${MY_ECLASSES}-xlibs/}; do
 		if [[ -n $(declare -f ${func}_${1}) ]]; then
@@ -200,7 +202,8 @@ check_inherited_funcs() {
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_configure.
 # @DESCRIPTION:
 multilib-xlibs_src_prepare_internal() {
-	base_src_prepare
+	[[ "${ECLASS_DEBUG}" == "yes" ]] && einfo "Using $(check_inherited_funcs src_prepare) ..."
+	$(check_inherited_funcs src_prepare)
 }
 
 # @FUNCTION: multilib-xlibs_src_configure_internal
