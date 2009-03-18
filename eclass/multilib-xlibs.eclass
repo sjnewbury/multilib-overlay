@@ -220,7 +220,7 @@ multilib-xlibs_src_compile_internal() {
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_install
 # @DESCRIPTION:
 multilib-xlibs_src_install_internal() {
-	[[ "${ECLASS_DEBUG}" == "yes" ]] && einfo "Using $(check_inherited_funcs src_install) ..."
+	[[ "${ECLASS_DEBUG}" == "yes" ]] && einfo "Using $(multilib-xlibs_check_inherited_funcs src_install) ..."
 	$(multilib-xlibs_check_inherited_funcs src_install)
 }
 
