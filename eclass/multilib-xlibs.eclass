@@ -186,9 +186,13 @@ multilib-xlibs_check_inherited_funcs() {
 	done
 
 	# now if $declared_func is still empty, none of the inherited eclasses
-	# provides it, so default on base.eclass
+	# provides it, so default on base.eclass. Do nothing for pkg_post*
 	if [[ -z "${declared_func}" ]]; then
-		declared_func="base_${1}"
+		if [[ -z "$(echo ${1}|grep src)" ]]; then
+			declared_func=":;"
+		else
+			declared_func="base_${1}"
+		fi
 	fi
 
 	echo ${declared_func}
@@ -227,10 +231,9 @@ multilib-xlibs_src_install_internal() {
 }
 
 multilib-xlibs_pkg_postinst_internal() {
-	:;	
+	$(multilib-xlibs_check_inherited_funcs pkg_postinst)
 }
 
 multilib-xlibs_pkg_postrm_internal() {
-	:;
+	$(multilib-xlibs_check_inherited_funcs pkg_postrm)
 }
-
