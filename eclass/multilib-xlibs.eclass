@@ -196,7 +196,7 @@ multilib-xlibs_check_inherited_funcs() {
 	# provides it, so default on base.eclass. Do nothing for pkg_post*
 	if [[ -z "${declared_func}" ]]; then
 		if [[ -z "$(echo ${1}|grep src)" ]]; then
-			declared_func=":;"
+			declared_func="return"
 		else
 			declared_func="base_${1}"
 		fi

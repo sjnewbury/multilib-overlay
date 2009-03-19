@@ -2,7 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-libs/e2fsprogs-libs/e2fsprogs-libs-1.41.4.ebuild,v 1.1 2009/01/28 05:43:32 vapier Exp $
 
-MULTILIB_SPLITTREE="yes"
 inherit flag-o-matic toolchain-funcs multilib-xlibs
 
 EAPI="2"

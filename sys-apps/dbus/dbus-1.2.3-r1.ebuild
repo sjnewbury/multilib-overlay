@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-apps/dbus/dbus-1.2.3-r1.ebuild,v 1.10 2009/02/05 19:03:24 aballier Exp $
 
+EAPI="2"
+
 inherit eutils autotools multilib flag-o-matic multilib-xlibs
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
@@ -13,10 +15,11 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="debug doc selinux X"
 
-RDEPEND="X? ( x11-libs/libXt x11-libs/libX11 )
+RDEPEND="X? ( x11-libs/libXt x11-libs/libX11[lib32?] )
 	selinux? ( sys-libs/libselinux
 				sec-policy/selinux-dbus )
-	>=dev-libs/expat-1.95.8
+	>=dev-libs/expat-1.95.8[lib32?]
+	sys-libs/e2fsprogs-libs[lib32?]
 	!<sys-apps/dbus-0.91"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig

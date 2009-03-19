@@ -33,11 +33,12 @@ RDEPEND="x11-libs/libXrender[lib32?]
 	>=x11-libs/cairo-1.6[X,lib32?]
 	media-libs/fontconfig[lib32?]
 	x11-misc/shared-mime-info
-	>=media-libs/libpng-1.2.1
+	>=media-libs/libpng-1.2.1[lib32?]
+	dev-libs/expat[lib32?]
 	cups? ( net-print/cups )
-	jpeg? ( >=media-libs/jpeg-6b-r2 )
+	jpeg? ( >=media-libs/jpeg-6b-r2[lib32?] )
 	jpeg2k? ( media-libs/jasper )
-	tiff? ( >=media-libs/tiff-3.5.7 )
+	tiff? ( >=media-libs/tiff-3.5.7[lib32?] )
 	!<gnome-base/gail-1000"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9
