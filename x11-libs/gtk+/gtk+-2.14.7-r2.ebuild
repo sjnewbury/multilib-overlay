@@ -35,7 +35,7 @@ RDEPEND="x11-libs/libXrender[lib32?]
 	x11-misc/shared-mime-info
 	>=media-libs/libpng-1.2.1[lib32?]
 	dev-libs/expat[lib32?]
-	cups? ( net-print/cups )
+	cups? ( net-print/cups[lib32?] )
 	jpeg? ( >=media-libs/jpeg-6b-r2[lib32?] )
 	jpeg2k? ( media-libs/jasper[lib32?] )
 	tiff? ( >=media-libs/tiff-3.5.7[lib32?] )
