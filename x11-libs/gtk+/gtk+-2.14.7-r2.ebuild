@@ -37,7 +37,7 @@ RDEPEND="x11-libs/libXrender[lib32?]
 	dev-libs/expat[lib32?]
 	cups? ( net-print/cups )
 	jpeg? ( >=media-libs/jpeg-6b-r2[lib32?] )
-	jpeg2k? ( media-libs/jasper )
+	jpeg2k? ( media-libs/jasper[lib32?] )
 	tiff? ( >=media-libs/tiff-3.5.7[lib32?] )
 	!<gnome-base/gail-1000"
 DEPEND="${RDEPEND}
