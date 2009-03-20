@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/libgcrypt/libgcrypt-1.4.0-r1.ebuild,v 1.12 2008/12/07 12:05:47 vapier Exp $
 
+EAPI="2"
+
 inherit eutils autotools multilib-xlibs
 
 DESCRIPTION="general purpose crypto library based on the code used in GnuPG"
@@ -15,7 +17,7 @@ KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fb
 IUSE="nls bindist idea"
 
 RDEPEND="nls? ( virtual/libintl )
-	>=dev-libs/libgpg-error-1.5"
+	>=dev-libs/libgpg-error-1.5[lib32?]"
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )"
 
