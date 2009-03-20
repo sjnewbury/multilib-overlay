@@ -19,10 +19,10 @@ inherit base multilib
 
 case "${EAPI:-0}" in
 	2)
-		EXPORT_FUNCTIONS src_prepare src_configure src_compile src_install pkg_preinst pkg_postinst pkg_postrm
+		EXPORT_FUNCTIONS pkg_setup src_prepare src_configure src_compile src_install pkg_preinst pkg_postinst pkg_postrm
 		;;
 	*)
-		EXPORT_FUNCTIONS src_compile src_install pkg_preinst pkg_postinst pkg_postrm
+		EXPORT_FUNCTIONS pkg_setup src_compile src_install pkg_preinst pkg_postinst pkg_postrm
 		;;
 esac
 
@@ -30,6 +30,13 @@ EMULTILIB_OCFLAGS=""
 EMULTILIB_OCXXFLAGS=""
 EMULTILIB_OCHOST=""
 EMULTILIB_OSPATH=""
+
+# @FUNCTION: multilib-xlibs_pkg_setup
+# @USAGE:
+# @DESCRIPTION:
+multilib-xlibs_pkg_setup() {
+	multilib-xlibs_src_generic pkg_setup
+}
 
 # @FUNCTION: multilib-xlibs_src_prepare
 # @USAGE:
@@ -150,12 +157,12 @@ multilib-xlibs_src_generic_sub() {
 		#Nice way to avoid the "cannot run test program while cross compiling" :)
 		CBUILD=$CHOST
 
-		if [[ ! -d "${WORKDIR}/builddir.${ABI}" ]]; then
+		if [[ ! -d "${WORKDIR}/builddir.${ABI}" ]] && [[ -z "$(echo ${1}|grep pkg)" ]]; then
 			einfo "Copying source tree to ${WORKDIR}/builddir.${ABI}"
 			cp -al ${S} ${WORKDIR}/builddir.${ABI}
+			cd ${WORKDIR}/builddir.${ABI}
 		fi
 		
-		cd ${WORKDIR}/builddir.${ABI}
 		S=${WORKDIR}/builddir.${ABI}
 
 		PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
@@ -171,6 +178,50 @@ multilib-xlibs_src_generic_sub() {
 			S="${EMULTILIB_OSPATH}"
 		fi
 	fi
+}
+
+# @FUNCTION: multilib-xlibs_src_prepare_internal
+# @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_configure.
+# @DESCRIPTION:
+multilib-xlibs_src_prepare_internal() {
+	multilib-xlibs_check_inherited_funcs src_prepare
+}
+
+# @FUNCTION: multilib-xlibs_src_configure_internal
+# @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_configure.
+# @DESCRIPTION:
+multilib-xlibs_src_configure_internal() {
+	multilib-xlibs_check_inherited_funcs src_configure
+}
+
+# @FUNCTION: multilib-xlibs_src_compile_internal
+# @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_compile.
+# @DESCRIPTION:
+multilib-xlibs_src_compile_internal() {
+	multilib-xlibs_check_inherited_funcs src_compile
+}
+
+# @FUNCTION: multilib-xlibs_src_install_internal
+# @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_install
+# @DESCRIPTION:
+multilib-xlibs_src_install_internal() {
+	multilib-xlibs_check_inherited_funcs src_install
+}
+
+multilib-xlibs_pkg_setup_internal() {
+	multilib-xlibs_check_inherited_funcs pkg_setup
+}
+
+multilib-xlibs_pkg_preinst_internal() {
+	multilib-xlibs_check_inherited_funcs pkg_preinst
+}
+
+multilib-xlibs_pkg_postinst_internal() {
+	multilib-xlibs_check_inherited_funcs pkg_postinst
+}
+
+multilib-xlibs_pkg_postrm_internal() {
+	multilib-xlibs_check_inherited_funcs pkg_postrm
 }
 
 # @internal-function multilib-xlibs_check_inherited_funcs
@@ -201,50 +252,8 @@ multilib-xlibs_check_inherited_funcs() {
 			declared_func="base_${1}"
 		fi
 	fi
-
-	echo ${declared_func}
+	
+	[[ -z "$(echo ${1}|grep pkg)" ]] && einfo "Using ${declared_func} ..."
+	${declared_func}
 }
 
-# @FUNCTION: multilib-xlibs_src_prepare_internal
-# @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_configure.
-# @DESCRIPTION:
-multilib-xlibs_src_prepare_internal() {
-	[[ "${ECLASS_DEBUG}" == "yes" ]] && einfo "Using $(multilib-xlibs_check_inherited_funcs src_prepare) ..."
-	$(multilib-xlibs_check_inherited_funcs src_prepare)
-}
-
-# @FUNCTION: multilib-xlibs_src_configure_internal
-# @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_configure.
-# @DESCRIPTION:
-multilib-xlibs_src_configure_internal() {
-	[[ "${ECLASS_DEBUG}" == "yes" ]] && einfo "Using $(multilib-xlibs_check_inherited_funcs src_configure) ..."
-	$(multilib-xlibs_check_inherited_funcs src_configure)
-}
-
-# @FUNCTION: multilib-xlibs_src_compile_internal
-# @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_compile.
-# @DESCRIPTION:
-multilib-xlibs_src_compile_internal() {
-	[[ "${ECLASS_DEBUG}" == "yes" ]] && einfo "Using $(multilib-xlibs_check_inherited_funcs src_compile) ..."
-	$(multilib-xlibs_check_inherited_funcs src_compile)
-}
-
-# @FUNCTION: multilib-xlibs_src_install_internal
-# @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_install
-# @DESCRIPTION:
-multilib-xlibs_src_install_internal() {
-	[[ "${ECLASS_DEBUG}" == "yes" ]] && einfo "Using $(multilib-xlibs_check_inherited_funcs src_install) ..."
-	$(multilib-xlibs_check_inherited_funcs src_install)
-}
-
-multilib-xlibs_pkg_preinst_internal() {
-	$(multilib-xlibs_check_inherited_funcs pkg_preinst)
-}
-
-multilib-xlibs_pkg_postinst_internal() {
-	$(multilib-xlibs_check_inherited_funcs pkg_postinst)
-}
-
-multilib-xlibs_pkg_postrm_internal() {
-	$(multilib-xlibs_check_inherited_funcs pkg_postrm)
-}

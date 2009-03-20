@@ -19,20 +19,20 @@ IUSE="acl avahi dbus gnutls java jpeg kerberos ldap pam perl php png ppds python
 
 COMMON_DEPEND="acl? ( kernel_linux? ( sys-apps/acl sys-apps/attr ) )
 	avahi? ( net-dns/avahi )
-	dbus? ( sys-apps/dbus )
+	dbus? ( sys-apps/dbus[lib32?] )
 	gnutls? ( net-libs/gnutls )
 	java? ( >=virtual/jre-1.4 )
-	jpeg? ( >=media-libs/jpeg-6b )
+	jpeg? ( >=media-libs/jpeg-6b[lib32?] )
 	kerberos? ( virtual/krb5 )
 	ldap? ( net-nds/openldap )
 	pam? ( virtual/pam )
-	perl? ( dev-lang/perl )
+	perl? ( dev-lang/perl[lib32?] )
 	php? ( dev-lang/php )
-	png? ( >=media-libs/libpng-1.2.1 )
-	python? ( dev-lang/python )
+	png? ( >=media-libs/libpng-1.2.1[lib32?] )
+	python? ( dev-lang/python[lib32?] )
 	slp? ( >=net-libs/openslp-1.0.4 )
 	ssl? ( !gnutls? ( >=dev-libs/openssl-0.9.8g ) )
-	tiff? ( >=media-libs/tiff-3.5.5 )
+	tiff? ( >=media-libs/tiff-3.5.5[lib32?] )
 	xinetd? ( sys-apps/xinetd )
 	zeroconf? ( !avahi? ( net-misc/mDNSResponder ) )
 	app-text/libpaper
@@ -113,6 +113,7 @@ src_unpack() {
 src_configure() { :; }
 
 multilib-xlibs_src_compile_internal() {
+	cd "${S}"
 	# Fails to compile on SH
 	use sh && replace-flags -O? -O0
 
@@ -188,6 +189,7 @@ multilib-xlibs_src_compile_internal() {
 }
 
 multilib-xlibs_src_install_internal() {
+	cd "${S}"
 	emake BUILDROOT="${D}" install || die "emake install failed"
 	dodoc {CHANGES{,-1.{0,1}},CREDITS,README}.txt || die "dodoc install failed"
 
@@ -280,9 +282,9 @@ pkg_postinst() {
 		echo
 	fi
 
-	if [ -e "${ROOT}"/usr/lib/cups ] ; then
+	if [ -e "${ROOT}"/usr/$(get_libdir)/cups ] ; then
 		echo
-		ewarn "/usr/lib/cups exists - You need to remerge every ebuild that"
+		ewarn "/usr/$(get_libdir)/cups exists - You need to remerge every ebuild that"
 		ewarn "installed into /usr/lib/cups and /etc/cups, qfile is in portage-utils:"
 		ewarn "# FEATURES=-collision-protect emerge -va1 \$(qfile -qC /usr/lib/cups /etc/cups | sed \"s:net-print/cups$::\")"
 		echo
@@ -292,9 +294,9 @@ pkg_postinst() {
 		echo
 
 		# place symlinks to make the update smoothless
-		for i in "${ROOT}"/usr/lib/cups/{backend,filter}/* ; do
-			if [ "${i/\*}" == "${i}" ] && ! [ -e ${i/lib/libexec} ] ; then
-				ln -s ${i} ${i/lib/libexec}
+		for i in "${ROOT}"/usr/$(get_libdir)/cups/{backend,filter}/* ; do
+			if [ "${i/\*}" == "${i}" ] && ! [ -e ${i/$(get_libdir)/libexec} ] ; then
+				ln -s ${i} ${i/$(get_libdir)/libexec}
 			fi
 		done
 	fi
