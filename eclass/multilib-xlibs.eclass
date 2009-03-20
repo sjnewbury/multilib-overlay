@@ -160,9 +160,9 @@ multilib-xlibs_src_generic_sub() {
 		if [[ ! -d "${WORKDIR}/builddir.${ABI}" ]] && [[ -z "$(echo ${1}|grep pkg)" ]]; then
 			einfo "Copying source tree to ${WORKDIR}/builddir.${ABI}"
 			cp -al ${S} ${WORKDIR}/builddir.${ABI}
-			cd ${WORKDIR}/builddir.${ABI}
 		fi
 		
+		[[ -d "${WORKDIR}/builddir.${ABI}" ]] && cd ${WORKDIR}/builddir.${ABI}
 		S=${WORKDIR}/builddir.${ABI}
 
 		PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
