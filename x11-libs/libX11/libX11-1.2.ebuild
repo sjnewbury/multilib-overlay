@@ -33,7 +33,6 @@ CONFIGURE_OPTIONS="$(use_enable ipv6)
 # $(use_enable nls xlocale)
 
 x-modular_src_compile() {
-	x-modular_src_configure
 	# [Cross-Compile Love] Disable {C,LD}FLAGS and redefine CC= for 'makekeys'
 	( filter-flags -m* ; cd src/util && make CC=$(tc-getBUILD_CC) CFLAGS="${CFLAGS}" LDFLAGS="" clean all)
 	x-modular_src_make
