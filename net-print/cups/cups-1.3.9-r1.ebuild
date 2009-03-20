@@ -31,12 +31,12 @@ COMMON_DEPEND="acl? ( kernel_linux? ( sys-apps/acl sys-apps/attr ) )
 	png? ( >=media-libs/libpng-1.2.1[lib32?] )
 	python? ( dev-lang/python[lib32?] )
 	slp? ( >=net-libs/openslp-1.0.4 )
-	ssl? ( !gnutls? ( >=dev-libs/openssl-0.9.8g ) )
+	ssl? ( !gnutls? ( >=dev-libs/openssl-0.9.8g[lib32?] ) )
 	tiff? ( >=media-libs/tiff-3.5.5[lib32?] )
 	xinetd? ( sys-apps/xinetd )
 	zeroconf? ( !avahi? ( net-misc/mDNSResponder ) )
-	app-text/libpaper
-	dev-libs/libgcrypt"
+	app-text/libpaper[lib32?]
+	dev-libs/libgcrypt[lib32?]"
 
 DEPEND="${COMMON_DEPEND}
 	!<net-print/foomatic-filters-ppds-20070501
@@ -113,7 +113,6 @@ src_unpack() {
 src_configure() { :; }
 
 multilib-xlibs_src_compile_internal() {
-	cd "${S}"
 	# Fails to compile on SH
 	use sh && replace-flags -O? -O0
 
@@ -189,7 +188,6 @@ multilib-xlibs_src_compile_internal() {
 }
 
 multilib-xlibs_src_install_internal() {
-	cd "${S}"
 	emake BUILDROOT="${D}" install || die "emake install failed"
 	dodoc {CHANGES{,-1.{0,1}},CREDITS,README}.txt || die "dodoc install failed"
 
