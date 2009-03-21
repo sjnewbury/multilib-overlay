@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-libs/readline/readline-6.0.ebuild,v 1.4 2009/02/24 08:57:47 kumba Exp $
 
+EAPI="2"
+
 inherit autotools eutils multilib toolchain-funcs flag-o-matic multilib-xlibs
 
 # Official patches
@@ -36,7 +38,7 @@ IUSE=""
 
 # We must be certain that we have a bash that is linked
 # to its internal readline, else we may get problems.
-RDEPEND=">=sys-libs/ncurses-5.2-r2"
+RDEPEND=">=sys-libs/ncurses-5.2-r2[lib32?]"
 DEPEND="${RDEPEND}
 	>=app-shells/bash-2.05b-r2"
 
@@ -60,6 +62,8 @@ src_unpack() {
 	cd examples/rlfe
 	eautoconf
 }
+
+src_configure() { :; }
 
 multilib-xlibs_src_compile_internal() {
 	append-cppflags -D_GNU_SOURCE

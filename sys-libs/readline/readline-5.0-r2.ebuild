@@ -21,7 +21,7 @@ IUSE=""
 
 # We must be certain that we have a bash that is linked
 # to its internal readline, else we may get problems.
-RDEPEND=">=sys-libs/ncurses-5.2-r2"
+RDEPEND=">=sys-libs/ncurses-5.2-r2[lib32?]"
 DEPEND="${RDEPEND}
 	>=app-shells/bash-2.05b-r2"
 
@@ -46,14 +46,11 @@ src_unpack() {
 	epatch "${FILESDIR}"/readline-5.0-parallel.patch
 }
 
-src_configure() { :; }
-
-multilib-xlibs_src_compile_internal() {
+multilib-xlibs_src_configure_internal() {
 	# the --libdir= is needed because if lib64 is a directory, it will default
 	# to using that... even if CONF_LIBDIR isnt set or we're using a version
 	# of portage without CONF_LIBDIR support.
 	econf --with-curses --libdir=/usr/$(get_libdir) || die
-	emake || die
 }
 
 multilib-xlibs_src_install_internal() {
