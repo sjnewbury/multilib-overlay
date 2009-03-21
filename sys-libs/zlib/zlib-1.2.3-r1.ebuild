@@ -2,7 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-libs/zlib/zlib-1.2.3-r1.ebuild,v 1.13 2008/05/02 04:13:33 vapier Exp $
 
-MULTILIB_SPLITTREE="yes"
+EAPI="2"
+
 inherit eutils flag-o-matic toolchain-funcs multilib-xlibs
 
 DESCRIPTION="Standard (de)compression library"
@@ -30,6 +31,8 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-1.2.3-LDFLAGS.patch #126718
 	sed -i -e '/ldconfig/d' Makefile*
 }
+
+src_configure() { :; }
 
 multilib-xlibs_src_compile_internal() {
 	tc-export AR CC RANLIB
