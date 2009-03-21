@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/glitz/glitz-0.5.6.ebuild,v 1.10 2008/01/15 18:51:04 grobian Exp $
 
+EAPI="2"
+
 inherit multilib-xlibs
 
 DESCRIPTION="An OpenGL image compositing library"
@@ -15,15 +17,11 @@ IUSE=""
 
 DEPEND="virtual/opengl"
 
-DOCS="AUTHORS ChangeLog README TODO"
-
-multilib-xlibs_src_compile_internal() {
+multilib-xlibs_src_configure_internal() {
 	econf --x-libraries="/usr/$(get_libdir)" || die
-	emake || die
 }
 
 multilib-xlibs_src_install_internal() {
 	make DESTDIR="${D}" install || die
-	cd "${S}"
-	dodoc ${DOCS}
+	dodoc AUTHORS ChangeLog README TODO
 }
