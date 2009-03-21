@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libmikmod/libmikmod-3.1.11-r2.ebuild,v 1.13 2008/01/16 18:07:17 grobian Exp $
 
+EAPI="2"
+
 WANT_AUTOMAKE="1.5"
 
 inherit flag-o-matic eutils libtool autotools multilib-xlibs
@@ -32,6 +34,8 @@ src_unpack() {
 	AT_M4DIR="${S}/m4" eautoreconf
 }
 
+src_configure() { :; }
+
 multilibs-xlibs_src_compile_internal() {
 	econf \
 		--enable-af \
@@ -44,6 +48,6 @@ multilibs-xlibs_src_compile_internal() {
 
 multilib-xlibs_src_install_internal() {
 	make DESTDIR="${D}" install || die
-	dodoc ${S}/AUTHORS ${S}/NEWS ${S}/README ${S}/TODO
-	dohtml ${S}/docs/*.html
+	dodoc AUTHORS NEWS README TODO
+	dohtml docs/*.html
 }
