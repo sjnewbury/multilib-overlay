@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/freeglut/freeglut-2.4.0-r1.ebuild,v 1.14 2008/11/30 09:34:32 vapier Exp $
 
+EAPI="2"
+
 inherit eutils flag-o-matic libtool multilib-xlibs
 
 DESCRIPTION="A completely OpenSourced alternative to the OpenGL Utility Toolkit (GLUT) library"
@@ -55,13 +57,12 @@ src_unpack() {
 	elibtoolize
 }
 
-src_compile() {
+multilib-xlibs_src_configure_internal() {
 	# (#191589) Don't let -Werror get tagged on
 	econf --disable-warnings || die "econf failed"
-	emake || die "emake failed"
 }
 
-src_install() {
+multilib-xlibs_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc AUTHORS ChangeLog NEWS README TODO
 	docinto doc

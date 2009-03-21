@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/tiff/tiff-3.8.2-r4.ebuild,v 1.6 2008/11/27 06:09:09 nerdboy Exp $
 
+EAPI="2"
+
 inherit eutils libtool multilib-xlibs
 
 DESCRIPTION="Library for manipulation of TIFF (Tag Image File Format) images"
@@ -14,9 +16,9 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="jpeg jbig nocxx zlib"
 
-DEPEND="jpeg? ( >=media-libs/jpeg-6b )
-	jbig? ( >=media-libs/jbigkit-1.6-r1 )
-	zlib? ( >=sys-libs/zlib-1.1.3-r2 )"
+DEPEND="jpeg? ( >=media-libs/jpeg-6b[lib32?] )
+	jbig? ( >=media-libs/jbigkit-1.6-r1[lib32?] )
+	zlib? ( >=sys-libs/zlib-1.1.3-r2[lib32?] )"
 
 src_unpack() {
 	unpack ${A}
@@ -30,6 +32,8 @@ src_unpack() {
 	epatch "${FILESDIR}"/${P}-CVE-2008-2327.patch
 	elibtoolize
 }
+
+src_configure() { :; }
 
 multilib-xlibs_src_compile_internal() {
 	econf \

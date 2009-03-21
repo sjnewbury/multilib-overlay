@@ -13,7 +13,7 @@ SRC_URI="http://www.mega-nerd.com/SRC/${P}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="doc sndfile"
+IUSE="sndfile"
 
 RDEPEND="sndfile? ( >=media-libs/libsndfile-1.0.2[lib32?] )"
 DEPEND="${RDEPEND}
@@ -38,5 +38,5 @@ multilib-xlibs_src_configure_internal() {
 multilib-xlibs_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc AUTHORS ChangeLog NEWS README
-	use doc && dohtml doc/*.html doc/*.css doc/*.png
+	dohtml doc/*.html doc/*.css doc/*.png
 }

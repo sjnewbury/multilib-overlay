@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/speex/speex-1.1.12.ebuild,v 1.13 2008/01/10 15:00:52 drac Exp $
 
+EAPI="2"
+
 inherit eutils autotools libtool multilib-xlibs
 
 DESCRIPTION="Speech encoding library"
@@ -33,6 +35,8 @@ src_unpack() {
 	elibtoolize
 }
 
+src_configure() { :; }
+
 multilibs-xlibs_src_compile_internal() {
 	# FIXME: ogg autodetect only
 	econf \
@@ -42,7 +46,7 @@ multilibs-xlibs_src_compile_internal() {
 	emake || die "emake failed."
 }
 
-multilib-xlibs_src_install_internal () {
+multilib-xlibs_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 	dodoc AUTHORS ChangeLog README* TODO NEWS
 }

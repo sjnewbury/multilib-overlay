@@ -7,7 +7,7 @@
 #   in dev-lang/python. It _WILL_ stop people installing from
 #   Gentoo 1.4 images.
 
-EAPI=2
+EAPI="2"
 
 inherit eutils autotools flag-o-matic python multilib versionator toolchain-funcs alternatives libtool multilib-xlibs
 
@@ -111,6 +111,8 @@ src_configure_internal() {
 
 	einfo "Disabled modules: $PYTHON_DISABLE_MODULES"
 }
+
+src_configure() { :; }
 
 multilib-xlibs_src_compile_internal() {
 	filter-flags -malign-double

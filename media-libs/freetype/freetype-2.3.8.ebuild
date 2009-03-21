@@ -1,6 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/freetype/freetype-2.3.8.ebuild,v 1.1 2009/01/21 16:06:10 pva Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/freetype/freetype-2.3.8.ebuild,v 1.10 2009/03/18 14:56:50 ranger Exp $
+
+EAPI="2" 
 
 inherit eutils flag-o-matic libtool multilib-xlibs
 
@@ -12,7 +14,7 @@ SRC_URI="mirror://sourceforge/freetype/${P/_/}.tar.bz2
 
 LICENSE="FTL GPL-2"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="X bindist debug doc utils fontforge"
 
 DEPEND="X?	( x11-libs/libX11
@@ -75,6 +77,8 @@ src_unpack() {
 	epunt_cxx
 }
 
+src_configure() { :; }
+
 multilib-xlibs_src_compile_internal() {
 	append-flags -fno-strict-aliasing
 
@@ -115,9 +119,6 @@ multilib-xlibs_src_install_internal() {
 }
 
 pkg_postinst() {
-	echo
-	ewarn "After upgrading to freetype-2.3.5, it is necessary to rebuild"
-	ewarn "libXfont to avoid build errors in some packages."
 	echo
 	elog "The utilities and demos previously bundled with freetype are now"
 	elog "optional.  Enable the utils USE flag if you would like them"

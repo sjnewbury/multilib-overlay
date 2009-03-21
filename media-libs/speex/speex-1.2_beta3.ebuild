@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/speex/speex-1.2_beta3.ebuild,v 1.9 2008/01/10 08:54:33 vapier Exp $
 
+EAPI="2"
+
 inherit autotools eutils flag-o-matic multilib-xlibs
 
 MY_P=${P/_/}
@@ -26,6 +28,8 @@ src_unpack() {
 	epatch "${FILESDIR}"/${P}-configure.patch
 	eautoreconf
 }
+
+src_configure() { :; }
 
 multilibs-xlibs_src_compile_internal() {
 	append-flags -D_FILE_OFFSET_BITS=64

@@ -52,7 +52,6 @@ multilib-xlibs_src_compile_internal() {
 
 multilib-xlibs_src_install_internal() {
 	make DESTDIR="${D}" install || die
-	cd ${S}
 	dodoc AUTHORS BUGS ChangeLog NEWS README* THANKS TODO VERSION
 }
 

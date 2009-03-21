@@ -2,7 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-arch/bzip2/bzip2-1.0.5-r1.ebuild,v 1.7 2008/09/22 04:02:26 jer Exp $
 
-MULTILIB_SPLITTREE="yes"
+EAPI="2"
+
 inherit eutils multilib toolchain-funcs flag-o-matic multilib-xlibs
 
 DESCRIPTION="A high-quality data compressor used extensively by Gentoo Linux"
@@ -38,6 +39,8 @@ src_unpack() {
 		-e "s:1\.0\.4:${PV}:" \
 		bzip2.1 bzip2.txt Makefile-libbz2_so manual.{html,ps,xml} || die
 }
+
+src_configure() { :; }
 
 multilib-xlibs_src_compile_internal() {
 	local makeopts="

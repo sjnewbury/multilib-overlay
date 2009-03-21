@@ -28,18 +28,16 @@ src_unpack() {
 	sed -i -e 's:-Werror::' Makefile.am
 }
 
-multilib-xlibs_src_compile_internal() {
+multilib-xlibs_src_configure_internal() {
 	elibtoolize
 	econf \
 		$(use_enable debug debug all) \
 		$(use_enable doc build-docs) \
 		|| die "econf failed"
-	emake || die "emake failed"
 }
 
 multilib-xlibs_src_install_internal() {
 	make DESTDIR=${D} install || die
-	cd "${S}"
 	dodoc AUTHORS NEWS README || die
 	if use doc; then
 		dohtml doc/html/*.html || die

@@ -2,7 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libpng/libpng-1.2.34.ebuild,v 1.9 2009/02/02 19:25:39 armin76 Exp $
 
-inherit libtool multilib eutils
+EAPI="2"
+
+inherit libtool multilib eutils multilib-xlibs
 
 MY_PV=${PV/_}
 DESCRIPTION="Portable Network Graphics library"
@@ -14,7 +16,7 @@ SLOT="1.2"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE=""
 
-RDEPEND="sys-libs/zlib"
+RDEPEND="sys-libs/zlib[lib32?]"
 DEPEND="${RDEPEND}
 	app-arch/lzma-utils"
 
@@ -29,12 +31,12 @@ src_unpack() {
 	elibtoolize
 }
 
-src_install() {
+multilib-xlibs_src_install_internal() {
 	emake DESTDIR="${D}" install || die
-	dodoc ../ANNOUNCE ../CHANGES ../KNOWNBUG ../README ../TODO ../Y2KINFO
+	dodoc ANNOUNCE CHANGES KNOWNBUG README TODO Y2KINFO
 }
 
-pkg_postinst() {
+multilib-xlibs_pkg_postinst_internal() {
 	# the libpng authors really screwed around between 1.2.1 and 1.2.3
 	if [[ -f ${ROOT}/usr/$(get_libdir)/libpng.so.3.1.2.1 ]] ; then
 		rm -f "${ROOT}"/usr/$(get_libdir)/libpng.so.3.1.2.1

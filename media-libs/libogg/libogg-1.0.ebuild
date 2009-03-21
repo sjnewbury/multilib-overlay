@@ -2,6 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libogg/libogg-1.0.ebuild,v 1.21 2007/01/05 17:14:17 flameeyes Exp $
 
+EAPI="2"
+
+inherit multilib-xlibs
+
 DESCRIPTION="the Ogg media file format library"
 HOMEPAGE="http://www.xiph.org/ogg/vorbis/index.html"
 SRC_URI="http://fatpipe.vorbis.com/files/1.0/unix/${P}.tar.gz"
@@ -17,7 +21,7 @@ multilibs-xlibs_src_compile_internal() {
 	emake || die
 }
 
-multilib-xlibs_src_install_internal () {
+multilib-xlibs_src_install_internal() {
 	make DESTDIR=${D} install || die
 
 	# remove the docs installed by make install, since I'll install
@@ -25,8 +29,8 @@ multilib-xlibs_src_install_internal () {
 	echo "Removing docs installed by make install"
 	rm -rf ${D}/usr/share/doc
 
-	dodoc ${S}/AUTHORS ${S}/CHANGES ${S}/COPYING ${S}/README
-	dohtml ${S}/doc/*.{html,png}
+	dodoc AUTHORS CHANGES COPYING README
+	dohtml doc/*.{html,png}
 }
 
 pkg_postinst() {

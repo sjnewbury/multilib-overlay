@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/popt/popt-1.14.ebuild,v 1.1 2008/04/18 04:37:48 flameeyes Exp $
 
+EAPI="2"
+
 inherit eutils multilib-xlibs
 
 DESCRIPTION="Parse Options - Command line parser"
@@ -16,12 +18,11 @@ IUSE="nls"
 RDEPEND="nls? ( virtual/libintl )"
 DEPEND="nls? ( sys-devel/gettext )"
 
-multilib-xlibs_src_compile_internal() {
+multilib-xlibs_src_configure_internal() {
 	econf \
 		--without-included-gettext \
 		$(use_enable nls) \
 		|| die
-	emake || die "emake failed"
 }
 
 multilib-xlibs_src_install_internal() {

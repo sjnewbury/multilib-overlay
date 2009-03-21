@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libmad/libmad-0.15.1b-r5.ebuild,v 1.1 2008/04/18 21:14:50 flameeyes Exp $
 
+EAPI="2"
+
 inherit eutils autotools libtool flag-o-matic multilib-xlibs
 
 DESCRIPTION="\"M\"peg \"A\"udio \"D\"ecoder library"
@@ -28,6 +30,8 @@ src_unpack() {
 	epunt_cxx #74490
 }
 
+src_configure() { :; }
+
 multilibs-xlibs_src_compile_internal() {
 	local myconf="--enable-accuracy"
 	# --enable-speed		 optimize for speed over accuracy
@@ -53,7 +57,7 @@ multilibs-xlibs_src_compile_internal() {
 multilib-xlibs_src_install_internal() {
 	emake install DESTDIR="${D}" || die "make install failed"
 
-	dodoc ${S}/CHANGES ${S}/CREDITS ${S}/README ${S}/TODO ${S}/VERSION
+	dodoc CHANGES CREDITS README TODO VERSION
 
 	# This file must be updated with each version update
 	insinto /usr/$(get_libdir)/pkgconfig

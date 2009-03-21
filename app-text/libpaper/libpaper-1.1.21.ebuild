@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-text/libpaper/libpaper-1.1.21.ebuild,v 1.15 2007/11/20 02:59:28 kumba Exp $
 
+EAPI="2"
+
 inherit eutils libtool multilib-xlibs
 
 MY_P=${P/-/_}

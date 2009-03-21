@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libogg/libogg-1.1.3-r1.ebuild,v 1.1 2008/04/18 21:16:38 flameeyes Exp $
 
+EAPI="2"
+
 inherit eutils libtool multilib-xlibs
 
 DESCRIPTION="the Ogg media file format library"

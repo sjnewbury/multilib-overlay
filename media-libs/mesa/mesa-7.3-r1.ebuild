@@ -117,6 +117,8 @@ src_unpack() {
 	eautoreconf
 }
 
+src_configure() { :; }
+
 multilib-xlibs_src_compile_internal() {
 	local myconf
 

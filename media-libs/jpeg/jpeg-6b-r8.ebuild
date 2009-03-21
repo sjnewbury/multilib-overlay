@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/jpeg/jpeg-6b-r8.ebuild,v 1.14 2008/08/16 14:46:39 vapier Exp $
 
+EAPI="2"
+
 inherit libtool eutils toolchain-funcs multilib-xlibs
 
 PATCH_VER="1.6"
@@ -31,6 +33,8 @@ src_unpack() {
 	elibtoolize
 }
 
+src_configure() { :; }
+
 multilib-xlibs_src_compile_internal() {
 	tc-export CC RANLIB AR
 	econf \
@@ -50,3 +54,4 @@ multilib-xlibs_src_install_internal() {
 		libjpeg.doc example.c structure.doc filelist.doc \
 		coderules.doc
 }
+

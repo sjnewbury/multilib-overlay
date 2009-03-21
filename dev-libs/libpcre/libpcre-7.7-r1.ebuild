@@ -29,6 +29,8 @@ src_unpack() {
 	elibtoolize
 }
 
+src_configure() { :; }
+
 multilib-xlibs_src_compile_internal() {
 	# Enable building of static libs too - grep and others
 	# depend on them being built: bug 164099
@@ -46,7 +48,7 @@ multilib-xlibs_src_compile_internal() {
 
 multilib-xlibs_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
-	cd "${S}"
+
 	dodoc doc/*.txt AUTHORS
 	use doc && dohtml doc/html/*
 }

@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.3.ebuild,v 1.2 2009/02/03 15:56:57 remi Exp $
 
+EAPI="2"
+
 GIT=$([[ ${PV} = 9999* ]] && echo "git")
 EGIT_REPO_URI="git://anongit.freedesktop.org/mesa/mesa"
 
@@ -49,14 +51,14 @@ IUSE="${IUSE_VIDEO_CARDS}
 
 RDEPEND="app-admin/eselect-opengl
 	dev-libs/expat
-	x11-libs/libX11
-	x11-libs/libXext
-	x11-libs/libXxf86vm
-	x11-libs/libXi
-	x11-libs/libXmu
-	x11-libs/libXdamage
-	>=x11-libs/libdrm-2.4.3
-	x11-libs/libICE
+	x11-libs/libX11[xcb?,lib32?]
+	x11-libs/libXext[lib32?]
+	x11-libs/libXxf86vm[lib32?]
+	x11-libs/libXi[lib32?]
+	x11-libs/libXmu[lib32?]
+	x11-libs/libXdamage[lib32?]
+	>=x11-libs/libdrm-2.4.3[lib32?]
+	x11-libs/libICE[lib32?]
 	motif? ( x11-libs/openmotif )
 	doc? ( app-doc/opengl-manpages )
 	!<=x11-base/xorg-x11-6.9"
@@ -77,14 +79,6 @@ S="${WORKDIR}/${MY_P}"
 # Think about: ggi, svga, fbcon, no-X configs
 
 pkg_setup() {
-	if use xcb; then
-		if ! built_with_use x11-libs/libX11 xcb; then
-			msg="You must build libX11 with xcb enabled."
-			eerror ${msg}
-			die ${msg}
-		fi
-	fi
-
 	if use debug; then
 		append-flags -g
 	fi
@@ -117,6 +111,8 @@ src_unpack() {
 
 	eautoreconf
 }
+
+src_configure() { :; }
 
 multilib-xlibs_src_compile_internal() {
 	local myconf
@@ -186,6 +182,9 @@ multilib-xlibs_src_install_internal() {
 	insinto /usr/$(get_libdir)
 	# (#67729) Needs to be lib, not $(get_libdir)
 	doins "${FILESDIR}"/lib/libGLU.la
+	sed -i -e "s:/lib:/$(get_libdir):g" \
+		"${D}"/usr/$(get_libdir)/libGLU.la
+
 	sed -e "s:\${libdir}:$(get_libdir):g" "${FILESDIR}"/lib/libGL.la \
 		> "${D}"/usr/$(get_libdir)/opengl/xorg-x11/lib/libGL.la
 
