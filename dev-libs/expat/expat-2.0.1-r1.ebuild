@@ -1,6 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/expat/expat-2.0.1-r1.ebuild,v 1.8 2009/02/20 18:02:39 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/expat/expat-2.0.1-r1.ebuild,v 1.9 2009/03/17 10:48:59 armin76 Exp $
+
+EAPI="2"
 
 inherit eutils libtool multilib-xlibs
 
@@ -10,7 +12,7 @@ SRC_URI="mirror://sourceforge/expat/${P}.tar.gz"
 
 LICENSE="as-is"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ~m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE=""
 
 DEPEND=""
@@ -28,7 +30,6 @@ src_unpack() {
 
 multilib-xlibs_src_install_internal() {
 	make install DESTDIR="${D}" || die
-	cd "${S}"
 	dodoc Changes README
 	dohtml doc/*
 }
