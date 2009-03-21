@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/freetype/freetype-2.3.9.ebuild,v 1.1 2009/03/13 18:33:06 pva Exp $
 
+EAPI="2"
+
 inherit eutils flag-o-matic libtool multilib-xlibs
 
 DESCRIPTION="A high-quality and portable font engine"
@@ -74,6 +76,8 @@ src_unpack() {
 	elibtoolize
 	epunt_cxx
 }
+
+src_configure() { :; }
 
 multilib-xlibs_src_compile_inernal() {
 	append-flags -fno-strict-aliasing
