@@ -33,6 +33,8 @@ src_unpack() {
 	elibtoolize
 }
 
+src_configure() { :; }
+
 multilib-xlibs_src_compile_internal() {
 	econf \
 		$(use_enable !nocxx cxx) \
