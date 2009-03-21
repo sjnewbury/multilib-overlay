@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/speex/speex-1.2_beta3_p2.ebuild,v 1.11 2008/12/07 11:54:58 vapier Exp $
 
+EAPI="2"
+
 inherit autotools eutils flag-o-matic multilib-xlibs
 
 MY_P=${P/_} ; MY_P=${MY_P/_p/.}
@@ -30,6 +32,8 @@ src_unpack() {
 		|| die "unable to disable tests building"
 	eautoreconf
 }
+
+src_configure() { :; }
 
 multilibs-xlibs_src_compile_internal() {
 	append-flags -D_FILE_OFFSET_BITS=64
