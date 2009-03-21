@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/fribidi/fribidi-0.10.7.ebuild,v 1.14 2007/05/08 18:53:39 grobian Exp $
 
+EAPI="2"
+
 inherit multilib-xlibs
 
 DESCRIPTION="A free implementation of the unicode bidirectional algorithm"
@@ -15,5 +17,5 @@ IUSE=""
 
 multilib-xlibs_src_install_internal() {
 	emake DESTDIR="${D}" install || die
-	dodoc ${S}/AUTHORS ${S}/NEWS ${S}/README ${S}/ChangeLog ${S}/THANKS ${S}/TODO
+	dodoc AUTHORS NEWS README ChangeLog THANKS TODO
 }
