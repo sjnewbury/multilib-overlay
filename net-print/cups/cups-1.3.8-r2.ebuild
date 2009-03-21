@@ -19,24 +19,24 @@ IUSE="acl avahi dbus gnutls java jpeg kerberos ldap pam perl php png ppds python
 
 COMMON_DEPEND="acl? ( kernel_linux? ( sys-apps/acl sys-apps/attr ) )
 	avahi? ( net-dns/avahi )
-	dbus? ( sys-apps/dbus )
+	dbus? ( sys-apps/dbus[lib32?] )
 	gnutls? ( net-libs/gnutls )
 	java? ( >=virtual/jre-1.4 )
-	jpeg? ( >=media-libs/jpeg-6b )
+	jpeg? ( >=media-libs/jpeg-6b[lib32?] )
 	kerberos? ( virtual/krb5 )
 	ldap? ( net-nds/openldap )
 	pam? ( virtual/pam )
-	perl? ( dev-lang/perl )
+	perl? ( dev-lang/perl[lib32?] )
 	php? ( dev-lang/php )
-	png? ( >=media-libs/libpng-1.2.1 )
-	python? ( dev-lang/python )
+	png? ( >=media-libs/libpng-1.2.1[lib32?] )
+	python? ( dev-lang/python[lib32?] )
 	slp? ( >=net-libs/openslp-1.0.4 )
-	ssl? ( !gnutls? ( >=dev-libs/openssl-0.9.8g ) )
-	tiff? ( >=media-libs/tiff-3.5.5 )
+	ssl? ( !gnutls? ( >=dev-libs/openssl-0.9.8g[lib32?] ) )
+	tiff? ( >=media-libs/tiff-3.5.5[lib32?] )
 	xinetd? ( sys-apps/xinetd )
 	zeroconf? ( !avahi? ( net-misc/mDNSResponder ) )
-	app-text/libpaper
-	dev-libs/libgcrypt"
+	app-text/libpaper[lib32?]
+	dev-libs/libgcrypt[lib32?]"
 
 DEPEND="${COMMON_DEPEND}
 	!<net-print/foomatic-filters-ppds-20070501
@@ -183,7 +183,7 @@ multilib-xlibs_src_compile_internal() {
 		--disable-pdftops \
 		${myconf}
 
-	# install in /usr/libexec always, instead of using /usr/lib/cups, as that
+	# install in /usr/libexec always, instead of using /usr/$(get_libdir)/cups, as that
 	# makes more sense when facing multilib support.
 	sed -i -e 's:SERVERBIN.*:SERVERBIN = "$(BUILDROOT)"/usr/libexec/cups:' Makedefs
 	sed -i -e 's:#define CUPS_SERVERBIN.*:#define CUPS_SERVERBIN "/usr/libexec/cups":' config.h
@@ -285,11 +285,11 @@ pkg_postinst() {
 		echo
 	fi
 
-	if [ -e "${ROOT}"/usr/lib/cups ] ; then
+	if [ -e "${ROOT}"/usr/$(get_libdir)/cups ] ; then
 		echo
-		ewarn "/usr/lib/cups exists - You need to remerge every ebuild that"
-		ewarn "installed into /usr/lib/cups and /etc/cups, qfile is in portage-utils:"
-		ewarn "# FEATURES=-collision-protect emerge -va1 \$(qfile -qC /usr/lib/cups /etc/cups | sed \"s:net-print/cups$::\")"
+		ewarn "/usr/$(get_libdir)/cups exists - You need to remerge every ebuild that"
+		ewarn "installed into /usr/$(get_libdir)/cups and /etc/cups, qfile is in portage-utils:"
+		ewarn "# FEATURES=-collision-protect emerge -va1 \$(qfile -qC /usr/$(get_libdir)/cups /etc/cups | sed \"s:net-print/cups$::\")"
 		echo
 		ewarn "FEATURES=-collision-protect is needed to overwrite the compatibility"
 		ewarn "symlinks installed by this package, it won't be needed on later merges."
@@ -297,9 +297,9 @@ pkg_postinst() {
 		echo
 
 		# place symlinks to make the update smoothless
-		for i in "${ROOT}"/usr/lib/cups/{backend,filter}/* ; do
-			if [ "${i/\*}" == "${i}" ] && ! [ -e ${i/lib/libexec} ] ; then
-				ln -s ${i} ${i/lib/libexec}
+		for i in "${ROOT}"/usr/$(get_libdir)/cups/{backend,filter}/* ; do
+			if [ "${i/\*}" == "${i}" ] && ! [ -e ${i/$(get_libdir)/libexec} ] ; then
+				ln -s ${i} ${i/$(get_libdir)/libexec}
 			fi
 		done
 	fi
