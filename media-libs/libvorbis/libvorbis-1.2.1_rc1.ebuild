@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libvorbis/libvorbis-1.2.1_rc1.ebuild,v 1.11 2008/12/07 11:53:14 vapier Exp $
 
+EAPI="2"
+
 inherit libtool flag-o-matic eutils toolchain-funcs multilib-xlibs
 
 MY_P=${P/_/}
@@ -32,6 +34,8 @@ src_unpack() {
 	sed -i -e "s:-mcpu=750::g" configure
 }
 
+src_configure() { :; }
+
 multilibs-xlibs_src_compile_internal() {
 	# gcc-3.4 and k6 with -ftracer causes code generation problems #49472
 	if [[ "$(gcc-major-version)$(gcc-minor-version)" == "34" ]]; then
@@ -49,10 +53,10 @@ multilib-xlibs_src_install_internal() {
 
 	rm -rf "${D}"/usr/share/doc/${P}
 
-	dodoc ${S}/AUTHORS ${S}/CHANGES ${S}/README ${S}/todo.txt
+	dodoc AUTHORS CHANGES README todo.txt
 
 	if use doc; then
-		docinto ${S}/txt
+		docinto txt
 		dodoc doc/*.txt
 		dohtml -r doc
 	fi
