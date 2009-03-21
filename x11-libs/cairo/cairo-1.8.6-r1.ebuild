@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/cairo/cairo-1.8.6-r1.ebuild,v 1.4 2009/03/11 02:26:29 dang Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/cairo/cairo-1.8.6-r1.ebuild,v 1.6 2009/03/18 14:21:26 armin76 Exp $
 
 EAPI="2"
 
@@ -12,7 +12,7 @@ SRC_URI="http://cairographics.org/releases/${P}.tar.gz"
 
 LICENSE="|| ( LGPL-2.1 MPL-1.1 )"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 ~arm ~hppa ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
 IUSE="cleartype debug directfb doc glitz opengl svg X xcb"
 
 # Test causes a circular depend on gtk+... since gtk+ needs cairo but test needs gtk+ so we need to block it
@@ -32,7 +32,8 @@ RDEPEND="media-libs/fontconfig[lib32?]
 		x11-libs/libXft[lib32?] )
 	xcb? (	>=x11-libs/libxcb-0.92[lib32?]
 		x11-libs/xcb-util[lib32?] )
-	lib32? ( app-emulation/emul-linux-x86-baselibs )"
+	lib32? ( app-emulation/emul-linux-x86-baselibs )
+	app-text/poppler-bindings[gtk]"
 #	test? (
 #	pdf test
 #	x11-libs/pango
@@ -50,8 +51,6 @@ DEPEND="${RDEPEND}
 		~app-text/docbook-xml-dtd-4.2 )
 	X? ( x11-proto/renderproto )
 	xcb? ( x11-proto/xcb-proto )"
-
-DOCS="AUTHORS ChangeLog NEWS README"
 
 src_unpack() {
 	unpack ${A}
@@ -89,9 +88,8 @@ multilib-xlibs_src_configure_internal() {
 }
 
 multilib-xlibs_src_install_internal() {
-	make DESTDIR="${D}" install || die
-	cd "${S}"
-	dodoc AUTHORS BIBLIOGRAPHY BUGS ChangeLog CODING_STYLE HACKING INSTALL README
+	make DESTDIR="${D}" install || die "Installation failed"
+	dodoc AUTHORS ChangeLog NEWS README
 }
 
 pkg_postinst() {
