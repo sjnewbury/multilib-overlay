@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-text/libpaper/libpaper-1.1.23.ebuild,v 1.9 2008/10/27 05:54:16 vapier Exp $
 
+EAPI="2"
+
 inherit eutils libtool multilib-xlibs
 
 MY_P=${P/-/_}
@@ -23,7 +25,6 @@ src_unpack() {
 
 multilib-xlibs_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
-	cd "${S}"
 	dodoc README ChangeLog debian/changelog debian/NEWS
 	dodir /etc
 	(paperconf 2>/dev/null || echo a4) > "${D}"/etc/papersize
