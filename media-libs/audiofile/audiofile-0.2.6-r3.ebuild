@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/audiofile/audiofile-0.2.6-r3.ebuild,v 1.12 2007/09/22 04:54:01 tgall Exp $
 
+EAPI="2"
+
 inherit libtool eutils multilib-xlibs
 
 DESCRIPTION="An elegant API for accessing audio files"
@@ -27,13 +29,11 @@ src_unpack() {
 	elibtoolize
 }
 
-multilibs-xlibs_src_compile_internal() {
+multilibs-xlibs_src_configure_internal() {
 	econf --enable-largefile || die
-	emake || die
 }
 
 multilib-xlibs_src_install_internal() {
 	make DESTDIR="${D}" install || die
-	dodoc ${S}/ACKNOWLEDGEMENTS ${S}/AUTHORS ${S}/ChangeLog ${S}/README
-	${S}/TODO ${S}/NEWS ${S}/NOTES
+	dodoc ACKNOWLEDGEMENTS AUTHORS ChangeLog README TODO NEWS NOTES
 }
