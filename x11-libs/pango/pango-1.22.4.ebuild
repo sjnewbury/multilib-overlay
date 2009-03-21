@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.22.4.ebuild,v 1.5 2009/03/11 02:27:58 dang Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.22.4.ebuild,v 1.7 2009/03/18 14:22:11 armin76 Exp $
 
 EAPI="2"
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.pango.org/"
 
 LICENSE="LGPL-2 FTL"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 ~arm ~hppa ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
 IUSE="X debug doc"
 
 RDEPEND=">=dev-libs/glib-2.17.3
@@ -74,7 +74,7 @@ multilib-xlibs_src_configure_internal() {
 }
 
 multilib-xlibs_src_install_internal() {
-	make DESTDIR="${D}" install || die
+	gnome2_src_install
 	rm "${D}/etc/pango/pango.modules"
 }
 
