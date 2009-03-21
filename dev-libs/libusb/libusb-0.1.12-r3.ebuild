@@ -42,13 +42,12 @@ src_unpack() {
 	"${S}"/doc/manual.sgml
 }
 
-multilib-xlibs_src_compile_internal() {
+multilib-xlibs_src_configure_internal() {
 	econf \
 		$(use_enable debug debug all) \
 		$(use_enable doc build-docs) \
 		--libdir /usr/$(get_libdir) \
 		|| die "econf failed"
-	emake || die "emake failed"
 }
 
 multilib-xlibs_src_install_internal() {
@@ -63,7 +62,6 @@ multilib-xlibs_src_install_internal() {
 	gen_usr_ldscript libusb.so
 	use nocxx || gen_usr_ldscript libusbpp.so
 
-	cd "${S}"
 	dodoc AUTHORS NEWS README || die "dodoc failed"
 	if use doc ; then
 		dohtml doc/html/*.html || die "dohtml failed"
