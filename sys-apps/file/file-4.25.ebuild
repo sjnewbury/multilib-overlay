@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-apps/file/file-4.25.ebuild,v 1.1 2008/07/17 20:06:49 cardoe Exp $
 
+EAPI="2"
+
 inherit eutils distutils libtool flag-o-matic multilib-xlibs
 
 DESCRIPTION="identify a file's format by scanning binary data for patterns"
@@ -32,6 +34,8 @@ src_unpack() {
 	mv python/README{,.python}
 }
 
+src_configure() { :; }
+
 multilib-xlibs_src_compile_internal() {
 	# file uses things like strndup() and wcwidth()
 	append-flags -D_GNU_SOURCE
@@ -39,14 +43,14 @@ multilib-xlibs_src_compile_internal() {
 	econf --datadir=/usr/share/misc || die
 	emake || die "emake failed"
 
-	use python && cd python && distutils_multilib-xlibs_src_compile_internal
+	use python && cd python && distutils_src_compile
 }
 
 multilib-xlibs_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc ChangeLog MAINT README
 
-	use python && cd python && distutils_multilib-xlibs_src_install_internal
+	use python && cd python && distutils_src_install
 }
 
 pkg_postinst() {
