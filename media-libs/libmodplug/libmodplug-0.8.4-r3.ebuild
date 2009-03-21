@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libmodplug/libmodplug-0.8.4-r3.ebuild,v 1.1 2008/04/14 14:06:31 flameeyes Exp $
 
+EAPI="2"
 WANT_AUTOCONF="latest"
 WANT_AUTOMAKE="latest"
 
@@ -35,7 +36,7 @@ src_unpack() {
 
 multilib-xlibs_src_install_internal() {
 	make DESTDIR="${D}" install || die
-	dodoc ${S}/AUTHORS ${S}/ChangeLog ${S}/README ${S}/TODO
+	dodoc AUTHORS ChangeLog README TODO
 
 	# Remove unneeded libtool files
 	find "${D}" -name '*.la' -delete
