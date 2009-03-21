@@ -37,6 +37,8 @@ src_unpack() {
 	eautoreconf
 }
 
+src_configure() { :; }
+
 multilib-xlibs_src_compile_internal() {
 	# so we can get backtraces from apps
 	append-flags -rdynamic
@@ -78,7 +80,7 @@ src_test() {
 
 multilib-xlibs_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
-	cd "${S}"
+
 	# initscript
 	newinitd "${FILESDIR}"/dbus.init-1.0 dbus
 
