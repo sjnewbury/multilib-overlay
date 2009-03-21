@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-vfs/gnome-vfs-2.24.0-r1.ebuild,v 1.1 2009/03/08 21:52:08 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-vfs/gnome-vfs-2.24.1.ebuild,v 1.1 2009/03/19 00:42:09 eva Exp $
 
 EAPI="2"
 
@@ -98,10 +98,10 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-2.20.0-home_dir_fakeroot.patch
 
 	# Configure with gnutls-2.7, bug #253729
-	epatch "${FILESDIR}"/${P}-gnutls27.patch
+	epatch "${FILESDIR}"/${PN}-2.24.0-gnutls27.patch
 
 	# Prevent duplicated volumes, bug #193083
-	epatch "${FILESDIR}"/${P}-uuid-mount.patch
+	epatch "${FILESDIR}"/${PN}-2.24.0-uuid-mount.patch
 
 	# Fix deprecated API disabling in used libraries - this is not future-proof, bug 212163
 	# upstream bug #519632
@@ -113,6 +113,19 @@ src_unpack() {
 	sed -i -e 's:-DG_DISABLE_DEPRECATED:$(NULL):g' \
 		programs/Makefile.am programs/Makefile.in
 
+	# Fix use of broken gtk-doc.make
+	if use doc; then
+		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" -i gtk-doc.make
+	else
+		sed "/^TARGET_DIR/i \GTKDOC_REBASE=true" -i gtk-doc.make
+	fi
+
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
+}
+
+src_test() {
+	unset DISPLAY
+	#unset DBUS_SESSION_BUS_ADDRESS
+	emake check || die "tests failed"
 }
