@@ -83,7 +83,9 @@ multilib-xlibs_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-xlibs_src_configure_internal() {
+src_configure() { :; }
+
+src_configure_internal() {
 	# disable extraneous modules with extra dependencies
 	if use build; then
 		export PYTHON_DISABLE_MODULES="readline pyexpat dbm gdbm bsddb _curses _curses_panel _tkinter _sqlite3"
@@ -146,7 +148,7 @@ multilib-xlibs_src_compile_internal() {
 		&& myconf="${myconf} --with-threads" \
 		|| myconf="${myconf} --without-threads"
 
-	multilib-xlibs_src_configure_internal
+	src_configure_internal
 
 	if tc-is-cross-compiler ; then
 		OPT="-O1" CFLAGS="" LDFLAGS="" CC="" \
