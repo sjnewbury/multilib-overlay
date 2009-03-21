@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libtheora/libtheora-1.0_beta3-r1.ebuild,v 1.8 2008/12/08 20:41:17 ranger Exp $
 
+EAPI="2"
+
 inherit autotools eutils toolchain-funcs flag-o-matic multilib-xlibs
 
 DESCRIPTION="The Theora Video Compression Codec"
@@ -31,6 +33,8 @@ src_unpack() {
 	AT_M4DIR="m4" eautoreconf
 }
 
+src_configure() { :; }
+
 multilibs-xlibs_src_compile_internal() {
 	use x86 && filter-flags -fforce-addr -frename-registers #200549
 	use doc || export ac_cv_prog_HAVE_DOXYGEN="false"
@@ -49,7 +53,7 @@ multilib-xlibs_src_install_internal() {
 	emake DESTDIR="${D}" docdir="usr/share/doc/${PF}" \
 		install || die "emake install failed."
 
-	dodoc ${S}/AUTHORS ${S}/CHANGES ${S}/README
+	dodoc AUTHORS CHANGES README
 
 	prepalldocs
 
