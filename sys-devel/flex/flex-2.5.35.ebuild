@@ -1,6 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-devel/flex/flex-2.5.35.ebuild,v 1.9 2009/02/09 20:14:34 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-devel/flex/flex-2.5.35.ebuild,v 1.10 2009/03/21 11:51:27 vapier Exp $
+
+EAPI="2"
 
 inherit eutils flag-o-matic multilib-xlibs
 
@@ -24,12 +26,12 @@ src_unpack() {
 	[[ -n ${DEB_VER} ]] && epatch "${WORKDIR}"/${PN}_${PV}-${DEB_VER}.diff
 	epatch "${FILESDIR}"/${PN}-2.5.34-isatty.patch #119598
 	epatch "${FILESDIR}"/${PN}-2.5.33-pic.patch
+	sed -i 's:^LDFLAGS:LOADLIBES:' tests/test-pthread/Makefile.in #262989
 }
 
-multilib-xlibs_src_compile_internal() {
+multilib-xlibs_src_configure_internal() {
 	use static && append-ldflags -static
 	econf $(use_enable nls) || die
-	emake || die
 }
 
 multilib-xlibs_src_install_internal() {
