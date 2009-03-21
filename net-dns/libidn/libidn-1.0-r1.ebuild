@@ -2,7 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-dns/libidn/libidn-1.0-r1.ebuild,v 1.7 2008/03/02 15:11:29 nixnut Exp $
 
-MULTILIB_SPLITTREE="yes"
+EAPI="2"
+
 inherit java-pkg-opt-2 mono autotools elisp-common multilib-xlibs
 
 DESCRIPTION="Internationalized Domain Names (IDN) implementation"
@@ -21,6 +22,8 @@ DEPEND="java? ( >=virtual/jdk-1.4
 RDEPEND="java? ( >=virtual/jre-1.4 )
 		mono? ( >=dev-lang/mono-0.95 )
 		emacs? ( virtual/emacs )"
+
+src_configure() { :; }
 
 multilib-xlibs_src_compile_internal() {
 	local myconf=" --disable-csharp"
