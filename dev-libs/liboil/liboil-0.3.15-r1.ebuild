@@ -42,7 +42,6 @@ multilib-xlibs_src_configure_internal() {
 
 multilib-xlibs_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed."
-	cd ${S}
 	dodoc AUTHORS BUG-REPORTING HACKING NEWS README || die "dodoc failed."
 }
 
