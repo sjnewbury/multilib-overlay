@@ -50,6 +50,11 @@ multilib-xlibs_src_configure_internal() {
 		replace-flags -mtune=* -DMTUNE_CENSORED
 		replace-flags -march=* -DMARCH_CENSORED
 	fi
+
+	if use lib32 && [[ "${ABI}" == "x86" ]]; then
+		myconf="${myconf} --program-suffix=32"
+	fi
+	
 	econf $(use_enable doc docs) \
 		--localstatedir=/var \
 		--with-docdir=/usr/share/doc/${PF} \
@@ -88,15 +93,21 @@ multilib-xlibs_src_install_internal() {
 	doenvd "${T}"/37fontconfig
 }
 
-pkg_postinst() {
+multilib-xlibs_pkg_postinst_internal() {
 	echo
 	ewarn "Please make fontconfig configuration changes in /etc/fonts/conf.d/"
 	ewarn "and NOT to /etc/fonts/fonts.conf, as it will be replaced!"
 	echo
 
 	if [[ ${ROOT} = / ]]; then
-		ebegin "Creating global font cache..."
-		/usr/bin/fc-cache -sr
-		eend $?
+		if use lib32 && [[ "${ABI}" == "x86" ]]; then
+			ebegin "Creating global 32bit font cache..."
+			/usr/bin/fc-cache32 -sr
+			eend $?
+		else
+			ebegin "Creating global font cache..."
+			/usr/bin/fc-cache -sr
+			eend $?
+		fi
 	fi
 }
