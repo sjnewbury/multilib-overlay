@@ -19,14 +19,20 @@ IUSE=""
 RDEPEND=">=dev-libs/libgpg-error-1.5[lib32?]"
 DEPEND="${RDEPEND}"
 
-multilib-xlibs_src_compile_internal() {
+multilib-xlibs_src_configure_internal() {
 	# --disable-padlock-support for bug #201917
+	
+	local myconf
+	if use lib32 && [[ "${ABI}" == "x86" ]]; then
+		myconf="--program-suffix=32"
+	fi
+	
 	econf \
 		--disable-padlock-support \
 		--disable-dependency-tracking \
 		--with-pic \
-		--enable-noexecstack
-	emake || die "emake failed"
+		--enable-noexecstack \
+		${myconf}
 }
 
 multilib-xlibs_src_install_internal() {
