@@ -17,9 +17,9 @@ SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
 IUSE="X bindist debug doc utils fontforge"
 
-DEPEND="X?	( x11-libs/libX11
-			  x11-libs/libXau
-			  x11-libs/libXdmcp )"
+DEPEND="X?	( x11-libs/libX11[lib32?]
+			  x11-libs/libXau[lib32?]
+			  x11-libs/libXdmcp[lib32?] )"
 
 # We also need a recent fontconfig version to prevent segfaults. #166029
 # July 3 2007 dirtyepic
@@ -79,11 +79,11 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_inernal() {
+multilib-xlibs_src_compile_internal() {
 	append-flags -fno-strict-aliasing
 
 	type -P gmake &> /dev/null && export GNUMAKE=gmake
-	econf
+	econf || die
 	emake || die "emake failed"
 
 	if use utils; then
