@@ -106,6 +106,10 @@ multilib-xlibs_src_configure_internal() {
 	# Passing --disable-debug is not recommended for production use
 	use debug && myconf="${myconf} --enable-debug=yes"
 
+	if use lib32 && [[ "${ABI}" == "x86" ]]; then
+		myconf="${myconf} --program-suffix=-32"
+	fi
+	
 	econf ${myconf} || die "configure failed"
 }
 
@@ -139,8 +143,13 @@ multilib-xlibs_pkg_postinst_internal() {
 	set_gtk2_confdir
 
 	if [ -d "${ROOT}${GTK2_CONFDIR}" ]; then
-		gtk-query-immodules-2.0  > "${ROOT}${GTK2_CONFDIR}/gtk.immodules"
-		gdk-pixbuf-query-loaders > "${ROOT}${GTK2_CONFDIR}/gdk-pixbuf.loaders"
+		if use lib32 && [[ "${ABI}" == "x86" ]]; then
+			gtk-query-immodules-2.0-32 > "${ROOT}${GTK2_CONFDIR}/gtk.immodules"
+			gdk-pixbuf-query-loaders-32 > "${ROOT}${GTK2_CONFDIR}/gdk-pixbuf.loaders"
+		else
+			gtk-query-immodules-2.0 > "${ROOT}${GTK2_CONFDIR}/gtk.immodules"
+			gdk-pixbuf-query-loaders > "${ROOT}${GTK2_CONFDIR}/gdk-pixbuf.loaders"
+		fi
 	else
 		ewarn "The destination path ${ROOT}${GTK2_CONFDIR} doesn't exist;"
 		ewarn "to complete the installation of GTK+, please create the"
