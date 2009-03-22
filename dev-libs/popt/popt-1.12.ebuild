@@ -1,6 +1,6 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2007 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/popt/popt-1.14.ebuild,v 1.1 2008/04/18 04:37:48 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/popt/popt-1.12.ebuild,v 1.1 2007/12/09 04:15:41 vapier Exp $
 
 inherit eutils multilib-xlibs
 
@@ -16,6 +16,13 @@ IUSE="nls"
 RDEPEND="nls? ( virtual/libintl )"
 DEPEND="nls? ( sys-devel/gettext )"
 
+src_unpack() {
+	unpack ${A}
+	cd "${S}"
+	epatch "${FILESDIR}"/${PN}-1.10.4-lib64.patch
+	epatch "${FILESDIR}"/${PN}-1.12-scrub-lame-gettext.patch
+}
+
 multilibs-xlibs_src_compile_internal() {
 	econf \
 		--without-included-gettext \
@@ -27,6 +34,4 @@ multilibs-xlibs_src_compile_internal() {
 multilib-xlibs_src_install_internal() {
 	emake install DESTDIR="${D}" || die
 	dodoc CHANGES README
-
-	find "${D}" -name '*.la' -delete
 }
