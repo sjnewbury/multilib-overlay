@@ -15,7 +15,7 @@ EGIT_BOOTSTRAP="eautoreconf"
 
 LICENSE="fontconfig"
 SLOT="1.0"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
+KEYWORDS=""
 IUSE="doc"
 
 # Purposefully dropped the xml USE flag and libxml2 support. Having this is

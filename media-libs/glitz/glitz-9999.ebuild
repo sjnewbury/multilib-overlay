@@ -16,7 +16,7 @@ ECVS_BOOTSTRAP="eautoreconf"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="alpha amd64 arm ia64 ppc ppc64 sh x86 ~x86-fbsd"
+KEYWORDS=""
 IUSE=""
 
 DEPEND="virtual/opengl"

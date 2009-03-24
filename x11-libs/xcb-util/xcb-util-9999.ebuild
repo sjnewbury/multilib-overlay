@@ -15,7 +15,7 @@ SRC_URI=""
 EGIT_REPO_URI="git://anongit.freedesktop.org/git/xcb/util"
 
 LICENSE="X11"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS=""
 IUSE="test"
 
 RDEPEND=">=x11-libs/libxcb-1[lib32?]"

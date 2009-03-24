@@ -8,7 +8,7 @@ SNAPSHOT="yes"
 inherit x-modular toolchain-funcs versionator multilib-xlibs
 
 DESCRIPTION="Low-level pixel manipulation routines"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS=""
 IUSE="altivec mmx sse sse2"
 
 CONFIGURE_OPTIONS="$(use_enable altivec vmx) $(use_enable mmx) \

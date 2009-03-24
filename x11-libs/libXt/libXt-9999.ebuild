@@ -12,7 +12,7 @@ inherit x-modular flag-o-matic multilib-xlibs
 
 DESCRIPTION="X.Org Xt library"
 
-KEYWORDS="alpha amd64 arm hppa ia64 mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
+KEYWORDS=""
 
 RDEPEND="x11-libs/libX11[lib32?]
 	x11-libs/libSM[lib32?]

@@ -5,7 +5,7 @@ inherit x-modular multilib-xlibs
 
 DESCRIPTION="X.Org Xau library"
 
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS=""
 
 RDEPEND="x11-proto/xproto"
 DEPEND="${RDEPEND}
