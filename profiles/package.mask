@@ -3,3 +3,10 @@
 =x11-libs/libX11-1.2
 =x11-libs/libXext-1.0.5
 =x11-libs/libXrandr-1.2.99.4
+# currently unstable stuff from gnome-overlay
+=dev-libs/glib-2.20.0
+=gnome-base/gconf-2.26.0
+=gnome-base/gnome-keyring-2.26.0
+=gnome-base/libgnome-2.26.0
+=gnome-base/libgnomecanvas-2.26.0
+=x11-libs/gtk+-2.16.0
