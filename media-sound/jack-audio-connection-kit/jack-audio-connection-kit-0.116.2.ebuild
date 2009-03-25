@@ -40,6 +40,12 @@ multilib-xlibs_src_configure_internal() {
 		append-flags -mmmx -msse -m3dnow -O2
 	fi
 
+	# it's possible to load a 32bit jack client into 64bit jackd since 0.116,
+	# but let's install the 32bit binaries anyway ;)
+	if use lib32 && [[ "${ABI}" == "x86" ]]; then
+		myconf="${myconf} --program-suffix=32"
+	fi
+
 	use doc || export ac_cv_prog_HAVE_DOXYGEN=false
 
 	econf \
