@@ -31,10 +31,10 @@ SLOT="4.6"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
 IUSE="tcl java doc nocxx"
 
-DEPEND="tcl? ( >=dev-lang/tcl-8.4 )
+DEPEND="tcl? ( >=dev-lang/tcl-8.4[lib32?] )
 	java? ( >=virtual/jdk-1.4 )
 	>=sys-devel/binutils-2.16.1"
-RDEPEND="tcl? ( dev-lang/tcl )
+RDEPEND="tcl? ( dev-lang/tcl[lib32?] )
 	java? ( >=virtual/jre-1.4 )"
 
 src_unpack() {
