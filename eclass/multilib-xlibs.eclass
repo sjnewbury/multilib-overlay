@@ -137,7 +137,7 @@ multilib-xlibs_src_generic_sub() {
 					x86)    CHOST="i686-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m32"
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m32"
-					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32"
+					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32 -L/usr/lib32"
 					;;
 					amd64)  CHOST="x86_64-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m64"
@@ -147,7 +147,7 @@ multilib-xlibs_src_generic_sub() {
 					ppc)   CHOST="powerpc-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m32"
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m32"
-					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32"
+					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32 -L/usr/lib32"
 					;;
 					ppc64)   CHOST="powerpc64-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m64"
