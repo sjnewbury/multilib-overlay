@@ -28,6 +28,7 @@ esac
 
 EMULTILIB_OCFLAGS=""
 EMULTILIB_OCXXFLAGS=""
+EMULTILIB_OLDFLAGS=""
 EMULTILIB_OCHOST=""
 EMULTILIB_OSPATH=""
 
@@ -128,6 +129,7 @@ multilib-xlibs_src_generic_sub() {
 		if has_multilib_profile ; then
 			EMULTILIB_OCFLAGS="${CFLAGS}"
 			EMULTILIB_OCXXFLAGS="${CXXFLAGS}"
+			EMULTILIB_OLDFLAGS="${LDFLAGS}"
 			EMULTILIB_OCHOST="${CHOST}"
 			EMULTILIB_OSPATH="${S}"
 			if use amd64 || use ppc64 ; then
@@ -135,18 +137,22 @@ multilib-xlibs_src_generic_sub() {
 					x86)    CHOST="i686-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m32"
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m32"
+					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32"
 					;;
 					amd64)  CHOST="x86_64-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m64"
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m64"
+					LDFLAGS="${EMULTILIB_OLDFLAGS} -m64"
 					;;
 					ppc)   CHOST="powerpc-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m32"
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m32"
+					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32"
 					;;
 					ppc64)   CHOST="powerpc64-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m64"
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m64"
+					LDFLAGS="${EMULTILIB_OLDFLAGS} -m64"
 					;;
 					*)   die "Unknown ABI"
 					;;
@@ -174,6 +180,7 @@ multilib-xlibs_src_generic_sub() {
 		if has_multilib_profile; then
 			CFLAGS="${EMULTILIB_OCFLAGS}"
 			CXXFLAGS="${EMULTILIB_OCXXFLAGS}"
+			LDFLAGS="${EMULTILIB_OLDFLAGS}"
 			CHOST="${EMULTILIB_OCHOST}"
 			S="${EMULTILIB_OSPATH}"
 		fi
