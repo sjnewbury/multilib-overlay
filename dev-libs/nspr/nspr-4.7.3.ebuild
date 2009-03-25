@@ -66,7 +66,7 @@ multilib-xlibs_src_install_internal() {
 	done
 	# cope with libraries being in /usr/lib/nspr
 	dodir /etc/env.d
-	echo "LDPATH=/usr/$(get_libdir)/nspr" >> "${D}/etc/env.d/08nspr"
+	echo "LDPATH=/usr/$(get_libdir)/nspr" > "${D}/etc/env.d/08nspr-${ABI}"
 
 	# install nspr-config
 	dobin "${S}"/build/config/nspr-config

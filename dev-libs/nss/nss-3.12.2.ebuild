@@ -98,7 +98,7 @@ multilib-xlibs_src_install_internal() {
 	# coping with nss being in a different path. We move up priority to
 	# ensure that nss/nspr are used specifically before searching elsewhere.
 	dodir /etc/env.d
-	echo "LDPATH=/usr/$(get_libdir)/nss" >> "${D}"/etc/env.d/08nss
+	echo "LDPATH=/usr/$(get_libdir)/nss" > "${D}/etc/env.d/08nss-${ABI}"
 
 	dodir /usr/bin
 	dodir /usr/$(get_libdir)/pkgconfig
