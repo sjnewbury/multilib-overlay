@@ -8,7 +8,7 @@ PATCHES="${FILESDIR}/libXt-1.0.5-cross.patch"
 
 EAPI="2"
 
-inherit x-modular flag-o-matic multilib-xlibs
+inherit x-modular flag-o-matic multilib-native
 
 DESCRIPTION="X.Org Xt library"
 

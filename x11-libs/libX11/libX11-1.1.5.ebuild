@@ -7,7 +7,7 @@
 
 EAPI="2"
 
-inherit x-modular toolchain-funcs flag-o-matic multilib-xlibs
+inherit x-modular toolchain-funcs flag-o-matic multilib-native
 
 DESCRIPTION="X.Org X11 library"
 
@@ -32,7 +32,7 @@ CONFIGURE_OPTIONS="$(use_enable ipv6)
 # xorg really doesn't like xlocale disabled.
 # $(use_enable nls xlocale)
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	# [Cross-Compile Love] Disable {C,LD}FLAGS and redefine CC= for 'makekeys'
 	( filter-flags -m* ; cd src/util && make CC=$(tc-getBUILD_CC) CFLAGS="${CFLAGS}" LDFLAGS="" clean all)
 	x-modular_src_make

@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils autotools libtool flag-o-matic multilib-xlibs
+inherit eutils autotools libtool flag-o-matic multilib-native
 
 DESCRIPTION="\"M\"peg \"A\"udio \"D\"ecoder library"
 HOMEPAGE="http://mad.sourceforge.net"
@@ -55,7 +55,7 @@ multilibs-xlibs_src_compile_internal() {
 	emake || die "make failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake install DESTDIR="${D}" || die "make install failed"
 
 	dodoc CHANGES CREDITS README TODO VERSION

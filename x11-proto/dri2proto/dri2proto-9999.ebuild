@@ -5,12 +5,12 @@
 EAPI="2"
 SNAPSHOT=yes
 
-inherit x-modular multilib-xlibs
+inherit x-modular multilib-native
 
 DESCRIPTION="X.Org DRI2 protocol headers"
 
 LICENSE="X11"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS=""
 
 RDEPEND=""
 DEPEND="${RDEPEND}"

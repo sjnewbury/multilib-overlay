@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils multilib toolchain-funcs flag-o-matic multilib-xlibs
+inherit eutils multilib toolchain-funcs flag-o-matic multilib-native
 
 DESCRIPTION="A high-quality data compressor used extensively by Gentoo Linux"
 HOMEPAGE="http://www.bzip.org/"
@@ -42,7 +42,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	local makeopts="
 		CC=$(tc-getCC)
 		AR=$(tc-getAR)
@@ -53,7 +53,7 @@ multilib-xlibs_src_compile_internal() {
 	emake LDFLAGS="${LDFLAGS}" ${makeopts} all || die "Make failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake PREFIX="${D}"/usr LIBDIR=$(get_libdir) install || die
 	dodoc README* CHANGES bzip2.txt manual.*
 

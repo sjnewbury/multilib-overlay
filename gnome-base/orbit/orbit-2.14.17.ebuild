@@ -6,7 +6,7 @@ GCONF_DEBUG="no"
 
 EAPI="2"
 
-inherit gnome2 toolchain-funcs multilib-xlibs
+inherit gnome2 toolchain-funcs multilib-native
 
 MY_P="ORBit2-${PV}"
 PVP=(${PV//[-\._]/ })
@@ -30,7 +30,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README* TODO"
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	# We need to unset IDL_DIR, which is set by RSI's IDL.  This causes certain
 	# files to be not found by autotools when compiling ORBit.  See bug #58540
 	# for more information.  Please don't remove -- 8/18/06

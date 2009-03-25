@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit libtool eutils multilib-xlibs
+inherit libtool eutils multilib-native
 
 DESCRIPTION="software-based implementation of the codec specified in the JPEG-2000 Part-1 standard"
 HOMEPAGE="http://www.ece.uvic.ca/~mdadams/jasper/"
@@ -32,7 +32,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	econf \
 		$(use_enable jpeg libjpeg) \
 		$(use_enable opengl) \
@@ -41,7 +41,7 @@ multilib-xlibs_src_compile_internal() {
 	emake || die "If you got undefined references to OpenGL related libraries,please try 'eselect opengl set xorg-x11' before emerging. See bug #133609."
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	make DESTDIR="${D}" install || die
 	dodoc NEWS README doc/*
 }

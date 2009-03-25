@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils libtool multilib-xlibs
+inherit eutils libtool multilib-native
 
 MY_P="${P/_rc/rc}"
 S="${WORKDIR}/${MY_P}"
@@ -50,7 +50,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	local myconf
 	use elibc_uclibc && myconf="--without-versioned"
 
@@ -85,7 +85,7 @@ multilib-xlibs_src_compile_internal() {
 	fi
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	dodoc ChangeLog TODO || die

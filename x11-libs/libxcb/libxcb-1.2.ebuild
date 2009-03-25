@@ -7,7 +7,7 @@ EAPI="2"
 # Must be before x-modular eclass is inherited
 #SNAPSHOT="yes"
 
-inherit x-modular multilib-xlibs
+inherit x-modular multilib-native
 
 DESCRIPTION="X C-language Bindings library"
 HOMEPAGE="http://xcb.freedesktop.org/"
@@ -28,7 +28,7 @@ CONFIGURE_OPTIONS="$(use_enable doc build-docs)
 	$(use_enable selinux xselinux)
 	--enable-xinput"
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	make DESTDIR="${D}" install || die
 }
 	

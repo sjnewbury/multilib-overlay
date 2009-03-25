@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/sys-libs/gdbm/gdbm-1.8.3-r4.ebuild,v 1.2 2008/02/16 22:21:08 vapier Exp $
 
 EAPI=2
-inherit eutils libtool flag-o-matic multilib-xlibs
+inherit eutils libtool flag-o-matic multilib-native
 
 DESCRIPTION="Standard GNU database libraries"
 HOMEPAGE="http://www.gnu.org/software/gdbm/gdbm.html"
@@ -28,7 +28,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	use berkdb || export ac_cv_lib_dbm_main=no ac_cv_lib_ndbm_main=no
 	econf \
 		--includedir=/usr/include/gdbm \
@@ -38,7 +38,7 @@ multilib-xlibs_src_compile_internal() {
 	emake || die
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake -j1 INSTALL_ROOT="${D}" install install-compat || die
 	mv "${D}"/usr/include/gdbm/gdbm.h "${D}"/usr/include/ || die
 	dodoc ChangeLog NEWS README

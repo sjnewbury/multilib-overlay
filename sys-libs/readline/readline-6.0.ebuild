@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools eutils multilib toolchain-funcs flag-o-matic multilib-xlibs
+inherit autotools eutils multilib toolchain-funcs flag-o-matic multilib-native
 
 # Official patches
 # See ftp://ftp.cwru.edu/pub/bash/readline-6.0-patches/
@@ -65,7 +65,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	append-cppflags -D_GNU_SOURCE
 
 	econf --with-curses || die
@@ -79,7 +79,7 @@ multilib-xlibs_src_compile_internal() {
 	fi
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
 	gen_usr_ldscript -a readline history #4411
 

@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils flag-o-matic libtool multilib-xlibs
+inherit eutils flag-o-matic libtool multilib-native
 
 DESCRIPTION="A high-quality and portable font engine"
 HOMEPAGE="http://www.freetype.org/"
@@ -85,7 +85,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	append-flags -fno-strict-aliasing
 
 	type -P gmake &> /dev/null && export GNUMAKE=gmake
@@ -98,7 +98,7 @@ multilib-xlibs_src_compile_internal() {
 	fi
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
 	dodoc ChangeLog README

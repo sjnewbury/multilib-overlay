@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils multilib-xlibs
+inherit eutils multilib-native
 
 DESCRIPTION="Library for playing MOD-like music files"
 SRC_URI="mirror://sourceforge/modplug-xmms/${P}.tar.gz"
@@ -27,7 +27,7 @@ src_unpack() {
 	epatch "${FILESDIR}/${P}-asneeded.patch"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	make DESTDIR="${D}" install || die
 	dodoc AUTHORS ChangeLog README TODO
 }

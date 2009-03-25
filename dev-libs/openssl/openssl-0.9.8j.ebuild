@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils flag-o-matic toolchain-funcs multilib-xlibs
+inherit eutils flag-o-matic toolchain-funcs multilib-native
 
 DESCRIPTION="Toolkit for SSL v2/v3 and TLS v1"
 HOMEPAGE="http://www.openssl.org/"
@@ -54,7 +54,7 @@ src_unpack() {
 		|| sed -i '/^MANDIR=/s:=.*:=/usr/share/man:' Makefile.org
 }
 
-multilib-xlibs_src_prepare_internal() {
+multilib-native_src_prepare_internal() {
 	# Try to derice users and work around broken ass toolchains
 	if [[ $(gcc-major-version) == "3" ]] ; then
 		filter-flags -fprefetch-loop-arrays -freduce-all-givs -funroll-loops
@@ -72,7 +72,7 @@ multilib-xlibs_src_prepare_internal() {
 	./config --test-sanity || die "I AM NOT SANE"
 }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	unset APPS #197996
 
 	tc-export CC AR RANLIB
@@ -139,7 +139,7 @@ src_test() {
 	emake -j1 test || die "make test failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake -j1 INSTALL_PREFIX="${D}" install || die
 	dodoc CHANGES* FAQ NEWS README doc/*.txt doc/c-indentation.el
 	dohtml doc/*
@@ -173,11 +173,11 @@ multilib-xlibs_src_install_internal() {
 	keepdir /etc/ssl/private
 }
 
-multilib-xlibs_pkg_preinst_internal() {
+multilib-native_pkg_preinst_internal() {
 	preserve_old_lib /usr/$(get_libdir)/lib{crypto,ssl}.so.0.9.{6,7}
 }
 
-multilib-xlibs_pkg_postinst_internal() {
+multilib-native_pkg_postinst_internal() {
 	preserve_old_lib_notify /usr/$(get_libdir)/lib{crypto,ssl}.so.0.9.{6,7}
 
 	if [[ ${CHOST} == i686* ]] ; then

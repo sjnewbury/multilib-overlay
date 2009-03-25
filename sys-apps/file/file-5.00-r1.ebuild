@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils distutils libtool flag-o-matic multilib-xlibs
+inherit eutils distutils libtool flag-o-matic multilib-native
 
 DESCRIPTION="identify a file's format by scanning binary data for patterns"
 HOMEPAGE="ftp://ftp.astron.com/pub/file/"
@@ -37,7 +37,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	# file uses things like strndup() and wcwidth()
 	append-flags -D_GNU_SOURCE
 
@@ -47,7 +47,7 @@ multilib-xlibs_src_compile_internal() {
 	use python && cd python && distutils_src_compile
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc ChangeLog MAINT README
 

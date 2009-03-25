@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils bash-completion multilib-xlibs
+inherit eutils bash-completion multilib-native
 
 DESCRIPTION="D-Bus bindings for glib"
 HOMEPAGE="http://dbus.freedesktop.org/"
@@ -33,7 +33,7 @@ src_prepare() {
 	epatch "${FILESDIR}"/${PN}-introspection.patch
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	econf \
 		$(use_enable bash-completion) \
 		$(use_enable debug verbose-mode) \
@@ -46,7 +46,7 @@ multilib-xlibs_src_configure_internal() {
 		$(use_enable doc gtk-doc)
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	dodoc AUTHORS ChangeLog HACKING NEWS README || die "dodoc failed."

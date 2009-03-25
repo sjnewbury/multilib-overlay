@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools eutils flag-o-matic multilib-xlibs
+inherit autotools eutils flag-o-matic multilib-native
 
 MY_P=${P/_} ; MY_P=${MY_P/_p/.}
 
@@ -42,7 +42,7 @@ multilibs-xlibs_src_compile_internal() {
 	emake || die "emake failed."
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" docdir="/usr/share/doc/${PF}" \
 		install || die "emake install failed."
 

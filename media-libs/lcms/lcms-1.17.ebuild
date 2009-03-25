@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/media-libs/lcms/lcms-1.17.ebuild,v 1.11 2008/04/20 17:01:55 flameeyes Exp $
 
 EAPI=2
-inherit libtool eutils multilib multilib-xlibs
+inherit libtool eutils multilib multilib-native
 
 DESCRIPTION="A lightweight, speed optimized color management engine"
 HOMEPAGE="http://www.littlecms.com/"
@@ -40,7 +40,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	econf \
 		--disable-dependency-tracking \
 		$(use_with jpeg) \
@@ -51,7 +51,7 @@ multilib-xlibs_src_compile_internal() {
 	emake || die "emake failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake \
 		DESTDIR="${D}" \
 		BINDIR="${D}"/usr/bin \

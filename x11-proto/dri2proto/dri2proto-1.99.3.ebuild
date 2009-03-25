@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit x-modular multilib-xlibs
+inherit x-modular multilib-native
 
 DESCRIPTION="X.Org DRI2 protocol headers"
 

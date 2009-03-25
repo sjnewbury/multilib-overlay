@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit libtool flag-o-matic eutils python multilib-xlibs
+inherit libtool flag-o-matic eutils python multilib-native
 
 DESCRIPTION="Version 2 of the library to manipulate XML files"
 HOMEPAGE="http://www.xmlsoft.org/"
@@ -48,7 +48,7 @@ src_unpack() {
 	epunt_cxx
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	# USE zlib support breaks gnome2
 	# (libgnomeprint for instance fails to compile with
 	# fresh install, and existing) - <azarah@gentoo.org> (22 Dec 2002).
@@ -85,7 +85,7 @@ multilib-xlibs_src_configure_internal() {
 	done
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "Installation failed"
 
 	dodoc AUTHORS ChangeLog Copyright NEWS README* TODO*
@@ -101,7 +101,7 @@ multilib-xlibs_src_install_internal() {
 	fi
 }
 
-multilib-xlibs_pkg_postinst_internal() {
+multilib-native_pkg_postinst_internal() {
 	if use python; then
 		python_version
 		python_need_rebuild
@@ -128,6 +128,6 @@ multilib-xlibs_pkg_postinst_internal() {
 	fi
 }
 
-multilib-xlibs_pkg_postrm_internal() {
+multilib-native_pkg_postrm_internal() {
 	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages
 }

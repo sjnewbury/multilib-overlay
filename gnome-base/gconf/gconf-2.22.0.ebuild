@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils gnome2 multilib-xlibs
+inherit eutils gnome2 multilib-native
 
 MY_PN=GConf
 MY_P=${MY_PN}-${PV}
@@ -46,7 +46,7 @@ src_unpack() {
 	epatch "${FILESDIR}/${P}-automagic-ldap.patch"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	gnome2_src_install
 
 	# hack hack

@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils multilib autotools multilib-xlibs
+inherit eutils multilib autotools multilib-native
 
 DESCRIPTION="D-Bus bindings for glib"
 HOMEPAGE="http://dbus.freedesktop.org/"
@@ -30,7 +30,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-introspection.patch
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	local myconf=""
 
 	econf \
@@ -54,7 +54,7 @@ multilib-xlibs_src_configure_internal() {
 	use selinux && addwrite /selinux/access
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	dodoc AUTHORS ChangeLog HACKING NEWS README

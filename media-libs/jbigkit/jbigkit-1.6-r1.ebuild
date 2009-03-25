@@ -4,7 +4,7 @@
 
 EAPI="2" 
 
-inherit eutils multilib toolchain-funcs multilib-xlibs
+inherit eutils multilib toolchain-funcs multilib-native
 
 DESCRIPTION="highly effective data compression algorithm for bi-level high-resolution images such as fax pages or scanned documents"
 HOMEPAGE="http://www.cl.cam.ac.uk/~mgk25/jbigkit/"
@@ -28,7 +28,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${P}-respect-make.patch
 }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	emake CC=$(tc-getCC) || die "emake failed"
 }
 
@@ -36,7 +36,7 @@ src_test() {
 	LD_LIBRARY_PATH="${S}"/libjbig make test || die "make test failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	dobin pbmtools/jbgtopbm pbmtools/pbmtojbg || die "dobin"
 	doman pbmtools/jbgtopbm.1 pbmtools/pbmtojbg.1
 

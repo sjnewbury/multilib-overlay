@@ -7,7 +7,7 @@ SNAPSHOT="yes"
 
 EAPI="2"
 
-inherit x-modular flag-o-matic multilib-xlibs
+inherit x-modular flag-o-matic multilib-native
 
 DESCRIPTION="X.Org Xft library"
 

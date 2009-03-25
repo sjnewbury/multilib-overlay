@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils libtool multilib-xlibs
+inherit eutils libtool multilib-native
 
 DESCRIPTION="Library to handle, display and manipulate GIF images"
 HOMEPAGE="http://sourceforge.net/projects/giflib/"
@@ -33,7 +33,7 @@ src_unpack() {
 	epunt_cxx
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	local myconf="--disable-gl $(use_enable X x11) --x-libraries=/usr/$(get_libdir)"
 	# prevent circular depend #111455
 	if has_version media-libs/urt ; then
@@ -44,7 +44,7 @@ multilib-xlibs_src_configure_internal() {
 	econf ${myconf}
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc AUTHORS BUGS ChangeLog NEWS ONEWS README TODO doc/*.txt
 	use doc && dohtml -r doc

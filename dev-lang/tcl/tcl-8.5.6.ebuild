@@ -7,7 +7,7 @@ EAPI=2
 WANT_AUTOCONF=latest
 WANT_AUTOMAKE=latest
 
-inherit autotools eutils multilib toolchain-funcs multilib-xlibs
+inherit autotools eutils multilib toolchain-funcs multilib-native
 
 MY_P="${PN}${PV/_beta/b}"
 DESCRIPTION="Tool Command Language"
@@ -48,7 +48,7 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	tc-export CC
 
 	cd "${S}"/unix
@@ -57,7 +57,7 @@ multilib-xlibs_src_configure_internal() {
 		$(use_enable debug symbols) || die
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	#short version number
 	local v1
 	v1=${PV%.*}

@@ -1,7 +1,7 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-inherit x-modular multilib-xlibs
+inherit x-modular multilib-native
 
 DESCRIPTION="X.Org Xau library"
 

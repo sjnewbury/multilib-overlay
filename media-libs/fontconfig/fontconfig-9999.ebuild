@@ -5,7 +5,7 @@
 EAPI="2"
 WANT_AUTOMAKE=1.9
 
-inherit eutils autotools libtool toolchain-funcs flag-o-matic multilib-xlibs
+inherit eutils autotools libtool toolchain-funcs flag-o-matic multilib-native
 
 DESCRIPTION="A library for configuring and customizing font access"
 HOMEPAGE="http://fontconfig.org/"
@@ -45,7 +45,7 @@ src_prepare() {
 	elibtoolize
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	local myconf
 	if tc-is-cross-compiler; then
 		myconf="--with-arch=${ARCH}"
@@ -65,7 +65,7 @@ multilib-xlibs_src_configure_internal() {
 		${myconf} || die
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
 
 	#fc-lang directory contains language coverage datafiles
@@ -95,7 +95,7 @@ multilib-xlibs_src_install_internal() {
 	doenvd "${T}"/37fontconfig
 }
 
-multilib-xlibs_pkg_postinst_internal() {
+multilib-native_pkg_postinst_internal() {
 	echo
 	ewarn "Please make fontconfig configuration changes in /etc/fonts/conf.d/"
 	ewarn "and NOT to /etc/fonts/fonts.conf, as it will be replaced!"

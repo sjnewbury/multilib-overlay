@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit libtool flag-o-matic eutils toolchain-funcs multilib-xlibs
+inherit libtool flag-o-matic eutils toolchain-funcs multilib-native
 
 MY_P=${P/_/}
 DESCRIPTION="the Ogg Vorbis sound file format library"
@@ -48,7 +48,7 @@ multilibs-xlibs_src_compile_internal() {
 	emake || die "emake failed."
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 
 	rm -rf "${D}"/usr/share/doc/${P}

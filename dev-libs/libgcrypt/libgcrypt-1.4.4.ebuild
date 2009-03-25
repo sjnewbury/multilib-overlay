@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils multilib-xlibs
+inherit eutils multilib-native
 
 DESCRIPTION="general purpose crypto library based on the code used in GnuPG"
 HOMEPAGE="http://www.gnupg.org/"
@@ -19,7 +19,7 @@ IUSE=""
 RDEPEND=">=dev-libs/libgpg-error-1.5[lib32?]"
 DEPEND="${RDEPEND}"
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	# --disable-padlock-support for bug #201917
 	
 	local myconf
@@ -35,7 +35,7 @@ multilib-xlibs_src_configure_internal() {
 		${myconf}
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS ChangeLog NEWS README* THANKS TODO
 }

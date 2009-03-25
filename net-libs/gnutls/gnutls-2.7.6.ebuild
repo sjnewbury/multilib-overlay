@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/net-libs/gnutls/gnutls-2.7.6.ebuild,v 1.1 2009/02/28 23:16:47 dragonheart Exp $
 
 EAPI="2"
-inherit libtool autotools multilib-xlibs
+inherit libtool autotools multilib-native
 
 DESCRIPTION="A TLS 1.0 and SSL 3.0 implementation for the GNU project"
 HOMEPAGE="http://www.gnutls.org/"
@@ -58,7 +58,7 @@ src_prepare() {
 	elibtoolize # for sane .so versioning on FreeBSD
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	local myconf
 	use bindist && myconf="--without-lzo" || myconf="$(use_with lzo)"
 	econf  \
@@ -70,7 +70,7 @@ multilib-xlibs_src_configure_internal() {
 		${myconf}
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
 	dodoc AUTHORS ChangeLog NEWS README THANKS doc/TODO

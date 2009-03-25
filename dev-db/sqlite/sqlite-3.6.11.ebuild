@@ -4,7 +4,7 @@
 
 EAPI="1"
 
-inherit autotools eutils flag-o-matic libtool versionator multilib-xlibs
+inherit autotools eutils flag-o-matic libtool versionator multilib-native
 
 DESCRIPTION="an SQL Database Engine in a C Library"
 HOMEPAGE="http://www.sqlite.org/"
@@ -48,7 +48,7 @@ src_unpack() {
 	epunt_cxx
 }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	# not available via configure and requested in bug #143794
 	use soundex && append-flags -DSQLITE_SOUNDEX=1
 
@@ -68,7 +68,7 @@ src_test() {
 	fi
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake \
 		DESTDIR="${D}" \
 		TCLLIBDIR="/usr/$(get_libdir)/${P}" \

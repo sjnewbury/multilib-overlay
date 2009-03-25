@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils gnome2 multilib-xlibs
+inherit eutils gnome2 multilib-native
 
 DESCRIPTION="Library to construct graphical interfaces at runtime"
 HOMEPAGE="http://www.gnome.org/"
@@ -25,7 +25,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
-multilib-xlibs_src_prepare_internal() {
+multilib-native_src_prepare_internal() {
 	# patch to stop make install installing the xml catalog
 	# because we do it ourselves in postinst()
 	epatch "${FILESDIR}"/Makefile.in.am-2.4.2-xmlcatalog.patch
@@ -34,7 +34,7 @@ multilib-xlibs_src_prepare_internal() {
 	epatch "${FILESDIR}/${PN}-2.6.3-fix_tests-page_size.patch"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	dodir /etc/xml
 	gnome2_src_install
 }

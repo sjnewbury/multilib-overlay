@@ -7,7 +7,7 @@ EAPI="2"
 GIT=$([[ ${PV} = 9999* ]] && echo "git")
 EGIT_REPO_URI="git://anongit.freedesktop.org/mesa/mesa"
 
-inherit autotools multilib flag-o-matic ${GIT} portability multilib-xlibs
+inherit autotools multilib flag-o-matic ${GIT} portability multilib-native
 
 OPENGL_DIR="xorg-x11"
 
@@ -119,7 +119,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	local myconf
 
 	# This is where we might later change to build xlib/osmesa
@@ -167,7 +167,7 @@ multilib-xlibs_src_compile_internal() {
 	emake || die
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	dodir /usr
 	emake \
 		DESTDIR="${D}" \

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-libs/db/db-4.6.21_p4.ebuild,v 1.1 2009/03/21 12:23:59 caleb Exp $
 
-inherit eutils db flag-o-matic java-pkg-opt-2 autotools libtool multilib-xlibs
+inherit eutils db flag-o-matic java-pkg-opt-2 autotools libtool multilib-native
 
 #Number of official patches
 #PATCHNO=`echo ${PV}|sed -e "s,\(.*_p\)\([0-9]*\),\2,"`
@@ -74,7 +74,7 @@ src_unpack() {
 		-e "s/__EDIT_DB_VERSION__/$DB_VERSION/g" configure
 }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	# compilation with -O0 fails on amd64, see bug #171231
 	if use amd64 && [ ${ABI} = "amd64" ]; then
 		replace-flags -O0 -O2
@@ -135,7 +135,7 @@ multilib-xlibs_src_compile_internal() {
 	emake || die "make failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	cd build_unix && einstall libdir="${D}/usr/$(get_libdir)" STRIP="none" || die
 
 	db_src_install_usrbinslot

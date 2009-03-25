@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2 eutils multilib-xlibs
+inherit gnome2 eutils multilib-native
 
 DESCRIPTION="a LGPL version of libart"
 HOMEPAGE="http://www.levien.com/libart"

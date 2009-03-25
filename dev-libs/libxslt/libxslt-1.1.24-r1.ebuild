@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit libtool eutils python autotools multilib-xlibs
+inherit libtool eutils python autotools multilib-native
 
 DESCRIPTION="XSLT libraries and tools"
 HOMEPAGE="http://www.xmlsoft.org/"
@@ -20,7 +20,7 @@ DEPEND=">=dev-libs/libxml2-2.6.27[lib32?]
 
 SRC_URI="ftp://xmlsoft.org/${PN}/${P}.tar.gz"
 
-multilib-xlibs_src_prepare_internal() {
+multilib-native_src_prepare_internal() {
 	# we still require the 1.1.8 patch for the .m4 file, to add
 	# the CXXFLAGS defines <obz@gentoo.org>
 	epatch "${FILESDIR}/libxslt.m4-${PN}-1.1.8.patch"
@@ -44,7 +44,7 @@ multilib-xlibs_src_prepare_internal() {
 	elibtoolize
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	# Always pass --with-debugger. It is required by third parties (see
 	# e.g. bug #98345)
 
@@ -63,7 +63,7 @@ multilib-xlibs_src_configure_internal() {
 	econf ${myconf} || die "configure failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "Installation failed"
 
 	dodoc AUTHORS ChangeLog Copyright FEATURES NEWS README TODO

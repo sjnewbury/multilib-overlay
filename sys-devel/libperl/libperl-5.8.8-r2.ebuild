@@ -56,7 +56,7 @@ IUSE="berkdb debug gdbm ithreads"
 
 EAPI="2"
 
-inherit eutils flag-o-matic toolchain-funcs multilib-xlibs
+inherit eutils flag-o-matic toolchain-funcs multilib-native
 
 # The slot of this binary compat version of libperl.so
 PERLSLOT="1"
@@ -108,7 +108,7 @@ pkg_setup() {
 	fi
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	cd "${S}"
 	# Fix the build scripts to create libperl with a soname of ${SLOT}.
 	# We basically add:
@@ -163,7 +163,7 @@ myconf() {
 	myconf=( "${myconf[@]}" "$@" )
 }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	cd "${S}"
 	
 	declare -a myconf
@@ -294,7 +294,7 @@ multilib-xlibs_src_compile_internal() {
 	mv ${LIBPERL} "${WORKDIR}/libperl.${ABI}"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	cd "${S}"
 	export LC_ALL="C"
 
@@ -376,7 +376,7 @@ EOF
 	fi
 }
 
-multilib-xlibs_pkg_postinst_internal() {
+multilib-native_pkg_postinst_internal() {
 
 	# Make sure we do not have stale/invalid libperl.so 's ...
 	if [ -f "${ROOT}usr/$(get_libdir)/libperl$(get_libname)" -a ! -L "${ROOT}usr/$(get_libdir)/libperl$(get_libname)" ]

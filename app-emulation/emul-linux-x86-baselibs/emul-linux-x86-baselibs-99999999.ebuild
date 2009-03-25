@@ -10,12 +10,13 @@ LICENSE="GPL-2"
 
 KEYWORDS="-* amd64"
 SLOT="0"
-IUSE="-nodep kerberos"
+IUSE="-nodep ldap kerberos"
 
 
 RDEPEND="
 !nodep? (
     kerberos? ( app-crypt/mit-krb5[lib32] )
+	ldap? ( net-nds/openldap[lib32] )
 	app-arch/bzip2[lib32]
     app-text/libpaper[lib32]
     dev-libs/dbus-glib[lib32]
@@ -37,7 +38,6 @@ RDEPEND="
     media-libs/libpng[lib32]
     media-libs/tiff[lib32]
     net-dns/libidn[lib32]
-    net-nds/openldap[lib32]
     net-print/cups[lib32]
     sys-apps/dbus[lib32]
     sys-apps/file[lib32]

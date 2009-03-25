@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils multilib-xlibs
+inherit eutils multilib-native
 
 MY_PN="murrine"
 MY_P="${MY_PN}-${PV}"
@@ -33,11 +33,11 @@ src_unpack() {
 	epatch "${FILESDIR}/${P}-use-gtk_free.patch"
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	econf --enable-animation || die "econf failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
 	dodir /usr/share/themes

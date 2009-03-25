@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils flag-o-matic versionator autotools multilib-xlibs
+inherit eutils flag-o-matic versionator autotools multilib-native
 
 PATCHV="0.5"
 MY_P=${P/mit-}
@@ -45,7 +45,7 @@ src_unpack() {
 	done
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	# needed to work with sys-libs/e2fsprogs-libs <- should be removed!!
 	append-flags "-I/usr/include/et"
 	econf \
@@ -56,7 +56,7 @@ multilib-xlibs_src_configure_internal() {
 		--enable-kdc-replay-cache || die
 }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	emake -j1 || die
 
 	if use doc ; then
@@ -71,7 +71,7 @@ src_test() {
 	einfo "Tests do not run in sandbox, have a lot of dependencies and are therefore completely disabled."
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake \
 		DESTDIR="${D}" \
 		EXAMPLEDIR=/usr/share/doc/${PF}/examples \

@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils libtool autotools multilib-xlibs
+inherit eutils libtool autotools multilib-native
 
 MY_P=${P/_pre/pre}
 
@@ -49,7 +49,7 @@ src_unpack() {
 	epunt_cxx
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	econf $(use_enable sqlite) \
 		$(use_enable alsa) \
 		$(use_enable !minimal external-libs) \
@@ -59,7 +59,7 @@ multilib-xlibs_src_configure_internal() {
 		--disable-dependency-tracking
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" htmldocdir="/usr/share/doc/${PF}/html" install || die "emake install failed."
 	dodoc AUTHORS ChangeLog NEWS README TODO
 }

@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils libtool multilib-xlibs
+inherit eutils libtool multilib-native
 
 DESCRIPTION="the Ogg media file format library"
 HOMEPAGE="http://xiph.org/ogg/"
@@ -23,6 +23,6 @@ src_unpack() {
 	epunt_cxx
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	make DESTDIR="${D}" install || die "make install failed"
 }

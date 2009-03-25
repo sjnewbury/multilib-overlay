@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit flag-o-matic multilib-xlibs
+inherit flag-o-matic multilib-native
 
 DESCRIPTION="library of simple functions that are optimized for various CPUs"
 HOMEPAGE="http://liboil.freedesktop.org/"
@@ -32,7 +32,7 @@ src_prepare() {
 
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	strip-flags
 	filter-flags -O?
 	append-flags -O2
@@ -40,7 +40,7 @@ multilib-xlibs_src_configure_internal() {
 		$(use_enable doc gtk-doc)
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 	dodoc AUTHORS BUG-REPORTING HACKING NEWS README || die "dodoc failed."
 }

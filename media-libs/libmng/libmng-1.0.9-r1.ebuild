@@ -6,7 +6,7 @@ EAPI="2"
 
 WANT_AUTOCONF=2.5
 WANT_AUTOMAKE=1.9
-inherit autotools multilib-xlibs
+inherit autotools multilib-native
 
 DESCRIPTION="Multiple Image Networkgraphics lib (animated png's)"
 HOMEPAGE="http://www.libmng.com/"
@@ -33,12 +33,12 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	econf --with-jpeg $(use_with lcms) || die
 	emake || die
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	make DESTDIR="${D}" install || die
 
 	dodoc ../CHANGES ../README*

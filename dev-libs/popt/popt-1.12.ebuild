@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/popt/popt-1.12.ebuild,v 1.1 2007/12/09 04:15:41 vapier Exp $
 
-inherit eutils multilib-xlibs
+inherit eutils multilib-native
 
 DESCRIPTION="Parse Options - Command line parser"
 HOMEPAGE="http://rpm5.org/"
@@ -31,7 +31,7 @@ multilibs-xlibs_src_compile_internal() {
 	emake || die "emake failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake install DESTDIR="${D}" || die
 	dodoc CHANGES README
 }

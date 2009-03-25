@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools eutils gnome2 multilib-xlibs
+inherit autotools eutils gnome2 multilib-native
 
 DESCRIPTION="Gnome Virtual Filesystem"
 HOMEPAGE="http://www.gnome.org/"

@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit multilib-xlibs
+inherit multilib-native
 
 DESCRIPTION="the Ogg media file format library"
 HOMEPAGE="http://www.xiph.org/ogg/vorbis/index.html"
@@ -21,7 +21,7 @@ multilibs-xlibs_src_compile_internal() {
 	emake || die
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	make DESTDIR=${D} install || die
 
 	# remove the docs installed by make install, since I'll install

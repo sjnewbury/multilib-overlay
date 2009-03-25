@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools eutils pam python multilib versionator confutils multilib-xlibs
+inherit autotools eutils pam python multilib versionator confutils multilib-native
 
 VSCAN_P="samba-vscan-0.3.6c-beta5"
 MY_P=${PN}-${PV/_/}
@@ -79,7 +79,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	cd "${S}/source"
 
 	local myconf
@@ -169,7 +169,7 @@ src_test() {
 	emake test || die "tests failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	cd "${S}/source"
 
 	emake DESTDIR="${D}" install-everything || die "emake install-everything failed"
@@ -316,7 +316,7 @@ pkg_preinst() {
 	fi
 }
 
-multilib-xlibs_pkg_postinst_internal() {
+multilib-native_pkg_postinst_internal() {
 	if use python ; then
 		python_version
 		python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages/samba
@@ -350,7 +350,7 @@ multilib-xlibs_pkg_postinst_internal() {
 	ewarn "Otherwise they might not be able to connect to the volumes."
 }
 
-multilib-xlibs_pkg_postrm_internal() {
+multilib-native_pkg_postrm_internal() {
 	if use python ; then
 		python_version
 		python_mod_cleanup /usr/$(get_libdir)/python${PYVER}/site-packages/samba

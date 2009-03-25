@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools eutils base multilib-xlibs
+inherit autotools eutils base multilib-native
 
 DESCRIPTION="free lossless audio encoder and decoder"
 HOMEPAGE="http://flac.sourceforge.net"
@@ -34,7 +34,7 @@ src_unpack() {
 	AT_M4DIR="m4" eautoreconf
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	econf $(use_enable ogg) \
 		$(use_enable sse) \
 		$(use_enable 3dnow) \
@@ -57,7 +57,7 @@ src_test() {
 	fi
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 
 	rm -rf "${D}"/usr/share/doc/${P}

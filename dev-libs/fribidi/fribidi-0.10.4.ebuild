@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils multilib-xlibs
+inherit eutils multilib-native
 
 DESCRIPTION="A free implementation of the unicode bidirectional algorithm"
 HOMEPAGE="http://freedesktop.org/Software/FriBidi"
@@ -22,12 +22,12 @@ src_unpack() {
 	epatch ${FILESDIR}/${PN}-macos.patch
 }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	emake || die "emake failed"
 	make test || die "make test failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	einstall || die
 	dodoc AUTHORS NEWS README ChangeLog THANKS TODO ANNOUNCE
 }

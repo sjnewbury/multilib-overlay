@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit flag-o-matic eutils multilib-xlibs
+inherit flag-o-matic eutils multilib-native
 
 DESCRIPTION="A low-latency audio server"
 HOMEPAGE="http://www.jackaudio.org"
@@ -30,7 +30,7 @@ src_unpack() {
 	epatch "${FILESDIR}/${PN}-sparc-cpuinfo.patch"
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	local myconf=""
 
 	# CPU Detection (dynsimd) uses asm routines which requires 3dnow, mmx and sse.
@@ -62,7 +62,7 @@ multilib-xlibs_src_configure_internal() {
 		${myconf} || die "configure failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "install failed"
 	dodoc AUTHORS TODO README
 

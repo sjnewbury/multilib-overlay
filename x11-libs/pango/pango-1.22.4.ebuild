@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils gnome2 multilib-xlibs
+inherit eutils gnome2 multilib-native
 
 DESCRIPTION="Text rendering and layout library"
 HOMEPAGE="http://www.pango.org/"
@@ -59,7 +59,7 @@ src_unpack() {
 	fi
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	local myconf
 	
 	if use debug ; then
@@ -73,12 +73,12 @@ multilib-xlibs_src_configure_internal() {
 	econf $(use_with X x) ${myconf} || die
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	gnome2_src_install
 	rm "${D}/etc/pango/pango.modules"
 }
 
-multilib-xlibs_pkg_postinst_internal() {
+multilib-native_pkg_postinst_internal() {
 	if [[ "${ROOT}" == "/" ]] ; then
 		einfo "Generating modules listing..."
 

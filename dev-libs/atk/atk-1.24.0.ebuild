@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2 multilib-xlibs
+inherit gnome2 multilib-native
 
 DESCRIPTION="GTK+ & GNOME Accessibility Toolkit"
 HOMEPAGE="http://developer.gnome.org/projects/gap/"

@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit libtool multilib eutils multilib-xlibs
+inherit libtool multilib eutils multilib-native
 
 MY_PV=${PV/_}
 DESCRIPTION="Portable Network Graphics library"
@@ -31,12 +31,12 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
 	dodoc ANNOUNCE CHANGES KNOWNBUG README TODO Y2KINFO
 }
 
-multilib-xlibs_pkg_postinst_internal() {
+multilib-native_pkg_postinst_internal() {
 	# the libpng authors really screwed around between 1.2.1 and 1.2.3
 	if [[ -f ${ROOT}/usr/$(get_libdir)/libpng.so.3.1.2.1 ]] ; then
 		rm -f "${ROOT}"/usr/$(get_libdir)/libpng.so.3.1.2.1

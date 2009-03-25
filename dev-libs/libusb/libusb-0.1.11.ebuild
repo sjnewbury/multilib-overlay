@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils libtool autotools multilib-xlibs
+inherit eutils libtool autotools multilib-native
 
 DESCRIPTION="Userspace access to USB devices"
 HOMEPAGE="http://libusb.sourceforge.net/"
@@ -28,7 +28,7 @@ src_unpack() {
 	sed -i -e 's:-Werror::' Makefile.am
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	elibtoolize
 	econf \
 		$(use_enable debug debug all) \
@@ -36,7 +36,7 @@ multilib-xlibs_src_configure_internal() {
 		|| die "econf failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	make DESTDIR=${D} install || die
 	dodoc AUTHORS NEWS README || die
 	if use doc; then

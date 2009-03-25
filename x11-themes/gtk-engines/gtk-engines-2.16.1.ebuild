@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2 multilib-xlibs
+inherit gnome2 multilib-native
 
 DESCRIPTION="GTK+2 standard engines and themes"
 HOMEPAGE="http://www.gtk.org/"

@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit virtualx gnome2 multilib-xlibs
+inherit virtualx gnome2 multilib-native
 
 DESCRIPTION="The Gnome 2 Canvas library"
 HOMEPAGE="http://www.gnome.org/"

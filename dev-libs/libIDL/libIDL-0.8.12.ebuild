@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils gnome2 multilib-xlibs
+inherit eutils gnome2 multilib-native
 
 DESCRIPTION="CORBA tree builder"
 HOMEPAGE="http://www.gnome.org/"

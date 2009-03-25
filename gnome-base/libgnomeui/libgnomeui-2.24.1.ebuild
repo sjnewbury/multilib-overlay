@@ -6,7 +6,7 @@ GCONF_DEBUG="no"
 
 EAPI="2"
 
-inherit eutils gnome2 multilib-xlibs
+inherit eutils gnome2 multilib-native
 
 DESCRIPTION="User Interface routines for Gnome"
 HOMEPAGE="http://www.gnome.org/"

@@ -6,7 +6,7 @@
 
 EAPI="2"
 
-inherit eutils flag-o-matic multilib-xlibs
+inherit eutils flag-o-matic multilib-native
 
 # Official patches
 # See ftp://ftp.cwru.edu/pub/bash/readline-4.3-patches/
@@ -56,13 +56,13 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	append-cppflags -D_GNU_SOURCE
 	econf --with-curses --disable-static || die
 	emake -C shlib || die
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake -C shlib DESTDIR="${D}" install || die
 	rm -f "${D}"/usr/lib*/*.so
 }

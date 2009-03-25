@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils flag-o-matic toolchain-funcs multilib-xlibs
+inherit eutils flag-o-matic toolchain-funcs multilib-native
 
 MY_PV=${PV:0:3}
 PV_SNAP=${PV:4}
@@ -34,7 +34,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	tc-export BUILD_CC
 
 	# Protect the user from themselves #115036
@@ -65,7 +65,7 @@ do_compile() {
 	
 	# We need the basic terminfo files in /etc, bug #37026.  We will
 	# add '--with-terminfo-dirs' and then populate /etc/terminfo in
-	# multilib-xlibs_src_install_internal() ...
+	# multilib-native_src_install_internal() ...
 	# The chtype/mmask-t settings below are to retain ABI compat
 	# with ncurses-5.4 so dont change em !
 	local conf_abi="
@@ -107,7 +107,7 @@ do_compile() {
 	emake || die "make failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	# install unicode version second so that the binaries in /usr/bin
 	# support both wide and narrow
 	cd "${WORKDIR}"/narrowc.${ABI}

@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils autotools multilib-xlibs
+inherit eutils autotools multilib-native
 
 DESCRIPTION="general purpose crypto library based on the code used in GnuPG"
 HOMEPAGE="http://www.gnupg.org/"
@@ -38,7 +38,7 @@ src_unpack() {
 	fi
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	# --disable-padlock-support for bug#201917
 	
 	local myconf
@@ -56,7 +56,7 @@ multilib-xlibs_src_configure_internal() {
 		|| die
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	make DESTDIR="${D}" install || die
 	dodoc AUTHORS BUGS ChangeLog NEWS README* THANKS TODO VERSION
 }
