@@ -43,6 +43,9 @@ src_unpack() {
 	# Respect LDFLAGS
 	sed -i -e 's/\$(MKSHLIB) -o/\$(MKSHLIB) \$(LDFLAGS) -o/g' rules.mk
 
+	# do not always append -m64/-m32 on 64bit since it breaks multilib build
+	sed -i -e '/ARCHFLAG.*=/s:^:# :' Linux.mk
+
 	cd "${S}"
 	epatch "${FILESDIR}"/${PN}-3.11-config.patch
 	epatch "${FILESDIR}"/${PN}-3.12-config-1.patch
