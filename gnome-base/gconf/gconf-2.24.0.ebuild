@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gconf/gconf-2.24.0.ebuild,v 1.6 2009/03/18 14:27:20 armin76 Exp $
 
 EAPI="2"
-inherit autotools eutils gnome2 multilib-xlibs
+inherit autotools eutils gnome2 multilib-native
 
 MY_PN=GConf
 MY_P=${MY_PN}-${PV}
@@ -64,7 +64,7 @@ src_unpack() {
 #	sh "${S}"/tests/runtests.sh || die "running tests failed"
 #}
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	gnome2_src_install
 
 	keepdir /etc/gconf/gconf.xml.mandatory

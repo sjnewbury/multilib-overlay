@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2 eutils multilib-xlibs
+inherit gnome2 eutils multilib-native
 
 DESCRIPTION="VMware's Incredibly Exciting Widgets"
 HOMEPAGE="http://view.sourceforge.net"

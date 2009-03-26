@@ -6,7 +6,7 @@ GCONF_DEBUG="no"
 
 EAPI="2"
 
-inherit eutils virtualx gnome2 multilib-xlibs
+inherit eutils virtualx gnome2 multilib-native
 
 DESCRIPTION="User Interface part of libbonobo"
 HOMEPAGE="http://developer.gnome.org/arch/gnome/componentmodel/bonobo.html"
@@ -36,7 +36,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	addpredict "/root/.gnome2_private"
 
 	gnome2_src_compile

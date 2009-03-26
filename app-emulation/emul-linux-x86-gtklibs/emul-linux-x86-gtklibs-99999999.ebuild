@@ -10,7 +10,7 @@ LICENSE="GPL-2"
 
 KEYWORDS="-* amd64"
 SLOT="0"
-IUSE="-nodep kerberos"
+IUSE="-nodep kerberos xfce"
 
 
 RDEPEND="
@@ -20,6 +20,6 @@ RDEPEND="
 	x11-libs/gtk+[lib32]
 	x11-libs/pango[lib32]
 	x11-themes/gtk-engines[lib32]
-	x11-themes/gtk-engines-xfce[lib32]
+	xfce? ( x11-themes/gtk-engines-xfce[lib32] )
 )
 "

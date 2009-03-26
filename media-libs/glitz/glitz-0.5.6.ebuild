@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit multilib-xlibs
+inherit multilib-native
 
 DESCRIPTION="An OpenGL image compositing library"
 HOMEPAGE="http://www.freedesktop.org/Software/glitz"
@@ -17,11 +17,11 @@ IUSE=""
 
 DEPEND="virtual/opengl"
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	econf --x-libraries="/usr/$(get_libdir)" || die
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	make DESTDIR="${D}" install || die
 	dodoc AUTHORS ChangeLog README TODO
 }

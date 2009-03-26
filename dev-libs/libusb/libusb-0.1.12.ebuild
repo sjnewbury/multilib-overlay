@@ -6,7 +6,7 @@ EAPI="2"
 
 WANT_AUTOMAKE="latest"
 WANT_AUTOCONF="latest"
-inherit eutils libtool autotools multilib-xlibs
+inherit eutils libtool autotools multilib-native
 
 DESCRIPTION="Userspace access to USB devices"
 HOMEPAGE="http://libusb.sourceforge.net/"
@@ -40,14 +40,14 @@ src_unpack() {
 	${S}/doc/manual.sgml
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	econf \
 		$(use_enable debug debug all) \
 		$(use_enable doc build-docs) \
 		|| die "econf failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake -j1 DESTDIR="${D}" install || die "make install failed"
 	dodoc AUTHORS NEWS README || die "dodoc failed"
 	if use doc ; then

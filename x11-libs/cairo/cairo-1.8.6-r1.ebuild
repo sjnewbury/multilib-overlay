@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils flag-o-matic libtool multilib-xlibs
+inherit eutils flag-o-matic libtool multilib-native
 
 DESCRIPTION="A vector graphics library with cross-device output support"
 HOMEPAGE="http://cairographics.org/"
@@ -64,7 +64,7 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	#gets rid of fbmmx.c inlining warnings
 	append-flags -finline-limit=1200
 
@@ -87,7 +87,7 @@ multilib-xlibs_src_configure_internal() {
 		|| die "configure failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	make DESTDIR="${D}" install || die "Installation failed"
 	dodoc AUTHORS ChangeLog NEWS README
 }

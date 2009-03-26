@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit flag-o-matic toolchain-funcs multilib-xlibs
+inherit flag-o-matic toolchain-funcs multilib-native
 
 DESCRIPTION="e2fsprogs libraries (common error, subsystem, uuid, block id)"
 HOMEPAGE="http://e2fsprogs.sourceforge.net/"
@@ -21,7 +21,7 @@ RDEPEND="!sys-libs/com_err
 DEPEND="nls? ( sys-devel/gettext )
 	sys-devel/bc"
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	export LDCONFIG=/bin/true
 	export CC=$(tc-getCC)
 
@@ -41,13 +41,13 @@ multilib-xlibs_src_configure_internal() {
 
 }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	export LDCONFIG=/bin/true
 	export CC=$(tc-getCC)
 	emake STRIP=/bin/true || die
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	export LDCONFIG=/bin/true
 	export CC=$(tc-getCC)
 

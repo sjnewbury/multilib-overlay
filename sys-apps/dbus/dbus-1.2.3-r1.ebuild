@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils autotools multilib flag-o-matic multilib-xlibs
+inherit eutils autotools multilib flag-o-matic multilib-native
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="http://dbus.freedesktop.org/"
@@ -39,7 +39,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	# so we can get backtraces from apps
 	append-flags -rdynamic
 
@@ -78,7 +78,7 @@ src_test() {
 	DBUS_VERBOSE=1 make check || die "make check failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	# initscript

@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit libtool autotools base multilib-xlibs
+inherit libtool autotools base multilib-native
 
 DESCRIPTION="An elegant API for accessing audio files"
 HOMEPAGE="http://www.68k.org/~michael/audiofile/"
@@ -42,7 +42,7 @@ multilibs-xlibs_src_configure_internal() {
 	econf --enable-largefile || die
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	make DESTDIR="${D}" install || die
 	dodoc ACKNOWLEDGEMENTS AUTHORS ChangeLog README TODO NEWS NOTES
 }

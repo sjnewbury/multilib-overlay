@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils multilib-xlibs
+inherit eutils multilib-native
 
 DESCRIPTION="the Ogg media file format library"
 HOMEPAGE="http://www.xiph.org/ogg/vorbis/index.html"
@@ -21,6 +21,6 @@ src_unpack() {
 	epunt_cxx
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	make DESTDIR="${D}" install || die "make install failed"
 }

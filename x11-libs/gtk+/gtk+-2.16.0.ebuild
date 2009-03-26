@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome.org flag-o-matic eutils libtool virtualx multilib-xlibs
+inherit gnome.org flag-o-matic eutils libtool virtualx multilib-native
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="http://www.gtk.org/"
@@ -78,7 +78,7 @@ src_prepare() {
 	elibtoolize
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	# png always on to display icons (foser)
 	local myconf="$(use_enable doc gtk-doc) \
 		$(use_with jpeg libjpeg) \
@@ -105,7 +105,7 @@ src_test() {
 	Xemake check || die "tests failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "Installation failed"
 
 	set_gtk2_confdir
@@ -126,7 +126,7 @@ multilib-xlibs_src_install_internal() {
 	rm "${D}/etc/gtk-2.0/gtk.immodules"
 }
 
-multilib-xlibs_pkg_postinst_internal() {
+multilib-native_pkg_postinst_internal() {
 	set_gtk2_confdir
 
 	if [ -d "${ROOT}${GTK2_CONFDIR}" ]; then

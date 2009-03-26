@@ -4,7 +4,7 @@
 
 EAPI=2
 
-inherit eutils toolchain-funcs multilib multilib-xlibs
+inherit eutils toolchain-funcs multilib multilib-native
 
 MY_P=${P/_}
 DESCRIPTION="Password Checking Library"
@@ -37,7 +37,7 @@ src_unpack() {
  
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	econf \
 		--with-default-dict='$(libdir)/cracklib_dict' \
 		$(use_enable nls) \
@@ -46,7 +46,7 @@ multilib-xlibs_src_compile_internal() {
 	emake || die
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	rm -r "${D}"/usr/share/cracklib
 

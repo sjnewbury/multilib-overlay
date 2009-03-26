@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils linux-info autotools flag-o-matic multilib-xlibs
+inherit eutils linux-info autotools flag-o-matic multilib-native
 
 PATCH_VERSION="1"
 
@@ -134,7 +134,7 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	local acpi="$(use_enable acpi)"
 	local backend=
 	local hardware=
@@ -209,7 +209,7 @@ multilib-xlibs_src_configure_internal() {
 	|| die "configure failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
 	dodoc AUTHORS ChangeLog NEWS README || die "docs failed"
 

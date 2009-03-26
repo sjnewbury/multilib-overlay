@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils gnome.org multilib-xlibs
+inherit eutils gnome.org multilib-native
 
 MY_PN="murrine"
 DESCRIPTION="Murrine GTK+2 Cairo Engine"
@@ -24,12 +24,12 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_PN}-${PV}"
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	econf --enable-animation || die "econf failed"
 	emake || die "emake failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
 	dodoc AUTHORS ChangeLog TODO

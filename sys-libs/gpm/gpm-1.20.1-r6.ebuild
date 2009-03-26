@@ -6,7 +6,7 @@
 
 EAPI="2"
 
-inherit eutils toolchain-funcs multilib-xlibs
+inherit eutils toolchain-funcs multilib-native
 #elisp-common
 
 PATCH_VER="1.6"
@@ -33,7 +33,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	econf \
 		--libdir=/$(get_libdir) \
 		--sysconfdir=/etc/gpm \
@@ -52,7 +52,7 @@ multilib-xlibs_src_compile_internal() {
 #	fi
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	make install DESTDIR="${D}" EMACS=: ELISP="" || die "make install failed"
 	# fix lib symlinks since the default is missing/bogus
 	dosym libgpm.so.1.19.0 /$(get_libdir)/libgpm.so.1

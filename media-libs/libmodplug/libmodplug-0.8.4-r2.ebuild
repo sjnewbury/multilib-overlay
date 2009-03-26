@@ -6,7 +6,7 @@ EAPI="2"
 WANT_AUTOCONF="latest"
 WANT_AUTOMAKE="latest"
 
-inherit eutils autotools multilib-xlibs
+inherit eutils autotools multilib-native
 
 DESCRIPTION="Library for playing MOD-like music files"
 SRC_URI="mirror://sourceforge/modplug-xmms/${P}.tar.gz"
@@ -34,7 +34,7 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	make DESTDIR="${D}" install || die
 	dodoc AUTHORS ChangeLog README TODO
 }

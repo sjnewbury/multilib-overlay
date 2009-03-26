@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils autotools multilib-xlibs
+inherit eutils autotools multilib-native
 
 DESCRIPTION="Secret Rabbit Code (aka libsamplerate) is a Sample Rate Converter for audio"
 HOMEPAGE="http://www.mega-nerd.com/SRC/"
@@ -28,14 +28,14 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	econf \
 		--disable-fftw \
 		$(use_enable sndfile) \
 		--disable-dependency-tracking
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc AUTHORS ChangeLog NEWS README
 	dohtml doc/*.html doc/*.css doc/*.png

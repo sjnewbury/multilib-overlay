@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit libtool eutils multilib-xlibs
+inherit libtool eutils multilib-native
 
 DESCRIPTION="Contains error handling functions used by GnuPG software"
 HOMEPAGE="http://www.gnupg.org/related_software/libgpg-error"
@@ -27,11 +27,11 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	econf $(use_enable nls) || die
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake install DESTDIR="${D}" || die
 	dodoc AUTHORS ChangeLog NEWS README
 }

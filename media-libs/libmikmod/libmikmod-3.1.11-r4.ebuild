@@ -6,7 +6,7 @@ EAPI="2"
 
 WANT_AUTOMAKE="1.5"
 
-inherit flag-o-matic eutils libtool autotools multilib-xlibs
+inherit flag-o-matic eutils libtool autotools multilib-native
 
 DESCRIPTION="A library to play a wide range of module formats"
 HOMEPAGE="http://mikmod.raphnet.net/"
@@ -45,7 +45,7 @@ multilibs-xlibs_src_compile_internal() {
 	emake || die "emake failed."
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 	dodoc AUTHORS NEWS README TODO
 	dohtml docs/*.html

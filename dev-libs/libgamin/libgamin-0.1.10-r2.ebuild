@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools eutils flag-o-matic libtool python multilib-xlibs
+inherit autotools eutils flag-o-matic libtool python multilib-native
 
 MY_PN=${PN//lib/}
 MY_P=${MY_PN}-${PV}
@@ -49,7 +49,7 @@ src_prepare() {
 	ln -s $(type -P true) "${S}"/py-compile
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	econf --disable-debug \
 		--disable-server \
 		$(use_enable kernel_linux inotify) \
@@ -57,20 +57,20 @@ multilib-xlibs_src_configure_internal() {
 		$(use_with python)
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "installation failed"
 
 	dodoc AUTHORS ChangeLog README TODO NEWS doc/*txt || die "dodoc failed"
 	dohtml doc/* || die "dohtml failed"
 }
 
-multilib-xlibs_pkg_postinst_internal() {
+multilib-native_pkg_postinst_internal() {
 	if use python; then
 		python_version
 		python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages
 	fi
 }
 
-multilib-xlibs_pkg_postrm_internal() {
+multilib-native_pkg_postrm_internal() {
 	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages
 }

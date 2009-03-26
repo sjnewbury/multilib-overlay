@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils flag-o-matic toolchain-funcs multilib-xlibs
+inherit eutils flag-o-matic toolchain-funcs multilib-native
 
 DESCRIPTION="Standard (de)compression library"
 HOMEPAGE="http://www.zlib.net/"
@@ -34,7 +34,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	tc-export AR CC RANLIB
 	case ${CHOST} in
 	*-mingw*|mingw*)
@@ -49,7 +49,7 @@ multilib-xlibs_src_compile_internal() {
 	esac
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	einstall libdir="${D}"/$(get_libdir) || die
 	rm "${D}"/$(get_libdir)/libz.a
 	insinto /usr/include

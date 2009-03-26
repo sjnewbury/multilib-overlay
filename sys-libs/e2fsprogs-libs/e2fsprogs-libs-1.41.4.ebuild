@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit flag-o-matic toolchain-funcs multilib-xlibs
+inherit flag-o-matic toolchain-funcs multilib-native
 
 DESCRIPTION="e2fsprogs libraries (common error, subsystem, uuid, block id)"
 HOMEPAGE="http://e2fsprogs.sourceforge.net/"
@@ -27,7 +27,7 @@ set_env() {
 	export CC=$(tc-getCC)
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	set_env
 
 	# We want to use the "bsd" libraries while building on Darwin, but while
@@ -45,12 +45,12 @@ multilib-xlibs_src_configure_internal() {
 		|| die
 }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	set_env
 	emake STRIP=/bin/true || die
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	set_env
 	emake STRIP=/bin/true DESTDIR="${D}" install || die
 

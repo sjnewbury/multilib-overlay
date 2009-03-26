@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils flag-o-matic multilib toolchain-funcs multilib-xlibs
+inherit eutils flag-o-matic multilib toolchain-funcs multilib-native
 
 NSPR_VER="4.7.3"
 RTM_NAME="NSS_${PV//./_}_RTM"
@@ -54,7 +54,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	strip-flags
 
 	echo > "${T}"/test.c
@@ -77,7 +77,7 @@ multilib-xlibs_src_compile_internal() {
 	emake -j1 BUILD_OPT=1 XCFLAGS="${CFLAGS}" CC="$(tc-getCC)" || die "nss make failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	MINOR_VERSION=12
 	cd "${S}"/security/dist
 

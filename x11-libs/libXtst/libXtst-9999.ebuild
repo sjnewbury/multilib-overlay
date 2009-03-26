@@ -5,7 +5,7 @@
 # Must be before x-modular eclass is inherited
 SNAPSHOT="yes"
 
-inherit x-modular multilib-xlibs
+inherit x-modular multilib-native
 
 DESCRIPTION="X.Org Xtst library"
 

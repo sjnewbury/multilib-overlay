@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/net-nds/openldap/openldap-2.4.11-r1.ebuild,v 1.6 2009/03/07 13:04:12 gentoofan23 Exp $
 
 EAPI="2"
-inherit db-use eutils flag-o-matic multilib ssl-cert versionator toolchain-funcs multilib-xlibs
+inherit db-use eutils flag-o-matic multilib ssl-cert versionator toolchain-funcs multilib-native
 
 DESCRIPTION="LDAP suite of application and development tools"
 HOMEPAGE="http://www.OpenLDAP.org/"
@@ -275,7 +275,7 @@ src_configure() {
 		${myconf} || die "configure failed"
 }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	emake depend || die "emake depend failed"
 	emake CC=$(tc-getCC) AR=$(tc-getAR) || die "emake failed"
 
@@ -329,7 +329,7 @@ src_test() {
 	cd tests ; make tests || die "make tests failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	dodoc ANNOUNCEMENT CHANGES COPYRIGHT README "${FILESDIR}"/DB_CONFIG.fast.example

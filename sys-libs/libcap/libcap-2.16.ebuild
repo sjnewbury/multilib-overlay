@@ -4,7 +4,7 @@
 
 EAPI=2
 
-inherit eutils multilib toolchain-funcs pam multilib-xlibs
+inherit eutils multilib toolchain-funcs pam multilib-native
 
 DESCRIPTION="POSIX 1003.1e capabilities"
 HOMEPAGE="http://www.friedhoff.org/posixfilecaps.html"
@@ -34,12 +34,12 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	tc-export BUILD_CC CC AR RANLIB
 	emake || die
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake install DESTDIR="${D}" || die
 
 	gen_usr_ldscript libcap.so

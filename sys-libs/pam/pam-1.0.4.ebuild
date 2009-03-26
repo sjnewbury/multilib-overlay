@@ -7,7 +7,7 @@ EAPI="2"
 WANT_AUTOCONF="latest"
 WANT_AUTOMAKE="latest"
 
-inherit libtool multilib eutils autotools pam toolchain-funcs flag-o-matic multilib-xlibs
+inherit libtool multilib eutils autotools pam toolchain-funcs flag-o-matic multilib-native
 
 MY_PN="Linux-PAM"
 MY_P="${MY_PN}-${PV}"
@@ -125,7 +125,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	local myconf
 
 	if use hppa || use elibc_FreeBSD; then
@@ -158,7 +158,7 @@ multilib-xlibs_src_compile_internal() {
 	emake sepermitlockdir="/var/run/sepermit" || die "emake failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install \
 		 sepermitlockdir="/var/run/sepermit" || die "make install failed"
 

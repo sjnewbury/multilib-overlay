@@ -5,7 +5,7 @@
 EAPI="2"
 
 MY_PN="gtk-xfce-engine"
-inherit xfce4 multilib-xlibs
+inherit xfce4 multilib-native
 
 XFCE_VERSION=4.6.0
 

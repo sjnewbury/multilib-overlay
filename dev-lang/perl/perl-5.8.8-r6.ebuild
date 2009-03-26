@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils flag-o-matic toolchain-funcs multilib-xlibs
+inherit eutils flag-o-matic toolchain-funcs multilib-native
 
 # The slot of this binary compat version of libperl.so
 PERLSLOT="1"
@@ -47,7 +47,7 @@ PDEPEND=">=app-admin/perl-cleaner-1.03
 			>=perl-core/Test-Harness-2.56
 		)"
 
-multilib-xlibs_pkg_setup_internal() {
+multilib-native_pkg_setup_internal() {
 	# I think this should rather be displayed if you *have* 'ithreads'
 	# in USE if it could break things ...
 	if use ithreads
@@ -69,7 +69,7 @@ multilib-xlibs_pkg_setup_internal() {
 	fi
 }
 
-multilib-xlibs_src_prepare_internal() {
+multilib-native_src_prepare_internal() {
 	cd "${S}"
 
 	# Get -lpthread linked before -lc.  This is needed
@@ -159,7 +159,7 @@ myconf() {
 	myconf=( "${myconf[@]}" "$@" )
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	cd "${S}"
 	
 	declare -a myconf
@@ -291,7 +291,7 @@ multilib-xlibs_src_configure_internal() {
 		"${myconf[@]}" || die "Unable to configure"
 }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	cd "${S}"
 	# would like to bracket this with a test for the existence of a
 	# dotfile, but can't clean it automatically now.
@@ -304,7 +304,7 @@ src_test() {
 	emake -i test CCDLFLAGS= || die "test failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	cd "${S}"
 	export LC_ALL="C"
 
@@ -595,7 +595,7 @@ src_remove_extra_files()
 	popd > /dev/null
 }
 
-multilib-xlibs_pkg_postinst_internal() {
+multilib-native_pkg_postinst_internal() {
 	cd "${S}"
 	INC=$(perl -e 'for $line (@INC) { next if $line eq "."; next if $line =~ m/'${MY_PV}'|etc|local|perl$/; print "$line\n" }')
 	if [[ "${ROOT}" = "/" ]]

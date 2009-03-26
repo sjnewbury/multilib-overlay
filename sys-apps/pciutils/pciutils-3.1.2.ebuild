@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils multilib-xlibs
+inherit eutils multilib-native
 
 DESCRIPTION="Various utilities dealing with the PCI bus"
 HOMEPAGE="http://atrey.karlin.mff.cuni.cz/~mj/pciutils.html"
@@ -25,7 +25,7 @@ src_unpack() {
 	cp "${FILESDIR}"/pcimodules.c . || die
 }
 
-multilib-xlibs_src_prepare_internal() {
+multilib-native_src_prepare_internal() {
 	sed -i -e "/^LIBDIR=/s:/lib:/$(get_libdir):" Makefile
 }
 
@@ -51,11 +51,11 @@ pemake() {
 		"$@"
 }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	pemake OPT="${CFLAGS}" all pcimodules || die "emake failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	pemake DESTDIR="${D}" install install-lib || die
 	dosbin pcimodules || die
 	doman "${FILESDIR}"/pcimodules.8

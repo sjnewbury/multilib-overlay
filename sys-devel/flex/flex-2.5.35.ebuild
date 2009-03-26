@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils flag-o-matic multilib-xlibs
+inherit eutils flag-o-matic multilib-native
 
 #DEB_VER=36
 DESCRIPTION="GNU lexical analyser generator"
@@ -29,12 +29,12 @@ src_unpack() {
 	sed -i 's:^LDFLAGS:LOADLIBES:' tests/test-pthread/Makefile.in #262989
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	use static && append-ldflags -static
 	econf $(use_enable nls) || die
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake install DESTDIR="${D}" || die "make install failed"
 	dodoc AUTHORS ChangeLog NEWS ONEWS README* THANKS TODO
 	dosym flex /usr/bin/lex

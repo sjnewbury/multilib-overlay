@@ -2,10 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 #
-# @ECLASS: multilib-xlibs.eclass
+# @ECLASS: multilib-native.eclass
 
 # temporary stuff to to have some debug info what's going on with
-# multilib-xlibs_check_inherited_funcs() and maybe other stuff. Remove this var and 
+# multilib-native_check_inherited_funcs() and maybe other stuff. Remove this var and 
 # the stuff in the phase functions when done...
 ECLASS_DEBUG="yes"
 
@@ -32,66 +32,66 @@ EMULTILIB_OLDFLAGS=""
 EMULTILIB_OCHOST=""
 EMULTILIB_OSPATH=""
 
-# @FUNCTION: multilib-xlibs_pkg_setup
+# @FUNCTION: multilib-native_pkg_setup
 # @USAGE:
 # @DESCRIPTION:
-multilib-xlibs_pkg_setup() {
-	multilib-xlibs_src_generic pkg_setup
+multilib-native_pkg_setup() {
+	multilib-native_src_generic pkg_setup
 }
 
-# @FUNCTION: multilib-xlibs_src_prepare
+# @FUNCTION: multilib-native_src_prepare
 # @USAGE:
 # @DESCRIPTION:
-multilib-xlibs_src_prepare() {
-	multilib-xlibs_src_generic src_prepare
+multilib-native_src_prepare() {
+	multilib-native_src_generic src_prepare
 }
 
-# @FUNCTION: multilib-xlibs_src_configure
+# @FUNCTION: multilib-native_src_configure
 # @USAGE:
 # @DESCRIPTION:
-multilib-xlibs_src_configure() {
-	multilib-xlibs_src_generic src_configure
+multilib-native_src_configure() {
+	multilib-native_src_generic src_configure
 }
 
-# @FUNCTION: multilib-xlibs_src_compile
+# @FUNCTION: multilib-native_src_compile
 # @USAGE:
 # @DESCRIPTION:
-multilib-xlibs_src_compile() {
-	multilib-xlibs_src_generic src_compile
+multilib-native_src_compile() {
+	multilib-native_src_generic src_compile
 }
 
-# @FUNCTION: multilib-xlibs_src_install
+# @FUNCTION: multilib-native_src_install
 # @USAGE:
 # @DESCRIPTION:
-multilib-xlibs_src_install() {
-	multilib-xlibs_src_generic src_install
+multilib-native_src_install() {
+	multilib-native_src_generic src_install
 }
 
-# @FUNCTION: multilib-xlibs_pkg_preinst
+# @FUNCTION: multilib-native_pkg_preinst
 # @USAGE:
 # @DESCRIPTION:
-multilib-xlibs_pkg_preinst() {
-	multilib-xlibs_src_generic pkg_preinst
+multilib-native_pkg_preinst() {
+	multilib-native_src_generic pkg_preinst
 }
 
-# @FUNCTION: multilib-xlibs_pkg_postinst
+# @FUNCTION: multilib-native_pkg_postinst
 # @USAGE:
 # @DESCRIPTION:
-multilib-xlibs_pkg_postinst() {
-	multilib-xlibs_src_generic pkg_postinst
+multilib-native_pkg_postinst() {
+	multilib-native_src_generic pkg_postinst
 }
 
-# @FUNCTION: multilib-xlibs_pkg_postrm
+# @FUNCTION: multilib-native_pkg_postrm
 # @USAGE:
 # @DESCRIPTION:
-multilib-xlibs_pkg_postrm() {
-	multilib-xlibs_src_generic pkg_postrm
+multilib-native_pkg_postrm() {
+	multilib-native_src_generic pkg_postrm
 }
 
-# @FUNCTION: multilib-xlibs_src_generic
+# @FUNCTION: multilib-native_src_generic
 # @USAGE:
 # @DESCRIPTION:
-multilib-xlibs_src_generic() {
+multilib-native_src_generic() {
 	if [[ -n ${EMULTILIB_PKG} ]]; then
 		if [[ -z ${OABI} ]] ; then
 			local abilist=""
@@ -107,7 +107,7 @@ multilib-xlibs_src_generic() {
 				OABI=${ABI}
 				for ABI in ${abilist} ; do
 					export ABI
-					multilib-xlibs_src_generic ${1}
+					multilib-native_src_generic ${1}
 				done
 				ABI=${OABI}
 				unset OABI
@@ -115,13 +115,13 @@ multilib-xlibs_src_generic() {
 			fi
 		fi
 	fi
-	multilib-xlibs_src_generic_sub ${1}
+	multilib-native_src_generic_sub ${1}
 }
 
-# @FUNCTION: multilib-xlibs_src_generic_sub
+# @FUNCTION: multilib-native_src_generic_sub
 # @USAGE:
 # @DESCRIPTION:
-multilib-xlibs_src_generic_sub() {
+multilib-native_src_generic_sub() {
 	if [[ -n ${EMULTILIB_PKG} ]]; then
 		export CC="$(tc-getCC)"
 		export CXX="$(tc-getCXX)"
@@ -137,7 +137,7 @@ multilib-xlibs_src_generic_sub() {
 					x86)    CHOST="i686-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m32"
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m32"
-					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32"
+					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32 -L/usr/lib32"
 					;;
 					amd64)  CHOST="x86_64-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m64"
@@ -147,7 +147,7 @@ multilib-xlibs_src_generic_sub() {
 					ppc)   CHOST="powerpc-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m32"
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m32"
-					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32"
+					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32 -L/usr/lib32"
 					;;
 					ppc64)   CHOST="powerpc64-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m64"
@@ -174,7 +174,7 @@ multilib-xlibs_src_generic_sub() {
 		PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 	fi
 	
-	multilib-xlibs_${1}_internal
+	multilib-native_${1}_internal
 	
 	if [[ -n ${EMULTILIB_PKG} ]]; then
 		if has_multilib_profile; then
@@ -187,54 +187,54 @@ multilib-xlibs_src_generic_sub() {
 	fi
 }
 
-# @FUNCTION: multilib-xlibs_src_prepare_internal
+# @FUNCTION: multilib-native_src_prepare_internal
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_configure.
 # @DESCRIPTION:
-multilib-xlibs_src_prepare_internal() {
-	multilib-xlibs_check_inherited_funcs src_prepare
+multilib-native_src_prepare_internal() {
+	multilib-native_check_inherited_funcs src_prepare
 }
 
-# @FUNCTION: multilib-xlibs_src_configure_internal
+# @FUNCTION: multilib-native_src_configure_internal
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_configure.
 # @DESCRIPTION:
-multilib-xlibs_src_configure_internal() {
-	multilib-xlibs_check_inherited_funcs src_configure
+multilib-native_src_configure_internal() {
+	multilib-native_check_inherited_funcs src_configure
 }
 
-# @FUNCTION: multilib-xlibs_src_compile_internal
+# @FUNCTION: multilib-native_src_compile_internal
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_compile.
 # @DESCRIPTION:
-multilib-xlibs_src_compile_internal() {
-	multilib-xlibs_check_inherited_funcs src_compile
+multilib-native_src_compile_internal() {
+	multilib-native_check_inherited_funcs src_compile
 }
 
-# @FUNCTION: multilib-xlibs_src_install_internal
+# @FUNCTION: multilib-native_src_install_internal
 # @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_install
 # @DESCRIPTION:
-multilib-xlibs_src_install_internal() {
-	multilib-xlibs_check_inherited_funcs src_install
+multilib-native_src_install_internal() {
+	multilib-native_check_inherited_funcs src_install
 }
 
-multilib-xlibs_pkg_setup_internal() {
-	multilib-xlibs_check_inherited_funcs pkg_setup
+multilib-native_pkg_setup_internal() {
+	multilib-native_check_inherited_funcs pkg_setup
 }
 
-multilib-xlibs_pkg_preinst_internal() {
-	multilib-xlibs_check_inherited_funcs pkg_preinst
+multilib-native_pkg_preinst_internal() {
+	multilib-native_check_inherited_funcs pkg_preinst
 }
 
-multilib-xlibs_pkg_postinst_internal() {
-	multilib-xlibs_check_inherited_funcs pkg_postinst
+multilib-native_pkg_postinst_internal() {
+	multilib-native_check_inherited_funcs pkg_postinst
 }
 
-multilib-xlibs_pkg_postrm_internal() {
-	multilib-xlibs_check_inherited_funcs pkg_postrm
+multilib-native_pkg_postrm_internal() {
+	multilib-native_check_inherited_funcs pkg_postrm
 }
 
-# @internal-function multilib-xlibs_check_inherited_funcs
+# @internal-function multilib-native_check_inherited_funcs
 # @USAGE: call it in the phases
 # @DESCRIPTION: checks all inherited eclasses for requested phase function
-multilib-xlibs_check_inherited_funcs() {
+multilib-native_check_inherited_funcs() {
 	# check all eclasses for given function, in order of inheritance.
 	# if none provides it, the var stays empty. If more have it, the last one wins.
 	# Ignore the ones we inherit ourselves, base doesn't matter, as we default
@@ -242,7 +242,7 @@ multilib-xlibs_check_inherited_funcs() {
 	local declared_func=""
 	local eclasses=""
 	eclasses="${INHERITED/base/}"
-	eclasses="${eclasses/multilib-xlibs/}"
+	eclasses="${eclasses/multilib-native/}"
 
 	for func in ${eclasses}; do
 		if [[ -n $(declare -f ${func}_${1}) ]]; then

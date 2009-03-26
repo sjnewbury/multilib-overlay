@@ -7,7 +7,7 @@ EAPI="2"
 WANT_AUTOCONF="latest"
 WANT_AUTOMAKE="latest"
 AT_M4DIR="./build"
-inherit autotools db-use eutils flag-o-matic multilib ssl-cert toolchain-funcs versionator multilib-xlibs
+inherit autotools db-use eutils flag-o-matic multilib ssl-cert toolchain-funcs versionator multilib-native
 
 DESCRIPTION="LDAP suite of application and development tools"
 HOMEPAGE="http://www.OpenLDAP.org/"
@@ -231,7 +231,7 @@ src_prepare() {
 	fi
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	local myconf
 
 	#Fix for glibc-2.8 and ucred. Bug 228457.
@@ -309,7 +309,7 @@ multilib-xlibs_src_configure_internal() {
 		${myconf} || die "configure failed"
 }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	emake depend || die "make depend failed"
 	emake || die "make failed"
 
@@ -366,7 +366,7 @@ src_test() {
 	cd tests ; make tests || die "make tests failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	dodoc ANNOUNCEMENT CHANGES COPYRIGHT README "${FILESDIR}"/DB_CONFIG.fast.example

@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome.org libtool eutils flag-o-matic multilib-xlibs
+inherit gnome.org libtool eutils flag-o-matic multilib-native
 
 DESCRIPTION="The GLib library of C routines"
 HOMEPAGE="http://www.gtk.org/"
@@ -26,7 +26,7 @@ DEPEND="${RDEPEND}
 		>=dev-util/gtk-doc-1.11
 		~app-text/docbook-xml-dtd-4.1.2 )"
 
-multilib-xlibs_src_prepare_internal() {
+multilib-native_src_prepare_internal() {
 	if use ppc64 && use hardened ; then
 		replace-flags -O[2-3] -O1
 		epatch "${FILESDIR}/glib-2.6.3-testglib-ssp.patch"
@@ -51,7 +51,7 @@ multilib-xlibs_src_prepare_internal() {
 	[[ ${CHOST} == *-freebsd* ]] && elibtoolize
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	local myconf
 
 	epunt_cxx
@@ -76,7 +76,7 @@ multilib-xlibs_src_configure_internal() {
 		  --with-threads=posix
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "Installation failed"
 
 	# Do not install charset.alias even if generated, leave it to libiconv

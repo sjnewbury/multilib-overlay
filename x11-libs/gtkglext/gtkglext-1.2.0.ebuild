@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2 autotools multilib-xlibs
+inherit gnome2 autotools multilib-native
 
 DESCRIPTION="GL extensions for Gtk+ 2.0"
 HOMEPAGE="http://gtkglext.sourceforge.net/"
@@ -26,7 +26,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog* INSTALL NEWS README* TODO"
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	G2CONF="--x-libraries=/usr/$(get_libdir)"
 	gnome2_src_configure
 }

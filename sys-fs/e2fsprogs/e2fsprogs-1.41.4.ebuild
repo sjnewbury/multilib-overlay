@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/sys-fs/e2fsprogs/e2fsprogs-1.41.4.ebuild,v 1.1 2009/01/28 05:47:45 vapier Exp $
 
 EAPI=2
-inherit eutils flag-o-matic toolchain-funcs multilib multilib-xlibs
+inherit eutils flag-o-matic toolchain-funcs multilib multilib-native
 
 DESCRIPTION="Standard EXT2 and EXT3 filesystem utilities"
 HOMEPAGE="http://e2fsprogs.sourceforge.net/"
@@ -49,7 +49,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	# Keep the package from doing silly things
 	addwrite /var/cache/fonts
 	export LDCONFIG=:
@@ -97,7 +97,7 @@ pkg_preinst() {
 	fi
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
 	emake DESTDIR="${D}" install-libs || die
 	dodoc README RELEASE-NOTES

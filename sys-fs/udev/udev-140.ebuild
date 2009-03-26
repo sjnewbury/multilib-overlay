@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-140.ebuild,v 1.1 2009/03/14 08:18:48 zzam Exp $
 
-inherit eutils flag-o-matic multilib toolchain-funcs versionator multilib-xlibs
+inherit eutils flag-o-matic multilib toolchain-funcs versionator multilib-native
 
 if [[ ${PV} == "9999" ]]; then
 	EGIT_REPO_URI="git://git.kernel.org/pub/scm/linux/hotplug/udev.git"
@@ -122,7 +122,7 @@ src_unpack() {
 	fi
 }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	filter-flags -fprefetch-loop-arrays
 
 	econf \
@@ -136,7 +136,7 @@ multilib-xlibs_src_compile_internal() {
 	emake || die "compiling udev failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	local scriptdir="${FILESDIR}/136"
 
 	into /

@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit multilib-xlibs
+inherit multilib-native
 
 DESCRIPTION="provides ASN.1 structures parsing capabilities for use with GNUTLS"
 HOMEPAGE="http://www.gnutls.org/"
@@ -19,7 +19,7 @@ DEPEND=">=dev-lang/perl-5.6[lib32?]
 	sys-devel/bison"
 RDEPEND=""
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "installed failed"
 	dodoc AUTHORS ChangeLog NEWS README THANKS
 	use doc && dodoc doc/asn1.ps

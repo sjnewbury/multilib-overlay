@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils libtool multilib-xlibs
+inherit eutils libtool multilib-native
 
 DESCRIPTION="Library for manipulation of TIFF (Tag Image File Format) images"
 HOMEPAGE="http://www.remotesensing.org/libtiff/"
@@ -35,7 +35,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	econf \
 		$(use_enable !nocxx cxx) \
 		$(use_enable zlib) \
@@ -47,7 +47,7 @@ multilib-xlibs_src_compile_internal() {
 	emake || die "emake failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	make install DESTDIR="${D}" || die "make install failed"
 	dodoc README TODO VERSION
 }

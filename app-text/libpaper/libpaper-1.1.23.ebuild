@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils libtool multilib-xlibs
+inherit eutils libtool multilib-native
 
 MY_P=${P/-/_}
 DESCRIPTION="Library for handling paper characteristics"
@@ -23,7 +23,7 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc README ChangeLog debian/changelog debian/NEWS
 	dodir /etc

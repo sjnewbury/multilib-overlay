@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.7.3.ebuild,v 1.7 2008/12/27 16:14:04 ranger Exp $
 
-inherit eutils multilib toolchain-funcs multilib-xlibs
+inherit eutils multilib toolchain-funcs multilib-native
 
 DESCRIPTION="Netscape Portable Runtime"
 HOMEPAGE="http://www.mozilla.org/projects/nspr/"
@@ -29,7 +29,7 @@ src_unpack() {
 		mozilla/nsprpub/config/rules.mk
 }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	cd "${S}"/build
 
 	echo > "${T}"/test.c
@@ -53,7 +53,7 @@ multilib-xlibs_src_compile_internal() {
 	make CC="$(tc-getCC)" CXX="$(tc-getCXX)" || die
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	# Their build system is royally fucked, as usual
 	MINOR_VERSION=7
 	cd "${S}"/build
@@ -79,7 +79,7 @@ multilib-xlibs_src_install_internal() {
 	rm "${D}"/usr/bin/{prerr.properties,nspr.pc}
 }
 
-multilib-xlibs_pkg_preinst_internal() {
+multilib-native_pkg_preinst_internal() {
 	preserve_old_lib /usr/$(get_libdir)/nspr/lib{nspr,plc,plds}4.so.6
 }
 

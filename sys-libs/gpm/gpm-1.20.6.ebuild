@@ -6,7 +6,7 @@
 
 EAPI="2"
 
-inherit eutils toolchain-funcs flag-o-matic multilib-xlibs
+inherit eutils toolchain-funcs flag-o-matic multilib-native
 
 DESCRIPTION="Console-based mouse driver"
 HOMEPAGE="http://linux.schottelius.org/gpm/"
@@ -30,7 +30,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	econf \
 		--libdir=/$(get_libdir) \
 		--sysconfdir=/etc/gpm \
@@ -44,7 +44,7 @@ multilib-xlibs_src_compile_internal() {
 	emake EMACS=: || die "emake failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake install DESTDIR="${D}" EMACS=: ELISP="" || die "make install failed"
 
 	dosym libgpm.so.1.20.0 /$(get_libdir)/libgpm.so.1

@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit java-pkg-opt-2 mono autotools elisp-common multilib-xlibs
+inherit java-pkg-opt-2 mono autotools elisp-common multilib-native
 
 DESCRIPTION="Internationalized Domain Names (IDN) implementation"
 HOMEPAGE="http://www.gnu.org/software/libidn/"
@@ -25,7 +25,7 @@ RDEPEND="java? ( >=virtual/jre-1.4 )
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	local myconf=" --disable-csharp"
 
 	use mono && myconf="--enable-csharp=mono"
@@ -40,7 +40,7 @@ multilib-xlibs_src_compile_internal() {
 	emake || die
 }
 
-multilib-xlibs_src_install_interal() {
+multilib-native_src_install_interal() {
 	make install DESTDIR="${D}" || die
 	dodoc AUTHORS ChangeLog FAQ NEWS README THANKS TODO || die
 

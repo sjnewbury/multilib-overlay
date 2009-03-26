@@ -6,7 +6,7 @@
 
 EAPI="2"
 
-inherit eutils multilib-xlibs
+inherit eutils multilib-native
 
 #MY_P=${P/_pre/-}
 DESCRIPTION="A Client that groks URLs"
@@ -50,7 +50,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/curl-7.17.0-strip-ldflags.patch
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 
 	myconf="$(use_enable ldap)
 		$(use_enable ldap ldaps)
@@ -95,7 +95,7 @@ multilib-xlibs_src_configure_internal() {
 	econf ${myconf} || die 'configure failed'
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "installed failed for current version"
 	rm -rf "${D}"/etc/
 

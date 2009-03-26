@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils multilib toolchain-funcs multilib-xlibs
+inherit eutils multilib toolchain-funcs multilib-native
 
 # Official patches
 # See ftp://ftp.cwru.edu/pub/bash/readline-5.1-patches/
@@ -60,7 +60,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	# the --libdir= is needed because if lib64 is a directory, it will default
 	# to using that... even if CONF_LIBDIR isnt set or we're using a version
 	# of portage without CONF_LIBDIR support.
@@ -74,7 +74,7 @@ multilib-xlibs_src_compile_internal() {
 	fi
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	make DESTDIR="${D}" install || die
 	dodir /$(get_libdir)
 

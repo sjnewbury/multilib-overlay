@@ -5,7 +5,7 @@
 EAPI="2"
 
 LIBTOOLIZE="true" #225559
-inherit eutils autotools multilib-xlibs
+inherit eutils autotools multilib-native
 
 DESCRIPTION="A shared library tool for developers"
 HOMEPAGE="http://www.gnu.org/software/libtool/"
@@ -41,7 +41,7 @@ src_unpack() {
 	fi
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
 	dodoc AUTHORS ChangeLog* NEWS README THANKS TODO doc/PLATFORMS
 

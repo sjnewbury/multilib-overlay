@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools eutils flag-o-matic multilib pam multilib-xlibs
+inherit autotools eutils flag-o-matic multilib pam multilib-native
 
 MY_P=${P/_}
 
@@ -120,7 +120,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	# needed to prevent ghostscript compile failures
 	use kerberos && strip-flags
 
@@ -192,7 +192,7 @@ multilib-xlibs_src_compile_internal() {
 	emake || die "emake failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake BUILDROOT="${D}" install || die "emake install failed"
 	dodoc {CHANGES{,-1.{0,1}},CREDITS,README}.txt || die "dodoc install failed"
 

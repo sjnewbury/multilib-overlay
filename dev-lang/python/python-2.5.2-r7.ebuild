@@ -9,7 +9,7 @@
 
 EAPI="2"
 
-inherit eutils autotools flag-o-matic python multilib versionator toolchain-funcs alternatives libtool multilib-xlibs
+inherit eutils autotools flag-o-matic python multilib versionator toolchain-funcs alternatives libtool multilib-native
 
 # we need this so that we don't depends on python.eclass
 PYVER_MAJOR=$(get_major_version)
@@ -52,7 +52,7 @@ DEPEND=">=sys-libs/zlib-1.1.3
 PDEPEND="${DEPEND} app-admin/python-updater"
 PROVIDE="virtual/python"
 
-multilib-xlibs_src_prepare_internal() {
+multilib-native_src_prepare_internal() {
 	if tc-is-cross-compiler ; then
 		epatch "${FILESDIR}"/python-2.4.4-test-cross.patch \
 			"${FILESDIR}"/python-2.5-cross-printf.patch
@@ -114,7 +114,7 @@ src_configure_internal() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	filter-flags -malign-double
 
 	# Seems to no longer be necessary
@@ -181,7 +181,7 @@ multilib-xlibs_src_compile_internal() {
 	emake || die "Parallel make failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	dodir /usr
 	src_configure_internal
 	make DESTDIR="${D}" altinstall maninstall || die
@@ -228,7 +228,7 @@ multilib-xlibs_src_install_internal() {
 	newconfd "${FILESDIR}/pydoc.conf" pydoc-${SLOT}
 }
 
-multilib-xlibs_pkg_postrm_internal() {
+multilib-native_pkg_postrm_internal() {
 	local mansuffix=$(ecompress --suffix)
 	python_makesym
 	alternatives_auto_makesym "/usr/bin/idle" "idle[0-9].[0-9]"
@@ -244,7 +244,7 @@ multilib-xlibs_pkg_postrm_internal() {
 		python_mod_cleanup /usr/$(get_libdir)/python${PYVER}
 }
 
-multilib-xlibs_pkg_postinst_internal() {
+multilib-native_pkg_postinst_internal() {
 	local myroot
 	myroot=$(echo $ROOT | sed 's:/$::')
 	local mansuffix=$(ecompress --suffix)

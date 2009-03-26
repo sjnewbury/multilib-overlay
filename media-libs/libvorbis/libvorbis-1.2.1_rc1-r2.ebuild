@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libvorbis/libvorbis-1.2.1_rc1-r2.ebuild,v 1.1 2008/12/15 03:47:23 yngwin Exp $
 
 EAPI="2"
-inherit autotools flag-o-matic eutils toolchain-funcs multilib-xlibs
+inherit autotools flag-o-matic eutils toolchain-funcs multilib-native
 
 MY_P=${P/_/}
 DESCRIPTION="The Ogg Vorbis sound file format library with aoTuV patch"
@@ -48,7 +48,7 @@ multilibs-xlibs_src_compile_internal() {
 	emake || die "emake failed."
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 
 	rm -rf "${D}"/usr/share/doc/*

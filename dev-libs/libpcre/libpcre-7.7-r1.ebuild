@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit libtool eutils multilib-xlibs
+inherit libtool eutils multilib-native
 
 MY_P="pcre-${PV}"
 
@@ -31,7 +31,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	# Enable building of static libs too - grep and others
 	# depend on them being built: bug 164099
 	econf --with-match-limit-recursion=8192 \
@@ -46,7 +46,7 @@ multilib-xlibs_src_compile_internal() {
 	emake all || die "emake failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	dodoc doc/*.txt AUTHORS

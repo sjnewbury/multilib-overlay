@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils libtool multilib-xlibs
+inherit eutils libtool multilib-native
 
 DESCRIPTION="XML parsing libraries"
 HOMEPAGE="http://expat.sourceforge.net/"
@@ -28,7 +28,7 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	make install DESTDIR="${D}" || die
 	dodoc Changes README
 	dohtml doc/*

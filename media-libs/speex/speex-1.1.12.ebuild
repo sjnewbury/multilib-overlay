@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils autotools libtool multilib-xlibs
+inherit eutils autotools libtool multilib-native
 
 DESCRIPTION="Speech encoding library"
 HOMEPAGE="http://www.speex.org"
@@ -46,7 +46,7 @@ multilibs-xlibs_src_compile_internal() {
 	emake || die "emake failed."
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 	dodoc AUTHORS ChangeLog README* TODO NEWS
 }

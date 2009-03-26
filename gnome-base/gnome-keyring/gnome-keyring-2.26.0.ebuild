@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2 pam multilib-xlibs
+inherit gnome2 pam multilib-native
 
 DESCRIPTION="Password and keyring managing daemon"
 HOMEPAGE="http://www.gnome.org/"

@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils flag-o-matic libtool multilib-xlibs
+inherit eutils flag-o-matic libtool multilib-native
 
 DESCRIPTION="A completely OpenSourced alternative to the OpenGL Utility Toolkit (GLUT) library"
 HOMEPAGE="http://freeglut.sourceforge.net/"
@@ -57,12 +57,12 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	# (#191589) Don't let -Werror get tagged on
 	econf --disable-warnings || die "econf failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc AUTHORS ChangeLog NEWS README TODO
 	docinto doc

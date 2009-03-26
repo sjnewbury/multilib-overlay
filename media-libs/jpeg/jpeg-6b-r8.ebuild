@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit libtool eutils toolchain-funcs multilib-xlibs
+inherit libtool eutils toolchain-funcs multilib-native
 
 PATCH_VER="1.6"
 DESCRIPTION="Library to load, handle and manipulate images in the JPEG format"
@@ -35,7 +35,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	tc-export CC RANLIB AR
 	econf \
 		--enable-shared \
@@ -46,7 +46,7 @@ multilib-xlibs_src_compile_internal() {
 	emake -C "${WORKDIR}"/extra || die "make extra failed"
 }
 
-multilib-xlibs_src_install_internal() {
+multilib-native_src_install_internal() {
 	emake install DESTDIR="${D}" || die "install"
 	emake -C "${WORKDIR}"/extra install DESTDIR="${D}" || die "install extra"
 
