@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools eutils pam python multilib versionator confutils multilib-native
+inherit autotools eutils pam python versionator confutils flag-o-matic multilib-native
 
 VSCAN_P="samba-vscan-0.3.6c-beta5"
 MY_P=${PN}-${PV/_/}
@@ -80,6 +80,9 @@ src_unpack() {
 src_configure() { :; }
 
 multilib-native_src_compile_internal() {
+	# multilib: we have to filter that out for samba
+	filter-ldflags -m32 -m64
+	
 	cd "${S}/source"
 
 	local myconf
