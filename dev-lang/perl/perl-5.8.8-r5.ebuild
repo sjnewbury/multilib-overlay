@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils flag-o-matic toolchain-funcs multilib
+inherit eutils flag-o-matic toolchain-funcs multilib multilib-native
 
 # The slot of this binary compat version of libperl.so
 PERLSLOT="1"
@@ -21,7 +21,7 @@ LIBPERL="libperl$(get_libname ${PERLSLOT}.${SHORT_PV})"
 LICENSE="|| ( Artistic GPL-2 )"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
-IUSE="berkdb debug doc gdbm ithreads perlsuid build elibc_FreeBSD lib32"
+IUSE="berkdb debug doc gdbm ithreads perlsuid build elibc_FreeBSD"
 PERL_OLDVERSEN="5.8.0 5.8.2 5.8.4 5.8.5 5.8.6 5.8.7"
 
 DEPEND="berkdb? ( sys-libs/db )
@@ -157,7 +157,7 @@ myconf() {
 	myconf=( "${myconf[@]}" "$@" )
 }
 
-src_configure() {
+multilib-native_src_configure_internal() {
 	declare -a myconf
 
 	# some arches and -O do not mix :)
@@ -287,7 +287,7 @@ src_configure() {
 		"${myconf[@]}" || die "Unable to configure"
 }
 
-src_compile() {
+multilib-native_src_compile_internal() {
 
 	# would like to bracket this with a test for the existence of a
 	# dotfile, but can't clean it automatically now.
@@ -300,7 +300,7 @@ src_test() {
 	emake -i test CCDLFLAGS= || die "test failed"
 }
 
-src_install() {
+multilib-native_src_install_internal() {
 
 	export LC_ALL="C"
 
