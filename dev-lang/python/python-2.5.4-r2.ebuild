@@ -113,6 +113,8 @@ src_configure_internal() {
 	einfo "Disabled modules: $PYTHON_DISABLE_MODULES"
 }
 
+src_configure() { :; }
+
 multilib-native_src_compile_internal() {
 	filter-flags -malign-double
 
