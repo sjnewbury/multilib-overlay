@@ -31,6 +31,7 @@ EMULTILIB_OCXXFLAGS=""
 EMULTILIB_OLDFLAGS=""
 EMULTILIB_OCHOST=""
 EMULTILIB_OSPATH=""
+EMULTILIB_OCCACHE_DIR=""
 
 # @FUNCTION: multilib-native_pkg_setup
 # @USAGE:
@@ -132,17 +133,28 @@ multilib-native_src_generic_sub() {
 			EMULTILIB_OLDFLAGS="${LDFLAGS}"
 			EMULTILIB_OCHOST="${CHOST}"
 			EMULTILIB_OSPATH="${S}"
+			EMULTILIB_OCCACHE_DIR="${CCACHE_DIR}"
 			if use amd64 || use ppc64 ; then
 				case ${ABI} in
 					x86)    CHOST="i686-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m32"
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m32"
 					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32 -L/usr/lib32"
+					if [[ -z ${CCACHE_DIR} ]] ; then 
+						CCACHE_DIR="/var/tmp/ccache"
+					else
+						CCACHE_DIR="${CCACHE_DIR}32"
+					fi
 					;;
 					amd64)  CHOST="x86_64-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m64"
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m64"
 					LDFLAGS="${EMULTILIB_OLDFLAGS} -m64"
+					if [[ -z ${CCACHE_DIR} ]] ; then 
+						CCACHE_DIR="/var/tmp/ccache"
+					else
+						CCACHE_DIR="${CCACHE_DIR}64"
+					fi
 					;;
 					ppc)   CHOST="powerpc-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m32"
@@ -183,6 +195,7 @@ multilib-native_src_generic_sub() {
 			LDFLAGS="${EMULTILIB_OLDFLAGS}"
 			CHOST="${EMULTILIB_OCHOST}"
 			S="${EMULTILIB_OSPATH}"
+			CCACHE_DIR="${EMULTILIB_OCCACHE_DIR}"
 		fi
 	fi
 }
