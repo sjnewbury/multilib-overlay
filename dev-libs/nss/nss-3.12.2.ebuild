@@ -58,7 +58,7 @@ multilib-xlibs_src_compile_internal() {
 	strip-flags
 
 	echo > "${T}"/test.c
-	$(tc-getCC) -c "${T}"/test.c -o "${T}"/test.o
+	$(tc-getCC) ${CFLAGS} -c "${T}"/test.c -o "${T}"/test.o
 	case $(file "${T}"/test.o) in
 	*64-bit*) export USE_64=1;;
 	*32-bit*) ;;
