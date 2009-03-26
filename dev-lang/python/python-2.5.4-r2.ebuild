@@ -184,7 +184,7 @@ multilib-native_src_compile_internal() {
 
 multilib-native_src_install_internal() {
 	dodir /usr
-	multilib-native_src_configure_internal
+	src_configure_internal
 	make DESTDIR="${D}" altinstall maninstall || die
 
 	mv "${D}"/usr/bin/python${PYVER}-config \
