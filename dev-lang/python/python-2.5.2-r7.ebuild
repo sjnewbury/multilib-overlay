@@ -9,7 +9,7 @@
 
 EAPI="2"
 
-inherit eutils autotools flag-o-matic python multilib versionator toolchain-funcs alternatives libtool multilib-native
+inherit eutils autotools flag-o-matic python versionator toolchain-funcs alternatives libtool multilib-native
 
 # we need this so that we don't depends on python.eclass
 PYVER_MAJOR=$(get_major_version)
@@ -32,18 +32,18 @@ IUSE="ncurses gdbm ssl readline tk berkdb ipv6 build ucs2 sqlite doc +threads ex
 # NOTE: dev-python/{elementtree,celementtree,pysqlite,ctypes,cjkcodecs}
 #       do not conflict with the ones in python proper. - liquidx
 
-DEPEND=">=sys-libs/zlib-1.1.3
+DEPEND=">=sys-libs/zlib-1.1.3[lib32?]
 	!build? (
-		sqlite? ( >=dev-db/sqlite-3 )
+		sqlite? ( >=dev-db/sqlite-3[lib32?] )
 		tk? ( >=dev-lang/tk-8.0 )
-		ncurses? ( >=sys-libs/ncurses-5.2
-					readline? ( >=sys-libs/readline-4.1 ) )
-		berkdb? ( || ( sys-libs/db:4.5 sys-libs/db:4.4 sys-libs/db:4.3
-					sys-libs/db:4.2 ) )
-		gdbm? ( sys-libs/gdbm )
-		ssl? ( dev-libs/openssl )
+		ncurses? ( >=sys-libs/ncurses-5.2[lib32?]
+					readline? ( >=sys-libs/readline-4.1[lib32?] ) )
+		berkdb? ( || ( sys-libs/db:4.5[lib32?] sys-libs/db:4.4[lib32?]
+				sys-libs/db:4.3[lib32?]	sys-libs/db:4.2[lib32?] ) )
+		gdbm? ( sys-libs/gdbm[lib32?] )
+		ssl? ( dev-libs/openssl[lib32?] )
 		doc? ( dev-python/python-docs:2.5 )
-		xml? ( dev-libs/expat )
+		xml? ( dev-libs/expat[lib32?] )
 	)"
 
 # NOTE: changed RDEPEND to PDEPEND to resolve bug 88777. - kloeri

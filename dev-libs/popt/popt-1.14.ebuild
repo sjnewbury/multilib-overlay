@@ -16,7 +16,7 @@ IUSE="nls"
 RDEPEND="nls? ( virtual/libintl )"
 DEPEND="nls? ( sys-devel/gettext )"
 
-multilibs-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	econf \
 		--without-included-gettext \
 		$(use_enable nls) \

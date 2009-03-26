@@ -37,7 +37,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilibs-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	econf --enable-af \
 		$(use_enable esd) \
 		$(use_enable alsa) \

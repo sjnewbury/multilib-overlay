@@ -34,9 +34,7 @@ src_unpack() {
 	sed -i -e "s:-mcpu=750::g" configure
 }
 
-src_configure() { :; }
-
-multilibs-xlibs_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# gcc-3.4 and k6 with -ftracer causes code generation problems #49472
 	if [[ "$(gcc-major-version)$(gcc-minor-version)" == "34" ]]; then
 		is-flag -march=k6* && filter-flags -ftracer
@@ -44,8 +42,7 @@ multilibs-xlibs_src_compile_internal() {
 		replace-flags -Os -O2
 	fi
 
-	econf
-	emake || die "emake failed."
+	econf || die
 }
 
 multilib-native_src_install_internal() {

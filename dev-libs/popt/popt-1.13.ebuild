@@ -22,7 +22,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-1.12-scrub-lame-gettext.patch
 }
 
-multilibs-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	econf \
 		--without-included-gettext \
 		$(use_enable nls) \

@@ -37,7 +37,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilibs-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	# FIXME: ogg autodetect only
 	econf \
 		$(use_enable vorbis-psy) \

@@ -38,7 +38,7 @@ src_unpack() {
 	elibtoolize
 }
 
-multilibs-xlibs_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	econf --enable-largefile || die
 }
 

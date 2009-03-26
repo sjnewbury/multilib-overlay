@@ -30,9 +30,7 @@ src_unpack() {
 	epunt_cxx #74490
 }
 
-src_configure() { :; }
-
-multilibs-xlibs_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local myconf="--enable-accuracy"
 	# --enable-speed		 optimize for speed over accuracy
 	# --enable-accuracy		 optimize for accuracy over speed

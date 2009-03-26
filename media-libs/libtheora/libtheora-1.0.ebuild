@@ -33,7 +33,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilibs-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	use x86 && filter-flags -fforce-addr -frename-registers #200549
 	use doc || export ac_cv_prog_HAVE_DOXYGEN="false"
 

@@ -31,7 +31,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilibs-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	append-flags -D_FILE_OFFSET_BITS=64
 
 	econf $(use_enable sse) $(use_enable ogg)

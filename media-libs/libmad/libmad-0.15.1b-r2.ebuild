@@ -29,9 +29,7 @@ src_unpack() {
 	epunt_cxx #74490
 }
 
-src_configure() { :; }
-
-multilibs-xlibs_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	use ppc && append-flags -fno-strict-aliasing
 
 	local myconf="--enable-accuracy"
@@ -51,7 +49,6 @@ multilibs-xlibs_src_compile_internal() {
 	econf \
 		$(use_enable debug debugging) \
 		${myconf} || die "configure failed"
-	emake || die "make failed"
 }
 
 multilib-native_src_install_internal() {

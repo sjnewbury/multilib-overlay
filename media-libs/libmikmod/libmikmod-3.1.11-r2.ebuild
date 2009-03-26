@@ -18,8 +18,8 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="oss esd alsa"
 
-DEPEND=">=media-libs/audiofile-0.2.3
-	alsa? ( >=media-libs/alsa-lib-0.5.9 )
+DEPEND=">=media-libs/audiofile-0.2.3[lib32?]
+	alsa? ( >=media-libs/alsa-lib-0.5.9[lib32?] )
 	esd? ( >=media-sound/esound-0.2.19 )"
 
 src_unpack() {
@@ -34,16 +34,13 @@ src_unpack() {
 	AT_M4DIR="${S}/m4" eautoreconf
 }
 
-src_configure() { :; }
-
-multilibs-xlibs_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	econf \
 		--enable-af \
 		$(use_enable esd) \
 		$(use_enable alsa) \
 		$(use_enable oss) \
 		|| die
-	emake || die
 }
 
 multilib-native_src_install_internal() {

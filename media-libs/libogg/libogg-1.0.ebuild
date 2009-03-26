@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc sparc x86"
 IUSE=""
 
-multilibs-xlibs_src_compile_internal() {
+multilib-native_src_compile_internal() {
 	./configure --prefix=/usr --host=${CHOST} || die
 
 	emake || die

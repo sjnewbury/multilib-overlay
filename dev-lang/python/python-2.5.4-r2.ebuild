@@ -83,8 +83,6 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-src_configure() { :; }
-
 src_configure_internal() {
 	# disable extraneous modules with extra dependencies
 	if use build; then
