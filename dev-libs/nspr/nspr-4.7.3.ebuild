@@ -83,6 +83,6 @@ multilib-native_pkg_preinst_internal() {
 	preserve_old_lib /usr/$(get_libdir)/nspr/lib{nspr,plc,plds}4.so.6
 }
 
-multilib_xlibs_pkg_postinst_internal() {
+multilib-native_pkg_postinst_internal() {
 	preserve_old_lib_notify /usr/$(get_libdir)/nspr/lib{nspr,plc,plds}4.so.6
 }
