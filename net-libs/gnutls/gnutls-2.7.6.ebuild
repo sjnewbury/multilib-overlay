@@ -59,6 +59,14 @@ src_prepare() {
 }
 
 multilib-native_src_configure_internal() {
+	if use lib32 && [[ "${ABI}" == "x86" ]]; then
+		export LIBGCRYPT_CONFIG="/usr/bin/libgcrypt-config32"
+		export LIBTASN1_CONFIG="/usr/bin/libtasn1-config32"
+	else
+		export LIBGCRYPT_CONFIG="/usr/bin/libgcrypt-config"
+		export LIBTASN1_CONFIG="/usr/bin/libtasn1-config"
+	fi
+
 	local myconf
 	use bindist && myconf="--without-lzo" || myconf="$(use_with lzo)"
 	econf  \
