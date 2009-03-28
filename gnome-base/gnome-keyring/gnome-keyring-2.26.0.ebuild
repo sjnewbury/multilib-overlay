@@ -31,17 +31,19 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
-pkg_setup() {
-	G2CONF="${G2CONF}
-		$(use_enable debug)
-		$(use_enable hal)
-		$(use_enable test tests)
-		$(use_enable pam)
-		$(use_with pam pam-dir $(getpam_mod_dir))
-		$(use_enable valgrind)
-		--with-root-certs=/usr/share/ca-certificates/
-		--enable-acl-prompts
-		--enable-ssh-agent"
+multilib-xlibs_src_configure_internal() {
+	econf \
+		${G2CONF} \
+		$(use_enable debug) \
+		$(use_enable hal) \
+		$(use_enable test tests) \
+		$(use_enable pam) \
+		$(use_with pam pam-dir $(getpam_mod_dir)) \
+		$(use_enable valgrind) \
+		--with-root-certs=/usr/share/ca-certificates/ \
+		--enable-acl-prompts \
+		--enable-ssh-agent \
+		|| die
 }
 
 src_test() {
