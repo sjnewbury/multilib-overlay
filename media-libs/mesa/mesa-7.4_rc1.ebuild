@@ -193,6 +193,9 @@ multilib-native_src_install_internal() {
 	insinto /usr/$(get_libdir)
 	# (#67729) Needs to be lib, not $(get_libdir)
 	doins "${FILESDIR}"/lib/libGLU.la
+	sed -i -e "s:/lib:/$(get_libdir):g" \
+		"${D}"/usr/$(get_libdir)/libGLU.la
+
 	sed -e "s:\${libdir}:$(get_libdir):g" "${FILESDIR}"/lib/libGL.la \
 		> "${D}"/usr/$(get_libdir)/opengl/xorg-x11/lib/libGL.la
 
