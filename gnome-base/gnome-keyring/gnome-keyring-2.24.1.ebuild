@@ -34,14 +34,15 @@ DOCS="AUTHORS ChangeLog NEWS README TODO"
 # upstream bug: http://bugzilla.gnome.org/show_bug.cgi?id=553164
 RESTRICT="test"
 
-pkg_setup() {
-	G2CONF="${G2CONF}
-		$(use_enable debug)
-		$(use_enable hal)
-		$(use_enable test tests)
-		$(use_enable pam)
-		$(use_with pam pam-dir $(getpam_mod_dir))
-		--with-root-certs=/usr/share/ca-certificates/
-		--enable-acl-prompts
-		--enable-ssh-agent"
+multilib-native_src_configure_internal() {
+	econf \
+		${G2CONF} \
+		$(use_enable debug) \
+		$(use_enable hal) \
+		$(use_enable test tests) \
+		$(use_enable pam) \
+		$(use_with pam pam-dir $(getpam_mod_dir)) \
+		--with-root-certs=/usr/share/ca-certificates/ \
+		--enable-acl-prompts \
+		--enable-ssh-agent || die
 }

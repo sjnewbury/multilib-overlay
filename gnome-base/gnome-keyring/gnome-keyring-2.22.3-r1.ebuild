@@ -31,14 +31,16 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
-pkg_setup() {
-	G2CONF="${G2CONF}
-		$(use_enable debug)
-		$(use_enable hal)
-		$(use_enable test tests)
-		$(use_enable pam)
-		$(use_with pam pam-dir $(getpam_mod_dir))
-		--with-root-certs=/usr/share/ca-certificates/"
+multilib-native_src_configure_internal() {
+	econf \
+		${G2CONF} \
+		$(use_enable debug) \
+		$(use_enable hal) \
+		$(use_enable test tests) \
+		$(use_enable pam) \
+		$(use_with pam pam-dir $(getpam_mod_dir)) \
+		--with-root-certs=/usr/share/ca-certificates/ \
+		|| die
 }
 
 src_unpack() {
