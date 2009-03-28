@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.11.ebuild,v 1.1 2009/03/01 02:56:38 tommy Exp $
 
-EAPI="1"
+EAPI="2"
 
 inherit autotools eutils flag-o-matic libtool versionator multilib-native
 
@@ -48,7 +48,7 @@ src_unpack() {
 	epunt_cxx
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# not available via configure and requested in bug #143794
 	use soundex && append-flags -DSQLITE_SOUNDEX=1
 
@@ -57,6 +57,9 @@ multilib-native_src_compile_internal() {
 		$(use_enable threadsafe) \
 		$(use_enable threadsafe cross-thread-connections) \
 		$(use_enable tcl)
+}
+
+multilib-native_src_compile_internal() {
 	emake TCLLIBDIR="/usr/$(get_libdir)/${P}" || die "emake failed"
 }
 
