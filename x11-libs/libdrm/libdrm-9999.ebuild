@@ -11,7 +11,8 @@ inherit x-modular multilib-native
 
 DESCRIPTION="X.Org libdrm library"
 HOMEPAGE="http://dri.freedesktop.org/"
-SRC_URI=""
+EGIT_REPO_URI="git://anongit.freedesktop.org/git/mesa/drm"
+#SRC_URI=""
 
 KEYWORDS=""
 IUSE=""
