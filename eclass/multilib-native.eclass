@@ -99,7 +99,7 @@ multilib-native_src_generic() {
 			if has_multilib_profile ; then
 				abilist=$(get_install_abis)
 				if [[ -z "$(echo ${1}|grep pkg)" ]]; then
-					einfo "${1/src_/}ing multilib ${PN} for ABIs: ${abilist}"
+					einfo "${1/src_/} multilib ${PN} for ABIs: ${abilist}"
 				fi
 			elif is_crosscompile || tc-is-cross-compiler ; then
 				abilist=${DEFAULT_ABI}
