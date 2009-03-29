@@ -11,3 +11,4 @@
 =gnome-base/libgnome-2.26.0
 =gnome-base/libgnomecanvas-2.26.0
 =x11-libs/gtk+-2.16.0
+=x11-libs/pango-1.24.0

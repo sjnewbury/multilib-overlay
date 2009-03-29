@@ -183,7 +183,7 @@ multilib-native_src_generic_sub() {
 		[[ -d "${WORKDIR}/builddir.${ABI}" ]] && cd ${WORKDIR}/builddir.${ABI}
 		S=${WORKDIR}/builddir.${ABI}
 
-		PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
+		export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 	fi
 	
 	multilib-native_${1}_internal
