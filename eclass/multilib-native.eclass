@@ -19,10 +19,10 @@ inherit base multilib
 
 case "${EAPI:-0}" in
 	2)
-		EXPORT_FUNCTIONS pkg_setup src_prepare src_configure src_compile src_install pkg_preinst pkg_postinst pkg_postrm
+		EXPORT_FUNCTIONS pkg_setup src_unpack src_prepare src_configure src_compile src_install pkg_preinst pkg_postinst pkg_postrm
 		;;
 	*)
-		EXPORT_FUNCTIONS pkg_setup src_compile src_install pkg_preinst pkg_postinst pkg_postrm
+		EXPORT_FUNCTIONS pkg_setup src_unpack src_compile src_install pkg_preinst pkg_postinst pkg_postrm
 		;;
 esac
 
@@ -38,6 +38,14 @@ EMULTILIB_OCCACHE_DIR=""
 # @DESCRIPTION:
 multilib-native_pkg_setup() {
 	multilib-native_src_generic pkg_setup
+}
+
+# @FUNCTION: multilib-native_src_unpack
+# @USAGE:
+# @DESCRIPTION:
+multilib-native_src_unpack() {
+	multilib-native_src_unpack_internal
+
 }
 
 # @FUNCTION: multilib-native_src_prepare
@@ -230,6 +238,10 @@ multilib-native_src_install_internal() {
 
 multilib-native_pkg_setup_internal() {
 	multilib-native_check_inherited_funcs pkg_setup
+}
+
+multilib-native_src_unpack_internal() {
+	multilib-native_check_inherited_funcs src_unpack
 }
 
 multilib-native_pkg_preinst_internal() {
