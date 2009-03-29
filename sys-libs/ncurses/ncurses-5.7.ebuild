@@ -30,10 +30,10 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-5.6-gfbsd.patch
 }
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
-	tc-export BUILD_CC
+multilib-native_src_configure_internal() {
+	# The ebuild keeps failing if this variable is set when a
+	# crossdev compiler is installed so is better to remove it
+	#tc-export BUILD_CC
 
 	# Protect the user from themselves #115036
 	unset TERMINFO
@@ -43,20 +43,20 @@ multilib-native_src_compile_internal() {
 	use ada || myconf="${myconf} --without-ada"
 
 	# First we build the regular ncurses ...
-	einfo "Compiling regular ncurses in ${WORKDIR}/narrowc.${ABI} ..."
+	einfo "Configuring regular ncurses in ${WORKDIR}/narrowc.${ABI} ..."
 	mkdir "${WORKDIR}"/narrowc.${ABI}
 	cd "${WORKDIR}"/narrowc.${ABI}
-	do_compile ${myconf}
+	do_configure ${myconf}
 
 	# Then we build the UTF-8 version
 	if use unicode ; then
-		einfo "Compiling unicode ncurses in ${WORKDIR}/widec.${ABI} .."
+		einfo "Configuring unicode ncurses in ${WORKDIR}/widec.${ABI} .."
 		mkdir "${WORKDIR}"/widec.${ABI}
 		cd "${WORKDIR}"/widec.${ABI}
-		do_compile ${myconf} --enable-widec --includedir=/usr/include/ncursesw
+		do_configure ${myconf} --enable-widec --includedir=/usr/include/ncursesw
 	fi
 }
-do_compile() {
+do_configure() {
 	ECONF_SOURCE=${S}
 
 	einfo "ECONF_SOURCE is $ECONF_SOURCE"
@@ -99,14 +99,26 @@ do_compile() {
 		${conf_abi} \
 		"$@" \
 		|| die "configure failed"
+}
 
+multilib-native_src_compile_internal() {
 	# A little hack to fix parallel builds ... they break when
 	# generating sources so if we generate the sources first (in
 	# non-parallel), we can then build the rest of the package
 	# in parallel.  This is not really a perf hit since the source
 	# generation is quite small.  -vapier
+
+	cd "${WORKDIR}"/narrowc.${ABI}
+	einfo "Compiling regular ncurses in ${WORKDIR}/narrowc.${ABI} ..."
 	emake -j1 sources || die "make sources failed"
 	emake || die "make failed"
+
+	if use unicode ; then
+		cd "${WORKDIR}"/widec.${ABI}
+		einfo "Compiling unicode ncurses in ${WORKDIR}/widec.${ABI} .."
+		emake -j1 sources || die "make sources failed"
+		emake || die "make failed"
+	fi
 }
 
 multilib-native_src_install_internal() {

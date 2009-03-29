@@ -28,14 +28,14 @@ src_unpack() {
 	epatch "${FILESDIR}"/0001-daemon-use-sys-ioctl.h-for-ioctl.patch #222099
 }
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	econf \
 		--libdir=/$(get_libdir) \
 		--sysconfdir=/etc/gpm \
 		|| die "econf failed"
+}
 
+multilib-native_src_compile_internal() {
 	# workaround broken release
 	find -name '*.o' | xargs rm
 	emake clean || die
