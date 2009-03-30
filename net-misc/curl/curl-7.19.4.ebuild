@@ -27,11 +27,11 @@ IUSE="ssl ipv6 ldap ares gnutls libssh2 nss idn kerberos test"
 RDEPEND="gnutls? ( net-libs/gnutls[lib32?] app-misc/ca-certificates )
 	nss? ( !gnutls? ( dev-libs/nss app-misc/ca-certificates ) )
 	ssl? ( !gnutls? ( !nss? ( dev-libs/openssl[lib32?] app-misc/ca-certificates ) ) )
-	ldap? ( net-nds/openldap )
-	idn? ( net-dns/libidn )
-	ares? ( >=net-dns/c-ares-1.4.0 )
+	ldap? ( net-nds/openldap[lib32?] )
+	idn? ( net-dns/libidn[lib32?] )
+	ares? ( >=net-dns/c-ares-1.4.0[lib32?] )
 	kerberos? ( virtual/krb5 )
-	libssh2? ( >=net-libs/libssh2-0.16 )"
+	libssh2? ( >=net-libs/libssh2-0.16[lib32?] )"
 
 # fbopenssl (not in gentoo) --with-spnego
 # krb4 http://web.mit.edu/kerberos/www/krb4-end-of-life.html
