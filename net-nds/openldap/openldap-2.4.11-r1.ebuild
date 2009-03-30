@@ -21,21 +21,21 @@ IUSE_CONTRIB="smbkrb5passwd kerberos"
 IUSE="${IUSE_DAEMON} ${IUSE_BACKEND} ${IUSE_OVERLAY} ${IUSE_OPTIONAL} ${IUSE_CONTRIB} lib32"
 
 # samba adding openssl is intentional --jokey
-RDEPEND="sys-libs/ncurses
-	tcpd? ( sys-apps/tcp-wrappers )
-	ssl? ( !gnutls? ( dev-libs/openssl )
-		gnutls? ( net-libs/gnutls ) )
+RDEPEND="sys-libs/ncurses[lib32?]
+	tcpd? ( sys-apps/tcp-wrappers[lib32?] )
+	ssl? ( !gnutls? ( dev-libs/openssl[lib32?] )
+		gnutls? ( net-libs/gnutls[lib32?] ) )
 	sasl? ( dev-libs/cyrus-sasl )
 	!minimal? (
-		odbc? ( !iodbc? ( dev-db/unixODBC )
-			iodbc? ( dev-db/libiodbc ) )
-		slp? ( net-libs/openslp )
-		perl? ( dev-lang/perl[-build] )
-		samba? ( !gnutls? ( dev-libs/openssl )
-			gnutls? ( net-libs/gnutls ) )
-		berkdb? ( sys-libs/db:4.5 )
+		odbc? ( !iodbc? ( dev-db/unixODBC[lib32?] )
+			iodbc? ( dev-db/libiodbc[lib32?] ) )
+		slp? ( net-libs/openslp[lib32?] )
+		perl? ( dev-lang/perl[-build,lib32?] )
+		samba? ( !gnutls? ( dev-libs/openssl[lib32?] )
+			gnutls? ( net-libs/gnutls[lib32?] ) )
+		berkdb? ( sys-libs/db:4.5[lib32?] )
 		smbkrb5passwd? (
-			dev-libs/openssl
+			dev-libs/openssl[lib32?]
 			app-crypt/heimdal )
 	)
 	selinux? ( sec-policy/selinux-openldap )"

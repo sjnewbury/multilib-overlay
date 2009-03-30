@@ -34,19 +34,19 @@ RDEPEND="sys-libs/ncurses[lib32?]
 		samba? ( dev-libs/openssl[lib32?] )
 		kerberos? ( virtual/krb5 )
 		berkdb? (
-			|| ( 	sys-libs/db:4.5
-				sys-libs/db:4.4
-				sys-libs/db:4.3
-				>=sys-libs/db-4.2.52_p2-r1:4.2
+			|| ( 	sys-libs/db:4.5[lib32?]
+				sys-libs/db:4.4[lib32?]
+				sys-libs/db:4.3[lib32?]
+				>=sys-libs/db-4.2.52_p2-r1:4.2[lib32?]
 			)
 		)
 		!berkdb? (
-			gdbm? ( sys-libs/gdbm )
+			gdbm? ( sys-libs/gdbm[lib32?] )
 			!gdbm? (
-				|| (	sys-libs/db:4.5
-					sys-libs/db:4.4
-					sys-libs/db:4.3
-					>=sys-libs/db-4.2.52_p2-r1:4.2
+				|| (	sys-libs/db:4.5[lib32?]
+					sys-libs/db:4.4[lib32?]
+					sys-libs/db:4.3[lib32?]
+					>=sys-libs/db-4.2.52_p2-r1:4.2[lib32?]
 				)
 			)
 		)
