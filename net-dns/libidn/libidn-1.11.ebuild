@@ -67,8 +67,9 @@ multilib-native_src_install_internal() {
 		java-pkg_newjar "${D}"/usr/share/java/${P}.jar || die
 		rm -rf "${D}"/usr/share/java || die
 
+		# dojavadoc dies if run twice
 		if use doc ; then
-			java-pkg_dojavadoc doc/java
+			[[ -d "${D}"/usr/share/doc/libidn-1.11/html ]] || java-pkg_dojavadoc doc/java
 		fi
 	fi
 }
