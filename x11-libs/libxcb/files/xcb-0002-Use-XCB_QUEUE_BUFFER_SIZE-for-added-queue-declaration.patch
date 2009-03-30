@@ -1,0 +1,25 @@
+From dca6cedea507095525fa0e606a7dc80dc970f3a7 Mon Sep 17 00:00:00 2001
+From: James Cloos <cloos@jhcloos.com>
+Date: Sat, 1 Nov 2008 12:01:45 -0400
+Subject: [PATCH] Use XCB_QUEUE_BUFFER_SIZE for added queue[] declaration
+
+---
+ src/xcbint.h |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/src/xcbint.h b/src/xcbint.h
+index dac0a61..6cac8e3 100644
+--- a/src/xcbint.h
++++ b/src/xcbint.h
+@@ -112,7 +112,7 @@ typedef struct _xcb_in {
+     pthread_cond_t event_cond;
+     int reading;
+ 
+-    char queue[4096];
++    char queue[XCB_QUEUE_BUFFER_SIZE];
+     int queue_len;
+ 
+     uint64_t request_expected;
+-- 
+1.6.0.2.307.gc427.dirty
+

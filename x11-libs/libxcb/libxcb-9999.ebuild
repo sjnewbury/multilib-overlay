@@ -11,7 +11,9 @@ inherit x-modular multilib-native
 
 DESCRIPTION="X C-language Bindings library"
 HOMEPAGE="http://xcb.freedesktop.org/"
-SRC_URI=""
+EGIT_REPO_URI="git://anongit.freedesktop.org/git/xcb/libxcb"
+PATCHES="${FILESDIR}/xcb-*.patch"
+
 LICENSE="X11"
 KEYWORDS=""
 IUSE="doc selinux"
