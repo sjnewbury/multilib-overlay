@@ -13,7 +13,7 @@ SRC_URI="mirror://sourceforge/libssh2/${P}.tar.gz"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="libgcrypt lib32"
+IUSE="libgcrypt"
 
 DEPEND="!libgcrypt? ( dev-libs/openssl[lib32?] )
 	libgcrypt? ( dev-libs/libgcrypt[lib32?] )

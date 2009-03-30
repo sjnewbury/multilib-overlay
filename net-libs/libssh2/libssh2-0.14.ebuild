@@ -13,7 +13,7 @@ SRC_URI="mirror://sourceforge/libssh2/${P}.tar.gz"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="lib32"
+IUSE=""
 
 DEPEND="dev-libs/openssl[lib32?]
 	sys-libs/zlib[lib32?]"

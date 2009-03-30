@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-IUSE="ruby lib32"
+IUSE="ruby"
 RUBY_OPTIONAL="yes"
 
 inherit eutils multilib python ruby multilib-native

@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-IUSE="lib32"
+IUSE=""
 
 inherit eutils multilib python multilib-native
 

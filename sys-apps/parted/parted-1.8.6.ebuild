@@ -4,6 +4,8 @@
 
 EAPI="2"
 
+inherit eutils multilib-native
+
 DESCRIPTION="Create, destroy, resize, check, copy partitions and file systems"
 HOMEPAGE="http://www.gnu.org/software/parted"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.bz2"
@@ -11,7 +13,7 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86"
-IUSE="nls readline debug selinux device-mapper lib32"
+IUSE="nls readline debug selinux device-mapper"
 
 # specific version for gettext needed
 # to fix bug 85999

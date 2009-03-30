@@ -12,7 +12,7 @@ SRC_URI="http://www.littlecms.com/${P}.tar.gz"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
-IUSE="tiff jpeg zlib python lib32"
+IUSE="tiff jpeg zlib python"
 
 RDEPEND="tiff? ( media-libs/tiff )
 	jpeg? ( media-libs/jpeg )

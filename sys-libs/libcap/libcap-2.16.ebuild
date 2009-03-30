@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-libs/libcap/libcap-2.16.ebuild,v 1.2 2009/01/17 17:18:14 vapier Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit eutils multilib toolchain-funcs pam multilib-native
 
@@ -13,7 +13,7 @@ SRC_URI="mirror://kernel/linux/libs/security/linux-privs/libcap${PV:0:1}/${P}.ta
 LICENSE="GPL-2 BSD"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
-IUSE="pam lib32"
+IUSE="pam"
 
 RDEPEND="sys-apps/attr[lib32?]
 	pam? ( virtual/pam )"

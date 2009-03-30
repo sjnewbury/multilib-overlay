@@ -18,7 +18,7 @@ IUSE_BACKEND="+berkdb"
 IUSE_OVERLAY="overlays perl"
 IUSE_OPTIONAL="gnutls iodbc sasl ssl odbc debug ipv6 syslog selinux"
 IUSE_CONTRIB="smbkrb5passwd kerberos"
-IUSE="${IUSE_DAEMON} ${IUSE_BACKEND} ${IUSE_OVERLAY} ${IUSE_OPTIONAL} ${IUSE_CONTRIB} lib32"
+IUSE="${IUSE_DAEMON} ${IUSE_BACKEND} ${IUSE_OVERLAY} ${IUSE_OPTIONAL} ${IUSE_CONTRIB}"
 
 # samba adding openssl is intentional --jokey
 RDEPEND="sys-libs/ncurses[lib32?]

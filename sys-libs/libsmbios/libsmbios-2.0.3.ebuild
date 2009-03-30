@@ -13,7 +13,7 @@ SRC_URI="http://linux.dell.com/libsmbios/download/libsmbios/${P}/${P}.tar.gz"
 LICENSE="GPL-2 OSL-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~ia64 ~x86"
-IUSE="test lib32"
+IUSE="test"
 
 DEPEND="dev-libs/libxml2[lib32?]
 	sys-libs/zlib[lib32?]

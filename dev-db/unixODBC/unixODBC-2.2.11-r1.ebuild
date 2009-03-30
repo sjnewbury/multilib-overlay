@@ -14,7 +14,7 @@ HOMEPAGE="http://www.unixodbc.org/"
 SRC_URI="http://www.unixodbc.org/${P}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="qt3 lib32"
+IUSE="qt3"
 
 DEPEND=">=sys-libs/readline-4.1
 		>=sys-libs/ncurses-5.2

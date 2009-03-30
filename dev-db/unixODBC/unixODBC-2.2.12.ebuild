@@ -18,7 +18,7 @@ SRC_URI="http://www.unixodbc.org/${P}.tar.gz
 		mirror://gentoo/${PATCH_P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="qt3 gnome lib32"
+IUSE="qt3 gnome"
 
 RDEPEND=">=sys-libs/readline-4.1[lib32?]
 		>=sys-libs/ncurses-5.2[lib32?]

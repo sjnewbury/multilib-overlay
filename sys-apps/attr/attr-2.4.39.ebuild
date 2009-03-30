@@ -15,7 +15,7 @@ SRC_URI="ftp://oss.sgi.com/projects/xfs/download/cmd_tars/${MY_P}.tar.gz
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k mips ppc ppc64 s390 sh sparc x86"
-IUSE="nls lib32"
+IUSE="nls"
 
 DEPEND="nls? ( sys-devel/gettext )
 	sys-devel/autoconf"

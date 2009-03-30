@@ -13,7 +13,7 @@ SRC_URI="mirror://sourceforge/freeglut/${P}.tar.gz"
 LICENSE="X11"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 mips ppc ppc64 sh sparc x86 ~x86-fbsd"
-IUSE="lib32"
+IUSE=""
 
 RDEPEND="virtual/opengl[lib32?]
 	virtual/glu[lib32?]

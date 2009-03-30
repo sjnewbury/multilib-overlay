@@ -13,7 +13,7 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86"
-IUSE="nls readline debug lib32"
+IUSE="nls readline debug"
 
 # specific version for gettext needed
 # to fix bug 85999
