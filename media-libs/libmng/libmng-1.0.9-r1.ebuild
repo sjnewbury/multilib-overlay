@@ -41,7 +41,7 @@ multilib-native_src_compile_internal() {
 multilib-native_src_install_internal() {
 	make DESTDIR="${D}" install || die
 
-	dodoc ../CHANGES ../README*
-	dodoc ../doc/doc.readme ../doc/libmng.txt
-	doman ../doc/man/*
+	dodoc CHANGES README*
+	dodoc doc/doc.readme doc/libmng.txt
+	doman doc/man/*
 }
