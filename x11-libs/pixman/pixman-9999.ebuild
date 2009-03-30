@@ -7,6 +7,7 @@ SNAPSHOT="yes"
 
 inherit x-modular toolchain-funcs versionator multilib-native
 
+EGIT_REPO_URI="git://anongit.freedesktop.org/git/pixman"
 DESCRIPTION="Low-level pixel manipulation routines"
 KEYWORDS=""
 IUSE="altivec mmx sse sse2"
