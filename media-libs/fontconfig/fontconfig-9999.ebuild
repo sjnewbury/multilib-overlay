@@ -5,7 +5,7 @@
 EAPI="2"
 WANT_AUTOMAKE=1.9
 
-inherit eutils autotools libtool toolchain-funcs flag-o-matic multilib-native
+inherit eutils autotools libtool toolchain-funcs flag-o-matic git multilib-native
 
 DESCRIPTION="A library for configuring and customizing font access"
 HOMEPAGE="http://fontconfig.org/"
@@ -35,7 +35,7 @@ DEPEND="${RDEPEND}
 	)"
 PDEPEND="app-admin/eselect-fontconfig"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epunt_cxx #74077
 	# Neeeded to get a sane .so versionning on fbsd, please dont drop
 	# If you have to run eautoreconf, you can also leave the elibtoolize call as
