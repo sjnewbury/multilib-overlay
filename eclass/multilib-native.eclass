@@ -186,6 +186,10 @@ multilib-native_src_generic_sub() {
 		if [[ ! -d "${WORKDIR}/builddir.${ABI}" ]] && [[ -z "$(echo ${1}|grep pkg)" ]]; then
 			einfo "Copying source tree to ${WORKDIR}/builddir.${ABI}"
 			cp -al ${S} ${WORKDIR}/builddir.${ABI}
+
+			# Workaround case where ${S} points to a src subdir of build tree and doc is
+			# is also in the package root (fixes doc install in some packages)
+			[[ -d "${S}/../doc" ]] && cp -al ${S}/../doc ${WORKDIR}/doc
 		fi
 		
 		[[ -d "${WORKDIR}/builddir.${ABI}" ]] && cd ${WORKDIR}/builddir.${ABI}
