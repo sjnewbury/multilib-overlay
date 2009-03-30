@@ -36,11 +36,11 @@ src_configure() { :; }
 
 multilib-native_src_compile_internal() {
 	tc-export BUILD_CC CC AR RANLIB
-	emake || die
+	emake lib=$(get_libdir) || die
 }
 
 multilib-native_src_install_internal() {
-	emake install DESTDIR="${D}" || die
+	emake install lib=$(get_libdir) DESTDIR="${D}" || die
 
 	gen_usr_ldscript libcap.so
 	mv "${D}"/$(get_libdir)/libcap.a "${D}"/usr/$(get_libdir)/ || die
