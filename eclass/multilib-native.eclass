@@ -189,7 +189,7 @@ multilib-native_src_generic_sub() {
 
 			# Workaround case where ${S} points to a src subdir of build tree and doc is
 			# is also in the package root (fixes doc install in some packages)
-			[[ -d "${S}/../doc" ]] && cp -al ${S}/../doc ${WORKDIR}/doc
+			[[ -d "${S}/../doc" && ! -d "${WORKDIR}/doc" ]] && cp -al ${S}/../doc ${WORKDIR}/doc
 		fi
 		
 		[[ -d "${WORKDIR}/builddir.${ABI}" ]] && cd ${WORKDIR}/builddir.${ABI}
