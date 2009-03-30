@@ -1,0 +1,19 @@
+diff -Naur parted-1.8.8-orig/tests/t3100-resize-ext2-partion.sh parted-1.8.8/tests/t3100-resize-ext2-partion.sh
+--- parted-1.8.8-orig/tests/t3100-resize-ext2-partion.sh	2007-08-09 12:47:57.000000000 -0600
++++ parted-1.8.8/tests/t3100-resize-ext2-partion.sh	2007-09-02 21:10:42.000000000 -0600
+@@ -44,13 +44,9 @@
+     'parted -s $dev mkpartfs primary ext2 0 $ORIG_SIZE > out 2>&1'
+ test_expect_success 'check for empty output' '$compare out /dev/null'
+ 
+-# FIXME: this test currently fails with the diagnostic "error: block
+-# relocator should have relocated 64".
+-# Eventually, when this bug is fixed, change each of the following
+-# expected failures to "test_expect_success".
+-test_expect_failure \
++test_expect_success \
+     'resize ext2 primary partition' \
+     'parted -s $dev resize 1 0 $NEW_SIZE > out 2>&1'
+-test_expect_failure 'check for empty output' '$compare out /dev/null'
++test_expect_success 'check for empty output' '$compare out /dev/null'
+ 
+ test_done
