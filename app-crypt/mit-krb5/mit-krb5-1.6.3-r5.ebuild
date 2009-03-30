@@ -59,10 +59,10 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_compile_internal() {
-	emake || die
+	emake -j1 || die
 
 	if use doc ; then
-		cd "${WORKDIR}/${MY_P}"/doc
+		cd ../doc
 		for dir in api implement ; do
 			make -C "${dir}" || die
 		done
@@ -81,7 +81,7 @@ multilib-native_src_install_internal() {
 
 	keepdir /var/lib/krb5kdc
 
-	cd "${WORKDIR}/${MY_P}"/doc
+	cd ..
 	dodoc README
 	dodoc doc/*.ps
 	doinfo doc/*.info*
