@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-db/unixODBC/unixODBC-2.2.12.ebuild,v 1.15 2008/06/15 17:33:57 hoffie Exp $
 
+EAPI=2
 WANT_AUTOCONF="latest"
 WANT_AUTOMAKE="latest"
 PATCH_VERSION="2.2.12-r0"
@@ -19,10 +20,10 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="qt3 gnome lib32"
 
-RDEPEND=">=sys-libs/readline-4.1
-		>=sys-libs/ncurses-5.2
-		qt3? ( =x11-libs/qt-3* )
-		gnome? ( gnome-base/libgnomeui )
+RDEPEND=">=sys-libs/readline-4.1[lib32?]
+		>=sys-libs/ncurses-5.2[lib32?]
+		qt3? ( =x11-libs/qt-3*[lib32?] )
+		gnome? ( gnome-base/libgnomeui[lib32?] )
 		sys-devel/libtool"
 DEPEND="${RDEPEND}
 	gnome? ( dev-util/cvs )" # see Bug 173256
@@ -49,7 +50,7 @@ src_unpack() {
 	fi
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local myconf
 
 	if use qt3 && ! use mips ; then
@@ -66,7 +67,6 @@ multilib-native_src_compile_internal() {
 		--enable-fdb \
 		--enable-ltdllib \
 		${myconf} || die "econf failed"
-	emake -j1 || die "emake failed"
 
 	if use gnome; then
 		# Symlink for configure
@@ -83,6 +83,15 @@ multilib-native_src_compile_internal() {
 		ln -s ../depcomp .
 		ln -s ../libtool .
 
+		cd ..
+	fi
+}
+
+multilib-native_src_compile_internal() {
+	emake -j1 || die "emake failed"
+
+	if use gnome; then
+		cd gODBCConfig
 		emake || die "emake gODBCConfig failed"
 		cd ..
 	fi
