@@ -1,0 +1,24 @@
+diff --exclude CVS -urN libsepol-1.12/src/module.c libsepol/src/module.c
+--- libsepol-1.12/src/module.c	2006-02-07 09:04:43.000000000 -0500
++++ libsepol/src/module.c	2006-03-26 16:27:24.000000000 -0500
+@@ -661,7 +661,7 @@
+ {
+ 	struct policy_file *file = &spf->pf;
+ 	policy_file_t polfile;
+-	uint32_t buf[3], offsets[5], len, nsec = 0;
++	uint32_t buf[5], offsets[5], len, nsec = 0;
+ 	int i;
+ 
+ 	if (p->policy) {
+diff --exclude CVS -urN libsepol-1.12/src/write.c libsepol/src/write.c
+--- libsepol-1.12/src/write.c	2005-11-15 08:05:58.000000000 -0500
++++ libsepol/src/write.c	2006-03-26 16:27:25.000000000 -0500
+@@ -1340,7 +1340,7 @@
+                 for (decl = cur->branch_list; decl != NULL; decl = decl->next) {
+                         num_decls++;
+                 }
+-                buf[0] = num_decls;
++                buf[0] = cpu_to_le32(num_decls);
+                 if (put_entry(buf, sizeof(uint32_t), 1, fp) != 1) {
+                         return -1;
+                 }
