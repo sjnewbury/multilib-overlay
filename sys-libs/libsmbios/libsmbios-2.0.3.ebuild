@@ -4,6 +4,8 @@
 
 EAPI="2"
 
+inherit multilib-native
+
 DESCRIPTION="Provide access to (SM)BIOS information"
 HOMEPAGE="http://linux.dell.com/libsmbios/main/index.html"
 SRC_URI="http://linux.dell.com/libsmbios/download/libsmbios/${P}/${P}.tar.gz"
