@@ -76,16 +76,17 @@ multilib-native_src_install_internal() {
 	doins "${S}"/fonts.conf
 
 	doman $(find "${S}" -type f -name *.1 -print)
-	newman doc/fonts-conf.5 fonts.conf.5
-	dodoc doc/fontconfig-user.{txt,pdf}
 
 	if use doc; then
+		newman doc/fonts-conf.5 fonts.conf.5
+		dodoc doc/fontconfig-user.{txt,pdf}
 		doman doc/Fc*.3
 		dohtml doc/fontconfig-devel.html
+		dohtml -r doc/fontconfig-devel
 		dodoc doc/fontconfig-devel.{txt,pdf}
 	fi
 
-	dodoc AUTHORS ChangeLog README || die
+	dodoc AUTHORS README || die
 
 	# Changes should be made to /etc/fonts/local.conf, and as we had
 	# too much problems with broken fonts.conf, we force update it ...
