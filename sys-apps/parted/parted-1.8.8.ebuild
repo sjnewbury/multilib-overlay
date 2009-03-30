@@ -19,7 +19,7 @@ IUSE="nls readline debug selinux device-mapper lib32"
 # to fix bug 85999
 DEPEND=">=sys-fs/e2fsprogs-1.27[lib32?]
 	>=sys-libs/ncurses-5.2[lib32?]
-	nls? ( >=sys-devel/gettext-0.12.1-r2[lib32?] )
+	nls? ( >=sys-devel/gettext-0.12.1-r2 )
 	readline? ( >=sys-libs/readline-5.2[lib32?] )
 	selinux? ( sys-libs/libselinux[lib32?] )
 	device-mapper? ( sys-fs/device-mapper )"

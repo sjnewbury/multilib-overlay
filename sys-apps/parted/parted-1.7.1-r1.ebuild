@@ -19,7 +19,7 @@ IUSE="nls readline debug lib32"
 # to fix bug 85999
 DEPEND=">=sys-fs/e2fsprogs-1.27[lib32?]
 	>=sys-libs/ncurses-5.2[lib32?]
-	nls? ( >=sys-devel/gettext-0.12.1-r2[lib32?] )
+	nls? ( >=sys-devel/gettext-0.12.1-r2 )
 	readline? ( >=sys-libs/readline-4.1-r4[lib32?] )"
 
 src_unpack() {
