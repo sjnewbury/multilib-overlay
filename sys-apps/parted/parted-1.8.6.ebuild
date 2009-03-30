@@ -20,7 +20,8 @@ DEPEND=">=sys-fs/e2fsprogs-1.27[lib32?]
 	nls? ( >=sys-devel/gettext-0.12.1-r2 )
 	readline? ( >=sys-libs/readline-4.1-r4[lib32?] )
 	selinux? ( sys-libs/libselinux[lib32?] )
-	device-mapper? ( sys-fs/device-mapper )"
+	device-mapper? ( sys-fs/device-mapper )
+	dev-libs/check[lib32?]"
 
 multilib-native_src_configure_internal() {
 	econf \
