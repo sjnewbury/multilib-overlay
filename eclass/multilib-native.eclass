@@ -162,9 +162,9 @@ multilib-native_src_generic_sub() {
 						CCACHE_DIR="${CCACHE_DIR}32"
 					fi
  
-					CUPS_CONFIG=/usr/bin/cups-config.32
-					GNUTLS_CONFIG=/usr/bin/gnutls-config.32
-					CURL_CONFIG=/usr/bin/curl-config.32
+					CUPS_CONFIG=/usr/bin/cups-config.${ABI}
+					GNUTLS_CONFIG=/usr/bin/gnutls-config.${ABI}
+					CURL_CONFIG=/usr/bin/curl-config.${ABI}
 					;;
 					amd64)  CHOST="x86_64-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m64"
@@ -181,9 +181,9 @@ multilib-native_src_generic_sub() {
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m32"
 					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32 -L/usr/lib32"
 
-					CUPS_CONFIG=/usr/bin/cups-config.32
-					GNUTLS_CONFIG=/usr/bin/gnutls-config.32
-					CURL_CONFIG=/usr/bin/curl-config.32
+					CUPS_CONFIG=/usr/bin/cups-config.${ABI}
+					GNUTLS_CONFIG=/usr/bin/gnutls-config.${ABI}
+					CURL_CONFIG=/usr/bin/curl-config.${ABI}
 					;;
 					ppc64)   CHOST="powerpc64-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m64"
@@ -232,8 +232,8 @@ multilib-native_src_generic_sub() {
 			# handle old-style (non-PKG-CONFIG) *-config scripts
 			if [[ ${1} == "src_install" ]] &&
 					 ( [[ ${ABI} == "x86" ]] || [[ ${ABI} == "ppc32" ]] ); then
-				[[ -x "${D}/usr/bin/${PN}-config" ]] && mv "${D}/usr/bin/${PN}-config" "${D}/usr/bin/${PN}-config.32"
-				[[ -x "${D}/usr/bin/lib${PN}-config" ]] && mv "${D}/usr/bin/lib${PN}-config" "${D}/usr/bin/lib${PN}-config.32"
+				[[ -x "${D}/usr/bin/${PN}-config" ]] && mv "${D}/usr/bin/${PN}-config" "${D}/usr/bin/${PN}-config.${ABI}"
+				[[ -x "${D}/usr/bin/lib${PN}-config" ]] && mv "${D}/usr/bin/lib${PN}-config" "${D}/usr/bin/lib${PN}-config.${ABI}"
 			fi
 		fi
 	fi
