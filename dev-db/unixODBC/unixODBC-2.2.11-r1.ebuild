@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-db/unixODBC/unixODBC-2.2.11-r1.ebuild,v 1.19 2008/03/13 21:42:01 ricmm Exp $
 
+EAPI="1"
+
 WANT_AUTOCONF="latest"
 WANT_AUTOMAKE="latest"
 
@@ -16,9 +18,9 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="qt3"
 
-DEPEND=">=sys-libs/readline-4.1
-		>=sys-libs/ncurses-5.2
-		qt3? ( =x11-libs/qt-3* )"
+DEPEND=">=sys-libs/readline-4.1[lib32?]
+		>=sys-libs/ncurses-5.2[lib32?]
+		qt3? ( =x11-libs/qt-3*[lib32?] )"
 RDEPEND="${DEPEND}"
 
 # the configure.in patch is required for 'use qt3'

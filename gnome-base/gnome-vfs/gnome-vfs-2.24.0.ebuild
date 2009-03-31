@@ -34,7 +34,7 @@ RDEPEND=">=gnome-base/gconf-2[lib32?]
 				)
 		)
 	hal? ( >=sys-apps/hal-0.5.7[lib32?] )
-	avahi? ( >=net-dns/avahi-0.6 )
+	avahi? ( >=net-dns/avahi-0.6[lib32?] )
 	kerberos? ( virtual/krb5 )
 	acl? (
 		sys-apps/acl

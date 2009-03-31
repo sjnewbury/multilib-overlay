@@ -25,7 +25,7 @@ RDEPEND="sys-libs/ncurses[lib32?]
 	tcpd? ( sys-apps/tcp-wrappers[lib32?] )
 	ssl? ( !gnutls? ( dev-libs/openssl[lib32?] )
 		gnutls? ( net-libs/gnutls[lib32?] ) )
-	sasl? ( dev-libs/cyrus-sasl )
+	sasl? ( dev-libs/cyrus-sasl[lib32?] )
 	!minimal? (
 		odbc? ( !iodbc? ( dev-db/unixODBC[lib32?] )
 			iodbc? ( dev-db/libiodbc[lib32?] ) )

@@ -26,10 +26,10 @@ IUSE="berkdb crypt debug gdbm ipv6 kerberos minimal odbc overlays perl samba sas
 RDEPEND="sys-libs/ncurses[lib32?]
 	tcpd? ( sys-apps/tcp-wrappers[lib32?] )
 	ssl? ( dev-libs/openssl[lib32?] )
-	sasl? ( dev-libs/cyrus-sasl )
+	sasl? ( dev-libs/cyrus-sasl[lib32?] )
 	!minimal? (
 		odbc? ( dev-db/unixODBC[lib32?] )
-		slp? ( net-libs/openslp )
+		slp? ( net-libs/openslp[lib32?] )
 		perl? ( dev-lang/perl[-build] )
 		samba? ( dev-libs/openssl )
 		kerberos? ( virtual/krb5 )
