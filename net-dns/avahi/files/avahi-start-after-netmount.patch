@@ -1,0 +1,31 @@
+Index: trunk/initscript/gentoo/avahi-dnsconfd.in
+===================================================================
+--- trunk/initscript/gentoo/avahi-dnsconfd.in	(revision 1538)
++++ trunk/initscript/gentoo/avahi-dnsconfd.in	(working copy)
+@@ -3,7 +3,7 @@
+ # Copyright 1999-2005 Gentoo Foundation
+ # Distributed under the terms of the GNU General Public License v2
+ 
+-opts="${opts} reload"
++opts="reload"
+ 
+ depend() {
+ 	need avahi-daemon
+Index: trunk/initscript/gentoo/avahi-daemon.in
+===================================================================
+--- trunk/initscript/gentoo/avahi-daemon.in	(revision 1538)
++++ trunk/initscript/gentoo/avahi-daemon.in	(working copy)
+@@ -1,11 +1,12 @@
+ #!/sbin/runscript
+ # $Id: avahi-start-after-netmount.patch,v 1.1 2007/09/09 20:37:33 swegener Exp $
+ # Copyright 1999-2005 Gentoo Foundation
+ # Distributed under the terms of the GNU General Public License v2
+ 
+-opts="${opts} reload"
++opts="reload"
+ 
+ depend() {
++	before netmount
+ 	use net
+ 	need dbus
+ }
