@@ -32,6 +32,10 @@ EMULTILIB_OLDFLAGS=""
 EMULTILIB_OCHOST=""
 EMULTILIB_OSPATH=""
 EMULTILIB_OCCACHE_DIR=""
+EMULTILIB_OCUPS_CONFIG=""
+EMULTILIB_OGNUTLS_CONFIG=""
+EMULTILIB_OCURL_CONFIG=""
+
 
 # @FUNCTION: multilib-native_pkg_setup
 # @USAGE:
@@ -142,6 +146,10 @@ multilib-native_src_generic_sub() {
 			EMULTILIB_OCHOST="${CHOST}"
 			EMULTILIB_OSPATH="${S}"
 			EMULTILIB_OCCACHE_DIR="${CCACHE_DIR}"
+			EMULTILIB_OCUPS_CONFIG="${CUPS_CONFIG}"
+			EMULTILIB_OGNUTLS_CONFIG="${GNUTLS_CONFIG}"
+			EMULTILIB_OCURL_CONFIG="${CURL_CONFIG}"
+
 			if use amd64 || use ppc64 ; then
 				case ${ABI} in
 					x86)    CHOST="i686-${EMULTILIB_OCHOST#*-}"
@@ -153,6 +161,10 @@ multilib-native_src_generic_sub() {
 					else
 						CCACHE_DIR="${CCACHE_DIR}32"
 					fi
+ 
+					CUPS_CONFIG=/usr/bin/cups-config.32
+					GNUTLS_CONFIG=/usr/bin/gnutls-config.32
+					CURL_CONFIG=/usr/bin/curl-config.32
 					;;
 					amd64)  CHOST="x86_64-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m64"
@@ -168,6 +180,10 @@ multilib-native_src_generic_sub() {
 					CFLAGS="${EMULTILIB_OCFLAGS} -m32"
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m32"
 					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32 -L/usr/lib32"
+
+					CUPS_CONFIG=/usr/bin/cups-config.32
+					GNUTLS_CONFIG=/usr/bin/gnutls-config.32
+					CURL_CONFIG=/usr/bin/curl-config.32
 					;;
 					ppc64)   CHOST="powerpc64-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m64"
@@ -177,6 +193,7 @@ multilib-native_src_generic_sub() {
 					*)   die "Unknown ABI"
 					;;
 				esac
+				export CUPS_CONFIG GNUTLS_CONFIG CURL_CONFIG
 			fi
 		fi
 
@@ -199,7 +216,7 @@ multilib-native_src_generic_sub() {
 	fi
 	
 	multilib-native_${1}_internal
-	
+
 	if [[ -n ${EMULTILIB_PKG} ]]; then
 		if has_multilib_profile; then
 			CFLAGS="${EMULTILIB_OCFLAGS}"
@@ -208,6 +225,15 @@ multilib-native_src_generic_sub() {
 			CHOST="${EMULTILIB_OCHOST}"
 			S="${EMULTILIB_OSPATH}"
 			CCACHE_DIR="${EMULTILIB_OCCACHE_DIR}"
+			CUPS_CONFIG="${EMULTILIB_OCUPS_CONFIG}"
+			GNUTLS_CONFIG="${EMULTILIB_OGNUTLS_CONFIG}"
+			CURL_CONFIG="${EMULTILIB_OCURL_CONFIG}"
+
+			# handle old-style (non-pkg-config) *-config scripts
+			if [[ ${1} == "src_install" ]] &&
+					 ( [[ ${ABI} == "x86" ]] || [[ ${ABI} == "ppc32" ]] ); then
+				[[ -x "${D}/usr/bin/${PN}-config" ]] && mv "${D}/usr/bin/${PN}-config" "${D}/usr/bin/${PN}-config.32"
+			fi
 		fi
 	fi
 }
