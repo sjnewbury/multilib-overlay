@@ -229,10 +229,11 @@ multilib-native_src_generic_sub() {
 			GNUTLS_CONFIG="${EMULTILIB_OGNUTLS_CONFIG}"
 			CURL_CONFIG="${EMULTILIB_OCURL_CONFIG}"
 
-			# handle old-style (non-pkg-config) *-config scripts
+			# handle old-style (non-PKG-CONFIG) *-config scripts
 			if [[ ${1} == "src_install" ]] &&
 					 ( [[ ${ABI} == "x86" ]] || [[ ${ABI} == "ppc32" ]] ); then
 				[[ -x "${D}/usr/bin/${PN}-config" ]] && mv "${D}/usr/bin/${PN}-config" "${D}/usr/bin/${PN}-config.32"
+				[[ -x "${D}/usr/bin/lib${PN}-config" ]] && mv "${D}/usr/bin/lib${PN}-config" "${D}/usr/bin/lib${PN}-config.32"
 			fi
 		fi
 	fi
