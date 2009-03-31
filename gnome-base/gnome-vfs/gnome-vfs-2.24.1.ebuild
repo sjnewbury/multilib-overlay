@@ -31,7 +31,7 @@ RDEPEND=">=gnome-base/gconf-2[lib32?]
 			>=dev-libs/openssl-0.9.5[lib32?]
 			!gnome-extra/gnome-vfs-sftp ) )
 	hal? ( >=sys-apps/hal-0.5.7[lib32?] )
-	avahi? ( >=net-dns/avahi-0.6 )
+	avahi? ( >=net-dns/avahi-0.6[lib32?] )
 	kerberos? ( virtual/krb5 )
 	acl? (
 		sys-apps/acl
