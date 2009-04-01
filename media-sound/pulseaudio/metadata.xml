@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <herd>sound</herd>
+  <use>
+    <flag name="X">
+    Build the X11 publish module to export PulseAudio information
+    through X11 protocol for clients to make use. Don't enable this
+    flag if you want to use a system wide instance. If unsure, enable
+    this flag.
+  </flag>
+    <flag name="gnome">
+    Use GConf to store user preferences on streams and so on. Don't
+    enable this flag if you want to use a system wide instance. If
+    unsure, enable this flag.
+  </flag>
+    <flag name="oss">
+    Enable OSS sink/source (output/input). Also build the padsp
+    script to make OSS software use PulseAudio.
+  </flag>
+    <flag name="policykit">
+    Use the PolicyKit framework (<pkg>sys-auth/policykit</pkg>) to
+    acquire high-priority and real-time scheduling for the daemon.
+  </flag>
+    <flag name="glib">
+    Add support to <pkg>dev-libs/glib</pkg>-based mainloop for the
+    libpulse client library, to allow using libpulse on glib-based
+    programs.
+  </flag>
+    <flag name="asyncns">Use libasyncns for asynchronous name resolution.</flag>
+    <flag name="glib">Enable glib eventloop support</flag>
+    <flag name="policykit">Enable support for PolicyKit framework.</flag>
+  </use>
+</pkgmetadata>
