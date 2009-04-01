@@ -35,7 +35,7 @@ EMULTILIB_OCCACHE_DIR=""
 EMULTILIB_OCUPS_CONFIG=""
 EMULTILIB_OGNUTLS_CONFIG=""
 EMULTILIB_OCURL_CONFIG=""
-
+EMULTILIB_OPERLBIN=""
 
 # @FUNCTION: multilib-native_pkg_setup
 # @USAGE:
@@ -149,6 +149,7 @@ multilib-native_src_generic_sub() {
 			EMULTILIB_OCUPS_CONFIG="${CUPS_CONFIG}"
 			EMULTILIB_OGNUTLS_CONFIG="${GNUTLS_CONFIG}"
 			EMULTILIB_OCURL_CONFIG="${CURL_CONFIG}"
+			EMULTILIB_OPERLBIN="${PERLBIN}"
 
 			if use amd64 || use ppc64 ; then
 				case ${ABI} in
@@ -162,9 +163,10 @@ multilib-native_src_generic_sub() {
 						CCACHE_DIR="${CCACHE_DIR}32"
 					fi
  
-					CUPS_CONFIG=/usr/bin/cups-config.${ABI}
-					GNUTLS_CONFIG=/usr/bin/gnutls-config.${ABI}
-					CURL_CONFIG=/usr/bin/curl-config.${ABI}
+					CUPS_CONFIG=/usr/bin/cups-config-${ABI}
+					GNUTLS_CONFIG=/usr/bin/gnutls-config-${ABI}
+					CURL_CONFIG=/usr/bin/curl-config-${ABI}
+					PERLBIN=/usr/bin/perl-${ABI}
 					;;
 					amd64)  CHOST="x86_64-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m64"
@@ -181,9 +183,10 @@ multilib-native_src_generic_sub() {
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m32"
 					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32 -L/usr/lib32"
 
-					CUPS_CONFIG=/usr/bin/cups-config.${ABI}
-					GNUTLS_CONFIG=/usr/bin/gnutls-config.${ABI}
-					CURL_CONFIG=/usr/bin/curl-config.${ABI}
+					CUPS_CONFIG=/usr/bin/cups-config-${ABI}
+					GNUTLS_CONFIG=/usr/bin/gnutls-config-${ABI}
+					CURL_CONFIG=/usr/bin/curl-config-${ABI}
+					PERLBIN=/usr/bin/perl-${ABI}
 					;;
 					ppc64)   CHOST="powerpc64-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m64"
@@ -193,7 +196,7 @@ multilib-native_src_generic_sub() {
 					*)   die "Unknown ABI"
 					;;
 				esac
-				export CUPS_CONFIG GNUTLS_CONFIG CURL_CONFIG
+				export CUPS_CONFIG GNUTLS_CONFIG CURL_CONFIG PERLBIN
 			fi
 		fi
 
@@ -228,12 +231,17 @@ multilib-native_src_generic_sub() {
 			CUPS_CONFIG="${EMULTILIB_OCUPS_CONFIG}"
 			GNUTLS_CONFIG="${EMULTILIB_OGNUTLS_CONFIG}"
 			CURL_CONFIG="${EMULTILIB_OCURL_CONFIG}"
+			PERLBIN="${EMULTILIB_OPERLBIN}"
 
 			# handle old-style (non-PKG-CONFIG) *-config scripts
-			if [[ ${1} == "src_install" ]] &&
+			if [[ ${1} == "src_install" ]] && \
 					 ( [[ ${ABI} == "x86" ]] || [[ ${ABI} == "ppc32" ]] ); then
-				[[ -x "${D}/usr/bin/${PN}-config" ]] && mv "${D}/usr/bin/${PN}-config" "${D}/usr/bin/${PN}-config.${ABI}"
-				[[ -x "${D}/usr/bin/lib${PN}-config" ]] && mv "${D}/usr/bin/lib${PN}-config" "${D}/usr/bin/lib${PN}-config.${ABI}"
+				[[ -x "${D}/usr/bin/${PN}-config" ]] && \
+						mv "${D}/usr/bin/${PN}-config" \
+						"${D}/usr/bin/${PN}-config.${ABI}"
+				[[ -x "${D}/usr/bin/lib${PN}-config" ]] && \
+						mv "${D}/usr/bin/lib${PN}-config" \
+						"${D}/usr/bin/lib${PN}-config.${ABI}"
 			fi
 		fi
 	fi
@@ -319,4 +327,3 @@ multilib-native_check_inherited_funcs() {
 	[[ -z "$(echo ${1}|grep pkg)" ]] && einfo "Using ${declared_func} ..."
 	${declared_func}
 }
-
