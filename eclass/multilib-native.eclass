@@ -238,10 +238,10 @@ multilib-native_src_generic_sub() {
 					 ( [[ ${ABI} == "x86" ]] || [[ ${ABI} == "ppc32" ]] ); then
 				[[ -x "${D}/usr/bin/${PN}-config" ]] && \
 						mv "${D}/usr/bin/${PN}-config" \
-						"${D}/usr/bin/${PN}-config.${ABI}"
+						"${D}/usr/bin/${PN}-config-${ABI}"
 				[[ -x "${D}/usr/bin/lib${PN}-config" ]] && \
 						mv "${D}/usr/bin/lib${PN}-config" \
-						"${D}/usr/bin/lib${PN}-config.${ABI}"
+						"${D}/usr/bin/lib${PN}-config-${ABI}"
 			fi
 		fi
 	fi
