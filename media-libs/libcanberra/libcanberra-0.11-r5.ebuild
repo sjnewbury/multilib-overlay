@@ -18,7 +18,7 @@ IUSE="alsa doc gstreamer +gtk oss pulseaudio"
 RDEPEND="media-libs/libvorbis[lib32?]
 	sys-devel/libtool[lib32?]
 	alsa? ( media-libs/alsa-lib[lib32?] )
-	pulseaudio? ( >=media-sound/pulseaudio-0.9.11 )
+	pulseaudio? ( >=media-sound/pulseaudio-0.9.11[lib32?] )
 	gstreamer? ( >=media-libs/gstreamer-0.10.15 )
 	gtk? ( dev-libs/glib:2[lib32?]
 		>=x11-libs/gtk+-2.13.4:2[lib32?]

@@ -19,6 +19,7 @@ RDEPEND="media-libs/libvorbis[lib32?]
 	sys-devel/libtool[lib32?]
 	alsa? ( media-libs/alsa-lib[lib32?] )
 	gstreamer? ( >=media-libs/gstreamer-0.10.15 )
+	pulse? ( media-sound/pulseaudio[lib32?] )
 	gtk? ( dev-libs/glib:2[lib32?]
 		>=x11-libs/gtk+-2.13.4:2[lib32?]
 		>=gnome-base/gconf-2[lib32?] )"
