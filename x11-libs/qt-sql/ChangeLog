@@ -1,0 +1,124 @@
+# ChangeLog for x11-libs/qt-sql
+# Copyright 1999-2009 Gentoo Foundation; Distributed under the GPL v2
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-sql/ChangeLog,v 1.30 2009/03/04 20:56:16 yngwin Exp $
+
+*qt-sql-4.5.0 (04 Mar 2009)
+
+  04 Mar 2009; Ben de Groot <yngwin@gentoo.org> +qt-sql-4.5.0.ebuild:
+  Version bump
+
+  25 Feb 2009; Markos Chandras <hwoarang@gentoo.org> qt-sql-4.4.2-r1.ebuild,
+  qt-sql-4.5.0_rc1.ebuild:
+  Added iconv use flag ( bug #260145 )
+
+  18 Feb 2009; Jeroen Roovers <jer@gentoo.org> qt-sql-4.4.2.ebuild:
+  Stable for HPPA (bug #248083).
+
+*qt-sql-4.4.2-r1 (14 Feb 2009)
+
+  14 Feb 2009; Markos Chandras <hwoarang@gentoo.org>
+  +files/0234-fix-mysql-threaded.diff, +qt-sql-4.4.2-r1.ebuild:
+  revbump with qt-copy patches. Thanks to Maciej Mrozowski (reavertm)
+  <reavertm@poczta.fm>
+
+*qt-sql-4.5.0_rc1 (11 Feb 2009)
+
+  11 Feb 2009; Ben de Groot <yngwin@gentoo.org> +qt-sql-4.5.0_rc1.ebuild:
+  Version bump
+
+  06 Feb 2009; Raúl Porcel <armin76@gentoo.org> qt-sql-4.4.2.ebuild:
+  ia64/sparc stable wrt #248038
+
+  04 Feb 2009; Brent Baude <ranger@gentoo.org> qt-sql-4.4.2.ebuild:
+  Marking qt-sql-4.4.2 ppc64 stable for bug 248038
+
+  04 Feb 2009; Alexey Shvetsov <alexxy@gentoo.org> qt-sql-4.4.2.ebuild:
+  Add ~mips keywords to qt-4.4.2
+
+  31 Jan 2009; Tobias Klausmann <klausman@gentoo.org> qt-sql-4.4.2.ebuild:
+  Stable on alpha, bug #248038
+
+  29 Jan 2009; Alexis Ballier <aballier@gentoo.org> qt-sql-4.4.2.ebuild:
+  keyword ~x86-fbsd
+
+  18 Jan 2009; Markus Meier <maekke@gentoo.org> qt-sql-4.4.2.ebuild:
+  amd64/x86 stable, bug #248038
+
+  17 Jan 2009; nixnut <nixnut@gentoo.org> qt-sql-4.4.2.ebuild:
+  ppc stable #248038
+
+  06 Jan 2009; Ben de Groot <yngwin@gentoo.org> -qt-sql-4.4.0.ebuild,
+  -qt-sql-4.4.1.ebuild:
+  Clean out old ebuilds
+
+*qt-sql-4.4.2 (19 Sep 2008)
+
+  19 Sep 2008; Ben de Groot <yngwin@gentoo.org> +qt-sql-4.4.2.ebuild:
+  Version bump
+
+  16 Aug 2008; Doug Goldstein <cardoe@gentoo.org> metadata.xml:
+  add GLEP 56 USE flag desc from use.local.desc
+
+*qt-sql-4.4.1 (11 Aug 2008)
+
+  11 Aug 2008; Ben de Groot <yngwin@gentoo.org> +qt-sql-4.4.1.ebuild:
+  Version bump
+
+  20 Jun 2008; Ingmar Vanhassel <ingmar@gentoo.org> qt-sql-4.4.0.ebuild:
+  Fix qt-sql[postgres] for the case where the only postgresql package
+  installed is dev-db/libpq. Patch by Rafał Mużyło in bug 227439.
+
+  13 Jun 2008; Ingmar Vanhassel <ingmar@gentoo.org> qt-sql-4.4.0.ebuild:
+  Make all split Qt4 ebuilds block the old monolithic ebuild.
+
+  27 May 2008; Raúl Porcel <armin76@gentoo.org> qt-sql-4.4.0.ebuild:
+  Add ~alpha/~ia64/~sparc wrt #223557
+
+  26 May 2008; Jeroen Roovers <jer@gentoo.org> qt-sql-4.4.0.ebuild:
+  Marked ~hppa (bug #223557).
+
+  25 May 2008; Markus Rothe <corsair@gentoo.org> qt-sql-4.4.0.ebuild:
+  Added ~ppc/~ppc64
+
+  19 May 2008; Tiziano Müller <dev-zero@gentoo.org> qt-sql-4.4.0.ebuild:
+  Fixed postgresql dep
+
+  19 May 2008; Tiziano Müller <dev-zero@gentoo.org> qt-sql-4.4.0.ebuild:
+  Changed dependency for postgresql to virtual/postgresql-base
+
+  16 May 2008; Ingmar Vanhassel <ingmar@gentoo.org>
+  -qt-sql-4.4.0_rc1.ebuild:
+  Old.
+
+*qt-sql-4.4.0 (15 May 2008)
+
+  15 May 2008; Ingmar Vanhassel <ingmar@gentoo.org> +qt-sql-4.4.0.ebuild:
+  Version bump to Qt-4.4.0.
+
+  10 Apr 2008; Ingmar Vanhassel <ingmar@gentoo.org>
+  -qt-sql-4.4.0_beta1.ebuild, +qt-sql-4.4.0_rc1.ebuild:
+  Version bump qt-sql to 4.4.0_rc1. Thanks to Bo Andresen and Bernd
+  Steinhauser.
+
+  09 Mar 2008; Ingmar Vanhassel <ingmar@gentoo.org>
+  qt-sql-4.4.0_beta1.ebuild:
+  Fix SQL plugin handling, bug 212471.
+
+  05 Mar 2008; Ingmar Vanhassel <ingmar@gentoo.org>
+  -qt-sql-4.4.0_rc1.ebuild:
+  Old.
+
+*qt-sql-4.4.0_beta1 (05 Mar 2008)
+
+  05 Mar 2008; Ingmar Vanhassel <ingmar@gentoo.org>
+  +qt-sql-4.4.0_beta1.ebuild:
+  Added Qt-4.4.0_beta, note that the RC1 is an accidentally mislabelled
+  `technical preview`, so this will appear as a downgrade if you installed
+  that version.
+
+*qt-sql-4.4.0_rc1 (21 Dec 2007)
+
+  21 Dec 2007; Caleb Tennis <caleb@gentoo.org> +metadata.xml,
+  +qt-sql-4.4.0_rc1.ebuild:
+  Initial ebuild
+
