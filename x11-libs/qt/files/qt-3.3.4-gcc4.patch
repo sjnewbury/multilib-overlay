@@ -1,0 +1,25 @@
+diff -Nur qt-x11-free-3.3.4.orig/configure qt-x11-free-3.3.4/configure
+--- qt-x11-free-3.3.4.orig/configure	2004-10-18 19:17:00.000000000 +0200
++++ qt-x11-free-3.3.4/configure	2005-07-19 17:17:35.000000000 +0200
+@@ -3030,6 +3030,9 @@
+     *3.*)
+ 	COMPILER_VERSION="3.*"
+ 	;;
++    *4.*)
++        COMPILER_VERSION="4.*"
++        ;;
+     *)
+ 	;;
+     esac
+diff -Nur qt-x11-free-3.3.4.orig/src/kernel/qsizepolicy.h qt-x11-free-3.3.4/src/kernel/qsizepolicy.h
+--- qt-x11-free-3.3.4.orig/src/kernel/qsizepolicy.h	2005-01-21 18:16:12.000000000 +0100
++++ qt-x11-free-3.3.4/src/kernel/qsizepolicy.h	2005-07-19 17:17:22.000000000 +0200
+@@ -88,7 +88,7 @@
+     }
+ 
+     void setHorData( SizeType d ) { data = (Q_UINT32)(data & ~HMask) | d; }
+-    void setVerData( SizeType d ) { data = (Q_UINT32)(data & ~(HMask << HSize)) |
++    void setVerData( SizeType d ) { data = (Q_UINT32)(data & ~VMask) |
+ 					   (d << HSize); }
+ 		
+     void setHeightForWidth( bool b ) { data = b ? (Q_UINT32)( data | ( 1 << 2*HSize ) )

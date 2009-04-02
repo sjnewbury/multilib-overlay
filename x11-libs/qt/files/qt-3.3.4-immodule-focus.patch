@@ -1,0 +1,24 @@
+--- qt-x11-free-3.3.4/src/kernel/qwidget.cpp	2005-04-03 14:19:26.000000000 +0900
++++ qt-x11-free-3.3.4/src/kernel/qwidget.cpp-immqt	2005-04-03 14:27:00.000000000 +0900
+@@ -3293,7 +3293,10 @@
+ 	    // input context should be survived until focused again. So we
+ 	    // delegate the responsibility to input context via
+ 	    // unfocusInputContext().
+-	    if ( prev != this ) {
++	    if ( prev != this && prev->isInputMethodEnabled() &&
++    			(isInputMethodEnabled() || !testWFlags(WType_Popup))) {
++	    // If this is a popup and inputmethod is not enabled, then we
++	    // should not unfocus the current editing widget.
+ #if 0
+ 		prev->resetInputContext();
+ #else
+@@ -3307,7 +3310,8 @@
+ 	}
+ #endif
+ 	qApp->focus_widget = this;
+-	focusInputContext();
++	if ( isInputMethodEnabled() )
++	    focusInputContext();
+ 
+ #if defined(Q_WS_WIN)
+ 	if ( !topLevelWidget()->isPopup() )

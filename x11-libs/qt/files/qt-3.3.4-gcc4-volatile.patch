@@ -1,0 +1,77 @@
+diff -Nur qt-x11-free-3.3.4.orig/src/tools/qlocale.cpp qt-x11-free-3.3.4/src/tools/qlocale.cpp
+--- qt-x11-free-3.3.4.orig/src/tools/qlocale.cpp	2005-01-21 18:16:05.000000000 +0100
++++ qt-x11-free-3.3.4/src/tools/qlocale.cpp	2005-08-20 16:05:53.000000000 +0200
+@@ -72,6 +72,12 @@
+ #   define NAN DBL_QNAN
+ #endif
+ 
++#if (defined(Q_CC_GNU) && defined(Q_OS_WIN)) || __GNUC__ == 4 || defined(QT_QLOCALE_NEEDS_VOLATILE)
++#   define NEEDS_VOLATILE volatile
++#else
++#   define NEEDS_VOLATILE
++#endif
++
+ enum {
+     LittleEndian,
+     BigEndian
+@@ -4068,9 +4074,9 @@
+ #error Exactly one of IEEE_BIG_OR_LITTLE_ENDIAN, VAX, or IBM should be defined.
+ #endif
+ 
+-inline ULong getWord0(double x)
++inline ULong getWord0(const NEEDS_VOLATILE double x)
+ {
+-    uchar *ptr = (uchar *)&x;
++    const NEEDS_VOLATILE uchar *ptr = reinterpret_cast<const NEEDS_VOLATILE uchar *>(&x);
+     if (ByteOrder == BigEndian) {
+         return (ptr[0]<<24) + (ptr[1]<<16) + (ptr[2]<<8) + ptr[3];
+     } else {
+@@ -4078,9 +4084,9 @@
+     }
+ }
+ 
+-inline void setWord0(double *x, ULong l)
++inline void setWord0(NEEDS_VOLATILE double *x, ULong l)
+ {
+-    uchar *ptr = (uchar *)x;
++    NEEDS_VOLATILE uchar *ptr = reinterpret_cast<NEEDS_VOLATILE uchar *>(x);
+     if (ByteOrder == BigEndian) {
+         ptr[0] = (uchar)(l>>24);
+         ptr[1] = (uchar)(l>>16);
+@@ -4094,18 +4100,18 @@
+     }
+ }
+ 
+-inline ULong getWord1(double x)
++inline ULong getWord1(const NEEDS_VOLATILE double x)
+ {
+-    uchar *ptr = (uchar *)&x;
++    const NEEDS_VOLATILE uchar *ptr = reinterpret_cast<const NEEDS_VOLATILE uchar *>(&x);
+     if (ByteOrder == BigEndian) {
+         return (ptr[4]<<24) + (ptr[5]<<16) + (ptr[6]<<8) + ptr[7];
+     } else {
+         return (ptr[3]<<24) + (ptr[2]<<16) + (ptr[1]<<8) + ptr[0];
+     }
+ }
+-inline void setWord1(double *x, ULong l)
++inline void setWord1(NEEDS_VOLATILE double *x, ULong l)
+ {
+-    uchar *ptr = (uchar *)x;
++    NEEDS_VOLATILE uchar *ptr = reinterpret_cast<uchar NEEDS_VOLATILE *>(x);
+     if (ByteOrder == BigEndian) {
+         ptr[4] = (uchar)(l>>24);
+         ptr[5] = (uchar)(l>>16);
+@@ -5679,11 +5685,11 @@
+ #ifdef Q_OS_LINUX
+     fesetenv(&envp);
+ #endif
+-    
++
+     return s;
+ }
+ 
+-static char *_qdtoa( double d, int mode, int ndigits, int *decpt, int *sign, char **rve, char **resultp)
++static char *_qdtoa( NEEDS_VOLATILE double d, int mode, int ndigits, int *decpt, int *sign, char **rve, char **resultp)
+ {
+     /*
+       Arguments ndigits, decpt, sign are similar to those
