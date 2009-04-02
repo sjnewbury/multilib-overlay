@@ -1,4 +1,4 @@
-A# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/qt/qt-3.3.8b-r1.ebuild,v 1.7 2009/01/17 16:41:01 nixnut Exp $
 
@@ -152,7 +152,7 @@ multilib-native_src_prepare_internal() {
 	use sparc && export CFLAGS="-O1" && export CXXFLAGS="${CFLAGS}"
 	# set c/xxflags and ldflags
 	strip-flags
-	append-flags -fno-strict-aliasing -DQT_CLEAN_NAMESPACE
+	append-flags -fno-strict-aliasing
 
 	if [[ $( gcc-fullversion ) == "3.4.6" && gcc-specs-ssp ]] ; then
 		ewarn "Appending -fno-stack-protector to CFLAGS/CXXFLAGS"
@@ -200,7 +200,7 @@ multilib-native_src_configure_internal() {
 	use debug	&& myconf+=" -debug" || myconf+=" -release -no-g++-exceptions"
 	use xinerama    && myconf+=" -xinerama" || myconf+=" -no-xinerama"
 
-	myconf="${myconf} -system-zlib -qt-gif"
+	myconf="${myconf} -system-zlib -qt-gif -DQT_CLEAN_NAMESPACE"
 
 	use ipv6        && myconf+=" -ipv6" || myconf+=" -no-ipv6"
 	use immqt-bc	&& myconf+=" -inputmethod"

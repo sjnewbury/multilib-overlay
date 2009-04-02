@@ -158,7 +158,7 @@ multilib-native_src_prepare_internal() {
 	use sparc && export CFLAGS="-O1" && export CXXFLAGS="${CFLAGS}"
 	# set c/xxflags and ldflags
 	strip-flags
-	append-flags -fno-strict-aliasing -DQT_CLEAN_NAMESPACE
+	append-flags -fno-strict-aliasing
 
 	if [[ $( gcc-fullversion ) == "3.4.6" && gcc-specs-ssp ]] ; then
 		ewarn "Appending -fno-stack-protector to CFLAGS/CXXFLAGS"
@@ -203,7 +203,7 @@ multilib-native_src_configure_internal() {
 	use debug	&& myconf="${myconf} -debug" || myconf="${myconf} -release -no-g++-exceptions"
 	use xinerama    && myconf="${myconf} -xinerama" || myconf="${myconf} -no-xinerama"
 
-	myconf="${myconf} -system-zlib"
+	myconf="${myconf} -system-zlib -DQT_CLEAN_NAMESPACE"
 
 	use ipv6        && myconf="${myconf} -ipv6" || myconf="${myconf} -no-ipv6"
 	use immqt-bc	&& myconf="${myconf} -inputmethod"
