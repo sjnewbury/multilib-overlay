@@ -171,12 +171,12 @@ multilib-native_src_generic_sub() {
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m32"
 					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32 -L/usr/lib32"
 					QMAKESPEC="linux-g++-32"
+
 					if [[ -z ${CCACHE_DIR} ]] ; then 
 						CCACHE_DIR="/var/tmp/ccache"
 					else
 						CCACHE_DIR="${CCACHE_DIR}32"
 					fi
- 
 					CUPS_CONFIG=/usr/bin/cups-config-${ABI}
 					GNUTLS_CONFIG=/usr/bin/gnutls-config-${ABI}
 					CURL_CONFIG=/usr/bin/curl-config-${ABI}
@@ -200,7 +200,6 @@ multilib-native_src_generic_sub() {
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m32"
 					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32 -L/usr/lib32"
 					QMAKESPEC="linux-g++-32"
-
 					CUPS_CONFIG=/usr/bin/cups-config-${ABI}
 					GNUTLS_CONFIG=/usr/bin/gnutls-config-${ABI}
 					CURL_CONFIG=/usr/bin/curl-config-${ABI}
@@ -224,6 +223,11 @@ multilib-native_src_generic_sub() {
 
 		#Nice way to avoid the "cannot run test program while cross compiling" :)
 		CBUILD=$CHOST
+
+		# qt-build.eclass sets these in pkg_setup, but that results
+		# in the path always pointing to the primary ABI libdir.
+		QTBASEDIR=/usr/$(get_libdir)/qt4
+		QTLIBDIR=/usr/$(get_libdir)/qt4
 
 		if [[ ! -d "${WORKDIR}/builddir.${ABI}" ]] && [[ -z "$(echo ${1}|grep pkg)" ]]; then
 			einfo "Copying source tree to ${WORKDIR}/builddir.${ABI}"
