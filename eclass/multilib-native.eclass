@@ -228,6 +228,8 @@ multilib-native_src_generic_sub() {
 		# in the path always pointing to the primary ABI libdir.
 		QTBASEDIR=/usr/$(get_libdir)/qt4
 		QTLIBDIR=/usr/$(get_libdir)/qt4
+		QTPCDIR=/usr/$(get_libdir)/pkgconfig
+		QTPLUGINDIR=${QTLIBDIR}/plugins
 
 		if [[ ! -d "${WORKDIR}/builddir.${ABI}" ]] && [[ -z "$(echo ${1}|grep pkg)" ]]; then
 			einfo "Copying source tree to ${WORKDIR}/builddir.${ABI}"
