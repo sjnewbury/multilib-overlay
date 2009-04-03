@@ -35,7 +35,10 @@ EMULTILIB_OCCACHE_DIR=""
 EMULTILIB_OCUPS_CONFIG=""
 EMULTILIB_OGNUTLS_CONFIG=""
 EMULTILIB_OCURL_CONFIG=""
+EMULTILIB_OCACA_CONFIG=""
+EMULTILIB_OAALIB_CONFIG=""
 EMULTILIB_OPERLBIN=""
+EMULTILIB_Omyconf=""
 
 # @FUNCTION: multilib-native_pkg_setup
 # @USAGE:
@@ -140,16 +143,26 @@ multilib-native_src_generic_sub() {
 		export CXX="$(tc-getCXX)"
 
 		if has_multilib_profile ; then
+			# Save env before each ABI pass
 			EMULTILIB_OCFLAGS="${CFLAGS}"
 			EMULTILIB_OCXXFLAGS="${CXXFLAGS}"
 			EMULTILIB_OLDFLAGS="${LDFLAGS}"
 			EMULTILIB_OCHOST="${CHOST}"
 			EMULTILIB_OSPATH="${S}"
+
+			# Various libraries store build-time linking
+			# information in a config script file or program binary
 			EMULTILIB_OCCACHE_DIR="${CCACHE_DIR}"
 			EMULTILIB_OCUPS_CONFIG="${CUPS_CONFIG}"
 			EMULTILIB_OGNUTLS_CONFIG="${GNUTLS_CONFIG}"
 			EMULTILIB_OCURL_CONFIG="${CURL_CONFIG}"
+			EMULTILIB_OCACA_CONFIG="${CACA_CONFIG}"
+			EMULTILIB_OAALIB_CONFIG="${AALIB_CONFIG}"
 			EMULTILIB_OPERLBIN="${PERLBIN}"
+
+			# We need to prevent myconf from accumulating through
+			# each pass, but respect initial value
+			EMULTILIB_Omyconf="${myconf}"
 
 			if use amd64 || use ppc64 ; then
 				case ${ABI} in
@@ -157,6 +170,7 @@ multilib-native_src_generic_sub() {
 					CFLAGS="${EMULTILIB_OCFLAGS} -m32"
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m32"
 					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32 -L/usr/lib32"
+					QMAKESPEC="linux-g++-32"
 					if [[ -z ${CCACHE_DIR} ]] ; then 
 						CCACHE_DIR="/var/tmp/ccache"
 					else
@@ -166,12 +180,15 @@ multilib-native_src_generic_sub() {
 					CUPS_CONFIG=/usr/bin/cups-config-${ABI}
 					GNUTLS_CONFIG=/usr/bin/gnutls-config-${ABI}
 					CURL_CONFIG=/usr/bin/curl-config-${ABI}
+					CACA_CONFIG=/usr/bin/caca-config-${ABI}
+					AALIB_CONFIG=/usr/bin/aalib-config-${ABI}
 					PERLBIN=/usr/bin/perl-${ABI}
 					;;
 					amd64)  CHOST="x86_64-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m64"
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m64"
 					LDFLAGS="${EMULTILIB_OLDFLAGS} -m64"
+					QMAKESPEC="linux-g++-64"
 					if [[ -z ${CCACHE_DIR} ]] ; then 
 						CCACHE_DIR="/var/tmp/ccache"
 					else
@@ -182,21 +199,26 @@ multilib-native_src_generic_sub() {
 					CFLAGS="${EMULTILIB_OCFLAGS} -m32"
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m32"
 					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32 -L/usr/lib32"
+					QMAKESPEC="linux-g++-32"
 
 					CUPS_CONFIG=/usr/bin/cups-config-${ABI}
 					GNUTLS_CONFIG=/usr/bin/gnutls-config-${ABI}
 					CURL_CONFIG=/usr/bin/curl-config-${ABI}
+					CACA_CONFIG=/usr/bin/caca-config-${ABI}
+					AALIB_CONFIG=/usr/bin/aalib-config-${ABI}
 					PERLBIN=/usr/bin/perl-${ABI}
 					;;
 					ppc64)   CHOST="powerpc64-${EMULTILIB_OCHOST#*-}"
 					CFLAGS="${EMULTILIB_OCFLAGS} -m64"
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m64"
 					LDFLAGS="${EMULTILIB_OLDFLAGS} -m64"
+					QMAKESPEC="linux-g++-64"
 					;;
 					*)   die "Unknown ABI"
 					;;
 				esac
-				export CUPS_CONFIG GNUTLS_CONFIG CURL_CONFIG PERLBIN
+				export QMAKESPEC CUPS_CONFIG GNUTLS_CONFIG CURL_CONFIG 
+				export CACA_CONFIG AALIB_CONFIG PERLBIN
 			fi
 		fi
 
@@ -231,7 +253,10 @@ multilib-native_src_generic_sub() {
 			CUPS_CONFIG="${EMULTILIB_OCUPS_CONFIG}"
 			GNUTLS_CONFIG="${EMULTILIB_OGNUTLS_CONFIG}"
 			CURL_CONFIG="${EMULTILIB_OCURL_CONFIG}"
+			CACA_CONFIG="${EMULTILIB_OCACA_CONFIG}"
+			AALIB_CONFIG="${EMULTILIB_OAALIB_CONFIG}"
 			PERLBIN="${EMULTILIB_OPERLBIN}"
+			myconf="${EMULTILIB_Omyconf}"
 
 			# handle old-style (non-PKG-CONFIG) *-config scripts
 			if [[ ${1} == "src_install" ]] && \

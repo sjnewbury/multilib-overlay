@@ -120,8 +120,6 @@ src_prepare(){
 }
 
 multilib-native_src_configure_internal() {
-	unset QMAKESPEC
-
 	myconf="${myconf}
 		$(qt_use glib)
 		$(qt_use iconv)
