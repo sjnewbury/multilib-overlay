@@ -121,6 +121,10 @@ src_prepare(){
 }
 
 multilib-native_src_configure_internal() {
+	if ! use lib32; then
+		unset QMAKESPEC
+	fi
+
 	myconf="${myconf}
 		$(qt_use glib)
 		$(qt_use iconv)
