@@ -171,7 +171,7 @@ multilib-native_src_generic_sub() {
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m32"
 					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32 -L/usr/lib32"
 					QMAKESPEC="linux-g++-32"
-
+					QTBINDIR="/usr/libexec/qt/32"
 					if [[ -z ${CCACHE_DIR} ]] ; then 
 						CCACHE_DIR="/var/tmp/ccache"
 					else
@@ -189,6 +189,7 @@ multilib-native_src_generic_sub() {
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m64"
 					LDFLAGS="${EMULTILIB_OLDFLAGS} -m64"
 					QMAKESPEC="linux-g++-64"
+					QTBINDIR="/usr/bin"
 					if [[ -z ${CCACHE_DIR} ]] ; then 
 						CCACHE_DIR="/var/tmp/ccache"
 					else
@@ -200,6 +201,7 @@ multilib-native_src_generic_sub() {
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m32"
 					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32 -L/usr/lib32"
 					QMAKESPEC="linux-g++-32"
+					QTBINDIR="/usr/libexec/qt/32"
 					CUPS_CONFIG=/usr/bin/cups-config-${ABI}
 					GNUTLS_CONFIG=/usr/bin/gnutls-config-${ABI}
 					CURL_CONFIG=/usr/bin/curl-config-${ABI}
@@ -212,6 +214,7 @@ multilib-native_src_generic_sub() {
 					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m64"
 					LDFLAGS="${EMULTILIB_OLDFLAGS} -m64"
 					QMAKESPEC="linux-g++-64"
+					QTBINDIR="/usr/bin"
 					;;
 					*)   die "Unknown ABI"
 					;;
