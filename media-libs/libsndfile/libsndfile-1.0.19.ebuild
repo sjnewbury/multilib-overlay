@@ -25,7 +25,7 @@ RDEPEND="!minimal? ( >=media-libs/flac-1.2.1[lib32?]
 		>=media-libs/libogg-1.1.3[lib32?]
 		>=media-libs/libvorbis-1.2.1_rc1[lib32?] )
 	alsa? ( media-libs/alsa-lib[lib32?] )
-	sqlite? ( >=dev-db/sqlite-3.2 )"
+	sqlite? ( >=dev-db/sqlite-3.2[lib32?] )"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
