@@ -34,7 +34,7 @@ QT4_EXTRACT_DIRECTORIES="${QT4_TARGET_DIRECTORIES}
 	include/
 	tools/"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# patch errors in arthurwidgets and plugandpaint
 	epatch "${FILESDIR}"/qt-demo-4.5.0-fixes.patch
 

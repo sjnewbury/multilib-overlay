@@ -72,7 +72,7 @@ src_unpack() {
 	qt4-build_src_unpack
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	qt4-build_src_prepare
 
 	# Don't build plugins this go around, because they depend on qt3support lib

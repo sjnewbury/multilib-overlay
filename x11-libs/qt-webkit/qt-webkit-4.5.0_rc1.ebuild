@@ -24,7 +24,7 @@ tools/"
 QCONFIG_ADD="webkit"
 QCONFIG_DEFINE="QT_WEBKIT"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	[[ $(tc-arch) == "ppc64" ]] && append-flags -mminimal-toc #241900
 	qt4-build_src_prepare
 }
