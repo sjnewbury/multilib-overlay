@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-core/qt-core-4.4.2-r2.ebuild,v 1.2 2009/02/25 09:17:26 hwoarang Exp $
 
-EAPI="1"
+EAPI="2"
 inherit qt4-build multilib-native
 
 DESCRIPTION="The Qt toolkit is a comprehensive C++ application development framework."
@@ -114,7 +114,7 @@ src_unpack() {
 	done
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	unset QMAKESPEC
 	local myconf
 
@@ -135,11 +135,22 @@ multilib-native_src_compile_internal() {
 		myconf="${myconf} -nomake docs"
 	fi
 
+	qt4-build_src_configure
+}
+
+multilib-native_src_compile_internal() {
+	# bug #259736
+	unset QMAKESPEC
 	qt4-build_src_compile
 }
 
 multilib-native_src_install_internal() {
-	dobin "${S}"/bin/{qmake,moc,rcc,uic} || die "dobin failed."
+	if use lib32 && ( [[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]] ); then
+		exeinto /usr/libexec/qt/32
+	else
+		exeinto /usr/bin
+	fi
+	doexe "${S}"/bin/{qmake,moc,rcc,uic} || die "doexe failed."
 
 	install_directories src/{corelib,xml,network,plugins/codecs}
 

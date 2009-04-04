@@ -156,12 +156,11 @@ multilib-native_src_compile_internal() {
 
 multilib-native_src_install_internal() {
 	if use lib32 && ( [[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]] ); then
-		insinto /usr/libexec/qt/32
+		exeinto /usr/libexec/qt/32
 	else
-		insinto /usr/bin
+		exeinto /usr/bin
 	fi
-	insopts -o root -g root -m 0755
-	doins "${S}"/bin/{qmake,moc,rcc,uic} || die "doins failed."
+	doexe "${S}"/bin/{qmake,moc,rcc,uic} || die "doexe failed."
 
 	install_directories src/{corelib,xml,network,plugins/codecs}
 
