@@ -20,8 +20,8 @@ RESTRICT="test"
 
 RDEPEND="media-libs/fontconfig[lib32?]
 	>=media-libs/freetype-2.1.9[lib32?]
-	sys-libs/zlib
-	media-libs/libpng
+	sys-libs/zlib[lib32?]
+	media-libs/libpng[lib32?]
 	>=x11-libs/pixman-0.12.0[lib32?]
 	directfb? ( >=dev-libs/DirectFB-0.9.24 )
 	glitz? ( >=media-libs/glitz-0.5.1[lib32?] )
