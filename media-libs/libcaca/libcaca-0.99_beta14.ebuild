@@ -21,11 +21,12 @@ RDEPEND="ncurses? ( >=sys-libs/ncurses-5.3[lib32?] )
 	slang? ( >=sys-libs/slang-1.4[lib32?] )
 	imlib? ( media-libs/imlib2[lib32?] )
 	X? ( x11-libs/libX11 x11-libs/libXt[lib32?] )
-	opengl? ( virtual/opengl
+	opengl? ( virtual/opengl[lib32?]
 		  media-libs/freeglut[lib32?]
 		  media-libs/ftgl[lib32?] )
 	mono? ( dev-lang/mono )
-	ruby? ( virtual/ruby )"
+	ruby? ( virtual/ruby )
+	x11-libs/pango[lib32?]"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	doc? ( app-doc/doxygen
