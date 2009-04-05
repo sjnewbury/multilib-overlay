@@ -53,8 +53,6 @@ S="${WORKDIR}/qt-x11-${SRCTYPE}-${PV}"
 
 QTBASE="/usr/qt/3"
 
-libdir="$(get_libdir)"
-
 pkg_setup() {
 	if use immqt && use immqt-bc ; then
 		ewarn
@@ -168,8 +166,8 @@ multilib-native_src_prepare_internal() {
 		   -e "s:\<QMAKE_LINK_SHLIB\>.*=.*:QMAKE_LINK_SHLIB=$(tc-getCXX):" \
 		"${S}"/mkspecs/${PLATFORM}/qmake.conf || die
 
-	if [ ${libdir} != "lib" ] ; then
-		sed -i -e "s:/lib$:/${libdir}:" \
+	if [ $(get_libdir) != "lib" ] ; then
+		sed -i -e "s:/lib$:/$(get_libdir):" \
 			"${S}"/mkspecs/${PLATFORM}/qmake.conf || die
 	fi
 
@@ -186,12 +184,12 @@ multilib-native_src_configure_internal() {
 	addwrite "${QTBASE}/etc/settings"
 	addwrite "${HOME}/.qt"
 
-	[ "${libdir}" != "lib" ] && myconf="${myconf} -L/usr/${libdir}"
+	[ "$(get_libdir)" != "lib" ] && myconf="${myconf} -L/usr/$(get_libdir)"
 
 	# unixODBC support is now a PDEPEND on dev-db/qt-unixODBC; see bug 14178.
 	use nas		&& myconf+=" -system-nas-sound"
 	use nis		&& myconf+=" -nis" || myconf+=" -no-nis"
-	use mysql	&& myconf+=" -plugin-sql-mysql -I/usr/include/mysql -L/usr/${libdir}/mysql" || myconf+=" -no-sql-mysql"
+	use mysql	&& myconf+=" -plugin-sql-mysql -I/usr/include/mysql -L/usr/$(get_libdir)/mysql" || myconf+=" -no-sql-mysql"
 	use postgres	&& myconf+=" -plugin-sql-psql -I/usr/include/postgresql/server -I/usr/include/postgresql/pgsql -I/usr/include/postgresql/pgsql/server" || myconf+=" -no-sql-psql"
 	use firebird    && myconf+=" -plugin-sql-ibase -I/opt/firebird/include" || myconf+=" -no-sql-ibase"
 	use sqlite	&& myconf+=" -plugin-sql-sqlite" || myconf+=" -no-sql-sqlite"
@@ -213,7 +211,7 @@ multilib-native_src_configure_internal() {
 	./configure -sm -thread -stl -system-libjpeg -verbose -largefile \
 		-qt-imgfmt-{jpeg,mng,png} -tablet -system-libmng \
 		-system-libpng -xft -platform ${PLATFORM} -xplatform \
-		${PLATFORM} -xrender -prefix ${QTBASE} -libdir ${QTBASE}/${libdir} \
+		${PLATFORM} -xrender -prefix ${QTBASE} -libdir ${QTBASE}/$(get_libdir) \
 		-fast -no-sql-odbc ${myconf} -dlopen-opengl || die
 }
 
@@ -252,7 +250,7 @@ multilib-native_src_install_internal() {
 	dolib.so lib/lib{editor,qassistantclient,designercore}.a
 	dolib.so lib/libqt-mt.la
 	dolib.so lib/libqt-mt.so.${PV/b} lib/libqui.so.1.0.0
-	cd "${D}"/${QTBASE}/${libdir}
+	cd "${D}"/${QTBASE}/$(get_libdir)
 
 	for x in libqui.so ; do
 		ln -s $x.1.0.0 $x.1.0
@@ -290,11 +288,11 @@ multilib-native_src_install_internal() {
 
 	# prl files
 	sed -i -e "s:${S}:${QTBASE}:g" "${S}"/lib/*.prl
-	insinto ${QTBASE}/${libdir}
+	insinto ${QTBASE}/$(get_libdir)
 	doins "${S}"/lib/*.prl
 
 	# pkg-config file
-	insinto ${QTBASE}/${libdir}/pkgconfig
+	insinto ${QTBASE}/$(get_libdir)/pkgconfig
 	doins "${S}"/lib/*.pc
 
 	# List all the multilib libdirs
@@ -310,7 +308,7 @@ ROOTPATH=${QTBASE}/bin
 LDPATH=${libdirs:1}
 QMAKESPEC=${PLATFORM}
 MANPATH=${QTBASE}/doc/man
-PKG_CONFIG_PATH=${QTBASE}/${libdir}/pkgconfig
+PKG_CONFIG_PATH=${QTBASE}/$(get_libdir)/pkgconfig
 EOF
 
 	cat <<EOF > "${T}"/50qtdir3
