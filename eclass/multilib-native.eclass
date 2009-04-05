@@ -39,6 +39,7 @@ EMULTILIB_OCACA_CONFIG=""
 EMULTILIB_OAALIB_CONFIG=""
 EMULTILIB_OPERLBIN=""
 EMULTILIB_Omyconf=""
+EMULTILIB_OKDE_S=""
 
 # @FUNCTION: multilib-native_pkg_setup
 # @USAGE:
@@ -159,6 +160,7 @@ multilib-native_src_generic_sub() {
 			EMULTILIB_OCACA_CONFIG="${CACA_CONFIG}"
 			EMULTILIB_OAALIB_CONFIG="${AALIB_CONFIG}"
 			EMULTILIB_OPERLBIN="${PERLBIN}"
+			EMULTILIB_OKDE_S="${KDE_S}"
 
 			# We need to prevent myconf from accumulating through
 			# each pass, but respect initial value
@@ -245,6 +247,7 @@ multilib-native_src_generic_sub() {
 		
 		[[ -d "${WORKDIR}/builddir.${ABI}" ]] && cd ${WORKDIR}/builddir.${ABI}
 		S=${WORKDIR}/builddir.${ABI}
+		KDE_S=${S}
 
 		export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 	fi
@@ -266,6 +269,7 @@ multilib-native_src_generic_sub() {
 			AALIB_CONFIG="${EMULTILIB_OAALIB_CONFIG}"
 			PERLBIN="${EMULTILIB_OPERLBIN}"
 			myconf="${EMULTILIB_Omyconf}"
+			KDE_S="${EMULTILIB_OKDE_S}"
 
 			# handle old-style (non-PKG-CONFIG) *-config scripts
 			if [[ ${1} == "src_install" ]] && \
