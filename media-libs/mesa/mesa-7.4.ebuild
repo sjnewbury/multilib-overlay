@@ -8,9 +8,9 @@ EGIT_REPO_URI="git://anongit.freedesktop.org/mesa/mesa"
 
 if [[ ${PV} = 9999* ]]; then
 	git_eclass="git"
-	drm_depend=">=x11-libs/libdrm-9999"
+	drm_depend=">=x11-libs/libdrm-9999[lib32?]"
 else
-	drm_depend=">=x11-libs/libdrm-2.4.3"
+	drm_depend=">=x11-libs/libdrm-2.4.3[lib32?]"
 fi
 
 inherit autotools multilib flag-o-matic ${git_eclass} portability multilib-native
