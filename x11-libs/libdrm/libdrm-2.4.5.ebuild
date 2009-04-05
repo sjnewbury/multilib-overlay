@@ -18,7 +18,9 @@ IUSE=""
 RESTRICT="test" # see bug #236845
 
 RDEPEND="dev-libs/libpthread-stubs"
-DEPEND="${RDEPEND}"
+DEPEND="${RDEPEND}
+	x11-libs/cairo[lib32?]
+"
 
 # FIXME, we should try to see how we can fit the --enable-udev configure flag
 
