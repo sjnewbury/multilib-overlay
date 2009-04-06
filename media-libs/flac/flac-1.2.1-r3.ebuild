@@ -4,6 +4,8 @@
 
 EAPI="2"
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit autotools eutils base multilib-native
 
 DESCRIPTION="free lossless audio encoder and decoder"

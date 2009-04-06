@@ -13,6 +13,8 @@ else
 	drm_depend=">=x11-libs/libdrm-2.4.3[lib32?]"
 fi
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit autotools multilib flag-o-matic ${git_eclass} portability multilib-native
 
 OPENGL_DIR="xorg-x11"

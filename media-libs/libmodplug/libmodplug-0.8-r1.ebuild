@@ -5,6 +5,7 @@
 EAPI="2"
 WANT_AUTOCONF="latest"
 WANT_AUTOMAKE="latest"
+MULTILIB_IN_SOURCE_BUILD="yes"
 
 inherit eutils autotools multilib-native
 

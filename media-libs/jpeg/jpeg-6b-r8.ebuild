@@ -4,6 +4,8 @@
 
 EAPI="2"
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit libtool eutils toolchain-funcs multilib-native
 
 PATCH_VER="1.6"

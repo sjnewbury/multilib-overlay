@@ -106,6 +106,15 @@ multilib-native_pkg_postrm() {
 	multilib-native_src_generic pkg_postrm
 }
 
+# @FUNCTION: _check_build_dir
+# @DESCRIPTION: This function overrides the function of the same name
+#		in cmake-utils.eclass.  We handle the build dir ourselves. 
+# Determine using IN or OUT source build
+_check_build_dir() {
+	# in/out source build
+	echo ">>> Working in BUILD_DIR: \"$CMAKE_BUILD_DIR\""
+}
+
 # @FUNCTION: multilib-native_src_generic
 # @USAGE:
 # @DESCRIPTION:
@@ -233,8 +242,6 @@ multilib-native_src_generic_sub() {
 				export QMAKESPEC CUPS_CONFIG GNUTLS_CONFIG CURL_CONFIG 
 				export CACA_CONFIG AALIB_CONFIG PERLBIN
 			fi
-			CMAKE_IN_SOURCE_BUILD=yes
-
 		fi
 
 		#Nice way to avoid the "cannot run test program while cross compiling" :)
@@ -247,18 +254,30 @@ multilib-native_src_generic_sub() {
 		QTPCDIR=/usr/$(get_libdir)/pkgconfig
 		QTPLUGINDIR=${QTLIBDIR}/plugins
 
-		if [[ ! -d "${WORKDIR}/builddir.${ABI}" ]] && [[ -z "$(echo ${1}|grep pkg)" ]]; then
-			einfo "Copying source tree to ${WORKDIR}/builddir.${ABI}"
-			cp -al ${S} ${WORKDIR}/builddir.${ABI}
+		# Prepare build dir
+		if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && [[ -z "$(echo ${1}|grep pkg)" ]]; then
+			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || [[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]; then
+				einfo "Copying source tree to ${WORKDIR}/${PN}_build_${ABI}"
+				cp -al ${S} ${WORKDIR}/${PN}_build_${ABI}
+				# Workaround case where ${S} points to a src subdir of build tree and doc is
+				# is also in the package root (fixes doc install in some packages)
+				[[ -d "${S}/../doc" && ! -d "${WORKDIR}/doc" ]] && cp -al ${S}/../doc ${WORKDIR}/doc
 
-			# Workaround case where ${S} points to a src subdir of build tree and doc is
-			# is also in the package root (fixes doc install in some packages)
-			[[ -d "${S}/../doc" && ! -d "${WORKDIR}/doc" ]] && cp -al ${S}/../doc ${WORKDIR}/doc
+			else
+				mkdir -p  ${WORKDIR}/${PN}_build_${ABI}
+			fi
+
 		fi
 		
-		[[ -d "${WORKDIR}/builddir.${ABI}" ]] && cd ${WORKDIR}/builddir.${ABI}
-		S=${WORKDIR}/builddir.${ABI}
-		KDE_S=${S}
+		[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]] && \
+			ECONF_SOURCE="${S}"
+		[[ -z "${CMAKE_IN_SOURCE_BUILD}" ]] && \
+			S=${WORKDIR}/${PN}_build_${ABI}
+		CMAKE_BUILD_DIR="${S}"
+		KDE_S="${S}"
+
+		[[ -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
+			cd ${WORKDIR}/${PN}_build_${ABI}
 
 		export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 	fi

@@ -4,6 +4,8 @@
 
 EAPI="2"
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils libtool autotools multilib-native
 
 MY_P=${P/_pre/pre}
