@@ -323,15 +323,15 @@ multilib-native_src_generic_sub() {
 			KDE_S="${EMULTILIB_OKDE_S}"
 			mycmakeargs="${EMULTILIB_Omycmakeargs}"
 
-			# handle old-style (non-PKG-CONFIG) *-config scripts
+			# handle old-style (non-PKG-CONFIG) *-config* scripts
 			if [[ ${1} == "src_install" ]] && \
-					 ( [[ ${ABI} == "x86" ]] || [[ ${ABI} == "ppc32" ]] ); then
-				[[ -x "${D}/usr/bin/${PN}-config" ]] && \
-						mv "${D}/usr/bin/${PN}-config" \
-						"${D}/usr/bin/${PN}-config-${ABI}"
-				[[ -x "${D}/usr/bin/lib${PN}-config" ]] && \
-						mv "${D}/usr/bin/lib${PN}-config" \
-						"${D}/usr/bin/lib${PN}-config-${ABI}"
+					 ! is_final_abi; then
+				local _config
+				for _config in $(find ${D}/usr/bin \
+						-executable \
+						-name '*${PN}-config*'); do
+					mv ${_config} ${_config}-${ABI}
+				done
 			fi
 		fi
 	fi
