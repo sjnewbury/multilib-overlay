@@ -296,8 +296,9 @@ multilib-native_src_generic_sub() {
 		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}"
 		KDE_S="${S}"
 
-		[[ -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
-			cd ${WORKDIR}/${PN}_build_${ABI}
+		#[[ -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
+		#	cd ${WORKDIR}/${PN}_build_${ABI}
+		cd ${S}
 
 		export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 	fi
