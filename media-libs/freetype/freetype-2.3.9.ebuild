@@ -83,7 +83,7 @@ multilib-native_src_compile_internal() {
 	append-flags -fno-strict-aliasing
 
 	type -P gmake &> /dev/null && export GNUMAKE=gmake
-	econf || die
+	econf
 	emake || die "emake failed"
 
 	if use utils; then
