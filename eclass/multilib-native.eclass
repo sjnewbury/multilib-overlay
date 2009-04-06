@@ -259,14 +259,28 @@ multilib-native_src_generic_sub() {
 			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || [[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]; then
 				einfo "Copying source tree to ${WORKDIR}/${PN}_build_${ABI}"
 				cp -al ${S} ${WORKDIR}/${PN}_build_${ABI}
+
 				# Workaround case where ${S} points to a src subdir of build tree and doc is
 				# is also in the package root (fixes doc install in some packages)
-				[[ -d "${S}/../doc" && ! -d "${WORKDIR}/doc" ]] && cp -al ${S}/../doc ${WORKDIR}/doc
+				[[ -d "${S}/../doc" && ! -d "${WORKDIR}/doc" ]] && \
+					cp -al ${S}/../doc ${WORKDIR}/doc
+
 
 			else
+				# Create build dir
 				mkdir -p  ${WORKDIR}/${PN}_build_${ABI}
-			fi
+				# Populate build dir with FILES in package
+				# root: This is a bit of a hack, but it ensures
+				# doc files are available for install phase
+				cp -al $(find ${S} -maxdepth 1 -type f \
+					! -executable | \
+					grep -v -e ".*\.in\|.*\.am\|config.*" ) \
+					${WORKDIR}/${PN}_build_${ABI}
+				# Ensures doc dir is present for out-of-source-tree builds (needed?)
+				[[ -d "${S}/doc" ]] && \
+					cp -al ${S}/doc ${WORKDIR}/${PN}_build_${ABI}/doc
 
+			fi
 		fi
 		
 		[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]] && \
