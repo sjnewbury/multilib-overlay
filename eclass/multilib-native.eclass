@@ -40,6 +40,7 @@ EMULTILIB_OAALIB_CONFIG=""
 EMULTILIB_OPERLBIN=""
 EMULTILIB_Omyconf=""
 EMULTILIB_OKDE_S=""
+EMULTILIB_Omycmakeargs=""
 
 # @FUNCTION: multilib-native_pkg_setup
 # @USAGE:
@@ -161,7 +162,7 @@ multilib-native_src_generic_sub() {
 			EMULTILIB_OAALIB_CONFIG="${AALIB_CONFIG}"
 			EMULTILIB_OPERLBIN="${PERLBIN}"
 			EMULTILIB_OKDE_S="${KDE_S}"
-
+			EMULTILIB_Omycmakeargs="${mycmakeargs}"
 			# We need to prevent myconf from accumulating through
 			# each pass, but respect initial value
 			EMULTILIB_Omyconf="${myconf}"
@@ -174,6 +175,8 @@ multilib-native_src_generic_sub() {
 					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32 -L/usr/lib32"
 					QMAKESPEC="linux-g++-32"
 					QTBINDIR="/usr/libexec/qt/32"
+					mycmakeargs="${EMULTILIB_Omycmakeargs} \
+						-DQT_QMAKE_EXECUTABLE:FILEPATH=${QTBINDIR}/qmake"
 					if [[ -z ${CCACHE_DIR} ]] ; then 
 						CCACHE_DIR="/var/tmp/ccache"
 					else
@@ -192,6 +195,8 @@ multilib-native_src_generic_sub() {
 					LDFLAGS="${EMULTILIB_OLDFLAGS} -m64"
 					QMAKESPEC="linux-g++-64"
 					QTBINDIR="/usr/bin"
+					mycmakeargs="${EMULTILIB_Omycmakeargs} \
+						-DQT_QMAKE_EXECUTABLE:FILEPATH=${QTBINDIR}/qmake"
 					if [[ -z ${CCACHE_DIR} ]] ; then 
 						CCACHE_DIR="/var/tmp/ccache"
 					else
@@ -204,6 +209,8 @@ multilib-native_src_generic_sub() {
 					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32 -L/usr/lib32"
 					QMAKESPEC="linux-g++-32"
 					QTBINDIR="/usr/libexec/qt/32"
+					mycmakeargs="${EMULTILIB_Omycmakeargs} \
+						-DQT_QMAKE_EXECUTABLE:FILEPATH=${QTBINDIR}/qmake"
 					CUPS_CONFIG=/usr/bin/cups-config-${ABI}
 					GNUTLS_CONFIG=/usr/bin/gnutls-config-${ABI}
 					CURL_CONFIG=/usr/bin/curl-config-${ABI}
@@ -217,6 +224,8 @@ multilib-native_src_generic_sub() {
 					LDFLAGS="${EMULTILIB_OLDFLAGS} -m64"
 					QMAKESPEC="linux-g++-64"
 					QTBINDIR="/usr/bin"
+					mycmakeargs="${EMULTILIB_Omycmakeargs} \
+						-DQT_QMAKE_EXECUTABLE:FILEPATH=${QTBINDIR}/qmake"
 					;;
 					*)   die "Unknown ABI"
 					;;
@@ -224,6 +233,8 @@ multilib-native_src_generic_sub() {
 				export QMAKESPEC CUPS_CONFIG GNUTLS_CONFIG CURL_CONFIG 
 				export CACA_CONFIG AALIB_CONFIG PERLBIN
 			fi
+			CMAKE_IN_SOURCE_BUILD=yes
+
 		fi
 
 		#Nice way to avoid the "cannot run test program while cross compiling" :)
@@ -270,6 +281,7 @@ multilib-native_src_generic_sub() {
 			PERLBIN="${EMULTILIB_OPERLBIN}"
 			myconf="${EMULTILIB_Omyconf}"
 			KDE_S="${EMULTILIB_OKDE_S}"
+			mycmakeargs="${EMULTILIB_Omycmakeargs}"
 
 			# handle old-style (non-PKG-CONFIG) *-config scripts
 			if [[ ${1} == "src_install" ]] && \

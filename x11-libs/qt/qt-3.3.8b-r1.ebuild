@@ -360,6 +360,8 @@ EOF
 	if use immqt || use immqt-bc ; then
 		dodoc "${S}"/README.immodule
 	fi
+
+	prep_ml_includes ${QTBASE}/include
 }
 
 pkg_postinst() {

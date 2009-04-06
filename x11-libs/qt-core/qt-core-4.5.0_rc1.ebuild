@@ -190,6 +190,11 @@ multilib-native_src_install_internal() {
 	mv "${D}"/${QTDATADIR}/mkspecs/qconfig.pri "${D}${QTDATADIR}"/mkspecs/gentoo || \
 		die "Failed to move qconfig.pri"
 
+        if [[ $(number_abis) -gt 1 ]] ; then
+		mv "${D}"/${QTDATADIR}/mkspecs "${D}"/${QTDATADIR}/mkspecss-${ABI}
+		is_final_abi && ln -s "${D}"/${QTDATADIR}/mkspecs-${ABI} "${D}"/${QTDATADIR}/mkspecs
+	fi			
+
 	sed -i -e '2a#include <Gentoo/gentoo-qconfig.h>\n' \
 		"${D}${QTHEADERDIR}"/QtCore/qconfig.h \
 		"${D}${QTHEADERDIR}"/Qt/qconfig.h || die "sed for qconfig.h failed."
@@ -206,6 +211,8 @@ qatomic_macosx.h,\
 qatomic_windows.h,\
 qatomic_windowsce.h,\
 qt_windows.h}
+
+	prep_ml_includes
 
 	keepdir "${QTSYSCONFDIR}"
 }
