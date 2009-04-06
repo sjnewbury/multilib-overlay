@@ -260,12 +260,12 @@ multilib-native_src_generic_sub() {
 			else
 				# Create build dir
 				mkdir -p  ${WORKDIR}/${PN}_build_${ABI}
-				# Populate build dir with FILES in package
+				# Populate build dir with filtered FILES from source
 				# root: This is a bit of a hack, but it ensures
 				# doc files are available for install phase
 				cp -al $(find ${S} -maxdepth 1 -type f \
 					! -executable | \
-					grep -v -e ".*\.in\|.*\.am\|config.*" ) \
+					grep -v -e ".*\.in\|.*\.am\|.*config.*\|.*\.h\|.*\.c.*" ) \
 					${WORKDIR}/${PN}_build_${ABI}
 				# Ensures doc dir is present for out-of-source-tree builds (needed?)
 				[[ -d "${S}/doc" ]] && \
@@ -284,12 +284,9 @@ multilib-native_src_generic_sub() {
 				S=${WORKDIR}/${PN}_build_${ABI}
 			fi
 		else
-			if [[ "$1" != "src_prepare" ]]; then
+			if !([[ "$1" == "src_prepare" ]] && \
+					[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]]); then
 				S=${WORKDIR}/${PN}_build_${ABI}
-			else
-				if [[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]; then
-					S=${WORKDIR}/${PN}_build_${ABI}
-				fi
 			fi
 		fi
 
@@ -337,49 +334,67 @@ multilib-native_src_generic_sub() {
 }
 
 # @FUNCTION: multilib-native_src_prepare_internal
-# @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_configure.
+# @USAGE: override this function if you want to use a custom src_configure.
 # @DESCRIPTION:
 multilib-native_src_prepare_internal() {
 	multilib-native_check_inherited_funcs src_prepare
 }
 
 # @FUNCTION: multilib-native_src_configure_internal
-# @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_configure.
+# @USAGE: override this function if you want to use a custom src_configure.
 # @DESCRIPTION:
 multilib-native_src_configure_internal() {
 	multilib-native_check_inherited_funcs src_configure
 }
 
 # @FUNCTION: multilib-native_src_compile_internal
-# @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_compile.
+# @USAGE: override this function if you want to use a custom src_compile.
 # @DESCRIPTION:
 multilib-native_src_compile_internal() {
 	multilib-native_check_inherited_funcs src_compile
 }
 
 # @FUNCTION: multilib-native_src_install_internal
-# @USAGE: override this function if you arent using x-modules eclass and want to use a custom src_install
+# @USAGE: override this function if you want to use a custom src_install
 # @DESCRIPTION:
 multilib-native_src_install_internal() {
 	multilib-native_check_inherited_funcs src_install
 }
 
+# @FUNCTION: multilib-native_pkg_setup_internal
+# @USAGE: override this function if you want to use a custom pkg_setup
+# @DESCRIPTION:
 multilib-native_pkg_setup_internal() {
 	multilib-native_check_inherited_funcs pkg_setup
 }
 
+# @FUNCTION: multilib-native_src_unpack_internal
+# @USAGE: override this function if you want to use a custom src_unpack
+# @DESCRIPTION:
 multilib-native_src_unpack_internal() {
 	multilib-native_check_inherited_funcs src_unpack
 }
 
+
+# @FUNCTION: multilib-native_pkg_preinst_internal
+# @USAGE: override this function if you want to use a custom pkg_preinst
+# @DESCRIPTION:
 multilib-native_pkg_preinst_internal() {
 	multilib-native_check_inherited_funcs pkg_preinst
 }
 
+
+# @FUNCTION: multilib-native_pkg_postinst_internal
+# @USAGE: override this function if you want to use a custom pkg_postinst
+# @DESCRIPTION:
 multilib-native_pkg_postinst_internal() {
 	multilib-native_check_inherited_funcs pkg_postinst
 }
 
+
+# @FUNCTION: multilib-native_pkg_postrm_internal
+# @USAGE: override this function if you want to use a custom pkg_postrm
+# @DESCRIPTION:
 multilib-native_pkg_postrm_internal() {
 	multilib-native_check_inherited_funcs pkg_postrm
 }
