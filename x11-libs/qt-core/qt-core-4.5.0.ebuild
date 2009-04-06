@@ -190,9 +190,12 @@ multilib-native_src_install_internal() {
 		die "Failed to move qconfig.pri"
 
         if [[ $(number_abis) -gt 1 ]] ; then
-		mv "${D}"/${QTDATADIR}/mkspecs "${D}"/${QTDATADIR}/mkspecs-${ABI}
-		is_final_abi && ln -s "${D}"/${QTDATADIR}/mkspecs-${ABI} "${D}"/${QTDATADIR}/mkspecs
-	fi			
+		if is_final_abi; then
+			ln -s "${D}"/${QTDATADIR}/mkspecs "${D}"/${QTDATADIR}/mkspecs-${ABI}
+		else
+			mv "${D}"/${QTDATADIR}/mkspecs "${D}"/${QTDATADIR}/mkspecs-${ABI}
+		fi			
+	fi
 
 	sed -i -e '2a#include <Gentoo/gentoo-qconfig.h>\n' \
 		"${D}${QTHEADERDIR}"/QtCore/qconfig.h \
