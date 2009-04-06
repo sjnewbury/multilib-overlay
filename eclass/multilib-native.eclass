@@ -115,6 +115,35 @@ _check_build_dir() {
 	echo ">>> Working in BUILD_DIR: \"$CMAKE_BUILD_DIR\""
 }
 
+# @FUNCTION: _set_platform_env
+# @DESCRIPTION: Set environment up for 32bit or 64bit ABI
+_set_platform_env() {
+	CFLAGS="${EMULTILIB_OCFLAGS} -m$1"
+	CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m$1"
+	LDFLAGS="${EMULTILIB_OLDFLAGS} -m$1 -L/usr/lib$1"
+	QMAKESPEC="linux-g++-$1"
+	if [[ $1 == "32" ]]; then
+		QTBINDIR="/usr/libexec/qt/$1"
+	else
+		QTBINDIR="/usr/bin"
+	fi
+	mycmakeargs="${EMULTILIB_Omycmakeargs} \
+		-DQT_QMAKE_EXECUTABLE:FILEPATH=${QTBINDIR}/qmake"
+	if [[ -z ${CCACHE_DIR} ]] ; then 
+		CCACHE_DIR="/var/tmp/ccache"
+	else
+		CCACHE_DIR="${CCACHE_DIR}$1"
+	fi
+	CUPS_CONFIG=/usr/bin/cups-config-${ABI}
+	GNUTLS_CONFIG=/usr/bin/gnutls-config-${ABI}
+	CURL_CONFIG=/usr/bin/curl-config-${ABI}
+	CACA_CONFIG=/usr/bin/caca-config-${ABI}
+	AALIB_CONFIG=/usr/bin/aalib-config-${ABI}
+	PERLBIN=/usr/bin/perl-${ABI}
+}
+
+
+
 # @FUNCTION: multilib-native_src_generic
 # @USAGE:
 # @DESCRIPTION:
@@ -185,62 +214,16 @@ multilib-native_src_generic_sub() {
 			if use amd64 || use ppc64 ; then
 				case ${ABI} in
 					x86)    CHOST="i686-${EMULTILIB_OCHOST#*-}"
-					CFLAGS="${EMULTILIB_OCFLAGS} -m32"
-					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m32"
-					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32 -L/usr/lib32"
-					QMAKESPEC="linux-g++-32"
-					QTBINDIR="/usr/libexec/qt/32"
-					mycmakeargs="${EMULTILIB_Omycmakeargs} \
-						-DQT_QMAKE_EXECUTABLE:FILEPATH=${QTBINDIR}/qmake"
-					if [[ -z ${CCACHE_DIR} ]] ; then 
-						CCACHE_DIR="/var/tmp/ccache"
-					else
-						CCACHE_DIR="${CCACHE_DIR}32"
-					fi
-					CUPS_CONFIG=/usr/bin/cups-config-${ABI}
-					GNUTLS_CONFIG=/usr/bin/gnutls-config-${ABI}
-					CURL_CONFIG=/usr/bin/curl-config-${ABI}
-					CACA_CONFIG=/usr/bin/caca-config-${ABI}
-					AALIB_CONFIG=/usr/bin/aalib-config-${ABI}
-					PERLBIN=/usr/bin/perl-${ABI}
+						_set_platform_env 32
 					;;
 					amd64)  CHOST="x86_64-${EMULTILIB_OCHOST#*-}"
-					CFLAGS="${EMULTILIB_OCFLAGS} -m64"
-					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m64"
-					LDFLAGS="${EMULTILIB_OLDFLAGS} -m64"
-					QMAKESPEC="linux-g++-64"
-					QTBINDIR="/usr/bin"
-					mycmakeargs="${EMULTILIB_Omycmakeargs} \
-						-DQT_QMAKE_EXECUTABLE:FILEPATH=${QTBINDIR}/qmake"
-					if [[ -z ${CCACHE_DIR} ]] ; then 
-						CCACHE_DIR="/var/tmp/ccache"
-					else
-						CCACHE_DIR="${CCACHE_DIR}64"
-					fi
+						_set_platform_env 64
 					;;
 					ppc)   CHOST="powerpc-${EMULTILIB_OCHOST#*-}"
-					CFLAGS="${EMULTILIB_OCFLAGS} -m32"
-					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m32"
-					LDFLAGS="${EMULTILIB_OLDFLAGS} -m32 -L/usr/lib32"
-					QMAKESPEC="linux-g++-32"
-					QTBINDIR="/usr/libexec/qt/32"
-					mycmakeargs="${EMULTILIB_Omycmakeargs} \
-						-DQT_QMAKE_EXECUTABLE:FILEPATH=${QTBINDIR}/qmake"
-					CUPS_CONFIG=/usr/bin/cups-config-${ABI}
-					GNUTLS_CONFIG=/usr/bin/gnutls-config-${ABI}
-					CURL_CONFIG=/usr/bin/curl-config-${ABI}
-					CACA_CONFIG=/usr/bin/caca-config-${ABI}
-					AALIB_CONFIG=/usr/bin/aalib-config-${ABI}
-					PERLBIN=/usr/bin/perl-${ABI}
+						_set_platform_env 32
 					;;
 					ppc64)   CHOST="powerpc64-${EMULTILIB_OCHOST#*-}"
-					CFLAGS="${EMULTILIB_OCFLAGS} -m64"
-					CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m64"
-					LDFLAGS="${EMULTILIB_OLDFLAGS} -m64"
-					QMAKESPEC="linux-g++-64"
-					QTBINDIR="/usr/bin"
-					mycmakeargs="${EMULTILIB_Omycmakeargs} \
-						-DQT_QMAKE_EXECUTABLE:FILEPATH=${QTBINDIR}/qmake"
+						_set_platform_env 64
 					;;
 					*)   die "Unknown ABI"
 					;;
