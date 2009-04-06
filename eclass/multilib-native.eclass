@@ -150,6 +150,12 @@ multilib-native_src_generic() {
 # @DESCRIPTION:
 multilib-native_src_generic_sub() {
 	if [[ -n ${EMULTILIB_PKG} ]]; then
+		if [[ "$1" == "src_prepare" ]] && ! is_final_abi; then
+			if !([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
+			[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]); then
+				return
+			fi
+		fi
 		export CC="$(tc-getCC)"
 		export CXX="$(tc-getCXX)"
 
@@ -255,8 +261,10 @@ multilib-native_src_generic_sub() {
 		QTPLUGINDIR=${QTLIBDIR}/plugins
 
 		# Prepare build dir
-		if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && [[ -z "$(echo ${1}|grep pkg)" ]]; then
-			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || [[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]; then
+		if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
+				[[ -z "$(echo ${1}|grep pkg)" ]]; then
+			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
+					[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]; then
 				einfo "Copying source tree to ${WORKDIR}/${PN}_build_${ABI}"
 				cp -al ${S} ${WORKDIR}/${PN}_build_${ABI}
 
@@ -285,9 +293,24 @@ multilib-native_src_generic_sub() {
 		
 		[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]] && \
 			ECONF_SOURCE="${S}"
-		[[ -z "${CMAKE_IN_SOURCE_BUILD}" ]] && \
-			S=${WORKDIR}/${PN}_build_${ABI}
-		CMAKE_BUILD_DIR="${S}"
+
+		# S should not be redefined for out-of-source-tree prepare
+		# phase, or at all in the cmake case
+		if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
+			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]]; then
+				S=${WORKDIR}/${PN}_build_${ABI}
+			fi
+		else
+			if [[ "$1" != "src_prepare" ]]; then
+				S=${WORKDIR}/${PN}_build_${ABI}
+			else
+				if [[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]; then
+					S=${WORKDIR}/${PN}_build_${ABI}
+				fi
+			fi
+		fi
+
+		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}"
 		KDE_S="${S}"
 
 		[[ -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
