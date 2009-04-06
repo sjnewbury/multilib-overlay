@@ -269,7 +269,7 @@ multilib-native_src_generic_sub() {
 
 		fi
 		
-		[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]] && \
+		[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]] && \
 			ECONF_SOURCE="${S}"
 		[[ -z "${CMAKE_IN_SOURCE_BUILD}" ]] && \
 			S=${WORKDIR}/${PN}_build_${ABI}
