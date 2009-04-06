@@ -258,18 +258,21 @@ multilib-native_src_generic_sub() {
 
 
 			else
+				local _docdir=""
 				# Create build dir
 				mkdir -p  ${WORKDIR}/${PN}_build_${ABI}
 				# Populate build dir with filtered FILES from source
-				# root: This is a bit of a hack, but it ensures
+				# root and any directories matching *doc*:
+				# This is a bit of a hack, but it ensures
 				# doc files are available for install phase
 				cp -al $(find ${S} -maxdepth 1 -type f \
 					! -executable | \
 					grep -v -e ".*\.in\|.*\.am\|.*config.*\|.*\.h\|.*\.c.*" ) \
 					${WORKDIR}/${PN}_build_${ABI}
-				# Ensures doc dir is present for out-of-source-tree builds (needed?)
-				[[ -d "${S}/doc" ]] && \
-					cp -al ${S}/doc ${WORKDIR}/${PN}_build_${ABI}/doc
+				for _docdir in $(find ${S} -type d -name '*doc*'); do
+					mkdir -p ${_docdir/"${S}"/"${WORKDIR}/${PN}_build_${ABI}"}
+					cp -al ${_docdir}/* ${_docdir/"${S}"/"${WORKDIR}/${PN}_build_${ABI}"}
+				done
 
 			fi
 		fi
