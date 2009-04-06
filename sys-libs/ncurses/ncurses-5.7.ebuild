@@ -4,6 +4,8 @@
 
 EAPI="2"
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils flag-o-matic toolchain-funcs multilib-native
 
 MY_PV=${PV:0:3}
