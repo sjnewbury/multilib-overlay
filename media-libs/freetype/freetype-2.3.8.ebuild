@@ -4,6 +4,8 @@
 
 EAPI="2" 
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils flag-o-matic libtool multilib-native
 
 DESCRIPTION="A high-quality and portable font engine"
