@@ -271,9 +271,14 @@ multilib-native_src_generic_sub() {
 		#
 		if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
 				[[ -z "$(echo ${1}|grep pkg)" ]]; then
-			# get 
+			# Determine whether S = source dir
 			EMULTILIB_partial_S_path=${S/"${WORKDIR}/"}
 			EMULTILIB_source_dir=${EMULTILIB_partial_S_path%%/*}
+
+			# If ${EMULTILIB_source_dir} is empty, then ${S} points
+			# to the top level.
+			[[ -z ${EMULTILIB_source_dir} ]] && \
+				EMULTILIB_source_dir=${EMULTILIB_partial_S_path}
 			EMULTILIB_source_path=${WORKDIR}/${EMULTILIB_source_dir}
 			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 					[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]; then
