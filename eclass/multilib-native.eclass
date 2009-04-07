@@ -325,9 +325,6 @@ multilib-native_src_generic_sub() {
 		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}"
 		KDE_S="${S}"
 
-		#[[ -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
-		#	cd ${WORKDIR}/${PN}_build_${ABI}
-		einfo "Using S=${S}"
 		[[ -d "${S}" ]] && cd ${S}
 
 		export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
