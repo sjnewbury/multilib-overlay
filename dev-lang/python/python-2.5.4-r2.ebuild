@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.1-r1.ebuild,v 1.2 2009/03/26 05:10:31 zmedico Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.5.4-r2.ebuild,v 1.5 2009/03/26 05:10:31 zmedico Exp $
 
 # NOTE about python-portage interactions :
 # - Do not add a pkg_setup() check for a certain version of portage
@@ -24,7 +24,7 @@ S="${WORKDIR}/${MY_P}"
 DESCRIPTION="Python is an interpreted, interactive, object-oriented programming language."
 HOMEPAGE="http://www.python.org/"
 SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
-	mirror://gentoo/python-gentoo-patches-${PV}.tar.bz2"
+		 mirror://gentoo/python-gentoo-patches-${PV}.tar.bz2"
 
 LICENSE="PSF-2.2"
 SLOT="2.5"
@@ -44,7 +44,7 @@ DEPEND=">=app-admin/eselect-python-20080925
 		berkdb? ( >=sys-libs/db-3.1[lib32?] )
 		gdbm? ( sys-libs/gdbm[lib32?] )
 		ssl? ( dev-libs/openssl[lib32?] )
-		doc? ( dev-python/python-docs:2.6 )
+		doc? ( dev-python/python-docs:2.5 )
 		xml? ( dev-libs/expat[lib32?] )
 	)"
 
@@ -57,15 +57,14 @@ PROVIDE="virtual/python"
 multilib-native_src_prepare_internal() {
 	default
 
-        if tc-is-cross-compiler ; then
-                epatch "${FILESDIR}"/python-2.4.4-test-cross.patch \
-                        "${FILESDIR}"/python-2.5-cross-printf.patch
-        else
+	if tc-is-cross-compiler ; then
+		epatch "${FILESDIR}"/python-2.4.4-test-cross.patch \
+			"${FILESDIR}"/python-2.5-cross-printf.patch
+	else
 		rm "${WORKDIR}/${PV}"/*_all_crosscompile.patch
 	fi
 
 	EPATCH_SUFFIX="patch" epatch "${WORKDIR}/${PV}"
-
 	sed -i -e "s:@@GENTOO_LIBDIR@@:$(get_libdir):g" \
 		Lib/distutils/command/install.py \
 		Lib/distutils/sysconfig.py \
@@ -73,9 +72,10 @@ multilib-native_src_prepare_internal() {
 		Makefile.pre.in \
 		Modules/Setup.dist \
 		Modules/getpath.c \
-		setup.py || die "sed failed to replace @@GENTOO_LIBDIR@@"
+		setup.py || die
 
-	# fix os.utime() on hppa. utimes it not supported but unfortunately reported as working - gmsoft (22 May 04)
+	# fix os.utime() on hppa. utimes it not supported but unfortunately reported
+	# as working - gmsoft (22 May 04)
 	# PLEASE LEAVE THIS FIX FOR NEXT VERSIONS AS IT'S A CRITICAL FIX !!!
 	[ "${ARCH}" = "hppa" ] && sed -e 's/utimes //' -i "${S}"/configure
 
@@ -149,7 +149,7 @@ multilib-native_src_configure_internal() {
 		sed -i \
 			-e '/^HOSTPYTHON/s:=.*:=./hostpython:' \
 			-e '/^HOSTPGEN/s:=.*:=./Parser/hostpgen:' \
-			Makefile.pre.in || die "sed failed"
+			Makefile.pre.in || die
 	fi
 
 	# export CXX so it ends up in /usr/lib/python2.x/config/Makefile
@@ -176,12 +176,11 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" altinstall maninstall || die
 
 	mv "${D}"/usr/bin/python${PYVER}-config "${D}"/usr/bin/python-config-${PYVER}
-        if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
+	if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
 		mv "${D}"/usr/bin/python${PYVER} "${D}"/usr/bin/python${PYVER}-${ABI}
 	fi
 
 	# Fix slotted collisions
-	mv "${D}"/usr/bin/2to3 "${D}"/usr/bin/2to3-${PYVER}
 	mv "${D}"/usr/bin/pydoc "${D}"/usr/bin/pydoc${PYVER}
 	mv "${D}"/usr/bin/idle "${D}"/usr/bin/idle${PYVER}
 	mv "${D}"/usr/share/man/man1/python.1 \
@@ -195,9 +194,11 @@ multilib-native_src_install_internal() {
 			/usr/$(get_libdir)/python${PYVER}/config/Makefile
 
 	if use build ; then
-		rm -rf "${D}"/usr/$(get_libdir)/python${PYVER}/{test,encodings,email,lib-tk,bsddb/test}
+		rm -rf \
+			"${D}"/usr/$(get_libdir)/python${PYVER}/{test,encodings,email,lib-tk,bsddb/test}
 	else
-		use elibc_uclibc && rm -rf "${D}"/usr/$(get_libdir)/python${PYVER}/{test,bsddb/test}
+		use elibc_uclibc && rm -rf \
+			"${D}"/usr/$(get_libdir)/python${PYVER}/{test,bsddb/test}
 		use berkdb || rm -rf "${D}"/usr/$(get_libdir)/python${PYVER}/bsddb
 		use tk || rm -rf "${D}"/usr/$(get_libdir)/python${PYVER}/lib-tk
 	fi
@@ -219,22 +220,71 @@ multilib-native_src_install_internal() {
 
 	newinitd "${FILESDIR}/pydoc.init" pydoc-${SLOT}
 	newconfd "${FILESDIR}/pydoc.conf" pydoc-${SLOT}
-
-	# Installs empty directory.
-	rmdir "${D}"/usr/$(get_libdir)/${PN}${PV}/lib-old
 }
 
-multilib-native_pkg_postrm_internal() {
-	eselect python update --ignore 3.0
-	python_mod_cleanup /usr/$(get_libdir)/python${PYVER}
+pkg_postrm() {
+	local mansuffix=$(ecompress --suffix)
+	python_makesym
+	alternatives_auto_makesym "/usr/bin/idle" "idle[0-9].[0-9]"
+	alternatives_auto_makesym "/usr/bin/pydoc" "pydoc[0-9].[0-9]"
+	alternatives_auto_makesym "/usr/bin/python-config" \
+								"python-config-[0-9].[0-9]"
+
+	alternatives_auto_makesym "/usr/share/man/man1/python.1${mansuffix}" \
+								"python[0-9].[0-9].1${mansuffix}"
+
+	python_mod_cleanup /usr/lib/python${PYVER}
+	[[ "$(get_libdir)" == "lib" ]] || \
+		python_mod_cleanup /usr/$(get_libdir)/python${PYVER}
 }
 
-multilib-native_pkg_postinst_internal() {
-	eselect python update --ignore 3.0
-	python_version
+pkg_postinst() {
+	local myroot
+	myroot=$(echo $ROOT | sed 's:/$::')
+	local mansuffix=$(ecompress --suffix)
 
+	python_makesym
+	alternatives_auto_makesym "/usr/bin/idle" "idle[0-9].[0-9]"
+	alternatives_auto_makesym "/usr/bin/pydoc" "pydoc[0-9].[0-9]"
+	alternatives_auto_makesym "/usr/bin/python-config" \
+								"python-config-[0-9].[0-9]"
+
+	alternatives_auto_makesym "/usr/share/man/man1/python.1${mansuffix}" \
+								"python[0-9].[0-9].1${mansuffix}"
+
+	python_mod_optimize
 	python_mod_optimize -x "(site-packages|test)" \
-						/usr/$(get_libdir)/python${PYVER}
+						/usr/lib/python${PYVER}
+	[[ "$(get_libdir)" == "lib" ]] || \
+		python_mod_optimize -x "(site-packages|test)" \
+							/usr/$(get_libdir)/python${PYVER}
+
+	# workaround possible python-upgrade-breaks-portage situation
+	if [ ! -f ${myroot}/usr/lib/portage/pym/portage.py ]; then
+		if [ -f ${myroot}/usr/lib/python2.3/site-packages/portage.py ]; then
+			einfo "Working around possible python-portage upgrade breakage"
+			mkdir -p ${myroot}/usr/lib/portage/pym
+			cp \
+			${myroot}/usr/lib/python2.4/site-packages/{portage,xpak,output,cvstree,getbinpkg,emergehelp,dispatch_conf}.py \
+				${myroot}/usr/lib/portage/pym
+			python_mod_optimize /usr/lib/portage/pym
+		fi
+	fi
+
+	echo
+	ewarn
+	ewarn "If you have just upgraded from an older version of python you will"
+	ewarn "need to run:"
+	ewarn
+	ewarn "/usr/sbin/python-updater"
+	ewarn
+	ewarn "This will automatically rebuild all the python dependent modules"
+	ewarn "to run with python-${PYVER}."
+	ewarn
+	ewarn "Your original Python is still installed and can be accessed via"
+	ewarn "/usr/bin/python2.x."
+	ewarn
+	ebeep 5
 }
 
 src_test() {
@@ -244,13 +294,12 @@ src_test() {
 		return
 	fi
 
-	# Byte compiling should be enabled here.
-	# Otherwise test_import fails.
+	# Disabling byte compiling breaks test_import
 	python_enable_pyc
 
 	#skip all tests that fail during emerge but pass without emerge:
 	#(See bug# 67970)
-	local skip_tests="distutils global httpservers mimetools minidom mmap posix pyexpat sax strptime subprocess syntax tcl time urllib urllib2 webbrowser xml_etree"
+	local skip_tests="distutils global mimetools minidom mmap posix pyexpat sax strptime subprocess syntax tcl time urllib urllib2 webbrowser xml_etree"
 
 	# test_pow fails on alpha.
 	# http://bugs.python.org/issue756093
