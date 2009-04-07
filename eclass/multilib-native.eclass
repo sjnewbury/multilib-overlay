@@ -141,7 +141,7 @@ _set_platform_env() {
 	pyver=$(eselect python show)
 
 	if ! is_final_abi; then
-		PYTHON=/usr/bin/python${pyver}-${ABI}
+		PYTHON=/usr/bin/${pyver}-${ABI}
 		PYTHON_CONFIG=/usr/bin/python-config-${pyver/python}-${ABI}
 		CUPS_CONFIG=/usr/bin/cups-config-${ABI}
 		GNUTLS_CONFIG=/usr/bin/gnutls-config-${ABI}
