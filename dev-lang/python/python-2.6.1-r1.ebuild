@@ -9,6 +9,8 @@
 
 EAPI=2
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils autotools flag-o-matic python versionator toolchain-funcs libtool multilib-native
 
 # we need this so that we don't depends on python.eclass
@@ -36,7 +38,7 @@ DEPEND=">=app-admin/eselect-python-20080925
 	>=sys-libs/zlib-1.1.3[lib32?]
 	!build? (
 		sqlite? ( >=dev-db/sqlite-3[lib32?] )
-		tk? ( >=dev-lang/tk-8.0 )
+		tk? ( >=dev-lang/tk-8.0[lib32?] )
 		ncurses? ( >=sys-libs/ncurses-5.2[lib32?]
 					readline? ( >=sys-libs/readline-4.1[lib32?] ) )
 		berkdb? ( >=sys-libs/db-3.1[lib32?] )
