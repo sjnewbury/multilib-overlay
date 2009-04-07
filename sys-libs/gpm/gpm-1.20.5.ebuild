@@ -6,6 +6,8 @@
 
 EAPI="2"
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils toolchain-funcs flag-o-matic multilib-native
 
 DESCRIPTION="Console-based mouse driver"
