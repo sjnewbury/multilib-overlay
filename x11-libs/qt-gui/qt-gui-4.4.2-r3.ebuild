@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-gui/qt-gui-4.4.2-r3.ebuild,v 1.1 2009/02/14 15:35:10 hwoarang Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-gui/qt-gui-4.4.2-r3.ebuild,v 1.4 2009/04/05 16:48:44 klausman Exp $
 
 EAPI="1"
 inherit eutils qt4-build multilib-native
@@ -10,7 +10,7 @@ HOMEPAGE="http://www.trolltech.com/"
 
 LICENSE="|| ( GPL-3 GPL-2 )"
 SLOT="4"
-KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc x86 ~x86-fbsd"
 
 IUSE_INPUT_DEVICES="input_devices_wacom"
 IUSE="+accessibility cups +dbus debug +glib mng nas nis tiff +qt3support xinerama ${IUSE_INPUT_DEVICES}"
@@ -45,7 +45,9 @@ tools/designer
 tools/linguist
 src/plugins/imageformats/gif
 src/plugins/imageformats/ico
-src/plugins/imageformats/jpeg"
+src/plugins/imageformats/jpeg
+src/plugins/inputmethods"
+
 QT4_EXTRACT_DIRECTORIES="
 src/tools/rcc/
 tools/shared/"

@@ -1,13 +1,13 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-gui/qt-gui-4.5.0.ebuild,v 1.1 2009/03/04 21:09:36 yngwin Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-gui/qt-gui-4.5.0.ebuild,v 1.5 2009/03/18 21:30:49 hwoarang Exp $
 
 EAPI="2"
 inherit eutils qt4-build multilib-native
 
 DESCRIPTION="The GUI module for the Qt toolkit"
 SLOT="4"
-KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="+accessibility cups +dbus +glib +gtkstyle mng nas nis raster tiff +qt3support xinerama"
 
 RDEPEND="media-libs/fontconfig[lib32?]
@@ -42,7 +42,9 @@ tools/designer
 tools/linguist
 src/plugins/imageformats/gif
 src/plugins/imageformats/ico
-src/plugins/imageformats/jpeg"
+src/plugins/imageformats/jpeg
+src/plugins/inputmethods"
+
 QT4_EXTRACT_DIRECTORIES="
 include/
 src/
@@ -50,12 +52,13 @@ tools/shared/"
 
 pkg_setup() {
 	if use raster; then
-		ewarn
-		ewarn "You have enabled raster backend rendering engine."
-		ewarn "This is a new feature and might lead to composite problems"
-		ewarn "or screen corruption."
-		ewarn
-		ebeep 3
+		ewarn "WARNING: You have enabled raster backend rendering engine."
+		ewarn "This is a new feature and may lead to composite problems"
+		ewarn "screen corruption and broken qt4 or kde4 applications. "
+		ewarn "If you encounter such problems please"
+		ewarn "remove 'raster' use flag and re-compile qt-gui before"
+		ewarn "filling a bug on gentoo bugzilla."
+		ebeep 5
 	fi
 	qt4-build_pkg_setup
 }
@@ -64,8 +67,8 @@ src_unpack() {
 	use dbus && QT4_TARGET_DIRECTORIES="${QT4_TARGET_DIRECTORIES} tools/qdbus/qdbusviewer"
 	use mng && QT4_TARGET_DIRECTORIES="${QT4_TARGET_DIRECTORIES} src/plugins/imageformats/mng"
 	use tiff && QT4_TARGET_DIRECTORIES="${QT4_TARGET_DIRECTORIES} src/plugins/imageformats/tiff"
-	QT4_EXTRACT_DIRECTORIES="${QT4_TARGET_DIRECTORIES}
-	${QT4_EXTRACT_DIRECTORIES}"
+	use accessibility && QT4_TARGET_DIRECTORIES="${QT4_TARGET_DIRECTORIES} src/plugins/accessible/widgets"
+	QT4_EXTRACT_DIRECTORIES="${QT4_TARGET_DIRECTORIES} ${QT4_EXTRACT_DIRECTORIES}"
 
 	qt4-build_src_unpack
 }
