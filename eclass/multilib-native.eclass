@@ -142,7 +142,9 @@ _set_platform_env() {
 	else
 		CCACHE_DIR="${CCACHE_DIR}$1"
 	fi
-	pyver=$(eselect python show)
+	pyver=$(python --version 2>&1)
+	pyver=${pyver/Python /python}
+	pyver=${pyver%.*}
 
 	if ! is_final_abi; then
 		PYTHON=/usr/bin/${pyver}-${ABI}
