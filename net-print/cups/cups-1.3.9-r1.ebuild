@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.3.9-r1.ebuild,v 1.11 2009/03/09 18:42:27 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.3.9-r1.ebuild,v 1.12 2009/03/30 14:25:12 loki_val Exp $
 
 EAPI="2"
 
@@ -47,7 +47,8 @@ DEPEND="${COMMON_DEPEND}
 RDEPEND="${COMMON_DEPEND}
 	!virtual/lpr
 	X? ( x11-misc/xdg-utils )
-	>=app-text/poppler-0.4.3-r1"
+	>=virtual/poppler-utils-0.4.3-r1
+	"
 
 PDEPEND="
 	ppds? ( || (
