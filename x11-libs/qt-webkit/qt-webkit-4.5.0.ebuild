@@ -1,13 +1,13 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-webkit/qt-webkit-4.5.0.ebuild,v 1.1 2009/03/04 21:01:59 yngwin Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-webkit/qt-webkit-4.5.0.ebuild,v 1.4 2009/03/18 10:46:04 armin76 Exp $
 
 EAPI="2"
 inherit qt4-build multilib-native
 
 DESCRIPTION="The Webkit module for the Qt toolkit"
 SLOT="4"
-KEYWORDS="~amd64 ~hppa ~mips ~ppc ~ppc64 -sparc ~x86"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 -sparc ~x86 ~x86-fbsd"
 IUSE=""
 
 DEPEND="~x11-libs/qt-core-${PV}[debug=,ssl,lib32?]
