@@ -274,7 +274,7 @@ multilib-native_src_generic_sub() {
 
 			else
 				einfo "Creating build directory"
-				local _docdir=""
+				local _docdir="" docfile=""
 				# Create build dir
 				mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
 				# Populate build dir with filtered FILES from source
@@ -289,7 +289,11 @@ multilib-native_src_generic_sub() {
 					mkdir -p ${_docdir/"${S}"/"${WORKDIR}/${PN}_build_${ABI}"}
 					cp -al ${_docdir}/* ${_docdir/"${S}"/"${WORKDIR}/${PN}_build_${ABI}"}
 				done
-
+				for _docfile in $(find ${S} -type f -name '*.html'); do
+					_docdir="${_docfile%/*}"
+					mkdir -p ${_docdir/"${S}"/"${WORKDIR}/${PN}_build_${ABI}"}
+					cp -al ${_docdir}/* ${_docdir/"${S}"/"${WORKDIR}/${PN}_build_${ABI}"}
+				done
 			fi
 		fi
 		
