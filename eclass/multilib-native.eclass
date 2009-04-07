@@ -39,6 +39,7 @@ EMULTILIB_OGNUTLS_CONFIG=""
 EMULTILIB_OCURL_CONFIG=""
 EMULTILIB_OCACA_CONFIG=""
 EMULTILIB_OAALIB_CONFIG=""
+EMULTILIB_GTK_CONFIG=""
 EMULTILIB_OPERLBIN=""
 EMULTILIB_Omyconf=""
 EMULTILIB_OKDE_S=""
@@ -148,6 +149,7 @@ _set_platform_env() {
 		CURL_CONFIG=/usr/bin/curl-config-${ABI}
 		CACA_CONFIG=/usr/bin/caca-config-${ABI}
 		AALIB_CONFIG=/usr/bin/aalib-config-${ABI}
+		GTK_CONFIG=/usr/bin/gtk-config-${ABI}
 		PERLBIN=/usr/bin/perl-${ABI}
 	fi
 }
@@ -216,6 +218,7 @@ multilib-native_src_generic_sub() {
 			EMULTILIB_OCURL_CONFIG="${CURL_CONFIG}"
 			EMULTILIB_OCACA_CONFIG="${CACA_CONFIG}"
 			EMULTILIB_OAALIB_CONFIG="${AALIB_CONFIG}"
+			EMULTILIB_OGTK_CONFIG="${GTK_CONFIG}"
 			EMULTILIB_OPERLBIN="${PERLBIN}"
 			EMULTILIB_OKDE_S="${KDE_S}"
 			EMULTILIB_Omycmakeargs="${mycmakeargs}"
@@ -241,7 +244,7 @@ multilib-native_src_generic_sub() {
 					;;
 				esac
 				export QMAKESPEC CUPS_CONFIG GNUTLS_CONFIG CURL_CONFIG PYTHON_CONFIG PYTHON 
-				export CACA_CONFIG AALIB_CONFIG PERLBIN
+				export CACA_CONFIG AALIB_CONFIG GTK_CONFIG PERLBIN
 			fi
 		fi
 
@@ -333,6 +336,7 @@ multilib-native_src_generic_sub() {
 			CURL_CONFIG="${EMULTILIB_OCURL_CONFIG}"
 			CACA_CONFIG="${EMULTILIB_OCACA_CONFIG}"
 			AALIB_CONFIG="${EMULTILIB_OAALIB_CONFIG}"
+			GTK_CONFIG="${EMULTILIB_OGTK_CONFIG}"
 			PERLBIN="${EMULTILIB_OPERLBIN}"
 			myconf="${EMULTILIB_Omyconf}"
 			KDE_S="${EMULTILIB_OKDE_S}"
