@@ -325,11 +325,12 @@ multilib-native_src_generic_sub() {
 
 			# handle old-style (non-PKG-CONFIG) *-config* scripts
 			if [[ ${1} == "src_install" ]] && \
-					 ! is_final_abi; then
+					 ( ! is_final_abi ); then
+				einfo Looking for package config scripts
 				local _config
-				for _config in $(find ${D}/usr/bin \
-						-executable \
-						-name '*${PN}-config*'); do
+				for _config in $(find "${D}/usr/bin" -executable \
+						-regex ".*-config.*"); do
+					einfo Renaming ${_config} as ${_config}-${ABI}
 					mv ${_config} ${_config}-${ABI}
 				done
 			fi
