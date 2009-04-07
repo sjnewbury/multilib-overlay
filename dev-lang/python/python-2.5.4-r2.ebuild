@@ -55,7 +55,6 @@ PDEPEND="${DEPEND} app-admin/python-updater"
 PROVIDE="virtual/python"
 
 multilib-native_src_prepare_internal() {
-	default
 
 	if tc-is-cross-compiler ; then
 		epatch "${FILESDIR}"/python-2.4.4-test-cross.patch \
@@ -116,17 +115,6 @@ multilib-native_src_configure_internal() {
 
 	einfo "Disabled modules: $PYTHON_DISABLE_MODULES"
 
-	export OPT="${CFLAGS}"
-
-	local myconf
-
-	# super-secret switch. don't use this unless you know what you're
-	# doing. enabling UCS2 support will break your existing python
-	# modules
-	use ucs2 \
-		&& myconf="${myconf} --enable-unicode=ucs2" \
-		|| myconf="${myconf} --enable-unicode=ucs4"
-
 	filter-flags -malign-double
 
 	# Seems to no longer be necessary
@@ -139,9 +127,25 @@ multilib-native_src_configure_internal() {
 	   use hardened && replace-flags -O3 -O2
 	fi
 
+	# See #228905
+	if [[ $(gcc-major-version) -ge 4 ]]; then
+		append-flags -fwrapv
+	fi
+
+	export OPT="${CFLAGS}"
+
+	local myconf
+
+	# super-secret switch. don't use this unless you know what you're
+	# doing. enabling UCS2 support will break your existing python
+	# modules
+	use ucs2 \
+		&& myconf="${myconf} --enable-unicode=ucs2" \
+		|| myconf="${myconf} --enable-unicode=ucs4"
+
 	if tc-is-cross-compiler ; then
 		OPT="-O1" CFLAGS="" LDFLAGS="" CC="" \
-		./configure || die "cross-configure failed"
+		./configure --{build,host}=${CBUILD} || die "cross-configure failed"
 		emake python Parser/pgen || die "cross-make failed"
 		mv python hostpython
 		mv Parser/pgen Parser/hostpgen
