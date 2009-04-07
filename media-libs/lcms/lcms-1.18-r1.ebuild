@@ -6,7 +6,7 @@ EAPI="2"
 
 MULTILIB_IN_SOURCE_BUILD="yes"
 
-inherit libtool eutils multilib multilib-native
+inherit autotools eutils multilib multilib-native
 
 DESCRIPTION="A lightweight, speed optimized color management engine"
 HOMEPAGE="http://www.littlecms.com/"
@@ -24,6 +24,11 @@ DEPEND="${RDEPEND}
 	python? ( >=dev-lang/swig-1.3.31 )"
 
 src_prepare() {
+	cd "${S}"
+	sed -i -e "/PYTHON=/s:^:# :" configure.ac
+	
+	eautoreconf
+
 	# Fix for CVE-2009-0793, bug #264604
 	epatch "${FILESDIR}"/${PN}-CVE-2009-0793.patch
 	# run swig to regenerate lcms_wrap.cxx and lcms.py (bug #148728)

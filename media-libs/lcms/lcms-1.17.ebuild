@@ -6,7 +6,7 @@ EAPI="2"
 
 MULTILIB_IN_SOURCE_BUILD="yes"
 
-inherit libtool eutils multilib multilib-native
+inherit autotools eutils multilib multilib-native
 
 DESCRIPTION="A lightweight, speed optimized color management engine"
 HOMEPAGE="http://www.littlecms.com/"
@@ -25,14 +25,15 @@ RDEPEND="tiff? ( media-libs/tiff )
 DEPEND="${RDEPEND}
 	python? ( >=dev-lang/swig-1.3.31 )"
 
-src_unpack() {
-	unpack ${A}
+src_prepare() {
 	cd "${S}"
 
 	# Fix multilib-strict; bug #185294
 	epatch "${FILESDIR}"/${P}-multilib.patch
 
-	elibtoolize
+	sed -i -e "/PYTHON=/s:^:# :" configure.ac
+	
+	eautoreconf
 
 	# run swig to regenerate lcms_wrap.cxx and lcms.py (bug #148728)
 	if use python; then
@@ -41,9 +42,7 @@ src_unpack() {
 	fi
 }
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	econf \
 		--disable-dependency-tracking \
 		$(use_with jpeg) \
@@ -51,7 +50,6 @@ multilib-native_src_compile_internal() {
 		$(use_with zlib) \
 		$(use_with python) \
 		|| die
-	emake || die "emake failed"
 }
 
 multilib-native_src_install_internal() {
