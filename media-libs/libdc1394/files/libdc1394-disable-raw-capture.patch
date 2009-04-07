@@ -1,0 +1,31 @@
+--- /tmp/libdc1394-1.2.2/libdc1394/dc1394_capture.c	2007-08-03 08:47:33.000000000 +0200
++++ libdc1394-1.2.2/libdc1394/dc1394_capture.c	2008-12-09 12:16:28.000000000 +0100
+@@ -27,6 +27,7 @@
+ #include <sys/ioctl.h>
+ #include <sys/mman.h>
+ #include <errno.h>
++#include <stdio.h>
+ 
+ #include "config.h"
+ #include "dc1394_control.h"
+@@ -424,6 +425,12 @@
+ dc1394_multi_capture(raw1394handle_t handle, dc1394_cameracapture *cams,
+                      int num) 
+ {
++    // this functionality is not supported anymore in libraw1394-2.0.0,
++    // nor in recent linux kernels, and is superseded by the dma capture
++    // functions below
++    fprintf(stderr, "libdc1394: error, raw capture mode is not supported anymore");
++    return DC1394_FAILURE;
++#if 0
+     int i, j;
+     _dc1394_all_captured= num;
+ 
+@@ -493,6 +500,7 @@
+     }
+ 
+     return DC1394_SUCCESS;
++#endif
+ }
+ 
+ /**********************************

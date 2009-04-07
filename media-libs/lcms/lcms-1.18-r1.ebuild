@@ -14,7 +14,7 @@ SRC_URI="http://www.littlecms.com/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="tiff jpeg zlib python"
 
 RDEPEND="tiff? ( media-libs/tiff )
@@ -24,6 +24,8 @@ DEPEND="${RDEPEND}
 	python? ( >=dev-lang/swig-1.3.31 )"
 
 src_prepare() {
+	# Fix for CVE-2009-0793, bug #264604
+	epatch "${FILESDIR}"/${PN}-CVE-2009-0793.patch
 	# run swig to regenerate lcms_wrap.cxx and lcms.py (bug #148728)
 	if use python; then
 		cd "${S}"/python
