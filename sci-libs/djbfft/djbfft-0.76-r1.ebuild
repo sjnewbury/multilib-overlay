@@ -41,6 +41,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${P}-shared.patch"
 	epatch "${FILESDIR}/${P}-headers.patch"
 
+	rm -f conf-cc conf-ld
 	sed -i -e "s:\"lib\":\"$(get_libdir)\":" hier.c
 	echo "$(tc-getCC) $MY_CFLAGS -fPIC -DPIC" > "conf-cc"
 	echo "$(tc-getCC) ${LDFLAGS}" > "conf-ld"
