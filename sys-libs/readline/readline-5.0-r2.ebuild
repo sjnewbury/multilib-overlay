@@ -4,6 +4,8 @@
 
 EAPI="2"
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils multilib toolchain-funcs multilib-native
 
 # Official patches

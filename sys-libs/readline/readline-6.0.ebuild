@@ -4,6 +4,8 @@
 
 EAPI="2"
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit autotools eutils multilib toolchain-funcs flag-o-matic multilib-native
 
 # Official patches
