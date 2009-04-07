@@ -15,11 +15,11 @@ SRC_URI="http://www.sqlite.org/${P}.tar.gz
 
 LICENSE="as-is"
 SLOT="3"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="debug doc soundex tcl +threadsafe"
 RESTRICT="!tcl? ( test )"
 
-RDEPEND="tcl? ( dev-lang/tcl )
+RDEPEND="tcl? ( dev-lang/tcl[lib32?] )
 	sys-libs/readline[lib32?]"
 DEPEND="${RDEPEND}
 	doc? ( app-arch/unzip )"
