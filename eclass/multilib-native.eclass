@@ -273,7 +273,7 @@ multilib-native_src_generic_sub() {
 				[[ -z "$(echo ${1}|grep pkg)" ]]; then
 			# get 
 			EMULTILIB_partial_S_path=${S/"${WORKDIR}/"}
-			EMULTILIB_source_dir=${EMULTILIB_partial_S_path%/*/*}
+			EMULTILIB_source_dir=${EMULTILIB_partial_S_path%%/*}
 			EMULTILIB_source_path=${WORKDIR}/${EMULTILIB_source_dir}
 			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 					[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]; then
