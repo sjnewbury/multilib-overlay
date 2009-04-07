@@ -197,8 +197,9 @@ multilib-native_src_generic_sub() {
 				return
 			fi
 		fi
-		export CC="$(tc-getCC)"
-		export CXX="$(tc-getCXX)"
+
+		local _source_dir="" source_path=""
+		export CC="$(tc-getCC)" CXX="$(tc-getCXX)"
 
 		if has_multilib_profile ; then
 			# Save env before each ABI pass
@@ -259,19 +260,24 @@ multilib-native_src_generic_sub() {
 		QTPLUGINDIR=${QTLIBDIR}/plugins
 
 		# Prepare build dir
+		#
+		# ${S} points to the source directory, but some packages assume
+		# a directory structure ABOVE ${S}.  "S" is set to a
+		# subdirectory of the tree they unpack into ${WORKDIR}. We
+		# need to deal with this by finding the top-level of the source
+		# tree and keeping track of ${S} relative to it.
+		#
 		if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
 				[[ -z "$(echo ${1}|grep pkg)" ]]; then
+			local _partial_S_path=""
+			# get 
+			_partial_S_path=${S/"${WORKDIR}/"}
+			_source_dir=${_partial_S_path%/*}
+			_source_path=${WORKDIR}/${_source_dir}
 			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 					[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]; then
 				einfo "Copying source tree to ${WORKDIR}/${PN}_build_${ABI}"
-				cp -al ${S} ${WORKDIR}/${PN}_build_${ABI}
-
-				# Workaround case where ${S} points to a src subdir of build tree and doc is
-				# is also in the package root (fixes doc install in some packages)
-				[[ -d "${S}/../doc" && ! -d "${WORKDIR}/doc" ]] && \
-					cp -al ${S}/../doc ${WORKDIR}/doc
-
-
+				cp -al ${_source_path} ${WORKDIR}/${PN}_build_${ABI}
 			else
 				einfo "Creating build directory"
 				local _docdir="" docfile=""
@@ -281,39 +287,39 @@ multilib-native_src_generic_sub() {
 				# root and any directories matching *doc*:
 				# This is a bit of a hack, but it ensures
 				# doc files are available for install phase
-				cp -al $(find ${S} -maxdepth 1 -type f \
+				cp -al $(find ${_source_path} -maxdepth 1 -type f \
 					! -executable | \
 					grep -v -e ".*\.in\|.*\.am\|.*config.*\|.*\.h\|.*\.c.*\|.*\.cmake" ) \
 					${WORKDIR}/${PN}_build_${ABI}
-				for _docdir in $(find ${S} -type d -name '*doc*'); do
-					mkdir -p ${_docdir/"${S}"/"${WORKDIR}/${PN}_build_${ABI}"}
-					cp -al ${_docdir}/* ${_docdir/"${S}"/"${WORKDIR}/${PN}_build_${ABI}"}
+				for _docdir in $(find ${_source_path} -type d -name '*doc*'); do
+					mkdir -p ${_docdir/"${_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
+					cp -al ${_docdir}/* ${_docdir/"${_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
 				done
-				for _docfile in $(find ${S} -type f -name '*.html'); do
+				for _docfile in $(find ${_source_path} -type f -name '*.html'); do
 					_docdir="${_docfile%/*}"
-					mkdir -p ${_docdir/"${S}"/"${WORKDIR}/${PN}_build_${ABI}"}
-					cp -al ${_docdir}/* ${_docdir/"${S}"/"${WORKDIR}/${PN}_build_${ABI}"}
+					mkdir -p ${_docdir/"${_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
+					cp -al ${_docdir}/* ${_docdir/"${_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
 				done
 			fi
 		fi
 		
 		[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]] && \
-			ECONF_SOURCE="${S}"
+			ECONF_SOURCE="${_source_path}"
 
 		# S should not be redefined for out-of-source-tree prepare
 		# phase, or at all in the cmake case
 		if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
 			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]]; then
-				S=${WORKDIR}/${PN}_build_${ABI}
+				S=${WORKDIR}/${PN}_build_${ABI}/${_partial_S_path/"${_source_dir}"}
 			fi
 		else
 			if !([[ "$1" == "src_prepare" ]] && \
 					[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]]); then
-				S=${WORKDIR}/${PN}_build_${ABI}
+				S=${WORKDIR}/${PN}_build_${ABI}/${_partial_S_path/"${_source_dir}"}
 			fi
 		fi
 
-		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}"
+		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${_partial_S_path/"${_source_dir}"}"
 		KDE_S="${S}"
 
 		#[[ -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
