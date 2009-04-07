@@ -179,6 +179,9 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" altinstall maninstall || die
 
 	mv "${D}"/usr/bin/python${PYVER}-config "${D}"/usr/bin/python-config-${PYVER}
+        if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
+		mv "${D}"/usr/bin/python${PYVER} "${D}"/usr/bin/python${PYVER}-${ABI}
+	fi
 
 	# Fix slotted collisions
 	mv "${D}"/usr/bin/2to3 "${D}"/usr/bin/2to3-${PYVER}
