@@ -32,6 +32,7 @@ EMULTILIB_OLDFLAGS=""
 EMULTILIB_OCHOST=""
 EMULTILIB_OSPATH=""
 EMULTILIB_OCCACHE_DIR=""
+EMULTILIB_OPYTHON_CONFIG=""
 EMULTILIB_OCUPS_CONFIG=""
 EMULTILIB_OGNUTLS_CONFIG=""
 EMULTILIB_OCURL_CONFIG=""
@@ -118,6 +119,7 @@ _check_build_dir() {
 # @FUNCTION: _set_platform_env
 # @DESCRIPTION: Set environment up for 32bit or 64bit ABI
 _set_platform_env() {
+	local pyver=""
 	CFLAGS="${EMULTILIB_OCFLAGS} -m$1"
 	CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m$1"
 	LDFLAGS="${EMULTILIB_OLDFLAGS} -m$1 -L/usr/lib$1"
@@ -134,6 +136,8 @@ _set_platform_env() {
 	else
 		CCACHE_DIR="${CCACHE_DIR}$1"
 	fi
+	pyver=$(eselect python show)
+	PYTHON_CONFIG=/usr/bin/python-config-${pyver/python}-${ABI}
 	CUPS_CONFIG=/usr/bin/cups-config-${ABI}
 	GNUTLS_CONFIG=/usr/bin/gnutls-config-${ABI}
 	CURL_CONFIG=/usr/bin/curl-config-${ABI}
@@ -199,6 +203,7 @@ multilib-native_src_generic_sub() {
 			# Various libraries store build-time linking
 			# information in a config script file or program binary
 			EMULTILIB_OCCACHE_DIR="${CCACHE_DIR}"
+			EMULTILIB_OPYTHON_CONFIG="${PYTHON_CONFIG}"
 			EMULTILIB_OCUPS_CONFIG="${CUPS_CONFIG}"
 			EMULTILIB_OGNUTLS_CONFIG="${GNUTLS_CONFIG}"
 			EMULTILIB_OCURL_CONFIG="${CURL_CONFIG}"
@@ -228,7 +233,7 @@ multilib-native_src_generic_sub() {
 					*)   die "Unknown ABI"
 					;;
 				esac
-				export QMAKESPEC CUPS_CONFIG GNUTLS_CONFIG CURL_CONFIG 
+				export QMAKESPEC CUPS_CONFIG GNUTLS_CONFIG CURL_CONFIG PYTHON_CONFIG 
 				export CACA_CONFIG AALIB_CONFIG PERLBIN
 			fi
 		fi
@@ -314,6 +319,7 @@ multilib-native_src_generic_sub() {
 			CHOST="${EMULTILIB_OCHOST}"
 			S="${EMULTILIB_OSPATH}"
 			CCACHE_DIR="${EMULTILIB_OCCACHE_DIR}"
+			PYTHON_CONFIG="${EMULTILIB_OPYTHON_CONFIG}"
 			CUPS_CONFIG="${EMULTILIB_OCUPS_CONFIG}"
 			GNUTLS_CONFIG="${EMULTILIB_OGNUTLS_CONFIG}"
 			CURL_CONFIG="${EMULTILIB_OCURL_CONFIG}"
