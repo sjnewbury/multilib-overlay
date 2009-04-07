@@ -31,6 +31,9 @@ src_unpack() {
 	# Fix for -Wl,--as-needed (bug #133818)
 	epatch "${DISTDIR}"/glib-1.2.10-r1-as-needed.patch.bz2
 
+	# Fix inline with gcc-4.3
+	epatch "${FILESDIR}"/${P}-gcc43-inline.patch
+
 	use ppc64 && use hardened && replace-flags -O[2-3] -O1
 	append-ldflags $(dlopen_lib)
 
