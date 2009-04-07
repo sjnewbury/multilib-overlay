@@ -4,6 +4,8 @@
 
 EAPI="2"
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit autotools eutils flag-o-matic multilib pam multilib-native
 
 MY_P=${P/_}
@@ -92,10 +94,7 @@ pkg_setup() {
 	enewgroup lpadmin 106
 }
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	# disable configure automagic for acl/attr, upstream bug STR #2723
 	epatch "${FILESDIR}/${PN}-1.3.0-configure.patch"
 
@@ -110,9 +109,7 @@ src_unpack() {
 	eautoconf
 }
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# Fails to compile on SH
 	use sh && replace-flags -O? -O0
 
@@ -183,8 +180,6 @@ multilib-native_src_compile_internal() {
 	sed -i -e 's:SERVERBIN.*:SERVERBIN = "$(BUILDROOT)"/usr/libexec/cups:' Makedefs
 	sed -i -e 's:#define CUPS_SERVERBIN.*:#define CUPS_SERVERBIN "/usr/libexec/cups":' config.h
 	sed -i -e 's:cups_serverbin=.*:cups_serverbin=/usr/libexec/cups:' cups-config
-
-	emake || die "emake failed"
 }
 
 multilib-native_src_install_internal() {
