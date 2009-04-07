@@ -4,6 +4,8 @@
 
 EAPI=1
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils flag-o-matic toolchain-funcs libtool multilib multilib-native
 
 # This should normally be empty string, unless a release has a suffix.
