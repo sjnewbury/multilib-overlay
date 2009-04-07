@@ -125,6 +125,7 @@ _set_platform_env() {
 	LDFLAGS="${EMULTILIB_OLDFLAGS} -m$1 -L/usr/lib$1"
 	QMAKESPEC="linux-g++-$1"
 	if [[ $1 == "32" ]]; then
+		# TODO: this should be changed to ${ABI}
 		QTBINDIR="/usr/libexec/qt/$1"
 	else
 		QTBINDIR="/usr/bin"
@@ -137,13 +138,17 @@ _set_platform_env() {
 		CCACHE_DIR="${CCACHE_DIR}$1"
 	fi
 	pyver=$(eselect python show)
-	PYTHON_CONFIG=/usr/bin/python-config-${pyver/python}-${ABI}
-	CUPS_CONFIG=/usr/bin/cups-config-${ABI}
-	GNUTLS_CONFIG=/usr/bin/gnutls-config-${ABI}
-	CURL_CONFIG=/usr/bin/curl-config-${ABI}
-	CACA_CONFIG=/usr/bin/caca-config-${ABI}
-	AALIB_CONFIG=/usr/bin/aalib-config-${ABI}
-	PERLBIN=/usr/bin/perl-${ABI}
+
+	if ! is_final_abi; then
+		PYTHON=/usr/bin/python${pyver}-${ABI}
+		PYTHON_CONFIG=/usr/bin/python-config-${pyver/python}-${ABI}
+		CUPS_CONFIG=/usr/bin/cups-config-${ABI}
+		GNUTLS_CONFIG=/usr/bin/gnutls-config-${ABI}
+		CURL_CONFIG=/usr/bin/curl-config-${ABI}
+		CACA_CONFIG=/usr/bin/caca-config-${ABI}
+		AALIB_CONFIG=/usr/bin/aalib-config-${ABI}
+		PERLBIN=/usr/bin/perl-${ABI}
+	fi
 }
 
 
