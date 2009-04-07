@@ -26,18 +26,20 @@ pkg_setup() {
 	MY_PV="${PV:0:1}.${PV:2:1}.${PV:3:1}" # a.bc -> a.b.c
 	MY_D="${D}usr"
 
-	# mask out everything, which is not suggested by the author (RTFM)!
-	ALLOWED_FLAGS="-fstack-protector -march -mcpu -pipe -mpreferred-stack-boundary -ffast-math"
-	strip-flags
-
-	MY_CFLAGS="${CFLAGS} -O1 -fomit-frame-pointer"
-	use x86 && MY_CFLAGS="${MY_CFLAGS} -malign-double"
-
 	LIBPERMS="0755"
 	LIBDJBFFT="libdjbfft.so.${MY_PV}"
 }
 
 multilib-native_src_prepare_internal() {
+	# mask out everything, which is not suggested by the author (RTFM)!
+	ALLOWED_FLAGS="-fstack-protector -march -mcpu -pipe -mpreferred-stack-boundary -ffast-math -m32 -m64"
+	strip-flags
+
+	MY_CFLAGS="${CFLAGS} -O1 -fomit-frame-pointer"
+	use x86 && MY_CFLAGS="${MY_CFLAGS} -malign-double"
+
+	cd "${S}"
+
 	epatch "${FILESDIR}/${P}-gcc3.patch"
 	epatch "${FILESDIR}/${P}-shared.patch"
 
