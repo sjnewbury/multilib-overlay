@@ -258,9 +258,10 @@ multilib-native_src_generic_sub() {
 
 
 			else
+				einfo "Creating build directory"
 				local _docdir=""
 				# Create build dir
-				mkdir -p  ${WORKDIR}/${PN}_build_${ABI}
+				mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
 				# Populate build dir with filtered FILES from source
 				# root and any directories matching *doc*:
 				# This is a bit of a hack, but it ensures
@@ -298,7 +299,7 @@ multilib-native_src_generic_sub() {
 
 		#[[ -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
 		#	cd ${WORKDIR}/${PN}_build_${ABI}
-		cd ${S}
+		[[ -d "${S}" ]] && cd ${S}
 
 		export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 	fi
