@@ -283,7 +283,7 @@ multilib-native_src_generic_sub() {
 				# doc files are available for install phase
 				cp -al $(find ${S} -maxdepth 1 -type f \
 					! -executable | \
-					grep -v -e ".*\.in\|.*\.am\|.*config.*\|.*\.h\|.*\.c.*\|.*\.cmake" ) \
+					grep -v -e ".*\.in\|.*\.am\|.*[^t]config.*\|.*\.h\|.*\.c.*\|.*\.cmake" ) \
 					${WORKDIR}/${PN}_build_${ABI}
 				for _docdir in $(find ${S} -type d -name '*doc*'); do
 					mkdir -p ${_docdir/"${S}"/"${WORKDIR}/${PN}_build_${ABI}"}
