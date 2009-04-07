@@ -4,6 +4,8 @@
 
 EAPI=1
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 ESVN_REPO_URI="svn://svn.mplayerhq.hu/ffmpeg/trunk"
 
 inherit eutils flag-o-matic multilib toolchain-funcs subversion multilib-native

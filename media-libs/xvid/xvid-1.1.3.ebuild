@@ -28,7 +28,8 @@ DEPEND="x86? ( ${NASM} )
 	amd64? ( ${NASM} )"
 RDEPEND=""
 
-S="${WORKDIR}"/${MY_P}/build/generic
+#S="${WORKDIR}"/${MY_P}/build/generic
+S="${WORKDIR}"/${MY_P}
 
 src_unpack() {
 	unpack ${A}
@@ -37,16 +38,18 @@ src_unpack() {
 	epatch "${WORKDIR}"/${PN}-1.1.2-noexec-stack.patch
 	epatch "${FILESDIR}"/${PN}-1.1.0-3dnow-2.patch
 	epatch "${FILESDIR}"/${P}-ia64-build.patch
-	cd "${S}"
+	cd "${S}"/build/generic
 	eautoreconf
 }
 
 multilib-native_src_compile_internal() {
+	cd "${S}"/build/generic
 	econf $(use_enable altivec)
 	emake || die "emake failed."
 }
 
 multilib-native_src_install_internal() {
+	cd "${S}"/build/generic
 	emake DESTDIR="${D}" install || die "emake install failed."
 
 	dodoc "${S}"/../../{AUTHORS,ChangeLog*,README,TODO}

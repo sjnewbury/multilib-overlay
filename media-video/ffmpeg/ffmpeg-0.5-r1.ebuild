@@ -4,6 +4,8 @@
 
 EAPI=1
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils flag-o-matic multilib toolchain-funcs multilib-native
 
 DESCRIPTION="Complete solution to record, convert and stream audio and video.

@@ -26,13 +26,21 @@ DEPEND="x86? ( ${NASM} )
 	x86-fbsd? ( ${NASM} )"
 RDEPEND=""
 
-S="${WORKDIR}/${MY_PN}/build/generic"
+#S="${WORKDIR}/${MY_PN}/build/generic"
+S="${WORKDIR}/${MY_PN}"
 
 multilib-native_src_configure_internal() {
+	cd "${S}"/build/generic
 	econf $(use_enable altivec)
 }
 
+multilib-native_src_compile_internal() {
+	cd "${S}"/build/generic
+	emake || die "emake failed."
+}
+
 multilib-native_src_install_internal() {
+	cd "${S}"/build/generic
 	emake DESTDIR="${D}" install || die "emake install failed."
 
 	dodoc "${S}"/../../{AUTHORS,ChangeLog*,README,TODO}
