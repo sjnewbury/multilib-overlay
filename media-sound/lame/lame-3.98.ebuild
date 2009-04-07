@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/lame/lame-3.98.ebuild,v 1.6 2008/08/08 08:29:25 aballier Exp $
 
-EAPI="1"
+EAPI="2"
 
 inherit flag-o-matic toolchain-funcs eutils autotools versionator multilib-native
 
@@ -16,16 +16,16 @@ SRC_URI="mirror://sourceforge/${PN}/${PN}-${MY_PV}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="debug mmx mp3rtp sndfile"
+IUSE="debug mmx mp3rtp sndfile gtk"
 
 RDEPEND=">=sys-libs/ncurses-5.2[lib32?]
-	sndfile? ( >=media-libs/libsndfile-1.0.2[lib32?] )"
+	sndfile? ( >=media-libs/libsndfile-1.0.2[lib32?] )
+	gtk? ( =x11-libs/gtk+-1.2*[lib32?] )"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	mmx? ( dev-lang/nasm )"
 
-src_unpack() {
-	unpack ${A}
+src_prepare() {
 	cd "${S}"
 
 	# The frontened tries to link staticly, but we prefer shared libs
@@ -61,7 +61,7 @@ src_unpack() {
 	epunt_cxx # embedded bug #74498
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	use sndfile && myconf="--with-fileio=sndfile"
 	# The user sets compiler optimizations... But if you'd like
 	# lame to choose it's own... uncomment one of these (experiMENTAL)
@@ -74,9 +74,8 @@ multilib-native_src_compile_internal() {
 		--disable-mp3x \
 		$(use_enable mmx nasm) \
 		$(use_enable mp3rtp) \
+		$(use_enable gtk gtktest) \
 		${myconf} || die "econf failed"
-
-	emake || die "emake failed"
 }
 
 multilib-native_src_install_internal() {

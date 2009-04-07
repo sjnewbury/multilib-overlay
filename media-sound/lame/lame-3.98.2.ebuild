@@ -17,10 +17,11 @@ SRC_URI="mirror://sourceforge/${PN}/${PN}-${MY_PV}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
-IUSE="debug mmx mp3rtp sndfile"
+IUSE="debug mmx mp3rtp sndfile gtk"
 
 RDEPEND=">=sys-libs/ncurses-5.2[lib32?]
-	sndfile? ( >=media-libs/libsndfile-1.0.2[lib32?] )"
+	sndfile? ( >=media-libs/libsndfile-1.0.2[lib32?] )
+	gtk? ( =x11-libs/gtk+-1.2*[lib32?] )"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	mmx? ( dev-lang/nasm )"
@@ -60,6 +61,7 @@ multilib-native_src_configure_internal() {
 		--disable-mp3x \
 		$(use_enable mmx nasm) \
 		$(use_enable mp3rtp) \
+		$(use_enable gtk gtktest) \
 		${myconf} || die "econf failed"
 }
 

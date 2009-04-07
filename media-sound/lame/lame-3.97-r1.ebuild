@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/lame/lame-3.97-r1.ebuild,v 1.11 2008/11/09 21:06:42 loki_val Exp $
 
-EAPI="1"
+EAPI="2"
 
 inherit flag-o-matic toolchain-funcs eutils autotools multilib-native
 
@@ -13,13 +13,13 @@ SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
-IUSE="debug mp3rtp"
+IUSE="debug mp3rtp gtk"
 
-RDEPEND=">=sys-libs/ncurses-5.2[lib32?]"
+RDEPEND=">=sys-libs/ncurses-5.2[lib32?]
+	 gtk? ( =x11-libs/gtk+-1.2*[lib32?] )"
 DEPEND="${RDEPEND}"
 
-src_unpack() {
-	unpack ${A}
+src_prepare() {
 	cd "${S}"
 
 	# The frontened tries to link staticly, but we prefer shared libs
@@ -39,7 +39,7 @@ src_unpack() {
 	epunt_cxx # embedded bug #74498
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# take out -fomit-frame-pointer from CFLAGS if k6-2
 	is-flag "-march=k6-3" && filter-flags "-fomit-frame-pointer"
 	is-flag "-march=k6-2" && filter-flags "-fomit-frame-pointer"
@@ -55,9 +55,8 @@ multilib-native_src_compile_internal() {
 		$(use_enable debug debug norm) \
 		--disable-mp3x \
 		$(use_enable mp3rtp mp3rtp) \
+		$(use_enable gtk gtktest) \
 		${myconf} || die "econf failed"
-
-	emake || die "emake failed"
 }
 
 multilib-native_src_install_internal() {
