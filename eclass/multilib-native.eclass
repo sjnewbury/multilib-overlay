@@ -44,6 +44,9 @@ EMULTILIB_OPERLBIN=""
 EMULTILIB_Omyconf=""
 EMULTILIB_OKDE_S=""
 EMULTILIB_Omycmakeargs=""
+EMULTILIB_source_dir=""
+EMULTILIB_source_path=""
+EMULTILIB_partial_S_path=""
 
 # @FUNCTION: multilib-native_pkg_setup
 # @USAGE:
@@ -198,7 +201,6 @@ multilib-native_src_generic_sub() {
 			fi
 		fi
 
-		local _source_dir="" source_path=""
 		export CC="$(tc-getCC)" CXX="$(tc-getCXX)"
 
 		if has_multilib_profile ; then
@@ -269,17 +271,16 @@ multilib-native_src_generic_sub() {
 		#
 		if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
 				[[ -z "$(echo ${1}|grep pkg)" ]]; then
-			local _partial_S_path=""
 			# get 
-			_partial_S_path=${S/"${WORKDIR}/"}
-			_source_dir=${_partial_S_path%/*}
-			_source_path=${WORKDIR}/${_source_dir}
+			EMULTILIB_partial_S_path=${S/"${WORKDIR}/"}
+			EMULTILIB_source_dir=${EMULTILIB_partial_S_path%/*/*}
+			EMULTILIB_source_path=${WORKDIR}/${EMULTILIB_source_dir}
 			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 					[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]; then
 				einfo "Copying source tree to ${WORKDIR}/${PN}_build_${ABI}"
-				cp -al ${_source_path} ${WORKDIR}/${PN}_build_${ABI}
+				cp -al ${EMULTILIB_source_path} ${WORKDIR}/${PN}_build_${ABI}
 			else
-				einfo "Creating build directory"
+				einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
 				local _docdir="" docfile=""
 				# Create build dir
 				mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
@@ -287,43 +288,46 @@ multilib-native_src_generic_sub() {
 				# root and any directories matching *doc*:
 				# This is a bit of a hack, but it ensures
 				# doc files are available for install phase
-				cp -al $(find ${_source_path} -maxdepth 1 -type f \
+				einfo "Copying documentation from source dir: ${EMULTILIB_source_path}"
+				for _docfile in $(find ${EMULTILIB_source_path} -maxdepth 1 -type f \
 					! -executable | \
-					grep -v -e ".*\.in\|.*\.am\|.*[^t]config.*\|.*\.h\|.*\.c.*\|.*\.cmake" ) \
-					${WORKDIR}/${PN}_build_${ABI}
-				for _docdir in $(find ${_source_path} -type d -name '*doc*'); do
-					mkdir -p ${_docdir/"${_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
-					cp -al ${_docdir}/* ${_docdir/"${_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
+					grep -v -e ".*\.in\|.*\.am\|.*[^t]config.*\|.*\.h\|.*\.c.*\|.*\.cmake" ); do
+					cp -al ${_docfile} ${WORKDIR}/${PN}_build_${ABI}
 				done
-				for _docfile in $(find ${_source_path} -type f -name '*.html'); do
+				for _docdir in $(find ${EMULTILIB_source_path} -type d -name '*doc*'); do
+					mkdir -p ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
+					cp -al ${_docdir}/* ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
+				done
+				for _docfile in $(find ${EMULTILIB_source_path} -type f -name '*.html'); do
 					_docdir="${_docfile%/*}"
-					mkdir -p ${_docdir/"${_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
-					cp -al ${_docdir}/* ${_docdir/"${_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
+					mkdir -p ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
+					cp -al ${_docdir}/* ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
 				done
 			fi
 		fi
 		
 		[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]] && \
-			ECONF_SOURCE="${_source_path}"
+			ECONF_SOURCE="${EMULTILIB_source_path}"
 
 		# S should not be redefined for out-of-source-tree prepare
 		# phase, or at all in the cmake case
 		if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
 			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]]; then
-				S=${WORKDIR}/${PN}_build_${ABI}/${_partial_S_path/"${_source_dir}"}
+				S=${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}
 			fi
 		else
 			if !([[ "$1" == "src_prepare" ]] && \
 					[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]]); then
-				S=${WORKDIR}/${PN}_build_${ABI}/${_partial_S_path/"${_source_dir}"}
+				S=${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}
 			fi
 		fi
 
-		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${_partial_S_path/"${_source_dir}"}"
+		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}"
 		KDE_S="${S}"
 
 		#[[ -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
 		#	cd ${WORKDIR}/${PN}_build_${ABI}
+		einfo "Using S=${S}"
 		[[ -d "${S}" ]] && cd ${S}
 
 		export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
