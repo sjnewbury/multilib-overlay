@@ -4,6 +4,8 @@
 
 EAPI=2
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 # order is important, gnome2 after gst-plugins
 inherit gst-plugins-base gst-plugins10 gnome2 flag-o-matic autotools eutils multilib-native
 # libtool
