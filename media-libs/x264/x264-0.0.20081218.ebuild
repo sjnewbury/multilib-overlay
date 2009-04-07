@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/media-libs/x264/x264-0.0.20081218.ebuild,v 1.1 2008/12/19 13:38:45 aballier Exp $
 
 EAPI="1"
+MULTILIB_IN_SOURCE_BUILD="yes"
 inherit multilib eutils toolchain-funcs versionator multilib-native
 
 MY_P="x264-snapshot-$(get_version_component_range 3)-2245"
