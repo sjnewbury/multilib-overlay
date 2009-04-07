@@ -1,10 +1,10 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.12.ebuild,v 1.2 2009/04/01 07:19:03 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.12.ebuild,v 1.3 2009/04/04 18:24:40 arfrever Exp $
 
 EAPI="2"
 
-inherit autotools eutils flag-o-matic multilib versionator multilib-native
+inherit eutils flag-o-matic multilib versionator multilib-native
 
 DESCRIPTION="an SQL Database Engine in a C Library"
 HOMEPAGE="http://www.sqlite.org/"
@@ -44,13 +44,12 @@ src_unpack() {
 	# note: this sandbox fix is no longer needed with sandbox-1.3+
 	epatch "${FILESDIR}"/sandbox-fix2.patch
 
-	eautoreconf
 	epunt_cxx
 }
 
 multilib-native_src_configure_internal() {
 	# not available via configure and requested in bug #143794
-	use soundex && append-flags -DSQLITE_SOUNDEX=1
+	use soundex && append-cppflags -DSQLITE_SOUNDEX=1
 
 	econf \
 		$(use_enable debug) \
@@ -66,7 +65,7 @@ multilib-native_src_compile_internal() {
 src_test() {
 	if has userpriv ${FEATURES}; then
 		local test=test
-		use debug && tets=fulltest
+		use debug && test=fulltest
 		emake ${test} || die "some test(s) failed"
 	fi
 }
