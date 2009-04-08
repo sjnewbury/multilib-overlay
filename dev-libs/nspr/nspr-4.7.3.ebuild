@@ -2,6 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.7.3.ebuild,v 1.7 2008/12/27 16:14:04 ranger Exp $
 
+EAPI="2"
+
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils multilib toolchain-funcs multilib-native
 
 DESCRIPTION="Netscape Portable Runtime"
@@ -13,10 +17,9 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 ~sparc x86 ~x86-fbsd"
 IUSE="ipv6 debug"
 
-DEPEND=">=dev-db/sqlite-3.5"
+DEPEND=">=dev-db/sqlite-3.5[lib32?]"
 
-src_unpack() {
-	unpack ${A}
+multilib-native_src_prepare_internal() {
 	cd "${S}"
 	mkdir build inst
 	epatch "${FILESDIR}"/${PN}-4.6.1-config.patch
@@ -29,7 +32,7 @@ src_unpack() {
 		mozilla/nsprpub/config/rules.mk
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	cd "${S}"/build
 
 	echo > "${T}"/test.c
@@ -50,7 +53,6 @@ multilib-native_src_compile_internal() {
 	ECONF_SOURCE="../mozilla/nsprpub" econf \
 		$(use_enable debug) \
 		${myconf} || die "econf failed"
-	make CC="$(tc-getCC)" CXX="$(tc-getCXX)" || die
 }
 
 multilib-native_src_install_internal() {
