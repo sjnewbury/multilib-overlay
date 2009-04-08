@@ -105,8 +105,9 @@ multilib-native_src_configure_internal() {
 	# Finalize and report settings
 	mozconfig_final
 
-	# -fstack-protector{,-all} breaks us
-	filter-flags -fstack-protector -fstack-protector-all
+	if [[ $(gcc-major-version) -lt 4 ]]; then
+		append-cxxflags -fno-stack-protector
+	fi
 
 	####################################
 	#
