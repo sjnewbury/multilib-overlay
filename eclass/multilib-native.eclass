@@ -369,11 +369,12 @@ multilib-native_src_generic_sub() {
 					 ( ! is_final_abi ); then
 				einfo Looking for package config scripts
 				local _config
-				for _config in $(find "${D}/usr/bin" -executable \
-						-regex ".*-config.*"); do
-					einfo Renaming ${_config} as ${_config}-${ABI}
-					mv ${_config} ${_config}-${ABI}
-				done
+				[[ -d "${D}/usr/bin" ]] && \
+					for _config in $(find "${D}/usr/bin" -executable \
+							-regex ".*-config.*"); do
+						einfo Renaming ${_config} as ${_config}-${ABI}
+						mv ${_config} ${_config}-${ABI}
+					done
 			fi
 		fi
 	fi
