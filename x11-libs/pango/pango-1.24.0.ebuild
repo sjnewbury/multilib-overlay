@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils gnome2 multilib multilib-native
+inherit autotools eutils gnome2 multilib multilib-native
 
 DESCRIPTION="Text rendering and layout library"
 HOMEPAGE="http://www.pango.org/"
@@ -45,15 +45,16 @@ pkg_setup() {
 	G2CONF="${G2CONF} $(use_with X x)"
 }
 
-src_unpack() {
-	gnome2_src_unpack
-
+src_prepare() {
 	# make config file location host specific so that a 32bit and 64bit pango
 	# wont fight with each other on a multilib system.  Fix building for
 	# emul-linux-x86-gtklibs
 	if multilib_enabled ; then
 		epatch "${FILESDIR}/${PN}-1.2.5-lib64.patch"
+		epatch "${FILESDIR}/${P}-no-man-gzip.patch"
 	fi
+
+	eautoreconf
 }
 
 multilib-native_src_configure_internal() {

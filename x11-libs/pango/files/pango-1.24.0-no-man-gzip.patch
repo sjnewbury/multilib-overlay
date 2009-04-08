@@ -1,0 +1,15 @@
+--- ./pango-view/Makefile.am~	2009-03-16 21:25:28.000000000 +0000
++++ ./pango-view/Makefile.am	2009-04-08 13:50:13.367654311 +0100
+@@ -100,12 +100,6 @@
+ 	      echo Failed to update pango-view.1, the man page may be outdated >&2; \
+ 	      (test -f "$@" || echo help2man is required to generate this file. >> "$@"));
+ 
+-install-data-hook:
+-	@cd "$(DESTDIR)$(man1dir)" && gzip -c pango-view.1 > preload.1.gz && $(RM) preload.1
+-
+-uninstall-hook:
+-	$(RM) "$(DESTDIR)$(man1dir)/pango-view.1.gz"
+-
+ #########################################################
+ 
+ BUILT_SOURCES = pangorc
