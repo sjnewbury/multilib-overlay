@@ -299,7 +299,7 @@ multilib-native_src_compile_internal() {
 	emake -j1 || die "Unable to make"
 }
 
-src_test() {
+multilib-native_src_test_internal() {
 	use elibc_uclibc && export MAKEOPTS="${MAKEOPTS} -j1"
 	emake -i test CCDLFLAGS= || die "test failed"
 }
