@@ -4,6 +4,8 @@
 
 EAPI="2"
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils flag-o-matic toolchain-funcs multilib-native
 
 DESCRIPTION="Toolkit for SSL v2/v3 and TLS v1"
