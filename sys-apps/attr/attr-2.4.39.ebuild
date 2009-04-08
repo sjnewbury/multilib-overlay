@@ -4,6 +4,8 @@
 
 EAPI=2
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils autotools toolchain-funcs multilib-native
 
 MY_P="${PN}_${PV}-1"
@@ -21,8 +23,7 @@ DEPEND="nls? ( sys-devel/gettext )
 	sys-devel/autoconf"
 RDEPEND=""
 
-src_unpack() {
-	unpack ${A}
+multilib-native_src_prepare_internal() {
 	cd "${S}"
 	epatch "${FILESDIR}"/${PN}-2.4.39-gettext.patch
 	epatch "${FILESDIR}"/${PN}-2.4.39-linguas.patch #205948

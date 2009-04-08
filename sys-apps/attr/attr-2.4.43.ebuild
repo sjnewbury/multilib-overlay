@@ -4,6 +4,8 @@
 
 EAPI=2
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils autotools toolchain-funcs multilib-native
 
 MY_P="${PN}_${PV}-1"
@@ -17,12 +19,11 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
 IUSE="nls"
 
-DEPEND="nls? ( sys-devel/gettext )
+DEPEND="nls? ( sys-devel/gettext[lib32?] )
 	sys-devel/autoconf"
 RDEPEND=""
 
-src_unpack() {
-	unpack ${A}
+multilib-native_src_prepare_internal() {
 	cd "${S}"
 	epatch "${FILESDIR}"/${PN}-2.4.39-gettext.patch
 	epatch "${FILESDIR}"/${PN}-2.4.43-linguas.patch #205948
