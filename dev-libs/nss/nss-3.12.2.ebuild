@@ -4,6 +4,8 @@
 
 EAPI="2"
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils flag-o-matic multilib toolchain-funcs multilib-native
 
 NSPR_VER="4.7.3"
@@ -24,9 +26,7 @@ S="${WORKDIR}/mozilla"
 DEPEND=">=dev-libs/nspr-${NSPR_VER}[lib32?]
 	>=dev-db/sqlite-3.5[lib32?]"
 
-src_unpack() {
-	unpack ${A}
-
+multilib-native_src_prepare_internal() {
 	cd "${S}"/security/coreconf
 	# hack nspr paths
 	echo 'INCLUDES += -I/usr/include/nspr -I$(DIST)/include/dbm' \
@@ -51,8 +51,6 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-3.12-config-1.patch
 	epatch "${FILESDIR}"/${PN}-mips64-2.patch
 }
-
-src_configure() { :; }
 
 multilib-native_src_compile_internal() {
 	strip-flags

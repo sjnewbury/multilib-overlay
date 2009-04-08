@@ -41,6 +41,8 @@ EMULTILIB_OCACA_CONFIG=""
 EMULTILIB_OAALIB_CONFIG=""
 EMULTILIB_GTK_CONFIG=""
 EMULTILIB_SMPEG_CONFIG=""
+EMULTILIB_NSPR_CONFIG=""
+EMULTILIB_NSS_CONFIG=""
 EMULTILIB_OPERLBIN=""
 EMULTILIB_Omyconf=""
 EMULTILIB_OKDE_S=""
@@ -157,6 +159,8 @@ _set_platform_env() {
 		AALIB_CONFIG=/usr/bin/aalib-config-${ABI}
 		GTK_CONFIG=/usr/bin/gtk-config-${ABI}
 		SMPEG_CONFIG=/usr/bin/smpeg-config-${ABI}
+		NSPR_CONFIG=/usr/bin/nspr-config-${ABI}
+		NSS_CONFIG=/usr/bin/nss-config-${ABI}
 		PERLBIN=/usr/bin/perl-${ABI}
 	fi
 }
@@ -227,6 +231,8 @@ multilib-native_src_generic_sub() {
 			EMULTILIB_OAALIB_CONFIG="${AALIB_CONFIG}"
 			EMULTILIB_OGTK_CONFIG="${GTK_CONFIG}"
 			EMULTILIB_OSMPEG_CONFIG="${SMPEG_CONFIG}"
+			EMULTILIB_ONSPR_CONFIG="${NSPR_CONFIG}"
+			EMULTILIB_ONSS_CONFIG="${NSS_CONFIG}"
 			EMULTILIB_OPERLBIN="${PERLBIN}"
 			EMULTILIB_OKDE_S="${KDE_S}"
 			EMULTILIB_Omycmakeargs="${mycmakeargs}"
@@ -251,8 +257,10 @@ multilib-native_src_generic_sub() {
 					*)   die "Unknown ABI"
 					;;
 				esac
-				export QMAKESPEC CUPS_CONFIG GNUTLS_CONFIG CURL_CONFIG PYTHON_CONFIG PYTHON 
-				export CACA_CONFIG AALIB_CONFIG GTK_CONFIG SMPEG_CONFIG PERLBIN
+				export QMAKESPEC CUPS_CONFIG GNUTLS_CONFIG
+				export CURL_CONFIG PYTHON_CONFIG PYTHON 
+				export CACA_CONFIG AALIB_CONFIG GTK_CONFIG
+				export SMPEG_CONFIG NSPR_CONFIG NSS_CONFIG PERLBIN
 			fi
 		fi
 
@@ -299,19 +307,22 @@ multilib-native_src_generic_sub() {
 				# This is a bit of a hack, but it ensures
 				# doc files are available for install phase
 				einfo "Copying documentation from source dir: ${EMULTILIB_source_path}"
+				einfo "Copying selected files from top-level of source tree"
 				for _docfile in $(find ${EMULTILIB_source_path} -maxdepth 1 -type f \
 					! -executable | \
-					grep -v -e ".*\.in\|.*\.am\|.*[^t]config.*\|.*\.h\|.*\.c.*\|.*\.cmake" ); do
-					cp -al ${_docfile} ${WORKDIR}/${PN}_build_${ABI}
+					grep -v -e ".*\.in$\|.*\.am$\|.*[^t]config.*\|.*\.h$\|.*\.c*$\|.*\.cpp$\|.*\.cmake" ); do
+					cp -alu ${_docfile} ${WORKDIR}/${PN}_build_${ABI}
 				done
-				for _docdir in $(find ${EMULTILIB_source_path} -type d -name '*doc*'); do
+				einfo "Copying common doc directories"
+				for _docdir in $(find ${EMULTILIB_source_path} -type d \( -name 'doc' -o -name 'docs' -o -name 'javadoc*' -o -name 'csharpdoc' \)); do
 					mkdir -p ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
-					cp -al ${_docdir}/* ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
+					cp -alu ${_docdir}/* ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
 				done
-				for _docfile in $(find ${EMULTILIB_source_path} -type f -name '*.html'); do
+				einfo "Finding other documentaion files"
+				for _docfile in $(find ${EMULTILIB_source_path} -type f \( -name '*.html' -o -name '*.sgml' -o -name '*.xml' -o -regex '.*\.[0-8]\|.*\.[0-8].' \)); do
 					_docdir="${_docfile%/*}"
 					mkdir -p ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
-					cp -al ${_docdir}/* ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
+					cp -plu ${_docfile} ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
 				done
 			fi
 		fi
@@ -359,6 +370,8 @@ multilib-native_src_generic_sub() {
 			AALIB_CONFIG="${EMULTILIB_OAALIB_CONFIG}"
 			GTK_CONFIG="${EMULTILIB_OGTK_CONFIG}"
 			SMPEG_CONFIG="${EMULTILIB_OSMPEG_CONFIG}"
+			NSPR_CONFIG="${EMULTILIB_ONSPR_CONFIG}"
+			NSS_CONFIG="${EMULTILIB_ONSS_CONFIG}"
 			PERLBIN="${EMULTILIB_OPERLBIN}"
 			myconf="${EMULTILIB_Omyconf}"
 			KDE_S="${EMULTILIB_OKDE_S}"
@@ -371,9 +384,11 @@ multilib-native_src_generic_sub() {
 				local _config
 				[[ -d "${D}/usr/bin" ]] && \
 					for _config in $(find "${D}/usr/bin" -executable \
-							-regex ".*-config.*"); do
-						einfo Renaming ${_config} as ${_config}-${ABI}
-						mv ${_config} ${_config}-${ABI}
+							-regex ".*-config[^32].*"); do
+#						if (file ${_config} | fgrep -q "script text"); then
+							einfo Renaming ${_config} as ${_config}-${ABI}
+							mv ${_config} ${_config}-${ABI}
+#						fi
 					done
 			fi
 		fi

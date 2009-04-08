@@ -4,6 +4,8 @@
 
 EAPI="2"
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit autotools multilib eutils multilib-native
 
 DESCRIPTION="Bluetooth Tools and System Daemons for Linux"
