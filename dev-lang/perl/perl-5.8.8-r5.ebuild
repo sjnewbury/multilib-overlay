@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.8.8-r5.ebuild,v 1.11 2009/03/11 21:55:45 flameeyes Exp $
 
 EAPI="2"
+MULTILIB_IN_SOURCE_BUILD="yes"
 
 inherit eutils flag-o-matic toolchain-funcs multilib multilib-native
 
