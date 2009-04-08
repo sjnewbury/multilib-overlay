@@ -384,11 +384,11 @@ multilib-native_src_generic_sub() {
 				local _config
 				[[ -d "${D}/usr/bin" ]] && \
 					for _config in $(find "${D}/usr/bin" -executable \
-							-regex ".*-config[^32].*"); do
-#						if (file ${_config} | fgrep -q "script text"); then
+							-regex ".*-config.*"|grep -v "config32"); do
+						if (file ${_config} | fgrep -q "script text"); then
 							einfo Renaming ${_config} as ${_config}-${ABI}
 							mv ${_config} ${_config}-${ABI}
-#						fi
+						fi
 					done
 			fi
 		fi
