@@ -13,7 +13,7 @@ SRC_URI="mirror://sourceforge/zsnes/${PN}${PV//./}src.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="-* amd64 x86 ~x86-fbsd"
-IUSE="ao custom-cflags opengl png"
+IUSE="ao custom-cflags opengl png lib32"
 
 RDEPEND="media-libs/libsdl[lib32?]
 	>=sys-libs/zlib-1.2.3-r1[lib32?]
