@@ -25,7 +25,6 @@ IUSE=""
 
 RDEPEND="java? ( >=virtual/jre-1.4 )
 	>=sys-devel/binutils-2.16.1
-	dev-libs/libIDL[lib32?]
 	>=dev-libs/nss-3.12.2[lib32?]
 	>=dev-libs/nspr-4.7.3[lib32?]
 	>=app-text/hunspell-1.1.9[lib32?]

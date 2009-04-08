@@ -23,7 +23,6 @@ IUSE=""
 
 RDEPEND=">=sys-libs/zlib-1.1.4[lib32?]
 	>=sys-devel/binutils-2.16.1
-	dev-libs/libIDL[lib32?]
 	>=dev-libs/nss-3.11.5[lib32?]
 	>=dev-libs/nspr-4.6.5-r1[lib32?]
 	java? ( >=virtual/jre-1.4 )"
