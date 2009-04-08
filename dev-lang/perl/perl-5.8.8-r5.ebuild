@@ -47,7 +47,7 @@ PDEPEND=">=app-admin/perl-cleaner-1.03
 			>=perl-core/Test-Harness-2.56
 		)"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	# I think this should rather be displayed if you *have* 'ithreads'
 	# in USE if it could break things ...
 	if use ithreads
@@ -69,7 +69,7 @@ pkg_setup() {
 	fi
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	cd "${S}"
 
 	# Get -lpthread linked before -lc.  This is needed
@@ -295,7 +295,7 @@ multilib-native_src_compile_internal() {
 	emake -j1 || die "Unable to make"
 }
 
-src_test() {
+multilib-native_src_test_internal() {
 	use elibc_uclibc && export MAKEOPTS="${MAKEOPTS} -j1"
 	emake -i test CCDLFLAGS= || die "test failed"
 }
@@ -598,7 +598,7 @@ src_remove_extra_files()
 	popd > /dev/null
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	INC=$(perl -e 'for $line (@INC) { next if $line eq "."; next if $line =~ m/'${MY_PV}'|etc|local|perl$/; print "$line\n" }')
 	if [[ "${ROOT}" = "/" ]]
 	then
