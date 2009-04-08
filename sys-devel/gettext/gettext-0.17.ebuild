@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-devel/gettext/gettext-0.17.ebuild,v 1.14 2008/11/28 22:37:38 ulm Exp $
 
+EAPI="2"
+
 inherit flag-o-matic eutils multilib toolchain-funcs mono libtool java-pkg-2 multilib-native
 
 DESCRIPTION="GNU locale utilities"
@@ -22,8 +24,7 @@ PDEPEND="emacs? ( app-emacs/po-mode )"
 RDEPEND="${DEPEND}
 	java? ( >=virtual/jdk-1.4 )"
 
-src_unpack() {
-	unpack ${A}
+multilib-native_src_prepare_internal() {
 	cd "${S}"
 
 	epunt_cxx
@@ -51,7 +52,7 @@ src_unpack() {
 	fi
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local myconf=""
 	# Build with --without-included-gettext (on glibc systems)
 	if use elibc_glibc ; then
@@ -73,7 +74,6 @@ multilib-native_src_compile_internal() {
 		$(use_enable openmp) \
 		${myconf} \
 		|| die
-	emake || die
 }
 
 multilib-native_src_install_internal() {
@@ -116,13 +116,13 @@ multilib-native_src_install_internal() {
 	dodoc AUTHORS ChangeLog NEWS README THANKS
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	# older gettext's sometimes installed libintl ...
 	# need to keep the linked version or the system
 	# could die (things like sed link against it :/)
 	preserve_old_lib /{,usr/}$(get_libdir)/libintl$(get_libname 7)
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	preserve_old_lib_notify /{,usr/}$(get_libdir)/libintl$(get_libname 7)
 }
