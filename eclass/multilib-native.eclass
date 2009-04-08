@@ -302,7 +302,7 @@ multilib-native_src_generic_sub() {
 				einfo "Copying selected files from top-level of source tree"
 				for _docfile in $(find ${EMULTILIB_source_path} -maxdepth 1 -type f \
 					! -executable | \
-					grep -v -e ".*\.in\|.*\.am\|.*[^t]config.*\|.*\.h\|.*\.c.*\|.*\.cmake" ); do
+					grep -v -e ".*\.in$\|.*\.am$\|.*[^t]config.*\|.*\.h$\|.*\.c*$\|.*\.cpp$\|.*\.cmake" ); do
 					cp -alu ${_docfile} ${WORKDIR}/${PN}_build_${ABI}
 				done
 				einfo "Copying common doc directories"
