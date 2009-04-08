@@ -2,6 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-devel/libperl/libperl-5.8.8-r2.ebuild,v 1.10 2008/10/27 06:03:20 vapier Exp $
 
+EAPI="2"
+
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 # The basic theory based on comments from Daniel Robbins <drobbins@gentoo.org>.
 #
 # We split the perl ebuild into libperl and perl.  The layout is as follows:
@@ -54,8 +58,6 @@
 
 IUSE="berkdb debug gdbm ithreads"
 
-EAPI="2"
-
 inherit eutils flag-o-matic toolchain-funcs multilib-native
 
 # The slot of this binary compat version of libperl.so
@@ -82,13 +84,13 @@ KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fb
 
 RESTRICT="test"
 
-DEPEND="berkdb? ( sys-libs/db )
-	gdbm? ( >=sys-libs/gdbm-1.8.0 )
+DEPEND="berkdb? ( sys-libs/db[lib32?] )
+	gdbm? ( >=sys-libs/gdbm-1.8.0[lib32?] )
 	elibc_FreeBSD? ( sys-freebsd/freebsd-mk-defs )"
 
 RDEPEND="
-	berkdb? ( sys-libs/db )
-	gdbm? ( >=sys-libs/gdbm-1.8.0 )"
+	berkdb? ( sys-libs/db[lib32?] )
+	gdbm? ( >=sys-libs/gdbm-1.8.0[lib32?] )"
 
 PDEPEND="~dev-lang/perl-${PV}[lib32?]"
 
@@ -108,8 +110,8 @@ pkg_setup() {
 	fi
 }
 
-multilib-native_src_configure_internal() {
-	cd "${S}"
+multilib-native_src_prepare_internal() {
+
 	# Fix the build scripts to create libperl with a soname of ${SLOT}.
 	# We basically add:
 	#
@@ -119,16 +121,17 @@ multilib-native_src_configure_internal() {
 	#
 	#   LIBPERL=libperl.so.${SLOT}.`echo ${PV} | cut -d. -f1,2`
 	#
+	cd "${S}";
 	epatch "${FILESDIR}"/${PN}-create-libperl-soname.patch
 
 	# Configure makes an unwarranted assumption that /bin/ksh is a
 	# good shell. This patch makes it revert to using /bin/sh unless
 	# /bin/ksh really is executable. Should fix bug 42665.
 	# rac 2004.06.09
-	epatch "${FILESDIR}"/${PN}-noksh.patch
+	cd "${S}"; epatch "${FILESDIR}"/${PN}-noksh.patch
 
 	# we need the same @INC-inversion magic here we do in perl
-	epatch "${FILESDIR}"/${P}-reorder-INC.patch
+	cd "${S}"; epatch "${FILESDIR}"/${P}-reorder-INC.patch
 
 	# makedepend.SH contains a syntax error which is ignored by bash but causes
 	# dash to abort
@@ -139,16 +142,16 @@ multilib-native_src_configure_internal() {
 	epatch "${FILESDIR}"/perl-hppa-pa7200-configure.patch
 
 	if use amd64 || use ppc64; then
-		if use lib32 && [[ "${ABI}" == "x86" ]]; then
+		if use lib32 && ( [[ "${ABI}" == "x86" ]] || \
+					[[ "${ABI}" == "ppc" ]] ); then
 			epatch "${FILESDIR}"/${P}-lib32.patch
 		else
 			epatch "${FILESDIR}"/${P}-lib64.patch
 		fi
 	fi
-
-	[[ ${CHOST} == *-dragonfly* ]] && epatch "${FILESDIR}"/${P}-dragonfly-clean.patch
-	[[ ${CHOST} == *-freebsd* ]] && epatch "${FILESDIR}"/${P}-fbsdhints.patch
-	epatch "${FILESDIR}"/${P}-cplusplus.patch
+	[[ ${CHOST} == *-dragonfly* ]] && cd "${S}" && epatch "${FILESDIR}"/${P}-dragonfly-clean.patch
+	[[ ${CHOST} == *-freebsd* ]] && cd "${S}" && epatch "${FILESDIR}"/${P}-fbsdhints.patch
+	cd "${S}"; epatch "${FILESDIR}"/${P}-cplusplus.patch
 	has_version '>=sys-devel/gcc-4.2' && epatch "${FILESDIR}"/${P}-gcc42-command-line.patch
 
 	# patch to fix bug #198196
@@ -163,9 +166,7 @@ myconf() {
 	myconf=( "${myconf[@]}" "$@" )
 }
 
-multilib-native_src_compile_internal() {
-	cd "${S}"
-	
+multilib-native_src_configure_internal() {
 	declare -a myconf
 
 	# Perl has problems compiling with -Os in your flags
@@ -183,10 +184,6 @@ multilib-native_src_compile_internal() {
 	# Fixes bug #143895 on gcc-4.1.1
 	filter-flags "-fsched2-use-superblocks"
 
-	if use lib32 && [[ "${ABI}" == "x86" ]]; then
-		append-ldflags -m32
-	fi
-	
 	export LC_ALL="C"
 
 	case ${CHOST} in
@@ -286,21 +283,22 @@ multilib-native_src_compile_internal() {
 		-Dcf_by="Gentoo" \
 		-Ud_csh \
 		"${myconf[@]}" || die "Unable to configure"
+}
 
+multilib-native_src_compile_internal() {
 	emake -j1 -f Makefile depend || die "Couldn't make libperl$(get_libname) depends"
 	emake -j1 -f Makefile LIBPERL=${LIBPERL} ${LIBPERL} || die "Unable to make libperl$(get_libname)"
-	
 	mkdir "${WORKDIR}/libperl.${ABI}"
 	mv ${LIBPERL} "${WORKDIR}/libperl.${ABI}"
 }
 
 multilib-native_src_install_internal() {
-	cd "${S}"
+
 	export LC_ALL="C"
 
 	if [ "${PN}" = "libperl" ]
 	then
-		dolib.so "${WORKDIR}/libperl.${ABI}"/${LIBPERL}
+		dolib.so "${WORKDIR}"/libperl.${ABI}/${LIBPERL}
 		dosym ${LIBPERL} /usr/$(get_libdir)/libperl$(get_libname ${PERLSLOT})
 	else
 		# Need to do this, else apps do not link to dynamic version of
