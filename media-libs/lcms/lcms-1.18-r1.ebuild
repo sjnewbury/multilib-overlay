@@ -17,11 +17,12 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="tiff jpeg zlib python"
 
-RDEPEND="tiff? ( media-libs/tiff )
-	jpeg? ( media-libs/jpeg )
-	zlib? ( sys-libs/zlib )"
+RDEPEND="tiff? ( media-libs/tiff[lib32?] )
+	jpeg? ( media-libs/jpeg[lib32?] )
+	zlib? ( sys-libs/zlib[lib32?] )
+	dev-lang/python[lib32?]"
 DEPEND="${RDEPEND}
-	python? ( >=dev-lang/swig-1.3.31 )"
+	python? ( >=dev-lang/swig-1.3.31[lib32?] )"
 
 src_prepare() {
 	cd "${S}"
