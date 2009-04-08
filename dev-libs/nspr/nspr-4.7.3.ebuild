@@ -56,6 +56,7 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_compile_internal() {
+	cd ${S}/build
 	make CC="$(tc-getCC)" CXX="$(tc-getCXX)" || die
 }
 
