@@ -2,6 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-libs/db/db-4.6.21_p4.ebuild,v 1.1 2009/03/21 12:23:59 caleb Exp $
 
+EAPI="2"
+
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils db flag-o-matic java-pkg-opt-2 autotools libtool multilib-native
 
 #Number of official patches
@@ -35,8 +39,7 @@ DEPEND="tcl? ( >=dev-lang/tcl-8.4[lib32?] )
 RDEPEND="tcl? ( dev-lang/tcl[lib32?] )
 	java? ( >=virtual/jre-1.4 )"
 
-src_unpack() {
-	unpack "${MY_P}".tar.gz
+src_prepare() {
 	cd "${S}"
 	for (( i=1 ; i<=${PATCHNO} ; i++ ))
 	do
@@ -74,7 +77,7 @@ src_unpack() {
 		-e "s/__EDIT_DB_VERSION__/$DB_VERSION/g" configure
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# compilation with -O0 fails on amd64, see bug #171231
 	if use amd64 && [ ${ABI} = "amd64" ]; then
 		replace-flags -O0 -O2
@@ -131,8 +134,6 @@ multilib-native_src_compile_internal() {
 
 	sed -e "s,\(^STRIP *=\).*,\1\"none\"," Makefile > Makefile.cpy \
 	    && mv Makefile.cpy Makefile
-
-	emake || die "make failed"
 }
 
 multilib-native_src_install_internal() {
