@@ -55,6 +55,10 @@ multilib-native_src_configure_internal() {
 		${myconf} || die "econf failed"
 }
 
+multilib-native_src_compile_internal() {
+	make CC="$(tc-getCC)" CXX="$(tc-getCXX)" || die
+}
+
 multilib-native_src_install_internal() {
 	# Their build system is royally fucked, as usual
 	MINOR_VERSION=7
