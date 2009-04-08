@@ -4,6 +4,8 @@
 
 EAPI="2"
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils multilib toolchain-funcs flag-o-matic multilib-native
 
 DESCRIPTION="A high-quality data compressor used extensively by Gentoo Linux"
@@ -17,8 +19,7 @@ IUSE="static"
 
 DEPEND=""
 
-src_unpack() {
-	unpack ${A}
+multilib-native_src_prepare_internal() {
 	cd "${S}"
 	epatch "${FILESDIR}"/${PN}-1.0.4-makefile-CFLAGS.patch
 	epatch "${FILESDIR}"/${PN}-1.0.4-saneso.patch
@@ -39,8 +40,6 @@ src_unpack() {
 		-e "s:1\.0\.4:${PV}:" \
 		bzip2.1 bzip2.txt Makefile-libbz2_so manual.{html,ps,xml} || die
 }
-
-src_configure() { :; }
 
 multilib-native_src_compile_internal() {
 	local makeopts="
