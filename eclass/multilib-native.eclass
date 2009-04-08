@@ -302,16 +302,16 @@ multilib-native_src_generic_sub() {
 				for _docfile in $(find ${EMULTILIB_source_path} -maxdepth 1 -type f \
 					! -executable | \
 					grep -v -e ".*\.in\|.*\.am\|.*[^t]config.*\|.*\.h\|.*\.c.*\|.*\.cmake" ); do
-					cp -al ${_docfile} ${WORKDIR}/${PN}_build_${ABI}
+					cp -alu ${_docfile} ${WORKDIR}/${PN}_build_${ABI}
 				done
-				for _docdir in $(find ${EMULTILIB_source_path} -type d -name '*doc*'); do
+				for _docdir in $(find ${EMULTILIB_source_path} -type d \( -name 'doc' -o -name 'docs' -o -name 'javadoc*' -o -name 'csharpdoc' \) ); do
 					mkdir -p ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
-					cp -al ${_docdir}/* ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
+					cp -alu ${_docdir}/* ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
 				done
-				for _docfile in $(find ${EMULTILIB_source_path} -type f -name '*.html' -o -name '*.sgml'); do
+				for _docfile in $(find ${EMULTILIB_source_path} -type f \( -name '*.html' -o -name '*.sgml' -o -name '*.xml' -o -regex '.*\.[0-8]\|.*\.[0-8].'\)); do
 					_docdir="${_docfile%/*}"
 					mkdir -p ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
-					cp -al ${_docdir}/* ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
+					cp -plu ${_docfile} ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
 				done
 			fi
 		fi
@@ -371,9 +371,11 @@ multilib-native_src_generic_sub() {
 				local _config
 				[[ -d "${D}/usr/bin" ]] && \
 					for _config in $(find "${D}/usr/bin" -executable \
-							-regex ".*-config.*"); do
-						einfo Renaming ${_config} as ${_config}-${ABI}
-						mv ${_config} ${_config}-${ABI}
+							-regex ".*-config[^32].*"); do
+						if (file ${_config} | grep -q "script text"); then
+							einfo Renaming ${_config} as ${_config}-${ABI}
+							mv ${_config} ${_config}-${ABI}
+						fi
 					done
 			fi
 		fi
