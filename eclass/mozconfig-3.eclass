@@ -13,7 +13,7 @@ RDEPEND="x11-libs/libXrender[lib32?]
 	x11-libs/libXmu[lib32?]
 	>=media-libs/jpeg-6b[lib32?]
 	dev-libs/expat[lib32?]
-	app-arch/zip[lib32?]
+	app-arch/zip
 	app-arch/unzip
 	>=x11-libs/gtk+-2.8.6[lib32?]
 	>=dev-libs/glib-2.8.2[lib32?]
