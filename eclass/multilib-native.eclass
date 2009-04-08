@@ -299,16 +299,19 @@ multilib-native_src_generic_sub() {
 				# This is a bit of a hack, but it ensures
 				# doc files are available for install phase
 				einfo "Copying documentation from source dir: ${EMULTILIB_source_path}"
+				einfo "Copying selected files from top-level of source tree"
 				for _docfile in $(find ${EMULTILIB_source_path} -maxdepth 1 -type f \
 					! -executable | \
 					grep -v -e ".*\.in\|.*\.am\|.*[^t]config.*\|.*\.h\|.*\.c.*\|.*\.cmake" ); do
 					cp -alu ${_docfile} ${WORKDIR}/${PN}_build_${ABI}
 				done
-				for _docdir in $(find ${EMULTILIB_source_path} -type d \( -name 'doc' -o -name 'docs' -o -name 'javadoc*' -o -name 'csharpdoc' \) ); do
+				einfo "Copying common doc directories"
+				for _docdir in $(find ${EMULTILIB_source_path} -type d \( -name 'doc' -o -name 'docs' -o -name 'javadoc*' -o -name 'csharpdoc' \)); do
 					mkdir -p ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
 					cp -alu ${_docdir}/* ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
 				done
-				for _docfile in $(find ${EMULTILIB_source_path} -type f \( -name '*.html' -o -name '*.sgml' -o -name '*.xml' -o -regex '.*\.[0-8]\|.*\.[0-8].'\)); do
+				einfo "Finding other documentaion files"
+				for _docfile in $(find ${EMULTILIB_source_path} -type f \( -name '*.html' -o -name '*.sgml' -o -name '*.xml' -o -regex '.*\.[0-8]\|.*\.[0-8].' \)); do
 					_docdir="${_docfile%/*}"
 					mkdir -p ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
 					cp -plu ${_docfile} ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
