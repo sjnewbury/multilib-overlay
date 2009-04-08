@@ -23,7 +23,7 @@ RDEPEND="tiff? ( media-libs/tiff[lib32?] )
 	python? ( >=dev-lang/python-1.5.2[lib32?] )"
 		# ugly workaround because arches have not keyworded it
 DEPEND="${RDEPEND}
-	python? ( >=dev-lang/swig-1.3.31[lib32?] )"
+	python? ( >=dev-lang/swig-1.3.31 )"
 
 multilib-native_src_prepare_internal() {
 	cd "${S}"

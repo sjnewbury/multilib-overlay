@@ -20,9 +20,9 @@ IUSE="tiff jpeg zlib python"
 RDEPEND="tiff? ( media-libs/tiff[lib32?] )
 	jpeg? ( media-libs/jpeg[lib32?] )
 	zlib? ( sys-libs/zlib[lib32?] )
-	dev-lang/python[lib32?]"
+	python? ( dev-lang/python[lib32?] )"
 DEPEND="${RDEPEND}
-	python? ( >=dev-lang/swig-1.3.31[lib32?] )"
+	python? ( >=dev-lang/swig-1.3.31 )"
 
 multilib-native_src_prepare_internal() {
 	cd "${S}"
