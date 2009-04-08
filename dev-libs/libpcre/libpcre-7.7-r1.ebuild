@@ -1,4 +1,4 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/libpcre/libpcre-7.7-r1.ebuild,v 1.2 2008/11/05 00:33:31 vapier Exp $
 
@@ -17,21 +17,21 @@ SLOT="3"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="bzip2 +cxx doc unicode zlib"
 
-DEPEND="dev-util/pkgconfig"
-RDEPEND=""
+DEPEND="dev-util/pkgconfig
+	sys-libs/zlib[lib32?]
+	app-arch/bzip2[lib32?]"
+RDEPEND="sys-libs/zlib[lib32?]
+	 app-arch/bzip2[lib32?]"
 
 S=${WORKDIR}/${MY_P}
 
-src_unpack() {
-	unpack ${A}
+src_prepare() {
 	cd "${S}"
 	epatch "${FILESDIR}"/${P}-buffer-overflow.patch
 	elibtoolize
 }
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# Enable building of static libs too - grep and others
 	# depend on them being built: bug 164099
 	econf --with-match-limit-recursion=8192 \
@@ -43,7 +43,6 @@ multilib-native_src_compile_internal() {
 		--htmldir=/usr/share/doc/${PF}/html \
 		--docdir=/usr/share/doc/${PF} \
 		|| die "econf failed"
-	emake all || die "emake failed"
 }
 
 multilib-native_src_install_internal() {
