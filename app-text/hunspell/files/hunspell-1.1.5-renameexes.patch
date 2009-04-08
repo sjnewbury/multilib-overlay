@@ -1,0 +1,116 @@
+diff -u -ur hunspell-1.1.5.orig/src/tools/Makefile.am hunspell-1.1.5/src/tools/Makefile.am
+--- hunspell-1.1.5.orig/src/tools/Makefile.am	2007-03-21 08:36:31.000000000 +0100
++++ hunspell-1.1.5/src/tools/Makefile.am	2007-05-20 13:31:26.000000000 +0200
+@@ -1,14 +1,14 @@
+-bin_PROGRAMS=munch unmunch example hunspell @EXPERIMENTAL@
++bin_PROGRAMS=hunspell-munch hunspell-unmunch hunspell-example hunspell @EXPERIMENTAL@
+ EXTRA_PROGRAMS=hunstem hunmorph
+ 
+ INCLUDES=-I${top_srcdir}/src/hunspell -I${top_srcdir}/src/parsers
+ 
+-munch_SOURCES=munch.c
+-unmunch_SOURCES=unmunch.c
++hunspell_munch_SOURCES=munch.c
++hunspell_unmunch_SOURCES=unmunch.c
+ include_HEADERS=munch.h unmunch.h
+ 
+-example_SOURCES=example.cxx
+-example_LDADD = ../hunspell/libhunspell-1.1.la
++hunspell_example_SOURCES=example.cxx
++hunspell_example_LDADD = ../hunspell/libhunspell-1.1.la
+ 
+ hunspell_SOURCES=hunspell.cxx
+ hunspell_LDADD = @LIBINTL@ ../hunspell/libhunspell-1.1.la \
+Only in hunspell-1.1.5/src/tools: Makefile.am.rej
+diff -u -ur hunspell-1.1.5.orig/src/tools/example.cxx hunspell-1.1.5/src/tools/example.cxx
+--- hunspell-1.1.5.orig/src/tools/example.cxx	2005-08-20 22:25:22.000000000 +0200
++++ hunspell-1.1.5/src/tools/example.cxx	2007-05-20 13:29:27.000000000 +0200
+@@ -24,21 +24,21 @@
+        af = mystrdup(argv[1]);
+   } else {
+     fprintf(stderr,"correct syntax is:\n"); 
+-    fprintf(stderr,"example affix_file dictionary_file file_of_words_to_check\n");
++    fprintf(stderr,"hunspell-example affix_file dictionary_file file_of_words_to_check\n");
+     exit(1);
+   }
+   if (argv[2]) {
+        df = mystrdup(argv[2]);
+   } else {
+     fprintf(stderr,"correct syntax is:\n"); 
+-    fprintf(stderr,"example affix_file dictionary_file file_of_words_to_check\n");
++    fprintf(stderr,"hunspell-example affix_file dictionary_file file_of_words_to_check\n");
+     exit(1);
+   }
+   if (argv[3]) {
+        wtc = mystrdup(argv[3]);
+   } else {
+     fprintf(stderr,"correct syntax is:\n"); 
+-    fprintf(stderr,"example affix_file dictionary_file file_of_words_to_check\n");
++    fprintf(stderr,"hunspell-example affix_file dictionary_file file_of_words_to_check\n");
+     exit(1);
+   }
+ 
+diff -u -ur hunspell-1.1.5.orig/src/tools/hunmorph.cxx hunspell-1.1.5/src/tools/hunmorph.cxx
+--- hunspell-1.1.5.orig/src/tools/hunmorph.cxx	2005-09-16 11:25:17.000000000 +0200
++++ hunspell-1.1.5/src/tools/hunmorph.cxx	2007-05-20 13:29:27.000000000 +0200
+@@ -26,7 +26,7 @@
+ 
+     for (i = 1; i < 3; i++)
+ 	if (!argv[i]) {
+-	    fprintf(stderr, "correct syntax is:\nexample affix_file");
++	    fprintf(stderr, "correct syntax is:\nhunmorph affix_file");
+ 	    fprintf(stderr, " dictionary_file file_of_words_to_check\n");
+ 	    exit(1);
+ 	}
+diff -u -ur hunspell-1.1.5.orig/src/tools/hunstem.cxx hunspell-1.1.5/src/tools/hunstem.cxx
+--- hunspell-1.1.5.orig/src/tools/hunstem.cxx	2006-05-12 16:16:58.000000000 +0200
++++ hunspell-1.1.5/src/tools/hunstem.cxx	2007-05-20 13:29:27.000000000 +0200
+@@ -26,7 +26,7 @@
+ 
+     for (i = 1; i < 3; i++)
+ 	if (!argv[i]) {
+-	    fprintf(stderr, "correct syntax is:\nexample affix_file");
++	    fprintf(stderr, "correct syntax is:\nhunstem affix_file");
+ 	    fprintf(stderr, " dictionary_file file_of_words_to_check\n");
+ 	    exit(1);
+ 	}
+diff -u -ur hunspell-1.1.5.orig/src/tools/munch.c hunspell-1.1.5/src/tools/munch.c
+--- hunspell-1.1.5.orig/src/tools/munch.c	2006-03-29 23:16:34.000000000 +0200
++++ hunspell-1.1.5/src/tools/munch.c	2007-05-20 13:29:27.000000000 +0200
+@@ -42,14 +42,14 @@
+        wf = mystrdup(argv[1]);
+   } else {
+     fprintf(stderr,"correct syntax is:\n"); 
+-    fprintf(stderr,"munch word_list_file affix_file\n");
++    fprintf(stderr,"hunspell-munch word_list_file affix_file\n");
+     exit(1);
+   }
+   if (argv[2]) {
+        af = mystrdup(argv[2]);
+   } else {
+     fprintf(stderr,"correct syntax is:\n"); 
+-    fprintf(stderr,"munch word_list_file affix_file\n");
++    fprintf(stderr,"hunspell-munch word_list_file affix_file\n");
+     exit(1);
+   }
+ 
+diff -u -ur hunspell-1.1.5.orig/src/tools/unmunch.c hunspell-1.1.5/src/tools/unmunch.c
+--- hunspell-1.1.5.orig/src/tools/unmunch.c	2006-10-02 12:12:00.000000000 +0200
++++ hunspell-1.1.5/src/tools/unmunch.c	2007-05-20 13:29:27.000000000 +0200
+@@ -39,14 +39,14 @@
+        wf = mystrdup(argv[1]);
+   } else {
+     fprintf(stderr,"correct syntax is:\n"); 
+-    fprintf(stderr,"unmunch dic_file affix_file\n");
++    fprintf(stderr,"hunspell-unmunch dic_file affix_file\n");
+     exit(1);
+   }
+   if (argv[2]) {
+        af = mystrdup(argv[2]);
+   } else {
+     fprintf(stderr,"correct syntax is:\n"); 
+-    fprintf(stderr,"unmunch dic_file affix_file\n");
++    fprintf(stderr,"hunspell-unmunch dic_file affix_file\n");
+     exit(1);
+   }
+ 
