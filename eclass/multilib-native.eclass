@@ -308,7 +308,7 @@ multilib-native_src_generic_sub() {
 					mkdir -p ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
 					cp -al ${_docdir}/* ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
 				done
-				for _docfile in $(find ${EMULTILIB_source_path} -type f -name '*.html'); do
+				for _docfile in $(find ${EMULTILIB_source_path} -type f -name '*.html' -o -name '*.sgml'); do
 					_docdir="${_docfile%/*}"
 					mkdir -p ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
 					cp -al ${_docdir}/* ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
