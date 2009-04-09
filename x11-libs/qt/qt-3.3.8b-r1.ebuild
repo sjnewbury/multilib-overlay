@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/qt/qt-3.3.8b-r1.ebuild,v 1.7 2009/01/17 16:41:01 nixnut Exp $
 
 EAPI=2
+MULTILIB_IN_SOURCE_BUILD="yes"
 
 # *** Please remember to update qt3.eclass when revbumping this ***
 
@@ -277,14 +278,16 @@ multilib-native_src_install_internal() {
 		doexe ${x}
 	done
 
-	# Past this point just needs to be done once
-	is_final_abi || return 0
-
 	# includes
 	cd "${S}"
 	dodir ${QTBASE}/include/private
 	cp include/*\.h "${D}"/${QTBASE}/include/
 	cp include/private/*\.h "${D}"/${QTBASE}/include/private/
+
+	prep_ml_includes ${QTBASE}/include
+
+	# Past this point just needs to be done once
+	is_final_abi || return 0
 
 	# prl files
 	sed -i -e "s:${S}:${QTBASE}:g" "${S}"/lib/*.prl
@@ -360,8 +363,6 @@ EOF
 	if use immqt || use immqt-bc ; then
 		dodoc "${S}"/README.immodule
 	fi
-
-	prep_ml_includes ${QTBASE}/include
 }
 
 pkg_postinst() {
