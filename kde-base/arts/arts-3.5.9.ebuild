@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/kde-base/arts/arts-3.5.9.ebuild,v 1.9 2008/07/27 20:19:23 carlo Exp $
 
 EAPI="2"
+MULTILIB_IN_SOURCE_BUILD="yes"
 inherit kde flag-o-matic eutils versionator multilib-native
 set-kdedir 3.5
 
