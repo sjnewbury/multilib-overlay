@@ -37,12 +37,12 @@ pkg_setup() {
 	fi
 }
 
-src_unpack() {
-	unpack ${A}
+src_prepare() {
 	cd "${S}"
 
 	# note: this sandbox fix is no longer needed with sandbox-1.3+
 	epatch "${FILESDIR}"/sandbox-fix2.patch
+	epatch "${FILESDIR}"/${P}-install-libsqlite3-first.patch
 
 	epunt_cxx
 }

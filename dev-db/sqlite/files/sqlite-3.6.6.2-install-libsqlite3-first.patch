@@ -1,0 +1,22 @@
+--- ./Makefile.in.orig	2008-11-26 14:36:06.000000000 +0000
++++ ./Makefile.in	2009-04-09 11:53:48.297478339 +0100
+@@ -750,7 +750,10 @@
+ 		$(TEMP_STORE) -o $@ $(TESTFIXTURE_SRC) $(LIBTCL)
+ 
+ 
+-install:	sqlite3$(BEXE) libsqlite3.la sqlite3.h ${HAVE_TCL:1=tcl_install}
++# libsqlite3.la must be installed before anything that depends on it,
++# including the tcl_install items.
++
++install:	sqlite3$(BEXE) libsqlite3.la sqlite3.h
+ 	$(INSTALL) -d $(DESTDIR)$(libdir)
+ 	$(LTINSTALL) libsqlite3.la $(DESTDIR)$(libdir)
+ 	$(INSTALL) -d $(DESTDIR)$(bindir)
+@@ -760,6 +763,7 @@
+ 	$(INSTALL) -m 0644 $(TOP)/src/sqlite3ext.h $(DESTDIR)$(includedir)
+ 	$(INSTALL) -d $(DESTDIR)$(pkgconfigdir)
+ 	$(INSTALL) -m 0644 sqlite3.pc $(DESTDIR)$(pkgconfigdir)
++	if [ "$(HAVE_TCL)" = 1 ]; then $(MAKE) tcl_install; fi
+ 
+ tcl_install:	libtclsqlite3.la
+ 	$(TCLSH_CMD) $(TOP)/tclinstaller.tcl $(RELEASE)

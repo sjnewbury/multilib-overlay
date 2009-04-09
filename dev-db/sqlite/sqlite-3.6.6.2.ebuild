@@ -37,11 +37,11 @@ pkg_setup() {
 	fi
 }
 
-src_unpack() {
-	unpack ${A}
+src_prepare() {
 	cd "${S}"
 
 	epatch "${FILESDIR}"/sandbox-fix2.patch
+	epatch "${FILESDIR}"/${P}-install-libsqlite3-first.patch
 
 	elibtoolize
 	epunt_cxx
