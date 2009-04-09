@@ -387,7 +387,7 @@ EOF
 			--htmldir="${D}/usr/share/doc/${PF}/html" \
 			--libpods='perlfunc:perlguts:perlvar:perlrun:perlop'
 	fi
-	cd `find "${D}" -name Path.pm|sed -e 's/Path.pm//'`
+	cd `find "${D}" -name Path.pm|grep $(get_libdir)|sed -e 's/Path.pm//'` || die cd failed
 	# CAN patch in bug 79685
 	epatch "${FILESDIR}"/${P}-CAN-2005-0448-rmtree.patch
 
