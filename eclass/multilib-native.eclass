@@ -115,6 +115,13 @@ multilib-native_pkg_postrm() {
 	multilib-native_src_generic pkg_postrm
 }
 
+# @FUNCTION: multilib_debug
+# @USAGE: multilib_debug name_of_variable content_of_variable
+# @DESCRIPTION: print debug output if MULTILIB_DEBUG is set
+multilib_debug() {
+	[[ -n ${MULTILIB_DEBUG} ]] && einfo MULTILIB_DEBUG:$1=$2
+}
+
 # @FUNCTION: _check_build_dir
 # @DESCRIPTION: This function overrides the function of the same name
 #		in cmake-utils.eclass.  We handle the build dir ourselves. 
@@ -285,17 +292,24 @@ multilib-native_src_generic_sub() {
 		if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
 				[[ -z "$(echo ${1}|grep pkg)" ]]; then
 			# Determine whether S = source dir
-			EMULTILIB_partial_S_path=${S/"${WORKDIR}/"}
+			EMULTILIB_partial_S_path=${S#*"${WORKDIR}/"}
 			EMULTILIB_source_dir=${EMULTILIB_partial_S_path%%/*}
+
+			multilib_debug WORKDIR ${WORKDIR}
+			multilib_debug S ${S}
+			multilib_debug EMULTILIB_partial_S_path ${EMULTILIB_partial_S_path}
+			multilib_debug EMULTILIB_source_dir ${EMULTILIB_source_dir}
 
 			# If ${EMULTILIB_source_dir} is empty, then ${S} points
 			# to the top level.
 			[[ -z ${EMULTILIB_source_dir} ]] && \
 				EMULTILIB_source_dir=${EMULTILIB_partial_S_path}
+			multilib_debug EMULTILIB_source_dir ${EMULTILIB_source_dir}
 			EMULTILIB_source_path=${WORKDIR}/${EMULTILIB_source_dir}
+			multilib_debug EMULTILIB_source_path ${EMULTILIB_source_path}
 			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 					[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]; then
-				einfo "Copying source tree to ${WORKDIR}/${PN}_build_${ABI}"
+				einfo "Copying source tree from ${EMULTILIB_source_path} to ${WORKDIR}/${PN}_build_${ABI}"
 				cp -al ${EMULTILIB_source_path} ${WORKDIR}/${PN}_build_${ABI}
 			else
 				einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
@@ -319,7 +333,8 @@ multilib-native_src_generic_sub() {
 					cp -alu ${_docdir}/* ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
 				done
 				einfo "Finding other documentaion files"
-				for _docfile in $(find ${EMULTILIB_source_path} -type f \( -name '*.html' -o -name '*.sgml' -o -name '*.xml' -o -regex '.*\.[0-8]\|.*\.[0-8].' \)); do
+				for _docfile in $(find ${EMULTILIB_source_path} -type f \( -name '*.html' -o -name '*.sgml' -o -name '*.xml' -o -regex '.*\.[0-8]\|.*\.[0-8].' \));
+				do
 					_docdir="${_docfile%/*}"
 					mkdir -p ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
 					cp -plu ${_docfile} ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
@@ -329,6 +344,7 @@ multilib-native_src_generic_sub() {
 		
 		[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]] && \
 			ECONF_SOURCE="${EMULTILIB_source_path}"
+		multilib_debug ECONF_SOURCE ${ECONF_SOURCE}
 
 		# S should not be redefined for out-of-source-tree prepare
 		# phase, or at all in the cmake case
@@ -342,15 +358,18 @@ multilib-native_src_generic_sub() {
 				S=${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}
 			fi
 		fi
+		multilib_debug S ${S}
 
 		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}"
+		multilib_debug CMAKE_BUILD_DIR ${CMAKE_BUILD_DIR}
 		KDE_S="${S}"
+		multilib_debug KDE_S ${KDE_S}
 
 		[[ -d "${S}" ]] && cd ${S}
 
 		export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 	fi
-	
+
 	multilib-native_${1}_internal
 
 	if [[ -n ${EMULTILIB_PKG} ]]; then
