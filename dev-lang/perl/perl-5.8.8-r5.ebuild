@@ -389,12 +389,7 @@ EOF
 	fi
 	cd `find "${D}" -name Path.pm|sed -e 's/Path.pm//'`
 	# CAN patch in bug 79685
-	if [[ $(number_abis) -gt 1 ]]; then
-		[[ "{ABI}" == "32" ]] && epatch "${FILESDIR}"/${P}-CAN-2005-0448-rmtree2.patch
-		[[ "{ABI}" == "64" ]] && epatch "${FILESDIR}"/${P}-CAN-2005-0448-rmtree.patch
-	else
-		epatch "${FILESDIR}"/${P}-CAN-2005-0448-rmtree.patch
-	fi
+	epatch "${FILESDIR}"/${P}-CAN-2005-0448-rmtree.patch
 
 	# Remove those items we PDPEND on
 	rm -f "${D}"/usr/bin/pod2usage
