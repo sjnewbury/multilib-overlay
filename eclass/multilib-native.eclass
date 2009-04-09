@@ -311,7 +311,7 @@ multilib-native_src_generic_sub() {
 				for _docfile in $(find ${EMULTILIB_source_path} -maxdepth 1 -type f \
 					! -executable | \
 					grep -v -e ".*\.in$\|.*\.am$\|.*[^t]config.*\|.*\.h$\|.*\.c*$\|.*\.cpp$\|.*\.cmake" ); do
-					cp -alu ${_docfile} ${WORKDIR}/${PN}_build_${ABI}
+					cp -au ${_docfile} ${WORKDIR}/${PN}_build_${ABI}
 				done
 				einfo "Copying common doc directories"
 				for _docdir in $(find ${EMULTILIB_source_path} -type d \( -name 'doc' -o -name 'docs' -o -name 'javadoc*' -o -name 'csharpdoc' \)); do
