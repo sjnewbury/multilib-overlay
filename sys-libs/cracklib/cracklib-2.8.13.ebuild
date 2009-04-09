@@ -4,6 +4,8 @@
 
 EAPI=2
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils toolchain-funcs multilib multilib-native
 
 MY_P=${P/_}
