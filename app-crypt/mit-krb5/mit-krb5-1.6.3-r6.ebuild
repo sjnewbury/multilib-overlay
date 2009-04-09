@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-crypt/mit-krb5/mit-krb5-1.6.3-r5.ebuild,v 1.6 2009/03/27 21:41:44 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-crypt/mit-krb5/mit-krb5-1.6.3-r6.ebuild,v 1.3 2009/04/08 17:53:57 keytoaster Exp $
 
 EAPI="2"
 
@@ -24,7 +24,6 @@ IUSE="krb4 doc"
 RDEPEND="!virtual/krb5
 	>=sys-libs/e2fsprogs-libs-1.41.0[lib32?]
 	dev-libs/openssl[lib32?]"
-
 DEPEND="${RDEPEND}
 	doc? ( virtual/latex-base )"
 
@@ -37,6 +36,8 @@ src_unpack() {
 	unpack ./${MY_P}.tar.gz
 	cd "${S}"
 	EPATCH_SUFFIX="patch" epatch "${PATCHDIR}"
+	epatch "${FILESDIR}/CVE-2009-0844+CVE-2009-0847.patch"
+	epatch "${FILESDIR}/CVE-2009-0846.patch"
 	einfo "Regenerating configure scripts (be patient)"
 	local subdir
 	for subdir in $(find . -name configure.in \
