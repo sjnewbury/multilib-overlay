@@ -4,6 +4,8 @@
 
 EAPI="2"
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils toolchain-funcs multilib-native
 
 MY_P="${P//-/_}"
@@ -22,10 +24,7 @@ DEPEND=""
 
 S=${WORKDIR}/${MY_P}
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
+src_prepare() {
 	chmod ug+w Makefile
 
 	EPATCH_SUFFIX="patch"
@@ -35,8 +34,6 @@ src_unpack() {
 	epatch ${PATCHDIR}/${P}-shared.patch
 	use ipv6 && epatch ${PATCHDIR}/${P}-ipv6-1.14.diff
 }
-
-src_configure(){ :; }
 
 multilib-native_src_compile_internal() {
 	tc-export AR CC RANLIB
