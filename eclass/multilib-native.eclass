@@ -345,18 +345,18 @@ multilib-native_src_generic_sub() {
 			[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]] && \
 				ECONF_SOURCE="${EMULTILIB_source_path}"
 			multilib_debug ECONF_SOURCE ${ECONF_SOURCE}
+		fi
 
-			# S should not be redefined for out-of-source-tree prepare
-			# phase, or at all in the cmake case
-			if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
-				if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]]; then
-					S=${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}
-				fi
-			else
-				if !([[ "$1" == "src_prepare" ]] && \
-						[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]]); then
-					S=${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}
-				fi
+		# S should not be redefined for out-of-source-tree prepare
+		# phase, or at all in the cmake case
+		if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
+			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]]; then
+				S=${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}
+			fi
+		else
+			if !([[ "$1" == "src_prepare" ]] && \
+					[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]]); then
+				S=${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}
 			fi
 		fi
 		
@@ -386,12 +386,12 @@ multilib-native_src_generic_sub() {
 	# We need to filter out our changes to the compiler and linker flags
 	# between phases so the is_final_abi flags don't carry through
 	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
+		S="${EMULTILIB_OSPATH}"
 		if ! is_final_abi; then
 			CFLAGS="${EMULTILIB_OCFLAGS}"
 			CXXFLAGS="${EMULTILIB_OCXXFLAGS}"
 			LDFLAGS="${EMULTILIB_OLDFLAGS}"
 			CHOST="${EMULTILIB_OCHOST}"
-			S="${EMULTILIB_OSPATH}"
 			CCACHE_DIR="${EMULTILIB_OCCACHE_DIR}"
 			PYTHON="${EMULTILIB_OPYTHON}"
 			PYTHON_CONFIG="${EMULTILIB_OPYTHON_CONFIG}"
