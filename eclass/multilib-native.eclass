@@ -425,9 +425,9 @@ multilib-native_src_generic_sub() {
 			fi
 		else
 			# Filter out our changes to flags
-			CFLAGS="${CFLAGS}/${EMULTILIB_ABI_FLAGS}"
-			CXXFLAGS="${CXXFLAGS}/${EMULTILIB_ABI_FLAGS}"
-			LDFLAGS="${LDFLAGS}/${EMULTILIB_ABI_FLAGS}"
+			CFLAGS="${CFLAGS/${EMULTILIB_ABI_FLAGS}}"
+			CXXFLAGS="${CXXFLAGS/${EMULTILIB_ABI_FLAGS}}"
+			LDFLAGS="${LDFLAGS/${EMULTILIB_ABI_FLAGS}}"
 		fi
 	fi
 }
