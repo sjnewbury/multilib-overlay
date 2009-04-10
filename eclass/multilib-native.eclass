@@ -372,8 +372,16 @@ multilib-native_src_generic_sub() {
 
 	multilib-native_${1}_internal
 
+	# Now restore the environment, it is vital that this only occurs
+	# between each pass through a single phase, and not between each
+	# phase as otherwise changes made by other eclasses and the ebuild
+	# will be lost.  On the final pass is_final_abi is TRUE, so we know
+	# we'll be entering a new phase, this allows the env vars changed
+	# during the is_final_abi to be respected.  FIXME?: any ABI specific
+	# changes to env vars we care about made during ! is_final_abi will
+	# be lost, hopefully this doesn't occur in the real world...
 	if [[ -n ${EMULTILIB_PKG} ]]; then
-		if has_multilib_profile; then
+		if has_multilib_profile && ! is_final_abi; then
 			CFLAGS="${EMULTILIB_OCFLAGS}"
 			CXXFLAGS="${EMULTILIB_OCXXFLAGS}"
 			LDFLAGS="${EMULTILIB_OLDFLAGS}"
