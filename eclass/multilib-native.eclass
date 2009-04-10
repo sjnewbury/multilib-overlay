@@ -135,9 +135,10 @@ _check_build_dir() {
 # @DESCRIPTION: Set environment up for 32bit or 64bit ABI
 _set_platform_env() {
 	local pyver=""
-	CFLAGS="${EMULTILIB_OCFLAGS} -m$1"
-	CXXFLAGS="${EMULTILIB_OCXXFLAGS} -m$1"
-	LDFLAGS="${EMULTILIB_OLDFLAGS} -m$1 -L/usr/lib$1"
+	EMULTILIB_ABI_FLAGS="-m$1"
+	CFLAGS="${EMULTILIB_OCFLAGS} ${EMULTILIB_ABI_FLAGS}"
+	CXXFLAGS="${EMULTILIB_OCXXFLAGS} ${EMULTILIB_ABI_FLAGS}"
+	LDFLAGS="${EMULTILIB_OLDFLAGS} ${EMULTILIB_ABI_FLAGS}"
 	QMAKESPEC="linux-g++-$1"
 	if [[ $1 == "32" ]]; then
 		# TODO: this should be changed to ${ABI}
@@ -219,34 +220,35 @@ multilib-native_src_generic_sub() {
 		export CC="$(tc-getCC)" CXX="$(tc-getCXX)"
 
 		if has_multilib_profile ; then
-			# Save env before each ABI pass
-			EMULTILIB_OCFLAGS="${CFLAGS}"
-			EMULTILIB_OCXXFLAGS="${CXXFLAGS}"
-			EMULTILIB_OLDFLAGS="${LDFLAGS}"
-			EMULTILIB_OCHOST="${CHOST}"
-			EMULTILIB_OSPATH="${S}"
+			if ! is_final_abi; then
+				# Save env before each ABI pass
+				EMULTILIB_OCFLAGS="${CFLAGS}"
+				EMULTILIB_OCXXFLAGS="${CXXFLAGS}"
+				EMULTILIB_OLDFLAGS="${LDFLAGS}"
+				EMULTILIB_OCHOST="${CHOST}"
+				EMULTILIB_OSPATH="${S}"
 
-			# Various libraries store build-time linking
-			# information in a config script file or program binary
-			EMULTILIB_OCCACHE_DIR="${CCACHE_DIR}"
-			EMULTILIB_OPYTHON="${PYTHON}"
-			EMULTILIB_OPYTHON_CONFIG="${PYTHON_CONFIG}"
-			EMULTILIB_OCUPS_CONFIG="${CUPS_CONFIG}"
-			EMULTILIB_OGNUTLS_CONFIG="${GNUTLS_CONFIG}"
-			EMULTILIB_OCURL_CONFIG="${CURL_CONFIG}"
-			EMULTILIB_OCACA_CONFIG="${CACA_CONFIG}"
-			EMULTILIB_OAALIB_CONFIG="${AALIB_CONFIG}"
-			EMULTILIB_OGTK_CONFIG="${GTK_CONFIG}"
-			EMULTILIB_OSMPEG_CONFIG="${SMPEG_CONFIG}"
-			EMULTILIB_ONSPR_CONFIG="${NSPR_CONFIG}"
-			EMULTILIB_ONSS_CONFIG="${NSS_CONFIG}"
-			EMULTILIB_OPERLBIN="${PERLBIN}"
-			EMULTILIB_OKDE_S="${KDE_S}"
-			EMULTILIB_Omycmakeargs="${mycmakeargs}"
-			# We need to prevent myconf from accumulating through
-			# each pass, but respect initial value
-			EMULTILIB_Omyconf="${myconf}"
-
+				# Various libraries store build-time linking
+				# information in a config script file or program binary
+				EMULTILIB_OCCACHE_DIR="${CCACHE_DIR}"
+				EMULTILIB_OPYTHON="${PYTHON}"
+				EMULTILIB_OPYTHON_CONFIG="${PYTHON_CONFIG}"
+				EMULTILIB_OCUPS_CONFIG="${CUPS_CONFIG}"
+				EMULTILIB_OGNUTLS_CONFIG="${GNUTLS_CONFIG}"
+				EMULTILIB_OCURL_CONFIG="${CURL_CONFIG}"
+				EMULTILIB_OCACA_CONFIG="${CACA_CONFIG}"
+				EMULTILIB_OAALIB_CONFIG="${AALIB_CONFIG}"
+				EMULTILIB_OGTK_CONFIG="${GTK_CONFIG}"
+				EMULTILIB_OSMPEG_CONFIG="${SMPEG_CONFIG}"
+				EMULTILIB_ONSPR_CONFIG="${NSPR_CONFIG}"
+				EMULTILIB_ONSS_CONFIG="${NSS_CONFIG}"
+				EMULTILIB_OPERLBIN="${PERLBIN}"
+				EMULTILIB_OKDE_S="${KDE_S}"
+				EMULTILIB_Omycmakeargs="${mycmakeargs}"
+				# We need to prevent myconf from accumulating through
+				# each pass, but respect initial value
+				EMULTILIB_Omyconf="${myconf}"
+			fi
 			if use amd64 || use ppc64 ; then
 				case ${ABI} in
 					x86)    CHOST="i686-${EMULTILIB_OCHOST#*-}"
@@ -340,24 +342,24 @@ multilib-native_src_generic_sub() {
 					cp -plu ${_docfile} ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
 				done
 			fi
+			[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]] && \
+				ECONF_SOURCE="${EMULTILIB_source_path}"
+			multilib_debug ECONF_SOURCE ${ECONF_SOURCE}
+
+			# S should not be redefined for out-of-source-tree prepare
+			# phase, or at all in the cmake case
+			if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
+				if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]]; then
+					S=${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}
+				fi
+			else
+				if !([[ "$1" == "src_prepare" ]] && \
+						[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]]); then
+					S=${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}
+				fi
+			fi
 		fi
 		
-		[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]] && \
-			ECONF_SOURCE="${EMULTILIB_source_path}"
-		multilib_debug ECONF_SOURCE ${ECONF_SOURCE}
-
-		# S should not be redefined for out-of-source-tree prepare
-		# phase, or at all in the cmake case
-		if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
-			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]]; then
-				S=${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}
-			fi
-		else
-			if !([[ "$1" == "src_prepare" ]] && \
-					[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]]); then
-				S=${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}
-			fi
-		fi
 		multilib_debug S ${S}
 
 		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}"
@@ -380,8 +382,11 @@ multilib-native_src_generic_sub() {
 	# during the is_final_abi to be respected.  FIXME?: any ABI specific
 	# changes to env vars we care about made during ! is_final_abi will
 	# be lost, hopefully this doesn't occur in the real world...
-	if [[ -n ${EMULTILIB_PKG} ]]; then
-		if has_multilib_profile && ! is_final_abi; then
+	#
+	# We need to filter out our changes to the compiler and linker flags
+	# between phases so the is_final_abi flags don't carry through
+	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
+		if ! is_final_abi; then
 			CFLAGS="${EMULTILIB_OCFLAGS}"
 			CXXFLAGS="${EMULTILIB_OCXXFLAGS}"
 			LDFLAGS="${EMULTILIB_OLDFLAGS}"
@@ -418,6 +423,11 @@ multilib-native_src_generic_sub() {
 						fi
 					done
 			fi
+		else
+			# Filter out our changes to flags
+			CFLAGS="${CFLAGS}/${EMULTILIB_ABI_FLAGS}"
+			CXXFLAGS="${CXXFLAGS}/${EMULTILIB_ABI_FLAGS}"
+			LDFLAGS="${LDFLAGS}/${EMULTILIB_ABI_FLAGS}"
 		fi
 	fi
 }
