@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/sys-apps/file/file-5.00-r2.ebuild,v 1.1 2009/02/21 23:37:50 vapier Exp $
 
 EAPI="2"
+MULTILIB_IN_SOURCE_BUILD="yes"
 
 inherit eutils distutils libtool flag-o-matic multilib-native
 
@@ -20,8 +21,9 @@ DEPEND="python? ( dev-lang/python[lib32?] )"
 
 src_unpack() {
 	unpack ${P}.tar.gz
-	cd "${S}"
+}
 
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-4.15-libtool.patch #99593
 	epatch "${FILESDIR}"/${P}-localization.patch #258452
 	epatch "${FILESDIR}"/${P}-short-read.patch
@@ -38,13 +40,14 @@ src_unpack() {
 	sed -i '/^pkgdatadir/s:/@PACKAGE@::' $(find -name Makefile.in)
 }
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# file uses things like strndup() and wcwidth()
 	append-flags -D_GNU_SOURCE
 
 	econf --datadir=/usr/share/misc || die
+}
+
+multilib-native_src_compile_internal() {
 	emake || die "emake failed"
 
 	use python && cd python && distutils_src_compile
@@ -57,10 +60,10 @@ multilib-native_src_install_internal() {
 	use python && cd python && distutils_src_install
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	use python && distutils_pkg_postinst
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	use python && distutils_pkg_postrm
 }
