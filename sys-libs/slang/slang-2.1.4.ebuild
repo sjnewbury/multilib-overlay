@@ -3,6 +3,9 @@
 # $Header: /var/cvsroot/gentoo-x86/sys-libs/slang/slang-2.1.4.ebuild,v 1.1 2008/11/03 01:47:54 matsuu Exp $
 
 EAPI=2
+
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils multilib-native
 
 DESCRIPTION="a portable programmer's library designed to allow a developer to create robust portable software."

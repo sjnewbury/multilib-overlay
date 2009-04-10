@@ -2,7 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-libs/slang/slang-2.1.3-r1.ebuild,v 1.20 2008/06/13 05:30:44 vapier Exp $
 
-EAPI="1"
+EAPI="2"
+
+MULTILIB_IN_SOURCE_BUILD="yes"
 
 inherit eutils multilib-native
 
@@ -31,14 +33,12 @@ pkg_setup() {
 	fi
 }
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+src_prepare() {
 	epatch "${FILESDIR}"/${PN}-2.1.2-slsh-libs.patch
 	epatch "${FILESDIR}"/${P}-uclibc.patch
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local readline
 
 	if use readline; then
@@ -49,7 +49,9 @@ multilib-native_src_compile_internal() {
 
 	econf $(use_with cjk onig) $(use_with pcre) $(use_with png) \
 		--with-readline=${readline}
+}
 
+multilib-native_src_compile_internal() {
 	emake -j1 elf static || die "emake elf static failed."
 
 	cd slsh
