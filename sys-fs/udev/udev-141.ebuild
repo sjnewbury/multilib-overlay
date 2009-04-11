@@ -4,6 +4,8 @@
 
 EAPI=2
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils flag-o-matic multilib toolchain-funcs versionator multilib-native
 
 if [[ ${PV} == "9999" ]]; then
