@@ -40,37 +40,39 @@ _set_multilib_array_index() {
 	esac
 }
 
+_set_multilib_platform_configuration()
+{
+	# This is the place to add support for new ABIs
+	_set_multilib_array_index x86
+	EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-m32"
+	EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]="32"
+	EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]=""
+	EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]="i686"
+
+	_set_multilib_array_index amd64
+	EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-m64"
+	EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]="64"
+	EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]=""
+	EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]="x86_64"
+
+	_set_multilib_array_index ppc
+	EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-m32"
+	EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]="32"
+	EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]=""
+	EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]="powerpc"
+
+	_set_multilib_array_index ppc64
+	EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-m64"
+	EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]="64"
+	EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]=""
+	EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]="powerpc64"
+}
+
 # ABI specific configuration
 declare -a EMULTILIB_COMPILER_ABI_FLAGS
 declare -a EMULTILIB_LIB_SUFFIX
 declare -a EMULTILIB_LIB_SUBDIR
 declare -a EMULTILIB_CHOST
-
-# This is the place to add support for new ABIs
-_set_multilib_array_index x86
-EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-m32"
-EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]="32"
-EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]=""
-EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]="i686"
-
-_set_multilib_array_index amd64
-EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-m64"
-EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]="64"
-EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]=""
-EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]="x86_64"
-
-_set_multilib_array_index ppc
-EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-m32"
-EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]="32"
-EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]=""
-EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]="powerpc"
-
-_set_multilib_array_index ppc64
-EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-m64"
-EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]="64"
-EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]=""
-EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]="powerpc64"
-
 # -----------------------------------------------------------------------------
 
 # These arrays are used to store environment for each ABI
@@ -203,6 +205,7 @@ _export_ml_config_vars() {
 # @USAGE: <ABI>
 # @DESCRIPTION: Setup initial environment for ABI, flags, workarounds etc.
 _setup_platform_env() {
+	_set_multilib_platform_configuration
 	_set_multilib_array_index ${1}
 	local pyver=""
 	[[ -z "${EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]}" ]] && die "Unknown ABI (${1})" 
@@ -259,7 +262,6 @@ _setup_platform_env() {
 		PERLBIN="/usr/bin/perl-${ABI}"
 	fi
 
-	export CC="$(tc-getCC)" CXX="$(tc-getCXX)"
 	export PYTHON PERLBIN QMAKESPEC
 	let EMULTILIB_INITIALISED++
 }
@@ -378,6 +380,12 @@ multilib-native_src_generic_sub() {
 		if [[ -z "$(echo ${1}|grep pkg)" ]]; then
 			# Is this our first run for this ABI?
 			if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
+
+				# We don't care what's set in the initial 
+				# enviroment we need this to work
+				export CC="$(tc-getCC)"
+				export CXX="$(tc-getCXX)"
+				export FC="$(tc-getCXX)"
 
 				# Save Initial, and create multilib environment
 				if [[ ${EMULTILIB_INITIALISED} > 0 ]]; then
