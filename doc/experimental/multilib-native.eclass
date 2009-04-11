@@ -388,7 +388,7 @@ multilib-native_src_generic_sub() {
 				# enviroment we need this to work
 				export CC="$(tc-getCC)"
 				export CXX="$(tc-getCXX)"
-				export FC="$(tc-getCXX)"
+				export FC="$(tc-getFC)"
 
 				# Save Initial, and create multilib environment
 				if [[ ${EMULTILIB_INITIALISED} > 0 ]]; then
