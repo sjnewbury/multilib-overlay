@@ -1,6 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-140.ebuild,v 1.1 2009/03/14 08:18:48 zzam Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-141.ebuild,v 1.1 2009/04/09 10:29:17 zzam Exp $
+
+EAPI=2
 
 inherit eutils flag-o-matic multilib toolchain-funcs versionator multilib-native
 
@@ -19,7 +21,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 IUSE="selinux"
 
-COMMON_DEPEND="selinux? ( sys-libs/libselinux )"
+COMMON_DEPEND="selinux? ( sys-libs/libselinux[lib32?] )"
 
 if [[ ${PV} == "9999" ]]; then
 	# for documentation processing with xsltproc
@@ -38,7 +40,7 @@ RDEPEND="${COMMON_DEPEND}
 # We need the lib/rcscripts/addon support
 PROVIDE="virtual/dev-manager"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	udev_helper_dir="/$(get_libdir)/udev"
 
 	# comparing kernel version without linux-info.eclass to not pull
@@ -86,9 +88,9 @@ src_unpack() {
 	else
 		unpack ${A}
 	fi
+}
 
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	# patches go here...
 
 	# change rules back to group uucp instead of dialout for now
@@ -101,7 +103,7 @@ src_unpack() {
 		# (more for my own needs than anything else ...)
 		MD5=$(md5sum < "${S}/rules/rules.d/50-udev-default.rules")
 		MD5=${MD5/  -/}
-		if [[ ${MD5} != 5c12d80f1daf00529e56af455bc20ced ]]
+		if [[ ${MD5} != b5c2f014a48a53921de37c4e469aab96 ]]
 		then
 			echo
 			eerror "50-udev-default.rules has been updated, please validate!"
@@ -122,7 +124,7 @@ src_unpack() {
 	fi
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	filter-flags -fprefetch-loop-arrays
 
 	econf \
