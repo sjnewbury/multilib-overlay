@@ -15,7 +15,7 @@ if use lib32; then
 	EMULTILIB_PKG="true"
 fi
 
-inherit flag-o-matic base multilib
+inherit base multilib flag-o-matic 
 
 case "${EAPI:-0}" in
 	2)
@@ -85,6 +85,7 @@ declare -a EMULTILIB_FCFLAGS
 declare -a EMULTILIB_LDFLAGS
 
 # Saved Portage/eclass variables
+declare -a EMULTILIB_CHOST
 declare -a EMULTILIB_S
 declare -a EMULTILIB_KDE_S
 declare -a EMULTILIB_CCACHE_DIR
@@ -210,7 +211,7 @@ _setup_platform_env() {
 	local pyver=""
 	[[ -z "${EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]}" ]] && die "Unknown ABI (${1})" 
 	CHOST="${EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]}-${CHOST#*-}"
-
+	multilib_debug "CHOST" ${CHOST}
 	# Set compiler and linker ABI flags
 	append-flags "${EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]}"
 	append-ldflags "${EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]}"
@@ -281,6 +282,7 @@ _save_platform_env() {
 	EMULTILIB_LDFLAGS[${EMULTILIB_ARRAY_INDEX}]="${LDFLAGS}"
 
 	# Saved Portage/eclass variables
+	EMULTILIB_CHOST[${EMULTILIB_ARRAY_INDEX}]="${CHOST}"
 	EMULTILIB_S[${EMULTILIB_ARRAY_INDEX}]="${S}"
 	EMULTILIB_KDE_S[${EMULTILIB_ARRAY_INDEX}]="${KDE_S}"
 	EMULTILIB_CCACHE_DIR[${EMULTILIB_ARRAY_INDEX}]="${CCACHE_DIR}"
@@ -313,6 +315,7 @@ _restore_platform_env() {
 	LDFLAGS="${EMULTILIB_LDFLAGS[${EMULTILIB_ARRAY_INDEX}]}"
 
 	# Saved Portage/eclass variables
+	CHOST="${EMULTILIB_CHOST[${EMULTILIB_ARRAY_INDEX}]}"
 	S="${EMULTILIB_S[${EMULTILIB_ARRAY_INDEX}]}"
 	KDE_S="${EMULTILIB_KDE_S[${EMULTILIB_ARRAY_INDEX}]}"
 	CCACHE_DIR="${EMULTILIB_CCACHE_DIR[${EMULTILIB_ARRAY_INDEX}]}"
