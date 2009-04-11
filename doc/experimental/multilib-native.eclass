@@ -15,7 +15,7 @@ if use lib32; then
 	EMULTILIB_PKG="true"
 fi
 
-inherit base multilib
+inherit flag-o-matic base multilib
 
 case "${EAPI:-0}" in
 	2)
