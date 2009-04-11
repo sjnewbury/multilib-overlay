@@ -206,7 +206,6 @@ _export_ml_config_vars() {
 # @USAGE: <ABI>
 # @DESCRIPTION: Setup initial environment for ABI, flags, workarounds etc.
 _setup_platform_env() {
-	_set_multilib_platform_configuration
 	_set_multilib_array_index ${1}
 	local pyver=""
 	[[ -z "${EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]}" ]] && die "Unknown ABI (${1})" 
@@ -394,6 +393,7 @@ multilib-native_src_generic_sub() {
 				if [[ ${EMULTILIB_INITIALISED} > 0 ]]; then
 					_restore_platform_env "INIT"
 				else
+					_set_multilib_platform_configuration
 					_save_platform_env "INIT"
 				fi
 				_setup_platform_env "${ABI}"
