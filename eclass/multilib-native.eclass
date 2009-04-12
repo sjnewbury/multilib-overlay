@@ -91,6 +91,8 @@ declare -a EMULTILIB_ECONF_SOURCE
 declare -a EMULTILIB_KDE_S
 declare -a EMULTILIB_CMAKE_BUILD_DIR
 declare -a EMULTILIB_CCACHE_DIR
+declare -a EMULTILIB_QTBINDIR
+declare -a EMULTILIB_QMAKESPEC
 declare -a EMULTILIB_myconf
 declare -a EMULTILIB_mycmakeargs
 
@@ -227,7 +229,7 @@ _setup_multilib_platform_env() {
 	multilib_debug "${ABI} LDFLAGS" "${CFLAGS}"
 
 	# Multilib QT Support - This is needed for QT and CMake based packages
-	if [[ -n ${QTBINDIR} ]] || [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
+	if [[ -n ${QTDIR} ]] || ${QTBINDIR} || [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
 		if [[ -n "${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}" ]]; then
 			QMAKESPEC="linux-g++-${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}"
 		else
@@ -247,6 +249,7 @@ _setup_multilib_platform_env() {
 		else
 			QTBINDIR="/usr/bin"
 		fi
+		QMAKE="${QTBINDIR}/qmake"
 		multilib_debug "${ABI} QMAKESPEC" "${QMAKESPEC}"
 	fi
 
@@ -269,7 +272,7 @@ _setup_multilib_platform_env() {
 	if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
 		# Multilib CMake Support, qmake provides the paths to link QT
 		mycmakeargs="${mycmakeargs} \
-			-DQT_QMAKE_EXECUTABLE:FILEPATH=${QTBINDIR}/qmake"
+			-DQT_QMAKE_EXECUTABLE:FILEPATH=${QMAKE}"
 		multilib_debug "${ABI} mycmakeargs" "${mycmakeargs}"
 
 		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
@@ -323,6 +326,8 @@ _save_multilib_platform_env() {
 	EMULTILIB_KDE_S[${EMULTILIB_ARRAY_INDEX}]="${KDE_S}"
 	EMULTILIB_CMAKE_BUILD_DIR[${EMULTILIB_ARRAY_INDEX}]="${CMAKE_BUILD_DIR}"
 	EMULTILIB_CCACHE_DIR[${EMULTILIB_ARRAY_INDEX}]="${CCACHE_DIR}"
+	EMULTILIB_QTBINDIR[${EMULTILIB_ARRAY_INDEX}]="${QTBINDIR}"
+	EMULTILIB_QMAKESPEC[${EMULTILIB_ARRAY_INDEX}]="${QMAKESPEC}"
 	EMULTILIB_myconf[${EMULTILIB_ARRAY_INDEX}]="${myconf}"
 	EMULTILIB_mycmakeargs[${EMULTILIB_ARRAY_INDEX}]="${mycmakeargs}"
 
@@ -358,6 +363,8 @@ _restore_multilib_platform_env() {
 	KDE_S="${EMULTILIB_KDE_S[${EMULTILIB_ARRAY_INDEX}]}"
 	CMAKE_BUILD_DIR="${EMULTILIB_CMAKE_BUILD_DIR[${EMULTILIB_ARRAY_INDEX}]}"
 	CCACHE_DIR="${EMULTILIB_CCACHE_DIR[${EMULTILIB_ARRAY_INDEX}]}"
+	QTBINDIR="${EMULTILIB_QTBINDIR[${EMULTILIB_ARRAY_INDEX}]}"
+	QMAKESPEC="${EMULTILIB_QMAKESPEC[${EMULTILIB_ARRAY_INDEX}]}"
 	myconf="${EMULTILIB_myconf[${EMULTILIB_ARRAY_INDEX}]}"
 	mycmakeargs="${EMULTILIB_mycmakeargs[${EMULTILIB_ARRAY_INDEX}]}"
 
@@ -548,11 +555,13 @@ multilib-native_src_generic_sub() {
 
 		# qt-build.eclass sets these in pkg_setup, but that results
 		# in the path always pointing to the primary ABI libdir.
-		# These need to run on each pass to set the correctly.
+		# These need to run on each pass to set correctly.
 		QTBASEDIR=/usr/"$(get_libdir)"/qt4
 		QTLIBDIR=/usr/"$(get_libdir)"/qt4
 		QTPCDIR=/usr/"$(get_libdir)"/pkgconfig
 		QTPLUGINDIR="${QTLIBDIR}"/plugins
+
+		QMAKE="${QTBINDIR}/qmake"
 		export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 
 		[[ -d "${S}" ]] && cd "${S}"
