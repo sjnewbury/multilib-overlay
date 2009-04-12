@@ -271,6 +271,27 @@ _setup_multilib_platform_env() {
 		PERLBIN="/usr/bin/perl-${ABI}"
 	fi
 
+	# S should not be redefined for the CMake
+	# !CMAKE_IN_SOURCE_BUILD case, otherwise
+	# ECONF_SOURCE should point to the _prepared_
+	# source dir and S to the build directory
+	if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
+		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+		[[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] && \
+			S="${CMAKE_BUILD_DIR}"
+	else
+		S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+		if [[ -n ${MULTILIB_IN_SOURCE_BUILD} ]]; then
+			ECONF_SOURCE="${S}"
+		else
+			ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+		fi
+	fi
+	KDE_S="${S}"
+	multilib_debug "${ABI} ECONF_SOURCE" "${ECONF_SOURCE}"
+	multilib_debug "${ABI} CMAKE_BUILD_DIR" "${CMAKE_BUILD_DIR}"
+	multilib_debug "${ABI} KDE_S" "${KDE_S}"
+
 	export PYTHON PERLBIN QMAKESPEC
 	let EMULTILIB_INITIALISED++
 }
@@ -500,26 +521,6 @@ multilib-native_src_generic_sub() {
 				fi
 
 
-				# S should not be redefined for the CMake
-				# !CMAKE_IN_SOURCE_BUILD case, otherwise
-				# ECONF_SOURCE should point to the _prepared_
-				# source dir and S to the build directory
-				if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
-					CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
-					[[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] && \
-						S="${CMAKE_BUILD_DIR}"
-				else
-					S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
-					if [[ -n ${MULTILIB_IN_SOURCE_BUILD} ]]; then
-						ECONF_SOURCE="${S}"
-					else
-						ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
-					fi
-				fi
-				KDE_S="${S}"
-				multilib_debug "${ABI} ECONF_SOURCE" "${ECONF_SOURCE}"
-				multilib_debug "${ABI} CMAKE_BUILD_DIR" "${CMAKE_BUILD_DIR}"
-				multilib_debug "${ABI} KDE_S" "${KDE_S}"
 			else
 				# If we are already set up then restore the environment
 				_restore_multilib_platform_env "${ABI}"
