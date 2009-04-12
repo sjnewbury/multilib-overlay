@@ -4,8 +4,6 @@
 
 EAPI=2
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 inherit eutils flag-o-matic multilib toolchain-funcs versionator multilib-native
 
 if [[ ${PV} == "9999" ]]; then
@@ -181,7 +179,7 @@ multilib-native_src_install_internal() {
 	keepdir /etc/udev/rules.d
 
 	# Now installing rules
-	cd "${S}"/rules
+	cd "${EMULTILIB_SOURCE_TOPDIR}"/rules
 	insinto "${udev_helper_dir}"/rules.d/
 
 	# Our rules files
@@ -194,7 +192,7 @@ multilib-native_src_install_internal() {
 	then
 		doins "packages/40-${ARCH}.rules"
 	fi
-	cd "${S}"
+	cd "${EMULTILIB_SOURCE_TOPDIR}"
 
 	# our udev hooks into the rc system
 	insinto /$(get_libdir)/rcscripts/addons
@@ -236,7 +234,7 @@ multilib-native_src_install_internal() {
 	mv index.html writing_udev_rules.html
 	dohtml *.html
 
-	cd "${S}"
+	cd "${EMULTILIB_SOURCE_TOPDIR}"
 
 	newdoc extras/volume_id/README README_volume_id
 
