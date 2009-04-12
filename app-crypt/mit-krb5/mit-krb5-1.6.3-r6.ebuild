@@ -34,7 +34,9 @@ PROVIDE="virtual/krb5"
 src_unpack() {
 	unpack ${A}
 	unpack ./${MY_P}.tar.gz
-	cd "${S}"
+}
+
+multilib-native_src_prepare_internal() {
 	EPATCH_SUFFIX="patch" epatch "${PATCHDIR}"
 	epatch "${FILESDIR}/CVE-2009-0844+CVE-2009-0847.patch"
 	epatch "${FILESDIR}/CVE-2009-0846.patch"
