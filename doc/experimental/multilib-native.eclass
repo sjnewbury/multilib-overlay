@@ -399,12 +399,12 @@ multilib-native_src_generic_sub() {
 
 		[[ -n ${MULTILIB_DEBUG} ]] && \
 			einfo "Determining SOURCE_TOPDIR from S and WORKDIR"
-		EMULTILIB_RELATIVE_BUILD_DIR=${S#*"${WORKDIR}/"}
-		EMULTILIB_SOURCE_TOP_DIRNAME=${EMULTILIB_RELATIVE_BUILD_DIR%%/*}
-		multilib_debug WORKDIR ${WORKDIR}
-		multilib_debug S ${S}
-		multilib_debug EMULTILIB_RELATIVE_BUILD_DIR ${EMULTILIB_RELATIVE_BUILD_DIR}
-		multilib_debug EMULTILIB_SOURCE_TOP_DIRNAME ${EMULTILIB_SOURCE_TOP_DIRNAME}
+		EMULTILIB_RELATIVE_BUILD_DIR="${S#*${WORKDIR}\/}"
+		EMULTILIB_SOURCE_TOP_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
+		multilib_debug WORKDIR "${WORKDIR}"
+		multilib_debug S "${S}"
+		multilib_debug EMULTILIB_RELATIVE_BUILD_DIR "${EMULTILIB_RELATIVE_BUILD_DIR}"
+		multilib_debug EMULTILIB_SOURCE_TOP_DIRNAME "${EMULTILIB_SOURCE_TOP_DIRNAME}"
 		# If ${EMULTILIB_SOURCE_TOP_DIRNAME} is
 		# empty, then we assume ${S} points to the top level.
 		# (This should never happen.)
@@ -414,7 +414,7 @@ multilib-native_src_generic_sub() {
 			EMULTILIB_SOURCE_TOP_DIRNAME=${EMULTILIB_RELATIVE_BUILD_DIR}
 			multilib_debug EMULTILIB_SOURCE_TOP_DIRNAME ${EMULTILIB_SOURCE_TOP_DIRNAME}
 		fi
-		EMULTILIB_SOURCE_TOPDIR=${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}
+		EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
 		multilib_debug EMULTILIB_SOURCE_TOPDIR ${EMULTILIB_SOURCE_TOPDIR}
 	fi
 	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
@@ -449,7 +449,7 @@ multilib-native_src_generic_sub() {
 				if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 					[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]; then
 					einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
-					cp -al ${EMULTILIB_SOURCE_TOPDIR} ${WORKDIR}/${PN}_build_${ABI}
+					cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
 				else
 					einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
 					local _docdir="" docfile=""
@@ -468,45 +468,51 @@ multilib-native_src_generic_sub() {
 					# hopefully this can be removed.
 					einfo "Copying documentation from source dir: ${EMULTILIB_SOURCE_TOPDIR}"
 					einfo "Copying selected files from top-level of source tree"
-					for _docfile in $(find ${EMULTILIB_SOURCE_TOPDIR} -maxdepth 1 -type f \
+					for _docfile in $(find "${EMULTILIB_SOURCE_TOPDIR}" -maxdepth 1 -type f \
 						! -executable | \
 						grep -v -e ".*\.in$\|.*\.am$\|.*[^t]config.*\|.*\.h$\|.*\.c*$\|.*\.cpp$\|.*\.cmake" ); do
-						cp -au ${_docfile} ${WORKDIR}/${PN}_build_${ABI}
+					[[ -n ${MULTILIB_DEBUG} ]] && echo cp -au "${_docfile}" "${WORKDIR}/${PN}_build_${ABI}"
+
+ 						cp -au "${_docfile}" "${WORKDIR}/${PN}_build_${ABI}"
 					done
 					einfo "Copying common doc directories"
-					for _docdir in $(find ${EMULTILIB_SOURCE_TOPDIR} -type d \( -name 'doc' -o -name 'docs' -o -name 'javadoc*' -o -name 'csharpdoc' \)); do
-						mkdir -p ${_docdir/"${EMULTILIB_SOURCE_TOPDIR}"/"${WORKDIR}/${PN}_build_${ABI}"}
-						cp -alu ${_docdir}/* ${_docdir/"${EMULTILIB_SOURCE_TOPDIR}"/"${WORKDIR}/${PN}_build_${ABI}"}
+					for _docdir in $(find "${EMULTILIB_SOURCE_TOPDIR}" -type d \( -name 'doc' -o -name 'docs' -o -name 'javadoc*' -o -name 'csharpdoc' \)); do
+						[[ -n ${MULTILIB_DEBUG} ]] && echo mkdir -p "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+						mkdir -p "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+						[[ -n ${MULTILIB_DEBUG} ]] && echo cp -alu "${_docdir}/*" "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+						cp -alu "${_docdir}/*" "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
 					done
 					einfo "Finding other documentaion files"
-					for _docfile in $(find ${EMULTILIB_SOURCE_TOPDIR} -type f \( -name '*.html' -o -name '*.sgml' -o -name '*.xml' -o -regex '.*\.[0-8]\|.*\.[0-8].' \));
+					for _docfile in $(find "${EMULTILIB_SOURCE_TOPDIR}" -type f \( -name '*.html' -o -name '*.sgml' -o -name '*.xml' -o -regex '.*\.[0-8]\|.*\.[0-8].' \));
 					do
 						_docdir="${_docfile%/*}"
-						mkdir -p ${_docdir/"${EMULTILIB_SOURCE_TOPDIR}"/"${WORKDIR}/${PN}_build_${ABI}"}
-						cp -plu ${_docfile} ${_docdir/"${EMULTILIB_SOURCE_TOPDIR}"/"${WORKDIR}/${PN}_build_${ABI}"}
+						[[ -n ${MULTILIB_DEBUG} ]] && echo mkdir -p "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+						mkdir -p "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+						[[ -n ${MULTILIB_DEBUG} ]] && echo cp -plu "${_docfile}" "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+						cp -plu "${_docfile}" "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
 					done
 				fi
 
 				[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]] && \
 					ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}"
-				multilib_debug ECONF_SOURCE ${ECONF_SOURCE}
+				multilib_debug ECONF_SOURCE "${ECONF_SOURCE}"
 
 				# S should not be redefined for out-of-source-tree
 				# prepare phase, or at all in the CMake case
 				if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
 					if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]]; then
-						S=${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/"${EMULTILIB_SOURCE_TOP_DIRNAME}"}
+						S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 					fi
 				else
 					if !([[ "$1" == "src_prepare" ]] && \
 							[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]]); then
-						S=${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/"${EMULTILIB_SOURCE_TOP_DIRNAME}"}
+						S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 					fi
 				fi
-				CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/"${EMULTILIB_SOURCE_TOP_DIRNAME}"}"
-				multilib_debug CMAKE_BUILD_DIR ${CMAKE_BUILD_DIR}
+				CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+				multilib_debug CMAKE_BUILD_DIR "${CMAKE_BUILD_DIR}"
 				KDE_S="${S}"
-				multilib_debug KDE_S ${KDE_S}
+				multilib_debug KDE_S "${KDE_S}"
 			else
 				# If we are already set up then restore the environment
 				_restore_multilib_platform_env "${ABI}"
@@ -521,13 +527,13 @@ multilib-native_src_generic_sub() {
 		# qt-build.eclass sets these in pkg_setup, but that results
 		# in the path always pointing to the primary ABI libdir.
 		# These need to run on each pass to set the correctly.
-		QTBASEDIR=/usr/$(get_libdir)/qt4
-		QTLIBDIR=/usr/$(get_libdir)/qt4
-		QTPCDIR=/usr/$(get_libdir)/pkgconfig
-		QTPLUGINDIR=${QTLIBDIR}/plugins
+		QTBASEDIR=/usr/"$(get_libdir)"/qt4
+		QTLIBDIR=/usr/"$(get_libdir)"/qt4
+		QTPCDIR=/usr/"$(get_libdir)"/pkgconfig
+		QTPLUGINDIR="${QTLIBDIR}"/plugins
 		export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 
-		[[ -d "${S}" ]] && cd ${S}
+		[[ -d "${S}" ]] && cd "${S}"
 	fi
 
 	multilib-native_${1}_internal
@@ -552,9 +558,9 @@ multilib-native_src_generic_sub() {
 			if [[ -d "${D}/usr/bin" ]]; then
 				for _config_script in $(find "${D}/usr/bin" -executable \
 						-regex ".*-config.*"|grep -v "config32"); do
-					if (file ${_config_script} | fgrep -q "script text"); then
-						einfo Renaming ${_config_script} as ${_config_script}-${ABI}
-						mv ${_config_script} ${_config_script}-${ABI}
+					if (file "${_config_script}" | fgrep -q "script text"); then
+						einfo Renaming "${_config_script}" as "${_config_script}-${ABI}"
+						mv "${_config_script}" "${_config_script}-${ABI}"
 					fi
 				done
 			fi
