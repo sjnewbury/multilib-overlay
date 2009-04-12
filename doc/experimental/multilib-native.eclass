@@ -88,6 +88,7 @@ declare -a EMULTILIB_LDFLAGS
 declare -a EMULTILIB_CHOST
 declare -a EMULTILIB_S
 declare -a EMULTILIB_KDE_S
+declare -a EMULTILIB_CMAKE_BUILD_DIR
 declare -a EMULTILIB_CCACHE_DIR
 declare -a EMULTILIB_myconf
 declare -a EMULTILIB_mycmakeargs
@@ -230,7 +231,7 @@ _setup_multilib_platform_env() {
 	else
 		QMAKESPEC="linux-g++"
 	fi
-	if [[ ${ABI} == ${DEFAULT_ABI} ]]; then
+	if [[ ! ${ABI} == ${DEFAULT_ABI} ]]; then
 		if [[ -n "${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}" ]]; then 
 			QTBINDIR="/usr/libexec/qt/${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}"
 			QMAKESPEC="linux-g++-${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}"
@@ -245,9 +246,12 @@ _setup_multilib_platform_env() {
 		QTBINDIR="/usr/bin"
 	fi
 
+	multilib_debug QMAKESPEC "${QMAKESPEC}"
+
 	# Multilib CMake Support - needs the qmake from QT above
 	mycmakeargs="${mycmakeargs} \
 		-DQT_QMAKE_EXECUTABLE:FILEPATH=${QTBINDIR}/qmake"
+	multilib_debug mycmakeargs "${mycmakeargs}"
 
 	# ccache
 	if [[ -z ${CCACHE_DIR} ]] ; then 
@@ -289,9 +293,10 @@ _save_multilib_platform_env() {
 	EMULTILIB_CHOST[${EMULTILIB_ARRAY_INDEX}]="${CHOST}"
 	EMULTILIB_S[${EMULTILIB_ARRAY_INDEX}]="${S}"
 	EMULTILIB_KDE_S[${EMULTILIB_ARRAY_INDEX}]="${KDE_S}"
+	EMULTILIB_KDE_CMAKE_BUILD_DIR[${EMULTILIB_ARRAY_INDEX}]="${CMAKE_BUILD_DIR}"
 	EMULTILIB_CCACHE_DIR[${EMULTILIB_ARRAY_INDEX}]="${CCACHE_DIR}"
 	EMULTILIB_myconf[${EMULTILIB_ARRAY_INDEX}]="${myconf}"
-	EMULTILIB_mycmakeargs[${EMULTILIB_ARRAY_INDEX}]="${mymakeargs}"
+	EMULTILIB_mycmakeargs[${EMULTILIB_ARRAY_INDEX}]="${mycmakeargs}"
 
 	# Non-default ABI binaries
 	EMULTILIB_PYTHON[${EMULTILIB_ARRAY_INDEX}]="${PYTHON}"
@@ -322,9 +327,10 @@ _restore_multilib_platform_env() {
 	CHOST="${EMULTILIB_CHOST[${EMULTILIB_ARRAY_INDEX}]}"
 	S="${EMULTILIB_S[${EMULTILIB_ARRAY_INDEX}]}"
 	KDE_S="${EMULTILIB_KDE_S[${EMULTILIB_ARRAY_INDEX}]}"
+	CMAKE_BUILD_DIR="${EMULTILIB_CMAKE_BUILD_DIR[${EMULTILIB_ARRAY_INDEX}]}"
 	CCACHE_DIR="${EMULTILIB_CCACHE_DIR[${EMULTILIB_ARRAY_INDEX}]}"
 	myconf="${EMULTILIB_myconf[${EMULTILIB_ARRAY_INDEX}]}"
-	mymakeargs="${EMULTILIB_mycmakeargs[${EMULTILIB_ARRAY_INDEX}]}"
+	mycmakeargs="${EMULTILIB_mycmakeargs[${EMULTILIB_ARRAY_INDEX}]}"
 
 	# Non-default ABI binaries
 	PYTHON="${EMULTILIB_PYTHON[${EMULTILIB_ARRAY_INDEX}]}"
