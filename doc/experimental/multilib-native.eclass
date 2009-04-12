@@ -493,23 +493,23 @@ multilib-native_src_generic_sub() {
 					done
 				fi
 
-				[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]] && \
-					ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}"
-				multilib_debug ECONF_SOURCE "${ECONF_SOURCE}"
 
-				# S should not be redefined for out-of-source-tree
-				# prepare phase, or at all in the CMake case
+				# S should not be redefined for the CMake
+				# !CMAKE_IN_SOURCE_BUILD case, otherwise
+				# ECONF_SOURCE should point to the _prepared_
+				# source dir and S to the build directory
 				if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
-					if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]]; then
-						S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
-					fi
+					CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+					[[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] && \
+						S="${CMAKE_BUILD_DIR}"
 				else
-					if !([[ "$1" == "src_prepare" ]] && \
-							[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]]); then
-						S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+					S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+					if [[ -n ${MULTILIB_IN_SOURCE_BUILD} ]]; then
+						ECONF_SOURCE="${S}"
+					else
+						ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 					fi
 				fi
-				CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 				multilib_debug CMAKE_BUILD_DIR "${CMAKE_BUILD_DIR}"
 				KDE_S="${S}"
 				multilib_debug KDE_S "${KDE_S}"
@@ -520,6 +520,7 @@ multilib-native_src_generic_sub() {
 			[[ "${ABI}" == "${DEFAULT_ABI}" ]] || \
 				_export_ml_config_vars "${ABI}"
 		fi
+		multilib_debug ECONF_SOURCE "${ECONF_SOURCE}"
 
 		#Nice way to avoid the "cannot run test program while cross compiling" :)
 		CBUILD=$CHOST
