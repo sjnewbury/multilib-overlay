@@ -4,11 +4,6 @@
 #
 # @ECLASS: multilib-native.eclass
 
-# temporary stuff to to have some debug info what's going on with
-# multilib-native_check_inherited_funcs() and maybe other stuff. Remove this var and 
-# the stuff in the phase functions when done...
-ECLASS_DEBUG="yes"
-
 IUSE="${IUSE} lib32"
 
 if use lib32; then
@@ -27,9 +22,12 @@ case "${EAPI:-0}" in
 esac
 
 # -----------------------------------------------------------------------------
-
+# This is the place to add support for new ABIs.  All ABI specific definitions
+# are specified only in this section.
 
 _set_multilib_array_index() {
+	# Until we can count on bash version > 4, we can't use associative
+	# arrays.  
 	case $1 in
 		INIT)	EMULTILIB_ARRAY_INDEX=0 ;;
 		x86)	EMULTILIB_ARRAY_INDEX=1 ;;
@@ -42,7 +40,6 @@ _set_multilib_array_index() {
 
 _init_multilib_platform_configuration()
 {
-	# This is the place to add support for new ABIs
 	_set_multilib_array_index x86
 	EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-m32"
 	EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]="32"
@@ -68,11 +65,14 @@ _init_multilib_platform_configuration()
 	EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]="powerpc64"
 }
 
-# ABI specific configuration
+# -----------------------------------------------------------------------------
+
+# Arrays to hold ABI specific configuration
 declare -a EMULTILIB_COMPILER_ABI_FLAGS
 declare -a EMULTILIB_LIB_SUFFIX
 declare -a EMULTILIB_LIB_SUBDIR
 declare -a EMULTILIB_CHOST
+
 # -----------------------------------------------------------------------------
 
 # These arrays are used to store environment for each ABI
