@@ -450,10 +450,16 @@ multilib-native_src_generic_sub() {
 		# DEFAULT_ABI when we are building out of the source tree since
 		# it is shared between each ABI.
 		if [[ "$1" == "src_prepare" ]] && \
-				[[ ! "${ABI}" == "${DEFAULT_ABI}" ]] && \
 				!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 				[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]); then
-			return
+			if [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
+				einfo "Skipping ${1} for ${ABI}"
+				return
+			else
+				einfo "Running ${1} for default ABI"
+				multilib-native_${1}_internal
+				return
+			fi
 		fi
 
 		if [[ -z "$(echo ${1}|grep pkg)" ]]; then
