@@ -40,7 +40,7 @@ _set_multilib_array_index() {
 	esac
 }
 
-_set_multilib_platform_configuration()
+_init_multilib_platform_configuration()
 {
 	# This is the place to add support for new ABIs
 	_set_multilib_array_index x86
@@ -97,7 +97,12 @@ declare -a EMULTILIB_PYTHON
 declare -a EMULTILIB_PERLBIN
 
 # On initialisation of multilib environment this gets incremented by 1
-EMULTILIB_INITIALISED=0
+EMULTILIB_INITIALISED=""
+
+# These may be useful in multilib-ised ebuilds
+EMULTILIB_SOURCE_TOP_DIRNAME=""
+EMULTILIB_SOURCE_TOPDIR=""
+EMULTILIB_RELATIVE_BUILD_DIR=""
 
 # -----------------------------------------------------------------------------
 
@@ -202,10 +207,10 @@ _export_ml_config_vars() {
 	done
 }
 
-# @FUNCTION: _setup_platform_env
+# @FUNCTION: _setup_multilib_platform_env
 # @USAGE: <ABI>
 # @DESCRIPTION: Setup initial environment for ABI, flags, workarounds etc.
-_setup_platform_env() {
+_setup_multilib_platform_env() {
 	_set_multilib_array_index ${1}
 	local pyver=""
 	[[ -z "${EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]}" ]] && die "Unknown ABI (${1})" 
@@ -266,10 +271,10 @@ _setup_platform_env() {
 	let EMULTILIB_INITIALISED++
 }
 
-# @FUNCTION: _save_platform_env
+# @FUNCTION: _save_multilib_platform_env
 # @USAGE: <ABI>
 # @DESCRIPTION: Save environment for ABI
-_save_platform_env() {
+_save_multilib_platform_env() {
 	_set_multilib_array_index ${1}
 	multilib_debug "Saving Environment" "${1}"
 
@@ -296,10 +301,10 @@ _save_platform_env() {
 	multilib_debug "EMULTILIB_CFLAGS[${EMULTILIB_ARRAY_INDEX}]" "${EMULTILIB_CFLAGS[${EMULTILIB_ARRAY_INDEX}]}"
 }
 
-# @FUNCTION: _restore_platform_env
+# @FUNCTION: _restore_multilib_platform_env
 # @USAGE: <ABI>
 # @DESCRIPTION: Restore environment for ABI
-_restore_platform_env() {
+_restore_multilib_platform_env() {
 	_set_multilib_array_index ${1}
 	multilib_debug "Restoring Environment" "${1}"
 
@@ -364,9 +369,54 @@ multilib-native_src_generic() {
 # @DESCRIPTION:
 multilib-native_src_generic_sub() {
 	EMULTILIB_config_vars=""
-	EMULTILIB_source_dir=""
-	EMULTILIB_source_path=""
-	EMULTILIB_partial_S_path=""
+
+	# We support two kinds of build, by default we create a minimal build
+	# dir for each ABI with a shared source tree.  Where that is
+	# unsupported with the underlying package due to deficiencies or bugs
+	# in their build system we can create a full image of the source tree
+	# for each ABI.  This latter behaviour is enabled with
+	# MULTILIB_IN_SOURCE_BUILD (MISB), or with CMake based packages the
+	# CMAKE_IN_SOURCE_BUILD environment variables.
+	#
+	# With multilib builds "S" eventually points into the build tree, but
+	# initially "S" points to the source the same as non-multilib
+	# packages. Sometimes, however, packages assume a directory structure
+	# ABOVE "S". ("S" is set to a subdirectory of the tree they unpack
+	# into ${WORKDIR})
+	#
+	# We need to deal with this by finding the top-level of the source
+	# tree and keeping track of ${S} relative to it.
+	#
+	# We initialise the variables early and unconditionally (except only
+	# while no multilib environment has been initialised), whether
+	# building for multilib or not.  This allows multilib-native ebuilds
+	# to always make use of them. (It is intended for this to happen for
+	# each phase until multilib is initialised, this allows ebuilds to
+	# modify the common environment, right up until we setup a build dir.)
+	if [[ -z ${EMULTILIB_INITIALISED} ]]; then
+		_init_multilib_platform_configuration
+		_save_multilib_platform_env "INIT"
+
+		[[ -n ${MULTILIB_DEBUG} ]] && \
+			einfo "Determining SOURCE_TOPDIR from S and WORKDIR"
+		EMULTILIB_RELATIVE_BUILD_DIR=${S#*"${WORKDIR}/"}
+		EMULTILIB_SOURCE_TOP_DIRNAME=${EMULTILIB_RELATIVE_BUILD_DIR%%/*}
+		multilib_debug WORKDIR ${WORKDIR}
+		multilib_debug S ${S}
+		multilib_debug EMULTILIB_RELATIVE_BUILD_DIR ${EMULTILIB_RELATIVE_BUILD_DIR}
+		multilib_debug EMULTILIB_SOURCE_TOP_DIRNAME ${EMULTILIB_SOURCE_TOP_DIRNAME}
+		# If ${EMULTILIB_SOURCE_TOP_DIRNAME} is
+		# empty, then we assume ${S} points to the top level.
+		# (This should never happen.)
+		if [[ -z ${EMULTILIB_SOURCE_TOP_DIRNAME} ]]; then
+			ewarn "Unable to determine dirname of the source topdir:"
+			ewarn "Assuming S points to the top level"
+			EMULTILIB_SOURCE_TOP_DIRNAME=${EMULTILIB_RELATIVE_BUILD_DIR}
+			multilib_debug EMULTILIB_SOURCE_TOP_DIRNAME ${EMULTILIB_SOURCE_TOP_DIRNAME}
+		fi
+		EMULTILIB_SOURCE_TOPDIR=${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}
+		multilib_debug EMULTILIB_SOURCE_TOPDIR ${EMULTILIB_SOURCE_TOPDIR}
+	fi
 	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
 
 		# If this is the src_prepare phase we only need to run for the
@@ -389,111 +439,77 @@ multilib-native_src_generic_sub() {
 				export CXX="$(tc-getCXX)"
 				export FC="$(tc-getFC)"
 
-				# Save Initial, and create multilib environment
-				if [[ ${EMULTILIB_INITIALISED} > 0 ]]; then
-					_restore_platform_env "INIT"
-				else
-					_set_multilib_platform_configuration
-					_save_platform_env "INIT"
-				fi
-				_setup_platform_env "${ABI}"
+				# Restore INIT and setup multilib environment
+				# for this ABI
+				_restore_multilib_platform_env "INIT"
+				_setup_multilib_platform_env "${ABI}"
 
 				# Prepare build dir
 				#
-				# We support two kinds of build, by default we
-				# create a minimal build directory for each ABI
-				# with a sharedsource tree.  Where that is
-				# unsupported with the underlying package due
-				# to deficiencies or bugs in their build system
-				# we can create a full image of the source tree
-				# for each ABI.  This latter behaviour is
-				# enabled with MULTILIB_IN_SOURCE_BUILD (MISB),
-				# or with CMake based packages the
-				# CMAKE_IN_SOURCE_BUILD environment variables.
-				#
-				# With multilib builds "S" eventually points
-				# into the build tree, but initially "S"
-				# points to the source the same as non-multilib
-				# packages.  Sometimes, however, packages
-				# assume a directory structure ABOVE "S".  ("S"
-				# is set to a subdirectory of the tree they
-				# unpack into ${WORKDIR})
-				#
-				# We need to deal with this by finding the
-				# top-level of the source tree and keeping
-				# track of ${S} relative to it.
-				EMULTILIB_partial_S_path=${S#*"${WORKDIR}/"}
-				EMULTILIB_source_dir=${EMULTILIB_partial_S_path%%/*}
-
-				multilib_debug WORKDIR ${WORKDIR}
-				multilib_debug S ${S}
-				multilib_debug EMULTILIB_partial_S_path ${EMULTILIB_partial_S_path}
-				multilib_debug EMULTILIB_source_dir ${EMULTILIB_source_dir}
-
-				# If ${EMULTILIB_source_dir} is empty, then ${S} points
-				# to the top level. (This should never happen.)
-				[[ -z ${EMULTILIB_source_dir} ]] && \
-				EMULTILIB_source_dir=${EMULTILIB_partial_S_path}
-				multilib_debug EMULTILIB_source_dir ${EMULTILIB_source_dir}
-				EMULTILIB_source_path=${WORKDIR}/${EMULTILIB_source_dir}
-				multilib_debug EMULTILIB_source_path ${EMULTILIB_source_path}
 				if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 					[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]; then
-					einfo "Copying source tree from ${EMULTILIB_source_path} to ${WORKDIR}/${PN}_build_${ABI}"
-					cp -al ${EMULTILIB_source_path} ${WORKDIR}/${PN}_build_${ABI}
+					einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
+					cp -al ${EMULTILIB_SOURCE_TOPDIR} ${WORKDIR}/${PN}_build_${ABI}
 				else
 					einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
 					local _docdir="" docfile=""
 					# Create build dir
 					mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
-					# Populate build dir with filtered FILES from source
-					# root and any directories matching *doc*:
-					# This is a bit of a hack, but it ensures
-					# doc files are available for install phase
-					einfo "Copying documentation from source dir: ${EMULTILIB_source_path}"
+					# Populate build dir with various
+					# "documentaion"  FILES.
+					# This is a bit of a hack, but it
+					# ensures doc files are available for
+					# install phase.  Ideally,
+					# multilib-native ebuilds should be
+					# modified to use the
+					# EMULTILIB_SOURCE_TOPDIR when
+					# installing from the source tree. Once
+					# all ebuilds have been modified,
+					# hopefully this can be removed.
+					einfo "Copying documentation from source dir: ${EMULTILIB_SOURCE_TOPDIR}"
 					einfo "Copying selected files from top-level of source tree"
-					for _docfile in $(find ${EMULTILIB_source_path} -maxdepth 1 -type f \
+					for _docfile in $(find ${EMULTILIB_SOURCE_TOPDIR} -maxdepth 1 -type f \
 						! -executable | \
 						grep -v -e ".*\.in$\|.*\.am$\|.*[^t]config.*\|.*\.h$\|.*\.c*$\|.*\.cpp$\|.*\.cmake" ); do
 						cp -au ${_docfile} ${WORKDIR}/${PN}_build_${ABI}
 					done
 					einfo "Copying common doc directories"
-					for _docdir in $(find ${EMULTILIB_source_path} -type d \( -name 'doc' -o -name 'docs' -o -name 'javadoc*' -o -name 'csharpdoc' \)); do
-						mkdir -p ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
-						cp -alu ${_docdir}/* ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
+					for _docdir in $(find ${EMULTILIB_SOURCE_TOPDIR} -type d \( -name 'doc' -o -name 'docs' -o -name 'javadoc*' -o -name 'csharpdoc' \)); do
+						mkdir -p ${_docdir/"${EMULTILIB_SOURCE_TOPDIR}"/"${WORKDIR}/${PN}_build_${ABI}"}
+						cp -alu ${_docdir}/* ${_docdir/"${EMULTILIB_SOURCE_TOPDIR}"/"${WORKDIR}/${PN}_build_${ABI}"}
 					done
 					einfo "Finding other documentaion files"
-					for _docfile in $(find ${EMULTILIB_source_path} -type f \( -name '*.html' -o -name '*.sgml' -o -name '*.xml' -o -regex '.*\.[0-8]\|.*\.[0-8].' \));
+					for _docfile in $(find ${EMULTILIB_SOURCE_TOPDIR} -type f \( -name '*.html' -o -name '*.sgml' -o -name '*.xml' -o -regex '.*\.[0-8]\|.*\.[0-8].' \));
 					do
 						_docdir="${_docfile%/*}"
-						mkdir -p ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
-						cp -plu ${_docfile} ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
+						mkdir -p ${_docdir/"${EMULTILIB_SOURCE_TOPDIR}"/"${WORKDIR}/${PN}_build_${ABI}"}
+						cp -plu ${_docfile} ${_docdir/"${EMULTILIB_SOURCE_TOPDIR}"/"${WORKDIR}/${PN}_build_${ABI}"}
 					done
 				fi
 
 				[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]] && \
-					ECONF_SOURCE="${EMULTILIB_source_path}"
+					ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}"
 				multilib_debug ECONF_SOURCE ${ECONF_SOURCE}
 
 				# S should not be redefined for out-of-source-tree
 				# prepare phase, or at all in the CMake case
 				if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
 					if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]]; then
-						S=${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}
+						S=${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/"${EMULTILIB_SOURCE_TOP_DIRNAME}"}
 					fi
 				else
 					if !([[ "$1" == "src_prepare" ]] && \
 							[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]]); then
-						S=${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}
+						S=${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/"${EMULTILIB_SOURCE_TOP_DIRNAME}"}
 					fi
 				fi
-				CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}"
+				CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/"${EMULTILIB_SOURCE_TOP_DIRNAME}"}"
 				multilib_debug CMAKE_BUILD_DIR ${CMAKE_BUILD_DIR}
 				KDE_S="${S}"
 				multilib_debug KDE_S ${KDE_S}
 			else
 				# If we are already set up then restore the environment
-				_restore_platform_env "${ABI}"
+				_restore_multilib_platform_env "${ABI}"
 			fi
 			[[ "${ABI}" == "${DEFAULT_ABI}" ]] || \
 				_export_ml_config_vars "${ABI}"
@@ -545,7 +561,7 @@ multilib-native_src_generic_sub() {
 		fi
 		
 		# Now save the environment
-		_save_platform_env "${ABI}"
+		_save_multilib_platform_env "${ABI}"
 	fi
 }
 
