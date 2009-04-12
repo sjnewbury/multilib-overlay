@@ -431,7 +431,7 @@ multilib-native_src_generic_sub() {
 				multilib_debug EMULTILIB_source_dir ${EMULTILIB_source_dir}
 
 				# If ${EMULTILIB_source_dir} is empty, then ${S} points
-				# to the top level.
+				# to the top level. (This should never happen.)
 				[[ -z ${EMULTILIB_source_dir} ]] && \
 				EMULTILIB_source_dir=${EMULTILIB_partial_S_path}
 				multilib_debug EMULTILIB_source_dir ${EMULTILIB_source_dir}
@@ -471,7 +471,6 @@ multilib-native_src_generic_sub() {
 					done
 				fi
 
-				# This should never happen
 				[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]] && \
 					ECONF_SOURCE="${EMULTILIB_source_path}"
 				multilib_debug ECONF_SOURCE ${ECONF_SOURCE}
