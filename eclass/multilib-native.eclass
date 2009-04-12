@@ -225,60 +225,57 @@ _setup_multilib_platform_env() {
 	multilib_debug "${ABI} CFLAGS" "${CFLAGS}"
 	multilib_debug "${ABI} LDFLAGS" "${CFLAGS}"
 
-	# Multilib QT Support
-	if [[ -n "${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}" ]]; then
-		QMAKESPEC="linux-g++-${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}"
-	else
-		QMAKESPEC="linux-g++"
-	fi
-	if [[ ! ${ABI} == ${DEFAULT_ABI} ]]; then
-		if [[ -n "${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}" ]]; then 
-			QTBINDIR="/usr/libexec/qt/${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}"
+	# Multilib QT Support - This is needed for QT and CMake based packages
+	if [[ -n ${QTBINDIR} ]] || [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
+		if [[ -n "${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}" ]]; then
 			QMAKESPEC="linux-g++-${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}"
-		elif [[ -d "${EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]}" ]]; then 
-			QTBINDIR="/usr/libexec/qt/${EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]}"
-			QMAKESPEC=""
 		else
-				QMAKESPEC="linux-g++"
-				QTBINDIR="/usr/libexec/qt/${1}"
+			QMAKESPEC="linux-g++"
 		fi
-	else
-		QTBINDIR="/usr/bin"
+		if [[ ! ${ABI} == ${DEFAULT_ABI} ]]; then
+			if [[ -n "${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}" ]]; then 
+				QTBINDIR="/usr/libexec/qt/${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}"
+				QMAKESPEC="linux-g++-${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}"
+			elif [[ -d "${EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]}" ]]; then 
+				QTBINDIR="/usr/libexec/qt/${EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]}"
+				QMAKESPEC=""
+			else
+					QMAKESPEC="linux-g++"
+					QTBINDIR="/usr/libexec/qt/${1}"
+			fi
+		else
+			QTBINDIR="/usr/bin"
+		fi
+		multilib_debug "${ABI} QMAKESPEC" "${QMAKESPEC}"
 	fi
 
-	multilib_debug QMAKESPEC "${QMAKESPEC}"
-
-	# Multilib CMake Support - needs the qmake from QT above
-	mycmakeargs="${mycmakeargs} \
-		-DQT_QMAKE_EXECUTABLE:FILEPATH=${QTBINDIR}/qmake"
-	multilib_debug mycmakeargs "${mycmakeargs}"
-
-	# ccache
-	if [[ -z ${CCACHE_DIR} ]] ; then 
-		CCACHE_DIR="/var/tmp/ccache-${1}"
-	else
-		CCACHE_DIR="${CCACHE_DIR}-${1}"
-	fi
-
-	# The python binary is sometimes used to find the python install dir,
-	# use the system default python to find the ABI specific version
-	pyver=$(python --version 2>&1)
-	pyver=${pyver/Python /python}
-	pyver=${pyver%.*}
-
+	# If we aren't building for the DEFAULT ABI we may need to use some
+	# ABI specific programs during the build.  The python binary is
+	# sometimes used to find the python install dir but there may be more
+	# than one version installed.  Use the system default python to find
+	# the ABI specific version.
 	if ! [[ "${ABI}" == "${DEFAULT_ABI}" ]]; then
+		pyver=$(python --version 2>&1)
+		pyver=${pyver/Python /python}
+		pyver=${pyver%.*}
 		PYTHON="/usr/bin/${pyver}-${ABI}"
 		PERLBIN="/usr/bin/perl-${ABI}"
 	fi
 
-	# S should not be redefined for the CMake
-	# !CMAKE_IN_SOURCE_BUILD case, otherwise
-	# ECONF_SOURCE should point to the _prepared_
-	# source dir and S to the build directory
+	# S should not be redefined for the CMake !CMAKE_IN_SOURCE_BUILD case,
+	# otherwise ECONF_SOURCE should point to the _prepared_ source dir and
+	# S into the build directory
 	if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
+		# Multilib CMake Support, qmake provides the paths to link QT
+		mycmakeargs="${mycmakeargs} \
+			-DQT_QMAKE_EXECUTABLE:FILEPATH=${QTBINDIR}/qmake"
+		multilib_debug "${ABI} mycmakeargs" "${mycmakeargs}"
+
 		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 		[[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] && \
 			S="${CMAKE_BUILD_DIR}"
+		multilib_debug "${ABI} CMAKE_BUILD_DIR" "${CMAKE_BUILD_DIR}"
+
 	else
 		S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 		if [[ -n ${MULTILIB_IN_SOURCE_BUILD} ]]; then
@@ -286,11 +283,21 @@ _setup_multilib_platform_env() {
 		else
 			ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 		fi
+		multilib_debug "${ABI} ECONF_SOURCE" "${ECONF_SOURCE}"
 	fi
-	KDE_S="${S}"
-	multilib_debug "${ABI} ECONF_SOURCE" "${ECONF_SOURCE}"
-	multilib_debug "${ABI} CMAKE_BUILD_DIR" "${CMAKE_BUILD_DIR}"
-	multilib_debug "${ABI} KDE_S" "${KDE_S}"
+
+	# If KDE_S is defined then the kde.eclass is in use
+	if [[ -n ${KDE_S} ]]; then
+		KDE_S="${S}"
+		multilib_debug "${ABI} KDE_S" "${KDE_S}"
+	fi
+
+	# ccache
+	if [[ -z ${CCACHE_DIR} ]] ; then 
+		CCACHE_DIR="/var/tmp/ccache-${1}"
+	else
+		CCACHE_DIR="${CCACHE_DIR}-${1}"
+	fi
 
 	export PYTHON PERLBIN QMAKESPEC
 	let EMULTILIB_INITIALISED++
@@ -485,45 +492,7 @@ multilib-native_src_generic_sub() {
 					cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
 				else
 					einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
-					local _docdir="" docfile=""
-					# Create build dir
 					mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
-					# Populate build dir with various
-					# "documentaion"  FILES.
-					# This is a bit of a hack, but it
-					# ensures doc files are available for
-					# install phase.  Ideally,
-					# multilib-native ebuilds should be
-					# modified to use the
-					# EMULTILIB_SOURCE_TOPDIR when
-					# installing from the source tree. Once
-					# all ebuilds have been modified,
-					# hopefully this can be removed.
-					einfo "Copying documentation from source dir: ${EMULTILIB_SOURCE_TOPDIR}"
-					einfo "Copying selected files from top-level of source tree"
-					for _docfile in $(find "${EMULTILIB_SOURCE_TOPDIR}" -maxdepth 1 -type f \
-						! -executable | \
-						grep -v -e ".*\.in$\|.*\.am$\|.*[^t]config.*\|.*\.h$\|.*\.c*$\|.*\.cpp$\|.*\.cmake" ); do
-					[[ -n ${MULTILIB_DEBUG} ]] && echo cp -au "${_docfile}" "${WORKDIR}/${PN}_build_${ABI}"
-
- 						cp -au "${_docfile}" "${WORKDIR}/${PN}_build_${ABI}"
-					done
-					einfo "Copying common doc directories"
-					for _docdir in $(find "${EMULTILIB_SOURCE_TOPDIR}" -type d \( -name 'doc' -o -name 'docs' -o -name 'javadoc*' -o -name 'csharpdoc' \)); do
-						[[ -n ${MULTILIB_DEBUG} ]] && echo mkdir -p "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
-						mkdir -p "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
-						[[ -n ${MULTILIB_DEBUG} ]] && echo cp -alu "${_docdir}/*" "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
-						cp -alu "${_docdir}/*" "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
-					done
-					einfo "Finding other documentaion files"
-					for _docfile in $(find "${EMULTILIB_SOURCE_TOPDIR}" -type f \( -name '*.html' -o -name '*.sgml' -o -name '*.xml' -o -regex '.*\.[0-8]\|.*\.[0-8].' \));
-					do
-						_docdir="${_docfile%/*}"
-						[[ -n ${MULTILIB_DEBUG} ]] && echo mkdir -p "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
-						mkdir -p "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
-						[[ -n ${MULTILIB_DEBUG} ]] && echo cp -plu "${_docfile}" "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
-						cp -plu "${_docfile}" "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
-					done
 				fi
 
 
