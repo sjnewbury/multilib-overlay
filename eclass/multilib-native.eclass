@@ -4,18 +4,13 @@
 #
 # @ECLASS: multilib-native.eclass
 
-# temporary stuff to to have some debug info what's going on with
-# multilib-native_check_inherited_funcs() and maybe other stuff. Remove this var and 
-# the stuff in the phase functions when done...
-ECLASS_DEBUG="yes"
-
 IUSE="${IUSE} lib32"
 
 if use lib32; then
 	EMULTILIB_PKG="true"
 fi
 
-inherit base multilib
+inherit base multilib flag-o-matic 
 
 case "${EAPI:-0}" in
 	2)
@@ -26,30 +21,91 @@ case "${EAPI:-0}" in
 		;;
 esac
 
-EMULTILIB_OCFLAGS=""
-EMULTILIB_OCXXFLAGS=""
-EMULTILIB_OLDFLAGS=""
-EMULTILIB_OCHOST=""
-EMULTILIB_OSPATH=""
-EMULTILIB_OCCACHE_DIR=""
-EMULTILIB_OPYTHON=""
-EMULTILIB_OPYTHON_CONFIG=""
-EMULTILIB_OCUPS_CONFIG=""
-EMULTILIB_OGNUTLS_CONFIG=""
-EMULTILIB_OCURL_CONFIG=""
-EMULTILIB_OCACA_CONFIG=""
-EMULTILIB_OAALIB_CONFIG=""
-EMULTILIB_GTK_CONFIG=""
-EMULTILIB_SMPEG_CONFIG=""
-EMULTILIB_NSPR_CONFIG=""
-EMULTILIB_NSS_CONFIG=""
-EMULTILIB_OPERLBIN=""
-EMULTILIB_Omyconf=""
-EMULTILIB_OKDE_S=""
-EMULTILIB_Omycmakeargs=""
-EMULTILIB_source_dir=""
-EMULTILIB_source_path=""
-EMULTILIB_partial_S_path=""
+# -----------------------------------------------------------------------------
+# This is the place to add support for new ABIs.  All ABI specific definitions
+# are specified only in this section.
+
+_set_multilib_array_index() {
+	# Until we can count on bash version > 4, we can't use associative
+	# arrays.  
+	case $1 in
+		INIT)	EMULTILIB_ARRAY_INDEX=0 ;;
+		x86)	EMULTILIB_ARRAY_INDEX=1 ;;
+		amd64)	EMULTILIB_ARRAY_INDEX=2 ;;
+		ppc)	EMULTILIB_ARRAY_INDEX=3 ;;
+		ppc64)	EMULTILIB_ARRAY_INDEX=4 ;;
+		*)		EMULTILIB_ARRAY_INDEX=0 ;;
+	esac
+}
+
+_init_multilib_platform_configuration()
+{
+	_set_multilib_array_index x86
+	EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-m32"
+	EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]="32"
+	EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]=""
+	EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]="i686"
+
+	_set_multilib_array_index amd64
+	EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-m64"
+	EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]="64"
+	EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]=""
+	EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]="x86_64"
+
+	_set_multilib_array_index ppc
+	EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-m32"
+	EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]="32"
+	EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]=""
+	EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]="powerpc"
+
+	_set_multilib_array_index ppc64
+	EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-m64"
+	EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]="64"
+	EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]=""
+	EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]="powerpc64"
+}
+
+# -----------------------------------------------------------------------------
+
+# Arrays to hold ABI specific configuration
+declare -a EMULTILIB_COMPILER_ABI_FLAGS
+declare -a EMULTILIB_LIB_SUFFIX
+declare -a EMULTILIB_LIB_SUBDIR
+declare -a EMULTILIB_CHOST
+
+# -----------------------------------------------------------------------------
+
+# These arrays are used to store environment for each ABI
+
+# Saved compiler flags for each ABI
+declare -a EMULTILIB_CFLAGS
+declare -a EMULTILIB_CXXFLAGS
+declare -a EMULTILIB_FFLAGS
+declare -a EMULTILIB_FCFLAGS
+declare -a EMULTILIB_LDFLAGS
+
+# Saved Portage/eclass variables
+declare -a EMULTILIB_CHOST
+declare -a EMULTILIB_S
+declare -a EMULTILIB_KDE_S
+declare -a EMULTILIB_CMAKE_BUILD_DIR
+declare -a EMULTILIB_CCACHE_DIR
+declare -a EMULTILIB_myconf
+declare -a EMULTILIB_mycmakeargs
+
+# Non-default ABI binaries
+declare -a EMULTILIB_PYTHON
+declare -a EMULTILIB_PERLBIN
+
+# On initialisation of multilib environment this gets incremented by 1
+EMULTILIB_INITIALISED=""
+
+# These may be useful in multilib-ised ebuilds
+EMULTILIB_SOURCE_TOP_DIRNAME=""
+EMULTILIB_SOURCE_TOPDIR=""
+EMULTILIB_RELATIVE_BUILD_DIR=""
+
+# -----------------------------------------------------------------------------
 
 # @FUNCTION: multilib-native_pkg_setup
 # @USAGE:
@@ -63,7 +119,6 @@ multilib-native_pkg_setup() {
 # @DESCRIPTION:
 multilib-native_src_unpack() {
 	multilib-native_src_unpack_internal
-
 }
 
 # @FUNCTION: multilib-native_src_prepare
@@ -131,49 +186,187 @@ _check_build_dir() {
 	echo ">>> Working in BUILD_DIR: \"$CMAKE_BUILD_DIR\""
 }
 
-# @FUNCTION: _set_platform_env
-# @DESCRIPTION: Set environment up for 32bit or 64bit ABI
-_set_platform_env() {
-	local pyver=""
-	EMULTILIB_ABI_FLAGS="-m$1"
-	CFLAGS="${EMULTILIB_OCFLAGS} ${EMULTILIB_ABI_FLAGS}"
-	CXXFLAGS="${EMULTILIB_OCXXFLAGS} ${EMULTILIB_ABI_FLAGS}"
-	LDFLAGS="${EMULTILIB_OLDFLAGS} ${EMULTILIB_ABI_FLAGS}"
-	QMAKESPEC="linux-g++-$1"
-	if [[ $1 == "32" ]]; then
-		# TODO: this should be changed to ${ABI}
-		QTBINDIR="/usr/libexec/qt/$1"
-	else
-		QTBINDIR="/usr/bin"
-	fi
-	mycmakeargs="${EMULTILIB_Omycmakeargs} \
-		-DQT_QMAKE_EXECUTABLE:FILEPATH=${QTBINDIR}/qmake"
-	if [[ -z ${CCACHE_DIR} ]] ; then 
-		CCACHE_DIR="/var/tmp/ccache"
-	else
-		CCACHE_DIR="${CCACHE_DIR}$1"
-	fi
-	pyver=$(python --version 2>&1)
-	pyver=${pyver/Python /python}
-	pyver=${pyver%.*}
-
-	if ! is_final_abi; then
-		PYTHON=/usr/bin/${pyver}-${ABI}
-		PYTHON_CONFIG=/usr/bin/python-config-${pyver/python}-${ABI}
-		CUPS_CONFIG=/usr/bin/cups-config-${ABI}
-		GNUTLS_CONFIG=/usr/bin/gnutls-config-${ABI}
-		CURL_CONFIG=/usr/bin/curl-config-${ABI}
-		CACA_CONFIG=/usr/bin/caca-config-${ABI}
-		AALIB_CONFIG=/usr/bin/aalib-config-${ABI}
-		GTK_CONFIG=/usr/bin/gtk-config-${ABI}
-		SMPEG_CONFIG=/usr/bin/smpeg-config-${ABI}
-		NSPR_CONFIG=/usr/bin/nspr-config-${ABI}
-		NSS_CONFIG=/usr/bin/nss-config-${ABI}
-		PERLBIN=/usr/bin/perl-${ABI}
-	fi
+# @FUNCTION: _ml_config_scripts
+# @USAGE: <ABI>
+# @DESCRIPTION:
+_export_ml_config_vars() {
+	EMULTILIB_config_vars=""
+	local _config_script _config_var
+	for _config_script in $(find "/usr/bin" -executable \
+			-regex ".*-config.*-${1}"); do
+		_config_var="${_config_script%%-*}"
+		#convert to upper case letters.
+		#with bash 4 we could use declare -u
+		_config_var="$(echo $_config_var | tr "[:lower:]" "[:upper:]")"
+		_config_var="${_config_var##*/}_CONFIG"
+		_config_var="${_config_var/#LIB}"
+		multilib_debug "${_config_var}_default" "${!_config_var}"
+		multilib_debug "${_config_var}" "${_config_script}"
+		declare ${_config_var}_default="${!_config_var}"
+		export ${_config_var}="${_config_script}"
+		EMULTILIB_config_vars="${EMULTILIB_config_vars} ${_config_var}"
+	done
 }
 
+# @FUNCTION: _setup_multilib_platform_env
+# @USAGE: <ABI>
+# @DESCRIPTION: Setup initial environment for ABI, flags, workarounds etc.
+_setup_multilib_platform_env() {
+	_set_multilib_array_index ${1}
+	local pyver=""
+	[[ -z "${EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]}" ]] && die "Unknown ABI (${1})" 
+	CHOST="${EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]}-${CHOST#*-}"
+	multilib_debug "CHOST" ${CHOST}
+	# Set compiler and linker ABI flags
+	append-flags "${EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]}"
+	append-ldflags "${EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]}"
 
+	multilib_debug EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}] ${EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]}
+	multilib_debug "${ABI} CFLAGS" "${CFLAGS}"
+	multilib_debug "${ABI} LDFLAGS" "${CFLAGS}"
+
+	# Multilib QT Support - This is needed for QT and CMake based packages
+	if [[ -n ${QTBINDIR} ]] || [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
+		if [[ -n "${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}" ]]; then
+			QMAKESPEC="linux-g++-${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}"
+		else
+			QMAKESPEC="linux-g++"
+		fi
+		if [[ ! ${ABI} == ${DEFAULT_ABI} ]]; then
+			if [[ -n "${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}" ]]; then 
+				QTBINDIR="/usr/libexec/qt/${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}"
+				QMAKESPEC="linux-g++-${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}"
+			elif [[ -d "${EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]}" ]]; then 
+				QTBINDIR="/usr/libexec/qt/${EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]}"
+				QMAKESPEC=""
+			else
+					QMAKESPEC="linux-g++"
+					QTBINDIR="/usr/libexec/qt/${1}"
+			fi
+		else
+			QTBINDIR="/usr/bin"
+		fi
+		multilib_debug "${ABI} QMAKESPEC" "${QMAKESPEC}"
+	fi
+
+	# If we aren't building for the DEFAULT ABI we may need to use some
+	# ABI specific programs during the build.  The python binary is
+	# sometimes used to find the python install dir but there may be more
+	# than one version installed.  Use the system default python to find
+	# the ABI specific version.
+	if ! [[ "${ABI}" == "${DEFAULT_ABI}" ]]; then
+		pyver=$(python --version 2>&1)
+		pyver=${pyver/Python /python}
+		pyver=${pyver%.*}
+		PYTHON="/usr/bin/${pyver}-${ABI}"
+		PERLBIN="/usr/bin/perl-${ABI}"
+	fi
+
+	# S should not be redefined for the CMake !CMAKE_IN_SOURCE_BUILD case,
+	# otherwise ECONF_SOURCE should point to the _prepared_ source dir and
+	# S into the build directory
+	if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
+		# Multilib CMake Support, qmake provides the paths to link QT
+		mycmakeargs="${mycmakeargs} \
+			-DQT_QMAKE_EXECUTABLE:FILEPATH=${QTBINDIR}/qmake"
+		multilib_debug "${ABI} mycmakeargs" "${mycmakeargs}"
+
+		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+		[[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] && \
+			S="${CMAKE_BUILD_DIR}"
+		multilib_debug "${ABI} CMAKE_BUILD_DIR" "${CMAKE_BUILD_DIR}"
+
+	else
+		S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+		if [[ -n ${MULTILIB_IN_SOURCE_BUILD} ]]; then
+			ECONF_SOURCE="${S}"
+		else
+			ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+		fi
+		multilib_debug "${ABI} ECONF_SOURCE" "${ECONF_SOURCE}"
+	fi
+
+	# If KDE_S is defined then the kde.eclass is in use
+	if [[ -n ${KDE_S} ]]; then
+		KDE_S="${S}"
+		multilib_debug "${ABI} KDE_S" "${KDE_S}"
+	fi
+
+	# ccache
+	if [[ -z ${CCACHE_DIR} ]] ; then 
+		CCACHE_DIR="/var/tmp/ccache-${1}"
+	else
+		CCACHE_DIR="${CCACHE_DIR}-${1}"
+	fi
+
+	export PYTHON PERLBIN QMAKESPEC
+	let EMULTILIB_INITIALISED++
+}
+
+# @FUNCTION: _save_multilib_platform_env
+# @USAGE: <ABI>
+# @DESCRIPTION: Save environment for ABI
+_save_multilib_platform_env() {
+	_set_multilib_array_index ${1}
+	multilib_debug "Saving Environment" "${1}"
+
+	# Save compiler and linker flags for each ABI
+	EMULTILIB_CFLAGS[${EMULTILIB_ARRAY_INDEX}]="${CFLAGS}"
+	EMULTILIB_CXXFLAGS[${EMULTILIB_ARRAY_INDEX}]="${CXXFLAGS}"
+	EMULTILIB_FFLAGS[${EMULTILIB_ARRAY_INDEX}]="${FFLAGS}"
+	EMULTILIB_FCFLAGS[${EMULTILIB_ARRAY_INDEX}]="${FCFLAGS}"
+	EMULTILIB_LDFLAGS[${EMULTILIB_ARRAY_INDEX}]="${LDFLAGS}"
+
+	# Saved Portage/eclass variables
+	EMULTILIB_CHOST[${EMULTILIB_ARRAY_INDEX}]="${CHOST}"
+	EMULTILIB_S[${EMULTILIB_ARRAY_INDEX}]="${S}"
+	EMULTILIB_KDE_S[${EMULTILIB_ARRAY_INDEX}]="${KDE_S}"
+	EMULTILIB_CMAKE_BUILD_DIR[${EMULTILIB_ARRAY_INDEX}]="${CMAKE_BUILD_DIR}"
+	EMULTILIB_CCACHE_DIR[${EMULTILIB_ARRAY_INDEX}]="${CCACHE_DIR}"
+	EMULTILIB_myconf[${EMULTILIB_ARRAY_INDEX}]="${myconf}"
+	EMULTILIB_mycmakeargs[${EMULTILIB_ARRAY_INDEX}]="${mycmakeargs}"
+
+	# Non-default ABI binaries
+	EMULTILIB_PYTHON[${EMULTILIB_ARRAY_INDEX}]="${PYTHON}"
+	EMULTILIB_PERLBIN[${EMULTILIB_ARRAY_INDEX}]="${PERLBIN}"
+
+	multilib_debug "EMULTILIB_S[${EMULTILIB_ARRAY_INDEX}]" "${EMULTILIB_S[${EMULTILIB_ARRAY_INDEX}]}"
+	multilib_debug "EMULTILIB_CFLAGS[${EMULTILIB_ARRAY_INDEX}]" "${EMULTILIB_CFLAGS[${EMULTILIB_ARRAY_INDEX}]}"
+}
+
+# @FUNCTION: _restore_multilib_platform_env
+# @USAGE: <ABI>
+# @DESCRIPTION: Restore environment for ABI
+_restore_multilib_platform_env() {
+	_set_multilib_array_index ${1}
+	multilib_debug "Restoring Environment" "${1}"
+
+	multilib_debug "EMULTILIB_S[${EMULTILIB_ARRAY_INDEX}]" "${EMULTILIB_S[${EMULTILIB_ARRAY_INDEX}]}"
+	multilib_debug "EMULTILIB_CFLAGS[${EMULTILIB_ARRAY_INDEX}]" "${EMULTILIB_CFLAGS[${EMULTILIB_ARRAY_INDEX}]}"
+
+	# Restore compiler and linker flags for each ABI
+	CFLAGS="${EMULTILIB_CFLAGS[${EMULTILIB_ARRAY_INDEX}]}"
+	CXXFLAGS="${EMULTILIB_CXXFLAGS[${EMULTILIB_ARRAY_INDEX}]}"
+	FFLAGS="${EMULTILIB_FFLAGS[${EMULTILIB_ARRAY_INDEX}]}"
+	FCFLAGS="${EMULTILIB_FCFLAGS[${EMULTILIB_ARRAY_INDEX}]}"
+	LDFLAGS="${EMULTILIB_LDFLAGS[${EMULTILIB_ARRAY_INDEX}]}"
+
+	# Saved Portage/eclass variables
+	CHOST="${EMULTILIB_CHOST[${EMULTILIB_ARRAY_INDEX}]}"
+	S="${EMULTILIB_S[${EMULTILIB_ARRAY_INDEX}]}"
+	KDE_S="${EMULTILIB_KDE_S[${EMULTILIB_ARRAY_INDEX}]}"
+	CMAKE_BUILD_DIR="${EMULTILIB_CMAKE_BUILD_DIR[${EMULTILIB_ARRAY_INDEX}]}"
+	CCACHE_DIR="${EMULTILIB_CCACHE_DIR[${EMULTILIB_ARRAY_INDEX}]}"
+	myconf="${EMULTILIB_myconf[${EMULTILIB_ARRAY_INDEX}]}"
+	mycmakeargs="${EMULTILIB_mycmakeargs[${EMULTILIB_ARRAY_INDEX}]}"
+
+	# Non-default ABI binaries
+	PYTHON="${EMULTILIB_PYTHON[${EMULTILIB_ARRAY_INDEX}]}"
+	PERLBIN="${EMULTILIB_PERLBIN[${EMULTILIB_ARRAY_INDEX}]}"
+
+	multilib_debug "S" "${S}"
+	multilib_debug "CFLAGS" "${CFLAGS}"
+}
 
 # @FUNCTION: multilib-native_src_generic
 # @USAGE:
@@ -209,68 +402,144 @@ multilib-native_src_generic() {
 # @USAGE:
 # @DESCRIPTION:
 multilib-native_src_generic_sub() {
-	if [[ -n ${EMULTILIB_PKG} ]]; then
-		if [[ "$1" == "src_prepare" ]] && ! is_final_abi; then
-			if !([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
-			[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]); then
+	EMULTILIB_config_vars=""
+
+	# We support two kinds of build, by default we create a minimal build
+	# dir for each ABI with a shared source tree.  Where that is
+	# unsupported with the underlying package due to deficiencies or bugs
+	# in their build system we can create a full image of the source tree
+	# for each ABI.  This latter behaviour is enabled with
+	# MULTILIB_IN_SOURCE_BUILD (MISB), or with CMake based packages the
+	# CMAKE_IN_SOURCE_BUILD environment variables.
+	#
+	# With multilib builds "S" eventually points into the build tree, but
+	# initially "S" points to the source the same as non-multilib
+	# packages. Sometimes, however, packages assume a directory structure
+	# ABOVE "S". ("S" is set to a subdirectory of the tree they unpack
+	# into ${WORKDIR})
+	#
+	# We need to deal with this by finding the top-level of the source
+	# tree and keeping track of ${S} relative to it.
+	#
+	# We initialise the variables early and unconditionally (except only
+	# while no multilib environment has been initialised), whether
+	# building for multilib or not.  This allows multilib-native ebuilds
+	# to always make use of them. (It is intended for this to happen for
+	# each phase until multilib is initialised, this allows ebuilds to
+	# modify the common environment, right up until we setup a build dir.)
+	if [[ -z ${EMULTILIB_INITIALISED} ]]; then
+		_init_multilib_platform_configuration
+		_save_multilib_platform_env "INIT"
+
+		[[ -n ${MULTILIB_DEBUG} ]] && \
+			einfo "Determining SOURCE_TOPDIR from S and WORKDIR"
+		EMULTILIB_RELATIVE_BUILD_DIR="${S#*${WORKDIR}\/}"
+		EMULTILIB_SOURCE_TOP_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
+		multilib_debug WORKDIR "${WORKDIR}"
+		multilib_debug S "${S}"
+		multilib_debug EMULTILIB_RELATIVE_BUILD_DIR "${EMULTILIB_RELATIVE_BUILD_DIR}"
+		multilib_debug EMULTILIB_SOURCE_TOP_DIRNAME "${EMULTILIB_SOURCE_TOP_DIRNAME}"
+		# If ${EMULTILIB_SOURCE_TOP_DIRNAME} is
+		# empty, then we assume ${S} points to the top level.
+		# (This should never happen.)
+		if [[ -z ${EMULTILIB_SOURCE_TOP_DIRNAME} ]]; then
+			ewarn "Unable to determine dirname of the source topdir:"
+			ewarn "Assuming S points to the top level"
+			EMULTILIB_SOURCE_TOP_DIRNAME=${EMULTILIB_RELATIVE_BUILD_DIR}
+			multilib_debug EMULTILIB_SOURCE_TOP_DIRNAME ${EMULTILIB_SOURCE_TOP_DIRNAME}
+		fi
+		EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
+		multilib_debug EMULTILIB_SOURCE_TOPDIR ${EMULTILIB_SOURCE_TOPDIR}
+	fi
+	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
+
+		# If this is the src_prepare phase we only need to run for the
+		# DEFAULT_ABI when we are building out of the source tree since
+		# it is shared between each ABI.
+		if [[ "$1" == "src_prepare" ]] && \
+				!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
+				[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]); then
+			if [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
+				einfo "Skipping ${1} for ${ABI}"
+				return
+			else
+				einfo "Running ${1} for default ABI"
+				multilib-native_${1}_internal
 				return
 			fi
 		fi
 
-		export CC="$(tc-getCC)" CXX="$(tc-getCXX)"
+		if [[ -z "$(echo ${1}|grep pkg)" ]]; then
+			# Is this our first run for this ABI?
+			if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
 
-		if has_multilib_profile ; then
-			if ! is_final_abi; then
-				# Save env before each ABI pass
-				EMULTILIB_OCFLAGS="${CFLAGS}"
-				EMULTILIB_OCXXFLAGS="${CXXFLAGS}"
-				EMULTILIB_OLDFLAGS="${LDFLAGS}"
-				EMULTILIB_OCHOST="${CHOST}"
-				EMULTILIB_OSPATH="${S}"
+				# We don't care what's set in the initial 
+				# enviroment we need this to work
+				export CC="$(tc-getCC)"
+				export CXX="$(tc-getCXX)"
+				export FC="$(tc-getFC)"
 
-				# Various libraries store build-time linking
-				# information in a config script file or program binary
-				EMULTILIB_OCCACHE_DIR="${CCACHE_DIR}"
-				EMULTILIB_OPYTHON="${PYTHON}"
-				EMULTILIB_OPYTHON_CONFIG="${PYTHON_CONFIG}"
-				EMULTILIB_OCUPS_CONFIG="${CUPS_CONFIG}"
-				EMULTILIB_OGNUTLS_CONFIG="${GNUTLS_CONFIG}"
-				EMULTILIB_OCURL_CONFIG="${CURL_CONFIG}"
-				EMULTILIB_OCACA_CONFIG="${CACA_CONFIG}"
-				EMULTILIB_OAALIB_CONFIG="${AALIB_CONFIG}"
-				EMULTILIB_OGTK_CONFIG="${GTK_CONFIG}"
-				EMULTILIB_OSMPEG_CONFIG="${SMPEG_CONFIG}"
-				EMULTILIB_ONSPR_CONFIG="${NSPR_CONFIG}"
-				EMULTILIB_ONSS_CONFIG="${NSS_CONFIG}"
-				EMULTILIB_OPERLBIN="${PERLBIN}"
-				EMULTILIB_OKDE_S="${KDE_S}"
-				EMULTILIB_Omycmakeargs="${mycmakeargs}"
-				# We need to prevent myconf from accumulating through
-				# each pass, but respect initial value
-				EMULTILIB_Omyconf="${myconf}"
+				# Restore INIT and setup multilib environment
+				# for this ABI
+				_restore_multilib_platform_env "INIT"
+				_setup_multilib_platform_env "${ABI}"
+
+				# Prepare build dir
+				#
+				if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
+					[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]; then
+					einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
+					cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
+				else
+					einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
+					local _docdir="" docfile=""
+					# Create build dir
+					mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
+					# Populate build dir with various
+					# "documentaion"  FILES.
+					# This is a bit of a hack, but it
+					# ensures doc files are available for
+					# install phase.  Ideally,
+					# multilib-native ebuilds should be
+					# modified to use the
+					# EMULTILIB_SOURCE_TOPDIR when
+					# installing from the source tree. Once
+					# all ebuilds have been modified,
+					# hopefully this can be removed.
+					einfo "Copying documentation from source dir: ${EMULTILIB_SOURCE_TOPDIR}"
+					einfo "Copying selected files from top-level of source tree"
+					for _docfile in $(find "${EMULTILIB_SOURCE_TOPDIR}" -maxdepth 1 -type f \
+						! -executable | \
+						grep -v -e ".*\.in$\|.*\.am$\|.*[^t]config.*\|.*\.h$\|.*\.c*$\|.*\.cpp$\|.*\.cmake" ); do
+					[[ -n ${MULTILIB_DEBUG} ]] && echo cp -au "${_docfile}" "${WORKDIR}/${PN}_build_${ABI}"
+
+ 						cp -au "${_docfile}" "${WORKDIR}/${PN}_build_${ABI}"
+					done
+					einfo "Copying common doc directories"
+					for _docdir in $(find "${EMULTILIB_SOURCE_TOPDIR}" -type d \( -name 'doc' -o -name 'docs' -o -name 'javadoc*' -o -name 'csharpdoc' \)); do
+						[[ -n ${MULTILIB_DEBUG} ]] && echo mkdir -p "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+						mkdir -p "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+						[[ -n ${MULTILIB_DEBUG} ]] && echo cp -alu "${_docdir}/*" "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+						cp -alu "${_docdir}/*" "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+					done
+					einfo "Finding other documentaion files"
+					for _docfile in $(find "${EMULTILIB_SOURCE_TOPDIR}" -type f \( -name '*.html' -o -name '*.sgml' -o -name '*.xml' -o -regex '.*\.[0-8]\|.*\.[0-8].' \));
+					do
+						_docdir="${_docfile%/*}"
+						[[ -n ${MULTILIB_DEBUG} ]] && echo mkdir -p "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+						mkdir -p "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+						[[ -n ${MULTILIB_DEBUG} ]] && echo cp -plu "${_docfile}" "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+						cp -plu "${_docfile}" "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+					done
+				fi
+
+
+			else
+				# If we are already set up then restore the environment
+				_restore_multilib_platform_env "${ABI}"
 			fi
-			if use amd64 || use ppc64 ; then
-				case ${ABI} in
-					x86)    CHOST="i686-${EMULTILIB_OCHOST#*-}"
-						_set_platform_env 32
-					;;
-					amd64)  CHOST="x86_64-${EMULTILIB_OCHOST#*-}"
-						_set_platform_env 64
-					;;
-					ppc)   CHOST="powerpc-${EMULTILIB_OCHOST#*-}"
-						_set_platform_env 32
-					;;
-					ppc64)   CHOST="powerpc64-${EMULTILIB_OCHOST#*-}"
-						_set_platform_env 64
-					;;
-					*)   die "Unknown ABI"
-					;;
-				esac
-				export QMAKESPEC CUPS_CONFIG GNUTLS_CONFIG
-				export CURL_CONFIG PYTHON_CONFIG PYTHON 
-				export CACA_CONFIG AALIB_CONFIG GTK_CONFIG
-				export SMPEG_CONFIG NSPR_CONFIG NSS_CONFIG PERLBIN
-			fi
+			[[ "${ABI}" == "${DEFAULT_ABI}" ]] || \
+				_export_ml_config_vars "${ABI}"
 		fi
 
 		#Nice way to avoid the "cannot run test program while cross compiling" :)
@@ -278,157 +547,48 @@ multilib-native_src_generic_sub() {
 
 		# qt-build.eclass sets these in pkg_setup, but that results
 		# in the path always pointing to the primary ABI libdir.
-		QTBASEDIR=/usr/$(get_libdir)/qt4
-		QTLIBDIR=/usr/$(get_libdir)/qt4
-		QTPCDIR=/usr/$(get_libdir)/pkgconfig
-		QTPLUGINDIR=${QTLIBDIR}/plugins
-
-		# Prepare build dir
-		#
-		# ${S} points to the source directory, but some packages assume
-		# a directory structure ABOVE ${S}.  "S" is set to a
-		# subdirectory of the tree they unpack into ${WORKDIR}. We
-		# need to deal with this by finding the top-level of the source
-		# tree and keeping track of ${S} relative to it.
-		#
-		if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
-				[[ -z "$(echo ${1}|grep pkg)" ]]; then
-			# Determine whether S = source dir
-			EMULTILIB_partial_S_path=${S#*"${WORKDIR}/"}
-			EMULTILIB_source_dir=${EMULTILIB_partial_S_path%%/*}
-
-			multilib_debug WORKDIR ${WORKDIR}
-			multilib_debug S ${S}
-			multilib_debug EMULTILIB_partial_S_path ${EMULTILIB_partial_S_path}
-			multilib_debug EMULTILIB_source_dir ${EMULTILIB_source_dir}
-
-			# If ${EMULTILIB_source_dir} is empty, then ${S} points
-			# to the top level.
-			[[ -z ${EMULTILIB_source_dir} ]] && \
-				EMULTILIB_source_dir=${EMULTILIB_partial_S_path}
-			multilib_debug EMULTILIB_source_dir ${EMULTILIB_source_dir}
-			EMULTILIB_source_path=${WORKDIR}/${EMULTILIB_source_dir}
-			multilib_debug EMULTILIB_source_path ${EMULTILIB_source_path}
-			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
-					[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]; then
-				einfo "Copying source tree from ${EMULTILIB_source_path} to ${WORKDIR}/${PN}_build_${ABI}"
-				cp -al ${EMULTILIB_source_path} ${WORKDIR}/${PN}_build_${ABI}
-			else
-				einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
-				local _docdir="" docfile=""
-				# Create build dir
-				mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
-				# Populate build dir with filtered FILES from source
-				# root and any directories matching *doc*:
-				# This is a bit of a hack, but it ensures
-				# doc files are available for install phase
-				einfo "Copying documentation from source dir: ${EMULTILIB_source_path}"
-				einfo "Copying selected files from top-level of source tree"
-				for _docfile in $(find ${EMULTILIB_source_path} -maxdepth 1 -type f \
-					! -executable | \
-					grep -v -e ".*\.in$\|.*\.am$\|.*[^t]config.*\|.*\.h$\|.*\.c*$\|.*\.cpp$\|.*\.cmake" ); do
-					cp -au ${_docfile} ${WORKDIR}/${PN}_build_${ABI}
-				done
-				einfo "Copying common doc directories"
-				for _docdir in $(find ${EMULTILIB_source_path} -type d \( -name 'doc' -o -name 'docs' -o -name 'javadoc*' -o -name 'csharpdoc' \)); do
-					mkdir -p ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
-					cp -alu ${_docdir}/* ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
-				done
-				einfo "Finding other documentaion files"
-				for _docfile in $(find ${EMULTILIB_source_path} -type f \( -name '*.html' -o -name '*.sgml' -o -name '*.xml' -o -regex '.*\.[0-8]\|.*\.[0-8].' \));
-				do
-					_docdir="${_docfile%/*}"
-					mkdir -p ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
-					cp -plu ${_docfile} ${_docdir/"${EMULTILIB_source_path}"/"${WORKDIR}/${PN}_build_${ABI}"}
-				done
-			fi
-			[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]] && \
-				ECONF_SOURCE="${EMULTILIB_source_path}"
-			multilib_debug ECONF_SOURCE ${ECONF_SOURCE}
-		fi
-
-		# S should not be redefined for out-of-source-tree prepare
-		# phase, or at all in the cmake case
-		if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
-			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]]; then
-				S=${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}
-			fi
-		else
-			if !([[ "$1" == "src_prepare" ]] && \
-					[[ -z "${MULTILIB_IN_SOURCE_BUILD}" ]]); then
-				S=${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}
-			fi
-		fi
-		
-		multilib_debug S ${S}
-
-		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_partial_S_path/"${EMULTILIB_source_dir}"}"
-		multilib_debug CMAKE_BUILD_DIR ${CMAKE_BUILD_DIR}
-		KDE_S="${S}"
-		multilib_debug KDE_S ${KDE_S}
-
-		[[ -d "${S}" ]] && cd ${S}
-
+		# These need to run on each pass to set the correctly.
+		QTBASEDIR=/usr/"$(get_libdir)"/qt4
+		QTLIBDIR=/usr/"$(get_libdir)"/qt4
+		QTPCDIR=/usr/"$(get_libdir)"/pkgconfig
+		QTPLUGINDIR="${QTLIBDIR}"/plugins
 		export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
+
+		[[ -d "${S}" ]] && cd "${S}"
 	fi
 
 	multilib-native_${1}_internal
 
-	# Now restore the environment, it is vital that this only occurs
-	# between each pass through a single phase, and not between each
-	# phase as otherwise changes made by other eclasses and the ebuild
-	# will be lost.  On the final pass is_final_abi is TRUE, so we know
-	# we'll be entering a new phase, this allows the env vars changed
-	# during the is_final_abi to be respected.  FIXME?: any ABI specific
-	# changes to env vars we care about made during ! is_final_abi will
-	# be lost, hopefully this doesn't occur in the real world...
-	#
-	# We need to filter out our changes to the compiler and linker flags
-	# between phases so the is_final_abi flags don't carry through
-	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
-		S="${EMULTILIB_OSPATH}"
-		if ! is_final_abi; then
-			CFLAGS="${EMULTILIB_OCFLAGS}"
-			CXXFLAGS="${EMULTILIB_OCXXFLAGS}"
-			LDFLAGS="${EMULTILIB_OLDFLAGS}"
-			CHOST="${EMULTILIB_OCHOST}"
-			CCACHE_DIR="${EMULTILIB_OCCACHE_DIR}"
-			PYTHON="${EMULTILIB_OPYTHON}"
-			PYTHON_CONFIG="${EMULTILIB_OPYTHON_CONFIG}"
-			CUPS_CONFIG="${EMULTILIB_OCUPS_CONFIG}"
-			GNUTLS_CONFIG="${EMULTILIB_OGNUTLS_CONFIG}"
-			CURL_CONFIG="${EMULTILIB_OCURL_CONFIG}"
-			CACA_CONFIG="${EMULTILIB_OCACA_CONFIG}"
-			AALIB_CONFIG="${EMULTILIB_OAALIB_CONFIG}"
-			GTK_CONFIG="${EMULTILIB_OGTK_CONFIG}"
-			SMPEG_CONFIG="${EMULTILIB_OSMPEG_CONFIG}"
-			NSPR_CONFIG="${EMULTILIB_ONSPR_CONFIG}"
-			NSS_CONFIG="${EMULTILIB_ONSS_CONFIG}"
-			PERLBIN="${EMULTILIB_OPERLBIN}"
-			myconf="${EMULTILIB_Omyconf}"
-			KDE_S="${EMULTILIB_OKDE_S}"
-			mycmakeargs="${EMULTILIB_Omycmakeargs}"
-
-			# handle old-style (non-PKG-CONFIG) *-config* scripts
-			if [[ ${1} == "src_install" ]] && \
-					 ( ! is_final_abi ); then
-				einfo Looking for package config scripts
-				local _config
-				[[ -d "${D}/usr/bin" ]] && \
-					for _config in $(find "${D}/usr/bin" -executable \
-							-regex ".*-config.*"|grep -v "config32"); do
-						if (file ${_config} | fgrep -q "script text"); then
-							einfo Renaming ${_config} as ${_config}-${ABI}
-							mv ${_config} ${_config}-${ABI}
-						fi
-					done
-			fi
-		else
-			# Filter out our changes to flags
-			CFLAGS="${CFLAGS/${EMULTILIB_ABI_FLAGS}}"
-			CXXFLAGS="${CXXFLAGS/${EMULTILIB_ABI_FLAGS}}"
-			LDFLAGS="${LDFLAGS/${EMULTILIB_ABI_FLAGS}}"
+	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile && \
+				[[ -z "$(echo ${1}|grep pkg)" ]]; then
+		# Restore config script variables to their defaults
+		local _temp_var
+		if [[ -n EMULTILIB_config_vars ]]; then
+			for _config_var in ${EMULTILIB_config_vars}; do
+				_temp_var=${_config_var}_default
+				export ${_config_var}="${!_temp_var}"
+			done
 		fi
+
+
+		# handle old-style (non-PKG-CONFIG) *-config* scripts
+		if [[ ${1} == "src_install" ]] && \
+				 [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
+			einfo Looking for package config scripts
+			local _config_script
+			if [[ -d "${D}/usr/bin" ]]; then
+				for _config_script in $(find "${D}/usr/bin" -executable \
+						-regex ".*-config.*"|grep -v "config32"); do
+					if (file "${_config_script}" | fgrep -q "script text"); then
+						einfo Renaming "${_config_script}" as "${_config_script}-${ABI}"
+						mv "${_config_script}" "${_config_script}-${ABI}"
+					fi
+				done
+			fi
+		fi
+		
+		# Now save the environment
+		_save_multilib_platform_env "${ABI}"
 	fi
 }
 

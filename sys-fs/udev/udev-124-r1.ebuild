@@ -4,6 +4,8 @@
 
 EAPI="2"
 
+MULTILIB_IN_SOURCE_BUILD="yes"
+
 inherit eutils flag-o-matic multilib toolchain-funcs versionator multilib-native
 
 DESCRIPTION="Linux dynamic and persistent device naming support (aka userspace devfs)"
