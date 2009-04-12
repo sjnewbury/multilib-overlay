@@ -510,9 +510,10 @@ multilib-native_src_generic_sub() {
 						ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 					fi
 				fi
-				multilib_debug CMAKE_BUILD_DIR "${CMAKE_BUILD_DIR}"
 				KDE_S="${S}"
-				multilib_debug KDE_S "${KDE_S}"
+				multilib_debug "${ABI} ECONF_SOURCE" "${ECONF_SOURCE}"
+				multilib_debug "${ABI} CMAKE_BUILD_DIR" "${CMAKE_BUILD_DIR}"
+				multilib_debug "${ABI} KDE_S" "${KDE_S}"
 			else
 				# If we are already set up then restore the environment
 				_restore_multilib_platform_env "${ABI}"
@@ -520,7 +521,6 @@ multilib-native_src_generic_sub() {
 			[[ "${ABI}" == "${DEFAULT_ABI}" ]] || \
 				_export_ml_config_vars "${ABI}"
 		fi
-		multilib_debug ECONF_SOURCE "${ECONF_SOURCE}"
 
 		#Nice way to avoid the "cannot run test program while cross compiling" :)
 		CBUILD=$CHOST
