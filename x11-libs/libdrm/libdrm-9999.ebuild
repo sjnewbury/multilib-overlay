@@ -18,7 +18,8 @@ KEYWORDS=""
 IUSE=""
 RESTRICT="test" # see bug #236845
 
-RDEPEND="dev-libs/libpthread-stubs"
+RDEPEND="dev-libs/libpthread-stubs
+	sys-fs/udev[lib32?]"
 DEPEND="${RDEPEND}"
 
 # FIXME, we should try to see how we can fit the --enable-udev configure flag

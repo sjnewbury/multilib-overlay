@@ -17,7 +17,8 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86
 IUSE=""
 RESTRICT="test" # see bug #236845
 
-RDEPEND="dev-libs/libpthread-stubs"
+RDEPEND="dev-libs/libpthread-stubs
+	sys-fs/udev[lib32?]"
 DEPEND="${RDEPEND}"
 
 PATCHES=(
