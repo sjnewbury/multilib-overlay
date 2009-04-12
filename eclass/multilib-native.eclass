@@ -492,7 +492,45 @@ multilib-native_src_generic_sub() {
 					cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
 				else
 					einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
+					local _docdir="" docfile=""
+					# Create build dir
 					mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
+					# Populate build dir with various
+					# "documentaion"  FILES.
+					# This is a bit of a hack, but it
+					# ensures doc files are available for
+					# install phase.  Ideally,
+					# multilib-native ebuilds should be
+					# modified to use the
+					# EMULTILIB_SOURCE_TOPDIR when
+					# installing from the source tree. Once
+					# all ebuilds have been modified,
+					# hopefully this can be removed.
+					einfo "Copying documentation from source dir: ${EMULTILIB_SOURCE_TOPDIR}"
+					einfo "Copying selected files from top-level of source tree"
+					for _docfile in $(find "${EMULTILIB_SOURCE_TOPDIR}" -maxdepth 1 -type f \
+						! -executable | \
+						grep -v -e ".*\.in$\|.*\.am$\|.*[^t]config.*\|.*\.h$\|.*\.c*$\|.*\.cpp$\|.*\.cmake" ); do
+					[[ -n ${MULTILIB_DEBUG} ]] && echo cp -au "${_docfile}" "${WORKDIR}/${PN}_build_${ABI}"
+
+ 						cp -au "${_docfile}" "${WORKDIR}/${PN}_build_${ABI}"
+					done
+					einfo "Copying common doc directories"
+					for _docdir in $(find "${EMULTILIB_SOURCE_TOPDIR}" -type d \( -name 'doc' -o -name 'docs' -o -name 'javadoc*' -o -name 'csharpdoc' \)); do
+						[[ -n ${MULTILIB_DEBUG} ]] && echo mkdir -p "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+						mkdir -p "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+						[[ -n ${MULTILIB_DEBUG} ]] && echo cp -alu "${_docdir}/*" "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+						cp -alu "${_docdir}/*" "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+					done
+					einfo "Finding other documentaion files"
+					for _docfile in $(find "${EMULTILIB_SOURCE_TOPDIR}" -type f \( -name '*.html' -o -name '*.sgml' -o -name '*.xml' -o -regex '.*\.[0-8]\|.*\.[0-8].' \));
+					do
+						_docdir="${_docfile%/*}"
+						[[ -n ${MULTILIB_DEBUG} ]] && echo mkdir -p "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+						mkdir -p "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+						[[ -n ${MULTILIB_DEBUG} ]] && echo cp -plu "${_docfile}" "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+						cp -plu "${_docfile}" "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
+					done
 				fi
 
 
