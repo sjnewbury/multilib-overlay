@@ -32,9 +32,7 @@ RDEPEND="media-libs/fontconfig[lib32?]
 		x11-libs/libX11[lib32?]
 		x11-libs/libXft[lib32?] )
 	xcb? (	>=x11-libs/libxcb-0.92[lib32?]
-		x11-libs/xcb-util[lib32?] )
-	lib32? ( app-emulation/emul-linux-x86-baselibs )
-	app-text/poppler-bindings[gtk]"
+		x11-libs/xcb-util[lib32?] )"
 #	test? (
 #	pdf test
 #	x11-libs/pango
