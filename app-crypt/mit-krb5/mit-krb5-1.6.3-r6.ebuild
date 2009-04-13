@@ -24,6 +24,7 @@ IUSE="krb4 doc"
 RDEPEND="!virtual/krb5
 	>=sys-libs/e2fsprogs-libs-1.41.0[lib32?]
 	dev-libs/openssl[lib32?]"
+
 DEPEND="${RDEPEND}
 	doc? ( virtual/latex-base )"
 
@@ -34,9 +35,7 @@ PROVIDE="virtual/krb5"
 src_unpack() {
 	unpack ${A}
 	unpack ./${MY_P}.tar.gz
-}
-
-multilib-native_src_prepare_internal() {
+	cd "${S}"
 	EPATCH_SUFFIX="patch" epatch "${PATCHDIR}"
 	epatch "${FILESDIR}/CVE-2009-0844+CVE-2009-0847.patch"
 	epatch "${FILESDIR}/CVE-2009-0846.patch"
