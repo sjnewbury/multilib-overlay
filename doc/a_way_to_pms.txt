@@ -28,6 +28,10 @@ open questions:
 Q:how do we know when a package needs a certain abi?
 A:we activate them via useflags
 
+Q:what happens when we rebuild a package that have a activated multiabi
+useflag set via pm internal useflag dependency but the global USE deactivates
+the useflag?
+A:
 
 Q:how can we keep open an update path?
 A:
