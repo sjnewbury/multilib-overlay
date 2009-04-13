@@ -178,7 +178,7 @@ multilib-native_pkg_postrm() {
 # @USAGE: multilib_debug name_of_variable content_of_variable
 # @DESCRIPTION: print debug output if MULTILIB_DEBUG is set
 multilib_debug() {
-	[[ -n ${MULTILIB_DEBUG} ]] && einfo MULTILIB_DEBUG:$1=$2
+	[[ -n ${MULTILIB_DEBUG} ]] && einfo MULTILIB_DEBUG:${1}=${2}
 }
 
 # @FUNCTION: _check_build_dir
@@ -190,10 +190,12 @@ _check_build_dir() {
 	echo ">>> Working in BUILD_DIR: \"$CMAKE_BUILD_DIR\""
 }
 
-# @FUNCTION: _ml_config_scripts
+# @FUNCTION: _find_ml_config_scripts
 # @USAGE: <ABI>
-# @DESCRIPTION:
-_export_ml_config_vars() {
+# @DESCRIPTION: Find all linker config scripts on this system provided for
+#		this ABI and export the appropriate env var to be used by
+#		"configure" scripts
+_find_ml_config_scripts() {
 	EMULTILIB_config_vars=""
 	local _config_script _config_var
 	for _config_script in $(find "/usr/bin" -executable \
@@ -388,7 +390,7 @@ multilib-native_src_generic() {
 			local abilist=""
 			if has_multilib_profile ; then
 				abilist=$(get_install_abis)
-				if [[ -z "$(echo ${1}|grep pkg)" ]]; then
+				if [[ "${1/_*}" != "pkg" ]]; then
 					einfo "${1/src_/} multilib ${PN} for ABIs: ${abilist}"
 				fi
 			elif is_crosscompile || tc-is-cross-compiler ; then
@@ -467,7 +469,7 @@ multilib-native_src_generic_sub() {
 		# If this is the src_prepare phase we only need to run for the
 		# DEFAULT_ABI when we are building out of the source tree since
 		# it is shared between each ABI.
-		if [[ "$1" == "src_prepare" ]] && \
+		if [[ "${1}" == "src_prepare" ]] && \
 				!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 				[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]); then
 			if [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
@@ -480,7 +482,7 @@ multilib-native_src_generic_sub() {
 			fi
 		fi
 
-		if [[ -z "$(echo ${1}|grep pkg)" ]]; then
+		if [[ "${1/_*}" != "pkg" ]]; then
 			# Is this our first run for this ABI?
 			if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
 
@@ -496,7 +498,6 @@ multilib-native_src_generic_sub() {
 				_setup_multilib_platform_env "${ABI}"
 
 				# Prepare build dir
-				#
 				if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 					[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]; then
 					einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
@@ -543,17 +544,17 @@ multilib-native_src_generic_sub() {
 						cp -plu "${_docfile}" "${_docdir/${EMULTILIB_SOURCE_TOPDIR}/${WORKDIR}/${PN}_build_${ABI}}"
 					done
 				fi
-
-
 			else
-				# If we are already set up then restore the environment
+				# If we are already setup then restore the
+				# environment
 				_restore_multilib_platform_env "${ABI}"
 			fi
 			[[ "${ABI}" == "${DEFAULT_ABI}" ]] || \
-				_export_ml_config_vars "${ABI}"
+				_find_ml_config_scripts "${ABI}"
 		fi
 
-		#Nice way to avoid the "cannot run test program while cross compiling" :)
+		# Nice way to avoid the "cannot run test program while cross
+		# compiling" :)
 		CBUILD=$CHOST
 
 		# qt-build.eclass sets these in pkg_setup, but that results
@@ -572,7 +573,7 @@ multilib-native_src_generic_sub() {
 	multilib-native_${1}_internal
 
 	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile && \
-				[[ -z "$(echo ${1}|grep pkg)" ]]; then
+				[[ "${1/_*}" != "pkg" ]]; then
 		# Restore config script variables to their defaults
 		local _temp_var
 		if [[ -n EMULTILIB_config_vars ]]; then
@@ -590,7 +591,7 @@ multilib-native_src_generic_sub() {
 			local _config_script
 			if [[ -d "${D}/usr/bin" ]]; then
 				for _config_script in $(find "${D}/usr/bin" -executable \
-						-regex ".*-config.*"|grep -v "config32"); do
+						-name "*config32*" -prune -o \( -regex ".*-config.*" -print \)); do
 					if (file "${_config_script}" | fgrep -q "script text"); then
 						einfo Renaming "${_config_script}" as "${_config_script}-${ABI}"
 						mv "${_config_script}" "${_config_script}-${ABI}"
@@ -692,13 +693,13 @@ multilib-native_check_inherited_funcs() {
 	# now if $declared_func is still empty, none of the inherited eclasses
 	# provides it, so default on base.eclass. Do nothing for pkg_post*
 	if [[ -z "${declared_func}" ]]; then
-		if [[ -z "$(echo ${1}|grep src)" ]]; then
+		if [[ "${1/_*}" != "src" ]]; then
 			declared_func="return"
 		else
 			declared_func="base_${1}"
 		fi
 	fi
 	
-	[[ -z "$(echo ${1}|grep pkg)" ]] && einfo "Using ${declared_func} ..."
+	[[ "${1/_*}" != "pkg" ]] && einfo "Using ${declared_func} ..."
 	${declared_func}
 }
