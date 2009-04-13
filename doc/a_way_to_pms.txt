@@ -4,6 +4,10 @@ run all functions until src_install twice while using completly independant
 environment and workingdirs.
 The last steps can be done with the environment of the default abi
 
+build only the abi that is requested via useflags
+
+the pm sets the useflags automatic to the dependencies
+
 changes on ebuild side:
 changes only needed for packages that have different includes/binarys which
 are needed to build other packages
