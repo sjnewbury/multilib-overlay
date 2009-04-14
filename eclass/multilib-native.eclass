@@ -42,6 +42,7 @@ _init_multilib_platform_configuration()
 {
 	_set_multilib_array_index x86
 	EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-m32"
+	EMULTILIB_LINKER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-L/usr/lib32"
 	EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]="32"
 	EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]=""
 	EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]="i686"
@@ -225,12 +226,11 @@ _setup_multilib_platform_env() {
 	multilib_debug "CHOST" ${CHOST}
 	# Set compiler and linker ABI flags
 	append-flags "${EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]}"
-	append-ldflags "${EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]}"
+	append-ldflags "${EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]} ${EMULTILIB_LINKER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]}"
 
 	multilib_debug EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}] ${EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]}
 	multilib_debug "${ABI} CFLAGS" "${CFLAGS}"
-	multilib_debug "${ABI} LDFLAGS" "${CFLAGS}"
-
+	multilib_debug "${ABI} LDFLAGS" "${LDFLAGS}"
 	# Multilib QT Support - This is needed for QT and CMake based packages
 	if [[ -n ${QTDIR} ]] || ${QTBINDIR} || [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
 		if [[ -n "${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}" ]]; then
