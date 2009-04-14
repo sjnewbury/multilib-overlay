@@ -4,8 +4,6 @@
 
 EAPI=2
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 WANT_AUTOCONF=latest
 WANT_AUTOMAKE=latest
 

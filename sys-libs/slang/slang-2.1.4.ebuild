@@ -4,8 +4,6 @@
 
 EAPI=2
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 inherit eutils multilib-native
 
 DESCRIPTION="a portable programmer's library designed to allow a developer to create robust portable software."

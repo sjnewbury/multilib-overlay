@@ -4,8 +4,6 @@
 
 EAPI="2"
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 inherit eutils flag-o-matic multilib toolchain-funcs multilib-native
 
 NSPR_VER="4.7.3"

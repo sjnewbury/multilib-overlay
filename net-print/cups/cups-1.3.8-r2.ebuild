@@ -4,8 +4,6 @@
 
 EAPI="2"
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 inherit autotools eutils flag-o-matic multilib pam multilib-native
 
 MY_P=${P/_}

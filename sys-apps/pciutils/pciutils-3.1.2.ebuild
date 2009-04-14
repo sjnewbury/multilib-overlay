@@ -4,8 +4,6 @@
 
 EAPI="2"
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 inherit eutils multilib-native
 
 DESCRIPTION="Various utilities dealing with the PCI bus"

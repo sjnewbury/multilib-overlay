@@ -6,6 +6,8 @@
 
 EAPI="2"
 
+MULTILIB_EXT_SOURCE_BUILD="yes"
+
 inherit eutils multilib-native
 
 #MY_P=${P/_pre/-}

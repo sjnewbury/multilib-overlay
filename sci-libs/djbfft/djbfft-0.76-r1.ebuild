@@ -4,8 +4,6 @@
 
 EAPI="2"
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 inherit eutils flag-o-matic toolchain-funcs multilib multilib-native
 
 DESCRIPTION="Extremely fast library for floating-point convolution"

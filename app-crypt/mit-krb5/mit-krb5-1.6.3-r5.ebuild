@@ -4,8 +4,6 @@
 
 EAPI="2"
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 inherit eutils flag-o-matic versionator autotools multilib-native
 
 PATCHV="0.5"

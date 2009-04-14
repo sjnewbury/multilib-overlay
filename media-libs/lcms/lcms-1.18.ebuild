@@ -4,8 +4,6 @@
 
 EAPI="2"
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 inherit autotools eutils multilib multilib-native
 
 DESCRIPTION="A lightweight, speed optimized color management engine"

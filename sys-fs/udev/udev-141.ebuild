@@ -4,11 +4,14 @@
 
 EAPI=2
 
+MULTILIB_EXT_SOURCE_BUILD="yes"
+
 inherit eutils flag-o-matic multilib toolchain-funcs versionator multilib-native
 
 if [[ ${PV} == "9999" ]]; then
 	EGIT_REPO_URI="git://git.kernel.org/pub/scm/linux/hotplug/udev.git"
 	EGIT_BRANCH="master"
+
 	inherit git autotools
 else
 	SRC_URI="mirror://kernel/linux/utils/kernel/hotplug/${P}.tar.bz2"

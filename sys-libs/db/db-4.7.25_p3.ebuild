@@ -4,8 +4,6 @@
 
 EAPI="2"
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 inherit eutils db flag-o-matic java-pkg-opt-2 autotools libtool multilib-native
 
 #Number of official patches

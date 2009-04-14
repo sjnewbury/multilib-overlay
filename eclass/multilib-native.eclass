@@ -285,7 +285,7 @@ _setup_multilib_platform_env() {
 
 	else
 		S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
-		if [[ -z ${MULTILIB_IN_SOURCE_BUILD} ]]; then
+		if [[ -n ${MULTILIB_EXT_SOURCE_BUILD} ]]; then
 			ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 		fi
 		multilib_debug "${ABI} ECONF_SOURCE" "${ECONF_SOURCE}"
@@ -417,13 +417,15 @@ multilib-native_src_generic() {
 multilib-native_src_generic_sub() {
 	EMULTILIB_config_vars=""
 
-	# We support two kinds of build, by default we create a minimal build
-	# dir for each ABI with a shared source tree.  Where that is
-	# unsupported with the underlying package due to deficiencies or bugs
-	# in their build system we can create a full image of the source tree
-	# for each ABI.  This latter behaviour is enabled with
-	# MULTILIB_IN_SOURCE_BUILD (MISB), or with CMake based packages the
-	# CMAKE_IN_SOURCE_BUILD environment variables.
+	# We support two kinds of build, by default we copy the source dir for
+	# each ABI. Where supportable with the underlying package we can just
+	# create an external build dir (objdir) this requires a modified ebuild
+	# which makes use of the EMULTILIB_SOURCE_TOPDIR variable (which points
+	# the the top of the original source dir) to install files.  This
+	# latter behaviour is enabled with MULTILIB_EXT_SOURCE_BUILD (MOSB).
+	# For CMake based packages default is reversed and the
+	# CMAKE_IN_SOURCE_BUILD environment variable is used to specify the
+	# former behaviour.
 	#
 	# With multilib builds "S" eventually points into the build tree, but
 	# initially "S" points to the source the same as non-multilib

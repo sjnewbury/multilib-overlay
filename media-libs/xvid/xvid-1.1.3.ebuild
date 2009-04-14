@@ -4,8 +4,6 @@
 
 EAPI="2"
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 inherit eutils fixheadtails autotools multilib-native
 
 MY_P=${PN}core-${PV}

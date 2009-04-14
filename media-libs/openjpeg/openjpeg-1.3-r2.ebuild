@@ -4,8 +4,6 @@
 
 EAPI="1"
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 inherit eutils toolchain-funcs multilib multilib-native
 
 DESCRIPTION="An open-source JPEG 2000 codec written in C"

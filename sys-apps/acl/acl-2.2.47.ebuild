@@ -4,8 +4,6 @@
 
 EAPI="2"
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 inherit eutils autotools toolchain-funcs multilib-native
 
 MY_P="${PN}_${PV}-1"

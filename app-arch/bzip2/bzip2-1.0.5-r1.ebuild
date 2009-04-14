@@ -4,8 +4,6 @@
 
 EAPI="2"
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 inherit eutils multilib toolchain-funcs flag-o-matic multilib-native
 
 DESCRIPTION="A high-quality data compressor used extensively by Gentoo Linux"

@@ -4,8 +4,6 @@
 
 EAPI="2"
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 inherit libtool autotools base multilib-native
 
 DESCRIPTION="An elegant API for accessing audio files"

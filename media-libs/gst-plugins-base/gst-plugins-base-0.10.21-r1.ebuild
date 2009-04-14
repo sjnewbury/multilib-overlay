@@ -4,8 +4,6 @@
 
 EAPI=2
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 inherit autotools eutils flag-o-matic multilib versionator multilib-native
 
 PV_MAJ_MIN=$(get_version_component_range '1-2')

@@ -4,8 +4,6 @@
 
 EAPI=1
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 inherit eutils flag-o-matic multilib toolchain-funcs multilib-native
 
 FFMPEG_SVN_REV="16916"

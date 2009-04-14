@@ -4,8 +4,6 @@
 
 EAPI="2"
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 inherit flag-o-matic eutils multilib toolchain-funcs mono libtool java-pkg-2 multilib-native
 
 DESCRIPTION="GNU locale utilities"

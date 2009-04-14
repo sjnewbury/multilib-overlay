@@ -4,8 +4,6 @@
 
 EAPI="2"
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 # The basic theory based on comments from Daniel Robbins <drobbins@gentoo.org>.
 #
 # We split the perl ebuild into libperl and perl.  The layout is as follows:

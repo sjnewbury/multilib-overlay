@@ -4,8 +4,6 @@
 
 EAPI="2" 
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 inherit eutils multilib toolchain-funcs multilib-native
 
 DESCRIPTION="highly effective data compression algorithm for bi-level high-resolution images such as fax pages or scanned documents"

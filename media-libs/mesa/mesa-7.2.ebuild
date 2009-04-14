@@ -10,8 +10,6 @@ if [[ ${PV} = 9999* ]]; then
 	GIT="git"
 fi
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
 inherit autotools multilib flag-o-matic ${GIT} portability multilib-native
 
 OPENGL_DIR="xorg-x11"
