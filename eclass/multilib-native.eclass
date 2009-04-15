@@ -473,7 +473,7 @@ multilib-native_src_generic_sub() {
 		# it is shared between each ABI.
 		if [[ "${1}" == "src_prepare" ]] && \
 				!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
-				[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]); then
+				[[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]]); then
 			if [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
 				einfo "Skipping ${1} for ${ABI}"
 				return
@@ -501,7 +501,7 @@ multilib-native_src_generic_sub() {
 
 				# Prepare build dir
 				if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
-					[[ -n "${MULTILIB_IN_SOURCE_BUILD}" ]]; then
+					[[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]]; then
 					einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
 					cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
 				else
