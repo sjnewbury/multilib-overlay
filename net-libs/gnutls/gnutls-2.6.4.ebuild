@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/gnutls/gnutls-2.6.4.ebuild,v 1.3 2009/04/05 16:50:25 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/gnutls/gnutls-2.6.4.ebuild,v 1.6 2009/04/11 14:08:29 armin76 Exp $
 
 EAPI="2"
 inherit eutils libtool autotools multilib-native
@@ -21,7 +21,7 @@ unset MINOR_VERSION
 # GPL-3 for the gnutls-extras library and LGPL for the gnutls library.
 LICENSE="LGPL-2.1 GPL-3"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc ~sparc-fbsd x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="bindist +cxx doc guile lzo nls zlib"
 
 RDEPEND="dev-libs/libgpg-error
