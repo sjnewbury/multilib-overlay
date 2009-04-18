@@ -1,10 +1,10 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/libsmbios/libsmbios-2.0.3.ebuild,v 1.1 2008/11/01 16:24:32 cedk Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/libsmbios/libsmbios-2.0.3.ebuild,v 1.2 2009/04/11 16:46:12 loki_val Exp $
 
-EAPI="2"
+EAPI=2
 
-inherit multilib-native
+inherit eutils multilib-native
 
 DESCRIPTION="Provide access to (SM)BIOS information"
 HOMEPAGE="http://linux.dell.com/libsmbios/main/index.html"
@@ -20,8 +20,10 @@ DEPEND="dev-libs/libxml2[lib32?]
 	test? ( dev-util/cppunit )"
 RDEPEND=${DEPEND}
 
-src_test() {
-	einfo "testing currently broken - bypassing"
+RESTRICT=test
+
+multilib-native_src_prepare_internal() {
+	epatch "${FILESDIR}/libsmbios-2.0.3-gcc44.patch"
 }
 
 multilib-native_src_install_internal() {
