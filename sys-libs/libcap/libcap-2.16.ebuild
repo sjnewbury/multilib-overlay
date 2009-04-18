@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/libcap/libcap-2.16.ebuild,v 1.2 2009/01/17 17:18:14 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/libcap/libcap-2.16.ebuild,v 1.6 2009/04/16 16:14:00 jer Exp $
 
 EAPI="2"
 
@@ -12,7 +12,7 @@ SRC_URI="mirror://kernel/linux/libs/security/linux-privs/libcap${PV:0:1}/${P}.ta
 
 LICENSE="GPL-2 BSD"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
+KEYWORDS="alpha amd64 ~arm hppa ~ia64 ~m68k ~mips ~ppc ppc64 ~s390 ~sh ~sparc ~x86"
 IUSE="pam"
 
 RDEPEND="sys-apps/attr[lib32?]
@@ -20,9 +20,7 @@ RDEPEND="sys-apps/attr[lib32?]
 DEPEND="${RDEPEND}
 	sys-kernel/linux-headers"
 
-src_unpack() {
-	unpack ${P}.tar.bz2
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PV}/*.patch
 	sed -i -e '/cap_setfcap.*morgan/s:^:#:' pam_cap/capability.conf
 	sed -i \
@@ -31,8 +29,6 @@ src_unpack() {
 		-e "/^lib=/s:=.*:=$(get_libdir):" \
 		Make.Rules
 }
-
-src_configure() { :; }
 
 multilib-native_src_compile_internal() {
 	tc-export BUILD_CC CC AR RANLIB
