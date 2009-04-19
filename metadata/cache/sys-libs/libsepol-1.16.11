@@ -1,0 +1,22 @@
+virtual/libc
+virtual/libc
+0
+http://www.nsa.gov/selinux/archives/libsepol-1.16.11.tgz
+test
+http://www.nsa.gov/selinux
+GPL-2
+SELinux binary policy representation library
+alpha amd64 mips ppc sparc x86
+base eutils flag-o-matic multilib multilib-native portability toolchain-funcs
+lib32
+
+
+
+2
+
+compile configure install postinst postrm preinst prepare setup unpack
+
+
+
+
+

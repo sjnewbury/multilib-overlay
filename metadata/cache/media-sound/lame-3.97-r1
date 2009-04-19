@@ -1,0 +1,22 @@
+>=sys-libs/ncurses-5.2[lib32?] gtk? ( =x11-libs/gtk+-1.2*[lib32?] ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
+>=sys-libs/ncurses-5.2[lib32?] gtk? ( =x11-libs/gtk+-1.2*[lib32?] )
+0
+mirror://sourceforge/lame/lame-3.97.tar.gz
+
+http://lame.sourceforge.net
+LGPL-2.1
+LAME Ain't an MP3 Encoder
+alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd
+autotools base eutils flag-o-matic libtool multilib multilib-native portability toolchain-funcs
+debug mp3rtp gtk lib32
+
+
+
+2
+
+compile configure install postinst postrm preinst prepare setup unpack
+
+
+
+
+

@@ -1,0 +1,22 @@
+virtual/opengl =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool >=dev-util/git-1.6
+virtual/opengl
+0
+
+
+http://www.freedesktop.org/Software/glitz
+BSD
+An OpenGL image compositing library
+
+autotools base eutils flag-o-matic git libtool multilib multilib-native portability toolchain-funcs
+lib32
+
+
+
+2
+
+compile configure install postinst postrm preinst prepare setup unpack
+
+
+
+
+
