@@ -1,0 +1,22 @@
+emacs? ( virtual/emacs ) mono? ( >=dev-lang/mono-0.95 ) java? ( >=virtual/jdk-1.4 dev-java/gjdoc ) java? ( >=dev-java/java-config-2.1.6 )
+emacs? ( virtual/emacs ) mono? ( >=dev-lang/mono-0.95 ) java? ( >=virtual/jre-1.4 ) java? ( >=dev-java/java-config-2.1.6 )
+0
+ftp://alpha.gnu.org/pub/gnu/libidn/libidn-1.11.tar.gz
+
+http://www.gnu.org/software/libidn/
+LGPL-2.1 GPL-3
+Internationalized Domain Names (IDN) implementation
+~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd
+base elisp-common eutils flag-o-matic java-pkg-opt-2 java-utils-2 mono multilib multilib-native portability toolchain-funcs versionator
+java doc emacs mono nls elibc_FreeBSD java lib32
+
+
+
+2
+
+compile configure install postinst postrm preinst prepare setup unpack
+
+
+
+
+

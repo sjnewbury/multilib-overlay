@@ -1,0 +1,22 @@
+~x11-libs/qt-gui-4.5.0_rc1[debug=,glib,qt3support,lib32?] !kde-base/phonon-kde !kde-base/phonon-xine !media-sound/phonon media-libs/gstreamer[lib32?] media-libs/gst-plugins-base[lib32?] dbus? ( =x11-libs/qt-dbus-4.5.0_rc1[debug=,lib32?] )
+~x11-libs/qt-gui-4.5.0_rc1[debug=,glib,qt3support,lib32?] !kde-base/phonon-kde !kde-base/phonon-xine !media-sound/phonon media-libs/gstreamer[lib32?] media-libs/gst-plugins-base[lib32?] dbus? ( =x11-libs/qt-dbus-4.5.0_rc1[debug=,lib32?] )
+4
+http://download.qtsoftware.com/qt/source/qt-x11-opensource-src-4.5.0-rc1.tar.bz2
+
+http://www.qtsoftware.com/
+|| ( GPL-3 GPL-2 )
+The Phonon module for the Qt toolkit
+~amd64 ~hppa ~ppc ~ppc64 ~x86
+base eutils flag-o-matic multilib multilib-native portability qt4-build toolchain-funcs versionator
++dbus custom-cxxflags debug pch lib32
+
+
+
+2
+
+compile configure install postinst postrm preinst prepare setup unpack
+
+
+
+
+

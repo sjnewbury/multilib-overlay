@@ -1,0 +1,22 @@
+!libgcrypt? ( dev-libs/openssl[lib32?] ) libgcrypt? ( dev-libs/libgcrypt[lib32?] ) sys-libs/zlib[lib32?]
+!libgcrypt? ( dev-libs/openssl[lib32?] ) libgcrypt? ( dev-libs/libgcrypt[lib32?] ) sys-libs/zlib[lib32?]
+0
+mirror://sourceforge/libssh2/libssh2-0.17.tar.gz
+
+http://www.libssh2.org/
+BSD
+Library implementing the SSH2 protocol
+~amd64 ~x86
+base eutils flag-o-matic multilib multilib-native portability toolchain-funcs
+libgcrypt lib32
+
+
+
+2
+
+compile configure install postinst postrm preinst prepare setup unpack
+
+
+
+
+

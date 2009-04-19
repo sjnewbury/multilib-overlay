@@ -1,0 +1,22 @@
+virtual/libc
+virtual/libc
+0
+http://userspace.selinuxproject.org/releases/current/devel/libsepol-2.0.32.tar.gz
+test
+http://userspace.selinuxproject.org
+GPL-2
+SELinux binary policy representation library
+~alpha ~amd64 ~mips ~ppc ~sparc ~x86
+base eutils flag-o-matic multilib multilib-native portability toolchain-funcs
+lib32
+
+
+
+2
+
+compile configure install postinst postrm preinst prepare setup unpack
+
+
+
+
+

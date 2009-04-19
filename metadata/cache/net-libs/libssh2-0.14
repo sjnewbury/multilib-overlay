@@ -1,0 +1,22 @@
+dev-libs/openssl[lib32?] sys-libs/zlib[lib32?]
+dev-libs/openssl[lib32?] sys-libs/zlib[lib32?]
+0
+mirror://sourceforge/libssh2/libssh2-0.14.tar.gz
+
+http://www.libssh2.org/
+BSD
+Library implementing the SSH2 protocol
+~x86
+base eutils flag-o-matic multilib multilib-native portability toolchain-funcs
+lib32
+
+
+
+2
+
+compile configure install postinst postrm preinst prepare setup unpack
+
+
+
+
+

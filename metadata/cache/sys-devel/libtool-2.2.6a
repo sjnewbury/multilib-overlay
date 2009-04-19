@@ -1,0 +1,22 @@
+sys-devel/gnuconfig >=sys-devel/autoconf-2.60 >=sys-devel/automake-1.10.1 app-arch/lzma-utils sys-apps/help2man =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61
+sys-devel/gnuconfig >=sys-devel/autoconf-2.60 >=sys-devel/automake-1.10.1
+1.5
+mirror://gnu/libtool/libtool-2.2.6a.tar.lzma
+
+http://www.gnu.org/software/libtool/
+GPL-2
+A shared library tool for developers
+~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd
+autotools base eutils flag-o-matic libtool multilib multilib-native portability toolchain-funcs
+vanilla lib32
+
+
+
+2
+
+compile configure install postinst postrm preinst prepare setup unpack
+
+
+
+
+

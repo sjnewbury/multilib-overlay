@@ -1,0 +1,22 @@
+jpeg? ( media-libs/jpeg ) opengl? ( virtual/opengl virtual/glut ) app-arch/unzip
+jpeg? ( media-libs/jpeg ) opengl? ( virtual/opengl virtual/glut )
+0
+http://www.ece.uvic.ca/~mdadams/jasper/software/jasper-1.900.1.zip mirror://gentoo/jasper-1.900.1-CVE-2008-3520+1+2.patch.bz2
+
+http://www.ece.uvic.ca/~mdadams/jasper/
+JasPer2.0
+software-based implementation of the codec specified in the JPEG-2000 Part-1 standard
+alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd
+base eutils flag-o-matic libtool multilib multilib-native portability toolchain-funcs
+opengl jpeg lib32
+
+
+
+2
+
+compile configure install postinst postrm preinst prepare setup unpack
+
+
+
+
+
