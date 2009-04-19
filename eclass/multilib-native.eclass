@@ -670,10 +670,10 @@ multilib-native_check_inherited_funcs() {
 
 prep_ml_binaries() {
 	if [[ -n $EMULTILIB_PKG ]] ; then
-		for binary in "S@"; do
-			mv ${D}/${binary} ${D}/${binary}-${ABI} \;
+		for binary in "$@"; do
+			mv ${D}/${binary} ${D}/${binary}-${ABI}
 			if [[ is_final_abi ]]; then
-				ln -s /usr/bin/abi-wrapper ${binary}
+				ln -s /usr/bin/abi-wrapper ${D}/${binary}
 			fi
 		done
 	fi		
