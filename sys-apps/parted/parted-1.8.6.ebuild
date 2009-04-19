@@ -1,6 +1,6 @@
-# Copyright 1999-2007 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/parted/parted-1.8.6.ebuild,v 1.8 2007/08/20 20:36:24 jokey Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/parted/parted-1.8.6.ebuild,v 1.9 2009/04/10 12:18:17 caleb Exp $
 
 EAPI="2"
 
@@ -22,7 +22,10 @@ DEPEND=">=sys-fs/e2fsprogs-1.27[lib32?]
 	nls? ( >=sys-devel/gettext-0.12.1-r2[lib32?] )
 	readline? ( >=sys-libs/readline-4.1-r4[lib32?] )
 	selinux? ( sys-libs/libselinux[lib32?] )
-	device-mapper? ( sys-fs/device-mapper[lib32?] )
+	device-mapper? ( || (
+		>=sys-fs/lvm2-2.02.45
+		sys-fs/device-mapper[lib32?] )
+	)
 	dev-libs/check[lib32?]"
 
 multilib-native_src_configure_internal() {

@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.1-r1.ebuild,v 1.2 2009/03/26 05:10:31 zmedico Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.1-r1.ebuild,v 1.4 2009/04/17 06:56:30 kumba Exp $
 
 # NOTE about python-portage interactions :
 # - Do not add a pkg_setup() check for a certain version of portage
@@ -28,7 +28,7 @@ SRC_URI="http://www.python.org/ftp/python/2.6.1/${MY_P}.tar.bz2
 
 LICENSE="PSF-2.2"
 SLOT="2.6"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
 IUSE="berkdb build doc elibc_uclibc examples gdbm ipv6 ncurses readline sqlite ssl +threads tk ucs2 wininst +xml"
 
 # NOTE: dev-python/{elementtree,celementtree,pysqlite,ctypes,cjkcodecs}
@@ -58,9 +58,10 @@ multilib-native_src_prepare_internal() {
 	default
 
 	if tc-is-cross-compiler ; then
-		[[ $(python -V 2>&1) != "Python ${PV}" ]] && \
-			die "Crosscompiling requires the same host and build versions."
+		epatch "${FILESDIR}"/python-2.5-cross-printf.patch
+		epatch "${FILESDIR}"/python-2.6-chflags-cross.patch
 		epatch "${FILESDIR}"/python-2.6-test-cross.patch
+		epatch "${FILESDIR}"/python-2.6-cross-patch-tweak.patch
 	else
 		rm "${WORKDIR}/${PYVER}"/*_all_crosscompile.patch
 	fi
@@ -144,7 +145,7 @@ multilib-native_src_configure_internal() {
 
 	if tc-is-cross-compiler ; then
 		OPT="-O1" CFLAGS="" LDFLAGS="" CC="" \
-		./configure || die "cross-configure failed"
+		./configure --{build,host}=${CBUILD} || die "cross-configure failed"
 		emake python Parser/pgen || die "cross-make failed"
 		mv python hostpython
 		mv Parser/pgen Parser/hostpgen
@@ -179,7 +180,7 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" altinstall maninstall || die
 
 	mv "${D}"/usr/bin/python${PYVER}-config "${D}"/usr/bin/python-config-${PYVER}
-        if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
+	if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
 		mv "${D}"/usr/bin/python${PYVER} "${D}"/usr/bin/python${PYVER}-${ABI}
 	fi
 

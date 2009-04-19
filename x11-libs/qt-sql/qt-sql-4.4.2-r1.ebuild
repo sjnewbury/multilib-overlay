@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-sql/qt-sql-4.4.2-r1.ebuild,v 1.4 2009/04/05 16:49:51 klausman Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-sql/qt-sql-4.4.2-r1.ebuild,v 1.7 2009/04/15 12:19:24 ranger Exp $
 
 EAPI="1"
 inherit qt4-build multilib-native
@@ -10,7 +10,7 @@ HOMEPAGE="http://www.trolltech.com/"
 
 LICENSE="|| ( GPL-3 GPL-2 )"
 SLOT="4"
-KEYWORDS="alpha amd64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 ~hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 
 IUSE="firebird +iconv mysql odbc postgres +qt3support +sqlite"
 

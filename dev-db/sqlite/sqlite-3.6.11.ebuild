@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.11.ebuild,v 1.6 2009/04/05 19:50:10 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.11.ebuild,v 1.7 2009/04/07 18:46:54 klausman Exp $
 
 EAPI="2"
 
@@ -15,7 +15,7 @@ SRC_URI="http://www.sqlite.org/${P}.tar.gz
 
 LICENSE="as-is"
 SLOT="3"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc ~sparc-fbsd x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 ~arm ~hppa ~ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="debug doc soundex tcl +threadsafe"
 RESTRICT="!tcl? ( test )"
 
@@ -25,7 +25,6 @@ DEPEND="${RDEPEND}
 	doc? ( app-arch/unzip )"
 
 pkg_setup() {
-	# test
 	if has test ${FEATURES}; then
 		if ! has userpriv ${FEATURES}; then
 			ewarn "The userpriv feature must be enabled to run tests."
@@ -39,8 +38,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	cd "${S}"
-
 	# note: this sandbox fix is no longer needed with sandbox-1.3+
 	epatch "${FILESDIR}"/sandbox-fix2.patch
 	epatch "${FILESDIR}"/${P}-reference.patch
