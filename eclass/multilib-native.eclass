@@ -667,3 +667,14 @@ multilib-native_check_inherited_funcs() {
 	[[ "${1/_*}" != "pkg" ]] && einfo "Using ${declared_func} ..."
 	${declared_func}
 }
+
+prep_ml_binaries() {
+	if [[ -n $EMULTILIB_PKG ]] ; then
+		for binary in "S@"; do
+			mv ${D}/${binary} ${D}/${binary}-${ABI} \;
+			if [[ is_final_abi ]]; then
+				ln -s /usr/bin/abi-wrapper ${binary}
+			fi
+		done
+	fi		
+}
