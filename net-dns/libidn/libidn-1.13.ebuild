@@ -18,7 +18,7 @@ IUSE="doc emacs java mono nls"
 COMMON_DEPEND="emacs? ( virtual/emacs )
 	mono? ( >=dev-lang/mono-0.95 )"
 DEPEND="${COMMON_DEPEND}
-	nls? ( >=sys-devel/gettext-0.17 )
+	nls? ( >=sys-devel/gettext-0.17[lib32?] )
 	java? ( >=virtual/jdk-1.4 dev-java/gjdoc )"
 RDEPEND="${COMMON_DEPEND}
 	nls? ( virtual/libintl )
@@ -70,7 +70,7 @@ multilib-native_src_install_internal() {
 		rm -rf "${D}"/usr/share/java || die
 
 		if use doc ; then
-			java-pkg_dojavadoc doc/java
+			[[ -d "${D}"/usr/share/doc/"${P}"/html ]] || java-pkg_dojavadoc doc/java
 		fi
 	fi
 }
