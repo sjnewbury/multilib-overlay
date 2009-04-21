@@ -358,9 +358,12 @@ _restore_multilib_platform_env() {
 	FCFLAGS="${EMULTILIB_FCFLAGS[$(_set_multilib_array_index ${1})]}"
 	FFLAGS="${EMULTILIB_FFLAGS[$(_set_multilib_array_index ${1})]}"
 	LDFLAGS="${EMULTILIB_LDFLAGS[$(_set_multilib_array_index ${1})]}"
+	CDEFINE="${EMULTILIB_CDEFINE[$(_set_multilib_array_index ${1})]}"
+	CHOST="${EMULTILIB_CHOST[$(_set_multilib_array_index ${1})]}"
+	CBUILD="${EMULTILIB_CBUILD[$(_set_multilib_array_index ${1})]}"
+	LIBDIR="${EMULTILIB_LIBDIR[$(_set_multilib_array_index ${1})]}"
 
 	# Saved Portage/eclass variables
-	CHOST="${EMULTILIB_CHOST[$(_set_multilib_array_index ${1})]}"
 	S="${EMULTILIB_S[$(_set_multilib_array_index ${1})]}"
 	ECONF_SOURCE="${EMULTILIB_ECONF_SOURCE[$(_set_multilib_array_index ${1})]}"
 	KDE_S="${EMULTILIB_KDE_S[$(_set_multilib_array_index ${1})]}"
