@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.34.ebuild,v 1.1 2009/04/07 09:03:39 dev-zero Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.36.ebuild,v 1.1 2009/04/19 08:31:17 dev-zero Exp $
 
 EAPI="2"
 
@@ -38,7 +38,7 @@ RDEPEND="${CDEPEND}
 src_prepare() {
 	epatch \
 		"${FILESDIR}/4.31-as_needed.patch" \
-		"${FILESDIR}/${PV}-conditional_libsbc.patch"
+		"${FILESDIR}/4.34-conditional_libsbc.patch"
 
 	if use cups; then
 		epatch "${FILESDIR}/4.18/cups-location.patch"
