@@ -7,7 +7,7 @@ http://www.freedesktop.org/Software/glitz
 BSD
 An OpenGL image compositing library
 
-autotools base eutils flag-o-matic git libtool multilib multilib-native portability toolchain-funcs
+autotools base eutils git libtool multilib multilib-native portability toolchain-funcs
 lib32
 
 

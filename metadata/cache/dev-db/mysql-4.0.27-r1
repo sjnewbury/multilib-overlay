@@ -5,7 +5,7 @@ mirror://mysql/Downloads/MySQL-4.0/mysql-4.0.27.tar.gz mirror://gentoo/mysql-ext
 
 http://www.mysql.com/
 GPL-2
-Based on the toolchain-funcs eclass
+Based on the base eclass
 amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86
 autotools base eutils flag-o-matic gnuconfig libtool multilib multilib-native mysql mysql_fx portability toolchain-funcs versionator
 big-tables debug embedded minimal perl selinux ssl static raid berkdb lib32

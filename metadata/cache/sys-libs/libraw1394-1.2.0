@@ -7,7 +7,7 @@ http://www.linux1394.org/
 LGPL-2.1
 library that provides direct access to the IEEE 1394 bus
 alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86
-base eutils flag-o-matic multilib multilib-native portability toolchain-funcs
+base eutils multilib multilib-native portability toolchain-funcs
 lib32
 
 

@@ -7,7 +7,7 @@ http://0pointer.de/lennart/projects/libcanberra/
 LGPL-2.1
 Portable Sound Event Library
 alpha amd64 ~arm ~hppa ia64 ppc ppc64 ~sh sparc x86 ~x86-fbsd
-base eutils flag-o-matic gnome2-utils multilib multilib-native portability toolchain-funcs
+base eutils gnome2-utils multilib multilib-native portability toolchain-funcs
 alsa doc gstreamer +gtk oss lib32
 
 

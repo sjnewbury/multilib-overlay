@@ -7,7 +7,7 @@ http://userspace.selinuxproject.org
 public-domain
 SELinux userland library
 ~alpha ~amd64 ~mips ~ppc ~sparc ~x86
-alternatives base eutils flag-o-matic multilib multilib-native portability python ruby toolchain-funcs
+alternatives base eutils multilib multilib-native portability python ruby toolchain-funcs
 ruby lib32
 
 

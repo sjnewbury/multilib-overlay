@@ -7,7 +7,7 @@ http://www.68k.org/~michael/audiofile/
 GPL-2
 An elegant API for accessing audio files
 alpha amd64 arm ~hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd
-autotools base eutils flag-o-matic libtool multilib multilib-native portability toolchain-funcs
+autotools base eutils libtool multilib multilib-native portability toolchain-funcs
 lib32
 
 

@@ -7,7 +7,7 @@ http://www.cimitan.com/murrine/
 GPL-2
 Murrine GTK+2 Cairo Engine
 amd64 ppc x86 ~x86-fbsd
-base eutils flag-o-matic multilib multilib-native portability toolchain-funcs
+base eutils multilib multilib-native portability toolchain-funcs
 lib32
 
 

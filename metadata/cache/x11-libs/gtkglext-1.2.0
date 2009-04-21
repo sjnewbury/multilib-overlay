@@ -7,7 +7,7 @@ http://gtkglext.sourceforge.net/
 GPL-2 LGPL-2.1
 GL extensions for Gtk+ 2.0
 alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd
-autotools base eutils fdo-mime flag-o-matic gnome.org gnome2 gnome2-utils libtool multilib multilib-native portability toolchain-funcs
+autotools base eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib multilib-native portability toolchain-funcs
 doc debug lib32
 
 

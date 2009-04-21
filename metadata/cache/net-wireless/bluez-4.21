@@ -7,7 +7,7 @@ http://bluez.sourceforge.net/
 GPL-2 LGPL-2.1
 Bluetooth Tools and System Daemons for Linux
 ~amd64 ~arm ~hppa ~ppc ~ppc64 ~sh ~sparc ~x86
-autotools base eutils flag-o-matic libtool multilib multilib-native portability toolchain-funcs
+autotools base eutils libtool multilib multilib-native portability toolchain-funcs
 alsa cups debug doc examples gstreamer old-daemons test-programs usb lib32
 
 

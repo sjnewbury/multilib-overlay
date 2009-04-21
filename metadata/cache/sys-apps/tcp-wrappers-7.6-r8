@@ -7,7 +7,7 @@ ftp://ftp.porcupine.org/pub/security/index.html
 tcp_wrappers_license
 TCP Wrappers
 alpha amd64 arm hppa ia64 m68k mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd
-base eutils flag-o-matic multilib multilib-native portability toolchain-funcs
+base eutils multilib multilib-native portability toolchain-funcs
 ipv6 lib32
 
 

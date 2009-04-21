@@ -7,7 +7,7 @@ http://avahi.org/
 LGPL-2.1
 System which facilitates service discovery on a local network
 alpha amd64 ~arm hppa ia64 ~mips ppc ppc64 ~s390 ~sh sparc x86
-alternatives base eutils flag-o-matic mono multilib multilib-native portability python toolchain-funcs
+alternatives base eutils mono multilib multilib-native portability python toolchain-funcs
 bookmarks howl-compat mdnsresponder-compat gdbm dbus doc mono gtk python qt3 qt4 autoipd kernel_linux test ipv6 lib32
 
 

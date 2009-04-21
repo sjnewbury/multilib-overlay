@@ -7,7 +7,7 @@ http://www.videolan.org/developers/x264.html
 GPL-2
 A free library for encoding X264/AVC streams
 alpha amd64 ~mips ppc ppc64 sparc x86 ~x86-fbsd
-base eutils flag-o-matic multilib multilib-native portability toolchain-funcs versionator
+base eutils multilib multilib-native portability toolchain-funcs versionator
 debug +threads lib32
 
 

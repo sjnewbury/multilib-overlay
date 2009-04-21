@@ -7,7 +7,7 @@ http://www.xvid.org
 GPL-2
 XviD, a high performance/quality MPEG-4 video de-/encoding solution
 ~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd
-autotools base eutils fixheadtails flag-o-matic libtool multilib multilib-native portability toolchain-funcs
+autotools base eutils fixheadtails libtool multilib multilib-native portability toolchain-funcs
 examples altivec lib32
 
 

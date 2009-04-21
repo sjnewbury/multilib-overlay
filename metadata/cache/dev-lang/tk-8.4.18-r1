@@ -7,7 +7,7 @@ http://dev.scriptics.com/software/tcltk/
 BSD
 Tk Widget Set
 ~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd
-autotools base eutils flag-o-matic libtool multilib multilib-native portability toolchain-funcs
+autotools base eutils libtool multilib multilib-native portability toolchain-funcs
 debug threads lib32
 
 

@@ -7,7 +7,7 @@ http://www.penguin.cz/~utx/amr
 LGPL-2 as-is
 Wrapper library for 3GPP Adaptive Multi-Rate Floating-point Speech Codec
 alpha amd64 hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd
-base eutils flag-o-matic multilib multilib-native portability toolchain-funcs
+base eutils multilib multilib-native portability toolchain-funcs
 lib32
 
 

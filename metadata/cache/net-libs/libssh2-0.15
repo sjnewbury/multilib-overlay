@@ -7,7 +7,7 @@ http://www.libssh2.org/
 BSD
 Library implementing the SSH2 protocol
 ~x86
-base eutils flag-o-matic multilib multilib-native portability toolchain-funcs
+base eutils multilib multilib-native portability toolchain-funcs
 libgcrypt lib32
 
 

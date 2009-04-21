@@ -7,7 +7,7 @@ http://libusb.sourceforge.net/
 LGPL-2
 Userspace access to USB devices
 alpha amd64 arm hppa ia64 m68k mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd
-autotools base eutils flag-o-matic libtool multilib multilib-native portability toolchain-funcs
+autotools base eutils libtool multilib multilib-native portability toolchain-funcs
 debug doc lib32
 
 

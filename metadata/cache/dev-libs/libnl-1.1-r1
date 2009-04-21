@@ -7,7 +7,7 @@ http://people.suug.ch/~tgr/libnl/
 LGPL-2.1
 A library for applications dealing with netlink socket
 amd64 ~arm hppa ~ia64 ppc ppc64 ~sparc x86
-base eutils flag-o-matic linux-info multilib multilib-native portability toolchain-funcs versionator
+base eutils linux-info multilib multilib-native portability toolchain-funcs versionator
 lib32
 
 

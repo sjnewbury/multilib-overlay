@@ -7,8 +7,8 @@ http://asg.web.cmu.edu/sasl/
 as-is
 The Cyrus SASL (Simple Authentication and Security Layer).
 alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd
-autotools base eutils flag-o-matic java-pkg-opt-2 java-utils-2 libtool multilib multilib-native pam portability toolchain-funcs versionator
-authdaemond berkdb crypt gdbm kerberos ldap mysql ntlm_unsupported_patch pam postgres sample srp ssl urandom elibc_FreeBSD java lib32
+autotools base check-reqs eutils flag-o-matic java-pkg-opt-2 java-utils-2 libtool multilib multilib-native pam portability toolchain-funcs versionator
+authdaemond berkdb crypt gdbm kerberos ldap mysql ntlm_unsupported_patch pam postgres sample srp ssl urandom elibc_FreeBSD java gcj multislot lib32
 
 
 
