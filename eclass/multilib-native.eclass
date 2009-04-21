@@ -22,71 +22,31 @@ case "${EAPI:-0}" in
 esac
 
 # -----------------------------------------------------------------------------
-# This is the place to add support for new ABIs.  All ABI specific definitions
-# are specified only in this section.
-
-_set_multilib_array_index() {
-	# Until we can count on bash version > 4, we can't use associative
-	# arrays.  
-	case $1 in
-		INIT)	EMULTILIB_ARRAY_INDEX=0 ;;
-		x86)	EMULTILIB_ARRAY_INDEX=1 ;;
-		amd64)	EMULTILIB_ARRAY_INDEX=2 ;;
-		ppc)	EMULTILIB_ARRAY_INDEX=3 ;;
-		ppc64)	EMULTILIB_ARRAY_INDEX=4 ;;
-		*)		EMULTILIB_ARRAY_INDEX=0 ;;
-	esac
-}
-
-_init_multilib_platform_configuration()
-{
-	_set_multilib_array_index x86
-	EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-m32"
-	EMULTILIB_LINKER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-L/usr/lib32"
-	EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]="32"
-	EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]=""
-	EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]="i686"
-
-	_set_multilib_array_index amd64
-	EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-m64"
-	EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]="64"
-	EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]=""
-	EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]="x86_64"
-
-	_set_multilib_array_index ppc
-	EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-m32"
-	EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]="32"
-	EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]=""
-	EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]="powerpc"
-
-	_set_multilib_array_index ppc64
-	EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]="-m64"
-	EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]="64"
-	EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]=""
-	EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]="powerpc64"
-}
-
-# -----------------------------------------------------------------------------
 
 # Arrays to hold ABI specific configuration
-declare -a EMULTILIB_COMPILER_ABI_FLAGS
-declare -a EMULTILIB_LIB_SUFFIX
-declare -a EMULTILIB_LIB_SUBDIR
+declare -a EMULTILIB_AS
+declare -a EMULTILIB_CC
+declare -a EMULTILIB_CXX
+declare -a EMULTILIB_FC
+declare -a EMULTILIB_LD
+declare -a EMULTILIB_ASFLAGS
+declare -a EMULTILIB_CFLAGS
+declare -a EMULTILIB_CXXFLAGS
+declare -a EMULTILIB_FCFLAGS
+declare -a EMULTILIB_FFLAGS
+declare -a EMULTILIB_LDFLAGS
 declare -a EMULTILIB_CHOST
+declare -a EMULTILIB_CBUILD
+declare -a EMULTILIB_CDEFINE
+declare -a EMULTILIB_LIBDIR
 
 # -----------------------------------------------------------------------------
 
 # These arrays are used to store environment for each ABI
 
-# Saved compiler flags for each ABI
-declare -a EMULTILIB_CFLAGS
-declare -a EMULTILIB_CXXFLAGS
-declare -a EMULTILIB_FFLAGS
-declare -a EMULTILIB_FCFLAGS
-declare -a EMULTILIB_LDFLAGS
+declare -a EMULTILIB_ARRAY_INDEX
 
 # Saved Portage/eclass variables
-declare -a EMULTILIB_CHOST
 declare -a EMULTILIB_S
 declare -a EMULTILIB_ECONF_SOURCE
 declare -a EMULTILIB_KDE_S
@@ -182,6 +142,22 @@ multilib_debug() {
 	[[ -n ${MULTILIB_DEBUG} ]] && einfo MULTILIB_DEBUG:${1}=${2}
 }
 
+# -----------------------------------------------------------------------------
+_set_multilib_array_index() {
+	# Until we can count on bash version > 4, we can't use associative
+	# arrays.
+	local index=0 element=""
+	if [[ -z "${EMULTILIB_ARRAY_INDEX}" ]]; then
+		local abilist=""
+		abilist=$(get_install_abis)
+		EMULTILIB_ARRAY_INDEX=(INIT ${abilist})
+	fi
+	for element in ${EMULTILIB_ARRAY_INDEX[@]}; do
+		[[ "${element}" == "${1}" ]] && echo "${index}"
+		let index++
+	done		
+}
+
 # @FUNCTION: _check_build_dir
 # @DESCRIPTION: This function overrides the function of the same name
 #		in cmake-utils.eclass.  We handle the build dir ourselves. 
@@ -219,35 +195,45 @@ _find_ml_config_scripts() {
 # @USAGE: <ABI>
 # @DESCRIPTION: Setup initial environment for ABI, flags, workarounds etc.
 _setup_multilib_platform_env() {
-	_set_multilib_array_index ${1}
-	local pyver=""
-	[[ -z "${EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]}" ]] && die "Unknown ABI (${1})" 
-	CHOST="${EMULTILIB_MACHINE_NAME[${EMULTILIB_ARRAY_INDEX}]}-${CHOST#*-}"
-	multilib_debug "CHOST" ${CHOST}
-	# Set compiler and linker ABI flags
-	append-flags "${EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]}"
-	append-ldflags "${EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]} ${EMULTILIB_LINKER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]}"
+	local pyver="" libsuffix=""
+	[[ -z $(_set_multilib_array_index ${1}) ]] && die "Unknown ABI (${1})" 
 
-	multilib_debug EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}] ${EMULTILIB_COMPILER_ABI_FLAGS[${EMULTILIB_ARRAY_INDEX}]}
-	multilib_debug "${ABI} CFLAGS" "${CFLAGS}"
-	multilib_debug "${ABI} LDFLAGS" "${LDFLAGS}"
+	# Set the CHOST native first so that we pick up the native
+	# toolchain and not a cross-compiler by accident #202811.
+	export CHOST=$(get_abi_CHOST ${DEFAULT_ABI})
+	export AS="$(tc-getAS)"
+	export CC="$(tc-getCC)"
+	export CXX="$(tc-getCXX)"
+	export FC="$(tc-getFC)"
+	export LD="$(tc-getLD) $(get_abi_LDFLAGS)"
+	export ASFLAGS="${ASFLAGS} $(get_abi_ASFLAGS)"
+	export CFLAGS="${CFLAGS} $(get_abi_CFLAGS)"
+	export CXXFLAGS="${CXXFLAGS} $(get_abi_CFLAGS)"
+	export FCFLAGS="${FCFLAGS} $(get_abi_CFLAGS)"
+	export FFLAGS="${FFLAGS} $(get_abi_CFLAGS)"
+	export CHOST=$(get_abi_CHOST $1)
+	export CBUILD=$(get_abi_CHOST $1)
+	export LIBDIR=$(get_abi_LIBDIR $1)
+	export LDFLAGS="${LDFLAGS} -L/${LIBDIR} -L/usr/${LIBDIR}"
+
+	multilib_debug "CHOST" ${CHOST}
+	multilib_debug "${ABI} CC" "${CC}"
+	multilib_debug "${ABI} LD" "${LD}"
 	# Multilib QT Support - This is needed for QT and CMake based packages
 	if [[ -n ${QTDIR} ]] || ${QTBINDIR} || [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
-		if [[ -n "${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}" ]]; then
-			QMAKESPEC="linux-g++-${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}"
+		libsuffix="${EMULTILIB_LIBDIR[$(_set_multilib_array_index ${1})]/lib}"
+		if [[ -n "${libsuffix}" ]]; then
+			QMAKESPEC="linux-g++-${libsuffix}"
 		else
 			QMAKESPEC="linux-g++"
 		fi
 		if [[ ! ${ABI} == ${DEFAULT_ABI} ]]; then
-			if [[ -n "${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}" ]]; then 
-				QTBINDIR="/usr/libexec/qt/${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}"
-				QMAKESPEC="linux-g++-${EMULTILIB_LIB_SUFFIX[${EMULTILIB_ARRAY_INDEX}]}"
-			elif [[ -d "${EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]}" ]]; then 
-				QTBINDIR="/usr/libexec/qt/${EMULTILIB_LIB_SUBDIR[${EMULTILIB_ARRAY_INDEX}]}"
-				QMAKESPEC=""
+			if [[ -n "${libsuffix}" ]]; then 
+				QTBINDIR="/usr/libexec/qt/${libsuffix}"
+				QMAKESPEC="linux-g++-${libsuffix}"
 			else
-					QMAKESPEC="linux-g++"
-					QTBINDIR="/usr/libexec/qt/${1}"
+				QMAKESPEC="linux-g++"
+				QTBINDIR="/usr/libexec/qt/${1}"
 			fi
 		else
 			QTBINDIR="/usr/bin"
@@ -297,7 +283,7 @@ _setup_multilib_platform_env() {
 		multilib_debug "${ABI} KDE_S" "${KDE_S}"
 	fi
 
-	# ccache
+	# ccache is ABI dependent
 	if [[ -z ${CCACHE_DIR} ]] ; then 
 		CCACHE_DIR="/var/tmp/ccache-${1}"
 	else
@@ -312,70 +298,83 @@ _setup_multilib_platform_env() {
 # @USAGE: <ABI>
 # @DESCRIPTION: Save environment for ABI
 _save_multilib_platform_env() {
-	_set_multilib_array_index ${1}
 	multilib_debug "Saving Environment" "${1}"
 
-	# Save compiler and linker flags for each ABI
-	EMULTILIB_CFLAGS[${EMULTILIB_ARRAY_INDEX}]="${CFLAGS}"
-	EMULTILIB_CXXFLAGS[${EMULTILIB_ARRAY_INDEX}]="${CXXFLAGS}"
-	EMULTILIB_FFLAGS[${EMULTILIB_ARRAY_INDEX}]="${FFLAGS}"
-	EMULTILIB_FCFLAGS[${EMULTILIB_ARRAY_INDEX}]="${FCFLAGS}"
-	EMULTILIB_LDFLAGS[${EMULTILIB_ARRAY_INDEX}]="${LDFLAGS}"
+	# Save toolchain flags for each ABI
+	EMULTILIB_AS[$(_set_multilib_array_index ${1})]="${AS}"
+	EMULTILIB_CC[$(_set_multilib_array_index ${1})]="${CC}"
+	EMULTILIB_CXX[$(_set_multilib_array_index ${1})]="${CXX}"
+	EMULTILIB_FC[$(_set_multilib_array_index ${1})]="${FC}"
+	EMULTILIB_LD[$(_set_multilib_array_index ${1})]="${LD}"
+	EMULTILIB_ASFLAGS[$(_set_multilib_array_index ${1})]="${ASFLAGS}"
+	EMULTILIB_CFLAGS[$(_set_multilib_array_index ${1})]="${CFLAGS}"
+	EMULTILIB_CXXFLAGS[$(_set_multilib_array_index ${1})]="${CXXFLAGS}"
+	EMULTILIB_FCFLAGS[$(_set_multilib_array_index ${1})]="${FCFLAGS}"
+	EMULTILIB_FFLAGS[$(_set_multilib_array_index ${1})]="${FFLAGS}"
+	EMULTILIB_LDFLAGS[$(_set_multilib_array_index ${1})]="${LDFLAGS}"
+	EMULTILIB_CDEFINE[$(_set_multilib_array_index ${1})]="${CBUILD}"
+	EMULTILIB_CHOST[$(_set_multilib_array_index ${1})]="${CHOST}"
+	EMULTILIB_CBUILD[$(_set_multilib_array_index ${1})]="${CBUILD}"
+	EMULTILIB_LIBDIR[$(_set_multilib_array_index ${1})]="${LIBDIR}"
 
 	# Saved Portage/eclass variables
-	EMULTILIB_CHOST[${EMULTILIB_ARRAY_INDEX}]="${CHOST}"
-	EMULTILIB_S[${EMULTILIB_ARRAY_INDEX}]="${S}"
-	EMULTILIB_ECONF_SOURCE[${EMULTILIB_ARRAY_INDEX}]="${ECONF_SOURCE}"
-	EMULTILIB_KDE_S[${EMULTILIB_ARRAY_INDEX}]="${KDE_S}"
-	EMULTILIB_CMAKE_BUILD_DIR[${EMULTILIB_ARRAY_INDEX}]="${CMAKE_BUILD_DIR}"
-	EMULTILIB_CCACHE_DIR[${EMULTILIB_ARRAY_INDEX}]="${CCACHE_DIR}"
-	EMULTILIB_QTBINDIR[${EMULTILIB_ARRAY_INDEX}]="${QTBINDIR}"
-	EMULTILIB_QMAKE[${EMULTILIB_ARRAY_INDEX}]="${QMAKE}"
-	EMULTILIB_QMAKESPEC[${EMULTILIB_ARRAY_INDEX}]="${QMAKESPEC}"
-	EMULTILIB_myconf[${EMULTILIB_ARRAY_INDEX}]="${myconf}"
-	EMULTILIB_mycmakeargs[${EMULTILIB_ARRAY_INDEX}]="${mycmakeargs}"
+	EMULTILIB_S[$(_set_multilib_array_index ${1})]="${S}"
+	EMULTILIB_ECONF_SOURCE[$(_set_multilib_array_index ${1})]="${ECONF_SOURCE}"
+	EMULTILIB_KDE_S[$(_set_multilib_array_index ${1})]="${KDE_S}"
+	EMULTILIB_CMAKE_BUILD_DIR[$(_set_multilib_array_index ${1})]="${CMAKE_BUILD_DIR}"
+	EMULTILIB_CCACHE_DIR[$(_set_multilib_array_index ${1})]="${CCACHE_DIR}"
+	EMULTILIB_QTBINDIR[$(_set_multilib_array_index ${1})]="${QTBINDIR}"
+	EMULTILIB_QMAKE[$(_set_multilib_array_index ${1})]="${QMAKE}"
+	EMULTILIB_QMAKESPEC[$(_set_multilib_array_index ${1})]="${QMAKESPEC}"
+	EMULTILIB_myconf[$(_set_multilib_array_index ${1})]="${myconf}"
+	EMULTILIB_mycmakeargs[$(_set_multilib_array_index ${1})]="${mycmakeargs}"
 
 	# Non-default ABI binaries
-	EMULTILIB_PYTHON[${EMULTILIB_ARRAY_INDEX}]="${PYTHON}"
-	EMULTILIB_PERLBIN[${EMULTILIB_ARRAY_INDEX}]="${PERLBIN}"
+	EMULTILIB_PYTHON[$(_set_multilib_array_index ${1})]="${PYTHON}"
+	EMULTILIB_PERLBIN[$(_set_multilib_array_index ${1})]="${PERLBIN}"
 
-	multilib_debug "EMULTILIB_S[${EMULTILIB_ARRAY_INDEX}]" "${EMULTILIB_S[${EMULTILIB_ARRAY_INDEX}]}"
-	multilib_debug "EMULTILIB_CFLAGS[${EMULTILIB_ARRAY_INDEX}]" "${EMULTILIB_CFLAGS[${EMULTILIB_ARRAY_INDEX}]}"
+	multilib_debug "EMULTILIB_S[$(_set_multilib_array_index ${1})]" "${EMULTILIB_S[$(_set_multilib_array_index ${1})]}"
+	multilib_debug "EMULTILIB_CC[$(_set_multilib_array_index ${1})]" "${EMULTILIB_CC[$(_set_multilib_array_index ${1})]}"
 }
 
 # @FUNCTION: _restore_multilib_platform_env
 # @USAGE: <ABI>
 # @DESCRIPTION: Restore environment for ABI
 _restore_multilib_platform_env() {
-	_set_multilib_array_index ${1}
 	multilib_debug "Restoring Environment" "${1}"
 
-	multilib_debug "EMULTILIB_S[${EMULTILIB_ARRAY_INDEX}]" "${EMULTILIB_S[${EMULTILIB_ARRAY_INDEX}]}"
-	multilib_debug "EMULTILIB_CFLAGS[${EMULTILIB_ARRAY_INDEX}]" "${EMULTILIB_CFLAGS[${EMULTILIB_ARRAY_INDEX}]}"
+	multilib_debug "EMULTILIB_S[$(_set_multilib_array_index ${1})]" "${EMULTILIB_S[$(_set_multilib_array_index ${1})]}"
+	multilib_debug "EMULTILIB_CFLAGS[$(_set_multilib_array_index ${1})]" "${EMULTILIB_CFLAGS[$(_set_multilib_array_index ${1})]}"
 
 	# Restore compiler and linker flags for each ABI
-	CFLAGS="${EMULTILIB_CFLAGS[${EMULTILIB_ARRAY_INDEX}]}"
-	CXXFLAGS="${EMULTILIB_CXXFLAGS[${EMULTILIB_ARRAY_INDEX}]}"
-	FFLAGS="${EMULTILIB_FFLAGS[${EMULTILIB_ARRAY_INDEX}]}"
-	FCFLAGS="${EMULTILIB_FCFLAGS[${EMULTILIB_ARRAY_INDEX}]}"
-	LDFLAGS="${EMULTILIB_LDFLAGS[${EMULTILIB_ARRAY_INDEX}]}"
+	AS="${EMULTILIB_AS[$(_set_multilib_array_index ${1})]}"
+	CC="${EMULTILIB_CC[$(_set_multilib_array_index ${1})]}"
+	CXX="${EMULTILIB_CXX[$(_set_multilib_array_index ${1})]}"
+	FC="${EMULTILIB_FC[$(_set_multilib_array_index ${1})]}"
+	LD="${EMULTILIB_LD[$(_set_multilib_array_index ${1})]}"
+	ASFLAGS="${EMULTILIB_ASFLAGS[$(_set_multilib_array_index ${1})]}"
+	CFLAGS="${EMULTILIB_CFLAGS[$(_set_multilib_array_index ${1})]}"
+	CXXFLAGS="${EMULTILIB_CXXFLAGS[$(_set_multilib_array_index ${1})]}"
+	FCFLAGS="${EMULTILIB_FCFLAGS[$(_set_multilib_array_index ${1})]}"
+	FFLAGS="${EMULTILIB_FFLAGS[$(_set_multilib_array_index ${1})]}"
+	LDFLAGS="${EMULTILIB_LDFLAGS[$(_set_multilib_array_index ${1})]}"
 
 	# Saved Portage/eclass variables
-	CHOST="${EMULTILIB_CHOST[${EMULTILIB_ARRAY_INDEX}]}"
-	S="${EMULTILIB_S[${EMULTILIB_ARRAY_INDEX}]}"
-	ECONF_SOURCE="${EMULTILIB_ECONF_SOURCE[${EMULTILIB_ARRAY_INDEX}]}"
-	KDE_S="${EMULTILIB_KDE_S[${EMULTILIB_ARRAY_INDEX}]}"
-	CMAKE_BUILD_DIR="${EMULTILIB_CMAKE_BUILD_DIR[${EMULTILIB_ARRAY_INDEX}]}"
-	CCACHE_DIR="${EMULTILIB_CCACHE_DIR[${EMULTILIB_ARRAY_INDEX}]}"
-	QTBINDIR="${EMULTILIB_QTBINDIR[${EMULTILIB_ARRAY_INDEX}]}"
-	QMAKE="${EMULTILIB_QMAKE[${EMULTILIB_ARRAY_INDEX}]}"
-	QMAKESPEC="${EMULTILIB_QMAKESPEC[${EMULTILIB_ARRAY_INDEX}]}"
-	myconf="${EMULTILIB_myconf[${EMULTILIB_ARRAY_INDEX}]}"
-	mycmakeargs="${EMULTILIB_mycmakeargs[${EMULTILIB_ARRAY_INDEX}]}"
+	CHOST="${EMULTILIB_CHOST[$(_set_multilib_array_index ${1})]}"
+	S="${EMULTILIB_S[$(_set_multilib_array_index ${1})]}"
+	ECONF_SOURCE="${EMULTILIB_ECONF_SOURCE[$(_set_multilib_array_index ${1})]}"
+	KDE_S="${EMULTILIB_KDE_S[$(_set_multilib_array_index ${1})]}"
+	CMAKE_BUILD_DIR="${EMULTILIB_CMAKE_BUILD_DIR[$(_set_multilib_array_index ${1})]}"
+	CCACHE_DIR="${EMULTILIB_CCACHE_DIR[$(_set_multilib_array_index ${1})]}"
+	QTBINDIR="${EMULTILIB_QTBINDIR[$(_set_multilib_array_index ${1})]}"
+	QMAKE="${EMULTILIB_QMAKE[$(_set_multilib_array_index ${1})]}"
+	QMAKESPEC="${EMULTILIB_QMAKESPEC[$(_set_multilib_array_index ${1})]}"
+	myconf="${EMULTILIB_myconf[$(_set_multilib_array_index ${1})]}"
+	mycmakeargs="${EMULTILIB_mycmakeargs[$(_set_multilib_array_index ${1})]}"
 
 	# Non-default ABI binaries
-	PYTHON="${EMULTILIB_PYTHON[${EMULTILIB_ARRAY_INDEX}]}"
-	PERLBIN="${EMULTILIB_PERLBIN[${EMULTILIB_ARRAY_INDEX}]}"
+	PYTHON="${EMULTILIB_PYTHON[$(_set_multilib_array_index ${1})]}"
+	PERLBIN="${EMULTILIB_PERLBIN[$(_set_multilib_array_index ${1})]}"
 
 	multilib_debug "S" "${S}"
 	multilib_debug "CFLAGS" "${CFLAGS}"
@@ -443,7 +442,6 @@ multilib-native_src_generic_sub() {
 	# each phase until multilib is initialised, this allows ebuilds to
 	# modify the common environment, right up until we setup a build dir.)
 	if [[ -z ${EMULTILIB_INITIALISED} ]]; then
-		_init_multilib_platform_configuration
 		_save_multilib_platform_env "INIT"
 
 		[[ -n ${MULTILIB_DEBUG} ]] && \
@@ -517,10 +515,6 @@ multilib-native_src_generic_sub() {
 				_find_ml_config_scripts "${ABI}"
 		fi
 
-		# Nice way to avoid the "cannot run test program while cross
-		# compiling" :)
-		CBUILD=$CHOST
-
 		# qt-build.eclass sets these in pkg_setup, but that results
 		# in the path always pointing to the primary ABI libdir.
 		# These need to run on each pass to set correctly.
@@ -554,8 +548,8 @@ multilib-native_src_generic_sub() {
 			einfo Looking for package config scripts
 			local _config_script
 			if [[ -d "${D}/usr/bin" ]]; then
-				for _config_script in $(find "${D}/usr/bin" -executable \
-						-name "*config32*" -prune -o \( -regex ".*-config.*" -print \)); do
+				for _config_script in $(find "${D}/usr/bin" \
+						-name "*config32*" -prune -o \( -executable -regex ".*-config.*" -print \)); do
 					if (file "${_config_script}" | fgrep -q "script text"); then
 						einfo Renaming "${_config_script}" as "${_config_script}-${ABI}"
 						mv "${_config_script}" "${_config_script}-${ABI}"
