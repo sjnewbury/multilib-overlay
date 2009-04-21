@@ -1,0 +1,134 @@
+#!/bin/sh
+
+# Author:	Hanno Meyer-Thurow
+# Revision:	4
+#
+# Use:		Rebuild your classmap database.
+
+# defaults
+JAVA_PKG_DB_TOOL="${JAVA_PKG_DB_TOOL:="$(gcc-config -B)/gcj-dbtool"}"
+JAVA_PKG_CLASSMAP=${JAVA_PKG_CLASSMAP:="@JAVA_PKG_CLASSMAP@"}
+
+# functions
+die() {
+	echo "ERROR: ${@}"
+	exit 1
+}
+
+show_help() {
+	echo "To rebuild your database run:"
+	echo "	'${0} <database file> [ <packages> | <path> ]'"
+	echo
+	echo "To print only what would be done run:"
+	echo "	'${0} printonly [ <packages> | <path> ]'"
+	echo
+	echo "To recreate the default database with all packages being checked execute:"
+	echo "	'${0} ${JAVA_PKG_CLASSMAP}'"
+	echo
+	echo "---------------"
+	echo " database file:		/path/to/classmap.gcjdb"
+	echo " packages:		comma-separated list of packages from 'java-config -l'"
+	echo " path:			fetch Jar files recursively from path"
+}
+
+get_classpath() {
+	local classpath
+	if [ -d "${@}" ] ; then
+		local jar
+		for jar in $(find ${@} -type f -name '*.jar') ; do
+			[[ ( -f "${jar}" ) && ( ".jar" == "${jar: -4:4}" ) ]] \
+				&& classpath="${jar}:${classpath}"
+		done
+		classpath=${classpath%:}
+	else
+		classpath="$(java-config --classpath=${@} 2>&1)"
+	fi
+
+	if [[ "${classpath}" =~ "ERROR" ]] ; then
+		die "A package missing/mispelled?!"
+	fi
+
+	echo "${classpath}"
+}
+
+check_jar() {
+	local ret_val=0
+	if [ -L "${1}" ] || [ ".jar" != "${1: -4:4}" ] ; then
+		echo -e "\033[01;31mno jarfile:\033[0m ${1}"
+		ret_val=1
+	elif [ ! -f "${2}" ] ; then
+		echo -e "\033[01;31mnot found:\033[0m ${2}"
+		ret_val=1
+	fi
+	return ${ret_val}
+}
+
+add_lib() {
+	echo "register: ${2}"
+	if [ "${DB_FILE}" != "printonly" ] ; then
+		${JAVA_PKG_DB_TOOL} -a ${DB_FILE} ${1} ${2} \
+			|| die "failed to register jar file"
+	fi
+}
+
+reg_pkgs() {
+	local pkg pkgs
+	for pkg in $(java-config -l | cut -d] -f1 | cut -c2-) ; do
+		pkgs="${pkg},${pkgs}"
+	done
+	pkgs="${pkgs//vm,active,the,by,Provided,}"
+	reg_classpath "${pkgs%,}"
+}
+
+reg_classpath() {
+	echo "check classpath ..."
+	local classpath="$(get_classpath "${1}")"
+
+	echo "${classpath}"
+	echo
+
+	local jar to
+	for jar in ${classpath//:/ } ; do
+		to="$(dirname ${jar})/lib$(basename ${jar}).so"
+		check_jar "${jar}" "${to}" && add_lib "${jar}" "${to}"
+	done
+}
+
+# errors
+if [[ ( ${#} -lt 1 ) || ( ${#} -ge 3 ) ]] ; then
+	show_help
+	exit 1
+fi
+
+if [ ! -x "$(which ${JAVA_PKG_DB_TOOL})" ] ; then
+	die "Java database tool unusable!"
+fi
+
+DB_FILE="${1}"
+
+if [ "${DB_FILE}" != "printonly" ] ; then
+	if [ ! -d "$(dirname ${DB_FILE})" ] ; then
+		die "Path to database file missing?!"
+	fi
+
+	if [ ".gcjdb" != "${DB_FILE: -6:6}" ] ; then
+		die "Given file has unknown format?!"
+	fi
+fi
+
+# start
+echo "(re-)create classmap database (${DB_FILE})"
+echo
+if [ "${DB_FILE}" != "printonly" ] ; then
+	rm -f ${DB_FILE}
+	${JAVA_PKG_DB_TOOL} -n ${DB_FILE}
+fi
+
+if [ -n "${2}" ] ; then
+	reg_classpath "${2}"
+else
+	reg_pkgs
+fi
+
+echo "... done!"
+exit 0

@@ -1,0 +1,52 @@
+8
+
+dir
+5297
+http://overlays.gentoo.org/svn/proj/java/gcj-overlay/dev-java/eclipse-ecj/files
+http://overlays.gentoo.org/svn/proj/java
+
+
+
+2007-07-27T14:20:42.533619Z
+5273
+geki
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+fe387f86-7aec-0310-8f44-a148a97195aa
+
+ecj-3.3
+file
+
+
+
+
+2007-05-08T20:14:21.000000Z
+889c68e9587bd066cb24b4e6844bba39
+2007-01-11T23:36:23.289957Z
+3501
+geki
+
+eclipse-ecj-gcj.patch
+file
+
+
+
+
+2007-08-06T18:12:12.000000Z
+a7669d975c1413a49e2d549be205c4b5
+2007-07-03T10:21:54.540596Z
+5226
+geki
+

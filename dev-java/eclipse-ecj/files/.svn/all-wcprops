@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/proj/java/!svn/ver/5273/gcj-overlay/dev-java/eclipse-ecj/files
+END
+ecj-3.3
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/proj/java/!svn/ver/3501/gcj-overlay/dev-java/eclipse-ecj/files/ecj-3.3
+END
+eclipse-ecj-gcj.patch
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/proj/java/!svn/ver/5226/gcj-overlay/dev-java/eclipse-ecj/files/eclipse-ecj-gcj.patch
+END

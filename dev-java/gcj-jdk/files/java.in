@@ -1,0 +1,8 @@
+#!/bin/bash
+# wrapper script for gij as java
+
+JAVA_PKG_CLASSMAP=${JAVA_PKG_CLASSMAP:="@JAVA_PKG_CLASSMAP@"}
+
+@HOME@/bin/gij \
+	-Dgnu.gcj.precompiled.db.path=${JAVA_PKG_CLASSMAP} \
+	"${@}"

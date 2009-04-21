@@ -1,0 +1,264 @@
+# ChangeLog for dev-java/eclipse-ecj
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  29 Oct 2008; Andrew John Hughes <gnu_andrew@member.fsf.org> eclipse-ecj-3.3.0-r7.ebuild:
+	Switch gcj build to creating a library and registering this using
+	gcj-dbtool.  Bump revision to recognise this change.
+	
+  29 Oct 2008; Andrew John Hughes <gnu_andrew@member.fsf.org> eclipse-ecj-3.3.0-r6.ebuild:
+	Remove LD_LIBRARY_PATH change.
+	
+  22 Jul 2008; Andrew John Hughes <gnu_andrew@member.fsf.org> eclipse-ecj-3.3.0-r5.ebuild:
+	Set LD_LIBRARY_PATH when running gcj.
+
+*eclipse-ecj-3.4.1 (29 Sep 2008)
+
+  29 Sep 2009; James Le Cuirot <chewi@aura-online.co.uk> 
+  +eclipse-ecj-3.4.1.ebuild:
+  Version bump. No changes.
+
+  17 Sep 2008; Vlastimil Babka <caster@gentoo.org>
+  eclipse-ecj-3.4-r2.ebuild:
+  Don't restrict gcc dependency.
+
+*eclipse-ecj-3.4-r2 (01 Aug 2008)
+
+  01 Aug 2008; Jean-Noël Rivasseau <elvanor@gentoo.org> +files/ecj-3.4,
+  +eclipse-ecj-3.4-r2.ebuild:
+  Bumping eclipse-ecj-3.4, moving from overlay to tree.
+
+  22 Jul 2008; Andrew John Hughes <gnu_andrew@member.fsf.org> eclipse-ecj-3.3.0-r5.ebuild eclipse-ecj-3.4.0-r2.ebuild:
+  Installed GCJ file should be ecj-3.3 in 3.3 ebuild.  Depend on current version of eselect-ecj.
+
+*eclipse-ecj-3.3.0-r3 (21 Jul 2008)
+*eclipse-ecj-3.2.2-r1 (21 Jul 2008)
+
+  21 Jul 2008; Petteri Räty <betelgeuse@gentoo.org>
+  +eclipse-ecj-3.2.2-r1.ebuild, +eclipse-ecj-3.3.0-r3.ebuild:
+  Add app-admin/eselect-ecj support.
+
+  21 Jul 2008; Petteri Räty <betelgeuse@gentoo.org>
+  -eclipse-ecj-3.2.ebuild, -eclipse-ecj-3.3.0-r1.ebuild:
+  Remove old ebuilds.
+	
+  14 Jul 2008; James Le Cuirot <chewi@aura-online.co.uk>
+  eclipse-ecj-3.3.0-r5.ebuild, eclipse-ecj-3.4.0-r2.ebuild:
+  Sorry about deleting the script. Didn't notice the update and thought it was
+  old. Make sure we only pass one file to gcc-config. Don't install /usr/bin/ecj
+  as it is handled by eselect. Don't install /usr/bin/native_ecj either as this
+  would have to be handled by eselect too but actually we don't need it at all.
+
+  12 Jul 2008; Andrew John Hughes <gnu_andrew@member.fsf.org> eclipse-ecj-3.3.0-r5.ebuild eclipse-ecj-3.4.0-r2.ebuild:
+  Add ecj script (AGAIN!!!) to ensure library path is correct for native ecj.
+
+  09 Jul 2008; James Le Cuirot <chewi@aura-online.co.uk>
+  -eclipse-ecj-3.4.ebuild, -eclipse-ecj-3.3.0-r3.ebuild, -files/ecj-3.4,
+  -files/ecj, -files/eclipse-ecj-3.4-gcj.diff, +eclipse-ecj-3.3.0-r4.ebuild,
+  +eclipse-ecj-3.4-r1.ebuild:
+  Use eselect-ecj to select between ECJ versions. Remove native_ecj symlinks.
+  Bring 3.3 in line with 3.4.
+
+  09 Jul 2008; James Le Cuirot <chewi@aura-online.co.uk>
+  -eclipse-ecj-3.4_rc4.ebuild, -files/eclipse-ecj-3.4_pre6-gcj.diff,
+  +eclipse-ecj-3.4.ebuild, +files/eclipse-ecj-3.4-gcj.diff:
+  Version bump to 3.4 final. This version also builds using GCJ without a JDK.
+
+  08 Jul 2008; Andrew John Hughes <gnu_andrew@member.fsf.org> eclipse-ecj-3.3.0-r3.ebuild:
+  Add ecj script to ensure library path is correct for native ecj.
+
+  08 Jul 2008; Andrew John Hughes <gnu_andrew@member.fsf.org> eclipse-ecj-3.3.0-r3.ebuild:
+  Fix mistakes in DEPEND and add RDEPEND.
+
+  08 Jul 2008; Andrew John Hughes <gnu_andrew@member.fsf.org> eclipse-ecj-3.3.0-r3.ebuild:
+  Make gcj build work without a JDK.
+
+  03 Jul 2008; Andrew John Hughes <gnu_andrew@member.fsf.org> eclipse-ecj-3.3.0-r3.ebuild:
+  Work with gcj from sys-devel/gcc-4.3.1.
+	
+  16 Jun 2008; Andrew John Hughes <gnu_andrew@member.fsf.org> eclipse-ecj-3.3.0-r3.ebuild:
+  Depend on gcj-jdk not gcj.
+
+  02 Jun 2008; Andrew John Hughes <gnu_andrew@member.fsf.org> eclipse-ecj-3.3.0-r3.ebuild:
+  Re-introduce pure Java builds, making GCJ a USE flag, and install ecj.jar correctly.
+
+  26 May 2008; Andrew John Hughes <gnu_andrew@member.fsf.org> eclipse-ecj-3.3.0-r3.ebuild:
+  Provide better support for native builds with GCJ.
+
+  07 Apr 2008; Kenneth Prugh <ken69267@gentoo.org> eclipse-ecj-3.2.2.ebuild:
+  amd64 stable, bug #212643
+
+  22 Mar 2008; Markus Meier <maekke@gentoo.org> eclipse-ecj-3.3.0-r2.ebuild:
+  amd64 stable, bug #204484
+
+  11 Mar 2008; Brent Baude <ranger@gentoo.org> eclipse-ecj-3.2.2.ebuild:
+  stable ppc64, bug 212643
+
+  08 Mar 2008; Krzysiek Pawlik <nelchael@gentoo.org>
+  eclipse-ecj-3.2.2.ebuild:
+  Stable on ppc, see bug #212643.
+
+  08 Mar 2008; Markus Meier <maekke@gentoo.org> eclipse-ecj-3.2.2.ebuild:
+  x86 stable, bug #212643
+
+  11 Feb 2008; Brent Baude <ranger@gentoo.org> ChangeLog:
+  Marking eclipse-ecj-3.3.0-r2 ppc64 for bug 204484
+
+  05 Feb 2008; Markus Rothe <corsair@gentoo.org>
+  eclipse-ecj-3.3.0-r2.ebuild:
+  Stable on ppc64
+
+  24 Jan 2008; nixnut <nixnut@gentoo.org> eclipse-ecj-3.3.0-r2.ebuild:
+  Stable on ppc wrt bug 204484
+
+  23 Jan 2008; Raúl Porcel <armin76@gentoo.org>
+  eclipse-ecj-3.3.0-r2.ebuild:
+  Re-add ~ia64 wrt #204484
+
+  23 Jan 2008; Christian Faulhammer <opfer@gentoo.org>
+  eclipse-ecj-3.3.0-r2.ebuild:
+  stable x86, bug 204484
+
+*eclipse-ecj-3.3.0-r2 (23 Jan 2008)
+
+  23 Jan 2008; Vlastimil Babka <caster@gentoo.org>
+  +eclipse-ecj-3.3.0-r2.ebuild:
+  Revbump to inherit proper eclass, fixed bug #207000.
+
+  06 Jan 2008; Vlastimil Babka <caster@gentoo.org>
+  -files/compiler-settings-3.1, -eclipse-ecj-3.1-r13.ebuild:
+  Removing ecj-3.1 - old, and does not work correctly with 1.6 JDK and ant 1.7.0.
+
+  05 Jan 2008; Petteri Räty <betelgeuse@gentoo.org>
+  -eclipse-ecj-3.3.0.ebuild:
+  Delete old revision.
+
+  01 Dec 2007; Markus Rothe <corsair@gentoo.org>
+  eclipse-ecj-3.3.0-r1.ebuild:
+  Stable on ppc64
+
+  27 Oct 2007; Krzysiek Pawlik <nelchael@gentoo.org>
+  eclipse-ecj-3.3.0-r1.ebuild:
+  Stable on ppc.
+
+  17 Oct 2007; Markus Rothe <corsair@gentoo.org>
+  eclipse-ecj-3.3.0-r1.ebuild:
+  Added ~ppc64; bug #191729
+
+  12 Oct 2007; Roy Marples <uberlord@gentoo.org> eclipse-ecj-3.3.0.ebuild,
+  eclipse-ecj-3.3.0-r1.ebuild:
+  Added ~x86-fbsd keyword back - don't drop it again! #191729
+
+  12 Oct 2007; Christian Faulhammer <opfer@gentoo.org>
+  eclipse-ecj-3.3.0-r1.ebuild:
+  stable x86, security bug 195571
+
+  12 Oct 2007; William L. Thomson Jr. <wltjr@gentoo.org>
+  eclipse-ecj-3.1-r13.ebuild, eclipse-ecj-3.2.ebuild,
+  eclipse-ecj-3.2.2.ebuild, eclipse-ecj-3.3.0.ebuild,
+  eclipse-ecj-3.3.0-r1.ebuild:
+  QA fixed copyright, added quotes.
+
+  12 Oct 2007; William L. Thomson Jr. <wltjr@gentoo.org>
+  eclipse-ecj-3.3.0-r1.ebuild:
+  amd64 stable, bug #195571.
+
+*eclipse-ecj-3.3.0-r1 (07 Sep 2007)
+
+  07 Sep 2007; Petteri Räty <betelgeuse@gentoo.org>
+  +eclipse-ecj-3.3.0-r1.ebuild:
+  Use java-pkg_dolauncher instead of the hand written wrapper script.
+
+*eclipse-ecj-3.3.0 (27 Jul 2007)
+
+  27 Jul 2007; Joshua Nichols <nichoj@gentoo.org> +files/ecj-3.3,
+  +files/eclipse-ecj-3.3.0-gcj.patch, +eclipse-ecj-3.3.0.ebuild:
+  Version bump imported from gcj-overlay.
+
+  08 May 2007; Raúl Porcel <armin76@gentoo.org> eclipse-ecj-3.2.2.ebuild:
+  Add ~ia64 wrt #177466
+
+*eclipse-ecj-3.2.2 (25 Apr 2007)
+
+  25 Apr 2007; Vlastimil Babka <caster@gentoo.org>
+  +eclipse-ecj-3.2.2.ebuild:
+  Version bump, bug #168806.
+
+  25 Apr 2007; Petteri Räty <betelgeuse@gentoo.org>
+  eclipse-ecj-3.1-r13.ebuild:
+  Add dev-java/ant-core to RDEPEND and use java-pkg_dojavadoc.
+
+  08 Mar 2007; Petteri Räty <betelgeuse@gentoo.org>
+  files/eclipse-ecj-3.2-build-gentoo.patch, -eclipse-ecj-3.1-r2.ebuild:
+  Remove old revision and fix javadoc installation for 3.2.
+
+  09 Dec 2006; Diego Pettenò <flameeyes@gentoo.org>
+  eclipse-ecj-3.1-r13.ebuild:
+  Add ~x86-fbsd keyword.
+
+  07 Dec 2006; Diego Pettenò <flameeyes@gentoo.org> eclipse-ecj-3.2.ebuild:
+  Add ~x86-fbsd keyword.
+
+  15 Oct 2006; Tobias Scherbaum <dertobi123@gentoo.org>
+  eclipse-ecj-3.1-r13.ebuild, eclipse-ecj-3.2.ebuild:
+  ppc stable. bug #147254
+
+  14 Oct 2006; Joshua Nichols <nichoj@gentoo.org>
+  eclipse-ecj-3.1-r13.ebuild, eclipse-ecj-3.2.ebuild:
+  Stabilizing on amd64 as part of new Java system, bug #147254.
+
+  14 Oct 2006; Joshua Jackson <tsunam@gentoo.org>
+  eclipse-ecj-3.1-r13.ebuild, eclipse-ecj-3.2.ebuild:
+  New java stable on x86; bug #147254
+
+  14 Sep 2006; Joshua Nichols <nichoj@gentoo.org> metadata.xml,
+  eclipse-ecj-3.1-r2.ebuild, eclipse-ecj-3.1-r13.ebuild,
+  eclipse-ecj-3.2.ebuild:
+  Added ~ppc64. Moved SRC_URI to Gentoo mirrors. Other minor whitespace cleanups.
+
+*eclipse-ecj-3.2 (10 Aug 2006)
+
+  10 Aug 2006; Joshua Nichols <nichoj@gentoo.org>
+  +files/compiler-settings-3.2, +files/eclipse-ecj-3.2-build-gentoo.patch,
+  +eclipse-ecj-3.2.ebuild:
+  Version bump, thanks to Caster.
+
+  07 Aug 2006; Krzysiek Pawlik <nelchael@gentoo.org>
+  eclipse-ecj-3.1-r13.ebuild:
+  Added classpath.
+
+  22 Jul 2006; Tobias Scherbaum <dertobi123@gentoo.org>
+  eclipse-ecj-3.1-r13.ebuild:
+  Added ~ppc, bug #105223
+
+  25 Jun 2006; <nichoj@gentoo.org> +files/compiler-settings-3.1:
+  Revision bump to add support for new Java system.
+
+  10 Mar 2006; Markus Rothe <corsair@gentoo.org> eclipse-ecj-3.1-r2.ebuild:
+  Added ~ppc64; bug #125715
+
+  24 Dec 2005; Thomas Matthijs <axxo@gentoo.org> -eclipse-ecj-3.1.ebuild:
+  remove
+
+  18 Dec 2005; Joshua Nichols <nichoj@gentoo.org> eclipse-ecj-3.1-r2.ebuild:
+  Added ~amd64 keyword.
+
+*eclipse-ecj-3.1-r2 (04 Sep 2005)
+
+  04 Sep 2005; Karl Trygve Kalleberg <karltk@gentoo.org>
+  +eclipse-ecj-3.1-r2.ebuild:
+  Added updates from Joshua. Also forgot to mention that this stuff is
+  inspired by the of work Scott Carr <scarr@progbits.com> over at #80526.
+
+*eclipse-ecj-3.1 (24 Aug 2005)
+
+  24 Aug 2005; Karl Trygve Kalleberg <karltk@gentoo.org>
+  +eclipse-ecj-3.1.ebuild:
+  Initial import. The source snapshot was ripped straight out of
+  plugins/org.eclipse.jdt.core from the 3.1 zipfile. Note that the
+  directory layout has changed a bit; I don't maintain separate
+  batch and compiler directories. Our layout looks exactly like the
+  one used for the bootstrap compiler in jdtcoresrc/.
+
+
+
