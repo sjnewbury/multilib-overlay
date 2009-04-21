@@ -19,7 +19,7 @@ EGIT_BOOTSTRAP="./autogen.sh"
 SRC_URI=""
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 ~ppc x86"
+KEYWORDS=""
 IUSE="crypt doc gnome"
 
 # Yes, I know that configure will accept libnl 1.0-pre8, however we only have
