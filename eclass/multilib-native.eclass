@@ -217,9 +217,6 @@ multilib-native_setup_abi_env() {
 	export LIBDIR=$(get_abi_LIBDIR $1)
 	export LDFLAGS="${LDFLAGS} -L/${LIBDIR} -L/usr/${LIBDIR}"
 
-	multilib_debug "CHOST" ${CHOST}
-	multilib_debug "${ABI} CC" "${CC}"
-	multilib_debug "${ABI} LD" "${LD}"
 	# Multilib QT Support - This is needed for QT and CMake based packages
 	if [[ -n ${QTDIR} ]] || ${QTBINDIR} || [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
 		libsuffix="${EMULTILIB_LIBDIR[$(multilib-native_abi_to_index_key ${1})]/lib}"
@@ -240,7 +237,6 @@ multilib-native_setup_abi_env() {
 			QTBINDIR="/usr/bin"
 		fi
 		QMAKE="${QTBINDIR}/qmake"
-		multilib_debug "${ABI} QMAKESPEC" "${QMAKESPEC}"
 	fi
 
 	# If we aren't building for the DEFAULT ABI we may need to use some
@@ -263,25 +259,20 @@ multilib-native_setup_abi_env() {
 		# Multilib CMake Support, qmake provides the paths to link QT
 		mycmakeargs="${mycmakeargs} \
 			-DQT_QMAKE_EXECUTABLE:FILEPATH=${QMAKE}"
-		multilib_debug "${ABI} mycmakeargs" "${mycmakeargs}"
 
 		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 		[[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] && \
 			S="${CMAKE_BUILD_DIR}"
-		multilib_debug "${ABI} CMAKE_BUILD_DIR" "${CMAKE_BUILD_DIR}"
-
 	else
 		S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 		if [[ -n ${MULTILIB_EXT_SOURCE_BUILD} ]]; then
 			ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 		fi
-		multilib_debug "${ABI} ECONF_SOURCE" "${ECONF_SOURCE}"
 	fi
 
 	# If KDE_S is defined then the kde.eclass is in use
 	if [[ -n ${KDE_S} ]]; then
 		KDE_S="${S}"
-		multilib_debug "${ABI} KDE_S" "${KDE_S}"
 	fi
 
 	# ccache is ABI dependent
@@ -391,10 +382,6 @@ multilib-native_src_generic_sub() {
 			einfo "Determining SOURCE_TOPDIR from S and WORKDIR"
 		EMULTILIB_RELATIVE_BUILD_DIR="${S#*${WORKDIR}\/}"
 		EMULTILIB_SOURCE_TOP_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
-		multilib_debug WORKDIR "${WORKDIR}"
-		multilib_debug S "${S}"
-		multilib_debug EMULTILIB_RELATIVE_BUILD_DIR "${EMULTILIB_RELATIVE_BUILD_DIR}"
-		multilib_debug EMULTILIB_SOURCE_TOP_DIRNAME "${EMULTILIB_SOURCE_TOP_DIRNAME}"
 		# If ${EMULTILIB_SOURCE_TOP_DIRNAME} is
 		# empty, then we assume ${S} points to the top level.
 		# (This should never happen.)
@@ -402,7 +389,6 @@ multilib-native_src_generic_sub() {
 			ewarn "Unable to determine dirname of the source topdir:"
 			ewarn "Assuming S points to the top level"
 			EMULTILIB_SOURCE_TOP_DIRNAME=${EMULTILIB_RELATIVE_BUILD_DIR}
-			multilib_debug EMULTILIB_SOURCE_TOP_DIRNAME ${EMULTILIB_SOURCE_TOP_DIRNAME}
 		fi
 		EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
 		multilib_debug EMULTILIB_SOURCE_TOPDIR ${EMULTILIB_SOURCE_TOPDIR}
