@@ -2920,15 +2920,15 @@ java-pkg_native_init_() {
 
 	# Is the current system VM gcj-jdk?  Is GCJ available?
 	# If so, use the gcc-config profile for that gcj-jdk
-	einfo "Checking current java-config system VM profile..."
+	#einfo "Checking current java-config system VM profile..."
 	gcc_profile=$(java-pkg_native-select-current-jdk-gcj)
 	# If not, find a suitable version
 	if [[ "${?}" != "0" ]]; then
-			einfo "Unable to match a gcc-config profile to current java-config system VM"
-			einfo "Attempting to determine suitable gcc-config profile for this system..."
+			#einfo "Unable to match a gcc-config profile to current java-config system VM"
+			#einfo "Attempting to determine suitable gcc-config profile for this system..."
 			gcc_profile=$(java-pkg_native-find-supported-gcj)
 	else
-			einfo "System VM is gcj-jdk. Using selected profile! ;-)"
+			einfo "System Java VM is gcj-jdk. Using selected profile."
 	fi
 	if [[ "${?}" != "0" ]]; then
 		# Do we want to die here?
