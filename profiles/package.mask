@@ -8,6 +8,7 @@
 # currently unstable stuff from gnome-overlay
 =dev-libs/atk-1.26.0
 =dev-libs/glib-2.20.0
+=dev-libs/glib-2.20.1
 =gnome-base/gconf-2.26.0
 =gnome-base/gnome-keyring-2.26.0
 =gnome-base/libgnome-2.26.0
