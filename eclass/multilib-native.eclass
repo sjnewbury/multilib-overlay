@@ -429,12 +429,6 @@ multilib-native_src_generic_sub() {
 			# Is this our first run for this ABI?
 			if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
 
-				# We don't care what's set in the initial 
-				# enviroment we need this to work
-				export CC="$(tc-getCC)"
-				export CXX="$(tc-getCXX)"
-				export FC="$(tc-getFC)"
-
 				# Restore INIT and setup multilib environment
 				# for this ABI
 				multilib-native_restore_abi_env "INIT"
