@@ -210,8 +210,8 @@ multilib-native_setup_abi_env() {
 	export ASFLAGS="${ASFLAGS} $(get_abi_ASFLAGS)"
 	export CFLAGS="${CFLAGS} $(get_abi_CFLAGS)"
 	export CXXFLAGS="${CXXFLAGS} $(get_abi_CFLAGS)"
-	export FCFLAGS="${FCFLAGS} $(get_abi_CFLAGS)"
-	export FFLAGS="${FFLAGS} $(get_abi_CFLAGS)"
+	export FCFLAGS="${FCFLAGS} ${CFLAGS} $(get_abi_CFLAGS)"
+	export FFLAGS="${FFLAGS} ${CFLAGS} $(get_abi_CFLAGS)"
 	export CHOST=$(get_abi_CHOST $1)
 	export CBUILD=$(get_abi_CHOST $1)
 	export LIBDIR=$(get_abi_LIBDIR $1)
