@@ -173,7 +173,8 @@ multilib-native_find_config_scripts() {
 	local _config_script _config_var
 	for _config_script in $(find "/usr/bin" -executable \
 			-regex ".*-config.*-${1}"); do
-		_config_var="${_config_script%%-*}"
+		_config_var="${_config_script%%-config*}"
+		_config_var="${_config_var/-/_}"
 		#convert to upper case letters.
 		#with bash 4 we could use declare -u
 		_config_var="$(echo $_config_var | tr "[:lower:]" "[:upper:]")"
