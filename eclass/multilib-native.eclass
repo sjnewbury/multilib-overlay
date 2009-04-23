@@ -217,7 +217,6 @@ multilib-native_setup_abi_env() {
 
 	# Multilib QT Support - This is needed for QT and CMake based packages
 	if [[ -n ${QTDIR} ]] || ${QTBINDIR} || [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
-		einfo Enabling QT support
 		libsuffix="${LIBDIR/lib}"
 		if [[ -n "${libsuffix}" ]]; then
 			QMAKESPEC="linux-g++-${libsuffix}"
@@ -258,7 +257,7 @@ multilib-native_setup_abi_env() {
 	# otherwise ECONF_SOURCE should point to the _prepared_ source dir and
 	# S into the build directory
 	if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
-		einfo Multilib CMake Support, qmake provides the paths to link QT
+		# Multilib CMake Support, qmake provides the paths to link QT
 		mycmakeargs="${mycmakeargs} \
 			-DQT_QMAKE_EXECUTABLE:FILEPATH=${QMAKE}"
 		multilib_debug mycmakeargs "${mycmakeargs}"
