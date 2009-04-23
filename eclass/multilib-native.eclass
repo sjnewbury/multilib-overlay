@@ -211,6 +211,7 @@ multilib-native_setup_abi_env() {
 	export FFLAGS="${FFLAGS} ${CFLAGS}"
 	export CHOST=$(get_abi_CHOST $1)
 	export CBUILD=$(get_abi_CHOST $1)
+	export CDEFINE=$(get_abi_CDEFINE $1)
 	export LIBDIR=$(get_abi_LIBDIR $1)
 	export LDFLAGS="${LDFLAGS} -L/${LIBDIR} -L/usr/${LIBDIR}"
 
