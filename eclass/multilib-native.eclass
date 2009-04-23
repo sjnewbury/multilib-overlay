@@ -217,7 +217,8 @@ multilib-native_setup_abi_env() {
 
 	# Multilib QT Support - This is needed for QT and CMake based packages
 	if [[ -n ${QTDIR} ]] || ${QTBINDIR} || [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
-		libsuffix="${EMULTILIB_LIBDIR[$(multilib-native_abi_to_index_key ${1})]/lib}"
+		einfo Enabling QT support
+		libsuffix="${LIBDIR/lib}"
 		if [[ -n "${libsuffix}" ]]; then
 			QMAKESPEC="linux-g++-${libsuffix}"
 		else
@@ -257,13 +258,14 @@ multilib-native_setup_abi_env() {
 	# otherwise ECONF_SOURCE should point to the _prepared_ source dir and
 	# S into the build directory
 	if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
-		# Multilib CMake Support, qmake provides the paths to link QT
+		einfo Multilib CMake Support, qmake provides the paths to link QT
 		mycmakeargs="${mycmakeargs} \
 			-DQT_QMAKE_EXECUTABLE:FILEPATH=${QMAKE}"
-
+		multilib_debug mycmakeargs "${mycmakeargs}"
 		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 		[[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] && \
 			S="${CMAKE_BUILD_DIR}"
+		multilib_debug CMAKE_BUILD_DIR "${CMAKE_BUILD_DIR}"
 		EMULTILIB_SAVE_VARS="${EMULTILIB_SAVE_VARS} CMAKE_BUILD_DIR mycmakeargs"
 	else
 		S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
@@ -408,7 +410,7 @@ multilib-native_src_generic_sub() {
 		# it is shared between each ABI.
 		if [[ "${1}" == "src_prepare" ]] && \
 				!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
-				[[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]]); then
+				([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
 			if [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
 				einfo "Skipping ${1} for ${ABI}"
 				return
@@ -430,7 +432,7 @@ multilib-native_src_generic_sub() {
 
 				# Prepare build dir
 				if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
-					[[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]]; then
+					([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]]); then
 					einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
 					cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
 				else
