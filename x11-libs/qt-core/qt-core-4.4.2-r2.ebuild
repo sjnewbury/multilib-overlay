@@ -145,8 +145,8 @@ multilib-native_src_compile_internal() {
 }
 
 multilib-native_src_install_internal() {
-	if use lib32 && ( [[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]] ); then
-		exeinto /usr/libexec/qt/32
+	if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
+		exeinto /usr/libexec/qt/"${LIBDIR/lib}"
 	else
 		exeinto /usr/bin
 	fi
