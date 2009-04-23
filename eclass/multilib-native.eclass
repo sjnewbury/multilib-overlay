@@ -126,7 +126,7 @@ multilib-native_pkg_postrm() {
 # @USAGE: <name_of_variable> <content_of_variable>
 # @DESCRIPTION: print debug output if MULTILIB_DEBUG is set
 multilib_debug() {
-	[[ -n ${MULTILIB_DEBUG} ]] && einfo MULTILIB_DEBUG:${1}=\"${2}\"
+	[[ -n ${MULTILIB_DEBUG} ]] && einfo "MULTILIB_DEBUG: ${1}=\"${2}\""
 }
 
 # -----------------------------------------------------------------------------
@@ -296,7 +296,8 @@ multilib-native_setup_abi_env() {
 # @USAGE: <ABI>
 # @DESCRIPTION: Save environment for ABI
 multilib-native_save_abi_env() {
-	multilib_debug "Saving Environment" "${1}"
+	[[ -n ${MULTILIB_DEBUG} ]] && \
+		einfo "MULTILIB_DEBUG: Saving Environment:" "${1}"
 	local _var _array
 	for _var in ${EMULTILIB_SAVE_VARS}; do
 		_array="EMULTILIB_${_var}"
@@ -310,7 +311,8 @@ multilib-native_save_abi_env() {
 # @USAGE: <ABI>
 # @DESCRIPTION: Restore environment for ABI
 multilib-native_restore_abi_env() {
-	multilib_debug "Restoring Environment" "${1}"
+	[[ -n ${MULTILIB_DEBUG} ]] && \
+		einfo "MULTILIB_DEBUG: Restoring Environment:" "${1}"
 	local _var _array
 	for _var in ${EMULTILIB_SAVE_VARS}; do
 		_array="EMULTILIB_${_var}[$(multilib-native_abi_to_index_key ${1})]"
@@ -384,7 +386,7 @@ multilib-native_src_generic_sub() {
 		multilib-native_save_abi_env "INIT"
 
 		[[ -n ${MULTILIB_DEBUG} ]] && \
-			einfo "Determining SOURCE_TOPDIR from S and WORKDIR"
+			einfo "MULTILIB_DEBUG: Determining EMULTILIB_SOURCE_TOPDIR from S and WORKDIR"
 		EMULTILIB_RELATIVE_BUILD_DIR="${S#*${WORKDIR}\/}"
 		EMULTILIB_SOURCE_TOP_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
 		# If ${EMULTILIB_SOURCE_TOP_DIRNAME} is
@@ -396,7 +398,8 @@ multilib-native_src_generic_sub() {
 			EMULTILIB_SOURCE_TOP_DIRNAME=${EMULTILIB_RELATIVE_BUILD_DIR}
 		fi
 		EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
-		multilib_debug EMULTILIB_SOURCE_TOPDIR ${EMULTILIB_SOURCE_TOPDIR}
+		[[ -n ${MULTILIB_DEBUG} ]] && \
+			einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_TOPDIR=\"${EMULTILIB_SOURCE_TOPDIR}\""
 	fi
 	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
 
