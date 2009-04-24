@@ -2675,7 +2675,7 @@ java-pkg_gcjflags() {
 	strip-flags
 	filter-flags "-ftree-loop-distribution -ftree-vectorize"
 	filter-flags "-D*"
-	replace-flags "-O?" "-O0"
+	replace-flags "-O?" "-O1"
 	append-flags -w
 
 	filter-ldflags -Wl,--as-needed --as-needed
@@ -2886,8 +2886,7 @@ java-pkg_native-set-env() {
 	# Construct the gcj-jdk JAVA_HOME in the same way as the gcj-jdk
 	# ebuild just in case it's not installed yet
 	gcj_java_home="/usr/$(get_libdir)/gcj-jdk-${gcc_slot}-${libgcj_abi_version}"
-	# Create the directory if it doesn't already exist
-	[[ -d "${gcj_java_home}" ]] || mkdir -p "${gcj_java_home}"
+	[[ -d "${gcj_java_home}" ]] || die "dev-java/gcj-jdk-${gcc_slot} is needed to compile native packages with gcj"
 	JAVA_PKG_NATIVE_BIN_FLAGS="-Wl,-rpath ${gcj_java_home}/lib/${ABI} -Wl,-Bsymbolic -findirect-dispatch -fjni"
 
 	export GCJ="${gccbin}/gcj"
