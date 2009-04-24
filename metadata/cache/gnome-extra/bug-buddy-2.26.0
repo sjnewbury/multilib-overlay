@@ -6,7 +6,7 @@ mirror://gnome/sources/bug-buddy/2.26/bug-buddy-2.26.0.tar.bz2
 http://www.gnome.org/
 Ximian-logos GPL-2
 A graphical bug reporting tool
-alpha amd64 ~hppa ia64 ppc ppc64 ~sparc x86 ~x86-fbsd
+
 base eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib multilib-native portability toolchain-funcs
 eds debug lib32
 
