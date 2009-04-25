@@ -1,6 +1,6 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/kde-base/arts/arts-3.5.9.ebuild,v 1.9 2008/07/27 20:19:23 carlo Exp $
+# $Header: /var/cvsroot/gentoo-x86/kde-base/arts/arts-3.5.9.ebuild,v 1.10 2009/04/22 22:24:30 gengor Exp $
 
 EAPI="2"
 MULTILIB_IN_SOURCE_BUILD="yes"
@@ -44,6 +44,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/arts-1.5.0-bindnow.patch"
 	epatch "${FILESDIR}/arts-1.5.4-multilib.patch"
 	epatch "${FILESDIR}/arts-1.5.9-glibc2.8-build-fix.patch"
+	epatch "${FILESDIR}/arts-1.5.10-unfortify.diff"
 
 	sed -i -e "s:GENTOO_LIB64:$(get_abi_LIBDIR amd64):" \
 		-e "s:GENTOO_LIB32:$(get_abi_LIBDIR x86):" artsc/artsdsp.in \
