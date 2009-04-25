@@ -220,7 +220,7 @@ multilib-native_setup_abi_env() {
 	export LDFLAGS="${LDFLAGS} -L/${LIBDIR} -L/usr/${LIBDIR} $(get_abi_CFLAGS)"
 
 	# Multilib QT Support - This is needed for QT and CMake based packages
-	if [[ -n ${QTDIR} ]] || ${QTBINDIR} || [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
+	if [[ -n ${QTDIR} ]] || [[ -n ${QTBINDIR} ]] || [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
 		libsuffix="${LIBDIR/lib}"
 		if [[ -n "${libsuffix}" ]]; then
 			QMAKESPEC="linux-g++-${libsuffix}"
