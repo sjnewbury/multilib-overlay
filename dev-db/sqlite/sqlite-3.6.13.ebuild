@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.13.ebuild,v 1.1 2009/04/14 02:30:13 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.13.ebuild,v 1.2 2009/04/19 00:10:20 arfrever Exp $
 
 EAPI="2"
 
@@ -48,6 +48,9 @@ src_unpack() {
 }
 
 multilib-native_src_configure_internal() {
+	# Enable column metadata, bug #266651
+	append-cppflags -DSQLITE_ENABLE_COLUMN_METADATA
+
 	# not available via configure and requested in bug #143794
 	use soundex && append-cppflags -DSQLITE_SOUNDEX=1
 

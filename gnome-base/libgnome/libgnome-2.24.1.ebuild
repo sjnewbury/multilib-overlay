@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/libgnome/libgnome-2.24.1.ebuild,v 1.7 2009/04/12 20:44:13 bluebird Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/libgnome/libgnome-2.24.1.ebuild,v 1.8 2009/04/18 22:41:07 eva Exp $
 
 EAPI="2"
 
@@ -16,6 +16,7 @@ IUSE="doc esd"
 
 RDEPEND=">=gnome-base/gconf-2[lib32?]
 	>=dev-libs/glib-2.16[lib32?]
+	gnome-base/gvfs
 	>=gnome-base/gnome-vfs-2.5.3[lib32?]
 	>=gnome-base/libbonobo-2.13[lib32?]
 	>=dev-libs/popt-1.7[lib32?]
