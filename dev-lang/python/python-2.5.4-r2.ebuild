@@ -63,6 +63,8 @@ multilib-native_src_prepare_internal() {
 		rm "${WORKDIR}/${PV}"/*_all_crosscompile.patch
 	fi
 
+	epatch "${FILESDIR}"/${P}-distutils-multilib.patch
+
 	EPATCH_SUFFIX="patch" epatch "${WORKDIR}/${PV}"
 	sed -i -e "s:@@GENTOO_LIBDIR@@:$(get_libdir):g" \
 		Lib/distutils/command/install.py \
