@@ -6,7 +6,7 @@ http://download.oracle.com/berkeley-db/db-4.6.21.tar.gz http://www.oracle.com/te
 http://www.oracle.com/technology/software/products/berkeley-db/index.html
 OracleDB
 Oracle Berkeley DB
-~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd
+~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd
 autotools base check-reqs db eutils flag-o-matic java-pkg-opt-2 java-utils-2 libtool multilib multilib-native portability toolchain-funcs versionator
 tcl java doc nocxx doc test elibc_FreeBSD java gcj multislot lib32
 

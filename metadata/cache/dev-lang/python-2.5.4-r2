@@ -6,7 +6,7 @@ http://www.python.org/ftp/python/2.5.4/Python-2.5.4.tar.bz2 mirror://gentoo/pyth
 http://www.python.org/
 PSF-2.2
 Python is an interpreted, interactive, object-oriented programming language.
-~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd
+alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd
 alternatives autotools base eutils flag-o-matic libtool multilib multilib-native portability python toolchain-funcs versionator
 +xml ncurses gdbm ssl readline tk berkdb ipv6 build ucs2 sqlite doc +threads examples elibc_uclibc wininst lib32
 
