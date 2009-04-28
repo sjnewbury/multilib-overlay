@@ -65,8 +65,8 @@ RDEPEND="${RDEPEND}
 	sys-apps/openrc
 	gnome-extra/gnome-audio
 	alsa? ( media-sound/alsa-utils )
-	bluetooth? || ( >=net-wireless/bluez-4[lib32?]
-			>=net-wireless/bluez-utils-3 )"
+	bluetooth? ( || ( >=net-wireless/bluez-4[lib32?]
+			>=net-wireless/bluez-utils-3 ) )"
 
 pkg_setup() {
 	enewgroup audio 18 # Just make sure it exists
