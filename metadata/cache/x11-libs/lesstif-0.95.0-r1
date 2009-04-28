@@ -1,0 +1,22 @@
+!x11-libs/motif-config !x11-libs/openmotif !<=x11-libs/lesstif-0.95.0 x11-libs/libXp[lib32?] x11-libs/libXt[lib32?] x11-libs/libXft[lib32?]
+!x11-libs/motif-config !x11-libs/openmotif !<=x11-libs/lesstif-0.95.0 x11-libs/libXp[lib32?] x11-libs/libXt[lib32?] x11-libs/libXft[lib32?]
+0
+mirror://sourceforge/lesstif/lesstif-0.95.0.tar.bz2
+
+http://www.lesstif.org/
+LGPL-2 GPL-2 libXpm FVWM
+An OSF/Motif(R) clone
+~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd
+base eutils multilib multilib-native portability toolchain-funcs
+static lib32
+
+
+
+2
+
+compile configure install postinst postrm preinst prepare setup unpack
+
+
+
+
+

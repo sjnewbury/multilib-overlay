@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "the tool is broken, forget it." 1>&2 && exit 1
+
 LIST=$(find . -name "*.done")
 SUM=0
 DONE_SUM=0

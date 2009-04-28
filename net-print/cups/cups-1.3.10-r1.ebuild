@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.3.8-r2.ebuild,v 1.5 2009/03/30 14:25:12 loki_val Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.3.10.ebuild,v 1.7 2009/04/21 19:31:01 klausman Exp $
 
 EAPI="2"
 
@@ -20,7 +20,7 @@ IUSE="acl avahi dbus gnutls java jpeg kerberos ldap pam perl php png ppds python
 COMMON_DEPEND="acl? ( kernel_linux? ( sys-apps/acl sys-apps/attr ) )
 	avahi? ( net-dns/avahi )
 	dbus? ( sys-apps/dbus[lib32?] )
-	gnutls? ( net-libs/gnutls )
+	gnutls? ( net-libs/gnutls[lib32?] )
 	java? ( >=virtual/jre-1.4 )
 	jpeg? ( >=media-libs/jpeg-6b[lib32?] )
 	kerberos? ( virtual/krb5 )
@@ -100,23 +100,15 @@ multilib-native_src_prepare_internal() {
 	# create a missing symlink to allow https printing via IPP, bug #217293
 	epatch "${FILESDIR}/${PN}-1.3.7-backend-https.patch"
 
-	# Upstream fix for using the webinterface via SSL with FF3, upstream bug STR #2892
-	epatch "${FILESDIR}/${PN}-1.3.8-str2892-1.3.patch"
-
-	# Upstream fix for broken .desktop file
-	epatch "${FILESDIR}/${PN}-1.3.8-str2924.patch"
-
-	# security bug #238976
-	epatch "${FILESDIR}/${PN}-1.3.8-CVE-2008-3639.patch"
-	epatch "${FILESDIR}/${PN}-1.3.8-CVE-2008-3640.patch"
-	epatch "${FILESDIR}/${PN}-1.3.8-CVE-2008-3641.patch"
-
 	# cups does not use autotools "the usual way" and ship a static config.h.in
 	eaclocal
 	eautoconf
 }
 
 multilib-native_src_configure_internal() {
+	# Fails to compile on SH
+	use sh && replace-flags -O? -O0
+
 	# needed to prevent ghostscript compile failures
 	use kerberos && strip-flags
 
@@ -158,6 +150,7 @@ multilib-native_src_configure_internal() {
 		--with-cups-group=lp \
 		--with-docdir=/usr/share/cups/html \
 		--with-languages=${LINGUAS} \
+		--with-pdftops=pdftops \
 		--with-system-groups=lpadmin \
 		--with-xinetd=/etc/xinetd.d \
 		$(use_enable acl) \
@@ -175,11 +168,11 @@ multilib-native_src_configure_internal() {
 		$(use_with php) \
 		$(use_with python) \
 		--enable-libpaper \
+		--enable-pdftops \
 		--enable-threads \
-		--disable-pdftops \
 		${myconf}
 
-	# install in /usr/libexec always, instead of using /usr/$(get_libdir)/cups, as that
+	# install in /usr/libexec always, instead of using /usr/lib/cups, as that
 	# makes more sense when facing multilib support.
 	sed -i -e 's:SERVERBIN.*:SERVERBIN = "$(BUILDROOT)"/usr/libexec/cups:' Makedefs
 	sed -i -e 's:#define CUPS_SERVERBIN.*:#define CUPS_SERVERBIN "/usr/libexec/cups":' config.h
@@ -215,15 +208,6 @@ multilib-native_src_install_internal() {
 		rm -rf "${D}"/etc/xinetd.d
 	fi
 
-	# install pdftops filter
-	exeinto /usr/libexec/cups/filter/
-	newexe "${FILESDIR}"/pdftops-1.20.gentoo pdftops
-
-	# only for gs-esp this is correct, see bug #163897
-	if has_version app-text/ghostscript-gpl || has_version app-text/ghostscript-gnu ; then
-		sed -i -e "s:#application/vnd.cups-postscript:application/vnd.cups-postscript:" "${D}"/etc/cups/mime.convs
-	fi
-
 	keepdir /usr/share/cups/profiles /usr/libexec/cups/driver /var/log/cups \
 		/var/run/cups/certs /var/cache/cups /var/spool/cups/tmp /etc/cups/ssl
 
@@ -242,8 +226,8 @@ multilib-native_src_install_internal() {
 	diropts -m 0740 -o lp -g lp
 	dodir /var/cache/cups/rss
 
-	# create /etc/cups/client.conf, bug #196967
-	echo "ServerName localhost" >> "${D}"/etc/cups/client.conf
+	# create /etc/cups/client.conf, bug #196967 and #266678
+	echo "ServerName /var/run/cups/cups.sock" > "${D}"/etc/cups/client.conf
 }
 
 pkg_preinst() {
@@ -282,8 +266,8 @@ pkg_postinst() {
 	if [ -e "${ROOT}"/usr/$(get_libdir)/cups ] ; then
 		echo
 		ewarn "/usr/$(get_libdir)/cups exists - You need to remerge every ebuild that"
-		ewarn "installed into /usr/$(get_libdir)/cups and /etc/cups, qfile is in portage-utils:"
-		ewarn "# FEATURES=-collision-protect emerge -va1 \$(qfile -qC /usr/$(get_libdir)/cups /etc/cups | sed \"s:net-print/cups$::\")"
+		ewarn "installed into /usr/lib/cups and /etc/cups, qfile is in portage-utils:"
+		ewarn "# FEATURES=-collision-protect emerge -va1 \$(qfile -qC /usr/lib/cups /etc/cups | sed \"s:net-print/cups$::\")"
 		echo
 		ewarn "FEATURES=-collision-protect is needed to overwrite the compatibility"
 		ewarn "symlinks installed by this package, it won't be needed on later merges."

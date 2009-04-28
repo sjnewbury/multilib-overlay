@@ -20,7 +20,7 @@ IUSE="acl avahi dbus gnutls java jpeg kerberos ldap pam perl php png ppds python
 COMMON_DEPEND="acl? ( kernel_linux? ( sys-apps/acl sys-apps/attr ) )
 	avahi? ( net-dns/avahi )
 	dbus? ( sys-apps/dbus[lib32?] )
-	gnutls? ( net-libs/gnutls )
+	gnutls? ( net-libs/gnutls[lib32?] )
 	java? ( >=virtual/jre-1.4 )
 	jpeg? ( >=media-libs/jpeg-6b[lib32?] )
 	kerberos? ( virtual/krb5 )
@@ -238,7 +238,7 @@ multilib-native_src_install_internal() {
 	dodir /var/cache/cups/rss
 
 	# create /etc/cups/client.conf, bug #196967
-	echo "ServerName localhost" >> "${D}"/etc/cups/client.conf
+	echo "ServerName localhost" > "${D}"/etc/cups/client.conf
 }
 
 pkg_preinst() {

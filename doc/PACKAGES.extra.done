@@ -1,1 +1,2 @@
 dev-lang/python[lib32]
+dev-python/pygobject[lib32]
