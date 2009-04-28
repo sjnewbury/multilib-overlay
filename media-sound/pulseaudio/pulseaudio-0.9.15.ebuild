@@ -39,7 +39,8 @@ RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib
 	)
 	app-admin/eselect-esd
 	bluetooth? (
-		>=net-wireless/bluez-libs-3[lib32?]
+		|| ( >=net-wireless/bluez-4[lib32?]
+			>=net-wireless/bluez-libs-3[lib32?] )
 		>=sys-apps/dbus-1.0.0[lib32?]
 	)
 	policykit? ( sys-auth/policykit )
@@ -64,7 +65,8 @@ RDEPEND="${RDEPEND}
 	sys-apps/openrc
 	gnome-extra/gnome-audio
 	alsa? ( media-sound/alsa-utils )
-	bluetooth? ( >=net-wireless/bluez-utils-3 )"
+	bluetooth? || ( >=net-wireless/bluez-4[lib32?]
+			>=net-wireless/bluez-utils-3 )"
 
 pkg_setup() {
 	enewgroup audio 18 # Just make sure it exists
