@@ -32,12 +32,12 @@ esac
 #		AS CC CXX FC LD ASFLAGS CFLAGS CXXFLAGS FCFLAGS FFLAGS LDFLAGS
 #		CHOST CBUILD CDEFINE LIBDIR S CCACHE_DIR myconf PYTHON PERLBIN
 #		QMAKE QMAKESPEC QTBINDIR CMAKE_BUILD_DIR mycmakeargs KDE_S
-#		ECONF_SOURCE
+#		ECONF_SOURCE MY_LIBDIR"
 EMULTILIB_SAVE_VARS="${EMULTILIB_SAVE_VARS}
 		AS CC CXX FC LD ASFLAGS CFLAGS CXXFLAGS FCFLAGS FFLAGS LDFLAGS
 		CHOST CBUILD CDEFINE LIBDIR S CCACHE_DIR myconf PYTHON PERLBIN
 		QMAKE QMAKESPEC QTBINDIR CMAKE_BUILD_DIR mycmakeargs KDE_S
-		ECONF_SOURCE"
+		ECONF_SOURCE MY_LIBDIR"
 
 # @VARIABLE: EMULTILIB_SOURCE_TOP_DIRNAME
 # @DESCRIPTION: On initialisation of multilib environment this gets incremented by 1
@@ -240,6 +240,12 @@ multilib-native_setup_abi_env() {
 		fi
 		QMAKE="${QTBINDIR}/qmake"
 	fi
+
+	# Hack to get mysql.eclass to work: mysql.eclass only sets MY_LIBDIR
+	# if it isn't already unset, this results in it being set during the
+	# src_unpack phase and always being set to the DEFAULT_ABI libdir.
+	# Ideally we should make src_unpack multilib instead. <-- TODO!
+	export MY_LIBDIR=/usr/$(get_libdir)/mysql
 
 	# If we aren't building for the DEFAULT ABI we may need to use some
 	# ABI specific programs during the build.  The python binary is
