@@ -26,7 +26,7 @@ RDEPEND=">=dev-libs/glib-2.14[lib32?]
 	>=gnome-base/orbit-2.4[lib32?]
 	>=dev-libs/libxml2-2[lib32?]
 	ldap? ( net-nds/openldap )
-	policykit? ( >=sys-auth/policykit-0.7 )"
+	policykit? ( >=sys-auth/policykit-0.7[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9
