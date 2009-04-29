@@ -81,7 +81,7 @@ multilib-native_pkg_postinst_internal() {
 	python_need_rebuild
 }
 
-multilib-native_pkg_postrm_internal() {
+pkg_postrm() {
 	python_version
 	python_mod_cleanup
 }
