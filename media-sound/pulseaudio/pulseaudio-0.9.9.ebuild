@@ -37,7 +37,7 @@ RDEPEND="X? ( x11-libs/libX11[lib32?] )
 		>=net-wireless/bluez-libs-3[lib32?]
 		>=sys-apps/dbus-1.0.0[lib32?]
 	)
-	policykit? ( sys-auth/policykit )
+	policykit? ( sys-auth/policykit[lib32?] )
 	asyncns? ( net-libs/libasyncns[lib32?] )
 	>=sys-devel/libtool-1.5.24" # it's a valid RDEPEND, libltdl.so is used
 DEPEND="${RDEPEND}

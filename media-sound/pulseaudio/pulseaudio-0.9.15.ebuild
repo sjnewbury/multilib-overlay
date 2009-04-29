@@ -43,7 +43,7 @@ RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib
 			>=net-wireless/bluez-libs-3[lib32?] )
 		>=sys-apps/dbus-1.0.0[lib32?]
 	)
-	policykit? ( sys-auth/policykit )
+	policykit? ( sys-auth/policykit[lib32?] )
 	asyncns? ( net-libs/libasyncns[lib32?] )
 	>=media-libs/audiofile-0.2.6-r1[lib32?]
 	>=media-libs/speex-1.2_beta[lib32?]
