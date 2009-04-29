@@ -76,7 +76,7 @@ distutils_src_prepare() {
 # @DESCRIPTION:
 # The distutils src_compile function, this function is exported
 distutils_src_compile() {
-	if is_final_abi; then
+	if is_final_abi || (! has_multilib_profile); then
 		if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
 			python=python${PYTHON_SLOT_VERSION}
 		else
@@ -102,7 +102,7 @@ distutils_src_compile() {
 # It also installs the "standard docs" (CHANGELOG, Change*, KNOWN_BUGS, MAINTAINERS,
 # PKG-INFO, CONTRIBUTORS, TODO, NEWS, MANIFEST*, README*, and AUTHORS)
 distutils_src_install() {
-	if is_final_abi; then
+	if is_final_abi || (! has_multilib_profile); then
 		if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
 			python=python${PYTHON_SLOT_VERSION}
 		else
