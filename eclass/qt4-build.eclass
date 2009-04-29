@@ -1,6 +1,6 @@
 # Copyright 2007-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.27 2009/03/11 23:58:31 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.32 2009/04/23 11:45:38 hwoarang Exp $
 
 # @ECLASS: qt4-build.eclass
 # @MAINTAINER:
@@ -10,8 +10,6 @@
 # @BLURB: Eclass for Qt4 split ebuilds.
 # @DESCRIPTION:
 # This eclass contains various functions that are used when building Qt4
-
-MULTILIB_IN_SOURCE_BUILD="yes"
 
 inherit eutils multilib toolchain-funcs flag-o-matic versionator
 
@@ -54,7 +52,6 @@ qt4-build_pkg_setup() {
 		# Check USE requirements
 		qt4-build_check_use
 	fi
-
 	# Set up installation directories
 	QTBASEDIR=/usr/$(get_libdir)/qt4
 	QTPREFIXDIR=/usr
@@ -78,7 +75,7 @@ qt4-build_pkg_setup() {
 	if ! version_is_at_least 4.1 $(gcc-version) ; then
 		ewarn "Using a GCC version lower than 4.1 is not supported!"
 		echo
-		ebeep 5
+		ebeep 3
 	fi
 
 	if use custom-cxxflags; then
@@ -137,17 +134,19 @@ qt4-build_src_prepare() {
 		replace-flags -O3 -O2
 	fi
 
-	# Bug 253127
-	# Unsupported old gcc versions - hardened needs this :(
-	if [[ $(gcc-major-version) -lt "4" ]] ; then
-		ewarn "Appending -fno-stack-protector to CXXFLAGS"
-		append-cxxflags -fno-stack-protector
-	fi
-
 	# Bug 178652
 	if [[ "$(gcc-major-version)" == "3" ]] && use amd64; then
 		ewarn "Appending -fno-gcse to CFLAGS/CXXFLAGS"
 		append-flags -fno-gcse
+	fi
+
+	# Unsupported old gcc versions - hardened needs this :(
+	if [[ $(gcc-major-version) -lt "4" ]] ; then
+		ewarn "Appending -fno-stack-protector to CXXFLAGS"
+		append-cxxflags -fno-stack-protector
+		# Bug 253127
+		sed -e "/^QMAKE_CFLAGS\t/ s:$: -fno-stack-protector-all:" \
+		-i "${S}"/mkspecs/common/g++.conf || die "sed ${S}/mkspecs/common/g++.conf failed"
 	fi
 
 	# Bug 172219
@@ -234,8 +233,14 @@ standard_configure_options() {
 		-translationdir ${QTTRANSDIR} -examplesdir ${QTEXAMPLESDIR}
 		-demosdir ${QTDEMOSDIR} -silent -fast
 		$([[ ${PN} == qt-xmlpatterns ]] || echo -no-exceptions)
-		$(use x86-fbsd || echo -reduce-relocations)
-		-nomake examples -nomake demos"
+		-reduce-relocations -nomake examples -nomake demos"
+	
+	# Make eclass 4.5.{1,2} ready
+	case "${MY_PV}" in
+		4.5.1 | 4.5.2)
+			myconf="${myconf} -opensource"
+			;;
+	esac
 
 	echo "${myconf}"
 }
