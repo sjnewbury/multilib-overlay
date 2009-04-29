@@ -242,10 +242,16 @@ multilib-native_setup_abi_env() {
 	fi
 
 	# Hack to get mysql.eclass to work: mysql.eclass only sets MY_LIBDIR
-	# if it isn't already unset, this results in it being set during the
-	# src_unpack phase and always being set to the DEFAULT_ABI libdir.
+	# if it isn't already unset, this results in it being defined during
+	# the src_unpack phase and always being set to the DEFAULT_ABI libdir.
+	# mysql_version_is_at_least is defined in mysql_fx.eclass, which is
+	# inherited by mysql.eclass, if it exists then the ebuild has
+	# inherited mysql.eclass.
+	#
 	# Ideally we should make src_unpack multilib instead. <-- TODO!
-	export MY_LIBDIR=/usr/$(get_libdir)/mysql
+	if mysql_version_is_at_least &>/dev/null; then
+		[[ -n ${MY_LIBDIR} ]] && export MY_LIBDIR=/usr/$(get_libdir)/mysql
+	fi
 
 	# If we aren't building for the DEFAULT ABI we may need to use some
 	# ABI specific programs during the build.  The python binary is
