@@ -14,24 +14,22 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm ~hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="X debug doc"
 
-RDEPEND=">=dev-libs/glib-2.17.3
-		 lib32? ( || ( app-emulation/emul-linux-x86-baselibs
-		 			>=dev-libs/glib-2.17.3[lib32?] ) )
-		 >=media-libs/fontconfig-1.0.1[lib32?]
-		 >=media-libs/freetype-2[lib32?]
-		 >=x11-libs/cairo-1.7.6[lib32?]
-		 X? (
-				x11-libs/libXrender[lib32?]
-				x11-libs/libX11[lib32?]
-				x11-libs/libXft[lib32?]
-			)"
+RDEPEND=">=dev-libs/glib-2.17.3[lib32?]
+	 >=media-libs/fontconfig-1.0.1[lib32?]
+	 >=media-libs/freetype-2[lib32?]
+	 >=x11-libs/cairo-1.7.6[lib32?]
+	 X? (
+			x11-libs/libXrender[lib32?]
+			x11-libs/libX11[lib32?]
+			x11-libs/libXft[lib32?]
+		)"
 DEPEND="${RDEPEND}
-		>=dev-util/pkgconfig-0.9
-		doc? (
-				>=dev-util/gtk-doc-1
-				~app-text/docbook-xml-dtd-4.1.2
-			 )
-		X? ( x11-proto/xproto )"
+	>=dev-util/pkgconfig-0.9
+	doc? (
+			>=dev-util/gtk-doc-1
+			~app-text/docbook-xml-dtd-4.1.2
+		 )
+	X? ( x11-proto/xproto )"
 
 DOCS="AUTHORS ChangeLog* NEWS README THANKS"
 
