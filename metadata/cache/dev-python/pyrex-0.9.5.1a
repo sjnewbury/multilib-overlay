@@ -1,0 +1,22 @@
+>=dev-lang/python-2.3 virtual/python
+>=dev-lang/python-2.3
+0
+http://www.cosc.canterbury.ac.nz/~greg/python/Pyrex/Pyrex-0.9.5.1a.tar.gz
+
+http://www.cosc.canterbury.ac.nz/~greg/python/Pyrex
+as-is
+A language for writing Python extension modules
+~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd
+alternatives base distutils eutils multilib multilib-native portability python toolchain-funcs
+examples lib32
+
+
+
+
+
+compile install postinst postrm preinst setup unpack
+
+
+
+
+

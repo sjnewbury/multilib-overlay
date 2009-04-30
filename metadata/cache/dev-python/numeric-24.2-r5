@@ -1,0 +1,22 @@
+>=dev-lang/python-2.3 virtual/python
+>=dev-lang/python-2.3
+0
+mirror://sourceforge/numpy/Numeric-24.2.tar.gz doc? ( http://numpy.scipy.org/numpy.pdf )
+
+http://numeric.scipy.org/
+as-is
+Numerical multidimensional array language facility for Python.
+~arm ~mips ~sh ~s390
+alternatives base distutils eutils multilib multilib-native portability python toolchain-funcs
+doc lib32
+
+
+
+
+
+compile install postinst postrm preinst setup test unpack
+
+
+
+
+
