@@ -1,0 +1,22 @@
+virtual/opengl virtual/glu
+virtual/opengl virtual/glu
+0
+mirror://sourceforge/glew/glew-1.5.0-src.tgz
+
+http://glew.sourceforge.net
+BSD GLX SGI-B GPL-2
+The OpenGL Extension Wrangler Library
+~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd
+base eutils multilib multilib-native portability toolchain-funcs
+lib32
+
+
+
+2
+
+compile configure install postinst postrm preinst prepare setup unpack
+
+
+
+
+
