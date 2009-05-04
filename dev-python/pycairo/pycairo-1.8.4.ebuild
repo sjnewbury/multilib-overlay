@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/dev-python/pycairo/pycairo-1.8.2.ebuild,v 1.1 2009/01/24 16:27:42 patrick Exp $
 
 EAPI=2
-NEED_PYTHON=2.5
+NEED_PYTHON=2.6
 
 inherit distutils multilib-native
 
@@ -13,15 +13,15 @@ SRC_URI="http://cairographics.org/releases/${P}.tar.gz"
 
 LICENSE="|| ( LGPL-2.1 MPL-1.1 )"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="examples"
 
-RDEPEND=">=x11-libs/cairo-1.8.2[lib32?]"
+RDEPEND=">=x11-libs/cairo-1.8.4[lib32?]"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
 PYTHON_MODNAME="cairo"
-DOCS="AUTHORS doc/*"
+DOCS="AUTHORS NEWS doc/*"
 
 multilib-native_src_prepare_internal() {
 	# don't run py-compile
