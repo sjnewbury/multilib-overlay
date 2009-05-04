@@ -14,7 +14,7 @@ SRC_URI="mirror://sourceforge/freetype/${P/_/}.tar.bz2
 
 LICENSE="FTL GPL-2"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
 IUSE="X bindist debug doc utils fontforge"
 
 DEPEND="X?	( x11-libs/libX11[lib32?]
