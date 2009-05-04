@@ -1,9 +1,7 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.0.8.ebuild,v 1.9 2009/04/12 14:58:19 bluebird Exp $
-
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.0.10.ebuild,v 1.6 2009/05/01 14:04:51 maekke Exp $
 EAPI="2"
-
 WANT_AUTOCONF="2.1"
 
 inherit flag-o-matic toolchain-funcs eutils mozconfig-3 makeedit multilib java-pkg-opt-2 python autotools multilib-native
@@ -16,7 +14,7 @@ SRC_URI="mirror://gentoo/${P}.tar.bz2
 	mirror://gentoo/${PATCH}.tar.bz2
 	http://dev.gentoo.org/~armin76/dist/${PATCH}.tar.bz2"
 
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sparc x86"
 SLOT="1.9"
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 IUSE=""
@@ -26,7 +24,9 @@ RDEPEND="java? ( >=virtual/jre-1.4 )
 	>=dev-libs/nss-3.12.2[lib32?]
 	>=dev-libs/nspr-4.7.4[lib32?]
 	>=app-text/hunspell-1.1.9[lib32?]
-	>=media-libs/lcms-1.17[lib32?]"
+	>=media-libs/lcms-1.17[lib32?]
+	x11-libs/cairo[X]
+	x11-libs/pango[X]"
 
 DEPEND="java? ( >=virtual/jdk-1.4 )
 	${RDEPEND}
@@ -34,25 +34,14 @@ DEPEND="java? ( >=virtual/jdk-1.4 )
 
 S="${WORKDIR}/mozilla"
 
-# Needed by multilib-native_src_compile_internal() and src_install().
+# Needed by src_compile() and src_install().
 # Would do in pkg_setup but that loses the export attribute, they
 # become pure shell variables.
 export MOZ_CO_PROJECT=xulrunner
 export BUILD_OFFICIAL=1
 export MOZILLA_OFFICIAL=1
 
-pkg_setup(){
-	if ! built_with_use x11-libs/cairo X; then
-		eerror "Cairo is not built with X useflag."
-		eerror "Please add 'X' to your USE flags, and re-emerge cairo."
-		die "Cairo needs X"
-	fi
-
-	if ! built_with_use --missing true x11-libs/pango X; then
-		eerror "Pango is not built with X useflag."
-		eerror "Please add 'X' to your USE flags, and re-emerge pango."
-		die "Pango needs X"
-	fi
+pkg_setup() {
 	java-pkg-opt-2_pkg_setup
 }
 
@@ -122,15 +111,15 @@ multilib-native_src_configure_internal() {
 	# Finalize and report settings
 	mozconfig_final
 
-	if [[ $(gcc-major-version) -lt 4 ]]; then
-		append-cxxflags -fno-stack-protector
-	fi
-
 	####################################
 	#
 	#  Configure and build
 	#
 	####################################
+
+	if [[ $(gcc-major-version) -lt 4 ]]; then
+		append-cxxflags -fno-stack-protector
+	fi
 
 	CPPFLAGS="${CPPFLAGS} -DARON_WAS_HERE" \
 	CC="$(tc-getCC)" CXX="$(tc-getCXX)" LD="$(tc-getLD)" \

@@ -1,10 +1,10 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/icu/icu-4.0.1.ebuild,v 1.1 2009/04/05 17:03:46 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/icu/icu-4.0.1.ebuild,v 1.8 2009/04/18 17:33:16 armin76 Exp $
 
 EAPI="2"
 
-inherit versionator multilib-native
+inherit eutils versionator multilib-native
 
 DESCRIPTION="International Components for Unicode"
 HOMEPAGE="http://www.icu-project.org/ http://ibm.com/software/globalization/icu/"
@@ -23,7 +23,7 @@ SRC_URI="${BASEURI}/${SRCPKG}
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="debug doc examples"
 
 DEPEND="doc? ( app-arch/unzip )"
@@ -46,13 +46,16 @@ src_unpack() {
 	fi
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# Do not hardcode used CFLAGS, LDFLAGS etc. into icu-config
 	# Bug 202059
 	# http://bugs.icu-project.org/trac/ticket/6102
 	for x in CFLAGS CXXFLAGS CPPFLAGS LDFLAGS ; do
 		sed -i -e "/^${x} =.*/s:@${x}@::" config/Makefile.inc.in || die "sed failed"
 	done
+
+	epatch "${FILESDIR}/${P}-fix_parallel_building.patch"
+	epatch "${FILESDIR}/${P}-TestDisplayNamesMeta.patch"
 }
 
 multilib-native_src_configure_internal() {
@@ -65,13 +68,13 @@ multilib-native_src_configure_internal() {
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
-	dohtml ../readme.html
-	dodoc ../unicode-license.txt
+	dohtml ../readme.html || die
+	dodoc ../unicode-license.txt || die
 	if use doc ; then
 		insinto /usr/share/doc/${PF}/html/userguide
-		doins -r "${WORKDIR}"/userguide/userguide/*
+		doins -r "${WORKDIR}"/userguide/userguide/* || die
 
 		insinto /usr/share/doc/${PF}/html/apidocs
-		doins -r "${WORKDIR}"/apidocs/*
+		doins -r "${WORKDIR}"/apidocs/* || die
 	fi
 }

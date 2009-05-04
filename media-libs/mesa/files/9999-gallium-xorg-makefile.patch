@@ -1,0 +1,116 @@
+--- ./src/gallium/winsys/drm/intel/xorg/Makefile~	2009-05-02 00:39:17.000000000 +0100
++++ ./src/gallium/winsys/drm/intel/xorg/Makefile	2009-05-02 10:20:24.867343202 +0100
+@@ -1,44 +1,27 @@
+-TARGET     = modesetting_drv.so
+-CFILES     = $(wildcard ./*.c)
+-OBJECTS    = $(patsubst ./%.c,./%.o,$(CFILES))
++TOP = ../../../../../..
+ GALLIUMDIR = ../../../..
+-TOP        = ../../../../../..
+-
+ include ${TOP}/configs/current
+ 
+-CFLAGS = -DHAVE_CONFIG_H \
+-         -g -Wall -Wimplicit-function-declaration -fPIC \
+-         $(shell pkg-config --cflags pixman-1 xorg-server libdrm xproto) \
+-	 -I../gem \
+-         -I${GALLIUMDIR}/include \
+-         -I${GALLIUMDIR}/drivers \
+-         -I${GALLIUMDIR}/auxiliary \
+-         -I${TOP}/src/mesa \
+-         -I$(TOP)/include \
+-         -I$(TOP)/src/egl/main
++LIBNAME = modesetting_drv.so
+ 
+-LIBS = \
++PIPE_DRIVERS = \
+ 	$(GALLIUMDIR)/state_trackers/xorg/libxorgtracker.a \
+ 	$(GALLIUMDIR)/winsys/drm/intel/gem/libinteldrm.a \
+ 	$(TOP)/src/gallium/drivers/i915simple/libi915simple.a \
+ 	$(TOP)/src/gallium/drivers/softpipe/libsoftpipe.a \
+ 	$(GALLIUM_AUXILIARIES)
+ 
+-#############################################
+-
+-
++C_SOURCES = \
++	$(COMMON_GALLIUM_SOURCES) \
++	$(DRIVER_SOURCES)
+ 
+-all default: $(TARGET)
++DRIVER_EXTRAS = -ldrm_intel
+ 
+-$(TARGET): $(OBJECTS) Makefile $(GALLIUMDIR)/state_trackers/xorg/libxorgtracker.a $(LIBS)
+-	$(TOP)/bin/mklib -noprefix -o $@ \
+-	$(OBJECTS) $(LIBS) $(shell pkg-config --libs libdrm) -ldrm_intel
++ASM_SOURCES = 
+ 
+-clean:
+-	rm -rf $(OBJECTS) $(TARGET)
++DRIVER_DEFINES = -I../gem $(shell pkg-config libdrm --atleast-version=2.3.1 \
++				&& echo "-DDRM_VBLANK_FLIP=DRM_VBLANK_FLIP")
+ 
+-install:
+-	$(INSTALL) -d $(DESTDIR)/$(XORG_DRIVER_INSTALL_DIR)
+-	$(INSTALL) -m 755 $(TARGET) $(DESTDIR)/$(XORG_DRIVER_INSTALL_DIR)
++include ../../Makefile.template
+ 
+-.PHONY	= all clean install
++symlinks:
+--- ./src/gallium/winsys/drm/radeon/xorg/Makefile~	2009-05-02 10:27:57.000000000 +0100
++++ ./src/gallium/winsys/drm/radeon/xorg/Makefile	2009-05-02 10:36:43.794324910 +0100
+@@ -1,42 +1,26 @@
+-TARGET     = modesetting_drv.so
+-CFILES     = $(wildcard ./*.c)
+-OBJECTS    = $(patsubst ./%.c,./%.o,$(CFILES))
++TOP = ../../../../../..
+ GALLIUMDIR = ../../../..
+-TOP        = ../../../../../..
+-
+ include ${TOP}/configs/current
+ 
+-CFLAGS = -DHAVE_CONFIG_H \
+-         -g -Wall -Wimplicit-function-declaration -fPIC \
+-         $(shell pkg-config --cflags pixman-1 xorg-server libdrm xproto) \
+-         -I${GALLIUMDIR}/include \
+-         -I${GALLIUMDIR}/drivers \
+-         -I${GALLIUMDIR}/auxiliary \
+-         -I${TOP}/src/mesa \
+-         -I$(TOP)/include \
+-         -I$(TOP)/src/egl/main
++LIBNAME = modesetting_drv.so
+ 
+-LIBS = \
++PIPE_DRIVERS = \
+ 	$(GALLIUMDIR)/state_trackers/xorg/libxorgtracker.a \
+ 	$(GALLIUMDIR)/winsys/drm/radeon/core/libradeonwinsys.a \
+ 	$(TOP)/src/gallium/drivers/r300/libr300.a \
+ 	$(GALLIUM_AUXILIARIES)
+ 
+-#############################################
+-
+-
++C_SOURCES = \
++	$(COMMON_GALLIUM_SOURCES) \
++	$(DRIVER_SOURCES)
+ 
+-all default: $(TARGET)
++DRIVER_EXTRAS = -ldrm_radeon
+ 
+-$(TARGET): $(OBJECTS) Makefile $(GALLIUMDIR)/state_trackers/xorg/libxorgtracker.a
+-	$(TOP)/bin/mklib -noprefix -o $@ \
+-	$(OBJECTS) $(LIBS) $(shell pkg-config --libs libdrm) -ldrm_radeon
++ASM_SOURCES = 
+ 
+-clean:
+-	rm -rf $(OBJECTS) $(TARGET)
++DRIVER_DEFINES = -I../gem $(shell pkg-config libdrm --atleast-version=2.3.1 \
++				&& echo "-DDRM_VBLANK_FLIP=DRM_VBLANK_FLIP")
+ 
+-install:
+-	$(INSTALL) -d $(DESTDIR)/$(XORG_DRIVER_INSTALL_DIR)
+-	$(INSTALL) -m 755 $(TARGET) $(DESTDIR)/$(XORG_DRIVER_INSTALL_DIR)
++include ../../Makefile.template
+ 
+-.PHONY	= all clean install
++symlinks:
