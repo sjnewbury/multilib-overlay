@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.7.3.ebuild,v 1.8 2009/04/12 14:56:15 bluebird Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.7.3.ebuild,v 1.9 2009/04/29 20:56:27 fauli Exp $
 
 EAPI="2"
 
@@ -16,6 +16,7 @@ KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="ipv6 debug"
 
 DEPEND=">=dev-db/sqlite-3.5[lib32?]"
+RDEPEND="${DEPEND}"
 
 multilib-native_src_prepare_internal() {
 	cd "${S}"
@@ -36,9 +37,9 @@ multilib-native_src_configure_internal() {
 	echo > "${T}"/test.c
 	$(tc-getCC) -c "${T}"/test.c -o "${T}"/test.o
 	case $(file "${T}"/test.o) in
-	    *64-bit*) myconf="${myconf} --enable-64bit";;
-	    *32-bit*) ;;
-	    *) die "Failed to detect whether your arch is 64bits or 32bits, disable distcc if you're using it, please";;
+		*64-bit*) myconf="${myconf} --enable-64bit";;
+		*32-bit*) ;;
+		*) die "Failed to detect whether your arch is 64bits or 32bits, disable distcc if you're using it, please";;
 	esac
 
 	if use ipv6; then

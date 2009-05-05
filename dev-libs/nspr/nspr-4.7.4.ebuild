@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.7.4.ebuild,v 1.1 2009/04/15 13:35:06 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.7.4.ebuild,v 1.7 2009/05/01 14:03:12 maekke Exp $
 
 EAPI="2"
 
@@ -12,10 +12,11 @@ SRC_URI="ftp://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v${PV}/src/${P}.tar
 
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="ipv6 debug"
 
 DEPEND=">=dev-db/sqlite-3.5[lib32?]"
+RDEPEND="${DEPEND}"
 
 multilib-native_src_prepare_internal() {
 	cd "${S}"
@@ -36,9 +37,9 @@ multilib-native_src_configure_internal() {
 	echo > "${T}"/test.c
 	$(tc-getCC) -c "${T}"/test.c -o "${T}"/test.o
 	case $(file "${T}"/test.o) in
-	    *64-bit*) myconf="${myconf} --enable-64bit";;
-	    *32-bit*) ;;
-	    *) die "Failed to detect whether your arch is 64bits or 32bits, disable distcc if you're using it, please";;
+		*64-bit*) myconf="${myconf} --enable-64bit";;
+		*32-bit*) ;;
+		*) die "Failed to detect whether your arch is 64bits or 32bits, disable distcc if you're using it, please";;
 	esac
 
 	if use ipv6; then
