@@ -48,6 +48,9 @@ multilib-native_src_prepare_internal() {
 	# Fix gmodule issues on fbsd; bug #184301
 	epatch "${FILESDIR}"/${PN}-2.12.12-fbsd.patch
 
+	# Fix GIO null unref, bug #260301
+	epatch "${FILESDIR}/${P}-gio-unref.patch"
+
 	[[ ${CHOST} == *-freebsd* ]] && elibtoolize
 }
 
@@ -62,7 +65,7 @@ multilib-native_src_configure_internal() {
 	# -- compnerd (3/27/06)
 	use debug && myconf="--enable-debug"
 
-	# always build static libs, see #153807
+	# Always build static libs, see #153807
 	# Always use internal libpcre, bug #254659
 	econf ${myconf}                 \
 		  $(use_enable xattr)       \

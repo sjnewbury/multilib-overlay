@@ -9,9 +9,9 @@ inherit gnome2 multilib-native
 DESCRIPTION="GTK+2 standard engines and themes"
 HOMEPAGE="http://www.gtk.org/"
 
-LICENSE="GPL-2 LGPL-2.1"
+LICENSE="LGPL-2.1"
 SLOT="2"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="accessibility"
 
 RDEPEND=">=x11-libs/gtk+-2.12[lib32?]"
@@ -22,6 +22,6 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog NEWS README"
 
 pkg_setup() {
-	G2CONF="--enable-animation --enable-lua"
+	G2CONF="${G2CONF} --enable-animation --enable-lua"
 	use accessibility || G2CONF="${G2CONF} --disable-hc"
 }
