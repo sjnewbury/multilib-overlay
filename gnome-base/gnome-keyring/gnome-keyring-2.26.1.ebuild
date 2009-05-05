@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2 pam multilib-native
+inherit gnome2 pam virtualx multilib-native
 
 DESCRIPTION="Password and keyring managing daemon"
 HOMEPAGE="http://www.gnome.org/"
@@ -20,34 +20,42 @@ RDEPEND=">=dev-libs/glib-2.16[lib32?]
 	 >=sys-apps/dbus-1.0[lib32?]
 	 hal? ( >=sys-apps/hal-0.5.7[lib32?] )
 	 pam? ( virtual/pam )
+	 lib32? ( pam? ( sys-libs/pam[lib32] ) )
 	 >=dev-libs/libgcrypt-1.2.2[lib32?]
 	 >=dev-libs/libtasn1-0.3.4[lib32?]
-	 lib32? ( pam? ( sys-libs/pam[lib32] ) )"
+	 valgrind? ( dev-util/valgrind )"
 DEPEND="${RDEPEND}
-	sys-devel/gettext
+	sys-devel/gettext[lib32?]
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9
 	doc? ( dev-util/gtk-doc )"
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
-multilib-xlibs_src_configure_internal() {
-	econf \
-		${G2CONF} \
-		$(use_enable debug) \
-		$(use_enable hal) \
-		$(use_enable test tests) \
-		$(use_enable pam) \
-		$(use_with pam pam-dir $(getpam_mod_dir)) \
-		$(use_enable valgrind) \
-		--with-root-certs=/usr/share/ca-certificates/ \
-		--enable-acl-prompts \
-		--enable-ssh-agent \
-		|| die
+pkg_setup() {
+	G2CONF="${G2CONF}
+		$(use_enable debug)
+		$(use_enable hal)
+		$(use_enable test tests)
+		$(use_enable pam)
+		$(use_with pam pam-dir $(getpam_mod_dir))
+		$(use_enable valgrind)
+		--with-root-certs=/usr/share/ca-certificates/
+		--enable-acl-prompts
+		--enable-ssh-agent"
+}
+
+multilib-native_src_prepare_internal() {
+	gnome2_src_prepare
+
+	# Remove silly CFLAGS
+	sed 's:CFLAGS="$CFLAGS -Werror:CFLAGS="$CFLAGS:' \
+		-i configure.in configure || die "sed failed"
 }
 
 src_test() {
-	emake check || die "emake check failed!"
+	unset DBUS_SESSION_BUS_ADDRESS
+	Xemake check || die "emake check failed!"
 
-	emake -C tests run || die "running tests failed!"
+	Xemake -C tests run || die "running tests failed!"
 }
