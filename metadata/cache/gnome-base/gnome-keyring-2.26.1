@@ -1,5 +1,5 @@
->=dev-libs/glib-2.16[lib32?] >=x11-libs/gtk+-2.6[lib32?] gnome-base/gconf[lib32?] >=sys-apps/dbus-1.0[lib32?] hal? ( >=sys-apps/hal-0.5.7[lib32?] ) pam? ( virtual/pam ) >=dev-libs/libgcrypt-1.2.2[lib32?] >=dev-libs/libtasn1-0.3.4[lib32?] lib32? ( pam? ( sys-libs/pam[lib32] ) ) sys-devel/gettext >=dev-util/intltool-0.35 >=dev-util/pkgconfig-0.9 doc? ( dev-util/gtk-doc ) >=sys-apps/sed-4
->=dev-libs/glib-2.16[lib32?] >=x11-libs/gtk+-2.6[lib32?] gnome-base/gconf[lib32?] >=sys-apps/dbus-1.0[lib32?] hal? ( >=sys-apps/hal-0.5.7[lib32?] ) pam? ( virtual/pam ) >=dev-libs/libgcrypt-1.2.2[lib32?] >=dev-libs/libtasn1-0.3.4[lib32?] lib32? ( pam? ( sys-libs/pam[lib32] ) )
+>=dev-libs/glib-2.16[lib32?] >=x11-libs/gtk+-2.6[lib32?] gnome-base/gconf[lib32?] >=sys-apps/dbus-1.0[lib32?] hal? ( >=sys-apps/hal-0.5.7[lib32?] ) pam? ( virtual/pam ) lib32? ( pam? ( sys-libs/pam[lib32] ) ) >=dev-libs/libgcrypt-1.2.2[lib32?] >=dev-libs/libtasn1-0.3.4[lib32?] valgrind? ( dev-util/valgrind ) sys-devel/gettext[lib32?] >=dev-util/intltool-0.35 >=dev-util/pkgconfig-0.9 doc? ( dev-util/gtk-doc ) >=sys-apps/sed-4 X? ( x11-base/xorg-server x11-apps/xhost )
+>=dev-libs/glib-2.16[lib32?] >=x11-libs/gtk+-2.6[lib32?] gnome-base/gconf[lib32?] >=sys-apps/dbus-1.0[lib32?] hal? ( >=sys-apps/hal-0.5.7[lib32?] ) pam? ( virtual/pam ) lib32? ( pam? ( sys-libs/pam[lib32] ) ) >=dev-libs/libgcrypt-1.2.2[lib32?] >=dev-libs/libtasn1-0.3.4[lib32?] valgrind? ( dev-util/valgrind )
 0
 mirror://gnome/sources/gnome-keyring/2.26/gnome-keyring-2.26.1.tar.bz2
 
@@ -7,8 +7,8 @@ http://www.gnome.org/
 GPL-2 LGPL-2
 Password and keyring managing daemon
 
-base eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib multilib-native pam portability toolchain-funcs
-debug doc hal pam valgrind test debug lib32
+base eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib multilib-native pam portability toolchain-funcs virtualx
+debug doc hal pam valgrind test debug X lib32
 
 
 
