@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.36.ebuild,v 1.1 2009/04/19 08:31:17 dev-zero Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.38.ebuild,v 1.1 2009/05/04 19:52:57 dev-zero Exp $
 
 EAPI="2"
 
