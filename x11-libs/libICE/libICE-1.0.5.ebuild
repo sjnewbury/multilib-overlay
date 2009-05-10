@@ -18,4 +18,6 @@ RDEPEND="x11-libs/xtrans
 	x11-proto/xproto"
 DEPEND="${RDEPEND}"
 
-CONFIGURE_OPTIONS="$(use_enable ipv6)"
+pkg_setup() {
+	CONFIGURE_OPTIONS="$(use_enable ipv6)"
+}
