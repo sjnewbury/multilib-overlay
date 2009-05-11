@@ -1,0 +1,16 @@
+--- tools/hal-system-power-hibernate	2006-04-26 19:25:40.000000000 -0500
++++ tools/hal-system-power-hibernate	2006-04-26 19:34:00.000000000 -0500
+@@ -53,4 +53,13 @@
+ 		fi
+ 	fi
+ 
++# Refresh devices when resuming from a hibernate
++for type in button battery ac_adapter ; do
++   devices=$(hal-find-by-capbility --capability $type)
++   for device in $devices ; do
++      dbus-send --system --print-reply --dest=org.freedesktop.Hal $device \
++                org.freedesktop.Hal.Device.Rescan
++   done
++done
++
+ exit $RET

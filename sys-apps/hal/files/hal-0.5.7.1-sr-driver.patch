@@ -1,0 +1,13 @@
+diff -ru hal-0.5.7.1.orig/hald/linux2/hotplug.c hal-0.5.7.1/hald/linux2/hotplug.c
+--- hal-0.5.7.1.orig/hald/linux2/hotplug.c	2006-07-26 11:03:17.000000000 -0700
++++ hal-0.5.7.1/hald/linux2/hotplug.c	2006-08-30 19:50:22.000000000 -0700
+@@ -282,7 +282,8 @@
+ 		size_t len;
+ 
+ 		len = strlen(hotplug_event->sysfs.sysfs_path);
+-		is_partition = isdigit(hotplug_event->sysfs.sysfs_path[len - 1]) ||
++		is_partition = (isdigit(hotplug_event->sysfs.sysfs_path[len - 1])
++				&& ! strstr(hotplug_event->sysfs.sysfs_path, "/block/sr")) ||
+ 			       strstr (hotplug_event->sysfs.sysfs_path, "/fakevolume") ;
+ 
+ 		if (hotplug_event->action == HOTPLUG_ACTION_ADD) {

@@ -1,0 +1,117 @@
+diff -uNr hal-0.5.7.orig/hald/device_info.c hal-0.5.7/hald/device_info.c
+--- hal-0.5.7.orig/hald/device_info.c	2006-01-21 07:36:51.000000000 +0100
++++ hal-0.5.7/hald/device_info.c	2006-10-26 23:00:26.000000000 +0200
+@@ -1114,56 +1114,22 @@
+ 				    pc->merge_type, pc->merge_type));
+ 			break;
+ 		}
+-	} else if (pc->curelem == CURELEM_APPEND && pc->match_ok && 
++	} else if ((pc->curelem == CURELEM_APPEND || pc->curelem == CURELEM_PREPEND) && pc->match_ok && 
+ 		   (hal_device_property_get_type (pc->device, pc->merge_key) == HAL_PROPERTY_TYPE_STRING ||
+ 		    hal_device_property_get_type (pc->device, pc->merge_key) == HAL_PROPERTY_TYPE_STRLIST ||
+ 		    hal_device_property_get_type (pc->device, pc->merge_key) == HAL_PROPERTY_TYPE_INVALID)) {
+ 		char buf[256];
+ 		char buf2[256];
+ 
+-		/* As soon as we are appending, we have matched the device... */
++		/* As soon as we are appending/prepending, we have matched the device... */
+ 		pc->device_matched = TRUE;
+ 
+ 		if (pc->merge_type == MERGE_TYPE_STRLIST) {
+-			hal_device_property_strlist_append (pc->device, pc->merge_key, pc->cdata_buf);
+-		} else {
+-			const char *existing_string;
+-			
+-			switch (pc->merge_type) {
+-			case MERGE_TYPE_STRING:
+-				strncpy (buf, pc->cdata_buf, sizeof (buf));
+-				break;
+-				
+-			case MERGE_TYPE_COPY_PROPERTY:
+-				hal_device_property_get_as_string (pc->device, pc->cdata_buf, buf, sizeof (buf));
+-				break;
+-				
+-			default:
+-				HAL_ERROR (("Unknown merge_type=%d='%c'", pc->merge_type, pc->merge_type));
+-				break;
+-			}
+-			
+-			existing_string = hal_device_property_get_string (pc->device, pc->merge_key);
+-			if (existing_string != NULL) {
+-				strncpy (buf2, existing_string, sizeof (buf2));
+-				strncat (buf2, buf, sizeof (buf2) - strlen(buf2));
++			if (pc->curelem == CURELEM_APPEND){
++				hal_device_property_strlist_append (pc->device, pc->merge_key, pc->cdata_buf);
+ 			} else {
+-				strncpy (buf2, buf, sizeof (buf2));
++				hal_device_property_strlist_prepend (pc->device, pc->merge_key, pc->cdata_buf);
+ 			}
+-			hal_device_property_set_string (pc->device, pc->merge_key, buf2);
+-		}
+-	} else if (pc->curelem == CURELEM_PREPEND && pc->match_ok && 
+-		   (hal_device_property_get_type (pc->device, pc->merge_key) == HAL_PROPERTY_TYPE_STRING ||
+-		    hal_device_property_get_type (pc->device, pc->merge_key) == HAL_PROPERTY_TYPE_STRLIST ||
+-		    hal_device_property_get_type (pc->device, pc->merge_key) == HAL_PROPERTY_TYPE_INVALID)) {
+-		char buf[256];
+-		char buf2[256];
+-
+-		/* As soon as we are prepending, we have matched the device... */
+-		pc->device_matched = TRUE;
+-
+-		if (pc->merge_type == MERGE_TYPE_STRLIST) {
+-			hal_device_property_strlist_prepend (pc->device, pc->merge_key, pc->cdata_buf);
+ 		} else {
+ 			const char *existing_string;
+ 			
+@@ -1173,8 +1139,34 @@
+ 				break;
+ 				
+ 			case MERGE_TYPE_COPY_PROPERTY:
+-				hal_device_property_get_as_string (pc->device, pc->cdata_buf, buf, sizeof (buf));
++			{
++				char udi_to_merge_from[256];
++				char prop_to_merge[256];
++
++				/* Resolve key paths like 'someudi/foo/bar/baz:prop.name' 
++				 * '@prop.here.is.an.udi:with.prop.name'
++				 */
++				if (!resolve_udiprop_path (pc->cdata_buf,
++							   pc->device->udi,
++							   udi_to_merge_from, sizeof (udi_to_merge_from),
++							   prop_to_merge, sizeof (prop_to_merge))) {
++					HAL_ERROR (("Could not resolve keypath '%s' on udi '%s'", pc->cdata_buf, pc->device->udi));
++				} else {
++					HalDevice *d;
++
++					d = hal_device_store_find (hald_get_gdl (), udi_to_merge_from);
++					if (d == NULL) {
++						d = hal_device_store_find (hald_get_tdl (), udi_to_merge_from);
++					}
++					if (d == NULL) {
++						HAL_ERROR (("Could not find device with udi '%s'", udi_to_merge_from));
++					} else {
++						hal_device_property_get_as_string (d, prop_to_merge, buf, sizeof (buf));
++					}
++				}
++
+ 				break;
++			}
+ 				
+ 			default:
+ 				HAL_ERROR (("Unknown merge_type=%d='%c'", pc->merge_type, pc->merge_type));
+@@ -1183,8 +1175,13 @@
+ 			
+ 			existing_string = hal_device_property_get_string (pc->device, pc->merge_key);
+ 			if (existing_string != NULL) {
+-				strncpy (buf2, buf, sizeof (buf2));
+-				strncat (buf2, existing_string, sizeof (buf2) - strlen(buf2));
++				if (pc->curelem == CURELEM_APPEND){
++					strncpy (buf2, existing_string, sizeof (buf2));
++					strncat (buf2, buf, sizeof (buf2) - strlen(buf2));
++				} else {
++					strncpy (buf2, buf, sizeof (buf2));
++					strncat (buf2, existing_string, sizeof (buf2) - strlen(buf2));
++				}
+ 			} else {
+ 				strncpy (buf2, buf, sizeof (buf2));
+ 			}
