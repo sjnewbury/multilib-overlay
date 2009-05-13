@@ -11,7 +11,7 @@ HOMEPAGE="http://www.pango.org/"
 
 LICENSE="LGPL-2 FTL"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="X debug doc"
 
 # FIXME: add gobject-introspection dependency when it is available
@@ -53,6 +53,9 @@ src_prepare() {
 		epatch "${FILESDIR}/${PN}-1.2.5-lib64.patch"
 		epatch "${FILESDIR}/${P}-no-man-gzip.patch"
 	fi
+	# gtk-doc checks do not pass, upstream bug #578944
+	sed 's:TESTS = check.docs: TESTS = :g'\
+		-i docs/Makefile.am docs/Makefile.in || die "sed failed"
 
 	eautoreconf
 }
