@@ -11,8 +11,9 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-KEYWORDS=""
-IUSE="debug doc hal pam valgrind test"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+IUSE="debug doc hal pam test"
+# USE=valgrind is probably not a good idea for the tree
 
 RDEPEND=">=dev-libs/glib-2.16[lib32?]
 	 >=x11-libs/gtk+-2.6[lib32?]
@@ -22,13 +23,13 @@ RDEPEND=">=dev-libs/glib-2.16[lib32?]
 	 pam? ( virtual/pam )
 	 lib32? ( pam? ( sys-libs/pam[lib32] ) )
 	 >=dev-libs/libgcrypt-1.2.2[lib32?]
-	 >=dev-libs/libtasn1-0.3.4[lib32?]
-	 valgrind? ( dev-util/valgrind )"
+	 >=dev-libs/libtasn1-1[lib32?]
+	#valgrind? ( dev-util/valgrind )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext[lib32?]
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9
-	doc? ( dev-util/gtk-doc )"
+	doc? ( dev-util/gtk-doc-1.9 )"
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
@@ -39,10 +40,10 @@ pkg_setup() {
 		$(use_enable test tests)
 		$(use_enable pam)
 		$(use_with pam pam-dir $(getpam_mod_dir))
-		$(use_enable valgrind)
 		--with-root-certs=/usr/share/ca-certificates/
 		--enable-acl-prompts
 		--enable-ssh-agent"
+#       $(use_enable valgrind)
 }
 
 multilib-native_src_prepare_internal() {
