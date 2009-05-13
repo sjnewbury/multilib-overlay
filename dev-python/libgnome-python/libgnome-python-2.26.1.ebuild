@@ -10,7 +10,7 @@ inherit gnome-python-common multilib-native
 DESCRIPTION="Python bindings for essential GNOME libraries"
 LICENSE="LGPL-2.1"
 SLOT="2"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="examples"
 
 RDEPEND=">=gnome-base/libgnome-2.24.1
