@@ -23,7 +23,7 @@ RDEPEND=">=dev-libs/glib-2.16[lib32?]
 	pam? ( virtual/pam )
 	pam? ( sys-libs/pam[lib32?] )
 	>=dev-libs/libgcrypt-1.2.2[lib32?]
-	>=dev-libs/libtasn1-1[lib32?]
+	>=dev-libs/libtasn1-1[lib32?]"
 #	valgrind? ( dev-util/valgrind )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext[lib32?]
