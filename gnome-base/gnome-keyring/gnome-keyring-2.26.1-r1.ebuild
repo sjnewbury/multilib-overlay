@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.22.3.ebuild,v 1.1 2008/07/02 21:32:43 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.26.1-r1.ebuild,v 1.1 2009/05/14 07:39:36 nirbheek Exp $
 
 EAPI="2"
 
@@ -16,20 +16,20 @@ IUSE="debug doc hal pam test"
 # USE=valgrind is probably not a good idea for the tree
 
 RDEPEND=">=dev-libs/glib-2.16[lib32?]
-	 >=x11-libs/gtk+-2.6[lib32?]
-	 gnome-base/gconf[lib32?]
-	 >=sys-apps/dbus-1.0[lib32?]
-	 hal? ( >=sys-apps/hal-0.5.7[lib32?] )
-	 pam? ( virtual/pam )
-	 lib32? ( pam? ( sys-libs/pam[lib32] ) )
-	 >=dev-libs/libgcrypt-1.2.2[lib32?]
-	 >=dev-libs/libtasn1-1[lib32?]
-	#valgrind? ( dev-util/valgrind )"
+	>=x11-libs/gtk+-2.6[lib32?]
+	gnome-base/gconf[lib32?]
+	>=sys-apps/dbus-1.0[lib32?]
+	hal? ( >=sys-apps/hal-0.5.7[lib32?] )
+	pam? ( virtual/pam )
+	pam? ( sys-libs/pam[lib32?] )
+	>=dev-libs/libgcrypt-1.2.2[lib32?]
+	>=dev-libs/libtasn1-1[lib32?]
+#	valgrind? ( dev-util/valgrind )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext[lib32?]
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9
-	doc? ( dev-util/gtk-doc-1.9 )"
+	doc? ( >=dev-util/gtk-doc-1.9 )"
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
@@ -43,7 +43,7 @@ pkg_setup() {
 		--with-root-certs=/usr/share/ca-certificates/
 		--enable-acl-prompts
 		--enable-ssh-agent"
-#       $(use_enable valgrind)
+#		$(use_enable valgrind)
 }
 
 multilib-native_src_prepare_internal() {
