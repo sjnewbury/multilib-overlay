@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils gnome2 multilib multilib-native
+inherit autotools eutils gnome2 multilib multilib-native
 
 DESCRIPTION="Text rendering and layout library"
 HOMEPAGE="http://www.pango.org/"
@@ -58,6 +58,7 @@ src_prepare() {
 	# gtk-doc checks do not pass, upstream bug #578944
 	sed 's:TESTS = check.docs: TESTS = :g'\
 		-i docs/Makefile.am docs/Makefile.in || die "sed failed"
+	sed -e '/@cd "$(DESTDIR)$(man1dir)" && gzip -c pango-view.1 > preload.1.gz && $(RM) preload.1/d' -i pango-view/Makefile.{in,am} || die 
 }
 
 multilib-native_src_configure_internal() {
