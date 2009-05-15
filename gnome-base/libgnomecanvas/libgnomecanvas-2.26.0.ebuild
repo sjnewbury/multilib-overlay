@@ -21,7 +21,7 @@ RDEPEND=">=x11-libs/gtk+-2.13[lib32?]
 	>=gnome-base/libglade-2[lib32?]"
 
 DEPEND="${RDEPEND}
-	>=dev-lang/perl-5 
+	>=dev-lang/perl-5
 	sys-devel/gettext
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.18
