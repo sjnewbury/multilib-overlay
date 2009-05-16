@@ -1,6 +1,6 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-cpp/glibmm/glibmm-2.18.1.ebuild,v 1.1 2008/11/03 21:04:23 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-cpp/glibmm/glibmm-2.20.0.ebuild,v 1.1 2009/05/10 22:15:53 eva Exp $
 
 EAPI="2"
 
@@ -15,10 +15,10 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc examples test"
 
 RDEPEND=">=dev-libs/libsigc++-2.2[lib32?]
-		 >=dev-libs/glib-2.19.8[lib32?]"
+	>=dev-libs/glib-2.19.8[lib32?]"
 DEPEND="${RDEPEND}
-		dev-util/pkgconfig
-		doc? ( app-doc/doxygen )"
+	dev-util/pkgconfig
+	doc? ( app-doc/doxygen )"
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
@@ -39,12 +39,12 @@ src_unpack() {
 }
 
 src_test() {
-		cd "${S}/tests/"
-		emake check || die "emake check failed"
+	cd "${S}/tests/"
+	emake check || die "emake check failed"
 
-		for i in */test; do
-			${i} || die "Running tests failed at ${i}"
-		done
+	for i in */test; do
+		${i} || die "Running tests failed at ${i}"
+	done
 }
 
 
