@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc"
 
 # gtk+ raised to fix gail dependency
@@ -21,16 +21,13 @@ RDEPEND=">=x11-libs/gtk+-2.13[lib32?]
 	>=gnome-base/libglade-2[lib32?]"
 
 DEPEND="${RDEPEND}
+	>=dev-lang/perl-5
 	sys-devel/gettext
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.18
 	doc? ( >=dev-util/gtk-doc-1 )"
 
 DOCS="AUTHORS ChangeLog NEWS README"
-
-pkg_setup() {
-	G2CONF="${G2CONF} --disable-rebuilds"
-}
 
 src_test() {
 	Xmake check || die "Test phase failed"

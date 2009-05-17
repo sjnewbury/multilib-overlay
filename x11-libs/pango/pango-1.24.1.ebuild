@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.22.4.ebuild,v 1.2 2009/01/18 21:02:37 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.24.1.ebuild,v 1.4 2009/05/13 14:17:42 nirbheek Exp $
 
 EAPI="2"
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.pango.org/"
 
 LICENSE="LGPL-2 FTL"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="X debug doc"
 
 # FIXME: add gobject-introspection dependency when it is available
@@ -46,15 +46,19 @@ pkg_setup() {
 }
 
 src_prepare() {
+	gnome2_src_prepare
+
 	# make config file location host specific so that a 32bit and 64bit pango
 	# wont fight with each other on a multilib system.  Fix building for
 	# emul-linux-x86-gtklibs
 	if multilib_enabled ; then
 		epatch "${FILESDIR}/${PN}-1.2.5-lib64.patch"
-		epatch "${FILESDIR}/${P}-no-man-gzip.patch"
 	fi
 
-	eautoreconf
+	# gtk-doc checks do not pass, upstream bug #578944
+	sed 's:TESTS = check.docs: TESTS = :g'\
+		-i docs/Makefile.am docs/Makefile.in || die "sed failed"
+	sed -e '/@cd "$(DESTDIR)$(man1dir)" && gzip -c pango-view.1 > preload.1.gz && $(RM) preload.1/d' -i pango-view/Makefile.{in,am} || die 
 }
 
 multilib-native_src_configure_internal() {
@@ -97,4 +101,3 @@ multilib-native_pkg_postinst_internal() {
 		fi
 	fi
 }
-

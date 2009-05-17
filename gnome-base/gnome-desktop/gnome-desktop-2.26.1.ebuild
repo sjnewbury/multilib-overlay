@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 FDL-1.1 LGPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc"
 
 # FIXME: Python deps are needed for gnome-about but not
@@ -39,7 +39,10 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
 pkg_setup() {
-	G2CONF="${G2CONF} --with-gnome-distributor=Gentoo --disable-scrollkeeper"
+	G2CONF="${G2CONF} 
+		--with-gnome-distributor=Gentoo
+		--disable-scrollkeeper
+		--disable-static"
 }
 
 pkg_postinst() {

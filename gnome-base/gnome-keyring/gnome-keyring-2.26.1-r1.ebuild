@@ -21,6 +21,7 @@ RDEPEND=">=dev-libs/glib-2.16[lib32?]
 	>=sys-apps/dbus-1.0[lib32?]
 	hal? ( >=sys-apps/hal-0.5.7[lib32?] )
 	pam? ( virtual/pam )
+	pam? ( sys-libs/pam[lib32?] )
 	>=dev-libs/libgcrypt-1.2.2[lib32?]
 	>=dev-libs/libtasn1-1[lib32?]"
 #	valgrind? ( dev-util/valgrind )"
@@ -45,7 +46,7 @@ pkg_setup() {
 #		$(use_enable valgrind)
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	gnome2_src_prepare
 
 	# Remove silly CFLAGS

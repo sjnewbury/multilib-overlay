@@ -11,11 +11,12 @@ HOMEPAGE="http://developer.gnome.org/projects/gap/"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc"
 
-RDEPEND=">=dev-libs/glib-2.5.7[lib32?]"
+RDEPEND=">=dev-libs/glib-2[lib32?]"
 DEPEND="${RDEPEND}
+	>=dev-lang/perl-5
 	sys-devel/gettext
 	>=dev-util/pkgconfig-0.9
 	doc? ( >=dev-util/gtk-doc-1 )"

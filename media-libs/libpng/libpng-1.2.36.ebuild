@@ -6,10 +6,9 @@ EAPI="2"
 
 inherit libtool multilib eutils multilib-native
 
-MY_PV=${PV/_}
 DESCRIPTION="Portable Network Graphics library"
 HOMEPAGE="http://www.libpng.org/"
-SRC_URI="mirror://sourceforge/libpng/${PN}-${MY_PV}.tar.lzma"
+SRC_URI="mirror://sourceforge/libpng/${P}.tar.lzma"
 
 LICENSE="as-is"
 SLOT="1.2"
@@ -23,13 +22,11 @@ DEPEND="${RDEPEND}
 src_unpack() {
 	unpack ${A}
 	cd "${S}"
-
 	# So we get sane .so versioning on FreeBSD
 	elibtoolize
 }
 
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
-
 	dodoc ANNOUNCE CHANGES KNOWNBUG README TODO Y2KINFO
 }

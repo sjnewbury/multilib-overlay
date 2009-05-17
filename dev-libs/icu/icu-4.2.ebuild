@@ -55,7 +55,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable examples samples)
 }
 
-src_test() {
+multilib-native_src_test_internal() {
 	emake check || die "emake check failed"
 }
 
