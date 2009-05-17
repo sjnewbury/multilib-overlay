@@ -1,0 +1,35 @@
+From 4e44e6ee79de160c70a1dc38dddbf4623f6a7965 Mon Sep 17 00:00:00 2001
+From: root <root@powerstation.mrothe.de>
+Date: Sat, 27 Sep 2008 13:04:02 +0200
+Subject: [PATCH] Fix issue on 64bit big endian architectures.
+
+---
+ hald/create_cache.c |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+diff --git a/hald/create_cache.c b/hald/create_cache.c
+index d52f834..6903688 100644
+--- a/hald/create_cache.c
++++ b/hald/create_cache.c
+@@ -305,15 +305,17 @@ static void remember_jump_position(struct fdi_context *fdi_ctx)
+ static void set_jump_position(struct fdi_context *fdi_ctx)
+ {
+ 	off_t	offset;
++        u_int32_t offset32;
+ 
+ 	if (fdi_ctx->depth <= 0)
+ 		DIE(("Rule depth underrun"));
+ 
+ 	fdi_ctx->depth--;
+ 	offset = RULES_ROUND(lseek(fdi_ctx->cache_fd, 0, SEEK_END));
++        offset32 = (u_int32_t)offset;
+ 	pad32_write(fdi_ctx->cache_fd,
+ 		fdi_ctx->match_at_depth[fdi_ctx->depth] + offsetof(struct rule, jump_position),
+-		&offset, sizeof(fdi_ctx->rule.jump_position));
++		&offset32, sizeof(fdi_ctx->rule.jump_position));
+ 
+ 	if (haldc_verbose)
+ 		HAL_INFO(("modify rule=0x%08x, set jump to 0x%08x",
+-- 
+1.6.0.2
+

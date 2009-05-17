@@ -1,0 +1,14 @@
+since we refer to C++ later in configure, we need to search for the prog
+
+http://bugs.gentoo.org/212772
+
+--- configure.in
++++ configure.in
+@@ -30,6 +30,7 @@
+ AC_ISC_POSIX
+ AC_PROG_CC
+ AM_PROG_CC_C_O
++AC_PROG_CXX
+ AC_HEADER_STDC
+ AC_PROG_LIBTOOL
+ AC_PROG_MAKE_SET

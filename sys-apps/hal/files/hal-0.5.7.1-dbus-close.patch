@@ -1,0 +1,24 @@
+diff -ruN hal-0.5.7.1.orig/tools/hal-device.c hal-0.5.7.1/tools/hal-device.c
+--- hal-0.5.7.1.orig/tools/hal-device.c	2006-07-28 16:07:56.000000000 -0500
++++ hal-0.5.7.1/tools/hal-device.c	2006-07-28 16:08:36.000000000 -0500
+@@ -155,7 +155,7 @@
+ 
+ 	libhal_ctx_shutdown(hal_ctx, &error);
+ 	libhal_ctx_free(hal_ctx);
+-	dbus_connection_disconnect(conn);
++	dbus_connection_close(conn);
+ 	dbus_connection_unref(conn);
+ 	dbus_error_free(&error);
+ 
+diff -ruN hal-0.5.7.1.orig/tools/lshal.c hal-0.5.7.1/tools/lshal.c
+--- hal-0.5.7.1.orig/tools/lshal.c	2006-07-28 16:07:56.000000000 -0500
++++ hal-0.5.7.1/tools/lshal.c	2006-07-28 16:08:52.000000000 -0500
+@@ -701,7 +701,7 @@
+ 	libhal_ctx_shutdown (hal_ctx, &error);
+ 	libhal_ctx_free (hal_ctx);
+ 
+-	dbus_connection_disconnect (conn);
++	dbus_connection_close (conn);
+ 	dbus_connection_unref (conn);
+ 
+ 	if (show_device)

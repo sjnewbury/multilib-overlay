@@ -1,0 +1,13 @@
+diff -ruN hal-0.5.7-old/volume_id/volume_id.c hal-0.5.7/volume_id/volume_id.c
+--- hal-0.5.7-old/volume_id/volume_id.c	2006-02-22 07:30:41.000000000 +0100
++++ hal-0.5.7/volume_id/volume_id.c	2006-03-08 11:21:01.000000000 +0100
+@@ -165,6 +165,9 @@
+ 	if (volume_id_probe_raid(id, off, size) == 0)
+ 		return 0;
+ 
++	if (volume_id_probe_msdos_part_table(id, off) == 0)
++		return 0;
++
+ 	if (volume_id_probe_filesystem(id, off, size) == 0)
+ 		return 0;
+ 
