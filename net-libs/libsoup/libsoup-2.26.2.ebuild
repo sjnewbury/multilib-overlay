@@ -38,3 +38,11 @@ multilib-native_pkg_setup_internal() {
 		$(use_with gnome)
 		$(use_enable ssl)"
 }
+
+multilib-native_src_prepare_internal() {
+	gnome2_src_prepare
+
+	# Fix test to follow POSIX (for x86-fbsd)
+	# No patch to prevent having to eautoreconf
+	sed -e 's/\(test.*\)==/\1=/g' -i configure.in configure || die "sed failed"
+}
