@@ -19,15 +19,6 @@ DEPEND=">=dev-lang/perl-5.6[lib32?]
 	sys-devel/bison"
 RDEPEND=""
 
-multilib-native_src_configure_internal() {
-	local myconf
-	if use lib32 && [[ "${ABI}" == "x86" ]]; then
-		myconf="--program-suffix=32"
-	fi
-
-	econf ${myconf}
-}
-
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "installed failed"
 	dodoc AUTHORS ChangeLog NEWS README THANKS
