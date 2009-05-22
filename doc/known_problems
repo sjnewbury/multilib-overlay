@@ -1,0 +1,2 @@
+x11-libs/qt-gui		(installs headers under /usr/include/gentoo-multilib)	ahuemer
+x11-libs/qt-phonon	(installs headers under /usr/include/gentoo-multilib)	ahuemer
