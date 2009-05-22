@@ -1,4 +1,4 @@
-alsa? ( media-libs/alsa-lib[lib32?] ) >=dev-util/cmake-2.4.6-r1
+alsa? ( media-libs/alsa-lib[lib32?] ) >=dev-util/cmake-2.6.2-r1 userland_GNU? ( >=sys-apps/findutils-4.4.0 )
 alsa? ( media-libs/alsa-lib[lib32?] )
 0
 http://kcat.strangesoft.net/openal-releases/openal-soft-1.7.411.tar.bz2
