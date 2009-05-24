@@ -42,14 +42,6 @@ multilib-native_src_configure_internal() {
 		$(use_enable debug)
 }
 
-multilib-native_src_compile_internal() {
-	# GStreamer doesn't handle optimization so well
-	strip-flags
-	replace-flags -O3 -O2
-
-	emake || die "emake failed."
-}
-
 multilib-native_src_install_internal() {
 	gnome2_src_install
 }

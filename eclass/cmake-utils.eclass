@@ -1,15 +1,17 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/cmake-utils.eclass,v 1.19 2009/03/12 08:45:52 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/cmake-utils.eclass,v 1.26 2009/05/08 10:54:02 scarabeus Exp $
 
 # @ECLASS: cmake-utils.eclass
 # @MAINTAINER:
 # kde@gentoo.org
-# @AUTHORS:
+#
+# @CODE
 # Tomáš Chvátal <scarabeus@gentoo.org>
 # Maciej Mrozowski <reavertm@poczta.fm>
 # (undisclosed contributors)
 # Original author: Zephyrus (zephyrus@mirach.it)
+# @CODE
 # @BLURB: common ebuild functions for cmake-based packages
 # @DESCRIPTION:
 # The cmake-utils eclass contains functions that make creating ebuilds for
@@ -22,8 +24,7 @@ inherit toolchain-funcs multilib flag-o-matic base
 
 EXPF="src_compile src_test src_install"
 case ${EAPI:-0} in
-	2) EXPF="${EXPF} src_configure"
-		;;
+	2) EXPF="${EXPF} src_configure" ;;
 	1|0) ;;
 	*) die "Unknown EAPI, Bug eclass maintainers." ;;
 esac
@@ -31,18 +32,48 @@ EXPORT_FUNCTIONS ${EXPF}
 
 : ${DESCRIPTION:="Based on the ${ECLASS} eclass"}
 
-DEPEND=">=dev-util/cmake-2.4.6-r1"
+if [[ ${PN} != cmake ]]; then
+	CMAKEDEPEND=">=dev-util/cmake-2.6.2-r1"
+fi
+
+DEPEND="${CMAKEDEPEND}
+	userland_GNU? ( >=sys-apps/findutils-4.4.0 )
+"
 
 # Internal functions used by cmake-utils_use_*
 _use_me_now() {
 	debug-print-function ${FUNCNAME} "$@"
+
+	local uper capitalised x
 	[[ -z $2 ]] && die "cmake-utils_use-$1 <USE flag> [<flag name>]"
-	echo "-D$1_${3:-$2}=$(use $2 && echo ON || echo OFF)"
+	if [[ ! -z $3 ]]; then
+		# user specified the use name so use it
+		echo "-D$1$3=$(use $2 && echo ON || echo OFF)"
+	else
+		# use all various most used combinations
+		uper=$(echo ${2} | tr '[:lower:]' '[:upper:]')
+		capitalised=$(echo ${2} | sed 's/\<\(.\)\([^ ]*\)/\u\1\L\2/g')
+		for x in $2 $uper $capitalised; do
+			echo "-D$1$x=$(use $2 && echo ON || echo OFF) "
+		done
+	fi
 }
 _use_me_now_inverted() {
 	debug-print-function ${FUNCNAME} "$@"
+
+	local uper capitalised x
 	[[ -z $2 ]] && die "cmake-utils_use-$1 <USE flag> [<flag name>]"
-	echo "-D$1_${3:-$2}=$(use $2 && echo OFF || echo ON)"
+	if [[ ! -z $3 ]]; then
+		# user specified the use name so use it
+		echo "-D$1$3=$(use $2 && echo OFF || echo ON)"
+	else
+		# use all various most used combinations
+		uper=$(echo ${2} | tr '[:lower:]' '[:upper:]')
+		capitalised=$(echo ${2} | sed 's/\<\(.\)\([^ ]*\)/\u\1\L\2/g')
+		for x in $2 $uper $capitalised; do
+			echo "-D$1$x=$(use $2 && echo OFF || echo ON) "
+		done
+	fi
 }
 
 # @ECLASS-VARIABLE: DOCS
@@ -54,7 +85,7 @@ _use_me_now_inverted() {
 # Documents passed to dohtml command.
 
 # @ECLASS-VARIABLE: PREFIX
-# @DESCRIPTION
+# @DESCRIPTION:
 # Eclass respects PREFIX variable, though it's not recommended way to set
 # install/lib/bin prefixes.
 # Use -DCMAKE_INSTALL_PREFIX=... CMake variable instead.
@@ -84,11 +115,19 @@ _use_me_now_inverted() {
 # @DESCRIPTION:
 # Determine using IN or OUT source build
 _check_build_dir() {
+	# @ECLASS-VARIABLE: CMAKE_USE_DIR
+	# @DESCRIPTION:
+	# Sets the directory where we are working with cmake.
+	# For example when application uses autotools and only one
+	# plugin needs to be done by cmake.
+	# By default it uses ${S}.
+	: ${CMAKE_USE_DIR:=${S}}
+
 	# in/out source build
 	if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]]; then
-		CMAKE_BUILD_DIR="${S}"
+		CMAKE_BUILD_DIR="${CMAKE_USE_DIR}"
 	else
-		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build"
+		CMAKE_BUILD_DIR="${CMAKE_USE_DIR}_build"
 	fi
 	echo ">>> Working in BUILD_DIR: \"$CMAKE_BUILD_DIR\""
 }
@@ -99,7 +138,7 @@ _check_build_dir() {
 #
 # `cmake-utils_use_with foo FOO` echoes -DWITH_FOO=ON if foo is enabled
 # and -DWITH_FOO=OFF if it is disabled.
-cmake-utils_use_with() { _use_me_now WITH "$@" ; }
+cmake-utils_use_with() { _use_me_now WITH_ "$@" ; }
 
 # @FUNCTION: cmake-utils_use_enable
 # @USAGE: <USE flag> [flag name]
@@ -108,7 +147,7 @@ cmake-utils_use_with() { _use_me_now WITH "$@" ; }
 #
 # `cmake-utils_use_enable foo FOO` echoes -DENABLE_FOO=ON if foo is enabled
 # and -DENABLE_FOO=OFF if it is disabled.
-cmake-utils_use_enable() { _use_me_now ENABLE "$@" ; }
+cmake-utils_use_enable() { _use_me_now ENABLE_ "$@" ; }
 
 # @FUNCTION: cmake-utils_use_disable
 # @USAGE: <USE flag> [flag name]
@@ -117,7 +156,7 @@ cmake-utils_use_enable() { _use_me_now ENABLE "$@" ; }
 #
 # `cmake-utils_use_enable foo FOO` echoes -DDISABLE_FOO=OFF if foo is enabled
 # and -DDISABLE_FOO=ON if it is disabled.
-cmake-utils_use_disable() { _use_me_now_inverted DISABLE "$@" ; }
+cmake-utils_use_disable() { _use_me_now_inverted DISABLE_ "$@" ; }
 
 # @FUNCTION: cmake-utils_use_no
 # @USAGE: <USE flag> [flag name]
@@ -126,7 +165,7 @@ cmake-utils_use_disable() { _use_me_now_inverted DISABLE "$@" ; }
 #
 # `cmake-utils_use_no foo FOO` echoes -DNO_FOO=OFF if foo is enabled
 # and -DNO_FOO=ON if it is disabled.
-cmake-utils_use_no() { _use_me_now_inverted NO "$@" ; }
+cmake-utils_use_no() { _use_me_now_inverted NO_ "$@" ; }
 
 # @FUNCTION: cmake-utils_use_want
 # @USAGE: <USE flag> [flag name]
@@ -135,7 +174,7 @@ cmake-utils_use_no() { _use_me_now_inverted NO "$@" ; }
 #
 # `cmake-utils_use_want foo FOO` echoes -DWANT_FOO=ON if foo is enabled
 # and -DWANT_FOO=OFF if it is disabled.
-cmake-utils_use_want() { _use_me_now WANT "$@" ; }
+cmake-utils_use_want() { _use_me_now WANT_ "$@" ; }
 
 # @FUNCTION: cmake-utils_use_build
 # @USAGE: <USE flag> [flag name]
@@ -144,7 +183,7 @@ cmake-utils_use_want() { _use_me_now WANT "$@" ; }
 #
 # `cmake-utils_use_build foo FOO` echoes -DBUILD_FOO=ON if foo is enabled
 # and -DBUILD_FOO=OFF if it is disabled.
-cmake-utils_use_build() { _use_me_now BUILD "$@" ; }
+cmake-utils_use_build() { _use_me_now BUILD_ "$@" ; }
 
 # @FUNCTION: cmake-utils_use_has
 # @USAGE: <USE flag> [flag name]
@@ -153,12 +192,12 @@ cmake-utils_use_build() { _use_me_now BUILD "$@" ; }
 #
 # `cmake-utils_use_has foo FOO` echoes -DHAVE_FOO=ON if foo is enabled
 # and -DHAVE_FOO=OFF if it is disabled.
-cmake-utils_use_has() { _use_me_now HAVE "$@" ; }
+cmake-utils_use_has() { _use_me_now HAVE_ "$@" ; }
 
 # @FUNCTION: cmake-utils_has
 # @DESCRIPTION:
 # Deprecated, use cmake-utils_use_has, kept now for backcompat.
-cmake-utils_has() { ewarn "QA notice: using deprecated ${FUNCNAME} call, use cmake-utils_use_has instead." ; _use_me_now HAVE "$@" ; }
+cmake-utils_has() { ewarn "QA notice: using deprecated ${FUNCNAME} call, use cmake-utils_use_has instead." ; _use_me_now HAVE_ "$@" ; }
 
 # @FUNCTION: cmake-utils_use
 # @USAGE: <USE flag> [flag name]
@@ -176,7 +215,7 @@ _modify-cmakelists() {
 
 	# Comment out all set (<some_should_be_user_defined_variable> value)
 	# TODO Add QA checker - inform when variable being checked for below is set in CMakeLists.txt
-	find "${S}" -name CMakeLists.txt \
+	find "${CMAKE_USE_DIR}" -name CMakeLists.txt \
 		-exec sed -i -e '/^[[:space:]]*[sS][eE][tT][[:space:]]*([[:space:]]*CMAKE_BUILD_TYPE.*)/{s/^/#IGNORE /g}' {} + \
 		-exec sed -i -e '/^[[:space:]]*[sS][eE][tT][[:space:]]*([[:space:]]*CMAKE_INSTALL_PREFIX.*)/{s/^/#IGNORE /g}' {} + \
 		|| die "${LINENO}: failed to disable hardcoded settings"
@@ -194,6 +233,16 @@ Install path: ${CMAKE_INSTALL_PREFIX}\n")' >> CMakeLists.txt
 # out-of-source build.
 cmake-utils_src_configure() {
 	debug-print-function ${FUNCNAME} "$@"
+
+	_check_build_dir
+
+	# check if CMakeLists.txt exist and if no then die
+	if [[ ! -e "${CMAKE_USE_DIR}"/CMakeLists.txt ]] ; then
+		eerror "I was unable to locate CMakeLists.txt under:"
+		eerror "\"${CMAKE_USE_DIR}/CMakeLists.txt\""
+		eerror "You should consider not inheriting the cmake eclass."
+		die "FATAL: Unable to find CMakeLists.txt"
+	fi
 
 	# Remove dangerous things.
 	_modify-cmakelists
@@ -234,11 +283,10 @@ _EOF_
 	[[ -n ${CMAKE_NO_COLOR} ]] && echo 'SET (CMAKE_COLOR_MAKEFILE OFF CACHE BOOL "pretty colors during make" FORCE)' >> ${common_config}
 	cmakeargs="-C ${common_config} ${cmakeargs}"
 
-	_check_build_dir
 	mkdir -p "${CMAKE_BUILD_DIR}"
 	pushd "${CMAKE_BUILD_DIR}" > /dev/null
 	debug-print "${LINENO} ${ECLASS} ${FUNCNAME}: mycmakeargs is $cmakeargs"
-	cmake ${cmakeargs} "${S}" || die "cmake failed"
+	cmake ${cmakeargs} "${CMAKE_USE_DIR}" || die "cmake failed"
 
 	popd > /dev/null
 }
@@ -279,6 +327,8 @@ cmake-utils_src_make() {
 
 	_check_build_dir
 	pushd "${CMAKE_BUILD_DIR}" > /dev/null
+	# first check if Makefile exist otherwise die
+	[[ -e Makefile ]] || die "Makefile not found. Error during configure stage."
 	if [[ -n ${CMAKE_VERBOSE} ]]; then
 		emake VERBOSE=1 "$@" || die "Make failed!"
 	else

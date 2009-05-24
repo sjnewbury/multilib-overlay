@@ -26,10 +26,6 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS README RELEASE"
 
-src_unpack() {
-	unpack ${A}
-}
-
 multilib-native_src_configure_internal() {
 	# gst doesnt handle opts well, last tested with 0.10.15
 	strip-flags
@@ -37,10 +33,6 @@ multilib-native_src_configure_internal() {
 
 	gst-plugins-base_src_configure \
 		$(use_enable nls)
-}
-
-multilib-native_src_compile_internal() {
-	emake || die "emake failed."
 }
 
 multilib-native_src_install_internal() {

@@ -37,8 +37,9 @@ multilib-native_src_configure_internal() {
 }
 
 # bug 265586
-multilib-native_src_install_internal() {
-		qt4-build_src_install
+#multilib-native_src_install_internal() {
+multilib-native_pkg_postinst_internal() {
+		#qt4-build_src_install
 		insinto ${QTHEADERDIR}
 		doins -r "${S}"/include/Phonon || die "failed to install Phonon headers"
 }

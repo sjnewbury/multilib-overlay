@@ -1,4 +1,4 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/libpcre/libpcre-7.8.ebuild,v 1.7 2008/11/05 00:33:31 vapier Exp $
 
@@ -18,10 +18,10 @@ KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fb
 IUSE="bzip2 +cxx doc unicode zlib"
 
 DEPEND="dev-util/pkgconfig
-	sys-libs/zlib[lib32?]
-	app-arch/bzip2[lib32?]"
-RDEPEND="sys-libs/zlib[lib32?]
-	 app-arch/bzip2[lib32?]"
+	zlib? sys-libs/zlib[lib32?]
+	bzip2? app-arch/bzip2[lib32?]"
+RDEPEND="zlib? sys-libs/zlib[lib32?]
+	 bzip2? app-arch/bzip2[lib32?]"
 
 S=${WORKDIR}/${MY_P}
 

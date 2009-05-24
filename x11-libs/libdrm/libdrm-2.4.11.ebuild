@@ -17,8 +17,10 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86
 IUSE=""
 RESTRICT="test" # see bug #236845
 
-RDEPEND="dev-libs/libpthread-stubs"
+RDEPEND="dev-libs/libpthread-stubs
+	sys-fs/udev[lib32?]"
 DEPEND="${RDEPEND}"
+
 # dispite its name --enable-udev does not pull in libudev
 
 pkg_postinst() {
