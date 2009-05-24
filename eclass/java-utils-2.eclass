@@ -23,7 +23,7 @@
 #
 # -----------------------------------------------------------------------------
 
-inherit eutils versionator multilib flag-o-matic check-reqs 
+inherit eutils versionator multilib
 
 IUSE="elibc_FreeBSD"
 
