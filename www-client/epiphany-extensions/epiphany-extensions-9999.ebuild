@@ -16,7 +16,7 @@ SRC_URI=""
 ESVN_REPO_URI="svn://svn.gnome.org/svn/${PN}/trunk"
 
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~sparc ~x86"
+KEYWORDS=""
 IUSE="dbus examples pcre python"
 
 RDEPEND=">=www-client/epiphany-${MY_MAJORV}[lib32?]
