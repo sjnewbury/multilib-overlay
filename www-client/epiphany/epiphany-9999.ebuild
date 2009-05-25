@@ -55,8 +55,10 @@ DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README TODO"
 
 src_unpack() {
 	subversion_src_unpack
+}
+
+src_prepare() {
 	gnome2_omf_fix
-#	gnome2_src_unpack
 
 	intltoolize --force --automake
 	gtkdocize

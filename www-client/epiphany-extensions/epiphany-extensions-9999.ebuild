@@ -39,8 +39,10 @@ DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
 src_unpack() {
 	subversion_src_unpack
+}
+
+src_prepare() {
 	gnome2_omf_fix
-#	gnome2_src_unpack
 
 	# disable pyc compiling
 	#mv py-compile py-compile.orig
@@ -49,9 +51,6 @@ src_unpack() {
 	# Don't remove sessionsaver, please.  -dang
 #	epatch "${FILESDIR}"/${P}-sessionsaver-v4.patch.gz
 #	echo "extensions/sessionsaver/ephy-sessionsaver-extension.c" >> po/POTFILES.in
-
-	# Add missing close tag
-	epatch "${FILESDIR}"/${P}-xmlfix.patch
 
 	intltoolize --force --automake
 	gnome-doc-prepare --force --automake
