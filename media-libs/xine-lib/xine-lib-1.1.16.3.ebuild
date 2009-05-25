@@ -65,7 +65,7 @@ RDEPEND="X? ( x11-libs/libXext[lib32?]
 	pulseaudio? ( media-sound/pulseaudio[lib32?] )
 	truetype? ( =media-libs/freetype-2*[lib32?] media-libs/fontconfig[lib32?] )
 	virtual/libiconv
-	wavpack? ( >=media-sound/wavpack-4.31[lib32?] )
+	wavpack? ( >=media-sound/wavpack-4.31 )
 	musepack? ( media-libs/libmpcdec[lib32?] )
 	xcb? ( >=x11-libs/libxcb-1.0[lib32?] )
 	jack? ( >=media-sound/jack-audio-connection-kit-0.100[lib32?] )
