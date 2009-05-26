@@ -6,7 +6,7 @@
 http://www.gnome.org/projects/epiphany/
 GPL-2
 GNOME webbrowser based on the mozilla rendering engine
-~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd
+
 autotools base eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib multilib-native portability subversion toolchain-funcs
 avahi doc networkmanager python debug lib32
 
