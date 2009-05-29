@@ -1,9 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.8.8-r6.ebuild,v 1.2 2009/03/11 21:47:17 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.8.8-r6.ebuild,v 1.4 2009/05/08 05:46:34 tove Exp $
 
 EAPI="2"
-MULTILIB_IN_SOURCE_BUILD="yes"
 
 inherit eutils flag-o-matic toolchain-funcs multilib-native
 
@@ -71,39 +70,38 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
-	cd "${S}"
 
 	# Get -lpthread linked before -lc.  This is needed
 	# when using glibc >= 2.3, or else runtime signal
 	# handling breaks.  Fixes bug #14380.
 	# <rac@gentoo.org> (14 Feb 2003)
 	# reinstated to try to avoid sdl segfaults 03.10.02
-	epatch "${FILESDIR}"/${PN}-prelink-lpthread.patch
+	cd "${S}"; epatch "${FILESDIR}"/${PN}-prelink-lpthread.patch
 
 	# Patch perldoc to not abort when it attempts to search
 	# nonexistent directories; fixes bug #16589.
 	# <rac@gentoo.org> (28 Feb 2003)
 
-	epatch "${FILESDIR}"/${PN}-perldoc-emptydirs.patch
+	cd "${S}"; epatch "${FILESDIR}"/${PN}-perldoc-emptydirs.patch
 
 	# this lays the groundwork for solving the issue of what happens
 	# when people (or ebuilds) install different versiosn of modules
 	# that are in the core, by rearranging the @INC directory to look
 	# site -> vendor -> core.
-	epatch "${FILESDIR}"/${P}-reorder-INC.patch
+	cd "${S}"; epatch "${FILESDIR}"/${P}-reorder-INC.patch
 
 	# some well-intentioned stuff in http://groups.google.com/groups?hl=en&lr=&ie=UTF-8&selm=Pine.SOL.4.10.10205231231200.5399-100000%40maxwell.phys.lafayette.edu
 	# attempts to avoid bringing cccdlflags to bear on static
 	# extensions (like DynaLoader).  i believe this is
 	# counterproductive on a Gentoo system which has both a shared
 	# and static libperl, so effectively revert this here.
-	epatch "${FILESDIR}"/${PN}-picdl.patch
+	cd "${S}"; epatch "${FILESDIR}"/${PN}-picdl.patch
 
 	# Configure makes an unwarranted assumption that /bin/ksh is a
 	# good shell. This patch makes it revert to using /bin/sh unless
 	# /bin/ksh really is executable. Should fix bug 42665.
 	# rac 2004.06.09
-	epatch "${FILESDIR}"/${PN}-noksh.patch
+	cd "${S}"; epatch "${FILESDIR}"/${PN}-noksh.patch
 
 	# makedepend.SH contains a syntax error which is ignored by bash but causes
 	# dash to abort
@@ -126,21 +124,29 @@ multilib-native_src_prepare_internal() {
 	# filter it otherwise configure fails. See #125535.
 	epatch "${FILESDIR}"/perl-hppa-pa7200-configure.patch
 
-	[[ $(get_libdir) == lib64 ]] && epatch "${FILESDIR}"/${P}-lib64.patch
-	[[ $(get_libdir) == lib32 ]] && epatch "${FILESDIR}"/${P}-lib32.patch
+	case "$(get_libdir)" in
+		lib64) cd "${S}" && epatch "${FILESDIR}"/${P}-lib64.patch;;
+		lib32) cd "${S}" && epatch "${FILESDIR}"/${P}-lib32.patch;;
+		lib) true;;
+		*) die "Something's wrong with your libdir, don't know how to treat it.";;
+	esac
 
-	[[ ${CHOST} == *-dragonfly* ]] && epatch "${FILESDIR}"/${P}-dragonfly-clean.patch
-	[[ ${CHOST} == *-freebsd* ]] && epatch "${FILESDIR}"/${P}-fbsdhints.patch
-	epatch "${FILESDIR}"/${P}-USE_MM_LD_RUN_PATH.patch
-	epatch "${FILESDIR}"/${P}-links.patch
+	[[ ${CHOST} == *-dragonfly* ]] && cd "${S}" && epatch "${FILESDIR}"/${P}-dragonfly-clean.patch
+	[[ ${CHOST} == *-freebsd* ]] && cd "${S}" && epatch "${FILESDIR}"/${P}-fbsdhints.patch
+	cd "${S}"; epatch "${FILESDIR}"/${P}-USE_MM_LD_RUN_PATH.patch
+	cd "${S}"; epatch "${FILESDIR}"/${P}-links.patch
 	# c++ patch - should address swig related items
-	epatch "${FILESDIR}"/${P}-cplusplus.patch
+	cd "${S}"; epatch "${FILESDIR}"/${P}-cplusplus.patch
 
 	epatch "${FILESDIR}"/${P}-gcc42-command-line.patch
 
 	# Newer linux-headers don't include asm/page.h. Fix this.
 	# Patch from bug 168312, thanks Peter!
 	has_version '>sys-kernel/linux-headers-2.6.20' && epatch "${FILESDIR}"/${P}-asm-page-h-compile-failure.patch
+
+	# Also add the directory prefix of the current file when the quote syntax is
+	# used; 'require' will only look in @INC, not the current directory.
+	epatch "${FILESDIR}"/${PN}-fix_h2ph_include_quote.patch
 
 	# perlcc fix patch - bug #181229
 	epatch "${FILESDIR}"/${P}-perlcc.patch
@@ -161,8 +167,6 @@ myconf() {
 }
 
 multilib-native_src_configure_internal() {
-	cd "${S}"
-	
 	declare -a myconf
 
 	# some arches and -O do not mix :)
@@ -293,7 +297,7 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_compile_internal() {
-	cd "${S}"
+
 	# would like to bracket this with a test for the existence of a
 	# dotfile, but can't clean it automatically now.
 
@@ -306,7 +310,7 @@ multilib-native_src_test_internal() {
 }
 
 multilib-native_src_install_internal() {
-	cd "${S}"
+
 	export LC_ALL="C"
 
 	# Need to do this, else apps do not link to dynamic version of
@@ -604,7 +608,6 @@ src_remove_extra_files()
 }
 
 multilib-native_pkg_postinst_internal() {
-	cd "${S}"
 	INC=$(perl -e 'for $line (@INC) { next if $line eq "."; next if $line =~ m/'${MY_PV}'|etc|local|perl$/; print "$line\n" }')
 	if [[ "${ROOT}" = "/" ]]
 	then
