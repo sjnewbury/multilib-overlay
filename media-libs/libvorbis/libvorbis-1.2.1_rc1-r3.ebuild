@@ -1,4 +1,4 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libvorbis/libvorbis-1.2.1_rc1-r3.ebuild,v 1.1 2009/05/27 08:37:45 ssuominen Exp $
 
@@ -9,8 +9,8 @@ MY_P=${P/_/}
 DESCRIPTION="The Ogg Vorbis sound file format library with aoTuV patch"
 HOMEPAGE="http://xiph.org/vorbis"
 SRC_URI="http://people.xiph.org/~giles/2008/${MY_P}.tar.bz2
-       aotuv? ( mirror://gentoo/${P}-aotuv_beta5.7.patch.bz2
-	           http://dev.gentoo.org/~ssuominen/${P}-aotuv_beta5.7.patch.bz2 )"
+	aotuv? ( mirror://gentoo/${P}-aotuv_beta5.7.patch.bz2
+		http://dev.gentoo.org/~ssuominen/${P}-aotuv_beta5.7.patch.bz2 )"
 
 LICENSE="BSD"
 SLOT="0"
@@ -21,17 +21,16 @@ RDEPEND="media-libs/libogg"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
-S="${WORKDIR}/${MY_P}"
+S=${WORKDIR}/${MY_P}
 
 multilib-native_src_prepare_internal() {
 	use aotuv && epatch "${WORKDIR}"/${P}-aotuv_beta5.7.patch
 
 	sed -e 's:-O20::g' -e 's:-mfused-madd::g' -e 's:-mcpu=750::g' \
-			-i configure.ac || die "sed failed"
+		-i configure.ac || die "sed failed"
 
-	rm ltmain.sh
+	rm -f ltmain.sh
 	AT_M4DIR=m4 eautoreconf
-
 }
 
 multilib-native_src_configure_internal() {
@@ -42,7 +41,7 @@ multilib-native_src_configure_internal() {
 		replace-flags -Os -O2
 	fi
 
-	econf || die
+	econf
 }
 
 multilib-native_src_install_internal() {
