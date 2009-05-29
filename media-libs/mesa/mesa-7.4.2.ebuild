@@ -89,7 +89,7 @@ DEPEND="${RDEPEND}
 	motif? ( x11-proto/printproto )
 "
 # glew depend on mesa and it is needed in runtime
-PDEPEND=">=media-libs/glew-1.5.1[lib32]"
+PDEPEND=">=media-libs/glew-1.5.1[lib32?]"
 
 S="${WORKDIR}/${MY_P}"
 
