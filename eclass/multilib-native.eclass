@@ -599,7 +599,7 @@ multilib-native_check_inherited_funcs() {
 		fi
 	fi
 	
-	[[ "${1/_*}" != "pkg" ]] && einfo "Using ${declared_func} ..."
+	[[ "${1/_*}" != "pkg" ]] && einfo "Using ${declared_func} for ABI ${ABI} ..."
 	${declared_func}
 }
 

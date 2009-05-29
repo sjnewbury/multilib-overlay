@@ -1,19 +1,18 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.5.4-r3.ebuild,v 1.1 2009/05/25 17:11:18 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.2-r1.ebuild,v 1.1 2009/05/28 16:59:24 arfrever Exp $
 
 # NOTE about python-portage interactions :
 # - Do not add a pkg_setup() check for a certain version of portage
 #   in dev-lang/python. It _WILL_ stop people installing from
 #   Gentoo 1.4 images.
 
-EAPI=2
+EAPI="2"
 
+inherit autotools eutils flag-o-matic libtool multilib python toolchain-funcs versionator multilib-native
 MULTILIB_IN_SOURCE_BUILD="yes"
 
-inherit eutils autotools flag-o-matic python versionator toolchain-funcs libtool multilib-native
-
-# We need this so that we don't depend on python.eclass
+# We need this so that we don't depends on python.eclass
 PYVER_MAJOR=$(get_major_version)
 PYVER_MINOR=$(get_version_component_range 2)
 PYVER="${PYVER_MAJOR}.${PYVER_MINOR}"
@@ -27,8 +26,8 @@ SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
 	mirror://gentoo/python-gentoo-patches-${PV}-r1.tar.bz2"
 
 LICENSE="PSF-2.2"
-SLOT="2.5"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+SLOT="2.6"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
 IUSE="berkdb build doc elibc_uclibc examples gdbm ipv6 ncurses readline sqlite ssl +threads tk ucs2 wininst +xml"
 
 # NOTE: dev-python/{elementtree,celementtree,pysqlite,ctypes,cjkcodecs}
@@ -41,8 +40,7 @@ DEPEND=">=app-admin/eselect-python-20080925
 			tk? ( >=dev-lang/tk-8.0[lib32?] )
 			ncurses? ( >=sys-libs/ncurses-5.2[lib32?]
 						readline? ( >=sys-libs/readline-4.1[lib32?] ) )
-			berkdb? ( || ( sys-libs/db:4.5[lib32?] sys-libs/db:4.4[lib32?] sys-libs/db:4.3[lib32?]
-							sys-libs/db:4.2[lib32?] ) )
+			berkdb? ( >=sys-libs/db-3.1[lib32?] )
 			gdbm? ( sys-libs/gdbm[lib32?] )
 			ssl? ( dev-libs/openssl[lib32?] )
 			doc? ( dev-python/python-docs:${SLOT} )
@@ -54,10 +52,10 @@ PDEPEND="${DEPEND} app-admin/python-updater"
 PROVIDE="virtual/python"
 
 multilib-native_src_prepare_internal() {
-
 	if tc-is-cross-compiler; then
-		epatch "${FILESDIR}"/python-2.4.4-test-cross.patch \
-			"${FILESDIR}"/python-2.5-cross-printf.patch
+		epatch "${FILESDIR}"/python-2.5-cross-printf.patch
+		epatch "${FILESDIR}"/python-2.6-chflags-cross.patch
+		epatch "${FILESDIR}"/python-2.6-test-cross.patch
 	else
 		rm "${WORKDIR}/${PV}"/*_all_crosscompile.patch
 	fi
@@ -131,8 +129,8 @@ multilib-native_src_configure_internal() {
 
 	# http://bugs.gentoo.org/show_bug.cgi?id=50309
 	if is-flag -O3; then
-		is-flag -fstack-protector-all && replace-flags -O3 -O2
-		use hardened && replace-flags -O3 -O2
+	   is-flag -fstack-protector-all && replace-flags -O3 -O2
+	   use hardened && replace-flags -O3 -O2
 	fi
 
 	if tc-is-cross-compiler; then
@@ -151,8 +149,8 @@ multilib-native_src_configure_internal() {
 	# Export CXX so it ends up in /usr/lib/python2.X/config/Makefile.
 	tc-export CXX
 
-	# Set LDFLAGS so we link modules with -lpython2.5 correctly.
-	# Needed on FreeBSD unless Python 2.5 is already installed.
+	# Set LDFLAGS so we link modules with -lpython2.6 correctly.
+	# Needed on FreeBSD unless Python 2.6 is already installed.
 	# Please query BSD team before removing this!
 	append-ldflags "-L."
 
@@ -165,11 +163,6 @@ multilib-native_src_configure_internal() {
 		--mandir='${prefix}'/share/man \
 		--with-libc='' \
 		${myconf}
-}
-
-multilib-native_src_compile_internal() {
-	src_configure
-	emake || die "emake failed"
 }
 
 multilib-native_src_test_internal() {
@@ -185,7 +178,7 @@ multilib-native_src_test_internal() {
 
 	# Skip all tests that fail during emerge but pass without emerge:
 	# (See bug #67970)
-	local skip_tests="distutils global mimetools minidom mmap posix pyexpat sax strptime subprocess syntax tcl time urllib urllib2 webbrowser xml_etree"
+	local skip_tests="distutils global httpservers mimetools minidom mmap posix pyexpat sax strptime subprocess syntax tcl time urllib urllib2 xml_etree"
 
 	# test_pow fails on alpha.
 	# http://bugs.python.org/issue756093
@@ -214,7 +207,10 @@ multilib-native_src_test_internal() {
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${D}" altinstall maninstall || die "emake altinstall maninstall failed"
+	# ahuemer, 20090529:
+	# -j1 was removed from python-2.6.2-r1.ebuild in portage
+	# we seem to still need it, because otherwise building fails!
+	emake -j1 DESTDIR="${D}" altinstall maninstall || die "emake altinstall maninstall failed"
 
 	mv "${D}"/usr/bin/python${PYVER}-config "${D}"/usr/bin/python-config-${PYVER}
 	if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
@@ -222,6 +218,7 @@ multilib-native_src_install_internal() {
 	fi
 
 	# Fix slotted collisions.
+	mv "${D}"/usr/bin/2to3 "${D}"/usr/bin/2to3-${PYVER}
 	mv "${D}"/usr/bin/pydoc "${D}"/usr/bin/pydoc${PYVER}
 	mv "${D}"/usr/bin/idle "${D}"/usr/bin/idle${PYVER}
 	mv "${D}"/usr/share/man/man1/python.1 "${D}"/usr/share/man/man1/python${PYVER}.1
@@ -248,16 +245,19 @@ multilib-native_src_install_internal() {
 
 	newinitd "${FILESDIR}/pydoc.init" pydoc-${SLOT}
 	newconfd "${FILESDIR}/pydoc.conf" pydoc-${SLOT}
+
+	# Installs empty directory.
+	rmdir "${D}"/usr/$(get_libdir)/${PN}${PYVER}/lib-old
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	eselect python update --ignore 3.0 --ignore 3.1
 
 	python_mod_cleanup /usr/lib/python${PYVER}
 	[[ "$(get_libdir)" != "lib" ]] && python_mod_cleanup /usr/$(get_libdir)/python${PYVER}
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	eselect python update --ignore 3.0 --ignore 3.1
 
 	python_mod_optimize -x "(site-packages|test)" /usr/lib/python${PYVER}

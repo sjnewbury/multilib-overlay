@@ -14,7 +14,7 @@ berkdb build doc elibc_uclibc examples gdbm ipv6 ncurses readline sqlite ssl +th
 virtual/python
 2
 
-compile configure install postinst postrm preinst prepare setup test unpack
+compile configure install postinst postrm preinst prepare setup unpack
 
 
 

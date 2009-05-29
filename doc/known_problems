@@ -1,2 +1,6 @@
-x11-libs/qt-gui		(installs headers under /usr/include/gentoo-multilib)	ahuemer
-x11-libs/qt-phonon	(installs headers under /usr/include/gentoo-multilib)	ahuemer
+x11-libs/qt-gui-4.5.1-r2	(installs headers under /usr/include/gentoo-multilib)	ahuemer
+x11-libs/qt-phonon-4.5.1	(installs headers under /usr/include/gentoo-multilib)	ahuemer
+dev-lang/python-2.6.2-r1	(emake -j1 still needed, otherwise build fails.
+				not necessary (?) in portage version)			ahuemer
+multilib-native.eclass:314	(quoting after equation sign breaks vim syntax highlighting
+				 this means normally that something is bad.)		ahuemer
