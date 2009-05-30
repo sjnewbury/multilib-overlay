@@ -1,6 +1,109 @@
 # ChangeLog for net-libs/gnutls
 # Copyright 1999-2009 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/gnutls/ChangeLog,v 1.180 2009/03/01 20:01:43 dragonheart Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/gnutls/ChangeLog,v 1.201 2009/05/28 17:33:30 arfrever Exp $
+
+*gnutls-2.9.0 (28 May 2009)
+*gnutls-2.8.0 (28 May 2009)
+
+  28 May 2009; Arfrever Frehtes Taifersar Arahesis <arfrever@gentoo.org>
+  -gnutls-2.7.12.ebuild, -gnutls-2.7.13.ebuild, +gnutls-2.8.0.ebuild,
+  +gnutls-2.9.0.ebuild:
+  Version bumps.
+
+*gnutls-2.7.13 (25 May 2009)
+
+  25 May 2009; Arfrever Frehtes Taifersar Arahesis <arfrever@gentoo.org>
+  -gnutls-2.7.11.ebuild, +gnutls-2.7.13.ebuild:
+  Version bump.
+
+*gnutls-2.7.12 (20 May 2009)
+
+  20 May 2009; Arfrever Frehtes Taifersar Arahesis <arfrever@gentoo.org>
+  -gnutls-2.7.10.ebuild, +gnutls-2.7.12.ebuild:
+  Version bump.
+
+*gnutls-2.7.11 (19 May 2009)
+
+  19 May 2009; Arfrever Frehtes Taifersar Arahesis <arfrever@gentoo.org>
+  -files/gnutls-2.6.0-openpgp-selftest.patch, -gnutls-2.6.4.ebuild,
+  -gnutls-2.6.5.ebuild, -gnutls-2.6.5-r1.ebuild, -gnutls-2.7.8.ebuild,
+  -files/gnutls-2.7.8-lzo.patch, +gnutls-2.7.11.ebuild,
+  -files/CVE-2009-1415.patch, -files/CVE-2009-1416.patch,
+  -files/CVE-2009-1417.patch:
+  Version bump.
+
+*gnutls-2.7.10 (15 May 2009)
+
+  15 May 2009; Arfrever Frehtes Taifersar Arahesis <arfrever@gentoo.org>
+  -gnutls-2.7.7.ebuild, +gnutls-2.7.10.ebuild:
+  Version bump.
+
+  06 May 2009; Raúl Porcel <armin76@gentoo.org> gnutls-2.6.6.ebuild:
+  alpha/arm/ia64/m68k/s390/sh/sparc stable wrt #267774
+
+*gnutls-2.7.8 (04 May 2009)
+
+  04 May 2009; Arfrever Frehtes Taifersar Arahesis <arfrever@gentoo.org>
+  +gnutls-2.7.8.ebuild, +files/gnutls-2.7.8-lzo.patch:
+  Version bump.
+
+  03 May 2009; Brent Baude <ranger@gentoo.org> gnutls-2.6.6.ebuild:
+  Marking gnutls-2.6.6 ppc64 and ppc for bug 267774
+
+  03 May 2009; Tobias Klausmann <klausman@gentoo.org> gnutls-2.6.6.ebuild:
+  Stable on alpha, bug #267774
+
+  02 May 2009; Jeroen Roovers <jer@gentoo.org> gnutls-2.6.6.ebuild:
+  Stable for HPPA (bug #267774).
+
+  01 May 2009; Markus Meier <maekke@gentoo.org> gnutls-2.6.6.ebuild:
+  amd64/x86 stable, bug #267774
+
+  01 May 2009; Daniel Black <dragonheart@gentoo.org> gnutls-2.6.5-r1.ebuild,
+  gnutls-2.6.6.ebuild:
+  libtool rebuild to prevent bug #268065 which I forgot about
+
+*gnutls-2.6.6 (30 Apr 2009)
+
+  30 Apr 2009; Daniel Black <dragonheart@gentoo.org> +gnutls-2.6.6.ebuild:
+  official upstream release to fix CVE-2009-1415 CVE-2009-1416 CVE-2009-1417
+
+*gnutls-2.6.5-r1 (30 Apr 2009)
+
+  30 Apr 2009; Daniel Black <dragonheart@gentoo.org>
+  +files/CVE-2009-1415.patch, +files/CVE-2009-1416.patch,
+  +files/CVE-2009-1417.patch, +gnutls-2.6.5-r1.ebuild:
+  fix for security bug #267774
+
+*gnutls-2.7.7 (26 Apr 2009)
+
+  26 Apr 2009; Arfrever Frehtes Taifersar Arahesis <arfrever@gentoo.org>
+  -gnutls-2.7.6.ebuild, +gnutls-2.7.7.ebuild:
+  Version bump.
+
+*gnutls-2.6.5 (12 Apr 2009)
+
+  12 Apr 2009; Arfrever Frehtes Taifersar Arahesis <arfrever@gentoo.org>
+  -files/gnutls-2.2.5-CVE-2008-4989-V2.patch,
+  -files/gnutls-2.3.11+gcc-4.3.patch, -gnutls-2.2.5.ebuild,
+  -gnutls-2.4.1-r2.ebuild, -gnutls-2.6.0-r2.ebuild, -gnutls-2.6.3.ebuild,
+  +gnutls-2.6.5.ebuild, -gnutls-2.7.4.ebuild:
+  Version bump. Remove older versions.
+
+  11 Apr 2009; Raúl Porcel <armin76@gentoo.org> gnutls-2.6.4.ebuild:
+  arm/ia64/m68k/s390/sh/sparc stable wrt #264392
+
+  08 Apr 2009; Jeroen Roovers <jer@gentoo.org> gnutls-2.6.4.ebuild:
+  Stable for HPPA (bug #264392).
+
+  07 Apr 2009; Tobias Klausmann <klausman@gentoo.org> gnutls-2.6.4.ebuild:
+  Stable on alpha, bug #264392
+
+  05 Apr 2009; Markus Meier <maekke@gentoo.org> gnutls-2.6.4.ebuild:
+  amd64/x86 stable, bug #264392
+
+  01 Apr 2009; Joseph Jezak <josejx@gentoo.org> gnutls-2.6.4.ebuild:
+  Marked ppc/ppc64 stable for bug #264392.
 
 *gnutls-2.6.4 (01 Mar 2009)
 
