@@ -38,7 +38,3 @@ multilib-native_src_configure_internal() {
 	myconf="${myconf} -webkit"
 	qt4-build_src_configure
 }
-
-multilib-native_src_compile_internal() {
-	qt4-build_src_compile
-}
