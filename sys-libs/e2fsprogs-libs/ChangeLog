@@ -1,6 +1,22 @@
 # ChangeLog for sys-libs/e2fsprogs-libs
 # Copyright 1999-2009 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/e2fsprogs-libs/ChangeLog,v 1.22 2009/01/28 05:43:32 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/e2fsprogs-libs/ChangeLog,v 1.25 2009/05/30 18:55:34 vapier Exp $
+
+*e2fsprogs-libs-1.41.6 (30 May 2009)
+
+  30 May 2009; Mike Frysinger <vapier@gentoo.org>
+  +e2fsprogs-libs-1.41.6.ebuild:
+  Version bump.
+
+*e2fsprogs-libs-1.41.5 (29 May 2009)
+
+  29 May 2009; Mike Frysinger <vapier@gentoo.org>
+  +e2fsprogs-libs-1.41.5.ebuild:
+  Version bump #267402 by Paul Mulders.
+
+  15 Mar 2009; Mike Frysinger <vapier@gentoo.org>
+  e2fsprogs-libs-1.41.4.ebuild:
+  Force recent version of glibc for tls support.
 
 *e2fsprogs-libs-1.41.4 (28 Jan 2009)
 
