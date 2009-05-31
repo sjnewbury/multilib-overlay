@@ -1,12 +1,21 @@
 #!/bin/bash
 
 SOURCE_DIR=$1
+IGNORE_LIST=$2
 
 if [[ ! -d ${SOURCE_DIR} ]]; then
 	SOURCE_DIR=/usr/portage
+	IGNORE_LIST=$1
 fi
 
-echo SOURCE_DIR=${SOURCE_DIR}
+if [[ ! -f ${IGNORE_LIST} ]]; then
+	IGNORE_LIST=doc/ignore_lists/portage
+fi
+
+echo ebuild listed in ${IGNORE_LIST} are ignored
+echo the following ebuild are not in ${SOURCE_DIR}
+
+IGNORED_EBUILD="$(cat ${IGNORE_LIST})"
 
 for EBUILD in $(find . -name "*.ebuild" -a -not -path "./main_tree*"); do
 	if [[ ! -f ${SOURCE_DIR}/${EBUILD} ]]; then
@@ -14,8 +23,10 @@ for EBUILD in $(find . -name "*.ebuild" -a -not -path "./main_tree*"); do
 	fi
 done
 
+for EBUILD in ${IGNORED_EBUILD}; do
+	EBUILDS_NOT_IN_SOURCE="${EBUILDS_NOT_IN_SOURCE/"${EBUILD}"/}"
+done
 
 EBUILDS_NOT_IN_SOURCE="$(tr ' ' '\n' <<< "${EBUILDS_NOT_IN_SOURCE}" | sort -u)"
 
-echo the following ebuild are not in ${SOURCE_DIR}
 echo -e "${EBUILDS_NOT_IN_SOURCE}"
