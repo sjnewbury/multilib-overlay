@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-0.4.9_p20090201.ebuild,v 1.10 2009/04/04 15:05:05 armin76 Exp $
 
-EAPI=1
+EAPI="2"
 
 inherit eutils flag-o-matic multilib toolchain-funcs multilib-native
 
@@ -61,7 +61,7 @@ src_unpack() {
 	sed -i s/UNKNOWN/SVN-r${FFMPEG_SVN_REV}/ "${S}/version.sh"
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	replace-flags -O0 -O2
 	#x86, what a wonderful arch....
 	replace-flags -O1 -O2
@@ -188,7 +188,9 @@ multilib-native_src_compile_internal() {
 		--enable-static --enable-shared \
 		--cc="$(tc-getCC)" \
 		${myconf} || die "configure failed"
+}
 
+multilib-native_src_compile_internal() {
 	emake version.h || die #252269
 	emake || die "make failed"
 }

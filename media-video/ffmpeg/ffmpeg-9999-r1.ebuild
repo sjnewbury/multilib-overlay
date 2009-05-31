@@ -1,8 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999.ebuild,v 1.15 2009/04/04 15:05:05 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999-r1.ebuild,v 1.1 2009/05/02 01:29:15 beandog Exp $
 
-EAPI=1
+EAPI="2"
 
 ESVN_REPO_URI="svn://svn.mplayerhq.hu/ffmpeg/trunk"
 
@@ -15,9 +15,9 @@ HOMEPAGE="http://ffmpeg.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="+3dnow +3dnowext alsa altivec amr custom-cflags debug dirac doc
-	  ieee1394 +encode faac faad gsm ipv6 jack +mmx +mmxext vorbis test theora
-	  threads x264 xvid network zlib sdl X mp3 oss schroedinger
+IUSE="+3dnow +3dnowext alsa altivec amr cpudetection custom-cflags debug dirac
+	  doc ieee1394 +encode faac faad gsm ipv6 jack +mmx +mmxext vorbis test
+	  theora threads x264 xvid network zlib sdl X mp3 oss schroedinger
 	  +hardcoded-tables bindist v4l v4l2 speex +ssse3 jpeg2k"
 
 RDEPEND="sdl? ( >=media-libs/libsdl-1.2.10[lib32?] )
@@ -49,7 +49,7 @@ DEPEND="${RDEPEND}
 	v4l? ( sys-kernel/linux-headers )
 	v4l2? ( sys-kernel/linux-headers )"
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local myconf="${EXTRA_ECONF}"
 
 	# enabled by default
@@ -64,11 +64,11 @@ multilib-native_src_compile_internal() {
 	fi
 
 	use custom-cflags && myconf="${myconf} --disable-optimizations"
+	use cpudetection && myconf="${myconf} --enable-runtime-cpudetect"
 
 	# enabled by default
 	if use encode
 	then
-		use faac && myconf="${myconf} --enable-libfaac"
 		use mp3 && myconf="${myconf} --enable-libmp3lame"
 		use vorbis && myconf="${myconf} --enable-libvorbis"
 		use theora && myconf="${myconf} --enable-libtheora"
@@ -107,10 +107,13 @@ multilib-native_src_compile_internal() {
 	if use bindist
 	then
 		use amr && ewarn "libamr is nonfree and cannot be distributed; disabling amr support."
+		use faac && ewarn "faac is nonfree and cannot be distributed; disabling
+		faac support."
 	else
 		use amr && myconf="${myconf} --enable-libamr-nb \
-									 --enable-libamr-wb \
-									 --enable-nonfree"
+									 --enable-libamr-wb"
+		use faac && myconf="${myconf} --enable-libfaac"
+		myconf="${myconf} --enable-nonfree"
 	fi
 
 	# CPU features
@@ -171,7 +174,9 @@ multilib-native_src_compile_internal() {
 		--enable-static --enable-shared \
 		--cc="$(tc-getCC)" \
 		${myconf} || die "configure failed"
+}
 
+multilib-native_src_compile_internal() {
 	emake version.h || die #252269
 	emake || die "make failed"
 }

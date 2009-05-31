@@ -1,8 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-0.5-r1.ebuild,v 1.4 2009/04/04 15:05:05 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-0.5-r1.ebuild,v 1.10 2009/05/21 19:02:04 ranger Exp $
 
-EAPI=1
+EAPI="2"
 
 inherit eutils flag-o-matic multilib toolchain-funcs multilib-native
 
@@ -13,7 +13,7 @@ SRC_URI="http://ffmpeg.org/releases/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 ~arm ~hppa ~ia64 ppc ppc64 ~sparc x86 ~x86-fbsd"
 IUSE="+3dnow +3dnowext alsa altivec amr custom-cflags debug dirac doc ieee1394
 	  +encode faac faad gsm ipv6 +mmx +mmxext vorbis test theora threads x264
 	  xvid network zlib sdl X mp3 oss schroedinger +hardcoded-tables bindist
@@ -24,7 +24,12 @@ RDEPEND="vhook? ( >=media-libs/imlib2-1.4.0[lib32?] >=media-libs/freetype-2[lib3
 	alsa? ( media-libs/alsa-lib[lib32?] )
 	encode? (
 		faac? ( media-libs/faac[lib32?] )
-		mp3? ( media-sound/lame[lib32?] )
+		mp3? (
+			|| (
+				>=media-sound/lame-3.98.2-r1[lib32?]
+				<media-sound/lame-3.98[lib32?]
+			)
+		)
 		vorbis? ( media-libs/libvorbis[lib32?] media-libs/libogg[lib32?] )
 		theora? ( media-libs/libtheora[lib32?] media-libs/libogg[lib32?] )
 		x264? ( >=media-libs/x264-0.0.20081006[lib32?] )
@@ -49,7 +54,7 @@ DEPEND="${RDEPEND}
 	v4l? ( sys-kernel/linux-headers )
 	v4l2? ( sys-kernel/linux-headers )"
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local myconf="${EXTRA_ECONF}"
 
 	# enabled by default
@@ -175,7 +180,9 @@ multilib-native_src_compile_internal() {
 		--enable-static --enable-shared \
 		--cc="$(tc-getCC)" \
 		${myconf} || die "configure failed"
+}		
 
+multilib-native_src_compile_internal() {
 	emake version.h || die #252269
 	emake || die "make failed"
 }

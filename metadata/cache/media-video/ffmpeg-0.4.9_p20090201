@@ -12,9 +12,9 @@ base eutils flag-o-matic multilib multilib-native portability toolchain-funcs
 
 
 
-1
+2
 
-compile install postinst postrm preinst setup test unpack
+compile configure install postinst postrm preinst prepare setup test unpack
 
 
 
