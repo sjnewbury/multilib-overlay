@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.22.4.ebuild,v 1.8 2009/03/28 17:06:31 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.22.4-r1.ebuild,v 1.1 2009/04/27 19:11:30 ford_prefect Exp $
 
 EAPI="2"
 
@@ -11,8 +11,7 @@ HOMEPAGE="http://www.pango.org/"
 
 LICENSE="LGPL-2 FTL"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86
-~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="X debug doc"
 
 RDEPEND=">=dev-libs/glib-2.17.3[lib32?]
@@ -52,8 +51,6 @@ src_unpack() {
 
 	# fix crash while handling special characters (bug #267560)
 	epatch "${FILESDIR}/${P}-special-chars-crash.patch"
-
-
 
 	# make config file location host specific so that a 32bit and 64bit pango
 	# wont fight with each other on a multilib system.  Fix building for

@@ -1,6 +1,7 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.14.2.ebuild,v 1.1 2009/05/26 10:55:03 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.14.2.ebuild,v 1.3 2009/05/28 20:53:11 fmccor Exp $
+
 EAPI="2"
 
 inherit eutils flag-o-matic multilib versionator multilib-native
@@ -41,6 +42,8 @@ src_unpack() {
 
 	# note: this sandbox fix is no longer needed with sandbox-1.3+
 	epatch "${FILESDIR}"/sandbox-fix2.patch
+
+	epatch "${FILESDIR}/${P}-fix_alignment.patch"
 
 	epunt_cxx
 }
