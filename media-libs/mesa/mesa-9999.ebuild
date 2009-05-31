@@ -232,13 +232,15 @@ multilib-native_src_install_internal() {
 
 	# Install libtool archives
 	insinto /usr/$(get_libdir)
-	# Should this use the -L/usr/lib instead of -L/usr/$(get_libdir)?
-	# Please confirm and update this comment or the file.
-	doins "${FILESDIR}"/lib/libGLU.la || die "doins libGLU.la failed"
 	sed \
 		-e "s:\${libdir}:$(get_libdir):g" \
 		"${FILESDIR}"/lib/libGL.la \
 		> "${D}"/usr/$(get_libdir)/opengl/xorg-x11/lib/libGL.la
+
+	sed \
+		-e "/\/usr\/lib/s:\/lib:\/$(get_libdir):g" \
+		"${FILESDIR}"/lib/libGLU.la \
+		> "${D}"/usr/$(get_libdir)/libGLU.la
 
 	# On *BSD libcs dlopen() and similar functions are present directly in
 	# libc.so and does not require linking to libdl. portability eclass takes
