@@ -311,7 +311,7 @@ multilib-native_save_abi_env() {
 	for _var in ${EMULTILIB_SAVE_VARS}; do
 		_array="EMULTILIB_${_var}"
 		multilib_debug ${_array}[$(multilib-native_abi_to_index_key ${1})] "${!_var}"
-		eval "${_array}[$(multilib-native_abi_to_index_key ${1})]"="\"${!_var}\""
+		eval "${_array}[$(multilib-native_abi_to_index_key ${1})]"=\"${!_var}\"
 	done
 }
 
