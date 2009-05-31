@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-phonon/qt-phonon-4.4.2.ebuild,v 1.6 2009/02/18 19:57:30 jer Exp $
 
-EAPI="1"
+EAPI="2"
 inherit qt4-build multilib-native
 
 DESCRIPTION="The Phonon module for the Qt toolkit."
@@ -34,10 +34,10 @@ QCONFIG_DEFINE="QT_GSTREAMER"
 QT4_BUILT_WITH_USE_CHECK="~x11-libs/qt-core-${PV} glib
 ~x11-libs/qt-gui-${PV} glib"
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local myconf
 	myconf="${myconf} -phonon -no-opengl -no-svg
 		$(qt_use dbus qdbus)"
 
-	qt4-build_src_compile
+	qt4-build_src_configure
 }
