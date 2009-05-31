@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-sql/qt-sql-4.4.2.ebuild,v 1.9 2009/02/18 19:52:25 jer Exp $
 
-EAPI="1"
+EAPI="2"
 inherit qt4-build multilib-native
 
 DESCRIPTION="The SQL module for the Qt toolkit."
@@ -47,7 +47,7 @@ src_unpack() {
 		|| die 'Sed to fix postgresql usage in ./configure failed.'
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local myconf
 	# Don't support sqlite2 anymore
 	myconf="${myconf} -no-sql-sqlite2
@@ -64,5 +64,5 @@ multilib-native_src_compile_internal() {
 		-no-xmlpatterns -no-freetype -no-libtiff  -no-accessibility -no-fontconfig
 		-no-glib -no-opengl -no-svg"
 
-	qt4-build_src_compile
+	qt4-build_src_configure
 }
