@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-test/qt-test-4.4.2.ebuild,v 1.9 2009/03/01 11:00:58 alexxy Exp $
 
-EAPI="1"
+EAPI="2"
 inherit qt4-build multilib-native
 
 DESCRIPTION="The testing framework module for the Qt toolkit."
@@ -20,7 +20,7 @@ RDEPEND="${DEPEND}"
 QT4_TARGET_DIRECTORIES="src/testlib"
 QT4_EXTRACT_DIRECTORIES="${QT4_TARGET_DIRECTORIES}"
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local myconf
 	myconf="${myconf} -no-xkb -no-tablet -no-fontconfig -no-xrender -no-xrandr
 		-no-xfixes -no-xcursor -no-xinerama -no-xshape -no-sm -no-opengl
@@ -29,5 +29,5 @@ multilib-native_src_compile_internal() {
 		-no-qt3support -no-xmlpatterns -no-freetype -no-libtiff -no-accessibility
 		-no-fontconfig -no-glib -no-opengl -no-svg"
 
-	qt4-build_src_compile
+	qt4-build_src_configure
 }
