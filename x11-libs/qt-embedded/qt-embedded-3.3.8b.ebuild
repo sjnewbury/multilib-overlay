@@ -1,16 +1,16 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-embedded/qt-embedded-3.3.8.ebuild,v 1.4 2008/12/08 01:06:02 darkside Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-embedded/qt-embedded-3.3.8b.ebuild,v 1.3 2009/05/05 08:23:14 ssuominen Exp $
 
 EAPI="2"
 
 DESCRIPTION="Embedded Linux port of Qt"
-HOMEPAGE="http://www.trolltech.com/products/embedded/"
-SRC_URI="ftp://ftp.trolltech.com/qt/source/qt-embedded-free-${PV}.tar.bz2"
-LICENSE="|| ( QPL-1.0 GPL-2 )"
+HOMEPAGE="http://www.qtsoftware.com/products/platform/qt-for-embedded-linux"
+SRC_URI="ftp://ftp.qtsoftware.com/qt/source/qt-embedded-free-${PV}.tar.gz"
+LICENSE="|| ( QPL-1.0 GPL-2 GPL-3 )"
 
 SLOT="3"
-KEYWORDS="~x86 ~ppc"
+KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="cups debug doc firebird gif ipv6 mysql nis odbc opengl postgres sqlite"
 
 DEPEND="media-libs/libpng[lib32?]
@@ -23,6 +23,7 @@ DEPEND="media-libs/libpng[lib32?]
 	mysql? ( virtual/mysql[lib32?] )
 	opengl? ( virtual/opengl[lib32?] virtual/glu[lib32?] )
 	postgres? ( virtual/postgresql-server[lib32?] )"
+RDEPEND="${DEPEND}"
 PDEPEND="odbc? ( ~dev-db/qt-unixODBC-3.3.8[lib32?] )"
 
 S=${WORKDIR}/qt-embedded-free-${PV}
@@ -35,7 +36,7 @@ pkg_setup() {
 	ewarn "I advise you select your own featureset (e.g. by editing this ebuild)"
 	ewarn "if building for such a system."
 
-	export QTDIR=${S}
+	export QTDIR="${S}"
 
 	# values for 'PLATFORM' (host system) can be found in mkspecs/
 	# values for 'XPLATFORM' (target system) can be found in mkspecs/qws/
@@ -60,6 +61,9 @@ multilib-native_src_prepare_internal() {
 
 	# avoid using -rpath
 	find mkspecs/ -name qmake.conf -exec sed -i -e "s:QMAKE_RPATH.*:QMAKE_RPATH =:" {} \;
+
+	# patch to fix invalid type casts with gcc-4 on amd64 (bug 164113)
+	epatch "${FILESDIR}"/${PN}-3.3.8-castfix.patch
 }
 
 multilib-native_src_configure_internal() {
@@ -86,38 +90,38 @@ multilib-native_src_compile_internal() {
 
 	export LD_LIBRARY_PATH="${S}/lib:${LD_LIBRARY_PATH}"
 
-	cd ${S} && emake symlinks src-qmake src-moc sub-src || die "make failed"
+	cd "${S}" && emake symlinks src-qmake src-moc sub-src || die "make failed"
 
 	# the designer is not compiled when using -embedded, but we need the uic
-	cd ${S}/tools/designer/uic && emake || die "making uic failed"
+	cd "${S}"/tools/designer/uic && emake || die "making uic failed"
 
-	cd ${S} && emake sub-tools || die "making tools failed"
+	cd "${S}" && emake sub-tools || die "making tools failed"
 
 	if use doc; then
-		cd ${S} && emake sub-tutorial sub-examples || die "making examples failed"
+		cd "${S}" && emake sub-tutorial sub-examples || die "making examples failed"
 	fi
 }
 
 multilib-native_src_install_internal() {
-	INSTALL_ROOT=${D} emake install
+	INSTALL_ROOT="${D}" emake install
 
 	# fix .prl files
-	find ${D}/${QTBASE}/lib* -name "*.prl" -exec sed -i -e "s:${S}:${QTBASE}:g" {} \;
+	find "${D}"/${QTBASE}/lib* -name "*.prl" -exec sed -i -e "s:${S}:${QTBASE}:g" {} \;
 
 	# remove broken link
-	rm -f ${D}/${QTBASE}/mkspecs/${PLATFORM}/${PLATFORM}
+	rm -f "${D}"/${QTBASE}/mkspecs/${PLATFORM}/${PLATFORM}
 
 	# fonts
 	insinto ${QTBASE}/lib/fonts
-	doins ${S}/lib/fonts/*
+	doins "${S}"/lib/fonts/*
 
 	# environment variables
-	cat <<EOF > ${T}/47qt-embedded3
+	cat <<EOF > "${T}"/47qt-embedded3
 PATH=${QTBASE}/bin
 ROOTPATH=${QTBASE}/bin
 LDPATH=${QTBASE}/lib
 EOF
-	doenvd ${T}/47qt-embedded3
+	doenvd "${T}"/47qt-embedded3
 
 	# qmake cache file
 	sed -i -e "s:${S}:${QTBASE}:" .qmake.cache
@@ -128,8 +132,8 @@ EOF
 	if use doc; then
 		find examples tutorial -name Makefile -exec sed -i -e "s:${S}:${QTBASE}:g" {} \;
 
-		cp -r ${S}/tutorial ${D}/${QTBASE}
-		cp -r ${S}/examples ${D}/${QTBASE}
+		cp -r "${S}"/tutorial "${D}"/${QTBASE}
+		cp -r "${S}"/examples "${D}"/${QTBASE}
 	fi
 
 	# default target link (overriden by QMAKESPEC env var)
