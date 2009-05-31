@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-webkit/qt-webkit-4.4.2.ebuild,v 1.9 2009/04/11 16:24:10 armin76 Exp $
 
-EAPI="1"
+EAPI="2"
 inherit qt4-build flag-o-matic toolchain-funcs multilib-native
 
 DESCRIPTION="The Webkit module for the Qt toolkit."
@@ -33,9 +33,12 @@ src_unpack() {
 	qt4-build_src_unpack
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local myconf
 	myconf="${myconf} -webkit"
+	qt4-build_src_configure
+}
 
+multilib-native_src_compile_internal() {
 	qt4-build_src_compile
 }
