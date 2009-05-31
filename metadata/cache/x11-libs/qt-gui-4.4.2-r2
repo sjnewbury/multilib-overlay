@@ -12,9 +12,9 @@ base eutils flag-o-matic multilib multilib-native portability qt4-build toolchai
 
 qt3support? ( ~x11-libs/qt-qt3support-4.4.2[lib32?] )
 
-1
+2
 
-compile install postinst postrm preinst setup unpack
+compile configure install postinst postrm preinst prepare setup unpack
 
 
 
