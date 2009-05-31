@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-script/qt-script-4.4.2.ebuild,v 1.9 2009/02/18 19:44:08 jer Exp $
 
-EAPI="1"
+EAPI="2"
 inherit qt4-build multilib-native
 
 DESCRIPTION="The ECMAScript module for the Qt toolkit"
@@ -34,6 +34,6 @@ multilib-native_src_compile_internal() {
 		-no-libmng -no-libjpeg -no-openssl -system-zlib -no-webkit -no-phonon
 		-no-qt3support -no-xmlpatterns -no-freetype -no-libtiff -no-accessibility
 		-no-fontconfig -no-glib -no-opengl -no-svg"
-
-	qt4-build_src_compile
+	qt4-build_src_configure
 }
+
