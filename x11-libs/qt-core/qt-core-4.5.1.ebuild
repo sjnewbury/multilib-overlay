@@ -1,13 +1,13 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-core/qt-core-4.5.0.ebuild,v 1.2 2009/03/17 17:45:52 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-core/qt-core-4.5.1.ebuild,v 1.8 2009/05/29 16:27:00 hwoarang Exp $
 
 EAPI="2"
 inherit qt4-build multilib-native
 
 DESCRIPTION="The Qt toolkit is a comprehensive C++ application development framework"
 SLOT="4"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha ~amd64 arm ~hppa ~ia64 ~mips ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="doc +glib +iconv +qt3support +ssl"
 
 RDEPEND="sys-libs/zlib[lib32?]
@@ -117,6 +117,8 @@ src_prepare(){
 		"${S}/qmake/Makefile.unix" || die "sed qmake/Makefile.unix CXXFLAGS failed"
 	sed -i -e "s:LFLAGS.*=:LFLAGS=${LDFLAGS} :" \
 		"${S}/qmake/Makefile.unix" || die "sed qmake/Makefile.unix LDFLAGS failed"
+	#patch for ia64 requested from armin76
+	epatch "${FILESDIR}/${PN}-4.5-boilerplate.diff"
 }
 
 multilib-native_src_configure_internal() {
