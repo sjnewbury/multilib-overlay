@@ -1,4 +1,4 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/libX11/libX11-1.1.5.ebuild,v 1.1 2008/09/06 06:56:34 dberkholz Exp $
 
@@ -13,12 +13,15 @@ DESCRIPTION="X.Org X11 library"
 
 KEYWORDS=""
 IUSE="ipv6 +xcb"
+
 RDEPEND=">=x11-libs/xtrans-1.2.3
-	x11-libs/libXau[lib32?]
-	x11-libs/libXdmcp[lib32?]
 	x11-proto/kbproto
 	>=x11-proto/xproto-7.0.15
-	xcb? ( >=x11-libs/libxcb-1.2[lib32?] )"
+	xcb? ( >=x11-libs/libxcb-1.2[lib32?] )
+	!xcb (
+		x11-libs/libXau[lib32?]
+		x11-libs/libXdmcp[lib32?]
+	)"
 DEPEND="${RDEPEND}
 	x11-proto/xf86bigfontproto
 	x11-proto/bigreqsproto
@@ -27,10 +30,12 @@ DEPEND="${RDEPEND}
 	x11-proto/xcmiscproto
 	>=x11-misc/util-macros-1.2.1"
 
-CONFIGURE_OPTIONS="$(use_enable ipv6)
-	$(use_with xcb)"
-# xorg really doesn't like xlocale disabled.
-# $(use_enable nls xlocale)
+pkg_setup() {
+	CONFIGURE_OPTIONS="$(use_enable ipv6)
+		$(use_with xcb)"
+	# xorg really doesn't like xlocale disabled.
+	# $(use_enable nls xlocale)
+}
 
 x-modular_src_compile() {
 	# [Cross-Compile Love] Disable {C,LD}FLAGS and redefine CC= for 'makekeys'
