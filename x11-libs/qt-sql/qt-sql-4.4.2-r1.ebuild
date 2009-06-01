@@ -42,12 +42,16 @@ pkg_setup() {
 
 src_unpack() {
 	qt4-build_src_unpack
+}
 
+multilib-native_src_prepare_internal() {
 	# Apply bugfix patches from qt-copy (KDE)
 	epatch "${FILESDIR}"/0234-fix-mysql-threaded.diff
 
 	sed -e '/pg_config --libs/d' -i "${S}"/configure \
 		|| die 'Sed to fix postgresql usage in ./configure failed.'
+
+	qt4-build_src_prepare
 }
 
 multilib-native_src_configure_internal() {
