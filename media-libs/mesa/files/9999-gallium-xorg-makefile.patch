@@ -1,5 +1,5 @@
---- ./src/gallium/winsys/drm/intel/xorg/Makefile~	2009-05-02 00:39:17.000000000 +0100
-+++ ./src/gallium/winsys/drm/intel/xorg/Makefile	2009-05-02 10:20:24.867343202 +0100
+--- ./src/gallium/winsys/drm/intel/xorg/Makefile.orig	2009-06-01 15:04:04.126176702 +0100
++++ ./src/gallium/winsys/drm/intel/xorg/Makefile	2009-06-01 15:24:17.816952744 +0100
 @@ -1,44 +1,27 @@
 -TARGET     = modesetting_drv.so
 -CFILES     = $(wildcard ./*.c)
@@ -52,13 +52,13 @@
  
 -install:
 -	$(INSTALL) -d $(DESTDIR)/$(XORG_DRIVER_INSTALL_DIR)
--	$(INSTALL) -m 755 $(TARGET) $(DESTDIR)/$(XORG_DRIVER_INSTALL_DIR)
+-	$(MINSTALL) -m 755 $(TARGET) $(DESTDIR)/$(XORG_DRIVER_INSTALL_DIR)
 +include ../../Makefile.template
  
 -.PHONY	= all clean install
 +symlinks:
---- ./src/gallium/winsys/drm/radeon/xorg/Makefile~	2009-05-02 10:27:57.000000000 +0100
-+++ ./src/gallium/winsys/drm/radeon/xorg/Makefile	2009-05-02 10:36:43.794324910 +0100
+--- ./src/gallium/winsys/drm/radeon/xorg/Makefile.orig	2009-06-01 15:04:04.540171880 +0100
++++ ./src/gallium/winsys/drm/radeon/xorg/Makefile	2009-06-01 15:26:01.179169691 +0100
 @@ -1,42 +1,26 @@
 -TARGET     = modesetting_drv.so
 -CFILES     = $(wildcard ./*.c)
@@ -109,7 +109,7 @@
  
 -install:
 -	$(INSTALL) -d $(DESTDIR)/$(XORG_DRIVER_INSTALL_DIR)
--	$(INSTALL) -m 755 $(TARGET) $(DESTDIR)/$(XORG_DRIVER_INSTALL_DIR)
+-	$(MINSTALL) -m 755 $(TARGET) $(DESTDIR)/$(XORG_DRIVER_INSTALL_DIR)
 +include ../../Makefile.template
  
 -.PHONY	= all clean install
