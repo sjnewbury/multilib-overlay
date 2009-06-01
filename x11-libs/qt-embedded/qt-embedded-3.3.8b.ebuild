@@ -4,6 +4,8 @@
 
 EAPI="2"
 
+inherit multilib-native
+
 DESCRIPTION="Embedded Linux port of Qt"
 HOMEPAGE="http://www.qtsoftware.com/products/platform/qt-for-embedded-linux"
 SRC_URI="ftp://ftp.qtsoftware.com/qt/source/qt-embedded-free-${PV}.tar.gz"
