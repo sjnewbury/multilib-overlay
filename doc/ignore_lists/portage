@@ -57,3 +57,4 @@
 ./x11-libs/libX11/libX11-1.2.1.ebuild
 ./x11-libs/libxcb/libxcb-1.2.ebuild
 ./sys-libs/e2fsprogs-libs/e2fsprogs-libs-1.41.6.ebuild
+./sys-fs/e2fsprogs/e2fsprogs-1.41.6.ebuild
