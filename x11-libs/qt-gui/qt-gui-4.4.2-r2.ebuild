@@ -67,7 +67,9 @@ src_unpack() {
 	${QT4_EXTRACT_DIRECTORIES}"
 
 	qt4-build_src_unpack
+}
 
+multilib-native_src_prepare_internal() {
 	# Apply bugfix patches from qt-copy
 	epatch "${FILESDIR}"/0248-fix-qwidget-scroll-slowness.diff
 	epatch "${FILESDIR}"/0254-fix-qgraphicsproxywidget-deletion-crash.diff
@@ -78,6 +80,8 @@ src_unpack() {
 
 	# Don't build plugins this go around, because they depend on qt3support lib
 	sed -i -e "s:CONFIG(shared:# &:g" "${S}"/tools/designer/src/src.pro
+
+	qt4-build_src_prepare
 }
 
 multilib-native_src_configure_internal() {
