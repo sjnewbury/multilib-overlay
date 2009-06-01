@@ -54,4 +54,6 @@
 ./media-libs/glitz/glitz-9999.ebuild
 ./media-libs/mesa/mesa-9999.ebuild
 ./x11-libs/libXext/libXext-1.0.5.ebuild
+./x11-libs/libX11/libX11-1.2.1.ebuild
 ./x11-libs/libxcb/libxcb-1.2.ebuild
+./sys-libs/e2fsprogs-libs/e2fsprogs-libs-1.41.6.ebuild
