@@ -31,9 +31,12 @@ src_unpack() {
 	[[ $(tc-arch) == "ppc64" ]] && append-flags -mminimal-toc #241900
 
 	qt4-build_src_unpack
+}
 
+multilib-native_src_prepare_internal() {
 	# Apply bugfix patches from qt-copy (KDE)
 	epatch "${FILESDIR}"/0249-webkit-stale-frame-pointer.diff
+	qt4-build_src_prepare
 }
 
 multilib-native_src_configure_internal() {
