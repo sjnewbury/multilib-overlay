@@ -1,7 +1,7 @@
 dev-libs/libgpg-error >=dev-libs/libgcrypt-1.4.0 >=dev-libs/libtasn1-0.3.4 nls? ( virtual/libintl ) guile? ( dev-scheme/guile[networking] ) zlib? ( >=sys-libs/zlib-1.1 ) !bindist? ( lzo? ( >=dev-libs/lzo-2 ) ) sys-devel/libtool doc? ( dev-util/gtk-doc ) nls? ( sys-devel/gettext ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
 dev-libs/libgpg-error >=dev-libs/libgcrypt-1.4.0 >=dev-libs/libtasn1-0.3.4 nls? ( virtual/libintl ) guile? ( dev-scheme/guile[networking] ) zlib? ( >=sys-libs/zlib-1.1 ) !bindist? ( lzo? ( >=dev-libs/lzo-2 ) )
 0
-mirror://gnu/gnutls/gnutls-2.6.5.tar.bz2
+mirror://gnu/gnutls/gnutls-2.8.0.tar.bz2
 
 http://www.gnutls.org/
 LGPL-2.1 GPL-3
