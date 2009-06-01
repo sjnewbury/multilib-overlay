@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-qt3support/qt-qt3support-4.4.2.ebuild,v 1.9 2009/02/18 19:53:30 jer Exp $
 
-EAPI="1"
+EAPI="2"
 inherit qt4-build multilib-native
 
 DESCRIPTION="The Qt3 support module for the Qt toolkit."
@@ -40,10 +40,10 @@ pkg_setup() {
 	qt4-build_pkg_setup
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local myconf
 	myconf="${myconf} -qt3support -no-gstreamer -no-phonon
 		$(qt_use accessibility)"
 
-	qt4-build_src_compile
+	qt4-build_src_configure
 }

@@ -1,0 +1,3 @@
+#ebuild from x11 overlay
+=media-libs/mesa-7.5_rc2
+=media-libs/mesa-9999

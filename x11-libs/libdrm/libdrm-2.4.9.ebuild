@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/libdrm/libdrm-2.4.6.ebuild,v 1.2 2009/04/09 17:14:46 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/libdrm/libdrm-2.4.9.ebuild,v 1.1 2009/04/30 11:53:46 remi Exp $
 
 # Must be before x-modular eclass is inherited
 #SNAPSHOT="yes"
@@ -27,6 +27,8 @@ PATCHES=(
 	"${FILESDIR}"/${PV}-0003-libdrm-mode-align-subpixel-results.patch
 	"${FILESDIR}"/${PV}-0004-intel-NULL-fake-bo-block-when-freeing-in-evict_all.patch
 )
+
+# FIXME, we should try to see how we can fit the --enable-udev configure flag
 
 pkg_postinst() {
 	x-modular_pkg_postinst

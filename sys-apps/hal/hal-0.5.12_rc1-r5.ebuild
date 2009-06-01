@@ -26,7 +26,7 @@ IUSE="X acpi apm crypt consolekit debug dell disk-partition doc laptop policykit
 RDEPEND=">=dev-libs/dbus-glib-0.61[lib32?]
 		 >=dev-libs/glib-2.14[lib32?]
 		 >=dev-libs/expat-1.95.8[lib32?]
-		 >=dev-libs/libusb-0.1.10a[lib32?]
+		 =virtual/libusb-0*[lib32?]
 		 >=sys-apps/pciutils-2.2.7-r1[lib32?]
 		 >=dev-util/gperf-3.0.3
 		   sys-apps/usbutils

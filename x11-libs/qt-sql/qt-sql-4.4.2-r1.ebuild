@@ -1,8 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-sql/qt-sql-4.4.2-r1.ebuild,v 1.7 2009/04/15 12:19:24 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-sql/qt-sql-4.4.2-r1.ebuild,v 1.8 2009/04/28 15:34:47 jer Exp $
 
-EAPI="1"
+EAPI="2"
 inherit qt4-build multilib-native
 
 DESCRIPTION="The SQL module for the Qt toolkit."
@@ -10,7 +10,7 @@ HOMEPAGE="http://www.trolltech.com/"
 
 LICENSE="|| ( GPL-3 GPL-2 )"
 SLOT="4"
-KEYWORDS="alpha amd64 ~hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 
 IUSE="firebird +iconv mysql odbc postgres +qt3support +sqlite"
 
@@ -42,15 +42,19 @@ pkg_setup() {
 
 src_unpack() {
 	qt4-build_src_unpack
+}
 
+multilib-native_src_prepare_internal() {
 	# Apply bugfix patches from qt-copy (KDE)
 	epatch "${FILESDIR}"/0234-fix-mysql-threaded.diff
 
 	sed -e '/pg_config --libs/d' -i "${S}"/configure \
 		|| die 'Sed to fix postgresql usage in ./configure failed.'
+
+	qt4-build_src_prepare
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local myconf
 	# Don't support sqlite2 anymore
 	myconf="${myconf} -no-sql-sqlite2
@@ -67,5 +71,5 @@ multilib-native_src_compile_internal() {
 		-no-xmlpatterns -no-freetype -no-libtiff  -no-accessibility -no-fontconfig
 		-no-glib -no-opengl -no-svg"
 
-	qt4-build_src_compile
+	qt4-build_src_configure
 }

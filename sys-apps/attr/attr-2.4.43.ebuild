@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-apps/attr/attr-2.4.43.ebuild,v 1.8 2009/03/14 12:31:23 vapier Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit eutils autotools toolchain-funcs multilib-native
 
@@ -22,7 +22,6 @@ DEPEND="nls? ( sys-devel/gettext[lib32?] )
 RDEPEND=""
 
 multilib-native_src_prepare_internal() {
-	cd "${S}"
 	epatch "${FILESDIR}"/${PN}-2.4.39-gettext.patch
 	epatch "${FILESDIR}"/${PN}-2.4.43-linguas.patch #205948
 	epatch "${FILESDIR}"/${PN}-2.4.24-only-symlink-when-needed.patch

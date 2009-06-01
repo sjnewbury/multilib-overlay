@@ -6,7 +6,7 @@ mirror://sourceforge/lame/lame-398-2.tar.gz
 http://lame.sourceforge.net
 LGPL-2.1
 LAME Ain't an MP3 Encoder
-alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd
+alpha amd64 ~arm ~hppa ~ia64 ~mips ppc ppc64 ~sh ~sparc x86 ~x86-fbsd
 autotools base eutils flag-o-matic libtool multilib multilib-native portability toolchain-funcs versionator
 debug mmx mp3rtp sndfile gtk lib32
 

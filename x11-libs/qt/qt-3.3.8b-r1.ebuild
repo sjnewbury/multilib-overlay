@@ -3,7 +3,6 @@
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/qt/qt-3.3.8b-r1.ebuild,v 1.7 2009/01/17 16:41:01 nixnut Exp $
 
 EAPI=2
-MULTILIB_IN_SOURCE_BUILD="yes"
 
 # *** Please remember to update qt3.eclass when revbumping this ***
 

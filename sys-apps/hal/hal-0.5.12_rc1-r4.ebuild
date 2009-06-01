@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/hal/hal-0.5.12_rc1-r4.ebuild,v 1.1 2009/05/13 20:54:12 dang Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/hal/hal-0.5.12_rc1-r4.ebuild,v 1.2 2009/05/16 08:49:29 robbat2 Exp $
 
 EAPI="2"
 
@@ -26,7 +26,7 @@ IUSE="X acpi apm crypt consolekit debug dell disk-partition doc laptop policykit
 RDEPEND=">=dev-libs/dbus-glib-0.61[lib32?]
 		 >=dev-libs/glib-2.14[lib32?]
 		 >=dev-libs/expat-1.95.8[lib32?]
-		 >=dev-libs/libusb-0.1.10a[lib32?]
+		 =virtual/libusb-0*[lib32?]
 		 >=sys-apps/pciutils-2.2.7-r1[lib32?]
 		 >=dev-util/gperf-3.0.3
 		   sys-apps/usbutils

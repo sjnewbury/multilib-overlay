@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-opengl/qt-opengl-4.4.2.ebuild,v 1.9 2009/02/18 19:58:24 jer Exp $
 
-EAPI="1"
+EAPI="2"
 inherit qt4-build multilib-native
 
 DESCRIPTION="The OpenGL module for the Qt toolkit."
@@ -30,11 +30,11 @@ pkg_setup() {
 	qt4-build_pkg_setup
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local myconf
 	myconf="${myconf} -opengl
 		$(qt_use qt3support)"
 
 	# Not building tools/designer/src/plugins/tools/view3d as it's commented out of the build in the source
-	qt4-build_src_compile
+	qt4-build_src_configure
 }

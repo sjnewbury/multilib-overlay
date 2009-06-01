@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-demo/qt-demo-4.4.2.ebuild,v 1.5 2009/02/18 20:18:03 jer Exp $
 
-EAPI="1"
+EAPI="2"
 inherit qt4-build multilib-native
 
 DESCRIPTION="Demonstration module of the Qt toolkit."
@@ -36,13 +36,13 @@ QT4_TARGET_DIRECTORIES="demos
 QT4_EXTRACT_DIRECTORIES="${QT4_TARGET_DIRECTORIES}
 	doc/src/images"
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# Doesn't find qt-gui and fails linking
 	sed -e '/QT_BUILD_TREE/ s:=:+=:' \
 		-i "${S}"/examples/tools/plugandpaint/plugandpaint.pro \
 		|| die "Fixing plugandpaint example failed."
 
-	qt4-build_src_compile
+	qt4-build_src_configure
 }
 
 multilib-native_src_install_internal() {

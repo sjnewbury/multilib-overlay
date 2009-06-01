@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-gui/qt-gui-4.4.2-r2.ebuild,v 1.2 2009/02/04 12:35:56 alexxy Exp $
 
-EAPI="1"
+EAPI="2"
 inherit eutils qt4-build multilib-native
 
 DESCRIPTION="The GUI module for the Qt toolkit"
@@ -67,7 +67,9 @@ src_unpack() {
 	${QT4_EXTRACT_DIRECTORIES}"
 
 	qt4-build_src_unpack
+}
 
+multilib-native_src_prepare_internal() {
 	# Apply bugfix patches from qt-copy
 	epatch "${FILESDIR}"/0248-fix-qwidget-scroll-slowness.diff
 	epatch "${FILESDIR}"/0254-fix-qgraphicsproxywidget-deletion-crash.diff
@@ -78,9 +80,11 @@ src_unpack() {
 
 	# Don't build plugins this go around, because they depend on qt3support lib
 	sed -i -e "s:CONFIG(shared:# &:g" "${S}"/tools/designer/src/src.pro
+
+	qt4-build_src_prepare
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	export PATH="${S}/bin:${PATH}"
 	export LD_LIBRARY_PATH="${S}/lib:${LD_LIBRARY_PATH}"
 
@@ -106,7 +110,7 @@ multilib-native_src_compile_internal() {
 	# Emerge "qt-webkit", "qt-phonon", etc for their functionality.
 	myconf="${myconf} -no-webkit -no-phonon -no-dbus -no-opengl"
 
-	qt4-build_src_compile
+	qt4-build_src_configure
 }
 
 multilib-native_src_install_internal() {

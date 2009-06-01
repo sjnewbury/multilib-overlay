@@ -109,9 +109,7 @@ src_unpack() {
 	fi
 }
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local myconf
 
 	# This is where we might later change to build xlib/osmesa
@@ -162,7 +160,6 @@ multilib-native_src_compile_internal() {
 	myconf="${myconf} $(use_enable motif)"
 
 	econf ${myconf} || die
-	emake || die
 }
 
 multilib-native_src_install_internal() {
