@@ -3,7 +3,6 @@
 # $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.4.2.ebuild,v 1.1 2009/05/16 08:43:30 remi Exp $
 
 EAPI="2"
-MULTILIB_IN_SOURCE_BUILD="yes"
 
 EGIT_REPO_URI="git://anongit.freedesktop.org/mesa/mesa"
 
@@ -27,7 +26,7 @@ MY_SRC_P="${MY_PN}Lib-${PV/_/-}"
 DESCRIPTION="OpenGL-like graphic library for Linux"
 HOMEPAGE="http://mesa3d.sourceforge.net/"
 
-#SRC_PATCHES="mirror://gentoo/${P}-gentoo-patches-02.tar.bz2"
+#SRC_PATCHES="mirror://gentoo/${P}-gentoo-patches-01.tar.bz2"
 if [[ $PV = *_rc* ]]; then
 	SRC_URI="http://www.mesa3d.org/beta/${MY_SRC_P}.tar.gz
 		${SRC_PATCHES}"
@@ -85,8 +84,7 @@ DEPEND="${RDEPEND}
 	x11-proto/inputproto
 	x11-proto/xextproto
 	x11-proto/xf86vidmodeproto
-	!hppa? ( x11-proto/xf86driproto )
-	motif? ( x11-proto/printproto )
+	x11-proto/xf86driproto
 "
 # glew depend on mesa and it is needed in runtime
 PDEPEND=">=media-libs/glew-1.5.1[lib32?]"

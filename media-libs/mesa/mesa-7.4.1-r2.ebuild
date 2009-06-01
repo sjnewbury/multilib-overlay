@@ -1,9 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.4.1-r2.ebuild,v 1.1 2009/05/07 16:30:32 remi Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.4.1-r2.ebuild,v 1.2 2009/05/09 00:04:11 remi Exp $
 
 EAPI="2"
-MULTILIB_IN_SOURCE_BUILD="yes"
 
 EGIT_REPO_URI="git://anongit.freedesktop.org/mesa/mesa"
 
@@ -85,8 +84,7 @@ DEPEND="${RDEPEND}
 	x11-proto/inputproto
 	x11-proto/xextproto
 	x11-proto/xf86vidmodeproto
-	!hppa? ( x11-proto/xf86driproto )
-	motif? ( x11-proto/printproto )
+	x11-proto/xf86driproto
 "
 # glew depend on mesa and it is needed in runtime
 PDEPEND=">=media-libs/glew-1.5.1[lib32?]"

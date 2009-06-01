@@ -1,9 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.4.1-r1.ebuild,v 1.1 2009/04/29 17:16:18 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.0.2.ebuild,v 1.6 2007/11/16 18:16:30 dberkholz Exp $
 
 EAPI="2"
-MULTILIB_IN_SOURCE_BUILD="yes"
 
 EGIT_REPO_URI="git://anongit.freedesktop.org/mesa/mesa"
 
@@ -27,7 +26,7 @@ MY_SRC_P="${MY_PN}Lib-${PV/_/-}"
 DESCRIPTION="OpenGL-like graphic library for Linux"
 HOMEPAGE="http://mesa3d.sourceforge.net/"
 
-SRC_PATCHES="mirror://gentoo/${P}-gentoo-patches-01.tar.bz2"
+#SRC_PATCHES="mirror://gentoo/${P}-gentoo-patches-01.tar.bz2"
 if [[ $PV = *_rc* ]]; then
 	SRC_URI="http://www.mesa3d.org/beta/${MY_SRC_P}.tar.gz
 		${SRC_PATCHES}"
@@ -65,17 +64,16 @@ IUSE="${IUSE_VIDEO_CARDS} ${IUSE_UNSTABLE}
 RDEPEND="!<=x11-base/xorg-x11-6.9
 	!<=x11-proto/xf86driproto-2.0.3
 	app-admin/eselect-opengl
-	dev-libs/expat[lib32?]
-	>=media-libs/glew-1.5.1[lib32?]
-	>=x11-libs/libdrm-2.4.6[lib32?]
-	x11-libs/libICE[lib32?]
-	x11-libs/libX11[xcb?,lib32?]]
-	x11-libs/libXdamage[lib32?]
-	x11-libs/libXext[lib32?]
-	x11-libs/libXi[lib32?]
-	x11-libs/libXmu[lib32?]
-	x11-libs/libXxf86vm[lib32?]
-	motif? ( x11-libs/openmotif[lib32?] )
+	dev-libs/expat
+	>=x11-libs/libdrm-2.4.9
+	x11-libs/libICE
+	x11-libs/libX11[xcb?]
+	x11-libs/libXdamage
+	x11-libs/libXext
+	x11-libs/libXi
+	x11-libs/libXmu
+	x11-libs/libXxf86vm
+	motif? ( x11-libs/openmotif )
 	doc? ( app-doc/opengl-manpages )
 "
 DEPEND="${RDEPEND}
@@ -85,10 +83,11 @@ DEPEND="${RDEPEND}
 	>=x11-proto/glproto-1.4.8
 	x11-proto/inputproto
 	x11-proto/xextproto
+	x11-proto/xf86driproto
 	x11-proto/xf86vidmodeproto
-	!hppa? ( x11-proto/xf86driproto )
-	motif? ( x11-proto/printproto )
 "
+# glew depend on mesa and it is needed in runtime
+PDEPEND=">=media-libs/glew-1.5.1"
 
 S="${WORKDIR}/${MY_P}"
 
@@ -125,10 +124,6 @@ src_prepare() {
 		sed -i -e "s/-DHAVE_POSIX_MEMALIGN//" configure.ac
 
 	eautoreconf
-
-	# remove glew headers. We preffer to use system ones
-	rm -f "${S}"/include/GL/{glew,glxew,wglew}.h \
-		|| die "Removing glew includes failed."
 }
 
 multilib-native_src_configure_internal() {
@@ -209,6 +204,9 @@ multilib-native_src_install_internal() {
 	# Remove redundant headers
 	# GLUT thing
 	rm -f "${D}"/usr/include/GL/glut*.h || die "Removing glut include failed."
+	# Glew includes
+	rm -f "${D}"/usr/include/GL/{glew,glxew,wglew}.h \
+		|| die "Removing glew includes failed."
 
 	# Move libGL and others from /usr/lib to /usr/lib/opengl/blah/lib
 	# because user can eselect desired GL provider.
@@ -235,8 +233,7 @@ multilib-native_src_install_internal() {
 	# Please confirm and update this comment or the file.
 	doins "${FILESDIR}"/lib/libGLU.la || die "doins libGLU.la failed"
 	sed -i -e "s:/lib:/$(get_libdir):g" \
-	    "${D}"/usr/$(get_libdir)/libGLU.la
-
+		"${D}"/usr/$(get_libdir)/libGLU.la
 	sed \
 		-e "s:\${libdir}:$(get_libdir):g" \
 		"${FILESDIR}"/lib/libGL.la \

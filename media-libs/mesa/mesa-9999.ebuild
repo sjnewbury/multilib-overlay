@@ -39,7 +39,7 @@ fi
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 
 IUSE_VIDEO_CARDS="${IUSE_VIDEO_CARDS_UNSTABLE}
 	video_cards_intel
@@ -65,7 +65,6 @@ RDEPEND="!<=x11-base/xorg-x11-6.9
 	!<=x11-proto/xf86driproto-2.0.3
 	app-admin/eselect-opengl
 	dev-libs/expat
-	>=media-libs/glew-1.5.1
 	>=x11-libs/libdrm-9999
 	x11-libs/libICE
 	x11-libs/libX11[xcb?]
@@ -84,10 +83,11 @@ DEPEND="${RDEPEND}
 	>=x11-proto/glproto-1.4.8
 	x11-proto/inputproto
 	x11-proto/xextproto
+	x11-proto/xf86driproto
 	x11-proto/xf86vidmodeproto
-	!hppa? ( x11-proto/xf86driproto )
-	motif? ( x11-proto/printproto )
 "
+# glew depend on mesa and it is needed in runtime
+PDEPEND=">=media-libs/glew-1.5.1"
 
 S="${WORKDIR}/${MY_P}"
 
@@ -124,12 +124,6 @@ src_prepare() {
 		sed -i -e "s/-DHAVE_POSIX_MEMALIGN//" configure.ac
 
 	eautoreconf
-
-	# remove glew headers. We preffer to use system ones
-	rm -f "${S}"/include/GL/{glew,glxew,wglew}.h \
-		|| die "Removing glew includes failed."
-
-	epatch "${FILESDIR}"/9999-gallium-xorg-makefile.patch
 }
 
 multilib-native_src_configure_internal() {
@@ -172,14 +166,17 @@ multilib-native_src_configure_internal() {
 			elog
 			elog "Intel: works only i915."
 			elog "Nouveau: only available implementation, so no other choice"
-			elog "Radeon: not working, disabled."
+			elog "Radeon: implementation up to the r500."
 			echo
 			myconf="${myconf}
-				--with-state-trackers=glx,xorg,egl
+				--with-state-trackers=glx,dri,egl
 				$(use_enable video_cards_nouveau gallium-nouveau)
 				$(use_enable video_cards_intel gallium-intel)"
-				#$(use_enable video_cards_radeon gallium-radeon)
-				#$(use_enable video_cards_radeonhd gallium-radeon)"
+			if ! use video_cards_radeon && ! use video_cards_radeonhd; then
+				myconf="${myconf} --disable-gallium-radeon"
+			else
+				myconf="${myconf} --enable-gallium-radeon"
+			fi
 		fi
 	fi
 
@@ -210,6 +207,9 @@ multilib-native_src_install_internal() {
 	# Remove redundant headers
 	# GLUT thing
 	rm -f "${D}"/usr/include/GL/glut*.h || die "Removing glut include failed."
+	# Glew includes
+	rm -f "${D}"/usr/include/GL/{glew,glxew,wglew}.h \
+		|| die "Removing glew includes failed."
 
 	# Move libGL and others from /usr/lib to /usr/lib/opengl/blah/lib
 	# because user can eselect desired GL provider.
@@ -232,15 +232,15 @@ multilib-native_src_install_internal() {
 
 	# Install libtool archives
 	insinto /usr/$(get_libdir)
+	# Should this use the -L/usr/lib instead of -L/usr/$(get_libdir)?
+	# Please confirm and update this comment or the file.
+	doins "${FILESDIR}"/lib/libGLU.la || die "doins libGLU.la failed"
+	sed -i -e "s:/lib:/$(get_libdir):g" \
+		"${D}"/usr/$(get_libdir)/libGLU.la
 	sed \
 		-e "s:\${libdir}:$(get_libdir):g" \
 		"${FILESDIR}"/lib/libGL.la \
 		> "${D}"/usr/$(get_libdir)/opengl/xorg-x11/lib/libGL.la
-
-	sed \
-		-e "/\/usr\/lib/s:\/lib:\/$(get_libdir):g" \
-		"${FILESDIR}"/lib/libGLU.la \
-		> "${D}"/usr/$(get_libdir)/libGLU.la
 
 	# On *BSD libcs dlopen() and similar functions are present directly in
 	# libc.so and does not require linking to libdl. portability eclass takes
