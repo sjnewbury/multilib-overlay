@@ -161,6 +161,14 @@ multilib-native_abi_to_index_key() {
 # in cmake-utils.eclass.  We handle the build dir ourselves. 
 # Determine using IN or OUT source build
 _check_build_dir() {
+	# @ECLASS-VARIABLE: CMAKE_USE_DIR
+	# @DESCRIPTION:
+	# Sets the directory where we are working with cmake.
+	# For example when application uses autotools and only one
+	# plugin needs to be done by cmake.
+	# By default it uses ${S}.
+	: ${CMAKE_USE_DIR:=${S}}
+
 	# in/out source build
 	echo ">>> Working in BUILD_DIR: \"$CMAKE_BUILD_DIR\""
 }
