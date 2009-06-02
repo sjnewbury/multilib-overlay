@@ -1,6 +1,49 @@
 # ChangeLog for dev-libs/libusb
-# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libusb/ChangeLog,v 1.81 2008/06/25 03:25:44 robbat2 Exp $
+# Copyright 1999-2009 Gentoo Foundation; Distributed under the GPL v2
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libusb/ChangeLog,v 1.92 2009/05/24 22:02:17 robbat2 Exp $
+
+  24 May 2009; Robin H. Johnson <robbat2@gentoo.org> libusb-0.1.11.ebuild,
+  libusb-0.1.12.ebuild, libusb-0.1.12-r1.ebuild:
+  mips notes they are dropping the stable keyword.
+
+  24 May 2009; Markus Meier <maekke@gentoo.org> libusb-0.1.12-r5.ebuild:
+  amd64/x86 stable, bug #270023
+
+  21 May 2009; Raúl Porcel <armin76@gentoo.org> libusb-0.1.12-r5.ebuild:
+  arm/ia64/m68k/s390/sh/sparc stable wrt #270023
+
+  17 May 2009; Alexis Ballier <aballier@gentoo.org> libusb-1.0.1.ebuild:
+  keyword -x86-fbsd for now, its not supported
+
+  16 May 2009; nixnut <nixnut@gentoo.org> libusb-0.1.12-r5.ebuild:
+  ppc stable #270023
+
+  16 May 2009; Jeroen Roovers <jer@gentoo.org> libusb-0.1.12-r5.ebuild:
+  Stable for HPPA (bug #270023).
+
+  16 May 2009; Tobias Klausmann <klausman@gentoo.org>
+  libusb-0.1.12-r5.ebuild:
+  Stable on alpha, bug #270023
+
+  15 May 2009; Robin H. Johnson <robbat2@gentoo.org> libusb-0.1.11.ebuild,
+  libusb-0.1.12.ebuild, libusb-0.1.12-r1.ebuild, libusb-0.1.12-r2.ebuild,
+  libusb-0.1.12-r3.ebuild, libusb-0.1.12-r4.ebuild, libusb-0.1.12-r5.ebuild:
+  Bug #247687 comment #21: We need to block libusb-compat in the libusb:0
+  ebuilds.
+
+*libusb-1.0.1 (14 May 2009)
+
+  14 May 2009; Robin H. Johnson <robbat2@gentoo.org> +libusb-1.0.1.ebuild:
+  Bug #247687: version bump to v1 series. Be sure to see the new libusb
+  virtuals. Ebuild by Tiziano Müller <dev-zero@gentoo.org>.
+
+  28 Mar 2009; Mike Frysinger <vapier@gentoo.org> libusb-0.1.12-r5.ebuild:
+  Dont move the C++ lib to /lib #245645 by DarkNRG.
+
+*libusb-0.1.12-r5 (28 Mar 2009)
+
+  28 Mar 2009; Mike Frysinger <vapier@gentoo.org> +libusb-0.1.12-r5.ebuild:
+  Use gen_usr_ldscript -a to relocate shared libs to the root dir.
 
 *libusb-0.1.12-r4 (25 Jun 2008)
 
