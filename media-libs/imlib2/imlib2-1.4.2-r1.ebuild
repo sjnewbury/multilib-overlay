@@ -52,7 +52,3 @@ multilib-native_src_configure_internal() {
 		${myconf} \
 	"
 }
-
-multilib-native_src_compile_internal() {
-	enlightenment_src_compile
-}
