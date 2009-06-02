@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/icu/icu-4.0.1.ebuild,v 1.8 2009/04/18 17:33:16 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/icu/icu-4.0.1.ebuild,v 1.9 2009/05/08 00:39:40 loki_val Exp $
 
 EAPI="2"
 
@@ -54,6 +54,9 @@ multilib-native_src_prepare_internal() {
 		sed -i -e "/^${x} =.*/s:@${x}@::" config/Makefile.inc.in || die "sed failed"
 	done
 
+	# Bug 258377
+	sed -i -e 's:^#elif$:#else:g' ${S}/layoutex/ParagraphLayout.cpp || die 'elif sed failed'
+	
 	epatch "${FILESDIR}/${P}-fix_parallel_building.patch"
 	epatch "${FILESDIR}/${P}-TestDisplayNamesMeta.patch"
 }
@@ -68,13 +71,13 @@ multilib-native_src_configure_internal() {
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
-	dohtml ../readme.html || die
-	dodoc ../unicode-license.txt || die
+	dohtml ../readme.html
+	dodoc ../unicode-license.txt
 	if use doc ; then
 		insinto /usr/share/doc/${PF}/html/userguide
-		doins -r "${WORKDIR}"/userguide/userguide/* || die
+		doins -r "${WORKDIR}"/userguide/userguide/*
 
 		insinto /usr/share/doc/${PF}/html/apidocs
-		doins -r "${WORKDIR}"/apidocs/* || die
+		doins -r "${WORKDIR}"/apidocs/*
 	fi
 }
