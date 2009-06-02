@@ -4,6 +4,8 @@
 
 EAPI="2"
 
+inherit multilib-native
+
 DESCRIPTION="Userspace access to USB devices"
 HOMEPAGE="http://libusb.sourceforge.net/"
 SRC_URI="mirror://sourceforge/libusb/${P}.tar.bz2"
