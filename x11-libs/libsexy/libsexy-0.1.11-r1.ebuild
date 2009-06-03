@@ -16,10 +16,10 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc"
 
 RDEPEND=">=dev-libs/glib-2.6[lib32?]
-		 >=x11-libs/gtk+-2.6[lib32?]
-		   dev-libs/libxml2[lib32?]
-		 >=x11-libs/pango-1.4.0[lib32?]
-		 >=app-text/iso-codes-0.49"
+		>=x11-libs/gtk+-2.6[lib32?]
+		dev-libs/libxml2[lib32?]
+		>=x11-libs/pango-1.4.0[lib32?]
+		>=app-text/iso-codes-0.49"
 DEPEND="${RDEPEND}
 		>=dev-lang/perl-5
 		>=dev-util/pkgconfig-0.19
