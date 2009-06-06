@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/kde-base/arts/arts-3.5.9.ebuild,v 1.10 2009/04/22 22:24:30 gengor Exp $
+# $Header: /var/cvsroot/gentoo-x86/kde-base/arts/arts-3.5.10.ebuild,v 1.5 2009/06/06 08:09:25 maekke Exp $
 
 EAPI="2"
 inherit kde flag-o-matic eutils versionator multilib-native
@@ -17,7 +17,7 @@ SRC_URI="mirror://kde/stable/${PV}/src/${PN}-${MY_PV}.tar.bz2"
 LICENSE="GPL-2 LGPL-2"
 
 SLOT="3.5"
-KEYWORDS="alpha amd64 hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~hppa ~ia64 ppc ppc64 ~sparc x86 ~x86-fbsd"
 IUSE="alsa esd artswrappersuid jack mp3 nas vorbis"
 
 RDEPEND="x11-libs/qt:3[lib32?]
@@ -28,26 +28,16 @@ RDEPEND="x11-libs/qt:3[lib32?]
 	esd? ( media-sound/esound[lib32?] )
 	jack? ( >=media-sound/jack-audio-connection-kit-0.90[lib32?] )
 	mp3? ( media-libs/libmad[lib32?] )
-	nas? ( media-libs/nas )
+	nas? ( media-libs/nas[lib32?] )
 	media-libs/audiofile[lib32?]"
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
-#PATCHES="${FILESDIR}/arts-1.5.0-bindnow.patch
-#	${FILESDIR}/arts-1.5.4-multilib.patch
-#	${FILESDIR}/arts-1.5.9-glibc2.8-build-fix.patch"
-
-multilib-native_src_prepare_internal() {
-
-	epatch "${FILESDIR}/arts-1.5.0-bindnow.patch"
-	epatch "${FILESDIR}/arts-1.5.4-multilib.patch"
-	epatch "${FILESDIR}/arts-1.5.9-glibc2.8-build-fix.patch"
-	epatch "${FILESDIR}/arts-1.5.10-unfortify.diff"
-
-	sed -i -e "s:GENTOO_LIB64:$(get_abi_LIBDIR amd64):" \
-		-e "s:GENTOO_LIB32:$(get_abi_LIBDIR x86):" artsc/artsdsp.in \
-		|| die "multilib-sed failed"
+src_prepare() {
+	epatch "${FILESDIR}/arts-1.5.0-bindnow.patch" \
+		"${FILESDIR}/arts-1.5.9-glibc2.8-build-fix.patch" \
+		"${FILESDIR}/arts-1.5.10-unfortify.diff"
 
 	# Alternative to arts-1.4-mcopidl.patch, make sure that flags are supported
 	# before trying to use them, for non-GCC, vanilla GCC or GCC 4.1 compilers
@@ -63,7 +53,7 @@ multilib-native_src_prepare_internal() {
 	rm -f "${S}/configure"
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	myconf="$(use_enable alsa) $(use_enable vorbis)
 			$(use_enable mp3 libmad) $(use_with jack)
 			$(use_with esd) $(use_with nas)
@@ -74,8 +64,6 @@ multilib-native_src_compile_internal() {
 
 	# breaks otherwise <gustavoz>
 	use sparc && export CFLAGS="-O1" && export CXXFLAGS="-O1"
-
-	kde_src_compile
 }
 
 multilib-native_src_install_internal() {

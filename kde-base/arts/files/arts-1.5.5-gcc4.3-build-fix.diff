@@ -1,0 +1,10 @@
+--- arts-1.5.5/mcopidl/mcopidl.cc	2005-09-10 10:13:31.000000000 +0200
++++ arts-1.5.7/mcopidl/mcopidl.cc	2007-05-14 09:36:40.000000000 +0200
+@@ -23,6 +23,7 @@
+ 
+     */
+ 
++#include <cstdlib>
+ #include <stdio.h>
+ #include <string.h>
+ #include <unistd.h>
