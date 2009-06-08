@@ -72,7 +72,7 @@ multilib-native_src_configure_internal() {
 	fi
 
 	local myconf
-	if use lib32 && [[ "${ABI}" == "x86" ]]; then
+	if use lib32 && ! is_final_abi; then
 		myconf="--enable-directfb=no"
 	else
 		myconf="$(use_enable directfb)"
