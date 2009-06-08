@@ -51,7 +51,8 @@ src_unpack() {
 	replace-flags -O3 -O2
 
 	# fixes compilation in multilib environment
-	epatch "${FILESDIR}"/${P}-multilib-fix.patch
+	# Perhaps, this patch causes the problem on 32ul on ppc64, please don't drop has_multilib_profile
+	has_multilib_profile && epatch "${FILESDIR}"/${P}-multilib-fix.patch
 
 	# Needed for sane .so versionning on bsd, please don't drop
 	elibtoolize
