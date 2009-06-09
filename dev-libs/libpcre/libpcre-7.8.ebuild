@@ -18,10 +18,10 @@ KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fb
 IUSE="bzip2 +cxx doc unicode zlib"
 
 DEPEND="dev-util/pkgconfig
-	zlib? sys-libs/zlib[lib32?]
-	bzip2? app-arch/bzip2[lib32?]"
-RDEPEND="zlib? sys-libs/zlib[lib32?]
-	 bzip2? app-arch/bzip2[lib32?]"
+	zlib? ( sys-libs/zlib[lib32?] )
+	bzip2? ( app-arch/bzip2[lib32?] )"
+RDEPEND="zlib? ( sys-libs/zlib[lib32?] )
+	 bzip2? ( app-arch/bzip2[lib32?] )"
 
 S=${WORKDIR}/${MY_P}
 
