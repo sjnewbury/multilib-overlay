@@ -82,6 +82,7 @@ multilib-native_src_prepare_internal() {
 	# fixing hardcoded fonts, bug #252312
 	EPATCH_OPTS="--ignore-whitespace"
 	epatch "${FILESDIR}"/hardcoded_fonts.patch
+
 	# ppc fix backported from qt 4.5.2
 	# http://www.qtsoftware.com/developer/task-tracker/index_html?method=entry&id=196152
 	# http://qt.gitorious.org/qt/qt/commit/e018b82432055d9a5f13be7c17e31502830b9fa7
