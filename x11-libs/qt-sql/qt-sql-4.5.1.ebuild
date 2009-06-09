@@ -1,13 +1,13 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-sql/qt-sql-4.5.1.ebuild,v 1.5 2009/05/28 12:06:16 dagger Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-sql/qt-sql-4.5.1.ebuild,v 1.8 2009/06/08 22:31:53 jer Exp $
 
 EAPI="2"
 inherit qt4-build multilib-native
 
 DESCRIPTION="The SQL module for the Qt toolkit"
 SLOT="4"
-KEYWORDS="alpha ~amd64 arm ~hppa ~ia64 ~mips ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ~ia64 ~mips ppc ~ppc64 ~sparc x86 ~x86-fbsd"
 IUSE="firebird +iconv mysql odbc postgres +qt3support +sqlite"
 
 DEPEND="~x11-libs/qt-core-${PV}[debug=,qt3support=,lib32?]
@@ -43,7 +43,10 @@ pkg_setup() {
 
 src_unpack() {
 	qt4-build_src_unpack
+}
 
+src_prepare() {
+	qt4-build_src_prepare
 	sed -e '/pg_config --libs/d' -i "${S}"/configure \
 		|| die 'Sed to fix postgresql usage in ./configure failed.'
 }
