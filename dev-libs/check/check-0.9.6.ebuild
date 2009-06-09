@@ -19,10 +19,19 @@ src_unpack() {
 	unpack ${A}
 	cd "${S}"
 	epatch "${FILESDIR}"/${P}-AM_PATH_CHECK.patch
+	epatch "${FILESDIR}"/${P}-64bitsafe.patch
+
+	sed -i -e '/^docdir =/d' Makefile.am doc/Makefile.am \
+		|| die "Unable to remove docdir references"
+
 	eautoreconf
+}
+
+multilib-native_src_compile_internal() {
+	econf --docdir=/usr/share/doc/${PF}
+	emake || die
 }
 
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
-	mv "${D}"/usr/share/doc/{${PN},${PF}} || die
 }
