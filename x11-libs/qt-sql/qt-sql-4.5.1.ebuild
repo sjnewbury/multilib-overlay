@@ -45,7 +45,7 @@ src_unpack() {
 	qt4-build_src_unpack
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	qt4-build_src_prepare
 	sed -e '/pg_config --libs/d' -i "${S}"/configure \
 		|| die 'Sed to fix postgresql usage in ./configure failed.'
