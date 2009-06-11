@@ -1,47 +1,45 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-141.ebuild,v 1.3 2009/05/12 17:46:47 zzam Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-124-r2.ebuild,v 1.9 2009/05/12 17:46:47 zzam Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit eutils flag-o-matic multilib toolchain-funcs versionator multilib-native
 
-if [[ ${PV} == "9999" ]]; then
-	EGIT_REPO_URI="git://git.kernel.org/pub/scm/linux/hotplug/udev.git"
-	EGIT_BRANCH="master"
-	inherit git autotools
-else
-	SRC_URI="mirror://kernel/linux/utils/kernel/hotplug/${P}.tar.bz2"
-fi
 DESCRIPTION="Linux dynamic and persistent device naming support (aka userspace devfs)"
 HOMEPAGE="http://www.kernel.org/pub/linux/utils/kernel/hotplug/udev.html"
+SRC_URI="mirror://kernel/linux/utils/kernel/hotplug/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
 IUSE="selinux"
 
-COMMON_DEPEND="selinux? ( sys-libs/libselinux[lib32?] )"
-
-if [[ ${PV} == "9999" ]]; then
-	# for documentation processing with xsltproc
-	DEPEND="${COMMON_DEPEND}
-		app-text/docbook-xsl-stylesheets
-		app-text/docbook-xml-dtd"
-else
-	DEPEND="${COMMON_DEPEND}"
-fi
-
-RDEPEND="${COMMON_DEPEND}
-	!sys-apps/coldplug
-	!<sys-fs/device-mapper-1.02.19-r1
+DEPEND="selinux? ( sys-libs/libselinux[lib32?] )"
+RDEPEND="!sys-apps/coldplug
+	!<sys-fs/device-mapper-1.02.19-r1"
+RDEPEND="${DEPEND} ${RDEPEND}
 	>=sys-apps/baselayout-1.12.5"
-
 # We need the lib/rcscripts/addon support
 PROVIDE="virtual/dev-manager"
 
-multilib-native_pkg_setup_internal() {
+pkg_setup() {
 	udev_helper_dir="/$(get_libdir)/udev"
+
+	myconf=
+	extras="extras/ata_id \
+			extras/cdrom_id \
+			extras/edd_id \
+			extras/firmware \
+			extras/floppy \
+			extras/path_id \
+			extras/scsi_id \
+			extras/usb_id \
+			extras/volume_id \
+			extras/collect \
+			extras/rule_generator"
+
+	use selinux && myconf="${myconf} USE_SELINUX=true"
 
 	# comparing kernel version without linux-info.eclass to not pull
 	# virtual/linux-sources
@@ -51,28 +49,18 @@ multilib-native_pkg_setup_internal() {
 	local KV_MINOR=$(get_version_component_range 2 ${KV})
 	local KV_MICRO=$(get_version_component_range 3 ${KV})
 
-	local KV_min_micro=15 KV_min_micro_reliable=22
-	KV_min=2.6.${KV_min_micro}
-	KV_min_reliable=2.6.${KV_min_micro_reliable}
-
 	local ok=0
-	if [[ ${KV_MAJOR} == 2 && ${KV_MINOR} == 6 ]]
+	if [[ ${KV_MAJOR} == 2 && ${KV_MINOR} == 6 && ${KV_MICRO} -ge 18 ]]
 	then
-		if [[ ${KV_MICRO} -ge ${KV_min_micro_reliable} ]]; then
-			ok=2
-		elif [[ ${KV_MICRO} -ge ${KV_min_micro} ]]; then
-			ok=1
-		fi
+		ok=1
 	fi
 
-	if [[ ${ok} -lt 1 ]]
+	if [[ ${ok} == 0 ]]
 	then
 		ewarn
-		ewarn "${P} does not support Linux kernel before version ${KV_min}!"
-	fi
-	if [[ ${ok} -lt 2 ]]; then
+		ewarn "${P} does not support Linux kernel before version 2.6.15!"
 		ewarn "If you want to use udev reliable you should update"
-		ewarn "to at least kernel version ${KV_min_reliable}!"
+		ewarn "to at least kernel version 2.6.18!"
 		ewarn
 		ebeep
 	fi
@@ -82,85 +70,82 @@ sed_helper_dir() {
 	sed -e "s#/lib/udev#${udev_helper_dir}#" -i "$@"
 }
 
-src_unpack() {
-	if [[ ${PV} == "9999" ]] ; then
-		git_src_unpack
-	else
-		unpack ${A}
-	fi
-}
-
-multilib-native_src_prepare_internal() {
+src_prepare() {
 	# patches go here...
+	# Bug #223757, Bug #208578
+	epatch "${FILESDIR}/${PN}-122-rules-update.diff"
+	epatch "${FILESDIR}/${P}-cdrom-autoclose-bug.diff"
 
-	# change rules back to group uucp instead of dialout for now
-	sed -e 's/GROUP="dialout"/GROUP="uucp"/' \
-		-i rules/{rules.d,packages,gentoo}/*.rules \
-	|| die "failed to change group dialout to uucp"
+	# Bug #266290
+	epatch "${FILESDIR}/${P}-encoding-overflow.patch" # CVE-2009-1185
+	epatch "${FILESDIR}/${P}-netlink-owner-check.patch" # CVE-2009-1186
 
-	if [[ ${PV} != 9999 ]]; then
-		# Make sure there is no sudden changes to upstream rules file
-		# (more for my own needs than anything else ...)
-		MD5=$(md5sum < "${S}/rules/rules.d/50-udev-default.rules")
-		MD5=${MD5/  -/}
-		if [[ ${MD5} != b5c2f014a48a53921de37c4e469aab96 ]]
-		then
-			echo
-			eerror "50-udev-default.rules has been updated, please validate!"
-			eerror "md5sum=${MD5}"
-			die "50-udev-default.rules has been updated, please validate!"
-		fi
+	# No need to clutter the logs ...
+	sed -ie '/^DEBUG/ c\DEBUG = false' Makefile
+	# Do not use optimization flags from the package
+	sed -ie 's|$(OPTIMIZATION)||g' Makefile
+	# Do not require xmlto to refresh manpages
+	sed -ie 's|$(MAN_PAGES)||g' Makefile
+
+	# Make sure there is no sudden changes to upstream rules file
+	# (more for my own needs than anything else ...)
+	MD5=$(md5sum < "${S}/etc/udev/rules.d/50-udev-default.rules")
+	MD5=${MD5/  -/}
+	if [[ ${MD5} != db44f7e02100f57a555d48e2192c3f8d ]]
+	then
+		echo
+		eerror "50-udev-default.rules has been updated, please validate!"
+		die "50-udev-default.rules has been updated, please validate!"
 	fi
 
 	sed_helper_dir \
-		rules/rules.d/50-udev-default.rules \
+		etc/udev/rules.d/50-udev-default.rules \
 		extras/rule_generator/write_*_rules \
-		udev/udev-util.c \
-		udev/udev-rules.c \
-		udev/udevd.c || die "sed failed"
+		udev_rules_parse.c \
+		udev_rules.c
 
-	if [[ ${PV} == 9999 ]]; then
-		eautoreconf
-	fi
+	# Use correct multilib dir
+	sed -i extras/volume_id/lib/Makefile \
+		-e "/ =/s-/lib-/$(get_libdir)-"
 }
 
-multilib-native_src_configure_internal() {
+multilib-native_src_compile_internal() {
 	filter-flags -fprefetch-loop-arrays
 
-	econf \
-		--prefix=/usr \
-		--sysconfdir=/etc \
-		--exec-prefix= \
-		--with-libdir-name=$(get_libdir) \
-		--enable-logging \
-		$(use_with selinux)
+	if [[ -z ${extras} ]]; then
+		eerror "Variable extras is unset!"
+		eerror "It seems you suffer from Bug #190994"
+		die "Variable extras is unset!"
+	fi
 
-	emake || die "compiling udev failed"
+	# Not everyone has full $CHOST-{ld,ar,etc...} yet
+	local mycross=""
+	type -p ${CHOST}-ar && mycross=${CHOST}-
+
+	emake \
+		EXTRAS="${extras}" \
+		libudevdir=${udev_helper_dir} \
+		CROSS_COMPILE=${mycross} \
+		OPTFLAGS="" \
+		${myconf} || die "compiling udev failed"
 }
 
 multilib-native_src_install_internal() {
-	local scriptdir="${FILESDIR}/136"
-
 	into /
-	emake DESTDIR="${D}" install || die "make install failed"
-	if [[ "$(get_libdir)" != "lib" ]]; then
-		# we can not just rename /lib to /lib64, because
-		# make install creates /lib64 and /lib
-		mkdir -p "${D}/$(get_libdir)"
-		mv "${D}"/lib/* "${D}/$(get_libdir)/"
-		rmdir "${D}"/lib
-	fi
+	emake \
+		DESTDIR="${D}" \
+		libudevdir=${udev_helper_dir} \
+		EXTRAS="${extras}" \
+		${myconf} \
+		install || die "make install failed"
 
 	exeinto "${udev_helper_dir}"
-	newexe "${FILESDIR}"/net-130-r1.sh net.sh	|| die "net.sh not installed properly"
+	newexe "${FILESDIR}"/net-118-r1.sh net.sh	|| die "net.sh not installed properly"
 	newexe "${FILESDIR}"/move_tmp_persistent_rules-112-r1.sh move_tmp_persistent_rules.sh \
 		|| die "move_tmp_persistent_rules.sh not installed properly"
-	newexe "${FILESDIR}"/write_root_link_rule-125 write_root_link_rule \
+	doexe "${FILESDIR}"/write_root_link_rule \
 		|| die "write_root_link_rule not installed properly"
-
-	doexe "${scriptdir}"/shell-compat-KV.sh \
-		|| die "shell-compat.sh not installed properly"
-	doexe "${scriptdir}"/shell-compat-addon.sh \
+	newexe "${FILESDIR}"/shell-compat-118-r3.sh shell-compat.sh \
 		|| die "shell-compat.sh not installed properly"
 
 	keepdir "${udev_helper_dir}"/state
@@ -171,21 +156,28 @@ multilib-native_src_install_internal() {
 	dosym "..${udev_helper_dir}/vol_id" /sbin/vol_id
 	dosym "..${udev_helper_dir}/scsi_id" /sbin/scsi_id
 
+	# vol_id library (needed by mount and HAL)
+	into /
+	rm "${D}/$(get_libdir)"/libvolume_id.so* 2>/dev/null
+	dolib extras/volume_id/lib/*.so* || die "Failed installing libvolume_id.so"
+	into /usr
+	dolib extras/volume_id/lib/*.a || die "Failed installing libvolume_id.a"
+
+	# handle static linking bug #4411
+	rm -f "${D}/usr/$(get_libdir)/libvolume_id.so"
+	gen_usr_ldscript libvolume_id.so
+
 	# Add gentoo stuff to udev.conf
 	echo "# If you need to change mount-options, do it in /etc/fstab" \
 	>> "${D}"/etc/udev/udev.conf
 
-	# let the dir exist at least
-	keepdir /etc/udev/rules.d
-
 	# Now installing rules
-	cd "${S}"/rules
-	insinto "${udev_helper_dir}"/rules.d/
+	cd etc/udev
+	insinto /etc/udev/rules.d/
 
 	# Our rules files
 	doins gentoo/??-*.rules
 	doins packages/40-alsa.rules
-	doins packages/40-isdn.rules
 
 	# Adding arch specific rules
 	if [[ -f packages/40-${ARCH}.rules ]]
@@ -196,26 +188,11 @@ multilib-native_src_install_internal() {
 
 	# our udev hooks into the rc system
 	insinto /$(get_libdir)/rcscripts/addons
-	doins "${scriptdir}"/udev-start.sh \
-		|| die "udev-start.sh not installed properly"
-	doins "${scriptdir}"/udev-stop.sh \
-		|| die "udev-stop.sh not installed properly"
+	newins "${FILESDIR}"/udev-start-122-r1.sh udev-start.sh
+	newins "${FILESDIR}"/udev-stop-118-r2.sh udev-stop.sh
 
-	local init
-	# udev-postmount and init-scripts for >=openrc-0.3.1, Bug #240984
-	for init in udev udev-mount udev-dev-tarball udev-postmount; do
-		newinitd "${scriptdir}/${init}.initd" "${init}" \
-			|| die "initscript ${init} not installed properly"
-	done
-
-	# insert minimum kernel versions
-	sed -e "s/%KV_MIN%/${KV_min}/" \
-		-e "s/%KV_MIN_RELIABLE%/${KV_min_reliable}/" \
-		-i "${D}"/etc/init.d/udev-mount
-
-	# config file for init-script and start-addon
-	newconfd "${scriptdir}/udev.confd" udev \
-		|| die "config file not installed properly"
+	# The udev-post init-script
+	newinitd "${FILESDIR}"/udev-postmount-initd-111-r2 udev-postmount
 
 	insinto /etc/modprobe.d
 	newins "${FILESDIR}"/blacklist-110 blacklist.conf
@@ -228,7 +205,8 @@ multilib-native_src_install_internal() {
 		"${D}"/etc/modprobe.d/*
 
 	# documentation
-	dodoc ChangeLog README TODO || die "failed installing docs"
+	dodoc ChangeLog FAQ README TODO RELEASE-NOTES
+	dodoc docs/{overview,udev_vs_devfs}
 
 	cd docs/writing_udev_rules
 	mv index.html writing_udev_rules.html
@@ -302,62 +280,7 @@ pkg_preinst() {
 	previous_less_than_113=$?
 }
 
-fix_old_persistent_net_rules() {
-	local rules=${ROOT}/etc/udev/rules.d/70-persistent-net.rules
-	[[ -f ${rules} ]] || return
-
-	elog
-	elog "Updating persistent-net rules file"
-
-	# Change ATTRS to ATTR matches, Bug #246927
-	sed -i -e 's/ATTRS{/ATTR{/g' "${rules}"
-
-	# Add KERNEL matches if missing, Bug #246849
-	sed -ri \
-		-e '/KERNEL/ ! { s/NAME="(eth|wlan|ath)([0-9]+)"/KERNEL=="\1*", NAME="\1\2"/}' \
-		"${rules}"
-}
-
-# See Bug #129204 for a discussion about restarting udevd
-restart_udevd() {
-	# need to merge to our system
-	[[ ${ROOT} = / ]] || return
-
-	# check if root of init-process is identical to ours (not in chroot)
-	[[ -r /proc/1/root && /proc/1/root/ -ef /proc/self/root/ ]] || return
-
-	# abort if there is no udevd running
-	[[ -n $(pidof udevd) ]] || return
-
-	# abort if no /dev/.udev exists
-	[[ -e /dev/.udev ]] || return
-
-	elog
-	elog "restarting udevd now."
-
-	killall -15 udevd &>/dev/null
-	sleep 1
-	killall -9 udevd &>/dev/null
-
-	/sbin/udevd --daemon
-}
-
 pkg_postinst() {
-	fix_old_persistent_net_rules
-
-	restart_udevd
-
-	if [[ -e "${ROOT}"/etc/runlevels/sysinit && ! -e "${ROOT}"/etc/runlevels/sysinit/udev ]]
-	then
-		ewarn
-		ewarn "You need to add the udev init script to the runlevel sysinit,"
-		ewarn "else your system will not be able to boot"
-		ewarn "after updating to >=openrc-0.4.0"
-		ewarn "Run this to enable udev for >=openrc-0.4.0:"
-		ewarn "\trc-update add udev sysinit"
-		ewarn
-	fi
-
 	# people want reminders, I'll give them reminders.  Odds are they will
 	# just ignore them anyway...
 
@@ -430,11 +353,26 @@ pkg_postinst() {
 	elog
 	elog "This may however number your devices in a different way than they are now."
 
-	ewarn
+	if [[ ${ROOT} == / ]]
+	then
+		# check if root of init-process is identical to ours
+		if [[ -r /proc/1/root && /proc/1/root/ -ef /proc/self/root/ ]]
+		then
+			einfo "restarting udevd now."
+			if [[ -n $(pidof udevd) ]]
+			then
+				killall -15 udevd &>/dev/null
+				sleep 1
+				killall -9 udevd &>/dev/null
+			fi
+			/sbin/udevd --daemon
+		fi
+	fi
+
 	ewarn "If you build an initramfs including udev, then please"
 	ewarn "make sure that the /sbin/udevadm binary gets included,"
-	ewarn "and your scripts changed to use it,as it replaces the"
-	ewarn "old helper apps udevinfo, udevtrigger, ..."
+	ewarn "as the helper apps udevinfo, udevtrigger, ... are now"
+	ewarn "only symlinks to udevadm."
 
 	ewarn
 	ewarn "mount options for directory /dev are no longer"

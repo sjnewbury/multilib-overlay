@@ -1,6 +1,6 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-124-r1.ebuild,v 1.10 2008/11/28 12:51:54 zzam Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-124-r1.ebuild,v 1.11 2009/05/06 23:52:24 vapier Exp $
 
 EAPI="2"
 
@@ -70,11 +70,7 @@ sed_helper_dir() {
 	sed -e "s#/lib/udev#${udev_helper_dir}#" -i "$@"
 }
 
-src_unpack() {
-	unpack ${A}
-
-	cd "${S}"
-
+src_prepare() {
 	# patches go here...
 	# Bug #223757, Bug #208578
 	epatch "${FILESDIR}/${PN}-122-rules-update.diff"
@@ -195,8 +191,8 @@ multilib-native_src_install_internal() {
 	newinitd "${FILESDIR}"/udev-postmount-initd-111-r2 udev-postmount
 
 	insinto /etc/modprobe.d
-	newins "${FILESDIR}"/blacklist-110 blacklist
-	doins "${FILESDIR}"/pnp-aliases
+	newins "${FILESDIR}"/blacklist-110 blacklist.conf
+	newins "${FILESDIR}"/pnp-aliases pnp-aliases.conf
 
 	# convert /lib/udev to real used dir
 	sed_helper_dir \
