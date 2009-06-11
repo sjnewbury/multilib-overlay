@@ -64,6 +64,7 @@ multilib-native_src_configure_internal() {
 
 	# breaks otherwise <gustavoz>
 	use sparc && export CFLAGS="-O1" && export CXXFLAGS="-O1"
+	kde_src_configure
 }
 
 multilib-native_src_install_internal() {
