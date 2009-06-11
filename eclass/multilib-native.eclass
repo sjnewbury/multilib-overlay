@@ -436,7 +436,7 @@ multilib-native_src_generic_sub() {
 			fi
 		fi
 
-		if [[ "${1/_*}" != "pkg" ]]; then
+		if [[ "${1}" != "pkg_setup" && "${1}" != "pkg_postrm" ]]; then
 			# Is this our first run for this ABI?
 			if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
 
