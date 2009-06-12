@@ -60,7 +60,7 @@ src_prepare() {
 	elibtoolize # for sane .so versioning on FreeBSD
 }
 
-src_configure() {
+multilib-native_src_configure_internal() {
 	local myconf
 	use bindist && myconf="--without-lzo" || myconf="$(use_with lzo)"
 	econf  \
@@ -72,7 +72,7 @@ src_configure() {
 		${myconf}
 }
 
-src_install() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
 	dodoc AUTHORS ChangeLog NEWS README THANKS doc/TODO
