@@ -2,8 +2,23 @@ x11-libs/qt-gui-4.5.1-r2	(installs headers under /usr/include/gentoo-multilib)	a
 x11-libs/qt-phonon-4.5.1	(installs headers under /usr/include/gentoo-multilib)	ahuemer
 				this is no "problem". see get_ml_incdir in 
 				multilib.eclass						vlooe
+				you seem to be right, vlooe. googleearth works again
+				now. maybe the reason was something else.
+				i will remove these 2 entries in some days.		ahuemer
+
 dev-lang/python-2.6.2-r1	(emake -j1 still needed, otherwise build fails.
 				not necessary (?) in portage version)			ahuemer
+
 dev-db/unixODBC			searches in qt headers for qt version. due to 
 				prep_ml_includes this can not work.			vlooe
 				this is only with qt3 a problem. qt 4 works fine	vlooe
+
+dev-python/PyQt4-4.5		this cannot be built on my machine. any other
+				experiences?
+				/usr/bin/moc -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB
+				-DQT_SHARED -I/usr/share/qt4/mkspecs/linux-g++-64 -I. 
+				-I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui 
+				-I/usr/include/qt4 -I/usr/include/python2.6 -I. -I. 
+				qpytextobject.h -o moc_qpytextobject.cpp
+				qpytextobject.h:47: Error: Undefined interface
+				the relevant file is at http://dpaste.com/53640/	ahuemer
