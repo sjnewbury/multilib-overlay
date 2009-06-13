@@ -64,7 +64,7 @@ multilib-native_src_configure_internal() {
 		myconf="--enable-debug=yes"
 	fi
 
-	if use lib32 && [[ "${ABI}" = "x86" ]]; then
+	if use lib32 && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
 		myconf="${myconf} --program-suffix=32"
 	fi
 
@@ -90,7 +90,7 @@ multilib-native_pkg_postinst_internal() {
 
 		mkdir -p ${PANGO_CONFDIR}
 
-		if use lib32 && [[ "${ABI}" = "x86" ]]; then
+		if use lib32 && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
 			pango-querymodules32 > ${PANGO_CONFDIR}/pango.modules
 		else
 			pango-querymodules > ${PANGO_CONFDIR}/pango.modules
