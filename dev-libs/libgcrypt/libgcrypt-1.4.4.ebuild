@@ -27,7 +27,7 @@ multilib-native_src_configure_internal() {
 	# --disable-padlock-support for bug #201917
 	
 	local myconf
-	if use lib32 && [[ "${ABI}" == "x86" ]]; then
+	if use lib32 && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
 		myconf="--program-suffix=32"
 	fi
 	
