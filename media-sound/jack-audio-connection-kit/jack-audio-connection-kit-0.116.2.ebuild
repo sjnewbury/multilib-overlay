@@ -42,7 +42,7 @@ multilib-native_src_configure_internal() {
 
 	# it's possible to load a 32bit jack client into 64bit jackd since 0.116,
 	# but let's install the 32bit binaries anyway ;)
-	if use lib32 && [[ "${ABI}" == "x86" ]]; then
+	if use lib32 && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
 		myconf="${myconf} --program-suffix=32"
 	fi
 
