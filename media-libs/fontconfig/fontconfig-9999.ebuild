@@ -52,7 +52,7 @@ multilib-native_src_configure_internal() {
 		replace-flags -march=* -DMARCH_CENSORED
 	fi
 
-	if use lib32 && [[ "${ABI}" == "x86" ]]; then
+	if use lib32 && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
 		myconf="${myconf} --program-suffix=32"
 	fi
 	
@@ -102,7 +102,7 @@ multilib-native_pkg_postinst_internal() {
 	echo
 
 	if [[ ${ROOT} = / ]]; then
-		if use lib32 && [[ "${ABI}" == "x86" ]]; then
+		if use lib32 && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
 			ebegin "Creating global 32bit font cache..."
 			/usr/bin/fc-cache32 -sr
 			eend $?
