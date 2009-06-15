@@ -1,5 +1,5 @@
-doc? ( app-text/openjade app-text/docbook-dsssl-stylesheets app-text/docbook-sgml-utils ~app-text/docbook-sgml-dtd-4.2 ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
-
+!dev-libs/libusb-compat doc? ( app-text/openjade app-text/docbook-dsssl-stylesheets app-text/docbook-sgml-utils ~app-text/docbook-sgml-dtd-4.2 ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
+!dev-libs/libusb-compat
 0
 mirror://sourceforge/libusb/libusb-0.1.12.tar.gz
 test

@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libusb/libusb-0.1.12-r5.ebuild,v 1.2 2009/03/28 11:30:42 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libusb/libusb-0.1.12-r5.ebuild,v 1.9 2009/06/01 00:00:46 ranger Exp $
 
 inherit eutils libtool autotools toolchain-funcs multilib-native
 
@@ -10,12 +10,13 @@ SRC_URI="mirror://sourceforge/libusb/${P}.tar.gz"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="debug doc nocxx"
 RESTRICT="test"
 
-RDEPEND=""
-DEPEND="doc? ( app-text/openjade
+RDEPEND="!dev-libs/libusb-compat"
+DEPEND="${RDEPEND}
+	doc? ( app-text/openjade
 	app-text/docbook-dsssl-stylesheets
 	app-text/docbook-sgml-utils
 	~app-text/docbook-sgml-dtd-4.2 )"

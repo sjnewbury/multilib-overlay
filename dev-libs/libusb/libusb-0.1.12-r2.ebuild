@@ -1,6 +1,6 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libusb/libusb-0.1.12-r2.ebuild,v 1.1 2008/05/11 02:28:05 solar Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libusb/libusb-0.1.12-r2.ebuild,v 1.2 2009/05/15 10:55:18 robbat2 Exp $
 
 EAPI="2"
 
@@ -18,8 +18,9 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~spar
 IUSE="debug doc"
 RESTRICT="test"
 
-RDEPEND=""
-DEPEND="doc? ( app-text/openjade
+RDEPEND="!dev-libs/libusb-compat"
+DEPEND="${RDEPEND}
+	doc? ( app-text/openjade
 	app-text/docbook-dsssl-stylesheets
 	app-text/docbook-sgml-utils
 	~app-text/docbook-sgml-dtd-4.2 )"
