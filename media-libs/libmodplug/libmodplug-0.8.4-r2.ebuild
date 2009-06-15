@@ -5,7 +5,6 @@
 EAPI="2"
 WANT_AUTOCONF="latest"
 WANT_AUTOMAKE="latest"
-MULTILIB_IN_SOURCE_BUILD="yes"
 
 inherit eutils autotools multilib-native
 
@@ -22,9 +21,7 @@ IUSE=""
 RDEPEND=""
 DEPEND="dev-util/pkgconfig"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${PN}-0.7-amd64.patch"
 	epatch "${FILESDIR}/${PN}-0.8.4-timidity-patches.patch"
 	epatch "${FILESDIR}/${PN}-0.8.4-ppc64-64ul.patch"
