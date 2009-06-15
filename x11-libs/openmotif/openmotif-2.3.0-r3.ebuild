@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/openmotif/openmotif-2.3.0-r3.ebuild,v 1.11 2009/02/04 21:04:38 ulm Exp $
 
+EAPI="2"
+
 inherit eutils flag-o-matic multilib autotools multilib-native
 
 DESCRIPTION="Open Motif"
@@ -56,9 +58,7 @@ pkg_setup() {
 		einfo "Cleaned up ${count} orphaned symlinks in ${ROOT}usr/share/man"
 }
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${P}-sensitivity-invisible.patch"
 	epatch "${FILESDIR}/${P}-fix-nedit-segfaults.patch"
 	epatch "${FILESDIR}/${P}-freebsd-libiconv.patch"
@@ -76,7 +76,7 @@ src_unpack() {
 	AT_M4DIR=. eautoreconf
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# get around some LANG problems in make (#15119)
 	unset LANG
 
@@ -93,7 +93,9 @@ multilib-native_src_compile_internal() {
 		$(use_enable xft) \
 		$(use_enable jpeg) \
 		$(use_enable png)
+}
 
+multilib-native_src_compile_internal() {
 	emake -j1 || die "emake failed"
 }
 

@@ -1,6 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/openmotif/openmotif-2.3.2.ebuild,v 1.3 2009/04/16 07:28:21 ulm Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/openmotif/openmotif-2.3.2.ebuild,v 1.6 2009/06/15 00:30:18 jer Exp $
+
+EAPI="2"
 
 inherit autotools eutils flag-o-matic multilib multilib-native
 
@@ -12,7 +14,7 @@ SRC_URI="ftp://ftp.ics.com/openmotif/${PV%.*}/${PV}/${P}.tar.gz
 
 LICENSE="MOTIF libXpm doc? ( OPL )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
 IUSE="doc examples jpeg png unicode xft"
 
 # make people unmerge motif-config and all previous slots
@@ -57,9 +59,7 @@ pkg_setup() {
 		einfo "Cleaned up ${count} orphaned symlinks in ${ROOT}usr/share/man"
 }
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${PN}-2.3.1-multilist-stipple.patch" #215984
 	epatch "${FILESDIR}/${PN}-2.3.1-ac-editres.patch" #82081
 
@@ -72,7 +72,7 @@ src_unpack() {
 	AT_M4DIR=. eautoreconf
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# get around some LANG problems in make (#15119)
 	unset LANG
 
@@ -90,7 +90,9 @@ multilib-native_src_compile_internal() {
 		$(use_enable xft) \
 		$(use_enable jpeg) \
 		$(use_enable png)
+}
 
+multilib-native_src_compile_internal() {
 	emake -j1 || die "emake failed"
 }
 

@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/openmotif/openmotif-2.3.1.1.ebuild,v 1.8 2009/02/04 21:04:38 ulm Exp $
 
+EAPI="2"
+
 inherit autotools eutils flag-o-matic multilib versionator multilib-native
 
 MY_PV=$(get_version_component_range 1-3)
@@ -63,9 +65,7 @@ pkg_setup() {
 		einfo "Cleaned up ${count} orphaned symlinks in ${ROOT}usr/share/man"
 }
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${MY_P}-multilist-stipple.patch" #215984
 	epatch "${FILESDIR}/${MY_P}-ac-editres.patch" #82081
 
@@ -78,7 +78,7 @@ src_unpack() {
 	AT_M4DIR=. eautoreconf
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# get around some LANG problems in make (#15119)
 	unset LANG
 
@@ -96,7 +96,9 @@ multilib-native_src_compile_internal() {
 		$(use_enable xft) \
 		$(use_enable jpeg) \
 		$(use_enable png)
+}
 
+multilib-native_src_compile_internal() {
 	emake -j1 || die "emake failed"
 }
 
