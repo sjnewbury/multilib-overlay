@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libpng/libpng-1.2.37.ebuild,v 1.3 2009/06/07 18:47:10 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libpng/libpng-1.2.37.ebuild,v 1.6 2009/06/10 19:05:54 maekke Exp $
 
 EAPI="2"
 
@@ -12,16 +12,14 @@ SRC_URI="mirror://sourceforge/libpng/${P}.tar.lzma"
 
 LICENSE="as-is"
 SLOT="1.2"
-KEYWORDS="alpha ~amd64 ~arm hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ~ppc ~ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE=""
 
 RDEPEND="sys-libs/zlib[lib32?]"
 DEPEND="${RDEPEND}
 	app-arch/lzma-utils"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	# So we get sane .so versioning on FreeBSD
 	elibtoolize
 }

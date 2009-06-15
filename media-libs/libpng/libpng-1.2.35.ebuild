@@ -22,9 +22,7 @@ DEPEND="${RDEPEND}
 
 S=${WORKDIR}/${PN}-${MY_PV}
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-1.2.24-pngconf-setjmp.patch
 
 	# So we get sane .so versioning on FreeBSD
