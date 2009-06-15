@@ -26,10 +26,7 @@ DEPEND="X?	( x11-libs/libX11[lib32?]
 RDEPEND="${DEPEND}
 		!<media-libs/fontconfig-2.3.2-r2"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	enable_option() {
 		sed -i -e "/#define $1/a #define $1" \
 			include/freetype/config/ftoption.h \
@@ -77,13 +74,14 @@ src_unpack() {
 	epunt_cxx
 }
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	append-flags -fno-strict-aliasing
 
 	type -P gmake &> /dev/null && export GNUMAKE=gmake
 	econf
+}
+
+multilib-native_src_compile_internal() {
 	emake || die "emake failed"
 
 	if use utils; then

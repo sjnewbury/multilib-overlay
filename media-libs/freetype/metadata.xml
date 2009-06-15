@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
-<pkgmetadata>
-  <herd>fonts</herd>
-  <use>
-    <flag name="kpathsea">Enable TeX support (ttf2pk and ttf2pfb)</flag>
-    <flag name="utils">Install utilities and examples from ft2demos</flag>
-  </use>
-</pkgmetadata>

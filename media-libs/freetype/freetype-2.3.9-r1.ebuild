@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/freetype/freetype-2.3.9.ebuild,v 1.1 2009/03/13 18:33:06 pva Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/freetype/freetype-2.3.9-r1.ebuild,v 1.6 2009/05/06 16:07:11 armin76 Exp $
 
 EAPI="2"
 
@@ -14,7 +14,7 @@ SRC_URI="mirror://sourceforge/freetype/${P/_/}.tar.bz2
 
 LICENSE="FTL GPL-2"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="X bindist debug doc utils fontforge"
 
 DEPEND="X?	( x11-libs/libX11[lib32?]
@@ -26,10 +26,7 @@ DEPEND="X?	( x11-libs/libX11[lib32?]
 RDEPEND="${DEPEND}
 		!<media-libs/fontconfig-2.3.2-r2"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	enable_option() {
 		sed -i -e "/#define $1/a #define $1" \
 			include/freetype/config/ftoption.h \
@@ -78,13 +75,14 @@ src_unpack() {
 	epunt_cxx
 }
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	append-flags -fno-strict-aliasing
 
 	type -P gmake &> /dev/null && export GNUMAKE=gmake
 	econf
+}
+
+multilib-native_src_compile_internal() {
 	emake || die "emake failed"
 
 	if use utils; then
