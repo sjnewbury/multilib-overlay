@@ -21,10 +21,7 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 S="${WORKDIR}/${MY_P}"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	elibtoolize
 
 	epunt_cxx #74493
