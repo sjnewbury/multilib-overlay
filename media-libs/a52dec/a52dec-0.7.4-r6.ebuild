@@ -1,8 +1,8 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/a52dec/a52dec-0.7.4-r6.ebuild,v 1.2 2008/06/16 10:42:16 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/a52dec/a52dec-0.7.4-r6.ebuild,v 1.8 2009/06/11 15:04:47 armin76 Exp $
 
-EAPI="1"
+EAPI="2"
 
 WANT_AUTOCONF=latest
 WANT_AUTOMAKE=latest
@@ -15,16 +15,13 @@ SRC_URI="http://liba52.sourceforge.net/files/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ~ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="oss djbfft"
 
 RDEPEND="djbfft? ( sci-libs/djbfft[lib32?] )"
 DEPEND="${RDEPEND}"
 
-src_unpack() {
-	unpack ${A}
-
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${P}-build.patch"
 	epatch "${FILESDIR}/${P}-freebsd.patch"
 	epatch "${FILESDIR}/${P}-tests-optional.patch"
@@ -33,7 +30,7 @@ src_unpack() {
 	epunt_cxx
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	filter-flags -fprefetch-loop-arrays
 
 	local myconf="--enable-shared"
@@ -41,7 +38,15 @@ multilib-native_src_compile_internal() {
 	econf \
 		$(use_enable djbfft) \
 		${myconf} || die
+}
+
+multilib-native_src_compile_internal() {
 	emake CFLAGS="${CFLAGS}" || die "emake failed"
+}
+
+src_test() {
+	filter-flags -fPIE
+	emake check || die "emake check failed"
 }
 
 multilib-native_src_install_internal() {

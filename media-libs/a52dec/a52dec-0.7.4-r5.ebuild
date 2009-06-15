@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/a52dec/a52dec-0.7.4-r5.ebuild,v 1.19 2008/06/13 14:06:16 loki_val Exp $
 
-EAPI="1"
+EAPI="2"
 
 WANT_AUTOCONF=latest
 WANT_AUTOMAKE=latest
@@ -21,10 +21,7 @@ IUSE="oss djbfft"
 RDEPEND="djbfft? ( sci-libs/djbfft[lib32?] )"
 DEPEND="${RDEPEND}"
 
-src_unpack() {
-	unpack ${A}
-
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${P}-build.patch"
 	epatch "${FILESDIR}/${P}-freebsd.patch"
 
@@ -32,7 +29,7 @@ src_unpack() {
 	epunt_cxx
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	filter-flags -fprefetch-loop-arrays
 
 	local myconf="--enable-shared"
@@ -40,6 +37,9 @@ multilib-native_src_compile_internal() {
 	econf \
 		$(use_enable djbfft) \
 		${myconf} || die
+}
+
+multilib-native_src_compile_internal() {
 	emake CFLAGS="${CFLAGS}" || die "emake failed"
 }
 
