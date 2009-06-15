@@ -26,7 +26,7 @@ src_unpack() {
 	sed -i -e 's:-s\b::g' Makefile
 }
 
-multilib-native_src_compile_internal(){
+multilib-native_src_compile_internal() {
 	emake LD="$(tc-getCC) ${LDFLAGS}" CC="$(tc-getCC)" \
 		POPT="${CFLAGS}" M_ARCH="" AR="$(tc-getAR)" \
 		|| die "emake failed."
