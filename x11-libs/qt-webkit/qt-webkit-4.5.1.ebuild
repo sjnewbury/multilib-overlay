@@ -12,8 +12,8 @@ IUSE="kde"
 
 DEPEND="~x11-libs/qt-core-${PV}[debug=,ssl,lib32?]
 	~x11-libs/qt-gui-${PV}[debug=,lib32?]
-	|| ( ~x11-libs/qt-phonon-${PV}:${SLOT}[debug=,lib32?] media-sound/phonon[lib32?] )
-	kde? ( media-sound/phonon )"
+	!kde? ( || ( ~x11-libs/qt-phonon-${PV}:${SLOT}[debug=,lib32?] media-sound/phonon[lib32?] ) )
+	kde? ( media-sound/phononb32] )"
 RDEPEND="${DEPEND}"
 
 QT4_TARGET_DIRECTORIES="src/3rdparty/webkit/WebCore tools/designer/src/plugins/qwebview"
