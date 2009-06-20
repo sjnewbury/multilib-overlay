@@ -1,6 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.9.ebuild,v 1.9 2009/02/24 11:16:21 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.9.ebuild,v 1.10 2009/04/28 14:30:42 armin76 Exp $
+
+EAPI="2"
 
 inherit eutils libtool autotools flag-o-matic multilib-native
 
@@ -10,7 +12,7 @@ SRC_URI="http://0pointer.de/lennart/projects/${PN}/${P}.tar.gz"
 
 LICENSE="LGPL-2 GPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 hppa ia64 ppc ppc64 sparc x86"
+KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86"
 IUSE="alsa avahi caps jack lirc oss tcpd X hal dbus libsamplerate gnome bluetooth policykit asyncns"
 
 RDEPEND="X? ( x11-libs/libX11[lib32?] )
@@ -41,7 +43,7 @@ RDEPEND="X? ( x11-libs/libX11[lib32?] )
 	asyncns? ( net-libs/libasyncns[lib32?] )
 	>=sys-devel/libtool-1.5.24" # it's a valid RDEPEND, libltdl.so is used
 DEPEND="${RDEPEND}
-	dev-libs/libatomic_ops
+	dev-libs/libatomic_ops[lib32?]
 	dev-util/pkgconfig"
 
 # alsa-utils dep is for the alsasound init.d script (see bug #155707)

@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.15.ebuild,v 1.2 2009/04/17 11:49:44 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.15.ebuild,v 1.7 2009/06/19 20:33:37 aballier Exp $
 
 EAPI=2
 
@@ -21,7 +21,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
 IUSE="alsa avahi caps jack lirc oss tcpd X hal dbus libsamplerate gnome bluetooth policykit asyncns +glib test"
 
-RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib32?] )
+RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib32?] x11-libs/libXtst[lib32?] )
 	caps? ( sys-libs/libcap[lib32?] )
 	libsamplerate? ( >=media-libs/libsamplerate-0.1.1-r1[lib32?] )
 	alsa? ( >=media-libs/alsa-lib-1.0.19[lib32?] )
@@ -54,7 +54,7 @@ RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib
 
 DEPEND="${RDEPEND}
 	X? ( x11-proto/xproto )
-	dev-libs/libatomic_ops
+	dev-libs/libatomic_ops[lib32?]
 	dev-util/pkgconfig
 	|| ( dev-util/unifdef sys-freebsd/freebsd-ubin )
 	dev-util/intltool"
@@ -76,10 +76,8 @@ pkg_setup() {
 	enewuser pulse -1 -1 /var/run/pulse pulse,audio
 }
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
+src_prepare() {
+	epatch "${FILESDIR}/${P}-bsd.patch"
 	elibtoolize
 }
 
@@ -117,7 +115,7 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_install_internal() {
-	emake -j1 DESTDIR="${D}" install || die "make install failed"
+	emake DESTDIR="${D}" install || die "make install failed"
 
 	newconfd "${FILESDIR}/pulseaudio.conf.d" pulseaudio
 
@@ -152,13 +150,16 @@ pkg_postinst() {
 	elog "PulseAudio in Gentoo can use a system-wide pulseaudio daemon."
 	elog "This support is enabled by starting the pulseaudio init.d ."
 	elog "To be able to access that you need to be in the group pulse-access."
-	elog "For more information about system-wide support, please refer to"
+	elog "If you choose to use this feature, please make sure that you"
+	elog "really want to run PulseAudio this way:"
+	elog "   http://pulseaudio.org/wiki/WhatIsWrongWithSystemMode"
+	elog "For more information about system-wide support, please refer to:"
 	elog "	 http://pulseaudio.org/wiki/SystemWideInstance"
 	if use gnome; then
 		elog
 		elog "By enabling gnome USE flag, you enabled gconf support. Please note"
 		elog "that you might need to remove the gnome USE flag or disable the"
-		elog "gconf module on /etc/pulse/default.pa to be able to use PulseAudio"
+		elog "gconf module on /etc/pulse/system.pa to be able to use PulseAudio"
 		elog "with a system-wide instance."
 	fi
 	elog

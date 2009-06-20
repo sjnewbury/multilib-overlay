@@ -1,7 +1,7 @@
 #!/sbin/runscript
 # Copyright 1999-2004 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/files/pulseaudio.init.d-4,v 1.1 2008/08/03 18:03:46 chutzpah Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/files/pulseaudio.init.d-4,v 1.2 2009/06/15 15:04:52 flameeyes Exp $
 
 depend() {
 	need localmount
@@ -59,6 +59,15 @@ depend() {
 }
 
 start() {
+	if [[ -z ${PULSEAUDIO_SHOULD_NOT_GO_SYSTEMWIDE} ]]; then
+		eerror "Please don't use system wide PulseAudio unless you read the"
+		eerror "documentation available at http://www.pulseaudio.org/wiki/WhatIsWrongWithSystemMode"
+		eerror ""
+		eerror "When you're done, please set the variable PULSEAUDIO_SHOULD_NOT_GO_SYSTEMWIDE in"
+		eerror "/etc/conf.d/pulseaudio . Please remember that upstream does not support this mode"
+		eerror "when used for standard desktop configurations."
+		return 1
+	fi
 	ebegin "Starting pulseaudio"
 	PA_ALL_OPTS="${PA_OPTS} --fail=1 --daemonize=1 --system"
 	start-stop-daemon --start --exec /usr/bin/pulseaudio -- ${PA_ALL_OPTS}
