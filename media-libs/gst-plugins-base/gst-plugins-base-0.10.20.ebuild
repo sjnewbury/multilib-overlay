@@ -42,6 +42,11 @@ multilib-native_src_configure_internal() {
 		$(use_enable debug)
 }
 
+multilib-native_src_compile_internal() {
+	#this is needed because original ebuild do not call gst-plugins-base_src_compile 
+	emake || die "emake failed"
+}
+
 multilib-native_src_install_internal() {
 	gnome2_src_install
 }
