@@ -1,5 +1,5 @@
->=sys-libs/ncurses-5.2-r2[lib32?] >=app-shells/bash-2.05b-r2
->=sys-libs/ncurses-5.2-r2[lib32?]
+>=sys-libs/ncurses-5.2-r2[lib32?] >=app-shells/bash-2.05b-r2 sys-apps/abi-wrapper
+>=sys-libs/ncurses-5.2-r2[lib32?] sys-apps/abi-wrapper
 0
 mirror://gnu/readline/readline-5.1.tar.gz ftp://ftp.cwru.edu/pub/bash/readline-5.1-patches/readline51-001 mirror://gnu/bash/readline-5.1-patches/readline51-001 ftp://ftp.cwru.edu/pub/bash/readline-5.1-patches/readline51-002 mirror://gnu/bash/readline-5.1-patches/readline51-002 ftp://ftp.cwru.edu/pub/bash/readline-5.1-patches/readline51-003 mirror://gnu/bash/readline-5.1-patches/readline51-003 ftp://ftp.cwru.edu/pub/bash/readline-5.1-patches/readline51-004 mirror://gnu/bash/readline-5.1-patches/readline51-004
 

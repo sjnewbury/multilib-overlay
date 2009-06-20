@@ -1,5 +1,5 @@
-nls? ( sys-devel/gettext ) sys-devel/bc
-!sys-libs/com_err !sys-libs/ss !<sys-fs/e2fsprogs-1.41
+nls? ( sys-devel/gettext ) sys-devel/bc sys-apps/abi-wrapper
+!sys-libs/com_err !sys-libs/ss !<sys-fs/e2fsprogs-1.41 sys-apps/abi-wrapper
 0
 mirror://sourceforge/e2fsprogs/e2fsprogs-libs-1.41.3.tar.gz
 

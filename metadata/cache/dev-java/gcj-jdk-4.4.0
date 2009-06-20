@@ -1,5 +1,5 @@
-~sys-devel/gcc-4.4.0[gcj,nsplugin?] >=dev-java/eclipse-ecj-3.2.1 >=dev-java/java-config-2 nsplugin? ( || ( www-client/mozilla-firefox net-libs/xulrunner www-client/seamonkey ) ) =dev-java/java-config-2*
-~sys-devel/gcc-4.4.0[gcj,nsplugin?] >=dev-java/eclipse-ecj-3.2.1 >=dev-java/java-config-2 nsplugin? ( || ( www-client/mozilla-firefox net-libs/xulrunner www-client/seamonkey ) ) =dev-java/java-config-2*
+~sys-devel/gcc-4.4.0[gcj,nsplugin?] >=dev-java/eclipse-ecj-3.2.1 >=dev-java/java-config-2 nsplugin? ( || ( www-client/mozilla-firefox net-libs/xulrunner www-client/seamonkey ) ) =dev-java/java-config-2* sys-apps/abi-wrapper
+~sys-devel/gcc-4.4.0[gcj,nsplugin?] >=dev-java/eclipse-ecj-3.2.1 >=dev-java/java-config-2 nsplugin? ( || ( www-client/mozilla-firefox net-libs/xulrunner www-client/seamonkey ) ) =dev-java/java-config-2* sys-apps/abi-wrapper
 4.4
 
 

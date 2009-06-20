@@ -1,5 +1,5 @@
-virtual/libc
-virtual/libc
+virtual/libc sys-apps/abi-wrapper
+virtual/libc sys-apps/abi-wrapper
 0
 http://userspace.selinuxproject.org/releases/current/devel/libsepol-2.0.32.tar.gz
 test

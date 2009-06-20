@@ -1,5 +1,5 @@
-sys-devel/gnuconfig =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool ssl? ( >=dev-libs/openssl-0.9.6d ) userland_GNU? ( sys-process/procps ) >=sys-apps/sed-4 >=sys-apps/texinfo-4.7-r1 >=sys-libs/readline-4.1 >=sys-libs/zlib-1.2.3 !dev-db/mysql-community berkdb? ( sys-apps/ed )
-ssl? ( >=dev-libs/openssl-0.9.6d ) userland_GNU? ( sys-process/procps ) >=sys-apps/sed-4 >=sys-apps/texinfo-4.7-r1 >=sys-libs/readline-4.1 >=sys-libs/zlib-1.2.3 !dev-db/mysql-community !minimal? ( dev-db/mysql-init-scripts ) selinux? ( sec-policy/selinux-mysql )
+sys-devel/gnuconfig =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool ssl? ( >=dev-libs/openssl-0.9.6d ) userland_GNU? ( sys-process/procps ) >=sys-apps/sed-4 >=sys-apps/texinfo-4.7-r1 >=sys-libs/readline-4.1 >=sys-libs/zlib-1.2.3 !dev-db/mysql-community berkdb? ( sys-apps/ed ) sys-apps/abi-wrapper
+ssl? ( >=dev-libs/openssl-0.9.6d ) userland_GNU? ( sys-process/procps ) >=sys-apps/sed-4 >=sys-apps/texinfo-4.7-r1 >=sys-libs/readline-4.1 >=sys-libs/zlib-1.2.3 !dev-db/mysql-community !minimal? ( dev-db/mysql-init-scripts ) selinux? ( sec-policy/selinux-mysql ) sys-apps/abi-wrapper
 0
 http://mirror.provenscaling.com/mysql/enterprise/source/5.0/mysql-5.0.60.tar.gz mirror://gentoo/mysql-extras-20080529.tar.bz2 http://g3nt8.org/patches/mysql-extras-20080529.tar.bz2
 

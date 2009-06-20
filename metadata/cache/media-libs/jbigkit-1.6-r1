@@ -1,5 +1,5 @@
->=sys-apps/sed-4
-
+>=sys-apps/sed-4 sys-apps/abi-wrapper
+sys-apps/abi-wrapper
 0
 http://www.cl.cam.ac.uk/~mgk25/download/jbigkit-1.6.tar.gz
 

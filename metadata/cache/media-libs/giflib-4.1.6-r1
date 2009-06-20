@@ -1,5 +1,5 @@
-!media-libs/libungif X? ( x11-libs/libXt[lib32?] x11-libs/libX11[lib32?] x11-libs/libICE[lib32?] x11-libs/libSM[lib32?] ) rle? ( media-libs/urt )
-!media-libs/libungif X? ( x11-libs/libXt[lib32?] x11-libs/libX11[lib32?] x11-libs/libICE[lib32?] x11-libs/libSM[lib32?] ) rle? ( media-libs/urt )
+!media-libs/libungif X? ( x11-libs/libXt[lib32?] x11-libs/libX11[lib32?] x11-libs/libICE[lib32?] x11-libs/libSM[lib32?] ) rle? ( media-libs/urt ) sys-apps/abi-wrapper
+!media-libs/libungif X? ( x11-libs/libXt[lib32?] x11-libs/libX11[lib32?] x11-libs/libICE[lib32?] x11-libs/libSM[lib32?] ) rle? ( media-libs/urt ) sys-apps/abi-wrapper
 0
 mirror://sourceforge/giflib/giflib-4.1.6.tar.bz2
 

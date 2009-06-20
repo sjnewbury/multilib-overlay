@@ -1,5 +1,5 @@
-ogg? ( media-libs/libogg ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
-ogg? ( media-libs/libogg )
+ogg? ( media-libs/libogg ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+ogg? ( media-libs/libogg ) sys-apps/abi-wrapper
 0
 http://downloads.xiph.org/releases/speex/speex-1.2rc1.tar.gz
 

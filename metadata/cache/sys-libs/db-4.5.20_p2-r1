@@ -1,5 +1,5 @@
-tcl? ( >=dev-lang/tcl-8.4[lib32?] ) java? ( >=virtual/jdk-1.4 ) >=sys-devel/binutils-2.16.1 test? ( >=dev-lang/tcl-8.4 ) java? ( >=dev-java/java-config-2.1.6 ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
-tcl? ( dev-lang/tcl[lib32?] ) java? ( >=virtual/jre-1.4 ) java? ( >=dev-java/java-config-2.1.6 )
+tcl? ( >=dev-lang/tcl-8.4[lib32?] ) java? ( >=virtual/jdk-1.4 ) >=sys-devel/binutils-2.16.1 test? ( >=dev-lang/tcl-8.4 ) java? ( >=dev-java/java-config-2.1.6 ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+tcl? ( dev-lang/tcl[lib32?] ) java? ( >=virtual/jre-1.4 ) java? ( >=dev-java/java-config-2.1.6 ) sys-apps/abi-wrapper
 4.5
 http://download.oracle.com/berkeley-db/db-4.5.20.tar.gz http://www.oracle.com/technology/products/berkeley-db/db/update/4.5.20/patch.4.5.20.1 http://www.oracle.com/technology/products/berkeley-db/db/update/4.5.20/patch.4.5.20.2
 

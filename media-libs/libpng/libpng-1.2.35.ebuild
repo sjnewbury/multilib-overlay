@@ -33,6 +33,8 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
 
 	dodoc ANNOUNCE CHANGES KNOWNBUG README TODO Y2KINFO
+
+	prep_ml_binaries /usr/bin/libpng-config /usr/bin/libpng12-config 
 }
 
 multilib-native_pkg_postinst_internal() {

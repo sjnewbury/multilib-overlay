@@ -114,6 +114,8 @@ multilib-native_src_install_internal() {
 			cp ${header} "${D}/usr/include/freetype2/internal4fontforge/$(dirname ${header})"
 		done
 	fi
+
+	prep_ml_binaries /usr/bin/freetype-config 
 }
 
 pkg_postinst() {

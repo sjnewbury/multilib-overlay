@@ -1,5 +1,5 @@
-=sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
-
+=sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+sys-apps/abi-wrapper
 0
 mirror://sourceforge/check/check-0.9.5.tar.gz
 

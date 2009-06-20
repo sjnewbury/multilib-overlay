@@ -239,6 +239,8 @@ multilib-native_src_install_internal() {
 
 	# create /etc/cups/client.conf, bug #196967
 	echo "ServerName localhost" > "${D}"/etc/cups/client.conf
+
+	prep_ml_binaries /usr/bin/cups-config 
 }
 
 pkg_preinst() {

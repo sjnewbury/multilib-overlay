@@ -1,5 +1,5 @@
-doc? ( app-doc/doxygen )
-
+doc? ( app-doc/doxygen ) sys-apps/abi-wrapper
+sys-apps/abi-wrapper
 0
 http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.12.tar.gz
 

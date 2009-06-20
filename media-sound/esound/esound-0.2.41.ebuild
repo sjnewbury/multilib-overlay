@@ -65,6 +65,8 @@ multilib-native_src_install_internal() {
 	use alsa && extradepend="$extradepend alsasound"
 	sed -e "s/@extradepend@/$extradepend/" "${FILESDIR}/esound.init.d.2" >"${T}/esound"
 	doinitd "${T}/esound"
+
+	prep_ml_binaries /usr/bin/esd-config 
 }
 
 pkg_postinst() {

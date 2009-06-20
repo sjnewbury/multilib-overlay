@@ -1,5 +1,5 @@
->=sys-libs/ncurses-5.2[lib32?] gtk? ( =x11-libs/gtk+-1.2*[lib32?] ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
->=sys-libs/ncurses-5.2[lib32?] gtk? ( =x11-libs/gtk+-1.2*[lib32?] )
+>=sys-libs/ncurses-5.2[lib32?] gtk? ( =x11-libs/gtk+-1.2*[lib32?] ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+>=sys-libs/ncurses-5.2[lib32?] gtk? ( =x11-libs/gtk+-1.2*[lib32?] ) sys-apps/abi-wrapper
 0
 mirror://sourceforge/lame/lame-3.97.tar.gz
 

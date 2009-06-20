@@ -101,6 +101,8 @@ multilib-native_src_install_internal() {
 		rm -rf "${D}/usr/share/doc/${P}/examples"
 		rm -rf "${D}/usr/share/doc/${PN}-python-${PV}/examples"
 	fi
+
+	prep_ml_binaries /usr/bin/xml2-config 
 }
 
 multilib-native_pkg_postinst_internal() {

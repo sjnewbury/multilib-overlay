@@ -1,5 +1,5 @@
-X? ( x11-libs/libX11[lib32?] ) slang? ( >=sys-libs/slang-1.4.2 ) >=sys-libs/ncurses-5.1[lib32?] X? ( x11-proto/xproto ) gpm? ( sys-libs/gpm[lib32?] )
-X? ( x11-libs/libX11[lib32?] ) slang? ( >=sys-libs/slang-1.4.2 )
+X? ( x11-libs/libX11[lib32?] ) slang? ( >=sys-libs/slang-1.4.2 ) >=sys-libs/ncurses-5.1[lib32?] X? ( x11-proto/xproto ) gpm? ( sys-libs/gpm[lib32?] ) sys-apps/abi-wrapper
+X? ( x11-libs/libX11[lib32?] ) slang? ( >=sys-libs/slang-1.4.2 ) sys-apps/abi-wrapper
 0
 mirror://sourceforge/aa-project/aalib-1.4rc4.tar.gz
 

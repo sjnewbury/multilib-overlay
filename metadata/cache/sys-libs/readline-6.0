@@ -1,5 +1,5 @@
->=sys-libs/ncurses-5.2-r2[lib32?] >=app-shells/bash-2.05b-r2 =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
->=sys-libs/ncurses-5.2-r2[lib32?]
+>=sys-libs/ncurses-5.2-r2[lib32?] >=app-shells/bash-2.05b-r2 =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+>=sys-libs/ncurses-5.2-r2[lib32?] sys-apps/abi-wrapper
 0
 mirror://gnu/readline/readline-6.0.tar.gz
 

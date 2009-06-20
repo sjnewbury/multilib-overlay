@@ -1,5 +1,5 @@
-!virtual/krb5 >=sys-libs/e2fsprogs-libs-1.41.0[lib32?] dev-libs/openssl[lib32?] doc? ( virtual/latex-base ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
-!virtual/krb5 >=sys-libs/e2fsprogs-libs-1.41.0[lib32?] dev-libs/openssl[lib32?]
+!virtual/krb5 >=sys-libs/e2fsprogs-libs-1.41.0[lib32?] dev-libs/openssl[lib32?] doc? ( virtual/latex-base ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+!virtual/krb5 >=sys-libs/e2fsprogs-libs-1.41.0[lib32?] dev-libs/openssl[lib32?] sys-apps/abi-wrapper
 0
 http://web.mit.edu/kerberos/dist/krb5/1.6/krb5-1.6.3-signed.tar mirror://gentoo/mit-krb5-1.6.3-patches-0.5.tar.bz2
 

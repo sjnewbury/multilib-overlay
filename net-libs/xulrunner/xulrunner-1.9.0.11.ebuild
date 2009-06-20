@@ -152,4 +152,6 @@ multilib-native_src_install_internal() {
 	    java-pkg_regjar "${D}"${MOZILLA_FIVE_HOME}/sdk/lib/MozillaGlue.jar
 	    java-pkg_regjar "${D}"${MOZILLA_FIVE_HOME}/sdk/lib/MozillaInterfaces.jar
 	fi
+
+	prep_ml_binaries /usr/bin/xulrunner-config 
 }

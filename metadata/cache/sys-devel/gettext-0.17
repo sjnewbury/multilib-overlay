@@ -1,5 +1,5 @@
-virtual/libiconv dev-libs/libxml2[lib32?] sys-libs/ncurses[lib32?] dev-libs/expat[lib32?] acl? ( kernel_linux? ( sys-apps/acl[lib32?] ) ) >=dev-java/java-config-2.1.6
-virtual/libiconv dev-libs/libxml2[lib32?] sys-libs/ncurses[lib32?] dev-libs/expat[lib32?] acl? ( kernel_linux? ( sys-apps/acl[lib32?] ) ) java? ( >=virtual/jdk-1.4 ) >=dev-java/java-config-2.1.6
+virtual/libiconv dev-libs/libxml2[lib32?] sys-libs/ncurses[lib32?] dev-libs/expat[lib32?] acl? ( kernel_linux? ( sys-apps/acl[lib32?] ) ) >=dev-java/java-config-2.1.6 sys-apps/abi-wrapper
+virtual/libiconv dev-libs/libxml2[lib32?] sys-libs/ncurses[lib32?] dev-libs/expat[lib32?] acl? ( kernel_linux? ( sys-apps/acl[lib32?] ) ) java? ( >=virtual/jdk-1.4 ) >=dev-java/java-config-2.1.6 sys-apps/abi-wrapper
 0
 mirror://gnu/gettext/gettext-0.17.tar.gz
 

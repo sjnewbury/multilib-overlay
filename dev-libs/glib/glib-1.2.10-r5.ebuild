@@ -65,4 +65,6 @@ multilib-native_src_install_internal() {
 
 	cd "${D}"/usr/$(get_libdir) || die
 	chmod 755 libgmodule-1.2.so.*
+
+	prep_ml_binaries /usr/bin/glib-config 
 }

@@ -1,5 +1,5 @@
-media-libs/libvorbis[lib32?] sys-devel/libtool[lib32?] alsa? ( media-libs/alsa-lib[lib32?] ) gstreamer? ( >=media-libs/gstreamer-0.10.15 ) pulse? ( media-sound/pulseaudio[lib32?] ) gtk? ( dev-libs/glib:2[lib32?] >=x11-libs/gtk+-2.13.4:2[lib32?] >=gnome-base/gconf-2[lib32?] ) >=dev-util/pkgconfig-0.17 doc? ( >=dev-util/gtk-doc-1.9 ) >=sys-apps/sed-4
-media-libs/libvorbis[lib32?] sys-devel/libtool[lib32?] alsa? ( media-libs/alsa-lib[lib32?] ) gstreamer? ( >=media-libs/gstreamer-0.10.15 ) pulse? ( media-sound/pulseaudio[lib32?] ) gtk? ( dev-libs/glib:2[lib32?] >=x11-libs/gtk+-2.13.4:2[lib32?] >=gnome-base/gconf-2[lib32?] )
+media-libs/libvorbis[lib32?] sys-devel/libtool[lib32?] alsa? ( media-libs/alsa-lib[lib32?] ) gstreamer? ( >=media-libs/gstreamer-0.10.15 ) pulse? ( media-sound/pulseaudio[lib32?] ) gtk? ( dev-libs/glib:2[lib32?] >=x11-libs/gtk+-2.13.4:2[lib32?] >=gnome-base/gconf-2[lib32?] ) >=dev-util/pkgconfig-0.17 doc? ( >=dev-util/gtk-doc-1.9 ) >=sys-apps/sed-4 sys-apps/abi-wrapper
+media-libs/libvorbis[lib32?] sys-devel/libtool[lib32?] alsa? ( media-libs/alsa-lib[lib32?] ) gstreamer? ( >=media-libs/gstreamer-0.10.15 ) pulse? ( media-sound/pulseaudio[lib32?] ) gtk? ( dev-libs/glib:2[lib32?] >=x11-libs/gtk+-2.13.4:2[lib32?] >=gnome-base/gconf-2[lib32?] ) sys-apps/abi-wrapper
 0
 http://0pointer.de/lennart/projects/libcanberra/libcanberra-0.11.tar.gz
 

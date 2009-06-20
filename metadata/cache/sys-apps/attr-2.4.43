@@ -1,5 +1,5 @@
-nls? ( sys-devel/gettext[lib32?] ) sys-devel/autoconf =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
-
+nls? ( sys-devel/gettext[lib32?] ) sys-devel/autoconf =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+sys-apps/abi-wrapper
 0
 ftp://oss.sgi.com/projects/xfs/download/cmd_tars/attr_2.4.43-1.tar.gz ftp://xfs.org/mirror/SGI/cmd_tars/attr_2.4.43-1.tar.gz
 

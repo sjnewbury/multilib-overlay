@@ -1,5 +1,5 @@
-jpeg? ( media-libs/jpeg ) opengl? ( virtual/opengl virtual/glut ) app-arch/unzip
-jpeg? ( media-libs/jpeg ) opengl? ( virtual/opengl virtual/glut )
+jpeg? ( media-libs/jpeg ) opengl? ( virtual/opengl virtual/glut ) app-arch/unzip sys-apps/abi-wrapper
+jpeg? ( media-libs/jpeg ) opengl? ( virtual/opengl virtual/glut ) sys-apps/abi-wrapper
 0
 http://www.ece.uvic.ca/~mdadams/jasper/software/jasper-1.900.1.zip
 

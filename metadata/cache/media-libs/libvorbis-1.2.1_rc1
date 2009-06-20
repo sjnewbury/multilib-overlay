@@ -1,5 +1,5 @@
->=media-libs/libogg-1 dev-util/pkgconfig
->=media-libs/libogg-1
+>=media-libs/libogg-1 dev-util/pkgconfig sys-apps/abi-wrapper
+>=media-libs/libogg-1 sys-apps/abi-wrapper
 0
 http://people.xiph.org/~giles/2008/libvorbis-1.2.1rc1.tar.bz2
 

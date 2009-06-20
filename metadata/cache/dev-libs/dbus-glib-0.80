@@ -1,5 +1,5 @@
->=sys-apps/dbus-1.1.0[lib32?] >=dev-libs/glib-2.10[lib32?] >=dev-libs/expat-1.95.8[lib32?] dev-util/pkgconfig sys-devel/gettext doc? ( app-doc/doxygen app-text/xmlto >=dev-util/gtk-doc-1.4 )
->=sys-apps/dbus-1.1.0[lib32?] >=dev-libs/glib-2.10[lib32?] >=dev-libs/expat-1.95.8[lib32?] bash-completion? ( app-admin/eselect )
+>=sys-apps/dbus-1.1.0[lib32?] >=dev-libs/glib-2.10[lib32?] >=dev-libs/expat-1.95.8[lib32?] dev-util/pkgconfig sys-devel/gettext doc? ( app-doc/doxygen app-text/xmlto >=dev-util/gtk-doc-1.4 ) sys-apps/abi-wrapper
+>=sys-apps/dbus-1.1.0[lib32?] >=dev-libs/glib-2.10[lib32?] >=dev-libs/expat-1.95.8[lib32?] bash-completion? ( app-admin/eselect ) sys-apps/abi-wrapper
 0
 http://dbus.freedesktop.org/releases/dbus-glib/dbus-glib-0.80.tar.gz
 

@@ -1,5 +1,5 @@
->=dev-libs/glib-2.10[lib32?] >=x11-libs/gtk+-2.8.16[lib32?] >=gnome-base/orbit-2.4[lib32?] >=dev-libs/libxml2-2[lib32?] ldap? ( net-nds/openldap ) >=dev-util/intltool-0.35 >=dev-util/pkgconfig-0.9 doc? ( >=dev-util/gtk-doc-1 ) >=sys-apps/sed-4
->=dev-libs/glib-2.10[lib32?] >=x11-libs/gtk+-2.8.16[lib32?] >=gnome-base/orbit-2.4[lib32?] >=dev-libs/libxml2-2[lib32?] ldap? ( net-nds/openldap )
+>=dev-libs/glib-2.10[lib32?] >=x11-libs/gtk+-2.8.16[lib32?] >=gnome-base/orbit-2.4[lib32?] >=dev-libs/libxml2-2[lib32?] ldap? ( net-nds/openldap ) >=dev-util/intltool-0.35 >=dev-util/pkgconfig-0.9 doc? ( >=dev-util/gtk-doc-1 ) >=sys-apps/sed-4 sys-apps/abi-wrapper
+>=dev-libs/glib-2.10[lib32?] >=x11-libs/gtk+-2.8.16[lib32?] >=gnome-base/orbit-2.4[lib32?] >=dev-libs/libxml2-2[lib32?] ldap? ( net-nds/openldap ) sys-apps/abi-wrapper
 2
 mirror://gnome/sources/GConf/2.22/GConf-2.22.0.tar.bz2
 

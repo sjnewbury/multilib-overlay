@@ -1,5 +1,5 @@
-gpm? ( sys-libs/gpm[lib32?] )
-gpm? ( sys-libs/gpm[lib32?] )
+gpm? ( sys-libs/gpm[lib32?] ) sys-apps/abi-wrapper
+gpm? ( sys-libs/gpm[lib32?] ) sys-apps/abi-wrapper
 5
 mirror://gnu/ncurses/ncurses-5.6.tar.gz ftp://invisible-island.net/ncurses/5.6/ncurses-5.6-coverity.patch.gz
 

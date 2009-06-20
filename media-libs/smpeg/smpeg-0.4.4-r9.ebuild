@@ -70,4 +70,6 @@ multilib-native_src_configure_internal() {
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc CHANGES README* TODO
+
+	prep_ml_binaries /usr/bin/smpeg-config 
 }

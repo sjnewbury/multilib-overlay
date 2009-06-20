@@ -145,4 +145,6 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc BUGS CREDITS README README-SDL.txt README.CVS TODO WhatsNew
 	dohtml -r ./
+
+	prep_ml_binaries /usr/bin/sdl-config 
 }

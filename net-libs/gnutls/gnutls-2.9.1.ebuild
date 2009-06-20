@@ -82,4 +82,6 @@ multilib-native_src_install_internal() {
 		docinto examples
 		dodoc doc/examples/*.c
 	fi
+
+	prep_ml_binaries /usr/bin/libgnutls-config /usr/bin/libgnutls-extra-config 
 }

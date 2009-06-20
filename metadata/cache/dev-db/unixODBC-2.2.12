@@ -1,5 +1,5 @@
->=sys-libs/readline-4.1[lib32?] >=sys-libs/ncurses-5.2[lib32?] qt3? ( =x11-libs/qt-3*[lib32?] ) gnome? ( gnome-base/libgnomeui[lib32?] ) sys-devel/libtool gnome? ( dev-util/cvs ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-devel/gnuconfig
->=sys-libs/readline-4.1[lib32?] >=sys-libs/ncurses-5.2[lib32?] qt3? ( =x11-libs/qt-3*[lib32?] ) gnome? ( gnome-base/libgnomeui[lib32?] ) sys-devel/libtool
+>=sys-libs/readline-4.1[lib32?] >=sys-libs/ncurses-5.2[lib32?] qt3? ( =x11-libs/qt-3*[lib32?] ) gnome? ( gnome-base/libgnomeui[lib32?] ) sys-devel/libtool gnome? ( dev-util/cvs ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-devel/gnuconfig sys-apps/abi-wrapper
+>=sys-libs/readline-4.1[lib32?] >=sys-libs/ncurses-5.2[lib32?] qt3? ( =x11-libs/qt-3*[lib32?] ) gnome? ( gnome-base/libgnomeui[lib32?] ) sys-devel/libtool sys-apps/abi-wrapper
 0
 http://www.unixodbc.org/unixODBC-2.2.12.tar.gz mirror://gentoo/unixODBC-2.2.12-r0-patches.tar.bz2
 

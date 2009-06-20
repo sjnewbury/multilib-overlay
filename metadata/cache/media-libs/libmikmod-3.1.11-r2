@@ -1,5 +1,5 @@
->=media-libs/audiofile-0.2.3[lib32?] alsa? ( >=media-libs/alsa-lib-0.5.9[lib32?] ) esd? ( >=media-sound/esound-0.2.19 ) =sys-devel/automake-1.5* >=sys-devel/autoconf-2.61 sys-devel/libtool
->=media-libs/audiofile-0.2.3[lib32?] alsa? ( >=media-libs/alsa-lib-0.5.9[lib32?] ) esd? ( >=media-sound/esound-0.2.19 )
+>=media-libs/audiofile-0.2.3[lib32?] alsa? ( >=media-libs/alsa-lib-0.5.9[lib32?] ) esd? ( >=media-sound/esound-0.2.19 ) =sys-devel/automake-1.5* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+>=media-libs/audiofile-0.2.3[lib32?] alsa? ( >=media-libs/alsa-lib-0.5.9[lib32?] ) esd? ( >=media-sound/esound-0.2.19 ) sys-apps/abi-wrapper
 0
 http://mikmod.raphnet.net/files/libmikmod-3.1.11.tar.gz mirror://gentoo/libmikmod-3.1.11-esdm4.patch.bz2
 

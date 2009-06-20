@@ -45,4 +45,6 @@ multilib-native_src_configure_internal() {
 multilib-native_src_install_internal() {
 	make DESTDIR="${D}" install || die
 	dodoc ACKNOWLEDGEMENTS AUTHORS ChangeLog README TODO NEWS NOTES
+
+	prep_ml_binaries /usr/bin/audiofile-config 
 }

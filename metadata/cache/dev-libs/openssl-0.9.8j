@@ -1,5 +1,5 @@
-gmp? ( dev-libs/gmp ) zlib? ( sys-libs/zlib[lib32?] ) kerberos? ( app-crypt/mit-krb5[lib32?] ) sys-apps/diffutils >=dev-lang/perl-5 test? ( sys-devel/bc )
-gmp? ( dev-libs/gmp ) zlib? ( sys-libs/zlib[lib32?] ) kerberos? ( app-crypt/mit-krb5[lib32?] )
+gmp? ( dev-libs/gmp ) zlib? ( sys-libs/zlib[lib32?] ) kerberos? ( app-crypt/mit-krb5[lib32?] ) sys-apps/diffutils >=dev-lang/perl-5 test? ( sys-devel/bc ) sys-apps/abi-wrapper
+gmp? ( dev-libs/gmp ) zlib? ( sys-libs/zlib[lib32?] ) kerberos? ( app-crypt/mit-krb5[lib32?] ) sys-apps/abi-wrapper
 0
 mirror://openssl/source/openssl-0.9.8j.tar.gz
 

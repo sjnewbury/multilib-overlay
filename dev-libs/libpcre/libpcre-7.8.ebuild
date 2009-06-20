@@ -49,4 +49,6 @@ multilib-native_src_install_internal() {
 
 	dodoc doc/*.txt AUTHORS
 	use doc && dohtml doc/html/*
+
+	prep_ml_binaries /usr/bin/pcre-config 
 }

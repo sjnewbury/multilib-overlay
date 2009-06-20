@@ -111,6 +111,8 @@ multilib-native_src_install_internal() {
 				"${D}"/usr/bin
 		done
 	fi
+
+	prep_ml_binaries /usr/bin/freetype-config 
 }
 
 pkg_postinst() {

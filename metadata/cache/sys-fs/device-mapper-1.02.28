@@ -1,5 +1,5 @@
-selinux? ( sys-libs/libselinux )
-!<sys-fs/udev-115-r1 selinux? ( sys-libs/libselinux )
+selinux? ( sys-libs/libselinux ) sys-apps/abi-wrapper
+!<sys-fs/udev-115-r1 selinux? ( sys-libs/libselinux ) sys-apps/abi-wrapper
 0
 ftp://sources.redhat.com/pub/dm/device-mapper.1.02.28.tgz ftp://sources.redhat.com/pub/dm/old/device-mapper.1.02.28.tgz
 

@@ -71,4 +71,6 @@ multilib-native_src_install_internal() {
 	if ! use examples; then
 		rm -rf "${D}/usr/share/doc/${PN}-python-${PV}/examples"
 	fi
+
+	prep_ml_binaries /usr/bin/xslt-config 
 }

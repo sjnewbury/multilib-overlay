@@ -1,5 +1,5 @@
-kernel_linux? ( virtual/linux-sources )
-
+kernel_linux? ( virtual/linux-sources ) sys-apps/abi-wrapper
+sys-apps/abi-wrapper
 0
 http://dev.gentoo.org/~steev/distfiles/libnl-1.0_pre6.tar.bz2
 

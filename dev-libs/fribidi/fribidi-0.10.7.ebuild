@@ -18,4 +18,6 @@ IUSE=""
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
 	dodoc AUTHORS NEWS README ChangeLog THANKS TODO
+
+	prep_ml_binaries /usr/bin/fribidi-config 
 }

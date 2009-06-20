@@ -1,5 +1,5 @@
-python? ( dev-lang/python ) >=media-sound/alsa-headers-1.0.20 doc? ( >=app-doc/doxygen-1.2.6 )
-python? ( dev-lang/python )
+python? ( dev-lang/python ) >=media-sound/alsa-headers-1.0.20 doc? ( >=app-doc/doxygen-1.2.6 ) sys-apps/abi-wrapper
+python? ( dev-lang/python ) sys-apps/abi-wrapper
 0
 mirror://alsaproject/lib/alsa-lib-1.0.20.tar.bz2
 

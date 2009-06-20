@@ -107,6 +107,8 @@ multilib-native_src_install_internal() {
 	insinto /etc
 	newins "${D}/usr/share/doc/${PF}/examples/krb5.conf" krb5.conf.example
 	newins "${D}/usr/share/doc/${PF}/examples/kdc.conf" kdc.conf.example
+
+	prep_ml_binaries /usr/bin/krb5-config 
 }
 
 pkg_postinst() {

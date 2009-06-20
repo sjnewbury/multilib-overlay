@@ -1,5 +1,5 @@
-nls? ( >=sys-devel/gettext-0.14.5 ) doc? ( app-text/xmlto ~app-text/docbook-xml-dtd-4.1.2 )
-
+nls? ( >=sys-devel/gettext-0.14.5 ) doc? ( app-text/xmlto ~app-text/docbook-xml-dtd-4.1.2 ) sys-apps/abi-wrapper
+sys-apps/abi-wrapper
 0
 mirror://sourceforge/openjade/OpenSP-1.5.2.tar.gz
 

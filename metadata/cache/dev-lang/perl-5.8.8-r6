@@ -1,5 +1,5 @@
-berkdb? ( sys-libs/db ) gdbm? ( >=sys-libs/gdbm-1.8.3 ) >=sys-devel/libperl-5.8.8-r1[lib32?] elibc_FreeBSD? ( sys-freebsd/freebsd-mk-defs ) <sys-devel/libperl-5.9[lib32?] !<perl-core/File-Spec-0.87 !<perl-core/Test-Simple-0.47-r1
-~sys-devel/libperl-5.8.8 berkdb? ( sys-libs/db ) gdbm? ( >=sys-libs/gdbm-1.8.3 ) build? ( !perl-core/Test-Harness !perl-core/PodParser !dev-perl/Locale-gettext )
+berkdb? ( sys-libs/db ) gdbm? ( >=sys-libs/gdbm-1.8.3 ) >=sys-devel/libperl-5.8.8-r1[lib32?] elibc_FreeBSD? ( sys-freebsd/freebsd-mk-defs ) <sys-devel/libperl-5.9[lib32?] !<perl-core/File-Spec-0.87 !<perl-core/Test-Simple-0.47-r1 sys-apps/abi-wrapper
+~sys-devel/libperl-5.8.8 berkdb? ( sys-libs/db ) gdbm? ( >=sys-libs/gdbm-1.8.3 ) build? ( !perl-core/Test-Harness !perl-core/PodParser !dev-perl/Locale-gettext ) sys-apps/abi-wrapper
 0
 mirror://cpan/src/perl-5.8.8.tar.bz2
 

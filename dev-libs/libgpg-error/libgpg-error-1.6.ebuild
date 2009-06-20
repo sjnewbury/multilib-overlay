@@ -34,4 +34,6 @@ multilib-native_src_configure_internal() {
 multilib-native_src_install_internal() {
 	emake install DESTDIR="${D}" || die
 	dodoc AUTHORS ChangeLog NEWS README
+
+	prep_ml_binaries /usr/bin/gpg-error-config 
 }

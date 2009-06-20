@@ -30,4 +30,6 @@ multilib-native_src_compile_internal() {
 multilib-native_src_install_internal() {
 	einstall || die
 	dodoc AUTHORS NEWS README ChangeLog THANKS TODO ANNOUNCE
+
+	prep_ml_binaries /usr/bin/fribidi-config 
 }

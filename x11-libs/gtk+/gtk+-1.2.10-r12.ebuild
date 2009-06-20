@@ -72,6 +72,8 @@ multilib-native_src_install_internal() {
 	#install nice, clean-looking gtk+ style
 	insinto /usr/share/themes/Gentoo/gtk
 	doins "${FILESDIR}"/gtkrc
+
+	prep_ml_binaries /usr/bin/gtk-config 
 }
 
 pkg_postinst() {

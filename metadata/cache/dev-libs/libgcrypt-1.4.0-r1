@@ -1,5 +1,5 @@
-nls? ( virtual/libintl ) >=dev-libs/libgpg-error-1.5[lib32?] nls? ( sys-devel/gettext ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
-nls? ( virtual/libintl ) >=dev-libs/libgpg-error-1.5[lib32?]
+nls? ( virtual/libintl ) >=dev-libs/libgpg-error-1.5[lib32?] nls? ( sys-devel/gettext ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+nls? ( virtual/libintl ) >=dev-libs/libgpg-error-1.5[lib32?] sys-apps/abi-wrapper
 0
 mirror://gnupg/libgcrypt/libgcrypt-1.4.0.tar.bz2 !bindist? ( idea? ( mirror://gentoo/libgcrypt-1.4.0-idea.diff.bz2 ) )
 

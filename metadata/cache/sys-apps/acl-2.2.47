@@ -1,5 +1,5 @@
->=sys-apps/attr-2.4[lib32?] nfs? ( net-libs/libnfsidmap[lib32?] ) nls? ( sys-devel/gettext[lib32?] ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
->=sys-apps/attr-2.4[lib32?] nfs? ( net-libs/libnfsidmap[lib32?] )
+>=sys-apps/attr-2.4[lib32?] nfs? ( net-libs/libnfsidmap[lib32?] ) nls? ( sys-devel/gettext[lib32?] ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+>=sys-apps/attr-2.4[lib32?] nfs? ( net-libs/libnfsidmap[lib32?] ) sys-apps/abi-wrapper
 0
 ftp://oss.sgi.com/projects/xfs/download/cmd_tars/acl_2.2.47-1.tar.gz ftp://xfs.org/mirror/SGI/cmd_tars/acl_2.2.47-1.tar.gz nfs? ( http://www.citi.umich.edu/projects/nfsv4/linux/acl-patches/2.2.42-2/acl-2.2.42-CITI_NFS4_ALL-2.dif )
 

@@ -50,3 +50,8 @@ src_test() {
 	# can fail in parallel, see bug #235994
 	emake -j1 check || die "tests failed"
 }
+
+multilib-native_src_install_internal() {
+	multilib-native_check_inherited_funcs src_install
+	prep_ml_binaries /usr/bin/orbit2-config 
+}

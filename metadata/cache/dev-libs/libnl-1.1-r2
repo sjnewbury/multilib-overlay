@@ -1,5 +1,5 @@
-kernel_linux? ( virtual/linux-sources )
-
+kernel_linux? ( virtual/linux-sources ) sys-apps/abi-wrapper
+sys-apps/abi-wrapper
 0
 http://people.suug.ch/~tgr/libnl/files/libnl-1.1.tar.gz
 

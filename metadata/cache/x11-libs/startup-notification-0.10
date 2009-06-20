@@ -1,5 +1,5 @@
-x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib32?] x11-libs/libxcb[lib32?] >=x11-libs/xcb-util-0.3[lib32?] dev-util/pkgconfig x11-proto/xproto x11-libs/libXt[lib32?]
-x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib32?] x11-libs/libxcb[lib32?] >=x11-libs/xcb-util-0.3[lib32?]
+x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib32?] x11-libs/libxcb[lib32?] >=x11-libs/xcb-util-0.3[lib32?] dev-util/pkgconfig x11-proto/xproto x11-libs/libXt[lib32?] sys-apps/abi-wrapper
+x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib32?] x11-libs/libxcb[lib32?] >=x11-libs/xcb-util-0.3[lib32?] sys-apps/abi-wrapper
 0
 http://freedesktop.org/software/startup-notification/releases/startup-notification-0.10.tar.gz
 

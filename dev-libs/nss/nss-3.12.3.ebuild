@@ -132,4 +132,6 @@ multilib-native_src_install_internal() {
 			newbin ${f} nss${f}
 		done
 	fi
+
+	prep_ml_binaries /usr/bin/nss-config 
 }

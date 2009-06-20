@@ -1,5 +1,5 @@
-doc? ( app-doc/doxygen ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
-
+doc? ( app-doc/doxygen ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+sys-apps/abi-wrapper
 1.2
 http://www.videolan.org/pub/libdvdcss/1.2.10/libdvdcss-1.2.10.tar.bz2
 

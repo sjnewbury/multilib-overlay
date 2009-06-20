@@ -1,5 +1,5 @@
-=dev-libs/glib-1.2*[lib32?] x11-libs/libXi[lib32?] x11-libs/libXt[lib32?] x11-proto/inputproto x11-proto/xextproto nls? ( sys-devel/gettext[lib32?] dev-util/intltool ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
-=dev-libs/glib-1.2*[lib32?] x11-libs/libXi[lib32?] x11-libs/libXt[lib32?]
+=dev-libs/glib-1.2*[lib32?] x11-libs/libXi[lib32?] x11-libs/libXt[lib32?] x11-proto/inputproto x11-proto/xextproto nls? ( sys-devel/gettext[lib32?] dev-util/intltool ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+=dev-libs/glib-1.2*[lib32?] x11-libs/libXi[lib32?] x11-libs/libXt[lib32?] sys-apps/abi-wrapper
 1
 mirror://gnome/sources/gtk+/1.2/gtk+-1.2.10.tar.gz http://www.ibiblio.org/gentoo/distfiles/gtk+-1.2.10-r8-gentoo.diff.bz2
 

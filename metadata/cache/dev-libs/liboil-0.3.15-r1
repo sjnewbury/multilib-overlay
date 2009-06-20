@@ -1,5 +1,5 @@
-examples? ( =dev-libs/glib-2*[lib32?] ) doc? ( >=dev-util/gtk-doc-1 )
-examples? ( =dev-libs/glib-2*[lib32?] )
+examples? ( =dev-libs/glib-2*[lib32?] ) doc? ( >=dev-util/gtk-doc-1 ) sys-apps/abi-wrapper
+examples? ( =dev-libs/glib-2*[lib32?] ) sys-apps/abi-wrapper
 0.3
 http://liboil.freedesktop.org/download/liboil-0.3.15.tar.gz
 

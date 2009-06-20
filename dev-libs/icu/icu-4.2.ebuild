@@ -68,4 +68,6 @@ multilib-native_src_install_internal() {
 		insinto /usr/share/doc/${PF}/html/apidocs
 		doins -r "${WORKDIR}"/apidocs/*
 	fi
+
+	prep_ml_binaries /usr/bin/icu-config 
 }

@@ -1,5 +1,5 @@
-=sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
-
+=sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+sys-apps/abi-wrapper
 0
 http://www.68k.org/~michael/audiofile/audiofile-0.2.6.tar.gz mirror://gentoo/audiofile-0.2.6-constantise.patch.bz2
 

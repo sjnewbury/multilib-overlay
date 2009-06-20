@@ -56,6 +56,8 @@ multilib-native_src_install_internal() {
 	dodoc doc/*.txt AUTHORS
 	use doc && dohtml doc/html/*
 	find "${D}" -type f -name '*.la' -exec rm -rf '{}' '+' || die "la removal failed"
+
+	prep_ml_binaries /usr/bin/pcre-config 
 }
 
 pkg_postinst() {

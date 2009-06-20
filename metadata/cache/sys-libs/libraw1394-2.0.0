@@ -1,5 +1,5 @@
-!<media-libs/libdc1394-1.2.2
-!<media-libs/libdc1394-1.2.2
+!<media-libs/libdc1394-1.2.2 sys-apps/abi-wrapper
+!<media-libs/libdc1394-1.2.2 sys-apps/abi-wrapper
 0
 http://www.linux1394.org/dl/libraw1394-2.0.0.tar.gz
 

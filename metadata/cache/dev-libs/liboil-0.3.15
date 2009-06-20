@@ -1,5 +1,5 @@
-=dev-libs/glib-2* doc? ( dev-util/gtk-doc )
-=dev-libs/glib-2*
+=dev-libs/glib-2* doc? ( dev-util/gtk-doc ) sys-apps/abi-wrapper
+=dev-libs/glib-2* sys-apps/abi-wrapper
 0.3
 http://liboil.freedesktop.org/download/liboil-0.3.15.tar.gz
 

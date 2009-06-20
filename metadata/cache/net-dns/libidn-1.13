@@ -1,5 +1,5 @@
-emacs? ( virtual/emacs ) mono? ( >=dev-lang/mono-0.95 ) nls? ( >=sys-devel/gettext-0.17[lib32?] ) java? ( >=virtual/jdk-1.4 dev-java/gjdoc ) java? ( >=dev-java/java-config-2.1.6 )
-emacs? ( virtual/emacs ) mono? ( >=dev-lang/mono-0.95 ) nls? ( virtual/libintl ) java? ( >=virtual/jre-1.4 ) java? ( >=dev-java/java-config-2.1.6 )
+emacs? ( virtual/emacs ) mono? ( >=dev-lang/mono-0.95 ) nls? ( >=sys-devel/gettext-0.17[lib32?] ) java? ( >=virtual/jdk-1.4 dev-java/gjdoc ) java? ( >=dev-java/java-config-2.1.6 ) sys-apps/abi-wrapper
+emacs? ( virtual/emacs ) mono? ( >=dev-lang/mono-0.95 ) nls? ( virtual/libintl ) java? ( >=virtual/jre-1.4 ) java? ( >=dev-java/java-config-2.1.6 ) sys-apps/abi-wrapper
 0
 mirror://gnu/libidn/libidn-1.13.tar.gz
 

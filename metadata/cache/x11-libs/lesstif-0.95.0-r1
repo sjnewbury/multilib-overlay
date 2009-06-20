@@ -1,5 +1,5 @@
-!x11-libs/motif-config !x11-libs/openmotif !<=x11-libs/lesstif-0.95.0 x11-libs/libXp[lib32?] x11-libs/libXt[lib32?] x11-libs/libXft[lib32?]
-!x11-libs/motif-config !x11-libs/openmotif !<=x11-libs/lesstif-0.95.0 x11-libs/libXp[lib32?] x11-libs/libXt[lib32?] x11-libs/libXft[lib32?]
+!x11-libs/motif-config !x11-libs/openmotif !<=x11-libs/lesstif-0.95.0 x11-libs/libXp[lib32?] x11-libs/libXt[lib32?] x11-libs/libXft[lib32?] sys-apps/abi-wrapper
+!x11-libs/motif-config !x11-libs/openmotif !<=x11-libs/lesstif-0.95.0 x11-libs/libXp[lib32?] x11-libs/libXt[lib32?] x11-libs/libXft[lib32?] sys-apps/abi-wrapper
 0
 mirror://sourceforge/lesstif/lesstif-0.95.0.tar.bz2
 

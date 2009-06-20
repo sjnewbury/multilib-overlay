@@ -1,5 +1,5 @@
-selinux? ( sys-libs/libselinux[lib32?] )
-selinux? ( sys-libs/libselinux[lib32?] ) !sys-apps/coldplug !<sys-fs/device-mapper-1.02.19-r1 >=sys-apps/baselayout-1.12.5
+selinux? ( sys-libs/libselinux[lib32?] ) sys-apps/abi-wrapper
+selinux? ( sys-libs/libselinux[lib32?] ) !sys-apps/coldplug !<sys-fs/device-mapper-1.02.19-r1 >=sys-apps/baselayout-1.12.5 sys-apps/abi-wrapper
 0
 mirror://kernel/linux/utils/kernel/hotplug/udev-124.tar.bz2
 

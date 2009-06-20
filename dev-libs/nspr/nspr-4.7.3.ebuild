@@ -83,6 +83,8 @@ multilib-native_src_install_internal() {
 
 	# Remove stupid files in /usr/bin
 	rm "${D}"/usr/bin/{prerr.properties,nspr.pc}
+
+	prep_ml_binaries /usr/bin/nspr-config 
 }
 
 multilib-native_pkg_preinst_internal() {

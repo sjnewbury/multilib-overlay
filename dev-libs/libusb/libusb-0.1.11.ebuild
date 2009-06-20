@@ -42,6 +42,8 @@ multilib-native_src_install_internal() {
 	if use doc; then
 		dohtml doc/html/*.html || die
 	fi
+
+	prep_ml_binaries /usr/bin/libusb-config 
 }
 
 src_test() {

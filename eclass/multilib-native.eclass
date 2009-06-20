@@ -9,6 +9,9 @@
 
 IUSE="${IUSE} lib32"
 
+DEPEND="${DEPEND} sys-apps/abi-wrapper"
+RDEPEND="${RDEPEND} sys-apps/abi-wrapper"
+
 if use lib32; then
 	EMULTILIB_PKG="true"
 fi
@@ -171,33 +174,6 @@ _check_build_dir() {
 
 	# in/out source build
 	echo ">>> Working in BUILD_DIR: \"$CMAKE_BUILD_DIR\""
-}
-
-# Internal function
-# @FUNCTION: multilib-native_find_config_scripts
-# @USAGE: <ABI>
-# @DESCRIPTION:
-# Find all linker config scripts on this system provided for
-# this ABI and export the appropriate env var to be used by
-# "configure" scripts
-multilib-native_find_config_scripts() {
-	EMULTILIB_config_vars=""
-	local _config_script _config_var
-	for _config_script in $(find "/usr/bin" -executable \
-			-regex ".*-config.*-${1}"); do
-		_config_var="${_config_script%%-config*}"
-		_config_var="${_config_var/-/_}"
-		#convert to upper case letters.
-		#with bash 4 we could use declare -u
-		_config_var="$(echo $_config_var | tr "[:lower:]" "[:upper:]")"
-		_config_var="${_config_var##*/}_CONFIG"
-		_config_var="${_config_var/#LIB}"
-		multilib_debug "${_config_var}_default" "${!_config_var}"
-		multilib_debug "${_config_var}" "${_config_script}"
-		declare ${_config_var}_default="${!_config_var}"
-		export ${_config_var}="${_config_script}"
-		EMULTILIB_config_vars="${EMULTILIB_config_vars} ${_config_var}"
-	done
 }
 
 # Internal function
@@ -459,8 +435,6 @@ multilib-native_src_generic_sub() {
 				# environment
 				multilib-native_restore_abi_env "${ABI}"
 			fi
-			[[ "${ABI}" == "${DEFAULT_ABI}" ]] || \
-				multilib-native_find_config_scripts "${ABI}"
 		fi
 
 		# qt-build.eclass sets these in pkg_setup, but that results
@@ -480,32 +454,6 @@ multilib-native_src_generic_sub() {
 
 	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile && \
 				[[ "${1/_*}" != "pkg" ]]; then
-		# Restore config script variables to their defaults
-		local _temp_var
-		if [[ -n EMULTILIB_config_vars ]]; then
-			for _config_var in ${EMULTILIB_config_vars}; do
-				_temp_var=${_config_var}_default
-				export ${_config_var}="${!_temp_var}"
-			done
-		fi
-
-
-		# handle old-style (non-PKG-CONFIG) *-config* scripts
-		if [[ ${1} == "src_install" ]] && \
-				 [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
-			einfo Looking for package config scripts
-			local _config_script
-			if [[ -d "${D}/usr/bin" ]]; then
-				for _config_script in $(find "${D}/usr/bin" \
-						-name "*config32*" -prune -o \( -executable -regex ".*-config.*" -print \)); do
-					if (file "${_config_script}" | fgrep -q "script text"); then
-						einfo Renaming "${_config_script}" as "${_config_script}-${ABI}"
-						mv "${_config_script}" "${_config_script}-${ABI}"
-					fi
-				done
-			fi
-		fi
-		
 		# Now save the environment
 		multilib-native_save_abi_env "${ABI}"
 	fi
@@ -618,8 +566,10 @@ prep_ml_binaries() {
 	if [[ -n $EMULTILIB_PKG ]] ; then
 		for binary in "$@"; do
 			mv ${D}/${binary} ${D}/${binary}-${ABI}
-			if [[ is_final_abi ]]; then
+			echo mv ${D}/${binary} ${D}/${binary}-${ABI}
+			if is_final_abi; then
 				ln -s /usr/bin/abi-wrapper ${D}/${binary}
+				echo ln -s /usr/bin/abi-wrapper ${D}/${binary}
 			fi
 		done
 	fi		

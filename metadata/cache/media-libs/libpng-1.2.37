@@ -1,5 +1,5 @@
-sys-libs/zlib[lib32?] app-arch/lzma-utils
-sys-libs/zlib[lib32?]
+sys-libs/zlib[lib32?] app-arch/lzma-utils sys-apps/abi-wrapper
+sys-libs/zlib[lib32?] sys-apps/abi-wrapper
 1.2
 mirror://sourceforge/libpng/libpng-1.2.37.tar.lzma
 

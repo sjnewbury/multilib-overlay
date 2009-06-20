@@ -47,4 +47,6 @@ multilib-native_src_install_internal() {
 	make DESTDIR="${D}" install || die
 	dodoc AUTHORS NEWS README TODO
 	dohtml docs/*.html
+
+	prep_ml_binaries /usr/bin/libmikmod-config 
 }

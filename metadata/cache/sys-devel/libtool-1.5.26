@@ -1,5 +1,5 @@
-sys-devel/gnuconfig >=sys-devel/autoconf-2.60 >=sys-devel/automake-1.10 sys-apps/help2man
-sys-devel/gnuconfig >=sys-devel/autoconf-2.60 >=sys-devel/automake-1.10
+sys-devel/gnuconfig >=sys-devel/autoconf-2.60 >=sys-devel/automake-1.10 sys-apps/help2man sys-apps/abi-wrapper
+sys-devel/gnuconfig >=sys-devel/autoconf-2.60 >=sys-devel/automake-1.10 sys-apps/abi-wrapper
 1.5
 mirror://gnu/libtool/libtool-1.5.26.tar.gz
 

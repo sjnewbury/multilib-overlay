@@ -1,5 +1,5 @@
-media-libs/libpng[lib32?] media-libs/jpeg[lib32?] media-libs/libmng[lib32?] media-libs/lcms[lib32?] sys-libs/zlib[lib32?] cups? ( net-print/cups[lib32?] ) firebird? ( dev-db/firebird[lib32?] ) mysql? ( virtual/mysql[lib32?] ) opengl? ( virtual/opengl[lib32?] virtual/glu[lib32?] ) postgres? ( virtual/postgresql-server[lib32?] )
-media-libs/libpng[lib32?] media-libs/jpeg[lib32?] media-libs/libmng[lib32?] media-libs/lcms[lib32?] sys-libs/zlib[lib32?] cups? ( net-print/cups[lib32?] ) firebird? ( dev-db/firebird[lib32?] ) mysql? ( virtual/mysql[lib32?] ) opengl? ( virtual/opengl[lib32?] virtual/glu[lib32?] ) postgres? ( virtual/postgresql-server[lib32?] )
+media-libs/libpng[lib32?] media-libs/jpeg[lib32?] media-libs/libmng[lib32?] media-libs/lcms[lib32?] sys-libs/zlib[lib32?] cups? ( net-print/cups[lib32?] ) firebird? ( dev-db/firebird[lib32?] ) mysql? ( virtual/mysql[lib32?] ) opengl? ( virtual/opengl[lib32?] virtual/glu[lib32?] ) postgres? ( virtual/postgresql-server[lib32?] ) sys-apps/abi-wrapper
+media-libs/libpng[lib32?] media-libs/jpeg[lib32?] media-libs/libmng[lib32?] media-libs/lcms[lib32?] sys-libs/zlib[lib32?] cups? ( net-print/cups[lib32?] ) firebird? ( dev-db/firebird[lib32?] ) mysql? ( virtual/mysql[lib32?] ) opengl? ( virtual/opengl[lib32?] virtual/glu[lib32?] ) postgres? ( virtual/postgresql-server[lib32?] ) sys-apps/abi-wrapper
 3
 ftp://ftp.qtsoftware.com/qt/source/qt-embedded-free-3.3.8b.tar.gz
 

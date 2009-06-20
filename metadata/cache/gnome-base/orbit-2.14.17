@@ -1,5 +1,5 @@
->=dev-libs/glib-2.8[lib32?] >=dev-libs/libIDL-0.8.2[lib32?] >=dev-util/pkgconfig-0.18 doc? ( >=dev-util/gtk-doc-1 ) >=sys-apps/sed-4
->=dev-libs/glib-2.8[lib32?] >=dev-libs/libIDL-0.8.2[lib32?]
+>=dev-libs/glib-2.8[lib32?] >=dev-libs/libIDL-0.8.2[lib32?] >=dev-util/pkgconfig-0.18 doc? ( >=dev-util/gtk-doc-1 ) >=sys-apps/sed-4 sys-apps/abi-wrapper
+>=dev-libs/glib-2.8[lib32?] >=dev-libs/libIDL-0.8.2[lib32?] sys-apps/abi-wrapper
 2
 mirror://gnome/sources/ORBit2/2.14/ORBit2-2.14.17.tar.bz2
 

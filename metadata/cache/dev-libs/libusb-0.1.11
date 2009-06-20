@@ -1,5 +1,5 @@
-!dev-libs/libusb-compat sys-devel/libtool doc? ( app-text/openjade app-text/docbook-sgml-utils ~app-text/docbook-sgml-dtd-4.2 ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
-!dev-libs/libusb-compat
+!dev-libs/libusb-compat sys-devel/libtool doc? ( app-text/openjade app-text/docbook-sgml-utils ~app-text/docbook-sgml-dtd-4.2 ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+!dev-libs/libusb-compat sys-apps/abi-wrapper
 0
 mirror://sourceforge/libusb/libusb-0.1.11.tar.gz
 

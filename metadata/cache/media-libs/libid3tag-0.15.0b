@@ -1,5 +1,5 @@
->=sys-libs/zlib-1.1.3[lib32?]
->=sys-libs/zlib-1.1.3[lib32?]
+>=sys-libs/zlib-1.1.3[lib32?] sys-apps/abi-wrapper
+>=sys-libs/zlib-1.1.3[lib32?] sys-apps/abi-wrapper
 0
 mirror://sourceforge/mad/libid3tag-0.15.0b.tar.gz
 

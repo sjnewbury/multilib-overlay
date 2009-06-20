@@ -1,5 +1,5 @@
-djbfft? ( sci-libs/djbfft[lib32?] ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
-djbfft? ( sci-libs/djbfft[lib32?] )
+djbfft? ( sci-libs/djbfft[lib32?] ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+djbfft? ( sci-libs/djbfft[lib32?] ) sys-apps/abi-wrapper
 0
 http://liba52.sourceforge.net/files/a52dec-0.7.4.tar.gz
 

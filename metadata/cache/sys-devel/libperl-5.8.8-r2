@@ -1,5 +1,5 @@
-berkdb? ( sys-libs/db[lib32?] ) gdbm? ( >=sys-libs/gdbm-1.8.0[lib32?] ) elibc_FreeBSD? ( sys-freebsd/freebsd-mk-defs )
-berkdb? ( sys-libs/db[lib32?] ) gdbm? ( >=sys-libs/gdbm-1.8.0[lib32?] )
+berkdb? ( sys-libs/db[lib32?] ) gdbm? ( >=sys-libs/gdbm-1.8.0[lib32?] ) elibc_FreeBSD? ( sys-freebsd/freebsd-mk-defs ) sys-apps/abi-wrapper
+berkdb? ( sys-libs/db[lib32?] ) gdbm? ( >=sys-libs/gdbm-1.8.0[lib32?] ) sys-apps/abi-wrapper
 1
 mirror://cpan/src/perl-5.8.8.tar.bz2
 test

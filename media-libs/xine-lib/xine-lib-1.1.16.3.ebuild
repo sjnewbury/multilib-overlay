@@ -174,4 +174,6 @@ multilib-native_src_install_internal() {
 		install || die "emake install failed."
 
 	dodoc ChangeLog
+
+	prep_ml_binaries /usr/bin/xine-config 
 }

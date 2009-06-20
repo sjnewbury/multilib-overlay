@@ -1,5 +1,5 @@
->=dev-libs/glib-2.5.7[lib32?] sys-devel/gettext >=dev-util/pkgconfig-0.9 doc? ( >=dev-util/gtk-doc-1 ) >=sys-apps/sed-4
->=dev-libs/glib-2.5.7[lib32?]
+>=dev-libs/glib-2.5.7[lib32?] sys-devel/gettext >=dev-util/pkgconfig-0.9 doc? ( >=dev-util/gtk-doc-1 ) >=sys-apps/sed-4 sys-apps/abi-wrapper
+>=dev-libs/glib-2.5.7[lib32?] sys-apps/abi-wrapper
 0
 mirror://gnome/sources/atk/1.24/atk-1.24.0.tar.bz2
 

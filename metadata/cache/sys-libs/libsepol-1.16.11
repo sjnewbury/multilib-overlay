@@ -1,5 +1,5 @@
-virtual/libc
-virtual/libc
+virtual/libc sys-apps/abi-wrapper
+virtual/libc sys-apps/abi-wrapper
 0
 http://www.nsa.gov/selinux/archives/libsepol-1.16.11.tgz
 test

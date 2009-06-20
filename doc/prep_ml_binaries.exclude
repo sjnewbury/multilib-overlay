@@ -1,0 +1,4 @@
+#glib-2* do not have *-config
+glib-2*
+
+gtk+-2* #gkt+-2* too

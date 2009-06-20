@@ -1,5 +1,5 @@
-nls? ( sys-devel/gettext[lib32?] )
-
+nls? ( sys-devel/gettext[lib32?] ) sys-apps/abi-wrapper
+sys-apps/abi-wrapper
 0
 mirror://sourceforge/flex/flex-2.5.35.tar.bz2
 

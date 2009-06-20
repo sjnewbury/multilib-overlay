@@ -1,5 +1,5 @@
-=sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
-
+=sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+sys-apps/abi-wrapper
 1
 ftp://ftp.gtk.org/pub/gtk/v1.2/glib-1.2.10.tar.gz ftp://ftp.gnome.org/pub/GNOME/stable/sources/glib/glib-1.2.10.tar.gz mirror://gentoo/glib-1.2.10-r1-as-needed.patch.bz2
 

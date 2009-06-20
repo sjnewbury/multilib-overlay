@@ -1,5 +1,5 @@
-dev-libs/popt sdl? ( >=media-libs/libsdl-1.2.5[lib32?] ) xv? ( x11-libs/libXv[lib32?] ) dev-util/pkgconfig
-dev-libs/popt sdl? ( >=media-libs/libsdl-1.2.5[lib32?] ) xv? ( x11-libs/libXv[lib32?] )
+dev-libs/popt sdl? ( >=media-libs/libsdl-1.2.5[lib32?] ) xv? ( x11-libs/libXv[lib32?] ) dev-util/pkgconfig sys-apps/abi-wrapper
+dev-libs/popt sdl? ( >=media-libs/libsdl-1.2.5[lib32?] ) xv? ( x11-libs/libXv[lib32?] ) sys-apps/abi-wrapper
 0
 mirror://sourceforge/libdv/libdv-1.0.0.tar.gz mirror://gentoo/libdv-1.0.0-pic.patch.bz2
 

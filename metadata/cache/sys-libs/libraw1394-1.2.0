@@ -1,5 +1,5 @@
-
-
+sys-apps/abi-wrapper
+sys-apps/abi-wrapper
 0
 mirror://sourceforge/libraw1394/libraw1394-1.2.0.tar.gz http://www.linux1394.org/dl/libraw1394-1.2.0.tar.gz
 

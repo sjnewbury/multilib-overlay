@@ -1,5 +1,5 @@
->=x11-libs/gtk+-2.8[lib32?] dev-util/pkgconfig
->=x11-libs/gtk+-2.8[lib32?]
+>=x11-libs/gtk+-2.8[lib32?] dev-util/pkgconfig sys-apps/abi-wrapper
+>=x11-libs/gtk+-2.8[lib32?] sys-apps/abi-wrapper
 0
 http://cimi.netsons.org/media/download_gallery/murrine/murrine-0.53.1.tar.bz2 http://cimi.netsons.org/media/download_gallery/MurrinaFancyCandy.tar.bz2 http://cimi.netsons.org/media/download_gallery/MurrinaVerdeOlivo.tar.bz2 http://cimi.netsons.org/media/download_gallery/MurrinaGilouche.tar.bz2 http://cimi.netsons.org/media/download_gallery/MurrinaLoveGray.tar.bz2 http://cimi.netsons.org/media/download_gallery/MurrineThemePack.tar.bz2 http://cimi.netsons.org/media/download_gallery/MurrineXfwm.tar.bz2 http://www.kernow-webhosting.com/~bvc/theme/mcity/Murrine.tar.gz
 

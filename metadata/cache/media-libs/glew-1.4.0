@@ -1,5 +1,5 @@
-virtual/opengl virtual/glu sys-apps/sed
-virtual/opengl virtual/glu
+virtual/opengl virtual/glu sys-apps/sed sys-apps/abi-wrapper
+virtual/opengl virtual/glu sys-apps/abi-wrapper
 0
 mirror://sourceforge/glew/glew-1.4.0-src.tgz
 

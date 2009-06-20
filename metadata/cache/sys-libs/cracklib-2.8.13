@@ -1,5 +1,5 @@
-python? ( dev-lang/python[lib32?] )
-python? ( dev-lang/python[lib32?] )
+python? ( dev-lang/python[lib32?] ) sys-apps/abi-wrapper
+python? ( dev-lang/python[lib32?] ) sys-apps/abi-wrapper
 0
 mirror://sourceforge/cracklib/cracklib-2.8.13.tar.gz
 

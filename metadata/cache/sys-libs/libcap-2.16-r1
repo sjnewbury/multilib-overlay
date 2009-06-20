@@ -1,5 +1,5 @@
-sys-apps/attr[lib32?] pam? ( virtual/pam ) sys-kernel/linux-headers
-sys-apps/attr[lib32?] pam? ( virtual/pam )
+sys-apps/attr[lib32?] pam? ( virtual/pam ) sys-kernel/linux-headers sys-apps/abi-wrapper
+sys-apps/attr[lib32?] pam? ( virtual/pam ) sys-apps/abi-wrapper
 0
 mirror://kernel/linux/libs/security/linux-privs/libcap2/libcap-2.16.tar.bz2
 

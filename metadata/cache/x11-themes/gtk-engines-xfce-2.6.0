@@ -1,5 +1,5 @@
->=sys-apps/sed-4 dev-util/pkgconfig
->=x11-libs/gtk+-2.6:2[lib32?] >=dev-libs/glib-2.6:2[lib32?] x11-libs/cairo[lib32?] x11-libs/pango[lib32?]
+>=sys-apps/sed-4 dev-util/pkgconfig sys-apps/abi-wrapper
+>=x11-libs/gtk+-2.6:2[lib32?] >=dev-libs/glib-2.6:2[lib32?] x11-libs/cairo[lib32?] x11-libs/pango[lib32?] sys-apps/abi-wrapper
 0
 mirror://xfce/xfce-4.6.0/src/gtk-xfce-engine-2.6.0.tar.bz2
 

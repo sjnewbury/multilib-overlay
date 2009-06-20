@@ -1,5 +1,5 @@
-nls? ( sys-devel/gettext )
-nls? ( virtual/libintl )
+nls? ( sys-devel/gettext ) sys-apps/abi-wrapper
+nls? ( virtual/libintl ) sys-apps/abi-wrapper
 0
 http://rpm5.org/files/popt/popt-1.14.tar.gz
 
