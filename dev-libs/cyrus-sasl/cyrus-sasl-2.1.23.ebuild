@@ -124,7 +124,7 @@ multilib-native_src_configure_internal() {
 	fi
 
 	if use mysql || use postgres ; then
-		myconf="${myconf} --enable-sql"
+		myconf="${myconf} --enable-sql --without-sqlite"
 	else
 		myconf="${myconf} --disable-sql"
 	fi
