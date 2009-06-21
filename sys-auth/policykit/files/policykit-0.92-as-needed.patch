@@ -1,0 +1,18 @@
+ configure.ac |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index f210559..8970f9c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -140,10 +140,6 @@ AC_CHECK_LIB(expat,XML_ParserCreate,[EXPAT_LIBS="-lexpat"],
+ 	     [AC_MSG_ERROR([Can't find expat library. Please install expat.])])
+ AC_SUBST(EXPAT_LIBS)
+ 
+-if test "x$GCC" = "xyes"; then
+-  LDFLAGS="-Wl,--as-needed $LDFLAGS"
+-fi
+-
+ dnl ---------------------------------------------------------------------------
+ dnl - User
+ dnl ---------------------------------------------------------------------------

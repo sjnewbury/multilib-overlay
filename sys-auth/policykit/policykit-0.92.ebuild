@@ -1,26 +1,27 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-auth/policykit/policykit-0.9-r1.ebuild,v 1.1 2009/04/25 02:42:16 dang Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-auth/policykit/policykit-0.92.ebuild,v 1.1 2009/06/20 21:02:55 mrpouet Exp $
 
-inherit autotools bash-completion eutils multilib pam multilib-native
+EAPI="2"
 
-MY_PN="PolicyKit"
+inherit autotools eutils multilib pam multilib-native
+
+MY_PN="polkit"
 MY_P="${MY_PN}-${PV}"
 
 DESCRIPTION="Policy framework for controlling privileges for system-wide services"
 HOMEPAGE="http://hal.freedesktop.org/docs/PolicyKit"
 SRC_URI="http://hal.freedesktop.org/releases/${MY_P}.tar.gz"
 
-LICENSE="MIT"
+LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
-IUSE="bash-completion doc pam selinux zsh-completion"
+KEYWORDS="~amd64 ~ppc ~x86"
+IUSE="debug doc expat pam zsh-completion nls"
 
-RDEPEND=">=dev-libs/glib-2.6[lib32?]
-	>=dev-libs/dbus-glib-0.73[lib32?]
-	dev-libs/expat[lib32?]
-	pam? ( virtual/pam )
-	selinux? ( sys-libs/libselinux[lib32?] )"
+RDEPEND=">=dev-libs/glib-2.14[lib32?]
+	>=dev-libs/eggdbus-0.4[lib32?]
+	expat? ( dev-libs/expat[lib32?] )
+	pam? ( virtual/pam )"
 DEPEND="${RDEPEND}
 	dev-libs/libxslt
 	app-text/docbook-xsl-stylesheets
@@ -32,63 +33,51 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${MY_P}"
 
 pkg_setup() {
-	enewgroup polkituser
 	enewuser polkituser -1 "-1" /dev/null polkituser
 }
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+src_prepare() {
+	# Add zsh completions
+	if use zsh-completion; then
+		epatch "${FILESDIR}/${P}-zsh-completions.patch"
+	fi
 
-	# Add zsh/bash completion
-	epatch "${FILESDIR}/${PN}-0.7-completions.patch"
-
-	# Fix use of undefined _pk_debug, bug #239573
-	epatch "${FILESDIR}/${P}-pk-debug.patch"
-
-	# Fix useless pam header inclusion, bug #239554
-	epatch "${FILESDIR}/${P}-pam-headers.patch"
-
-	# Fix API change in consolekit 0.3
-	epatch "${FILESDIR}/${P}-consolekit03.patch"
-
-	# Fix dbus auth for new deny default
-	epatch "${FILESDIR}"/${P}-dbus-auth.patch
+	# Don't force user to use --as-needed LDFLAGS
+	epatch "${FILESDIR}/${P}-as-needed.patch"
 	eautoreconf
 }
 
-multilib-native_src_compile_internal() {
-	local authdb=
+multilib-native_src_configure_internal() {
+
+	local conf=
 
 	if use pam ; then
-		authdb="--with-authdb=default --with-authfw=pam --with-pam-module-dir=$(getpam_mod_dir)"
+		conf="--with-authfw=pam --with-pam-module-dir=$(getpam_mod_dir)"
 	else
-		authdb="--with-authdb=dummy --with-authfw=none"
+		conf="--with-authfw=none"
 	fi
 
-	econf ${authdb} \
-		--without-bash-completion \
-		--without-zsh-completion \
+	if use expat; then
+		conf="--with-expat=/usr"
+	fi
+
+	econf ${conf} \
+		--enable-fast-install \
+		--enable-libtool-lock \
 		--enable-man-pages \
+		--disable-dependency-tracking \
 		--with-os-type=gentoo \
 		--with-polkit-user=polkituser \
-		--with-polkit-group=polkituser \
+		--localstatedir=/var \
+		$(use_enable debug verbose-mode) \
 		$(use_enable doc gtk-doc) \
-		$(use_enable selinux) \
-		--localstatedir=/var
-	# won't install with tests
-	#	$(use_enable test tests) \
-	emake || die "emake failed"
+		$(use_enable nls)
 }
 
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
-	dodoc NEWS README AUTHORS ChangeLog
-
-	if use bash-completion; then
-		dobashcompletion "${S}/tools/polkit-bash-completion.sh"
-	fi
+	dodoc NEWS README AUTHORS ChangeLog || die "dodoc failed"
 
 	if use zsh-completion ; then
 		insinto /usr/share/zsh/site-functions
