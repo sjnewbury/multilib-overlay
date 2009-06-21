@@ -1,12 +1,18 @@
 #!/bin/bash
 
-if [[ -n $1 && -n $2 ]]; then
+if [[ -n ${1} && -n ${2} ]]; then
 
-mkdir -p $1/$2
-cp -au /usr/portage/$1/$2 $1
+mkdir -p ${1}/${2}
+cp -u /usr/portage/${1}/${2}/*.ebuild ${1}/${2}/
+cp -u /usr/portage/${1}/${2}/Manifest ${1}/${2}/
 
-find $1/$2 -name "*.ebuild" -exec sh bin/make_multilib {} \;
+if [[ -d /usr/portage/${1}/${2}/files ]]; then
+	mkdir -p ${1}/${2}/files
+	cp -u /usr/portage/${1}/${2}/files/* ${1}/${2}/files/
+fi
 
+find ${1}/${2} -name "*.ebuild" -exec sh bin/make_multilib {} \;
+egencache --update --repo=multilib ${1}/${2}
 else
 
 echo usage: 
