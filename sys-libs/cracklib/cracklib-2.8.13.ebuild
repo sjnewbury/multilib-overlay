@@ -35,7 +35,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${P}-python-linkage.patch #246747
 	elibtoolize #269003
 }
- 
+
 multilib_src_configure_internal() {
 	econf \
 		--with-default-dict='$(libdir)/cracklib_dict' \
