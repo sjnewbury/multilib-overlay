@@ -4,7 +4,7 @@
 
 EAPI=2
 
-inherit eutils toolchain-funcs multilib multilib-native
+inherit eutils toolchain-funcs multilib libtool multilib-native
 
 MY_P=${P/_}
 DESCRIPTION="Password Checking Library"
@@ -33,17 +33,14 @@ src_unpack() {
 	unpack ${A}
 	cd "${S}"
 	epatch "${FILESDIR}"/${P}-python-linkage.patch #246747
+	elibtoolize #269003
 }
  
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib_src_configure_internal() {
 	econf \
 		--with-default-dict='$(libdir)/cracklib_dict' \
 		$(use_enable nls) \
-		$(use_with python) \
-		|| die
-	emake || die
+		$(use_with python)
 }
 
 multilib-native_src_install_internal() {
