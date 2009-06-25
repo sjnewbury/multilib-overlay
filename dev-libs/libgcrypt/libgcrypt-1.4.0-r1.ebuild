@@ -40,19 +40,12 @@ src_unpack() {
 
 multilib-native_src_configure_internal() {
 	# --disable-padlock-support for bug#201917
-	
-	local myconf
-	if use lib32 && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
-		myconf="--program-suffix=32"
-	fi
-	
 	econf \
 		--disable-padlock-support \
 		--disable-dependency-tracking \
 		--with-pic \
 		--enable-noexecstack \
 		$(use_enable nls) \
-		${myconf} \
 		|| die
 }
 

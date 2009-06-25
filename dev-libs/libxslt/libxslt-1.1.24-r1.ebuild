@@ -47,13 +47,6 @@ multilib-native_src_prepare_internal() {
 multilib-native_src_configure_internal() {
 	# Always pass --with-debugger. It is required by third parties (see
 	# e.g. bug #98345)
-
-	if use lib32 && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
-		export LIBGCRYPT_CONFIG="/usr/bin/libgcrypt-config32"
-	else
-		export LIBGCRYPT_CONFIG="/usr/bin/libgcrypt-config"
-	fi
-
 	local myconf="--with-debugger \
 		$(use_with python)       \
 		$(use_with crypt crypto) \

@@ -6,7 +6,7 @@ diff -Naur libproxy-0.2.3.orig/src/lib/Makefile.am libproxy-0.2.3/src/lib/Makefi
  						misc.h url.h pac.h dhcp.h dns.h slp.h wpad.h proxy_factory.h proxy.h config_file.h
  libproxy_la_CFLAGS  = -Wall
 -libproxy_la_LDFLAGS = -lm
-+libproxy_la_LDFLAGS = -lm -ldl
++libproxy_la_LDFLAGS = -lm $(LIBDL)
  
  include_HEADERS     = proxy.h
  

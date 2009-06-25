@@ -1,0 +1,14 @@
+--- configure.ac-old	2008-06-05 15:56:16.000000000 -0500
++++ configure.ac	2009-06-22 23:00:28.582633887 -0500
+@@ -17,8 +17,10 @@
+ PKG_CHECK_MODULES(gconf, gconf-2.0, have_gconf=yes, have_gconf=no)
+ PKG_CHECK_MODULES(webkit, webkit-1.0, have_webkit=yes, have_webkit=no)
+ PKG_CHECK_MODULES(mozjs, xulrunner-js, have_mozjs=yes, 
++		[PKG_CHECK_MODULES(mozjs, libxul-unstable, have_mozjs=yes,
++		[PKG_CHECK_MODULES(mozjs, seamonkey-js , have_mozjs=yes,
+ 		[PKG_CHECK_MODULES(mozjs, firefox-js, have_mozjs=yes,
+-		[PKG_CHECK_MODULES(mozjs, mozilla-js, have_mozjs=yes, have_mozjs=no)])])
++		[PKG_CHECK_MODULES(mozjs, mozilla-js, have_mozjs=yes, have_mozjs=no)])])])])
+ PKG_CHECK_MODULES(NetworkManager, NetworkManager, 
+ 					have_networkmanager=yes, have_networkmanager=no)
+ 
