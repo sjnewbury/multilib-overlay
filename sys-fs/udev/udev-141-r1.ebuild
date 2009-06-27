@@ -1,10 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-141-r1.ebuild,v 1.1 2009/06/10 20:10:01 zzam Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-141-r1.ebuild,v 1.2 2009/06/17 13:29:39 jer Exp $
 
-EAPI=2
-
-MULTILIB_EXT_SOURCE_BUILD="yes"
+EAPI="2"
 
 inherit eutils flag-o-matic multilib toolchain-funcs versionator multilib-native
 
@@ -20,7 +18,7 @@ HOMEPAGE="http://www.kernel.org/pub/linux/utils/kernel/hotplug/udev.html"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
+KEYWORDS="~alpha ~amd64 ~arm hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 IUSE="selinux +devfs-compat"
 
 COMMON_DEPEND="selinux? ( sys-libs/libselinux[lib32?] )"
@@ -185,7 +183,7 @@ multilib-native_src_install_internal() {
 	keepdir /etc/udev/rules.d
 
 	# Now installing rules
-	cd "${EMULTILIB_SOURCE_TOPDIR}"/rules
+	cd "${S}"/rules
 	insinto "${udev_helper_dir}"/rules.d/
 
 	# Our rules files
@@ -198,7 +196,7 @@ multilib-native_src_install_internal() {
 	then
 		doins "packages/40-${ARCH}.rules"
 	fi
-	cd "${EMULTILIB_SOURCE_TOPDIR}"
+	cd "${S}"
 
 	# our udev hooks into the rc system
 	insinto /$(get_libdir)/rcscripts/addons
@@ -240,7 +238,7 @@ multilib-native_src_install_internal() {
 	mv index.html writing_udev_rules.html
 	dohtml *.html
 
-	cd "${EMULTILIB_SOURCE_TOPDIR}"
+	cd "${S}"
 
 	newdoc extras/volume_id/README README_volume_id
 

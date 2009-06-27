@@ -1,0 +1,57 @@
+diff --git a/configure.ac b/configure.ac
+index 82c455d..88dd20c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -8,7 +8,6 @@ AC_SYS_LARGEFILE
+ AC_CONFIG_MACRO_DIR([m4])
+ AC_PROG_LIBTOOL
+ AC_PROG_AWK
+-GTK_DOC_CHECK(1.10)
+ AC_PREFIX_DEFAULT([/usr])
+ AC_PATH_PROG([XSLTPROC], [xsltproc])
+ 
+@@ -103,8 +102,6 @@ AC_CONFIG_FILES([
+ 	Makefile
+ 	libudev/Makefile
+ 	libudev/libudev.pc
+-	libudev/docs/Makefile
+-	libudev/docs/version.xml
+ 	udev/Makefile
+ 	rules/Makefile
+ 	extras/Makefile
+@@ -125,8 +122,6 @@ AC_CONFIG_FILES([
+ 	extras/usb-db/Makefile
+ 	extras/gudev/Makefile
+ 	extras/gudev/gudev-1.0.pc
+-	extras/gudev/docs/Makefile
+-	extras/gudev/docs/version.xml
+ 	extras/keymap/Makefile
+ 	extras/modem-modeswitch/Makefile
+ ])
+diff --git a/extras/gudev/Makefile.am b/extras/gudev/Makefile.am
+index dcfc2bd..87d9aba 100644
+--- a/extras/gudev/Makefile.am
++++ b/extras/gudev/Makefile.am
+@@ -2,8 +2,7 @@ include $(top_srcdir)/Makefile.am.inc
+ 
+ # putting ‘.’ first causes prefix ordering of directories
+ SUBDIRS = \
+-	. \
+-	docs
++	.
+ 
+ AM_CPPFLAGS += \
+ 	-I$(top_builddir)/extras \
+diff --git a/libudev/Makefile.am b/libudev/Makefile.am
+index 220cff0..f40c830 100644
+--- a/libudev/Makefile.am
++++ b/libudev/Makefile.am
+@@ -1,7 +1,6 @@
+ include $(top_srcdir)/Makefile.am.inc
+ 
+-SUBDIRS = \
+-	docs
++SUBDIRS =
+ 
+ noinst_PROGRAMS = \
+ 	test-libudev
