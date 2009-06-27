@@ -2,9 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-crypt/mit-krb5/mit-krb5-1.6.3-r6.ebuild,v 1.3 2009/04/08 17:53:57 keytoaster Exp $
 
-EAPI="2"
-
-inherit eutils flag-o-matic versionator autotools multilib-native
+inherit eutils flag-o-matic versionator autotools
 
 PATCHV="0.5"
 MY_P=${P/mit-}
@@ -20,9 +18,8 @@ KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
 IUSE="krb4 doc"
 
 RDEPEND="!virtual/krb5
-	>=sys-libs/e2fsprogs-libs-1.41.0[lib32?]
-	dev-libs/openssl[lib32?]"
-
+	>=sys-libs/e2fsprogs-libs-1.41.0
+	dev-libs/openssl"
 DEPEND="${RDEPEND}
 	doc? ( virtual/latex-base )"
 
@@ -49,7 +46,7 @@ src_unpack() {
 	done
 }
 
-multilib-native_src_configure_internal() {
+src_compile() {
 	# needed to work with sys-libs/e2fsprogs-libs <- should be removed!!
 	append-flags "-I/usr/include/et"
 	econf \
@@ -58,9 +55,7 @@ multilib-native_src_configure_internal() {
 		--with-system-et --with-system-ss \
 		--enable-dns-for-realm \
 		--enable-kdc-replay-cache || die
-}
 
-multilib-native_src_compile_internal() {
 	emake -j1 || die
 
 	if use doc ; then
@@ -75,7 +70,7 @@ src_test() {
 	einfo "Tests do not run in sandbox, have a lot of dependencies and are therefore completely disabled."
 }
 
-multilib-native_src_install_internal() {
+src_install() {
 	emake \
 		DESTDIR="${D}" \
 		EXAMPLEDIR=/usr/share/doc/${PF}/examples \
@@ -107,8 +102,6 @@ multilib-native_src_install_internal() {
 	insinto /etc
 	newins "${D}/usr/share/doc/${PF}/examples/krb5.conf" krb5.conf.example
 	newins "${D}/usr/share/doc/${PF}/examples/kdc.conf" kdc.conf.example
-
-	prep_ml_binaries /usr/bin/krb5-config 
 }
 
 pkg_postinst() {
