@@ -1,10 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.8.8-r6.ebuild,v 1.4 2009/05/08 05:46:34 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.8.8-r6.ebuild,v 1.5 2009/05/29 13:26:28 tove Exp $
 
-EAPI="2"
-
-inherit eutils flag-o-matic toolchain-funcs multilib-native
+inherit eutils flag-o-matic toolchain-funcs multilib
 
 # The slot of this binary compat version of libperl.so
 PERLSLOT="1"
@@ -26,9 +24,9 @@ PERL_OLDVERSEN="5.8.0 5.8.2 5.8.4 5.8.5 5.8.6 5.8.7"
 
 DEPEND="berkdb? ( sys-libs/db )
 	gdbm? ( >=sys-libs/gdbm-1.8.3 )
-	>=sys-devel/libperl-${PV}-r1[lib32?]
+	>=sys-devel/libperl-${PV}-r1
 	elibc_FreeBSD? ( sys-freebsd/freebsd-mk-defs )
-	<sys-devel/libperl-5.9[lib32?]
+	<sys-devel/libperl-5.9
 	!<perl-core/File-Spec-0.87
 	!<perl-core/Test-Simple-0.47-r1"
 
@@ -47,7 +45,7 @@ PDEPEND=">=app-admin/perl-cleaner-1.03
 			>=perl-core/Test-Harness-2.56
 		)"
 
-multilib-native_pkg_setup_internal() {
+pkg_setup() {
 	# I think this should rather be displayed if you *have* 'ithreads'
 	# in USE if it could break things ...
 	if use ithreads
@@ -69,7 +67,8 @@ multilib-native_pkg_setup_internal() {
 	fi
 }
 
-multilib-native_src_prepare_internal() {
+src_unpack() {
+	unpack ${A}
 
 	# Get -lpthread linked before -lc.  This is needed
 	# when using glibc >= 2.3, or else runtime signal
@@ -159,6 +158,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-CVE-2008-1927.patch
 
 	epatch "${FILESDIR}"/${P}-CAN-2005-0448-rmtree-2.patch
+	epatch "${FILESDIR}"/${P}-fix_file_path_chdir.patch
 }
 
 myconf() {
@@ -166,7 +166,7 @@ myconf() {
 	myconf=( "${myconf[@]}" "$@" )
 }
 
-multilib-native_src_configure_internal() {
+src_configure() {
 	declare -a myconf
 
 	# some arches and -O do not mix :)
@@ -296,20 +296,22 @@ multilib-native_src_configure_internal() {
 		"${myconf[@]}" || die "Unable to configure"
 }
 
-multilib-native_src_compile_internal() {
+src_compile() {
 
 	# would like to bracket this with a test for the existence of a
 	# dotfile, but can't clean it automatically now.
 
+	src_configure
+
 	emake -j1 || die "Unable to make"
 }
 
-multilib-native_src_test_internal() {
+src_test() {
 	use elibc_uclibc && export MAKEOPTS="${MAKEOPTS} -j1"
 	emake -i test CCDLFLAGS= || die "test failed"
 }
 
-multilib-native_src_install_internal() {
+src_install() {
 
 	export LC_ALL="C"
 
@@ -607,7 +609,7 @@ src_remove_extra_files()
 	popd > /dev/null
 }
 
-multilib-native_pkg_postinst_internal() {
+pkg_postinst() {
 	INC=$(perl -e 'for $line (@INC) { next if $line eq "."; next if $line =~ m/'${MY_PV}'|etc|local|perl$/; print "$line\n" }')
 	if [[ "${ROOT}" = "/" ]]
 	then
