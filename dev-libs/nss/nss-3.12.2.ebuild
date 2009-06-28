@@ -2,9 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/nss/nss-3.12.2.ebuild,v 1.6 2009/04/12 14:56:16 bluebird Exp $
 
-EAPI="2"
-
-inherit eutils flag-o-matic multilib toolchain-funcs multilib-native
+inherit eutils flag-o-matic multilib toolchain-funcs
 
 NSPR_VER="4.7.3"
 RTM_NAME="NSS_${PV//./_}_RTM"
@@ -19,13 +17,15 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="utils"
 
-S="${WORKDIR}/mozilla"
+S="${WORKDIR}"
 
-DEPEND=">=dev-libs/nspr-${NSPR_VER}[lib32?]
-	>=dev-db/sqlite-3.5[lib32?]"
+DEPEND=">=dev-libs/nspr-${NSPR_VER}
+	>=dev-db/sqlite-3.5"
 
-multilib-native_src_prepare_internal() {
-	cd "${S}"/security/coreconf
+src_unpack() {
+	unpack ${A}
+
+	cd "${S}"/mozilla/security/coreconf
 	# hack nspr paths
 	echo 'INCLUDES += -I/usr/include/nspr -I$(DIST)/include/dbm' \
 		>> headers.mk || die "failed to append include"
@@ -50,7 +50,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-mips64-2.patch
 }
 
-multilib-native_src_compile_internal() {
+src_compile() {
 	strip-flags
 
 	echo > "${T}"/test.c
@@ -65,17 +65,17 @@ multilib-native_src_compile_internal() {
 	export NSS_USE_SYSTEM_SQLITE=1
 	export NSS_ENABLE_ECC=1
 	export NSPR_LIB_DIR="/usr/$(get_libdir)/nspr"
-	cd "${S}"/security/coreconf
+	cd "${S}"/mozilla/security/coreconf
 	emake -j1 BUILD_OPT=1 XCFLAGS="${CFLAGS}" CC="$(tc-getCC)" || die "coreconf make failed"
-	cd "${S}"/security/dbm
+	cd "${S}"/mozilla/security/dbm
 	emake -j1 BUILD_OPT=1 XCFLAGS="${CFLAGS}" CC="$(tc-getCC)" || die "dbm make failed"
-	cd "${S}"/security/nss
+	cd "${S}"/mozilla/security/nss
 	emake -j1 BUILD_OPT=1 XCFLAGS="${CFLAGS}" CC="$(tc-getCC)" || die "nss make failed"
 }
 
-multilib-native_src_install_internal() {
+src_install () {
 	MINOR_VERSION=12
-	cd "${S}"/security/dist
+	cd "${S}"/mozilla/security/dist
 
 	# put all *.a files in /usr/lib/nss (because some have conflicting names
 	# with existing libraries)
@@ -97,15 +97,15 @@ multilib-native_src_install_internal() {
 	# coping with nss being in a different path. We move up priority to
 	# ensure that nss/nspr are used specifically before searching elsewhere.
 	dodir /etc/env.d
-	echo "LDPATH=/usr/$(get_libdir)/nss" > "${D}/etc/env.d/08nss-${ABI}"
+	echo "LDPATH=/usr/$(get_libdir)/nss" > "${D}"/etc/env.d/08nss
 
 	dodir /usr/bin
 	dodir /usr/$(get_libdir)/pkgconfig
 	cp "${FILESDIR}"/3.12-nss-config.in "${D}"/usr/bin/nss-config
 	cp "${FILESDIR}"/3.12-nss.pc.in "${D}"/usr/$(get_libdir)/pkgconfig/nss.pc
-	NSS_VMAJOR=`cat ${S}/security/nss/lib/nss/nss.h | grep "#define.*NSS_VMAJOR" | awk '{print $3}'`
-	NSS_VMINOR=`cat ${S}/security/nss/lib/nss/nss.h | grep "#define.*NSS_VMINOR" | awk '{print $3}'`
-	NSS_VPATCH=`cat ${S}/security/nss/lib/nss/nss.h | grep "#define.*NSS_VPATCH" | awk '{print $3}'`
+	NSS_VMAJOR=`cat ${S}/mozilla/security/nss/lib/nss/nss.h | grep "#define.*NSS_VMAJOR" | awk '{print $3}'`
+	NSS_VMINOR=`cat ${S}/mozilla/security/nss/lib/nss/nss.h | grep "#define.*NSS_VMINOR" | awk '{print $3}'`
+	NSS_VPATCH=`cat ${S}/mozilla/security/nss/lib/nss/nss.h | grep "#define.*NSS_VPATCH" | awk '{print $3}'`
 
 	sed -e "s,@libdir@,/usr/"$(get_libdir)"/nss,g" \
 		-e "s,@prefix@,/usr,g" \
@@ -127,11 +127,9 @@ multilib-native_src_install_internal() {
 	chmod 644 "${D}"/usr/$(get_libdir)/pkgconfig/nss.pc
 
 	if use utils; then
-		cd "${S}"/security/dist/*/bin/
+		cd "${S}"/mozilla/security/dist/*/bin/
 		for f in *; do
 			newbin ${f} nss${f}
 		done
 	fi
-
-	prep_ml_binaries /usr/bin/nss-config 
 }

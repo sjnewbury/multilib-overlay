@@ -2,9 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/nss/nss-3.12.3.ebuild,v 1.1 2009/04/15 13:37:53 armin76 Exp $
 
-EAPI="2"
-
-inherit eutils flag-o-matic multilib toolchain-funcs multilib-native
+inherit eutils flag-o-matic multilib toolchain-funcs
 
 NSPR_VER="4.7.4"
 RTM_NAME="NSS_${PV//./_}_RTM"
@@ -21,10 +19,12 @@ IUSE="utils"
 
 S="${WORKDIR}/${P}"
 
-DEPEND=">=dev-libs/nspr-${NSPR_VER}[lib32?]
-	>=dev-db/sqlite-3.5[lib32?]"
+DEPEND=">=dev-libs/nspr-${NSPR_VER}
+	>=dev-db/sqlite-3.5"
 
-multilib-native_src_prepare_internal() {
+src_unpack() {
+	unpack ${A}
+
 	cd "${S}"/mozilla/security/coreconf
 	# hack nspr paths
 	echo 'INCLUDES += -I/usr/include/nspr -I$(DIST)/include/dbm' \
@@ -50,7 +50,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-mips64-2.patch
 }
 
-multilib-native_src_compile_internal() {
+src_compile() {
 	strip-flags
 
 	echo > "${T}"/test.c
@@ -73,7 +73,7 @@ multilib-native_src_compile_internal() {
 	emake -j1 BUILD_OPT=1 XCFLAGS="${CFLAGS}" CC="$(tc-getCC)" || die "nss make failed"
 }
 
-multilib-native_src_install_internal() {
+src_install () {
 	MINOR_VERSION=12
 	cd "${S}"/mozilla/security/dist
 
@@ -97,7 +97,7 @@ multilib-native_src_install_internal() {
 	# coping with nss being in a different path. We move up priority to
 	# ensure that nss/nspr are used specifically before searching elsewhere.
 	dodir /etc/env.d
-	echo "LDPATH=/usr/$(get_libdir)/nss" > "${D}/etc/env.d/08nss-${ABI}"
+	echo "LDPATH=/usr/$(get_libdir)/nss" > "${D}"/etc/env.d/08nss
 
 	dodir /usr/bin
 	dodir /usr/$(get_libdir)/pkgconfig
@@ -132,6 +132,4 @@ multilib-native_src_install_internal() {
 			newbin ${f} nss${f}
 		done
 	fi
-
-	prep_ml_binaries /usr/bin/nss-config 
 }
