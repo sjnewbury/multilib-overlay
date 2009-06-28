@@ -9,8 +9,7 @@
 
 EAPI="2"
 
-inherit autotools eutils flag-o-matic libtool multilib python toolchain-funcs versionator multilib-native
-MULTILIB_IN_SOURCE_BUILD="yes"
+inherit autotools eutils flag-o-matic libtool multilib python toolchain-funcs versionator
 
 # We need this so that we don't depends on python.eclass
 PYVER_MAJOR=$(get_major_version)
@@ -34,24 +33,24 @@ IUSE="berkdb build doc elibc_uclibc examples gdbm ipv6 ncurses readline sqlite s
 #       do not conflict with the ones in python proper. - liquidx
 
 DEPEND=">=app-admin/eselect-python-20080925
-		>=sys-libs/zlib-1.1.3[lib32?]
+		>=sys-libs/zlib-1.1.3
 		!build? (
-			sqlite? ( >=dev-db/sqlite-3[lib32?] )
-			tk? ( >=dev-lang/tk-8.0[lib32?] )
-			ncurses? ( >=sys-libs/ncurses-5.2[lib32?]
-						readline? ( >=sys-libs/readline-4.1[lib32?] ) )
-			berkdb? ( >=sys-libs/db-3.1[lib32?] )
-			gdbm? ( sys-libs/gdbm[lib32?] )
-			ssl? ( dev-libs/openssl[lib32?] )
+			sqlite? ( >=dev-db/sqlite-3 )
+			tk? ( >=dev-lang/tk-8.0 )
+			ncurses? ( >=sys-libs/ncurses-5.2
+						readline? ( >=sys-libs/readline-4.1 ) )
+			berkdb? ( >=sys-libs/db-3.1 )
+			gdbm? ( sys-libs/gdbm )
+			ssl? ( dev-libs/openssl )
 			doc? ( dev-python/python-docs:${SLOT} )
-			xml? ( dev-libs/expat[lib32?] )
+			xml? ( dev-libs/expat )
 	)"
 RDEPEND="${DEPEND}"
 PDEPEND="${DEPEND} app-admin/python-updater"
 
 PROVIDE="virtual/python"
 
-multilib-native_src_prepare_internal() {
+src_prepare() {
 	if tc-is-cross-compiler; then
 		epatch "${FILESDIR}"/python-2.5-cross-printf.patch
 		epatch "${FILESDIR}"/python-2.6-chflags-cross.patch
@@ -83,7 +82,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+src_configure() {
 	# Disable extraneous modules with extra dependencies.
 	if use build; then
 		export PYTHON_DISABLE_MODULES="readline pyexpat dbm gdbm bsddb _curses _curses_panel _tkinter _sqlite3"
@@ -165,7 +164,7 @@ multilib-native_src_configure_internal() {
 		${myconf}
 }
 
-multilib-native_src_test_internal() {
+src_test() {
 	# Tests won't work when cross compiling.
 	if tc-is-cross-compiler; then
 		elog "Disabling tests due to crosscompiling."
@@ -206,14 +205,14 @@ multilib-native_src_test_internal() {
 	elog "and run the tests separately."
 }
 
-multilib-native_src_install_internal() {
+src_install() {
 	# ahuemer, 20090529:
 	# -j1 was removed from python-2.6.2-r1.ebuild in portage
 	# we seem to still need it, because otherwise building fails!
-	emake -j1 DESTDIR="${D}" altinstall maninstall || die "emake altinstall maninstall failed"
+	emake DESTDIR="${D}" altinstall maninstall || die "emake altinstall maninstall failed"
 
 	mv "${D}"/usr/bin/python${PYVER}-config "${D}"/usr/bin/python-config-${PYVER}
-	if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
+	if use lib32 && ( [[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]] ); then
 		mv "${D}"/usr/bin/python${PYVER} "${D}"/usr/bin/python${PYVER}-${ABI}
 	fi
 
@@ -250,14 +249,14 @@ multilib-native_src_install_internal() {
 	rmdir "${D}"/usr/$(get_libdir)/${PN}${PYVER}/lib-old
 }
 
-multilib-native_pkg_postrm_internal() {
+pkg_postrm() {
 	eselect python update --ignore 3.0 --ignore 3.1
 
 	python_mod_cleanup /usr/lib/python${PYVER}
 	[[ "$(get_libdir)" != "lib" ]] && python_mod_cleanup /usr/$(get_libdir)/python${PYVER}
 }
 
-multilib-native_pkg_postinst_internal() {
+pkg_postinst() {
 	eselect python update --ignore 3.0 --ignore 3.1
 
 	python_mod_optimize -x "(site-packages|test)" /usr/lib/python${PYVER}

@@ -7,11 +7,9 @@
 #   in dev-lang/python. It _WILL_ stop people installing from
 #   Gentoo 1.4 images.
 
-EAPI=2
+EAPI=1
 
-MULTILIB_IN_SOURCE_BUILD="yes"
-
-inherit eutils autotools flag-o-matic python versionator toolchain-funcs libtool multilib-native
+inherit eutils autotools flag-o-matic python multilib versionator toolchain-funcs alternatives libtool
 
 # we need this so that we don't depends on python.eclass
 PYVER_MAJOR=$(get_major_version)
@@ -34,18 +32,18 @@ IUSE="+xml ncurses gdbm ssl readline tk berkdb ipv6 build ucs2 sqlite doc +threa
 # NOTE: dev-python/{elementtree,celementtree,pysqlite,ctypes,cjkcodecs}
 #       do not conflict with the ones in python proper. - liquidx
 
-DEPEND=">=sys-libs/zlib-1.1.3[lib32?]
+DEPEND=">=sys-libs/zlib-1.1.3
 		!build? (
-			sqlite? ( >=dev-db/sqlite-3[lib32?] )
-			tk? ( >=dev-lang/tk-8.0[lib32?] )
-			ncurses? ( >=sys-libs/ncurses-5.2[lib32?]
-						readline? ( >=sys-libs/readline-4.1[lib32?] ) )
-			berkdb? ( || ( sys-libs/db:4.5[lib32?] sys-libs/db:4.4[lib32?] sys-libs/db:4.3[lib32?]
-							sys-libs/db:4.2[lib32?] ) )
-			gdbm? ( sys-libs/gdbm[lib32?] )
-			ssl? ( dev-libs/openssl[lib32?] )
+			sqlite? ( >=dev-db/sqlite-3 )
+			tk? ( >=dev-lang/tk-8.0 )
+			ncurses? ( >=sys-libs/ncurses-5.2
+						readline? ( >=sys-libs/readline-4.1 ) )
+			berkdb? ( || ( sys-libs/db:4.5 sys-libs/db:4.4 sys-libs/db:4.3
+							sys-libs/db:4.2 ) )
+			gdbm? ( sys-libs/gdbm )
+			ssl? ( dev-libs/openssl )
 			doc? ( dev-python/python-docs:2.5 )
-		xml? ( dev-libs/expat[lib32?] )
+		xml? ( dev-libs/expat )
 	)"
 
 # NOTE: changed RDEPEND to PDEPEND to resolve bug 88777. - kloeri
@@ -54,7 +52,9 @@ DEPEND=">=sys-libs/zlib-1.1.3[lib32?]
 PDEPEND="${DEPEND} app-admin/python-updater"
 PROVIDE="virtual/python"
 
-multilib-native_src_prepare_internal() {
+src_unpack() {
+	unpack ${A}
+	cd "${S}"
 
 	if tc-is-cross-compiler ; then
 		epatch "${FILESDIR}"/python-2.4.4-test-cross.patch \
@@ -63,7 +63,7 @@ multilib-native_src_prepare_internal() {
 		rm "${WORKDIR}/${PV}"/*_all_crosscompile.patch
 	fi
 
-	epatch "${FILESDIR}"/${P}-distutils-multilib.patch
+	#epatch "${FILESDIR}"/${P}-distutils-multilib.patch
 
 	EPATCH_SUFFIX="patch" epatch "${WORKDIR}/${PV}"
 	sed -i -e "s:@@GENTOO_LIBDIR@@:$(get_libdir):g" \
@@ -88,7 +88,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+src_configure() {
 	# disable extraneous modules with extra dependencies
 	if use build; then
 		export PYTHON_DISABLE_MODULES="readline pyexpat dbm gdbm bsddb _curses _curses_panel _tkinter _sqlite3"
@@ -116,7 +116,9 @@ multilib-native_src_configure_internal() {
 	fi
 
 	einfo "Disabled modules: $PYTHON_DISABLE_MODULES"
+}
 
+src_compile() {
 	filter-flags -malign-double
 
 	# Seems to no longer be necessary
@@ -145,6 +147,12 @@ multilib-native_src_configure_internal() {
 		&& myconf="${myconf} --enable-unicode=ucs2" \
 		|| myconf="${myconf} --enable-unicode=ucs4"
 
+	use threads \
+		&& myconf="${myconf} --with-threads" \
+		|| myconf="${myconf} --without-threads"
+
+	src_configure
+
 	if tc-is-cross-compiler ; then
 		OPT="-O1" CFLAGS="" LDFLAGS="" CC="" \
 		./configure --{build,host}=${CBUILD} || die "cross-configure failed"
@@ -169,20 +177,22 @@ multilib-native_src_configure_internal() {
 	econf \
 		--with-fpectl \
 		--enable-shared \
-		$(use_enable ipv6) \
-		$(use_with threads) \
+		`use_enable ipv6` \
 		--infodir='${prefix}'/share/info \
 		--mandir='${prefix}'/share/man \
 		--with-libc='' \
-		${myconf}
+		${myconf} || die
+	emake || die "Parallel make failed"
 }
 
-multilib-native_src_install_internal() {
+src_install() {
 	dodir /usr
-	emake DESTDIR="${D}" altinstall maninstall || die
+	src_configure
+	make DESTDIR="${D}" altinstall maninstall || die
 
-	mv "${D}"/usr/bin/python${PYVER}-config "${D}"/usr/bin/python-config-${PYVER}
-	if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
+	mv "${D}"/usr/bin/python${PYVER}-config \
+		"${D}"/usr/bin/python-config-${PYVER}
+	if use lib32 && ( [[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]] ); then
 		mv "${D}"/usr/bin/python${PYVER} "${D}"/usr/bin/python${PYVER}-${ABI}
 	fi
 

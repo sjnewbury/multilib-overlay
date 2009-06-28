@@ -1,19 +1,17 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.5.4-r3.ebuild,v 1.1 2009/05/25 17:11:18 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.5.4-r3.ebuild,v 1.3 2009/06/26 06:08:32 jer Exp $
 
 # NOTE about python-portage interactions :
 # - Do not add a pkg_setup() check for a certain version of portage
 #   in dev-lang/python. It _WILL_ stop people installing from
 #   Gentoo 1.4 images.
 
-EAPI=2
+EAPI="1"
 
-MULTILIB_IN_SOURCE_BUILD="yes"
+inherit autotools eutils flag-o-matic libtool multilib python toolchain-funcs versionator
 
-inherit eutils autotools flag-o-matic python versionator toolchain-funcs libtool multilib-native
-
-# We need this so that we don't depend on python.eclass
+# We need this so that we don't depends on python.eclass
 PYVER_MAJOR=$(get_major_version)
 PYVER_MINOR=$(get_version_component_range 2)
 PYVER="${PYVER_MAJOR}.${PYVER_MINOR}"
@@ -28,32 +26,34 @@ SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
 
 LICENSE="PSF-2.2"
 SLOT="2.5"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="berkdb build doc elibc_uclibc examples gdbm ipv6 ncurses readline sqlite ssl +threads tk ucs2 wininst +xml"
 
 # NOTE: dev-python/{elementtree,celementtree,pysqlite,ctypes,cjkcodecs}
 #       do not conflict with the ones in python proper. - liquidx
 
 DEPEND=">=app-admin/eselect-python-20080925
-		>=sys-libs/zlib-1.1.3[lib32?]
+		>=sys-libs/zlib-1.1.3
 		!build? (
-			sqlite? ( >=dev-db/sqlite-3[lib32?] )
-			tk? ( >=dev-lang/tk-8.0[lib32?] )
-			ncurses? ( >=sys-libs/ncurses-5.2[lib32?]
-						readline? ( >=sys-libs/readline-4.1[lib32?] ) )
-			berkdb? ( || ( sys-libs/db:4.5[lib32?] sys-libs/db:4.4[lib32?] sys-libs/db:4.3[lib32?]
-							sys-libs/db:4.2[lib32?] ) )
-			gdbm? ( sys-libs/gdbm[lib32?] )
-			ssl? ( dev-libs/openssl[lib32?] )
+			sqlite? ( >=dev-db/sqlite-3 )
+			tk? ( >=dev-lang/tk-8.0 )
+			ncurses? ( >=sys-libs/ncurses-5.2
+						readline? ( >=sys-libs/readline-4.1 ) )
+			berkdb? ( || ( sys-libs/db:4.5 sys-libs/db:4.4 sys-libs/db:4.3
+							sys-libs/db:4.2 ) )
+			gdbm? ( sys-libs/gdbm )
+			ssl? ( dev-libs/openssl )
 			doc? ( dev-python/python-docs:${SLOT} )
-			xml? ( dev-libs/expat[lib32?] )
+			xml? ( dev-libs/expat )
 	)"
 RDEPEND="${DEPEND}"
 PDEPEND="${DEPEND} app-admin/python-updater"
 
 PROVIDE="virtual/python"
 
-multilib-native_src_prepare_internal() {
+src_unpack() {
+	unpack ${A}
+	cd "${S}"
 
 	if tc-is-cross-compiler; then
 		epatch "${FILESDIR}"/python-2.4.4-test-cross.patch \
@@ -85,7 +85,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+src_configure() {
 	# Disable extraneous modules with extra dependencies.
 	if use build; then
 		export PYTHON_DISABLE_MODULES="readline pyexpat dbm gdbm bsddb _curses _curses_panel _tkinter _sqlite3"
@@ -131,8 +131,8 @@ multilib-native_src_configure_internal() {
 
 	# http://bugs.gentoo.org/show_bug.cgi?id=50309
 	if is-flag -O3; then
-		is-flag -fstack-protector-all && replace-flags -O3 -O2
-		use hardened && replace-flags -O3 -O2
+	   is-flag -fstack-protector-all && replace-flags -O3 -O2
+	   use hardened && replace-flags -O3 -O2
 	fi
 
 	if tc-is-cross-compiler; then
@@ -167,12 +167,12 @@ multilib-native_src_configure_internal() {
 		${myconf}
 }
 
-multilib-native_src_compile_internal() {
+src_compile() {
 	src_configure
 	emake || die "emake failed"
 }
 
-multilib-native_src_test_internal() {
+src_test() {
 	# Tests won't work when cross compiling.
 	if tc-is-cross-compiler; then
 		elog "Disabling tests due to crosscompiling."
@@ -213,11 +213,11 @@ multilib-native_src_test_internal() {
 	elog "and run the tests separately."
 }
 
-multilib-native_src_install_internal() {
+src_install() {
 	emake DESTDIR="${D}" altinstall maninstall || die "emake altinstall maninstall failed"
 
 	mv "${D}"/usr/bin/python${PYVER}-config "${D}"/usr/bin/python-config-${PYVER}
-	if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
+	if use lib32 && ( [[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]] ); then
 		mv "${D}"/usr/bin/python${PYVER} "${D}"/usr/bin/python${PYVER}-${ABI}
 	fi
 
