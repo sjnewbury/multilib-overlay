@@ -1,0 +1,11 @@
+A basic way to use this branch:
+
+First, install the modified portage version:
+1. emerge -av1 portage
+then add the new useflag to the database or compile everything with a new useflag:
+2. run bin/add_lib32 or emerge -aDN world
+to save some compile time, there is a list of packages, which are usually not needed for 32bit libs:
+3. add the NO-AUTO-FLAG var to the portage environment (e.g. to /etc/make.conf)
+
+This is a basic set:
+NO-AUTO-FLAG="app-admin/eselect-fontconfig app-admin/eselect-python app-admin/perl-cleaner app-admin/python-updater app-arch/unzip app-arch/zip app-misc/ca-certificates app-shells/bash dev-lang/swig dev-util/gtk-doc-am dev-util/intltool dev-util/pkgconfig gnome-base/gnome-common gnome-base/gnome-mime-data media-fonts/gnu-gs-fonts-std media-sound/alsa-headers net-misc/openssh sys-apps/abi-wrapper sys-apps/baselayout sys-apps/diffutils sys-apps/sed sys-auth/pambase sys-devel/autoconf sys-devel/automake sys-devel/bc sys-devel/binutils-config sys-devel/bison sys-devel/gnuconfig sys-devel/m4 virtual/libc virtual/libiconv virtual/libintl virtual/poppler-utils www-plugins/adobe-flash x11-apps/xhost x11-apps/xrdb x11-misc/makedepend x11-misc/shared-mime-info x11-misc/util-macros x11-misc/xdg-utils x11-themes/gnome-icon-theme dev-java/java-config dev-perl/Locale-gettext perl-core/PodParser perl-core/Test-Harness sys-libs/glibc x11-base/xorg-server"
