@@ -21,11 +21,13 @@ NO-AUTO-FLAG="
 	sys-apps/diffutils
 	sys-apps/sed
 	sys-auth/pambase
+	sys-boot/grub
 	sys-devel/autoconf
 	sys-devel/automake
 	sys-devel/bc
 	sys-devel/binutils-config
 	sys-devel/bison
+	sys-devel/gcc
 	sys-devel/gnuconfig
 	sys-devel/m4
 	virtual/libc
