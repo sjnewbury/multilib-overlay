@@ -1,7 +1,7 @@
 NO-AUTO-FLAG="
 	app-admin/eselect-fontconfig
-	app-admin/eselect-python
 	app-admin/eselect-opengl
+	app-admin/eselect-python
 	app-admin/eselect-xvmc
 	app-admin/perl-cleaner
 	app-admin/python-updater
@@ -9,7 +9,9 @@ NO-AUTO-FLAG="
 	app-arch/zip
 	app-misc/ca-certificates
 	app-shells/bash
+	dev-java/java-config
 	dev-lang/swig
+	dev-perl/Locale-gettext
 	dev-util/gtk-doc-am
 	dev-util/intltool
 	dev-util/pkgconfig
@@ -18,6 +20,8 @@ NO-AUTO-FLAG="
 	media-fonts/gnu-gs-fonts-std
 	media-sound/alsa-headers
 	net-misc/openssh
+	perl-core/PodParser
+	perl-core/Test-Harness
 	sys-apps/abi-wrapper
 	sys-apps/baselayout
 	sys-apps/diffutils
@@ -30,9 +34,10 @@ NO-AUTO-FLAG="
 	sys-devel/binutils-config
 	sys-devel/bison
 	sys-devel/gcc
-	sys-libs/e2fsprogs-libs
 	sys-devel/gnuconfig
 	sys-devel/m4
+	sys-libs/e2fsprogs-libs
+	sys-libs/glibc
 	virtual/libc
 	virtual/libiconv
 	virtual/libintl
@@ -40,16 +45,10 @@ NO-AUTO-FLAG="
 	www-plugins/adobe-flash
 	x11-apps/xhost
 	x11-apps/xrdb
+	x11-base/xorg-server
 	x11-misc/makedepend
 	x11-misc/shared-mime-info
 	x11-misc/util-macros
 	x11-misc/xdg-utils
 	x11-themes/gnome-icon-theme
-
-	dev-java/java-config
-	dev-perl/Locale-gettext
-	perl-core/PodParser
-	perl-core/Test-Harness
-	sys-libs/glibc
-	x11-base/xorg-server
-"
+	"
