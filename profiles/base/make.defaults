@@ -1,6 +1,7 @@
 NO-AUTO-FLAG="
 	app-admin/eselect-fontconfig
 	app-admin/eselect-python
+	app-admin/eselect-opengl
 	app-admin/perl-cleaner
 	app-admin/python-updater
 	app-arch/unzip
