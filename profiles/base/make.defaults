@@ -30,6 +30,7 @@ NO-AUTO-FLAG="
 	sys-devel/binutils-config
 	sys-devel/bison
 	sys-devel/gcc
+	sys-libs/e2fsprogs-libs
 	sys-devel/gnuconfig
 	sys-devel/m4
 	virtual/libc
