@@ -9,6 +9,8 @@ NO-AUTO-FLAG="
 	app-arch/zip
 	app-misc/ca-certificates
 	app-shells/bash
+	app-vim/gtk-syntax
+	app-vim/pam-syntax
 	dev-java/java-config
 	dev-lang/swig
 	dev-perl/Locale-gettext
@@ -26,6 +28,7 @@ NO-AUTO-FLAG="
 	sys-apps/baselayout
 	sys-apps/diffutils
 	sys-apps/sed
+	sys-apps/xinetd
 	sys-auth/pambase
 	sys-boot/grub
 	sys-devel/autoconf
@@ -36,7 +39,9 @@ NO-AUTO-FLAG="
 	sys-devel/gcc
 	sys-devel/gnuconfig
 	sys-devel/m4
+	sys-libs/e2fsprogs-libs
 	sys-libs/glibc
+	sys-kernel/linux-headers
 	virtual/libc
 	virtual/libiconv
 	virtual/libintl
