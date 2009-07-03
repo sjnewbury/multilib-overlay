@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/libXfont/libXfont-1.3.4.ebuild,v 1.1 2009/01/13 02:40:07 dberkholz Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/libXfont/libXfont-1.4.0.ebuild,v 1.4 2009/06/27 10:46:25 armin76 Exp $
 
 EAPI=2
 
@@ -22,11 +22,11 @@ RDEPEND="x11-libs/xtrans[lib32?]
 DEPEND="${RDEPEND}
 	x11-proto/fontcacheproto"
 
-CONFIGURE_OPTIONS="$(use_enable ipv6)
-	--with-bzip2
-	--with-encodingsdir=/usr/share/fonts/encodings"
-
 pkg_setup() {
+	CONFIGURE_OPTIONS="$(use_enable ipv6)
+		--with-bzip2
+		--with-encodingsdir=/usr/share/fonts/encodings"
+
 	# No such function yet
 	# x-modular_pkg_setup
 
