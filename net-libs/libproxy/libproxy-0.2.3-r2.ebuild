@@ -1,4 +1,4 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-libs/libproxy/libproxy-0.2.3-r2.ebuild,v 1.1 2009/06/29 19:26:13 leio Exp $
 
@@ -30,6 +30,7 @@ RDEPEND="
 	!xulrunner? ( seamonkey? ( www-client/seamonkey[lib32?] ) )
 "
 # Since xulrunner-1.9.0.11-r1 its shipped mozilla-js.pc is fixed so we can use it
+
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.19"
 
@@ -45,12 +46,12 @@ src_prepare() {
 
 	# Bug 275127 and 275318
 	epatch "${FILESDIR}/${P}-fix-automagic-mozjs.patch"
-	
+
 	# Fix implicit declaration QA, bug #268546
 	epatch "${FILESDIR}/${P}-implicit-declaration.patch"
-	
+
 	epatch "${FILESDIR}/${P}-fbsd.patch" # drop at next bump
-	
+
 	# Fix test to follow POSIX (for x86-fbsd).
 	# FIXME: This doesn't actually fix all == instances when two are on the same line
 	sed -e 's/\(test.*\)==/\1=/g' -i configure.ac configure || die "sed failed"
