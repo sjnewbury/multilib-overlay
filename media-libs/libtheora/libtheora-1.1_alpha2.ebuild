@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libtheora/libtheora-1.1_alpha2.ebuild,v 1.1 2009/06/09 16:55:43 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libtheora/libtheora-1.1_alpha2.ebuild,v 1.2 2009/06/21 03:37:29 ssuominen Exp $
 
 EAPI=2
 inherit autotools eutils flag-o-matic multilib-native
@@ -15,7 +15,10 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-
 IUSE="doc encode examples"
 
 RDEPEND="media-libs/libogg[lib32?]
-	encode? ( media-libs/libvorbis[lib32?] )"
+	encode? ( media-libs/libvorbis[lib32?] )
+	examples? ( media-libs/libpng[lib32?]
+		media-libs/libvorbis[lib32?]
+		media-libs/libsdl[lib32?] )"
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )
 	dev-util/pkgconfig"
@@ -32,25 +35,34 @@ multilib-native_src_configure_internal() {
 	use x86 && filter-flags -fforce-addr -frename-registers #200549
 	use doc || export ac_cv_prog_HAVE_DOXYGEN="false"
 
-	# Don't build specs even with doc enabled, just a few people would need
-	# it and causes sandbox violations.
-	export ac_cv_prog_HAVE_PDFLATEX="false"
+	local myconf
+	use examples && myconf="--enable-encode"
 
+	# --disable-spec because LaTeX documentation has been prebuilt
 	econf \
 		--disable-dependency-tracking \
-		--disable-sdltest \
+		--disable-spec \
 		$(use_enable encode) \
-		--disable-examples
+		$(use_enable examples) \
+		${myconf}
 }
 
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" docdir=/usr/share/doc/${PF} \
 		install || die "emake install failed"
+
 	dodoc AUTHORS CHANGES README
 	prepalldocs
 
 	if use examples; then
-		insinto /usr/share/doc/${PF}/examples
-		doins examples/*.[ch]
+		if use doc; then
+			insinto /usr/share/doc/${PF}/examples
+			doins examples/*.[ch]
+		fi
+
+		dobin examples/.libs/png2theora || die "dobin failed"
+		for bin in dump_{psnr,video} {encoder,player}_example; do
+			newbin examples/.libs/${bin} theora_${bin} || die "newbin failed"
+		done
 	fi
 }
