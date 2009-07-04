@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.14.2.ebuild,v 1.3 2009/05/28 20:53:11 fmccor Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.14.2.ebuild,v 1.8 2009/07/01 14:54:39 armin76 Exp $
 
 EAPI="2"
 
@@ -15,7 +15,7 @@ SRC_URI="http://www.sqlite.org/${P}.tar.gz
 
 LICENSE="as-is"
 SLOT="3"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+KEYWORDS="alpha ~amd64 arm ~hppa ia64 ~mips ~ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="debug doc soundex tcl +threadsafe"
 RESTRICT="!tcl? ( test )"
 
@@ -36,10 +36,7 @@ pkg_setup() {
 	fi
 }
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	# note: this sandbox fix is no longer needed with sandbox-1.3+
 	epatch "${FILESDIR}"/sandbox-fix2.patch
 
@@ -48,7 +45,7 @@ src_unpack() {
 	epunt_cxx
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# Enable column metadata, bug #266651
 	append-cppflags -DSQLITE_ENABLE_COLUMN_METADATA
 
@@ -60,6 +57,9 @@ multilib-native_src_compile_internal() {
 		$(use_enable threadsafe) \
 		$(use_enable threadsafe cross-thread-connections) \
 		$(use_enable tcl)
+}
+
+multilib-native_src_compile_internal() {
 	emake TCLLIBDIR="/usr/$(get_libdir)/${P}" || die "emake failed"
 }
 

@@ -11,7 +11,7 @@ HOMEPAGE="http://www.sqlite.org/"
 DOC_BASE="$(get_version_component_range 1-3)"
 DOC_PV="$(replace_all_version_separators _ ${DOC_BASE})"
 SRC_URI="http://www.sqlite.org/${P}.tar.gz
-		doc? ( http://www.sqlite.org/${PN}_docs_${DOC_PV}.zip )"
+	doc? ( http://www.sqlite.org/${PN}_docs_${DOC_PV}.zip )"
 
 LICENSE="as-is"
 SLOT="3"
@@ -21,7 +21,7 @@ RESTRICT="!tcl? ( test )"
 
 RDEPEND="tcl? ( dev-lang/tcl )"
 DEPEND="${RDEPEND}
-		doc? ( app-arch/unzip )"
+	doc? ( app-arch/unzip )"
 
 pkg_setup() {
 	if has test ${FEATURES}; then
@@ -36,7 +36,7 @@ pkg_setup() {
 	fi
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# note: this sandbox fix is no longer needed with sandbox-1.3+
 	epatch "${FILESDIR}"/sandbox-fix2.patch
 
@@ -79,8 +79,8 @@ multilib-native_src_install_internal() {
 	doman sqlite3.1 || die "doman sqlite3.1 failed"
 
 	if use doc; then
-			# Naming scheme changes randomly between - and _ in releases
-			# http://www.sqlite.org/cvstrac/tktview?tn=3523
-			dohtml -r "${WORKDIR}"/${PN}-${DOC_PV}-docs/* || die "dohtml failed"
+		# Naming scheme changes randomly between - and _ in releases
+		# http://www.sqlite.org/cvstrac/tktview?tn=3523
+		dohtml -r "${WORKDIR}"/${PN}-${DOC_PV}-docs/* || die "dohtml failed"
 	fi
 }
