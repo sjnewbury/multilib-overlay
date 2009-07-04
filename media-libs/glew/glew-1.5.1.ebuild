@@ -40,6 +40,6 @@ multilib-native_src_install_internal() {
 	emake STRIP=true GLEW_DEST="${D}/usr" LIBDIR="${D}/usr/$(get_libdir)" \
 		M_ARCH="" install || die "emake install failed"
 
-	dodoc README.txt || die
-	dohtml doc/*.{html,css,png,jpg} || die
+	dodoc README.txt
+	dohtml doc/*.{html,css,png,jpg}
 }
