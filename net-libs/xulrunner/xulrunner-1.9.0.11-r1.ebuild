@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.0.11.ebuild,v 1.6 2009/06/26 00:23:12 rich0 Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.0.11-r1.ebuild,v 1.1 2009/06/29 16:42:04 nirbheek Exp $
 EAPI="2"
 WANT_AUTOCONF="2.1"
 
@@ -52,6 +52,9 @@ src_prepare() {
 	EPATCH_FORCE="yes" \
 	epatch "${WORKDIR}"/patch
 
+	# Bad mozilla-js.pc, causes stuff like bug 275318
+	epatch "${FILESDIR}/066-fix-includedir-mozilla-js.patch"
+	
 	eautoreconf || die "failed  running eautoreconf"
 
 	# We need to re-patch this because autoreconf overwrites it
