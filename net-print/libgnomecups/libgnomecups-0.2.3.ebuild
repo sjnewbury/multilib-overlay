@@ -23,7 +23,5 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog NEWS"
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}/enablenet.patch"
-	sed -i -e "/^CUPS_.*/s:cups-config:\$CUPS_CONFIG:g" configure.in
-	eautoreconf
+	epatch "${FILESDIR}"/enablenet.patch
 }
