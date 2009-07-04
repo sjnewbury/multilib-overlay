@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/lame/lame-3.98.2-r1.ebuild,v 1.6 2009/05/21 19:02:02 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/lame/lame-3.98.2-r1.ebuild,v 1.8 2009/06/25 17:30:18 armin76 Exp $
 
 EAPI="2"
 
@@ -16,7 +16,7 @@ SRC_URI="mirror://sourceforge/${PN}/${PN}-${MY_PV}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="alpha amd64 ~arm ~hppa ~ia64 ~mips ppc ppc64 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="debug mmx mp3rtp sndfile gtk"
 
 RDEPEND=">=sys-libs/ncurses-5.2[lib32?]
@@ -40,7 +40,7 @@ multilib-native_src_prepare_internal() {
 
 	# Patch gtk stuff, otherwise eautoreconf dies
 	epatch "${FILESDIR}"/${PN}-3.98-gtk-path.patch
-	
+
 	# Fix for ffmpeg-0.5, bug 265830
 	epatch "${FILESDIR}"/${PN}-3.98.2-ffmpeg-0.5.patch
 
