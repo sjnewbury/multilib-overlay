@@ -33,19 +33,15 @@ src_unpack() {
 	eautoreconf
 }
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	append-flags -D_FILE_OFFSET_BITS=64
 
 	econf $(use_enable sse) $(use_enable ogg)
-	emake || die "emake failed."
 }
 
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" docdir="/usr/share/doc/${PF}" \
 		install || die "emake install failed."
 
-	cd "${S}"
 	dodoc AUTHORS ChangeLog NEWS README* TODO
 }
