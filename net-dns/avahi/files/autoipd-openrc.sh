@@ -24,7 +24,7 @@ autoipd_start() {
 }
 
 autoipd_stop() {
-	avahi-autoipd --check --syslog "${IFACE}" || return 0
+	/usr/sbin/avahi-autoipd --check --syslog "${IFACE}" || return 0
 
 	ebegin "Stopping avahi-autoipd"
 	/usr/sbin/avahi-autoipd --kill --syslog "${IFACE}"
