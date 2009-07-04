@@ -34,3 +34,5 @@ net-print/cups prep_ml_binaries /usr/bin/cups-config
 sys-libs/ncurses prep_ml_binaries /usr/bin/ncurses5-config /usr/bin/ncursesw5-config 
 x11-libs/gtk+ prep_ml_binaries /usr/bin/gtk-config 
 x11-libs/libXft prep_ml_binaries /usr/bin/xft-config 
+x11-libs/pango /usr/bin/pango-querymodules
+
