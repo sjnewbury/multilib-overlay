@@ -70,7 +70,7 @@ multilib-native_src_install_internal() {
 	gnome2_src_install
 	rm "${D}/etc/pango/pango.modules"
 
-	/usr/bin/pango-querymodules
+	prep_ml_binaries /usr/bin/pango-querymodules
 }
 
 multilib-native_pkg_postinst_internal() {
