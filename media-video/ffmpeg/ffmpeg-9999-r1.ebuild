@@ -1,8 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999-r1.ebuild,v 1.1 2009/05/02 01:29:15 beandog Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999-r1.ebuild,v 1.7 2009/07/04 08:20:56 aballier Exp $
 
-EAPI="2"
+EAPI=2
 
 ESVN_REPO_URI="svn://svn.mplayerhq.hu/ffmpeg/trunk"
 
@@ -12,13 +12,14 @@ DESCRIPTION="Complete solution to record, convert and stream audio and video.
 Includes libavcodec. live svn"
 HOMEPAGE="http://ffmpeg.org/"
 
-LICENSE="GPL-2"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
 IUSE="+3dnow +3dnowext alsa altivec amr cpudetection custom-cflags debug dirac
 	  doc ieee1394 +encode faac faad gsm ipv6 jack +mmx +mmxext vorbis test
-	  theora threads x264 xvid network zlib sdl X mp3 oss schroedinger
-	  +hardcoded-tables bindist v4l v4l2 speex +ssse3 jpeg2k"
+	  theora threads x264 xvid network zlib sdl X mp3 opencore-amrnb
+	  opencore-amrwb oss schroedinger +hardcoded-tables bindist v4l v4l2
+	  speex +ssse3 jpeg2k"
 
 RDEPEND="sdl? ( >=media-libs/libsdl-1.2.10[lib32?] )
 	alsa? ( media-libs/alsa-lib[lib32?] )
@@ -80,13 +81,13 @@ multilib-native_src_configure_internal() {
 
 	# libavdevice options
 	use ieee1394 && myconf="${myconf} --enable-libdc1394"
-	# Demuxers
+	# Indevs
 	for i in v4l v4l2 alsa oss jack ; do
-		use $i || myconf="${myconf} --disable-demuxer=$i"
+		use $i || myconf="${myconf} --disable-indev=$i"
 	done
-	# Muxers
+	# Outdevs
 	for i in alsa oss ; do
-		use $i || myconf="${myconf} --disable-muxer=$i"
+		use $i || myconf="${myconf} --disable-outdev=$i"
 	done
 	use X && myconf="${myconf} --enable-x11grab"
 
@@ -94,10 +95,9 @@ multilib-native_src_configure_internal() {
 	use threads && myconf="${myconf} --enable-pthreads"
 
 	# Decoders
-	use faad && myconf="${myconf} --enable-libfaad"
-	use dirac && myconf="${myconf} --enable-libdirac"
-	use schroedinger && myconf="${myconf} --enable-libschroedinger"
-	use speex && myconf="${myconf} --enable-libspeex"
+	for i in faad dirac schroedinger speex opencore-amrnb opencore-amrwb ; do
+		use $i && myconf="${myconf} --enable-lib$i"
+	done
 	use jpeg2k && myconf="${myconf} --enable-libopenjpeg"
 	if use gsm; then
 		myconf="${myconf} --enable-libgsm"
@@ -113,7 +113,7 @@ multilib-native_src_configure_internal() {
 		use amr && myconf="${myconf} --enable-libamr-nb \
 									 --enable-libamr-wb"
 		use faac && myconf="${myconf} --enable-libfaac"
-		myconf="${myconf} --enable-nonfree"
+		{ use faac || use amr ; } && myconf="${myconf} --enable-nonfree"
 	fi
 
 	# CPU features
@@ -140,7 +140,7 @@ multilib-native_src_configure_internal() {
 	done
 
 	# Mandatory configuration
-	myconf="${myconf} --enable-gpl --enable-postproc \
+	myconf="${myconf} --enable-gpl --enable-version3 --enable-postproc \
 			--enable-avfilter --enable-avfilter-lavf \
 			--disable-stripping"
 
@@ -188,15 +188,9 @@ multilib-native_src_install_internal() {
 	dodoc doc/*
 }
 
-# Never die for now...
 src_test() {
-	for t in codectest libavtest seektest ; do
-		emake ${t} || ewarn "Some tests in ${t} failed"
+	for t in codectest lavftest seektest ; do
+		LD_LIBRARY_PATH="${S}/libpostproc:${S}/libswscale:${S}/libavcodec:${S}/libavdevice:${S}/libavfilter:${S}/libavformat:${S}/libavutil" \
+			emake ${t} || die "Some tests in ${t} failed"
 	done
-}
-
-pkg_postinst() {
-	ewarn "ffmpeg may have had ABI changes, if ffmpeg based programs"
-	ewarn "like xine-lib or vlc stop working as expected please"
-	ewarn "rebuild them."
 }
