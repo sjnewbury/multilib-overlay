@@ -1,7 +1,7 @@
 !<=x11-base/xorg-x11-6.9 !<=x11-proto/xf86driproto-2.0.3 app-admin/eselect-opengl dev-libs/expat >=x11-libs/libdrm-2.4.9 x11-libs/libICE x11-libs/libX11[xcb?] x11-libs/libXdamage x11-libs/libXext x11-libs/libXi x11-libs/libXmu x11-libs/libXxf86vm motif? ( x11-libs/openmotif ) doc? ( app-doc/opengl-manpages ) dev-util/pkgconfig x11-misc/makedepend >=x11-proto/dri2proto-1.99.3 >=x11-proto/glproto-1.4.8 x11-proto/inputproto x11-proto/xextproto x11-proto/xf86driproto x11-proto/xf86vidmodeproto =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
 !<=x11-base/xorg-x11-6.9 !<=x11-proto/xf86driproto-2.0.3 app-admin/eselect-opengl dev-libs/expat >=x11-libs/libdrm-2.4.9 x11-libs/libICE x11-libs/libX11[xcb?] x11-libs/libXdamage x11-libs/libXext x11-libs/libXi x11-libs/libXmu x11-libs/libXxf86vm motif? ( x11-libs/openmotif ) doc? ( app-doc/opengl-manpages ) sys-apps/abi-wrapper
 0
-http://www.mesa3d.org/beta/MesaLib-7.5-rc2.tar.gz
+http://www.mesa3d.org/beta/MesaLib-7.5-rc4.tar.gz
 
 http://mesa3d.sourceforge.net/
 LGPL-2
