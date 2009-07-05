@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/gst-plugins-base/gst-plugins-base-0.10.20.ebuild,v 1.9 2009/04/05 17:42:47 armin76 Exp $
 
-EAPI=2
+EAPI="2"
 
 # order is important, gnome2 after gst-plugins
 inherit gst-plugins-base gst-plugins10 gnome2 libtool flag-o-matic multilib-native
@@ -24,10 +24,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS README RELEASE"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	# Needed for sane .so versioning on Gentoo/FreeBSD
 	elibtoolize
 }
@@ -40,11 +37,6 @@ multilib-native_src_configure_internal() {
 	gst-plugins-base_src_configure \
 		$(use_enable nls) \
 		$(use_enable debug)
-}
-
-multilib-native_src_compile_internal() {
-	#this is needed because original ebuild do not call gst-plugins-base_src_compile 
-	emake || die "emake failed"
 }
 
 multilib-native_src_install_internal() {

@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/gst-plugins-base/gst-plugins-base-0.10.22.ebuild,v 1.5 2009/05/15 05:14:22 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/gst-plugins-base/gst-plugins-base-0.10.22.ebuild,v 1.9 2009/07/01 16:16:40 armin76 Exp $
 
 EAPI="2"
 
@@ -12,7 +12,7 @@ HOMEPAGE="http://gstreamer.sourceforge.net"
 SRC_URI="http://gstreamer.freedesktop.org/src/${PN}/${P}.tar.bz2"
 
 LICENSE="GPL-2"
-KEYWORDS="alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="nls"
 
 RDEPEND=">=dev-libs/glib-2.8[lib32?]
@@ -25,9 +25,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS README RELEASE"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-CVE-2009-0586.patch
 	elibtoolize
 }
@@ -39,11 +37,6 @@ multilib-native_src_configure_internal() {
 
 	gst-plugins-base_src_configure \
 		$(use_enable nls)
-}
-
-multilib-native_src_compile_internal() {
-	#this is needed because original ebuild do not call gst-plugins-base_src_compile 
-	emake || die "emake failed"
 }
 
 multilib-native_src_install_internal() {
