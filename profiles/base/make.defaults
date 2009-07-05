@@ -14,12 +14,15 @@ NO-AUTO-FLAG="
 	app-vim/pam-syntax
 	dev-java/java-config
 	dev-lang/swig
+        dev-lang/yasm
 	dev-perl/Locale-gettext
+        dev-util/cmake
 	dev-util/gtk-doc-am
 	dev-util/intltool
 	dev-util/pkgconfig
 	gnome-base/gnome-common
 	gnome-base/gnome-mime-data
+        kde-base/automoc
 	media-fonts/gnu-gs-fonts-std
 	media-sound/alsa-headers
 	net-misc/openssh
@@ -41,6 +44,7 @@ NO-AUTO-FLAG="
 	sys-devel/gcc
 	sys-devel/gnuconfig
 	sys-devel/m4
+        sys-devel/make
 	sys-libs/glibc
 	sys-kernel/linux-headers
 	virtual/libc
