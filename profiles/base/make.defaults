@@ -9,6 +9,7 @@ NO-AUTO-FLAG="
 	app-arch/zip
 	app-misc/ca-certificates
 	app-shells/bash
+	app-text/iso-codes
 	app-vim/gtk-syntax
 	app-vim/pam-syntax
 	dev-java/java-config
@@ -54,4 +55,4 @@ NO-AUTO-FLAG="
 	x11-misc/util-macros
 	x11-misc/xdg-utils
 	x11-themes/gnome-icon-theme
-	"
+"
