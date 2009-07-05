@@ -16,6 +16,7 @@ NO-AUTO-FLAG="
 	dev-lang/swig
         dev-lang/yasm
 	dev-perl/Locale-gettext
+	dev-python/sip
         dev-util/cmake
 	dev-util/gtk-doc-am
 	dev-util/intltool
