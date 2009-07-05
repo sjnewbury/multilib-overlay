@@ -28,6 +28,7 @@ NO-AUTO-FLAG="
 	sys-apps/abi-wrapper
 	sys-apps/baselayout
 	sys-apps/diffutils
+	sys-apps/findutils
 	sys-apps/sed
 	sys-apps/xinetd
 	sys-auth/pambase
