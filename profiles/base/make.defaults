@@ -39,7 +39,6 @@ NO-AUTO-FLAG="
 	sys-devel/gcc
 	sys-devel/gnuconfig
 	sys-devel/m4
-	sys-libs/e2fsprogs-libs
 	sys-libs/glibc
 	sys-kernel/linux-headers
 	virtual/libc
