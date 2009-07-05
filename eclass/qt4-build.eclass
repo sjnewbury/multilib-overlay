@@ -1,6 +1,6 @@
 # Copyright 2007-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.40 2009/06/27 18:55:02 yngwin Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.41 2009/06/28 15:24:42 hwoarang Exp $
 
 # @ECLASS: qt4-build.eclass
 # @MAINTAINER:
@@ -84,22 +84,6 @@ qt4-build_pkg_setup() {
 		# Check USE requirements
 		qt4-build_check_use
 	fi
-	# Set up installation directories
-	QTBASEDIR=/usr/$(get_libdir)/qt4
-	QTPREFIXDIR=/usr
-	QTBINDIR=/usr/bin
-	QTLIBDIR=/usr/$(get_libdir)/qt4
-	QTPCDIR=/usr/$(get_libdir)/pkgconfig
-	QTDATADIR=/usr/share/qt4
-	QTDOCDIR=/usr/share/doc/qt-${PV}
-	QTHEADERDIR=/usr/include/qt4
-	QTPLUGINDIR=${QTLIBDIR}/plugins
-	QTSYSCONFDIR=/etc/qt4
-	QTTRANSDIR=${QTDATADIR}/translations
-	QTEXAMPLESDIR=${QTDATADIR}/examples
-	QTDEMOSDIR=${QTDATADIR}/demos
-
-	PLATFORM=$(qt_mkspecs_dir)
 
 	PATH="${S}/bin:${PATH}"
 	LD_LIBRARY_PATH="${S}/lib:${LD_LIBRARY_PATH}"
@@ -125,6 +109,7 @@ qt4-build_pkg_setup() {
 # @DESCRIPTION:
 # Unpacks the sources
 qt4-build_src_unpack() {
+	setqtenv
 	local target targets licenses
 	if version_is_at_least 4.5 ${PV} ; then
 		licenses="LICENSE.GPL3 LICENSE.LGPL"
@@ -167,6 +152,7 @@ qt4-build_src_unpack() {
 # Prepare the sources before the configure phase. Strip CFLAGS if necessary, and fix
 # source files in order to respect CFLAGS/CXXFLAGS/LDFLAGS specified on /etc/make.conf.
 qt4-build_src_prepare() {
+	setqtenv
 	cd "${S}"
 
 	if [[ ${PN} != qt-core ]]; then
@@ -209,7 +195,7 @@ qt4-build_src_prepare() {
 # @DESCRIPTION:
 # Default configure phase
 qt4-build_src_configure() {
-
+	setqtenv
 	myconf="$(standard_configure_options) ${myconf}"
 
 	echo ./configure ${myconf}
@@ -219,6 +205,7 @@ qt4-build_src_configure() {
 # @FUNCTION: qt4-build_src_compile
 # @DESCRIPTION: Actual compile phase
 qt4-build_src_compile() {
+	setqtenv
 	# Be backwards compatible for now
 	if [[ $EAPI != 2 ]]; then
 		qt4-build_src_configure
@@ -231,15 +218,33 @@ qt4-build_src_compile() {
 # @DESCRIPTION:
 # Perform the actual installation including some library fixes.
 qt4-build_src_install() {
+	setqtenv
 	install_directories "${QT4_TARGET_DIRECTORIES}"
 	install_qconfigs
 	fix_library_files
-	if [[ $(number_abis) -gt 1 ]] ; then
-		if ! is_final_abi; then
-			mv "${D}"/${QTDATADIR}/mkspecs "${D}"/${QTDATADIR}/mkspecs-${ABI}
-		fi
-	fi
-	prep_ml_includes
+}
+
+# @FUNCTION: setqtenv
+setqtenv() {
+	# Set up installation directories
+	QTBASEDIR=/usr/$(get_libdir)/qt4
+	QTPREFIXDIR=/usr
+	QTBINDIR=/usr/bin
+	QTLIBDIR=/usr/$(get_libdir)/qt4
+	QMAKE_LIBDIR_QT=${QTLIBDIR}
+	QTPCDIR=/usr/$(get_libdir)/pkgconfig
+	QTDATADIR=/usr/share/qt4
+	QTDOCDIR=/usr/share/doc/qt-${PV}
+	QTHEADERDIR=/usr/include/qt4
+	QTPLUGINDIR=${QTLIBDIR}/plugins
+	QTSYSCONFDIR=/etc/qt4
+	QTTRANSDIR=${QTDATADIR}/translations
+	QTEXAMPLESDIR=${QTDATADIR}/examples
+	QTDEMOSDIR=${QTDATADIR}/demos
+	QT_INSTALL_PREFIX=/usr/$(get_libdir)/qt4
+	PLATFORM=$(qt_mkspecs_dir)
+
+	unset QMAKESPEC
 }
 
 # @FUNCTION: standard_configure_options
@@ -307,6 +312,7 @@ build_directories() {
 	local dirs="$@"
 	for x in ${dirs}; do
 		cd "${S}"/${x}
+		sed -i -e "s:\$\$\[QT_INSTALL_LIBS\]:/usr/$(get_libdir)/qt4:g" "${S}"/{mkspecs/common/linux.conf,src/q{t_install,base}.pri} || die
 		"${S}"/bin/qmake "LIBS+=-L${QTLIBDIR}" "CONFIG+=nostrip" || die "qmake failed"
 		emake || die "emake failed"
 	done
@@ -442,7 +448,7 @@ qt4-build_pkg_postinst() {
 	ewarn "make sure all your Qt4 packages are up-to-date and built with the same"
 	ewarn "configuration."
 	ewarn
-	ewarn "For more information, see http://doc.trolltech.com/4.4/plugins-howto.html"
+	ewarn "For more information, see http://doc.trolltech.com/${PV%.*}/plugins-howto.html"
 	echo
 }
 
@@ -622,6 +628,9 @@ qt_mkspecs_dir() {
 		spec="${spec}-icc"
 	else
 		die "Unknown compiler ${CXX}."
+	fi
+	if [[ -n "${LIBDIR/lib}" ]]; then
+		spec="${spec}-${LIBDIR/lib}"
 	fi
 
 	echo "${spec}"
