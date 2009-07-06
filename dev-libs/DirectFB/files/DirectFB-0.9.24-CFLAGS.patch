@@ -1,0 +1,26 @@
+--- configure
++++ configure
+@@ -21384,7 +21384,6 @@
+   CFLAGS=
+ fi
+ 
+-CFLAGS="-O3 -ffast-math -pipe $CFLAGS"
+ 
+ DFB_INTERNAL_CFLAGS="-D_GNU_SOURCE $DFB_INTERNAL_CFLAGS"
+ 
+@@ -21903,7 +21902,6 @@
+   enable_debug=no
+ fi;
+ if test "$enable_debug" = "yes"; then
+-    CFLAGS="$CFLAGS -g3 -fno-inline"
+     DIRECT_BUILD_DEBUG=1
+ else
+     DIRECT_BUILD_DEBUG=0
+@@ -21929,7 +21927,6 @@
+   enable_trace=no
+ fi;
+ if test "$enable_trace" = "yes"; then
+-    DFB_INTERNAL_CFLAGS="$DFB_INTERNAL_CFLAGS -finstrument-functions"
+     DIRECT_BUILD_TRACE=1
+ else
+     DIRECT_BUILD_TRACE=0
