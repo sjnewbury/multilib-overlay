@@ -542,9 +542,6 @@ multilib-native_check_inherited_funcs() {
 	for func in ${eclasses}; do
 		if [[ -n $(declare -f ${func}_${1}) ]]; then
 			declared_func="${func}_${1}"
-			# last inherited eclass is listed at the beginning of
-			# INHERITED so we can break here
-			break 
 		fi
 	done
 
