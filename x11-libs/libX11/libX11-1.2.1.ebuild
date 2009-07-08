@@ -18,7 +18,7 @@ RDEPEND=">=x11-libs/xtrans-1.2.3
 	x11-proto/kbproto
 	>=x11-proto/xproto-7.0.15
 	xcb? ( >=x11-libs/libxcb-1.2[lib32?] )
-	!xcb (
+	!xcb? (
 		x11-libs/libXau[lib32?]
 		x11-libs/libXdmcp[lib32?]
 	)"
