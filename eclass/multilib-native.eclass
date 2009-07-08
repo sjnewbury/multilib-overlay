@@ -537,7 +537,7 @@ multilib-native_check_inherited_funcs() {
 	local declared_func=""
 	local eclasses=""
 	if [[ -f "${T}"/eclass-debug.log ]]; then
-		eclasses=i"$(grep inherit "${T}"/eclass-debug.log | cut -d ' ' -f 2)"
+		eclasses="$(grep inherit "${T}"/eclass-debug.log | cut -d ' ' -f 2)"
 	else
 		ewarn "you are using a packet manager that do not provide "${T}"/eclass-debug.log"
 		ewarn "join #gentoo-multilib-overlay on freenode to help finding another way for you"
