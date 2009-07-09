@@ -1,6 +1,6 @@
 # Copyright 2007-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.40 2009/06/27 18:55:02 yngwin Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.41 2009/06/28 15:24:42 hwoarang Exp $
 
 # @ECLASS: qt4-build.eclass
 # @MAINTAINER:
@@ -442,7 +442,7 @@ qt4-build_pkg_postinst() {
 	ewarn "make sure all your Qt4 packages are up-to-date and built with the same"
 	ewarn "configuration."
 	ewarn
-	ewarn "For more information, see http://doc.trolltech.com/4.4/plugins-howto.html"
+	ewarn "For more information, see http://doc.trolltech.com/${PV%.*}/plugins-howto.html"
 	echo
 }
 
