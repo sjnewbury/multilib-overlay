@@ -2,11 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/qt/qt-3.3.8b-r1.ebuild,v 1.7 2009/01/17 16:41:01 nixnut Exp $
 
-EAPI=2
-
 # *** Please remember to update qt3.eclass when revbumping this ***
 
-inherit eutils flag-o-matic toolchain-funcs multilib-native
+inherit eutils flag-o-matic toolchain-funcs
 
 SRCTYPE="free"
 DESCRIPTION="The Qt toolkit is a comprehensive C++ application development framework."
@@ -24,23 +22,23 @@ KEYWORDS="alpha amd64 hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="cups debug doc examples firebird ipv6 mysql nas nis odbc opengl postgres sqlite xinerama immqt immqt-bc"
 
 RDEPEND="
-	media-libs/jpeg[lib32?]
-	>=media-libs/freetype-2[lib32?]
-	>=media-libs/libmng-1.0.9[lib32?]
-	media-libs/libpng[lib32?]
-	sys-libs/zlib[lib32?]
-	x11-libs/libXft[lib32?]
-	x11-libs/libXcursor[lib32?]
-	x11-libs/libXi[lib32?]
-	x11-libs/libXrandr[lib32?]
-	x11-libs/libSM[lib32?]
-	cups? ( net-print/cups[lib32?] )
+	media-libs/jpeg
+	>=media-libs/freetype-2
+	>=media-libs/libmng-1.0.9
+	media-libs/libpng
+	sys-libs/zlib
+	x11-libs/libXft
+	x11-libs/libXcursor
+	x11-libs/libXi
+	x11-libs/libXrandr
+	x11-libs/libSM
+	cups? ( net-print/cups )
 	firebird? ( dev-db/firebird )
-	mysql? ( virtual/mysql[lib32?] )
-	nas? ( >=media-libs/nas-1.5[lib32?] )
-	opengl? ( virtual/opengl[lib32?] virtual/glu[lib32?] )
-	postgres? ( virtual/postgresql-base[lib32?] )
-	xinerama? ( x11-libs/libXinerama[lib32?] )"
+	mysql? ( virtual/mysql )
+	nas? ( >=media-libs/nas-1.5 )
+	opengl? ( virtual/opengl virtual/glu )
+	postgres? ( virtual/postgresql-base )
+	xinerama? ( x11-libs/libXinerama )"
 DEPEND="${RDEPEND}
 	x11-proto/inputproto
 	x11-proto/xextproto
@@ -99,7 +97,8 @@ pkg_setup() {
 	export PLATFORM="${PLATNAME}-${PLATCXX}"
 }
 
-multilib-native_src_prepare_internal() {
+src_unpack() {
+	unpack ${A}
 	cd "${S}"
 
 	sed -i -e 's:read acceptance:acceptance=yes:' configure
@@ -174,9 +173,10 @@ multilib-native_src_prepare_internal() {
 	sed -i -e "s:CXXFLAGS.*=:CXXFLAGS=${CXXFLAGS} :" \
 		   -e "s:LFLAGS.*=:LFLAGS=${LDFLAGS} :" \
 		"${S}"/qmake/Makefile.unix || die
+	epatch "${FILESDIR}"/freetype-multilib-header.patch
 }
 
-multilib-native_src_configure_internal() {
+src_compile() {
 	export SYSCONF="${D}${QTBASE}"/etc/settings
 
 	# Let's just allow writing to these directories during Qt emerge
@@ -198,7 +198,7 @@ multilib-native_src_configure_internal() {
 	use debug	&& myconf+=" -debug" || myconf+=" -release -no-g++-exceptions"
 	use xinerama    && myconf+=" -xinerama" || myconf+=" -no-xinerama"
 
-	myconf="${myconf} -system-zlib -qt-gif -DQT_CLEAN_NAMESPACE"
+	myconf="${myconf} -system-zlib -qt-gif"
 
 	use ipv6        && myconf+=" -ipv6" || myconf+=" -no-ipv6"
 	use immqt-bc	&& myconf+=" -inputmethod"
@@ -213,9 +213,7 @@ multilib-native_src_configure_internal() {
 		-system-libpng -xft -platform ${PLATFORM} -xplatform \
 		${PLATFORM} -xrender -prefix ${QTBASE} -libdir ${QTBASE}/$(get_libdir) \
 		-fast -no-sql-odbc ${myconf} -dlopen-opengl || die
-}
 
-multilib-native_src_compile_internal() {
 	emake src-qmake src-moc sub-src || die
 
 	export DYLD_LIBRARY_PATH="${S}/lib:/usr/X11R6/lib:${DYLD_LIBRARY_PATH}"
@@ -239,7 +237,7 @@ multilib-native_src_compile_internal() {
 
 }
 
-multilib-native_src_install_internal() {
+src_install() {
 	# binaries
 	into ${QTBASE}
 	dobin bin/*
@@ -277,16 +275,14 @@ multilib-native_src_install_internal() {
 		doexe ${x}
 	done
 
+	# Past this point just needs to be done once
+	is_final_abi || return 0
+
 	# includes
 	cd "${S}"
 	dodir ${QTBASE}/include/private
 	cp include/*\.h "${D}"/${QTBASE}/include/
 	cp include/private/*\.h "${D}"/${QTBASE}/include/private/
-
-	prep_ml_includes ${QTBASE}/include
-
-	# Past this point just needs to be done once
-	is_final_abi || return 0
 
 	# prl files
 	sed -i -e "s:${S}:${QTBASE}:g" "${S}"/lib/*.prl
@@ -294,7 +290,7 @@ multilib-native_src_install_internal() {
 	doins "${S}"/lib/*.prl
 
 	# pkg-config file
-	insinto ${QTBASE}/$(get_libdir)/pkgconfig
+	insinto ${QTBASE}/$get_libdir)/pkgconfig
 	doins "${S}"/lib/*.pc
 
 	# List all the multilib libdirs
