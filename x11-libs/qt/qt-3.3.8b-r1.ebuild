@@ -290,7 +290,7 @@ src_install() {
 	doins "${S}"/lib/*.prl
 
 	# pkg-config file
-	insinto ${QTBASE}/$get_libdir)/pkgconfig
+	insinto ${QTBASE}/$(get_libdir)/pkgconfig
 	doins "${S}"/lib/*.pc
 
 	# List all the multilib libdirs
