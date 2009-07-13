@@ -30,22 +30,15 @@ esac
 # @DESCRIPTION:
 # This helps make it possible to add extensions to python slots.
 # Normally only a -py21- ebuild would set PYTHON_SLOT_VERSION.
-if [[ $(number_abis) -gt 1 ]] ; then
-	if [ "${PYTHON_SLOT_VERSION}" = "2.1" ] ; then
-		DEPEND="=dev-lang/python-2.1*[lib32?]"
-	elif [ "${PYTHON_SLOT_VERSION}" = "2.3" ] ; then
-		DEPEND="=dev-lang/python-2.3*[lib32?]"
-	else
-		DEPEND="virtual/python[lib32?]"
-	fi
+if [ "${PYTHON_SLOT_VERSION}" = "2.1" ] ; then
+	DEPEND="=dev-lang/python-2.1*"
+	python="python2.1"
+elif [ "${PYTHON_SLOT_VERSION}" = "2.3" ] ; then
+	DEPEND="=dev-lang/python-2.3*"
+	python="python2.3"
 else
-	if [ "${PYTHON_SLOT_VERSION}" = "2.1" ] ; then
-		DEPEND="=dev-lang/python-2.1*"
-	elif [ "${PYTHON_SLOT_VERSION}" = "2.3" ] ; then
-		DEPEND="=dev-lang/python-2.3*"
-	else
-		DEPEND="virtual/python"
-	fi
+	DEPEND="virtual/python"
+	python="python"
 fi
 
 # @ECLASS-VARIABLE: DOCS
@@ -76,23 +69,6 @@ distutils_src_prepare() {
 # @DESCRIPTION:
 # The distutils src_compile function, this function is exported
 distutils_src_compile() {
-	if is_final_abi || (! has_multilib_profile); then
-		if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
-			python=python${PYTHON_SLOT_VERSION}
-		else
-			python=python
-		fi
-	else
-		[[ -z $(get_abi_var SETARCH_ARCH ${ABI}) ]] && die "SETARCH_ARCH_${ABI} is missing in your portage profile"
-		if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
-			python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) python${PYTHON_SLOT_VERSION}-${ABI}"
-		elif [[ -n "${PYTHON}" ]]; then
-			python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) ${PYTHON}"
-		else
-			python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) python"
-		fi	
-	fi
-	einfo Using ${python}
 	${python} setup.py build "$@" || die "compilation failed"
 }
 
@@ -102,20 +78,17 @@ distutils_src_compile() {
 # It also installs the "standard docs" (CHANGELOG, Change*, KNOWN_BUGS, MAINTAINERS,
 # PKG-INFO, CONTRIBUTORS, TODO, NEWS, MANIFEST*, README*, and AUTHORS)
 distutils_src_install() {
-	if is_final_abi || (! has_multilib_profile); then
-		if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
-			python=python${PYTHON_SLOT_VERSION}
-		else
-			python=python
-		fi
+	if [[ ${ABI} != ${DEFAULT_ABI} ]]; then
+		python="setarch $(get_abi_var SETARCH_ARCH ${ABI})"
 	else
-		if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
-			python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) python${PYTHON_SLOT_VERSION}-${ABI}"
-		elif [[ -n "${PYTHON}" ]]; then
-			python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) ${PYTHON}"
-		else
-			python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) python"
-		fi	
+		python=""
+	fi
+	if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
+		python="${python} python${PYTHON_SLOT_VERSION}"
+	elif [[ -n "${PYTHON}" ]]; then
+		python="${python} ${PYTHON}"
+	else
+		python="${python} python"
 	fi
 	einfo Using ${python}
 
