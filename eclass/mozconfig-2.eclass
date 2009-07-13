@@ -6,7 +6,7 @@
 
 inherit multilib flag-o-matic mozcoreconf
 
-IUSE="debug gnome ipv6 xinerama xprint"
+IUSE="debug gnome ipv6 xinerama"
 
 RDEPEND="x11-libs/libXrender[lib32?]
 	x11-libs/libXt[lib32?]
@@ -29,13 +29,11 @@ RDEPEND="x11-libs/libXrender[lib32?]
 
 
 DEPEND="${RDEPEND}
-	xinerama? ( x11-proto/xineramaproto )
-	xprint? ( x11-proto/printproto )"
+	xinerama? ( x11-proto/xineramaproto )"
 
 mozconfig_config() {
 	mozconfig_use_enable ipv6
 	mozconfig_use_enable xinerama
-	mozconfig_use_enable xprint
 
 	# We use --enable-pango to do truetype fonts, and currently pango
 	# is required for it to build

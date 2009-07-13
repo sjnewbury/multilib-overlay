@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/e2fsprogs/e2fsprogs-1.41.3-r1.ebuild,v 1.8 2009/03/17 10:23:45 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/e2fsprogs/e2fsprogs-1.41.3-r1.ebuild,v 1.9 2009/06/20 11:59:03 vapier Exp $
 
 EAPI="2"
 
@@ -19,6 +19,7 @@ RDEPEND="~sys-libs/${PN}-libs-${PV}[lib32?]
 	nls? ( virtual/libintl )"
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext[lib32?] )
+	dev-util/pkgconfig
 	sys-apps/texinfo"
 
 pkg_setup() {
@@ -30,7 +31,6 @@ pkg_setup() {
 }
 
 multilib-native_src_prepare_internal() {
-	cd "${S}"
 	epatch "${FILESDIR}"/${PN}-1.38-tests-locale.patch #99766
 	epatch "${FILESDIR}"/${PN}-1.41.2-makefile.patch
 	epatch "${FILESDIR}"/${PN}-1.40-fbsd.patch

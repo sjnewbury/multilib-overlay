@@ -64,6 +64,12 @@ EMULTILIB_SOURCE_TOPDIR=""
 # EMULTILIB_RELATIVE_BUILD_DIR=""
 EMULTILIB_RELATIVE_BUILD_DIR=""
 
+# @VARIABLE: EMULTILIB_INHERITED
+# @DESCRIPTION:
+# Holds a list of inherited eclasses
+# is this var is onlky used in multilib-native_check_inherited_funcs
+EMULTILIB_INHERITED=""
+
 # -----------------------------------------------------------------------------
 
 # @FUNCTION: multilib-native_pkg_setup
@@ -535,12 +541,24 @@ multilib-native_check_inherited_funcs() {
 	# Ignore the ones we inherit ourselves, base doesn't matter, as we default
 	# on it
 	local declared_func=""
-	local eclasses=""
-	eclasses="${INHERITED/base/}"
-	eclasses="${eclasses/multilib-native/}"
+	if [[ -z ${EMULTILIB_INHERITED} ]]; then
+		if [[ -f "${T}"/eclass-debug.log ]]; then
+			EMULTILIB_INHERITED="$(grep EXPORT_FUNCTIONS "${T}"/eclass-debug.log | cut -d ' ' -f 4 | cut -d '_' -f 1)"
+		else
+			ewarn "you are using a packet manager that do not provide "${T}"/eclass-debug.log"
+			ewarn "join #gentoo-multilib-overlay on freenode to help finding another way for you"
+			ewarn "falling back to old behaviour"
+			EMULTILIB_INHERITED="${INHERITED}"
+		fi
+		EMULTILIB_INHERITED="${EMULTILIB_INHERITED//base/}"
+		EMULTILIB_INHERITED="${EMULTILIB_INHERITED//multilib-native/}"
+	fi
 
-	for func in ${eclasses}; do
+	multilib_debug EMULTILIB_INHERITED ${EMULTILIB_INHERITED}
+
+	for func in ${EMULTILIB_INHERITED}; do
 		if [[ -n $(declare -f ${func}_${1}) ]]; then
+			multilib_debug declared_func "${declared_func}"
 			declared_func="${func}_${1}"
 		fi
 	done

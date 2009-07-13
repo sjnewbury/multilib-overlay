@@ -22,10 +22,6 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS"
 
-src_unpack() {
-	unpack ${A}
-	cd ${S}
-	epatch "${FILESDIR}/enablenet.patch"
-	sed -i -e "/^CUPS_.*/s:cups-config:\$CUPS_CONFIG:g" configure.in
-	eautoreconf
+multilib-native_src_prepare_internal() {
+	epatch "${FILESDIR}"/enablenet.patch
 }

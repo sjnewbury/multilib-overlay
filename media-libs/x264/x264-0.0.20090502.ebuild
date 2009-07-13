@@ -1,9 +1,8 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/x264/x264-0.0.20081218.ebuild,v 1.1 2008/12/19 13:38:45 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/x264/x264-0.0.20090502.ebuild,v 1.1 2009/05/03 20:08:47 aballier Exp $
 
 EAPI="1"
-MULTILIB_IN_SOURCE_BUILD="yes"
 inherit multilib eutils toolchain-funcs versionator multilib-native
 
 MY_P="x264-snapshot-$(get_version_component_range 3)-2245"

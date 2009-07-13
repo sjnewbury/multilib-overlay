@@ -1,0 +1,12 @@
+diff -u -r server/dia/auutil.c server-new/dia/auutil.c
+--- server/dia/auutil.c	1999-09-05 04:43:13.000000000 +0200
++++ server-new/dia/auutil.c	2005-05-01 15:55:29.317370904 +0200
+@@ -173,7 +173,7 @@
+ AuCreateResourceTypes()
+ {
+     void            AuFreeComponent();
+-    static void     freeFlow();
++    void     freeFlow();
+ 
+     auComponentType = CreateNewResourceType(AuFreeComponent);
+     auFlowType = CreateNewResourceType(freeFlow);

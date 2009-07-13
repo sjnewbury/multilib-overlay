@@ -6,7 +6,7 @@ EAPI=2
 
 inherit eutils flag-o-matic toolchain-funcs multilib multilib-native
 
-DESCRIPTION="Standard EXT2 and EXT3 filesystem utilities"
+DESCRIPTION="Standard EXT2/EXT3/EXT4 filesystem utilities"
 HOMEPAGE="http://e2fsprogs.sourceforge.net/"
 SRC_URI="mirror://sourceforge/e2fsprogs/${P}.tar.gz"
 
@@ -19,6 +19,7 @@ RDEPEND="~sys-libs/${PN}-libs-${PV}[lib32?]
 	nls? ( virtual/libintl )"
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext[lib32?] )
+	dev-util/pkgconfig
 	sys-apps/texinfo"
 
 pkg_setup() {

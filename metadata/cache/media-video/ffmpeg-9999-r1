@@ -4,11 +4,11 @@ sdl? ( >=media-libs/libsdl-1.2.10[lib32?] ) alsa? ( media-libs/alsa-lib[lib32?] 
 
 
 http://ffmpeg.org/
-GPL-2
+GPL-3
 Complete solution to record, convert and stream audio and video. Includes libavcodec. live svn
 
 base eutils flag-o-matic multilib multilib-native portability subversion toolchain-funcs
-+3dnow +3dnowext alsa altivec amr cpudetection custom-cflags debug dirac doc ieee1394 +encode faac faad gsm ipv6 jack +mmx +mmxext vorbis test theora threads x264 xvid network zlib sdl X mp3 oss schroedinger +hardcoded-tables bindist v4l v4l2 speex +ssse3 jpeg2k lib32
++3dnow +3dnowext alsa altivec amr cpudetection custom-cflags debug dirac doc ieee1394 +encode faac faad gsm ipv6 jack +mmx +mmxext vorbis test theora threads x264 xvid network zlib sdl X mp3 opencore-amrnb opencore-amrwb oss schroedinger +hardcoded-tables bindist v4l v4l2 speex +ssse3 jpeg2k lib32
 
 
 

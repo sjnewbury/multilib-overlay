@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/hal/hal-0.5.12_rc1-r6.ebuild,v 1.1 2009/06/01 22:51:46 dang Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/hal/hal-0.5.12_rc1-r6.ebuild,v 1.2 2009/06/07 22:59:48 dang Exp $
 
 EAPI="2"
 
@@ -282,7 +282,9 @@ pkg_postinst() {
 	elog "scripts, this should be done like this :"
 	elog "\`rc-update add hald default\`"
 	echo
-	elog "Looking for automounting support? Add yourself to the plugdev group"
+	elog "Access to hal is not protected by either policykit or the plugdev group."
+	elog "If you have problems discovering/configuring hardware, try adding"
+	elog "yourself to plugdev."
 	echo
 	elog "IF you have additional applications which consume ACPI events, you"
 	elog "should consider installing acpid to allow applications to share ACPI"

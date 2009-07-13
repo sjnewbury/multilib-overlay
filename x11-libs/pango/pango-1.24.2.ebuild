@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools eutils gnome2 multilib multilib-native
+inherit eutils gnome2 multilib multilib-native
 
 DESCRIPTION="Text rendering and layout library"
 HOMEPAGE="http://www.pango.org/"
@@ -63,16 +63,14 @@ multilib-native_src_configure_internal() {
 		myconf="--enable-debug=yes"
 	fi
 
-	if use lib32 && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
-		myconf="${myconf} --program-suffix=32"
-	fi
-
 	econf $(use_with X x) ${myconf} || die
 }
 
 multilib-native_src_install_internal() {
 	gnome2_src_install
 	rm "${D}/etc/pango/pango.modules"
+
+	prep_ml_binaries /usr/bin/pango-querymodules
 }
 
 multilib-native_pkg_postinst_internal() {
@@ -89,10 +87,6 @@ multilib-native_pkg_postinst_internal() {
 
 		mkdir -p ${PANGO_CONFDIR}
 
-		if use lib32 && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
-			pango-querymodules32 > ${PANGO_CONFDIR}/pango.modules
-		else
-			pango-querymodules > ${PANGO_CONFDIR}/pango.modules
-		fi
+		pango-querymodules > ${PANGO_CONFDIR}/pango.modules
 	fi
 }
