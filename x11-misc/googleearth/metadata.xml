@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<herd>no-herd</herd>
+  <maintainer>
+    <email>caster@gentoo.org</email>
+    <name>Vlastimil Babka</name>
+    <description>Assign bugs to me for now</description>
+  </maintainer>
+  <maintainer>
+    <email>genstef@gentoo.org</email>
+    <name>Stefan Schweizer</name>
+    <description>Feel free to change what you want</description>
+  </maintainer>
+</pkgmetadata>
