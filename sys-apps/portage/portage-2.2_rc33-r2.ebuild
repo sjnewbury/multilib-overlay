@@ -121,7 +121,7 @@ src_install() {
 	exeinto ${portage_base}/bin/ebuild-helpers || die "exeinto failed"
 	cd "${S}"/bin/ebuild-helpers || die "cd failed"
 	doexe $(find . -type f ! -type l) || die "doexe failed"
-	symlinks=$(find . -type l)
+	symlinks=$(find . -maxdepth 1 -type l)
 	if [ -n "$symlinks" ] ; then
 		cp -P $symlinks "${D}${portage_base}/bin/ebuild-helpers/" || \
 			die "cp failed"
