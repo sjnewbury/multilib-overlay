@@ -1,8 +1,0 @@
---- FTGL/unix/configure.ac	2003-08-25 06:18:22.000000000 +0200
-+++ FTGL/unix/configure.ac.patch	2007-04-08 20:08:28.000000000 +0200
-@@ -1,4 +1,4 @@
--AC_INIT(ftgl, 2.0.5, henryj@paradise.net.nz)
-+AC_INIT(ftgl, 2.1.2, henryj@paradise.net.nz)
- AC_CONFIG_SRCDIR([Make.conf.in])
- dnl AC_CONFIG_HEADER([src/config.h])
- 
