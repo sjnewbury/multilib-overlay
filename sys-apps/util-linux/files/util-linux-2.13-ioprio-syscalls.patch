@@ -1,0 +1,16 @@
+Just stub this cruft for crappy arches
+
+http://bugs.gentoo.org/190613
+
+--- schedutils/ionice.c
++++ schedutils/ionice.c
+@@ -39,7 +39,8 @@
+ #  define __NR_ioprio_set		196
+ #  define __NR_ioprio_get		218
+ # else
+-#  error "Unsupported arch"
++#  define __NR_ioprio_set		-1
++#  define __NR_ioprio_get		-1
+ # endif
+ 
+ # define SYS_ioprio_get		__NR_ioprio_get
