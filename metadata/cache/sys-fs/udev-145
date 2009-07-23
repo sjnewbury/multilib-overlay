@@ -1,0 +1,22 @@
+selinux? ( sys-libs/libselinux ) extras? ( sys-apps/acl[lib32?] >=sys-apps/usbutils-0.82 dev-libs/libusb[lib32?] sys-apps/pciutils[lib32?] dev-libs/glib:2[lib32?] ) >=sys-apps/util-linux-2.16 extras? ( dev-util/gperf ) sys-apps/abi-wrapper
+selinux? ( sys-libs/libselinux ) extras? ( sys-apps/acl[lib32?] >=sys-apps/usbutils-0.82 dev-libs/libusb[lib32?] sys-apps/pciutils[lib32?] dev-libs/glib:2[lib32?] ) >=sys-apps/util-linux-2.16 !sys-apps/coldplug !<sys-fs/device-mapper-1.02.19-r1 >=sys-apps/baselayout-1.12.5 sys-apps/abi-wrapper
+0
+mirror://kernel/linux/utils/kernel/hotplug/udev-145.tar.bz2
+
+http://www.kernel.org/pub/linux/utils/kernel/hotplug/udev.html
+GPL-2
+Linux dynamic and persistent device naming support (aka userspace devfs)
+~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86
+base eutils flag-o-matic multilib multilib-native portability toolchain-funcs versionator
+selinux +devfs-compat -extras lib32
+
+
+virtual/dev-manager
+2
+
+compile configure install postinst postrm preinst prepare setup unpack
+
+
+
+
+
