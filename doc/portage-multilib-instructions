@@ -1,9 +1,11 @@
 A basic way to use this branch:
 
 First, install the modified portage version:
-1. emerge -av1 portage
+1.
+emerge -av1 portage
 then add the new useflag to the database or compile everything with a new useflag:
-2. run bin/add_lib32 or emerge -aDN world
+2.
+run bin/add_lib32 or emerge -aDN world
 to save some compile time, there is a list of packages, which are usually not needed for 32bit libs
 either use the profile in /etc:
 3. 
@@ -12,3 +14,10 @@ either use the profile in /etc:
 OR
 add the NO-AUTO-FLAG var to the portage environment (e.g. to /etc/make.conf):
 -cat profiles/base/make.defaults >> /etc/make.conf
+4.
+let the multilib overlay eclasses override the main tree ones: add the following to /etc/portage/repos.conf or create it with the following content:
+
+[DEFAULT]
+eclass-overrides = gentoo multilib
+[multilib]
+eclass-overrides = gentoo multilib
