@@ -206,6 +206,8 @@ multilib-native_src_install_internal() {
 		java-pkg_regjar "${D}/${SDKDIR}/lib/MozillaGlue.jar"
 		java-pkg_regjar "${D}/${SDKDIR}/lib/MozillaInterfaces.jar"
 	fi
+
+	prep_ml_binaries /usr/bin/xulrunner-config 
 }
 
 pkg_postinst() {
