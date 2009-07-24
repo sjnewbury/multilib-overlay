@@ -3,22 +3,27 @@
 # assure options like --libs return the correct ABI-specific values.
 # This must match the multilib-behaviour of the set profile!
 
-if [[ -n ${ABI} ]] ; then
+if [[ -n ${ABI} ]]; then
 	abi=${ABI}
-elif [[ -n ${DEFAULT_ABI} ]] ; then
+elif [[ -n ${DEFAULT_ABI} ]]; then
 	abi=${DEFAULT_ABI}
 else 
 	# we're called from outside portage, so try default first
 	abis=$(portageq envvar DEFAULT_ABI MULTILIB_ABIS)
-	for abi in ${abis} ; do
+	for abi in ${abis}; do
 		[[ -f ${0}-${abi} ]] && break
 		unset abi
 	done
 fi
 
-if [[ -f ${0}-${abi} ]] ; then
-	exec ${0}-${abi} ${@}
+if [[ -f ${0}-${abi} ]]; then
+	exec ${0}-${abi} "${@}"
 else
-	echo "${0}: abi-wrapper-config couldn't find script for current abi" >&2
-	exit 1
+	if [[ -L ${0} ]]; then
+		LINK_TARGET="$(readlink ${0})"
+		exec ${LINK_TARGET} "${@}"
+	else
+		echo "${0}: abi-wrapper-config couldn't find script for current abi" >&2
+		exit 1
+	fi
 fi
