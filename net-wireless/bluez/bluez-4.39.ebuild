@@ -29,7 +29,7 @@ CDEPEND="alsa? ( media-libs/alsa-lib[lib32?] )
 	!net-wireless/bluez-libs
 	!net-wireless/bluez-utils"
 DEPEND="sys-devel/flex
-	>=dev-util/pkgconfig-0.20
+	>=dev-util/pkgconfig-0.20[lib32?]
 	doc? ( dev-util/gtk-doc )
 	${CDEPEND}"
 RDEPEND="${CDEPEND}

@@ -48,7 +48,7 @@ RDEPEND=">=sys-apps/dbus-1.2[lib32?]
 		net-firewall/iptables )"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	dev-util/intltool
 	net-dialup/ppp
 	doc? ( >=dev-util/gtk-doc-1.8 )"

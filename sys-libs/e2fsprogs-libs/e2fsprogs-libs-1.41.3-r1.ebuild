@@ -19,7 +19,7 @@ RDEPEND="!sys-libs/com_err
 	!sys-libs/ss
 	!<sys-fs/e2fsprogs-1.41"
 DEPEND="nls? ( sys-devel/gettext )
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	sys-devel/bc"
 
 multilib-native_src_configure_internal() {

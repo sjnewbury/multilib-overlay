@@ -52,7 +52,7 @@ RDEPEND=">=dev-libs/dbus-glib-0.61[lib32?]
 							sys-auth/policykit[pam]
 		 			)"
 DEPEND="${RDEPEND}
-		dev-util/pkgconfig
+		dev-util/pkgconfig[lib32?]
 		>=dev-util/intltool-0.35
 		doc?	(
 					app-text/xmlto

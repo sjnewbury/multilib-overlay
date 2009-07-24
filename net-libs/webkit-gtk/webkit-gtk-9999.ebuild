@@ -37,7 +37,7 @@ RDEPEND=">=x11-libs/gtk+-2.8[lib32?]
 
 DEPEND="${RDEPEND}
 	dev-util/gperf
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	dev-util/gtk-doc
 	virtual/perl-Text-Balanced"
 

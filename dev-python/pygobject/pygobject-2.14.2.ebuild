@@ -23,7 +23,7 @@ RDEPEND=">=dev-lang/python-2.4.4-r5[lib32?]
 	!<dev-python/pygtk-2.9[lib32?]"
 DEPEND="${RDEPEND}
 	doc? ( dev-libs/libxslt >=app-text/docbook-xsl-stylesheets-1.70.1 )
-	>=dev-util/pkgconfig-0.12.0"
+	>=dev-util/pkgconfig-0.12.0[lib32?]"
 
 DOCS="AUTHORS ChangeLog NEWS README"
 

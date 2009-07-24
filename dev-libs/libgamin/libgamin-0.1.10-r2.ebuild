@@ -25,7 +25,7 @@ RDEPEND="python? ( dev-lang/python[lib32?] )
 	!<app-admin/gamin-0.1.10"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 S="${WORKDIR}/${MY_P}"
 

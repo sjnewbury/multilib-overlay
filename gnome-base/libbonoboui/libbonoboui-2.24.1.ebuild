@@ -30,7 +30,7 @@ RDEPEND=">=gnome-base/libgnomecanvas-1.116[lib32?]
 DEPEND="${RDEPEND}
 	x11-apps/xrdb
 	sys-devel/gettext
-	>=dev-util/pkgconfig-0.20
+	>=dev-util/pkgconfig-0.20[lib32?]
 	>=dev-util/intltool-0.40
 	doc? ( >=dev-util/gtk-doc-1 )"
 

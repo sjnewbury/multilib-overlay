@@ -18,7 +18,7 @@ RDEPEND=">=dev-libs/glib-2.4[lib32?]"
 DEPEND="${RDEPEND}
 	sys-devel/flex
 	sys-devel/bison
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 DOCS="AUTHORS BUGS ChangeLog HACKING MAINTAINERS NEWS README"
 

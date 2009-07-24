@@ -29,7 +29,7 @@ RDEPEND=">=gnome-base/libbonobo-2[lib32?]
 
 DEPEND=${RDEPEND}"
 	>=app-text/gnome-doc-utils-0.3.2
-	>=dev-util/pkgconfig-0.9
+	>=dev-util/pkgconfig-0.9[lib32?]
 	>=dev-util/intltool-0.40"
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"

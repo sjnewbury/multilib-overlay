@@ -19,7 +19,7 @@ RDEPEND="media-libs/libogg
 	encode? ( media-libs/libvorbis )"
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 VARTEXFONTS=${T}/fonts
 

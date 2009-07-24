@@ -29,7 +29,7 @@ RDEPEND=">=dev-libs/glib-2.14[lib32?]
 	policykit? ( >=sys-auth/policykit-0.7[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
-	>=dev-util/pkgconfig-0.9
+	>=dev-util/pkgconfig-0.9[lib32?]
 	>=dev-util/gtk-doc-am-1.10
 	doc? ( >=dev-util/gtk-doc-1 )"
 

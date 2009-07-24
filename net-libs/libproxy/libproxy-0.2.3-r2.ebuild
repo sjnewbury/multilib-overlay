@@ -32,7 +32,7 @@ RDEPEND="
 # Since xulrunner-1.9.0.11-r1 its shipped mozilla-js.pc is fixed so we can use it
 
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.19"
+	>=dev-util/pkgconfig-0.19[lib32?]"
 
 src_prepare() {
 	# http://code.google.com/p/libproxy/issues/detail?id=23

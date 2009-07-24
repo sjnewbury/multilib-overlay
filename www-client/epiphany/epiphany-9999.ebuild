@@ -46,7 +46,7 @@ RDEPEND=">=dev-libs/glib-2.18.0[lib32?]
 	x11-themes/gnome-icon-theme"
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
-	>=dev-util/pkgconfig-0.9
+	>=dev-util/pkgconfig-0.9[lib32?]
 	>=dev-util/intltool-0.40
 	>=app-text/gnome-doc-utils-0.3.2
 	doc? ( >=dev-util/gtk-doc-1 )"

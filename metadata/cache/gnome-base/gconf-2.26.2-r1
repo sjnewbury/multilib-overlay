@@ -1,4 +1,4 @@
->=dev-libs/glib-2.14[lib32?] >=x11-libs/gtk+-2.8.16[lib32?] >=dev-libs/dbus-glib-0.74[lib32?] >=sys-apps/dbus-1[lib32?] >=gnome-base/orbit-2.4[lib32?] >=dev-libs/libxml2-2[lib32?] ldap? ( net-nds/openldap ) policykit? ( >=sys-auth/policykit-0.7[lib32?] ) >=dev-util/intltool-0.35 >=dev-util/pkgconfig-0.9 >=dev-util/gtk-doc-am-1.10 doc? ( >=dev-util/gtk-doc-1 ) >=sys-apps/sed-4 sys-apps/abi-wrapper
+>=dev-libs/glib-2.14[lib32?] >=x11-libs/gtk+-2.8.16[lib32?] >=dev-libs/dbus-glib-0.74[lib32?] >=sys-apps/dbus-1[lib32?] >=gnome-base/orbit-2.4[lib32?] >=dev-libs/libxml2-2[lib32?] ldap? ( net-nds/openldap ) policykit? ( >=sys-auth/policykit-0.7[lib32?] ) >=dev-util/intltool-0.35 >=dev-util/pkgconfig-0.9[lib32?] >=dev-util/gtk-doc-am-1.10 doc? ( >=dev-util/gtk-doc-1 ) >=sys-apps/sed-4 sys-apps/abi-wrapper
 >=dev-libs/glib-2.14[lib32?] >=x11-libs/gtk+-2.8.16[lib32?] >=dev-libs/dbus-glib-0.74[lib32?] >=sys-apps/dbus-1[lib32?] >=gnome-base/orbit-2.4[lib32?] >=dev-libs/libxml2-2[lib32?] ldap? ( net-nds/openldap ) policykit? ( >=sys-auth/policykit-0.7[lib32?] ) sys-apps/abi-wrapper
 2
 mirror://gnome/sources/GConf/2.26/GConf-2.26.2.tar.bz2

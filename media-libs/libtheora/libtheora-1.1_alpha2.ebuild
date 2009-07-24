@@ -21,7 +21,7 @@ RDEPEND="media-libs/libogg[lib32?]
 		media-libs/libsdl[lib32?] )"
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 VARTEXFONTS=${T}/fonts
 S=${WORKDIR}/${P/_}

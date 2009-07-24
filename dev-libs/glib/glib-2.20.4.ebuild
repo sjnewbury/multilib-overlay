@@ -19,7 +19,7 @@ RDEPEND="virtual/libc
 	xattr? ( sys-apps/attr )
 	fam? ( virtual/fam )"
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.16
+	>=dev-util/pkgconfig-0.16[lib32?]
 	>=sys-devel/gettext-0.11
 	doc? (
 		>=dev-libs/libxslt-1.0

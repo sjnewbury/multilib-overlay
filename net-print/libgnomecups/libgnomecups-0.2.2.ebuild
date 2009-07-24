@@ -17,7 +17,7 @@ IUSE=""
 RDEPEND=">=dev-libs/glib-2[lib32?]
 	>=net-print/cups-1.3.8[lib32?]"
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.9
+	>=dev-util/pkgconfig-0.9[lib32?]
 	>=dev-util/intltool-0.28"
 
 DOCS="AUTHORS ChangeLog NEWS"

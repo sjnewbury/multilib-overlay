@@ -32,7 +32,7 @@ RDEPEND="x11-libs/qt:3[lib32?]
 	media-libs/audiofile[lib32?]"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 src_prepare() {
 	epatch "${FILESDIR}/arts-1.5.0-bindnow.patch" \

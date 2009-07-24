@@ -44,7 +44,7 @@ RDEPEND="java? ( >=virtual/jre-1.4 )
 
 DEPEND="java? ( >=virtual/jdk-1.4 )
 	${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 S="${WORKDIR}/mozilla-${MAJ_PV}"
 

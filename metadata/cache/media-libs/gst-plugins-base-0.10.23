@@ -1,4 +1,4 @@
->=dev-libs/glib-2.8[lib32?] >=media-libs/gstreamer-0.10.23[lib32?] >=dev-libs/liboil-0.3.14o[lib32?] !<media-libs/gst-plugins-bad-0.10.10 nls? ( >=sys-devel/gettext-0.11.5[lib32?] ) dev-util/pkgconfig >=sys-apps/sed-4 sys-apps/abi-wrapper
+>=dev-libs/glib-2.8[lib32?] >=media-libs/gstreamer-0.10.23[lib32?] >=dev-libs/liboil-0.3.14o[lib32?] !<media-libs/gst-plugins-bad-0.10.10 nls? ( >=sys-devel/gettext-0.11.5[lib32?] ) dev-util/pkgconfig[lib32?] >=sys-apps/sed-4 sys-apps/abi-wrapper
 >=dev-libs/glib-2.8[lib32?] >=media-libs/gstreamer-0.10.23[lib32?] >=dev-libs/liboil-0.3.14o[lib32?] !<media-libs/gst-plugins-bad-0.10.10 sys-apps/abi-wrapper
 0.10
 http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-0.10.23.tar.bz2

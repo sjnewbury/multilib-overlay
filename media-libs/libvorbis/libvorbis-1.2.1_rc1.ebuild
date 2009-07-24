@@ -18,7 +18,7 @@ IUSE="doc"
 
 RDEPEND=">=media-libs/libogg-1"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 S="${WORKDIR}/${MY_P}"
 
 multilib-native_src_prepare_internal() {

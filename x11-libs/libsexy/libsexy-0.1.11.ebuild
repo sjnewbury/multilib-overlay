@@ -22,7 +22,7 @@ RDEPEND=">=dev-libs/glib-2.6[lib32?]
 		 >=app-text/iso-codes-0.49"
 DEPEND="${RDEPEND}
 		>=dev-lang/perl-5
-		>=dev-util/pkgconfig-0.19
+		>=dev-util/pkgconfig-0.19[lib32?]
 		doc? ( >=dev-util/gtk-doc-1.4 )"
 
 DOCS="AUTHORS ChangeLog NEWS README"

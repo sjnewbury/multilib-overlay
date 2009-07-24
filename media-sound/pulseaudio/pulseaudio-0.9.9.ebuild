@@ -44,7 +44,7 @@ RDEPEND="X? ( x11-libs/libX11[lib32?] )
 	>=sys-devel/libtool-1.5.24" # it's a valid RDEPEND, libltdl.so is used
 DEPEND="${RDEPEND}
 	dev-libs/libatomic_ops[lib32?]
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 # alsa-utils dep is for the alsasound init.d script (see bug #155707)
 # bluez-utils dep is for the bluetooth init.d script

@@ -45,7 +45,7 @@ RDEPEND="media-libs/fontconfig[lib32?]
 #	>=gnome-base/librsvg-2.15.0
 
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.19
+	>=dev-util/pkgconfig-0.19[lib32?]
 	doc? (	>=dev-util/gtk-doc-1.6
 		~app-text/docbook-xml-dtd-4.2 )
 	X? ( x11-proto/renderproto )

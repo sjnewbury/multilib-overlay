@@ -40,7 +40,7 @@ RDEPEND=">=sys-apps/dbus-0.60[lib32?]
 		>=gnome-base/libgnomeui-2[lib32?] )
 	crypt? ( dev-libs/libgcrypt[lib32?] )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	dev-util/intltool"
 PDEPEND="gnome? ( =gnome-extra/nm-applet-9999 )"
 

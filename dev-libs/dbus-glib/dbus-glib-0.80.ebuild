@@ -19,7 +19,7 @@ RDEPEND=">=sys-apps/dbus-1.1.0[lib32?]
 	>=dev-libs/glib-2.10[lib32?]
 	>=dev-libs/expat-1.95.8[lib32?]"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	sys-devel/gettext
 	doc? (
 		app-doc/doxygen

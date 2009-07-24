@@ -30,7 +30,7 @@ RDEPEND=">=media-libs/alsa-lib-${PV}
 	!media-plugins/alsa-jack"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 S="${WORKDIR}/${MY_P}"
 

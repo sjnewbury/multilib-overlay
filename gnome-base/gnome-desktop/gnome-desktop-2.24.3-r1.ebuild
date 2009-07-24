@@ -29,7 +29,7 @@ RDEPEND=">=dev-libs/libxml2-2.4.20[lib32?]
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.9
+	>=dev-util/pkgconfig-0.9[lib32?]
 	>=app-text/gnome-doc-utils-0.3.2
 	doc? ( >=dev-util/gtk-doc-1.4 )
 	~app-text/docbook-xml-dtd-4.1.2

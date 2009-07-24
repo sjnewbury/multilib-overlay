@@ -1,4 +1,4 @@
-media-libs/libogg encode? ( media-libs/libvorbis ) doc? ( app-doc/doxygen ) dev-util/pkgconfig =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+media-libs/libogg encode? ( media-libs/libvorbis ) doc? ( app-doc/doxygen ) dev-util/pkgconfig[lib32?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
 media-libs/libogg encode? ( media-libs/libvorbis ) sys-apps/abi-wrapper
 0
 http://downloads.xiph.org/releases/theora/libtheora-1.0.tar.bz2

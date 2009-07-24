@@ -24,7 +24,7 @@ RDEPEND="dev-libs/glib:2[lib32?]
 		x11-libs/libX11[lib32?]
 		x11-libs/libXft[lib32?] )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	doc? (
 		>=dev-util/gtk-doc-1
 		~app-text/docbook-xml-dtd-4.1.2 )

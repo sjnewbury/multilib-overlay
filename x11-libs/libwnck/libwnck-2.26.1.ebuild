@@ -22,7 +22,7 @@ RDEPEND=">=x11-libs/gtk+-2.11.3[lib32?]
 		 x11-libs/libXext[lib32?]"
 DEPEND="${RDEPEND}
 		sys-devel/gettext[lib32?]
-		>=dev-util/pkgconfig-0.9
+		>=dev-util/pkgconfig-0.9[lib32?]
 		>=dev-util/intltool-0.40
 		doc? ( >=dev-util/gtk-doc-1.9 )"
 

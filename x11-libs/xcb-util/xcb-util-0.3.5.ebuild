@@ -20,7 +20,7 @@ IUSE="test"
 RDEPEND=">=x11-libs/libxcb-1.2[lib32?]"
 DEPEND="${RDEPEND}
 	>=dev-util/gperf-3.0.1
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	>=x11-proto/xproto-7.0.8
 	>=x11-proto/xcb-proto-1.5
 	test? ( >=dev-libs/check-0.9.4 )"

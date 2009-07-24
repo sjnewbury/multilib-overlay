@@ -22,7 +22,7 @@ RDEPEND=">=dev-libs/glib-2
 
 # libtool is needed for the install-sh to work
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 src_unpack() {
 	unpack ${A}

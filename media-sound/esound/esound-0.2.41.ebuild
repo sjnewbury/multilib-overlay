@@ -23,7 +23,7 @@ COMMON_DEPEND=">=media-libs/audiofile-0.2.3[lib32?]
 #	arts? ( kde-base/arts[lib32?] )
 
 DEPEND="${COMMON_DEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 RDEPEND="${COMMON_DEPEND}
 	app-admin/eselect-esd"

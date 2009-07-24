@@ -24,7 +24,7 @@ DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
 	sys-devel/gettext
 	>=dev-util/intltool-0.35
-	>=dev-util/pkgconfig-0.18
+	>=dev-util/pkgconfig-0.18[lib32?]
 	doc? ( >=dev-util/gtk-doc-1 )"
 
 DOCS="AUTHORS ChangeLog NEWS README"

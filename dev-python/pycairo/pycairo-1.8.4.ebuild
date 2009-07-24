@@ -18,7 +18,7 @@ IUSE="examples"
 
 RDEPEND=">=x11-libs/cairo-1.8.4[lib32?]"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 PYTHON_MODNAME="cairo"
 DOCS="AUTHORS NEWS doc/*"

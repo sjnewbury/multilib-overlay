@@ -21,7 +21,7 @@ RDEPEND=">=media-libs/libsndfile-1.0.0[lib32?]
 	media-libs/libsamplerate[lib32?]
 	!media-sound/jack-cvs"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	doc? ( app-doc/doxygen )"
 
 src_unpack() {

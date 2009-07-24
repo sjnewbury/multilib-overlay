@@ -26,7 +26,7 @@ RDEPEND=">=dev-libs/glib-2.8[lib32?]
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.35
-	>=dev-util/pkgconfig-0.9
+	>=dev-util/pkgconfig-0.9[lib32?]
 	dev-util/gtk-doc-am
 	doc? ( dev-util/gtk-doc )"
 

@@ -23,7 +23,7 @@ RDEPEND=">=dev-libs/glib-2.8[lib32?]
 	>=dev-libs/libIDL-0.8.2[lib32?]"
 
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.18
+	>=dev-util/pkgconfig-0.18[lib32?]
 	doc? ( >=dev-util/gtk-doc-1 )"
 
 DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README* TODO"

@@ -21,7 +21,7 @@ RDEPEND="X? ( x11-libs/libXt x11-libs/libX11[lib32?] )
 	>=dev-libs/expat-1.95.8[lib32?]
 	!<sys-apps/dbus-0.91"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	doc? (	app-doc/doxygen
 		app-text/xmlto )"
 

@@ -20,7 +20,7 @@ IUSE="doc"
 
 RDEPEND="media-libs/libogg"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 S=${WORKDIR}/${MY_P}
 

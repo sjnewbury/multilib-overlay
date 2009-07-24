@@ -19,7 +19,7 @@ RDEPEND="ogg? ( >=media-libs/libogg-1.1.3[lib32?] )"
 DEPEND="${RDEPEND}
 	x86? ( dev-lang/nasm )
 	!elibc_uclibc? ( sys-devel/gettext )
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 PATCHES=( "${FILESDIR}/${P}-asneeded.patch"
 	"${FILESDIR}/${P}-cflags.patch"

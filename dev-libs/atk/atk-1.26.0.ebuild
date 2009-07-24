@@ -18,7 +18,7 @@ RDEPEND=">=dev-libs/glib-2[lib32?]"
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5
 	sys-devel/gettext
-	>=dev-util/pkgconfig-0.9
+	>=dev-util/pkgconfig-0.9[lib32?]
 	doc? ( >=dev-util/gtk-doc-1 )"
 
 DOCS="AUTHORS ChangeLog NEWS README"

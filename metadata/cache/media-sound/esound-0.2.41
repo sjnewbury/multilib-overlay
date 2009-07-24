@@ -1,4 +1,4 @@
->=media-libs/audiofile-0.2.3[lib32?] alsa? ( >=media-libs/alsa-lib-0.5.10b[lib32?] ) doc? ( app-text/docbook-sgml-utils ) tcpd? ( >=sys-apps/tcp-wrappers-7.6-r2[lib32?] ) dev-util/pkgconfig sys-apps/abi-wrapper
+>=media-libs/audiofile-0.2.3[lib32?] alsa? ( >=media-libs/alsa-lib-0.5.10b[lib32?] ) doc? ( app-text/docbook-sgml-utils ) tcpd? ( >=sys-apps/tcp-wrappers-7.6-r2[lib32?] ) dev-util/pkgconfig[lib32?] sys-apps/abi-wrapper
 >=media-libs/audiofile-0.2.3[lib32?] alsa? ( >=media-libs/alsa-lib-0.5.10b[lib32?] ) doc? ( app-text/docbook-sgml-utils ) tcpd? ( >=sys-apps/tcp-wrappers-7.6-r2[lib32?] ) app-admin/eselect-esd sys-apps/abi-wrapper
 0
 mirror://gnome/sources/esound/0.2/esound-0.2.41.tar.bz2

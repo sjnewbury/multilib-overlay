@@ -24,7 +24,7 @@ RDEPEND=">=dev-libs/glib-2.8[lib32?]
 DEPEND="${RDEPEND}
 	sys-devel/flex
 	x11-apps/xrdb
-	>=dev-util/pkgconfig-0.9
+	>=dev-util/pkgconfig-0.9[lib32?]
 	>=dev-util/intltool-0.35
 	doc? ( >=dev-util/gtk-doc-1 )"
 

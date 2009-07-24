@@ -59,7 +59,7 @@ RDEPEND=">=dev-libs/libdaemon-0.11-r1[lib32?]
 	kernel_linux? ( sys-libs/libcap[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
-	>=dev-util/pkgconfig-0.9.0
+	>=dev-util/pkgconfig-0.9.0[lib32?]
 	doc? (
 		app-doc/doxygen
 		mono? ( >=virtual/monodoc-1.1.8 )

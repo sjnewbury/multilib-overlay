@@ -18,7 +18,7 @@ RDEPEND="sys-libs/zlib[lib32?]
 	ssl? ( dev-libs/openssl[lib32?] )
 	!<=x11-libs/qt-4.4.0_alpha:${SLOT}"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 PDEPEND="qt3support? ( ~x11-libs/qt-gui-${PV}[lib32?] )"
 
 QT4_TARGET_DIRECTORIES="

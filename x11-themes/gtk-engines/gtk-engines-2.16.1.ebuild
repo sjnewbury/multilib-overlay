@@ -17,7 +17,7 @@ IUSE="accessibility"
 RDEPEND=">=x11-libs/gtk+-2.12[lib32?]"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.31
-	>=dev-util/pkgconfig-0.9"
+	>=dev-util/pkgconfig-0.9[lib32?]"
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
