@@ -425,8 +425,6 @@ multilib-native_src_generic_sub() {
 		QTPCDIR=/usr/"$(get_libdir)"/pkgconfig
 		QTPLUGINDIR="${QTLIBDIR}"/plugins
 
-		export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
-
 		[[ -d "${S}" ]] && cd "${S}"
 	fi
 
