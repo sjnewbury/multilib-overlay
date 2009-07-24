@@ -158,12 +158,7 @@ multilib-native_src_compile_internal() {
 }
 
 multilib-native_src_install_internal() {
-	if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
-		exeinto /usr/libexec/qt/"${LIBDIR/lib}"
-	else
-		exeinto /usr/bin
-	fi
-	doexe "${S}"/bin/{qmake,moc,rcc,uic} || die "doexe failed"
+	dobin "${S}"/bin/{qmake,moc,rcc,uic} || die "dobin failed"
 
 	install_directories src/{corelib,xml,network,plugins/codecs}
 
@@ -192,14 +187,6 @@ multilib-native_src_install_internal() {
 	mv "${D}"/${QTDATADIR}/mkspecs/qconfig.pri "${D}${QTDATADIR}"/mkspecs/gentoo \
 		|| die "Failed to move qconfig.pri"
 
-		if [[ $(number_abis) -gt 1 ]]; then
-		if is_final_abi; then
-			ln -s "${D}"/${QTDATADIR}/mkspecs "${D}"/${QTDATADIR}/mkspecs-${ABI}
-		else
-			mv "${D}"/${QTDATADIR}/mkspecs "${D}"/${QTDATADIR}/mkspecs-${ABI}
-		fi			
-	fi
-
 	sed -i -e '2a#include <Gentoo/gentoo-qconfig.h>\n' \
 			"${D}${QTHEADERDIR}"/QtCore/qconfig.h \
 			"${D}${QTHEADERDIR}"/Qt/qconfig.h \
@@ -221,4 +208,6 @@ qt_windows.h}
 	prep_ml_includes
 
 	keepdir "${QTSYSCONFDIR}"
+
+	prep_ml_binaries /usr/bin/qmake /usr/bin/moc /usr/bin/rcc /usr/bin/uic
 }

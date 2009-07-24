@@ -1,13 +1,13 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-core/qt-core-4.5.1.ebuild,v 1.11 2009/06/08 22:27:04 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-core/qt-core-4.5.1.ebuild,v 1.12 2009/06/30 15:09:30 armin76 Exp $
 
 EAPI="2"
 inherit qt4-build multilib-native
 
 DESCRIPTION="The Qt toolkit is a comprehensive C++ application development framework"
 SLOT="4"
-KEYWORDS="alpha amd64 arm hppa ~ia64 ~mips ppc ~ppc64 ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ~ppc64 sparc x86 ~x86-fbsd"
 IUSE="doc +glib +iconv +qt3support +ssl"
 
 RDEPEND="sys-libs/zlib[lib32?]
@@ -157,12 +157,7 @@ multilib-native_src_compile_internal() {
 }
 
 multilib-native_src_install_internal() {
-	if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
-		exeinto /usr/libexec/qt/"${LIBDIR/lib}"
-	else
-		exeinto /usr/bin
-	fi
-	doexe "${S}"/bin/{qmake,moc,rcc,uic} || die "doexe failed."
+	dobin "${S}"/bin/{qmake,moc,rcc,uic} || die "dobin failed."
 
 	install_directories src/{corelib,xml,network,plugins/codecs}
 
@@ -191,14 +186,6 @@ multilib-native_src_install_internal() {
 	mv "${D}"/${QTDATADIR}/mkspecs/qconfig.pri "${D}${QTDATADIR}"/mkspecs/gentoo || \
 		die "Failed to move qconfig.pri"
 
-        if [[ $(number_abis) -gt 1 ]] ; then
-		if is_final_abi; then
-			ln -s "${D}"/${QTDATADIR}/mkspecs "${D}"/${QTDATADIR}/mkspecs-${ABI}
-		else
-			mv "${D}"/${QTDATADIR}/mkspecs "${D}"/${QTDATADIR}/mkspecs-${ABI}
-		fi			
-	fi
-
 	sed -i -e '2a#include <Gentoo/gentoo-qconfig.h>\n' \
 		"${D}${QTHEADERDIR}"/QtCore/qconfig.h \
 		"${D}${QTHEADERDIR}"/Qt/qconfig.h || die "sed for qconfig.h failed."
@@ -219,4 +206,6 @@ qt_windows.h}
 	prep_ml_includes
 
 	keepdir "${QTSYSCONFDIR}"
+	
+	prep_ml_binaries /usr/bin/qmake /usr/bin/moc /usr/bin/rcc /usr/bin/uic
 }
