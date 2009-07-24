@@ -209,28 +209,6 @@ multilib-native_setup_abi_env() {
 	export LIBDIR=$(get_abi_LIBDIR $1)
 	export LDFLAGS="${LDFLAGS} -L/${LIBDIR} -L/usr/${LIBDIR} $(get_abi_CFLAGS)"
 
-	# Multilib QT Support - This is needed for QT and CMake based packages
-	if [[ -n ${QTDIR} ]] || [[ -n ${QTBINDIR} ]] || [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
-		libsuffix="${LIBDIR/lib}"
-		if [[ -n "${libsuffix}" ]]; then
-			QMAKESPEC="linux-g++-${libsuffix}"
-		else
-			QMAKESPEC="linux-g++"
-		fi
-		if [[ ! ${ABI} == ${DEFAULT_ABI} ]]; then
-			if [[ -n "${libsuffix}" ]]; then 
-				QTBINDIR="/usr/libexec/qt/${libsuffix}"
-				QMAKESPEC="linux-g++-${libsuffix}"
-			else
-				QMAKESPEC="linux-g++"
-				QTBINDIR="/usr/libexec/qt/${1}"
-			fi
-		else
-			QTBINDIR="/usr/bin"
-		fi
-		QMAKE="${QTBINDIR}/qmake"
-	fi
-
 	# Hack to get mysql.eclass to work: mysql.eclass only sets MY_LIBDIR
 	# if it isn't already unset, this results in it being defined during
 	# the src_unpack phase and always being set to the DEFAULT_ABI libdir.
@@ -260,10 +238,6 @@ multilib-native_setup_abi_env() {
 	# otherwise ECONF_SOURCE should point to the _prepared_ source dir and
 	# S into the build directory
 	if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
-		# Multilib CMake Support, qmake provides the paths to link QT
-		mycmakeargs="${mycmakeargs} \
-			-DQT_QMAKE_EXECUTABLE:FILEPATH=${QMAKE}"
-		multilib_debug mycmakeargs "${mycmakeargs}"
 		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 		[[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] && \
 			S="${CMAKE_BUILD_DIR}"
