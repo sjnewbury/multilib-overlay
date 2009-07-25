@@ -18,7 +18,7 @@ RDEPEND="sys-libs/zlib[lib32?]
 	ssl? ( dev-libs/openssl[lib32?] )
 	!<=x11-libs/qt-4.4.0_alpha:${SLOT}"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 PDEPEND="qt3support? ( ~x11-libs/qt-gui-${PV}[lib32?] )"
 
 QT4_TARGET_DIRECTORIES="
@@ -138,12 +138,7 @@ multilib-native_src_compile_internal() {
 }
 
 multilib-native_src_install_internal() {
-	if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
-		exeinto /usr/libexec/qt/"${LIBDIR/lib}"
-	else
-		exeinto /usr/bin
-	fi
-	doexe "${S}"/bin/{qmake,moc,rcc,uic} || die "doexe failed."
+	dobin "${S}"/bin/{qmake,moc,rcc,uic} || die "dobin failed."
 
 	install_directories src/{corelib,xml,network,plugins/codecs}
 
@@ -182,5 +177,9 @@ multilib-native_src_install_internal() {
 		install_qconfigs
 	fi
 
+	prep_ml_includes
+
 	keepdir "${QTSYSCONFDIR}"
+
+	prep_ml_binaries /usr/bin/qmake /usr/bin/moc /usr/bin/rcc /usr/bin/uic
 }

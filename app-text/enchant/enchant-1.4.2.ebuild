@@ -24,7 +24,7 @@ RDEPEND="${COMMON_DEPENDS}
 
 # libtool is needed for the install-sh to work
 DEPEND="${COMMON_DEPENDS}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 pkg_setup() {
 	confutils_require_any aspell hunspell zemberek

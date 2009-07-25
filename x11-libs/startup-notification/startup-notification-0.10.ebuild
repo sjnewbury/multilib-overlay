@@ -21,7 +21,7 @@ RDEPEND="x11-libs/libX11[lib32?]
 	x11-libs/libxcb[lib32?]
 	>=x11-libs/xcb-util-0.3[lib32?]"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	x11-proto/xproto
 	x11-libs/libXt[lib32?]"
 

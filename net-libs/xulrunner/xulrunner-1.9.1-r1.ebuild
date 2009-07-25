@@ -44,7 +44,7 @@ RDEPEND="java? ( >=virtual/jre-1.4 )
 
 DEPEND="java? ( >=virtual/jdk-1.4 )
 	${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 S="${WORKDIR}/mozilla-${MAJ_PV}"
 
@@ -206,6 +206,8 @@ multilib-native_src_install_internal() {
 		java-pkg_regjar "${D}/${SDKDIR}/lib/MozillaGlue.jar"
 		java-pkg_regjar "${D}/${SDKDIR}/lib/MozillaInterfaces.jar"
 	fi
+
+	prep_ml_binaries /usr/bin/xulrunner-config 
 }
 
 pkg_postinst() {

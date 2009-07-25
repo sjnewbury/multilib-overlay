@@ -21,7 +21,7 @@ RDEPEND=">=dev-libs/glib-2.6[lib32?]
 	)"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
-	>=dev-util/pkgconfig-0.9
+	>=dev-util/pkgconfig-0.9[lib32?]
 	>=dev-util/intltool-0.35"
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"

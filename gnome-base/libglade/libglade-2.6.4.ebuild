@@ -20,7 +20,7 @@ RDEPEND=">=dev-libs/glib-2.10[lib32?]
 	>=dev-libs/libxml2-2.4.10[lib32?]
 	>=dev-lang/python-2.0-r7[lib32?]"
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.9
+	>=dev-util/pkgconfig-0.9[lib32?]
 	doc? ( >=dev-util/gtk-doc-1 )"
 
 DOCS="AUTHORS ChangeLog NEWS README"

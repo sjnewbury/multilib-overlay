@@ -17,7 +17,7 @@ IUSE="sndfile"
 
 RDEPEND="sndfile? ( >=media-libs/libsndfile-1.0.2[lib32?] )"
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.14"
+	>=dev-util/pkgconfig-0.14[lib32?]"
 
 src_unpack() {
 	unpack ${A}

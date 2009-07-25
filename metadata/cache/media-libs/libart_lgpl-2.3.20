@@ -1,4 +1,4 @@
-dev-util/pkgconfig >=sys-apps/sed-4 sys-apps/abi-wrapper
+dev-util/pkgconfig[lib32?] >=sys-apps/sed-4 sys-apps/abi-wrapper
 sys-apps/abi-wrapper
 0
 mirror://gnome/sources/libart_lgpl/2.3/libart_lgpl-2.3.20.tar.bz2

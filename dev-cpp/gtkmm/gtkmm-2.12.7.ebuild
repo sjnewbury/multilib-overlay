@@ -21,7 +21,7 @@ RDEPEND=">=dev-cpp/glibmm-2.14.1[lib32?]
 	>=dev-libs/atk-1.9.1[lib32?]"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 DOCS="AUTHORS CHANGES ChangeLog PORTING NEWS README"
 

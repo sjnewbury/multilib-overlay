@@ -27,7 +27,7 @@ RDEPEND=">=sys-libs/zlib-1.1.4[lib32?]
 
 DEPEND="java? ( >=virtual/jdk-1.4 )
 	${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 S="${WORKDIR}/mozilla"
 

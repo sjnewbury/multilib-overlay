@@ -28,7 +28,7 @@ RDEPEND="!minimal? ( >=media-libs/flac-1.2.1[lib32?]
 	sqlite? ( >=dev-db/sqlite-3.2[lib32?] )
 	jack? ( media-sound/jack-audio-connection-kit[lib32?] )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 S=${WORKDIR}/${MY_P}
 

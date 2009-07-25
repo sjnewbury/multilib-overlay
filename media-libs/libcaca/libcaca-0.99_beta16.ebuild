@@ -27,7 +27,7 @@ RDEPEND="ncurses? ( >=sys-libs/ncurses-5.3[lib32?] )
 	mono? ( dev-lang/mono )
 	ruby? ( virtual/ruby )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	doc? ( app-doc/doxygen
 		virtual/latex-base
 		|| ( dev-texlive/texlive-fontsrecommended app-text/tetex app-text/ptex ) )"

@@ -21,7 +21,7 @@ RDEPEND=">=dev-libs/dbus-glib-0.73[lib32?]
 DEPEND="${DEPEND}
 	doc? ( dev-libs/libxslt
 		>=dev-util/gtk-doc-1.3 )
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 # NOTES:
 # man pages are built (and installed) when doc is enabled

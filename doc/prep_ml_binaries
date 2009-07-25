@@ -35,4 +35,6 @@ sys-libs/ncurses prep_ml_binaries /usr/bin/ncurses5-config /usr/bin/ncursesw5-co
 x11-libs/gtk+ prep_ml_binaries /usr/bin/gtk-config 
 x11-libs/libXft prep_ml_binaries /usr/bin/xft-config 
 x11-libs/pango prep_ml_binaries /usr/bin/pango-querymodules
+x11-libs/qt-core prep_ml_binaries /usr/bin/qmake /usr/bin/moc /usr/bin/rcc /usr/bin/uic
+dev-util/pkgconfig prep_ml_binaries /usr/bin/pkg-config
 

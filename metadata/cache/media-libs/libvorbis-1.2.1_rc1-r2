@@ -1,4 +1,4 @@
->=media-libs/libogg-1 dev-util/pkgconfig =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+>=media-libs/libogg-1 dev-util/pkgconfig[lib32?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
 >=media-libs/libogg-1 sys-apps/abi-wrapper
 0
 http://people.xiph.org/~giles/2008/libvorbis-1.2.1rc1.tar.bz2 aotuv? ( mirror://gentoo/aotuv-b5.6-1.2.1rc1.diff.bz2 )

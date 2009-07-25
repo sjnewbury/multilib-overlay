@@ -1,4 +1,4 @@
->=dev-libs/glib-2.4[lib32?] sys-devel/flex sys-devel/bison dev-util/pkgconfig >=sys-apps/sed-4 sys-apps/abi-wrapper
+>=dev-libs/glib-2.4[lib32?] sys-devel/flex sys-devel/bison dev-util/pkgconfig[lib32?] >=sys-apps/sed-4 sys-apps/abi-wrapper
 >=dev-libs/glib-2.4[lib32?] sys-apps/abi-wrapper
 0
 mirror://gnome/sources/libIDL/0.8/libIDL-0.8.13.tar.bz2

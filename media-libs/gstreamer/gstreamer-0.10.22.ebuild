@@ -22,7 +22,7 @@ RDEPEND=">=dev-libs/glib-2.12:2[lib32?]
 	dev-libs/libxml2[lib32?]
 	>=dev-libs/check-0.9.2[lib32?]"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	nls? ( sys-devel/gettext[lib32?] )"
 
 multilib-native_src_configure_internal() {

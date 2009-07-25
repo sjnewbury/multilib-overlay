@@ -24,7 +24,7 @@ RDEPEND="media-libs/libvorbis[lib32?]
 		>=x11-libs/gtk+-2.13.4:2[lib32?]
 		>=gnome-base/gconf-2[lib32?] )"
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.17
+	>=dev-util/pkgconfig-0.17[lib32?]
 	doc? ( >=dev-util/gtk-doc-1.9 )"
 
 src_unpack() {

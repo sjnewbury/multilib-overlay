@@ -21,7 +21,7 @@ RDEPEND=">=sys-apps/dbus-1.1.0[lib32?]
 	>=dev-libs/libxml2-2.6.21[lib32?]"
 	# expat code now sucks.. libxml2 is the default
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	doc? ( app-doc/doxygen app-text/xmlto )"
 
 src_unpack() {

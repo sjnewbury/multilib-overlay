@@ -1,0 +1,22 @@
+sys-apps/abi-wrapper
+sys-apps/abi-wrapper
+0
+http://pkgconfig.freedesktop.org/releases/pkg-config-0.21.tar.gz
+
+http://pkgconfig.freedesktop.org/wiki/
+GPL-2
+Package config system that manages compile/link flags
+alpha amd64 arm hppa ia64 m68k mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd
+base eutils flag-o-matic multilib multilib-native portability toolchain-funcs
+hardened elibc_FreeBSD lib32
+
+
+
+
+
+compile install postinst postrm preinst setup unpack
+
+
+
+
+

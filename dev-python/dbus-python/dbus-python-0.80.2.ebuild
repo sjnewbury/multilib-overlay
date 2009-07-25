@@ -23,7 +23,7 @@ RDEPEND=">=dev-lang/python-2.4[lib32?]
 
 DEPEND="${RDEPEND}
 	test? ( dev-python/pygobject[lib32?] )
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 multilib-native_src_prepare_internal() {
 	# disable pyc compiling

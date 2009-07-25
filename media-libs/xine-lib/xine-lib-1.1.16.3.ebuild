@@ -81,7 +81,7 @@ DEPEND="${RDEPEND}
 		 x11-proto/xf86vidmodeproto
 		 xinerama? ( x11-proto/xineramaproto ) )
 	v4l? ( virtual/os-headers )
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	sys-devel/libtool[lib32?]
 	nls? ( sys-devel/gettext[lib32?] )"
 

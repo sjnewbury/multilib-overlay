@@ -19,7 +19,7 @@ RDEPEND="~sys-libs/${PN}-libs-${PV}[lib32?]
 	nls? ( virtual/libintl )"
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext[lib32?] )
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	sys-apps/texinfo"
 
 pkg_setup() {

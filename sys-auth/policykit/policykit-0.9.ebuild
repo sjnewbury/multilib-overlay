@@ -25,7 +25,7 @@ RDEPEND=">=dev-libs/glib-2.6[lib32?]
 DEPEND="${RDEPEND}
 	dev-libs/libxslt
 	app-text/docbook-xsl-stylesheets
-	>=dev-util/pkgconfig-0.18
+	>=dev-util/pkgconfig-0.18[lib32?]
 	>=dev-util/intltool-0.36
 	>=dev-util/gtk-doc-am-1.10-r1
 	doc? ( >=dev-util/gtk-doc-1.10 )"

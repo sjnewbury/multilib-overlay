@@ -40,7 +40,7 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	gnome-base/gnome-common
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.9
+	>=dev-util/pkgconfig-0.9[lib32?]
 	>=dev-util/gtk-doc-am-1.10-r1
 	doc? ( >=dev-util/gtk-doc-1 )"
 PDEPEND="hal? ( >=gnome-base/gnome-mount-0.6 )"

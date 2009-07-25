@@ -67,7 +67,7 @@ RDEPEND=">=app-admin/eselect-opengl-1.0.6-r1
 	!<=x11-base/xorg-x11-6.9"
 DEPEND="${RDEPEND}
 	!<=x11-proto/xf86driproto-2.0.3
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	>=x11-misc/makedepend-1.0.1
 	>=x11-proto/inputproto-1.4.4
 	>=x11-proto/xextproto-7.0.3

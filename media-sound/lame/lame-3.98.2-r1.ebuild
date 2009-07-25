@@ -23,7 +23,7 @@ RDEPEND=">=sys-libs/ncurses-5.2[lib32?]
 	sndfile? ( >=media-libs/libsndfile-1.0.2[lib32?] )
 	gtk? ( =x11-libs/gtk+-1.2*[lib32?] )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	mmx? ( dev-lang/nasm )"
 
 multilib-native_src_prepare_internal() {

@@ -1,4 +1,4 @@
->=sys-libs/ncurses-5.2[lib32?] sndfile? ( >=media-libs/libsndfile-1.0.2[lib32?] ) dev-util/pkgconfig mmx? ( dev-lang/nasm ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+>=sys-libs/ncurses-5.2[lib32?] sndfile? ( >=media-libs/libsndfile-1.0.2[lib32?] ) dev-util/pkgconfig[lib32?] mmx? ( dev-lang/nasm ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
 >=sys-libs/ncurses-5.2[lib32?] sndfile? ( >=media-libs/libsndfile-1.0.2[lib32?] ) sys-apps/abi-wrapper
 0
 mirror://sourceforge/lame/lame-398-2.tar.gz

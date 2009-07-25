@@ -39,7 +39,7 @@ RDEPEND="x11-libs/libXrender[lib32?]
 	tiff? ( >=media-libs/tiff-3.5.7[lib32?] )
 	!<gnome-base/gail-1000"
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.9
+	>=dev-util/pkgconfig-0.9[lib32?]
 	x11-proto/xextproto
 	x11-proto/xproto
 	x11-proto/inputproto

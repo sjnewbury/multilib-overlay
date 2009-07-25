@@ -21,7 +21,7 @@ RDEPEND=">=x11-libs/gtk+-2.14.0[lib32?]
 	>=x11-libs/startup-notification-0.5[lib32?]"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.9
+	>=dev-util/pkgconfig-0.9[lib32?]
 	>=app-text/gnome-doc-utils-0.3.2
 	doc? ( >=dev-util/gtk-doc-1.4 )
 	~app-text/docbook-xml-dtd-4.1.2

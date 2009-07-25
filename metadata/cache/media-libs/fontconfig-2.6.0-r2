@@ -1,4 +1,4 @@
->=media-libs/freetype-2.2.1 >=dev-libs/expat-1.95.3 dev-util/pkgconfig doc? ( app-text/docbook-sgml-utils[jadetex] =app-text/docbook-sgml-dtd-3.1* ) =sys-devel/automake-1.9* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+>=media-libs/freetype-2.2.1 >=dev-libs/expat-1.95.3 dev-util/pkgconfig[lib32?] doc? ( app-text/docbook-sgml-utils[jadetex] =app-text/docbook-sgml-dtd-3.1* ) =sys-devel/automake-1.9* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
 >=media-libs/freetype-2.2.1 >=dev-libs/expat-1.95.3 sys-apps/abi-wrapper
 1.0
 http://fontconfig.org/release/fontconfig-2.6.0.tar.gz

@@ -21,7 +21,7 @@ IUSE=""
 
 RDEPEND=">=x11-libs/gtk+-2.8[lib32?]"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 S="${WORKDIR}/${MY_P}"
 

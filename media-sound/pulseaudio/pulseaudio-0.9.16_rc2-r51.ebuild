@@ -54,7 +54,7 @@ DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )
 	X? ( x11-proto/xproto )
 	dev-libs/libatomic_ops[lib32?]
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	|| ( dev-util/unifdef sys-freebsd/freebsd-ubin )
 	dev-util/intltool"
 

@@ -1,4 +1,4 @@
-dev-util/pkgconfig =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+dev-util/pkgconfig[lib32?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
 sys-apps/abi-wrapper
 0
 mirror://sourceforge/modplug-xmms/libmodplug-0.8.tar.gz

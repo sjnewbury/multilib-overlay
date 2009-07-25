@@ -32,7 +32,7 @@ RDEPEND=">=www-client/epiphany-${MY_MAJORV}[lib32?]
 DEPEND="${RDEPEND}
 	  gnome-base/gnome-common
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.20
+	>=dev-util/pkgconfig-0.20[lib32?]
 	>=app-text/gnome-doc-utils-0.3.2"
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"

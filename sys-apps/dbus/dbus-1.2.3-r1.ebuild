@@ -22,7 +22,7 @@ RDEPEND="X? ( x11-libs/libXt x11-libs/libX11[lib32?] )
 	sys-libs/e2fsprogs-libs[lib32?]
 	!<sys-apps/dbus-0.91"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	doc? (	app-doc/doxygen
 		app-text/xmlto )"
 

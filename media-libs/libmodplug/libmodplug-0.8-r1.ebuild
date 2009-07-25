@@ -19,7 +19,7 @@ KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh -sparc x86 ~x86-fbsd"
 IUSE=""
 
 RDEPEND=""
-DEPEND="dev-util/pkgconfig"
+DEPEND="dev-util/pkgconfig[lib32?]"
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${PN}-0.7-amd64.patch"

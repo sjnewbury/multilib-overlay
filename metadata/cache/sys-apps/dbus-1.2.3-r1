@@ -1,4 +1,4 @@
-X? ( x11-libs/libXt x11-libs/libX11[lib32?] ) selinux? ( sys-libs/libselinux sec-policy/selinux-dbus ) >=dev-libs/expat-1.95.8[lib32?] sys-libs/e2fsprogs-libs[lib32?] !<sys-apps/dbus-0.91 dev-util/pkgconfig doc? ( app-doc/doxygen app-text/xmlto ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+X? ( x11-libs/libXt x11-libs/libX11[lib32?] ) selinux? ( sys-libs/libselinux sec-policy/selinux-dbus ) >=dev-libs/expat-1.95.8[lib32?] sys-libs/e2fsprogs-libs[lib32?] !<sys-apps/dbus-0.91 dev-util/pkgconfig[lib32?] doc? ( app-doc/doxygen app-text/xmlto ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
 X? ( x11-libs/libXt x11-libs/libX11[lib32?] ) selinux? ( sys-libs/libselinux sec-policy/selinux-dbus ) >=dev-libs/expat-1.95.8[lib32?] sys-libs/e2fsprogs-libs[lib32?] !<sys-apps/dbus-0.91 sys-apps/abi-wrapper
 0
 http://dbus.freedesktop.org/releases/dbus/dbus-1.2.3.tar.gz

@@ -1,4 +1,4 @@
-cddb? ( >=media-libs/libcddb-1.0.1[lib32?] ) virtual/libintl sys-devel/gettext dev-util/pkgconfig =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+cddb? ( >=media-libs/libcddb-1.0.1[lib32?] ) virtual/libintl sys-devel/gettext dev-util/pkgconfig[lib32?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
 cddb? ( >=media-libs/libcddb-1.0.1[lib32?] ) virtual/libintl sys-apps/abi-wrapper
 0
 mirror://gnu/libcdio/libcdio-0.80.tar.gz

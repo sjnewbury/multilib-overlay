@@ -17,7 +17,7 @@ IUSE="doc examples"
 RDEPEND=">=dev-libs/libsigc++-2.2[lib32?]
 		 >=dev-libs/glib-2.16[lib32?]"
 DEPEND="${RDEPEND}
-		dev-util/pkgconfig
+		dev-util/pkgconfig[lib32?]
 		doc? ( app-doc/doxygen )"
 
 DOCS="AUTHORS ChangeLog NEWS README"

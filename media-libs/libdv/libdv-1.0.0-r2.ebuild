@@ -20,7 +20,7 @@ RDEPEND="dev-libs/popt
 	sdl? ( >=media-libs/libsdl-1.2.5[lib32?] )
 	xv? ( x11-libs/libXv[lib32?] )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-0.99-2.6.patch

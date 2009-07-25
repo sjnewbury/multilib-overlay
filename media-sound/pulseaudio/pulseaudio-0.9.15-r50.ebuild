@@ -55,7 +55,7 @@ RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib
 DEPEND="${RDEPEND}
 	X? ( x11-proto/xproto )
 	dev-libs/libatomic_ops
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	|| ( dev-util/unifdef sys-freebsd/freebsd-ubin )
 	dev-util/intltool"
 

@@ -1,4 +1,4 @@
->=sys-apps/dbus-1.1.0[lib32?] >=dev-libs/glib-2.6[lib32?] selinux? ( sys-libs/libselinux ) >=dev-libs/libxml2-2.6.21[lib32?] dev-util/pkgconfig doc? ( app-doc/doxygen app-text/xmlto ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+>=sys-apps/dbus-1.1.0[lib32?] >=dev-libs/glib-2.6[lib32?] selinux? ( sys-libs/libselinux ) >=dev-libs/libxml2-2.6.21[lib32?] dev-util/pkgconfig[lib32?] doc? ( app-doc/doxygen app-text/xmlto ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
 >=sys-apps/dbus-1.1.0[lib32?] >=dev-libs/glib-2.6[lib32?] selinux? ( sys-libs/libselinux ) >=dev-libs/libxml2-2.6.21[lib32?] sys-apps/abi-wrapper
 0
 http://dbus.freedesktop.org/releases/dbus-glib/dbus-glib-0.76.tar.gz

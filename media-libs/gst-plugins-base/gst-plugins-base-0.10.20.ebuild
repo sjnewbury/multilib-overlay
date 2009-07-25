@@ -20,7 +20,7 @@ RDEPEND=">=dev-libs/glib-2.8[lib32?]
 	>=dev-libs/liboil-0.3.14[lib32?]"
 DEPEND="${RDEPEND}
 	nls? ( >=sys-devel/gettext-0.11.5 )
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 DOCS="AUTHORS README RELEASE"
 

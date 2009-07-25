@@ -19,7 +19,7 @@ RDEPEND=">=dev-libs/glib-2.15.3[lib32?]
 		 >=dev-libs/libxml2-2[lib32?]
 		 ssl? ( >=net-libs/gnutls-1[lib32?] )"
 DEPEND="${RDEPEND}
-		>=dev-util/pkgconfig-0.9
+		>=dev-util/pkgconfig-0.9[lib32?]
 		doc? ( >=dev-util/gtk-doc-1 )"
 
 DOCS="AUTHORS ChangeLog NEWS README"

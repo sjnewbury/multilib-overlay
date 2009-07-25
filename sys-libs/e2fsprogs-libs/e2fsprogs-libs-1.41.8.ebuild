@@ -20,7 +20,7 @@ RDEPEND="elibc_glibc? ( >=sys-libs/glibc-2.6 )
 	!sys-libs/ss
 	!<sys-fs/e2fsprogs-1.41.8"
 DEPEND="nls? ( sys-devel/gettext )
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	sys-devel/bc"
 
 src_prepare() {

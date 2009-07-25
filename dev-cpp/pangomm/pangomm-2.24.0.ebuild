@@ -20,7 +20,7 @@ RDEPEND=">=x11-libs/pango-1.23.0[lib32?]
 	!<dev-cpp/gtkmm-2.13:2.4[lib32?]"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 DOCS="AUTHORS CHANGES ChangeLog PORTING NEWS README"
 

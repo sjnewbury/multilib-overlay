@@ -27,7 +27,7 @@ RDEPEND=">=gnome-base/gconf-2[lib32?]
 
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.17
+	>=dev-util/pkgconfig-0.17[lib32?]
 	doc? ( >=dev-util/gtk-doc-1 )"
 
 DOCS="AUTHORS ChangeLog NEWS README"

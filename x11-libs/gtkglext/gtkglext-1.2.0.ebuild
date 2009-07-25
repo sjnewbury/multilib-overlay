@@ -22,7 +22,7 @@ RDEPEND=">=dev-libs/glib-2[lib32?]
 	virtual/opengl"
 DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-0.10 )
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 DOCS="AUTHORS ChangeLog* INSTALL NEWS README* TODO"
 

@@ -28,7 +28,7 @@ RDEPEND=">=dev-libs/glib-2.16[lib32?]
 DEPEND="${RDEPEND}
 	sys-devel/gettext[lib32?]
 	>=dev-util/intltool-0.35
-	>=dev-util/pkgconfig-0.9
+	>=dev-util/pkgconfig-0.9[lib32?]
 	doc? ( >=dev-util/gtk-doc-1.9 )"
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"

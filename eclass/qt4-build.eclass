@@ -234,11 +234,6 @@ qt4-build_src_install() {
 	install_directories "${QT4_TARGET_DIRECTORIES}"
 	install_qconfigs
 	fix_library_files
-	if [[ $(number_abis) -gt 1 ]] ; then
-		if ! is_final_abi; then
-			mv "${D}"/${QTDATADIR}/mkspecs "${D}"/${QTDATADIR}/mkspecs-${ABI}
-		fi
-	fi
 	prep_ml_includes
 }
 

@@ -21,7 +21,7 @@ RDEPEND=">=dev-libs/glib-2.8[lib32?]
 	!<media-libs/gst-plugins-bad-0.10.10"
 DEPEND="${RDEPEND}
 	nls? ( >=sys-devel/gettext-0.11.5[lib32?] )
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 DOCS="AUTHORS README RELEASE"
 

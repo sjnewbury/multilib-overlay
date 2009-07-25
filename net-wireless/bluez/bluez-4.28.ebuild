@@ -28,7 +28,7 @@ RDEPEND="alsa? ( media-libs/alsa-lib[lib32?] )
 	!net-wireless/bluez-utils"
 DEPEND="!<dev-libs/libnl-1.1
 	sys-devel/flex
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	doc? ( dev-util/gtk-doc )
 	${RDEPEND}"
 
