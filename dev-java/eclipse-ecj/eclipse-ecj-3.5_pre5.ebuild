@@ -21,11 +21,11 @@ SLOT="3.5"
 CDEPEND=">=app-admin/eselect-ecj-0.3
 	gcj? ( sys-devel/gcc )"
 DEPEND="${CDEPEND}
-	!gcj? ( !java6? ( >=virtual/jdk-1.4 )
-		java6? ( >=virtual/jdk-1.6 ) )"
+	!java6? ( >=virtual/jdk-1.4 )
+		java6? ( >=virtual/jdk-1.6 )"
 RDEPEND="${CDEPEND}
-	!gcj? ( !java6? ( >=virtual/jre-1.4 )
-		java6? ( >=virtual/jre-1.6 ) )"
+	!java6? ( >=virtual/jre-1.4 )
+		java6? ( >=virtual/jre-1.6 )"
 
 pkg_setup() {
 	if use gcj ; then
@@ -34,9 +34,8 @@ pkg_setup() {
 			eerror "Please rebuild sys-devel/gcc with USE=\"gcj\"";
 			die "Rebuild sys-devel/gcc with gcj support"
 		fi
-	else
-		java-pkg-2_pkg_setup
 	fi
+	java-pkg-2_pkg_setup
 }
 
 src_unpack() {
@@ -54,8 +53,7 @@ src_unpack() {
 
 src_compile() {
 	local javac_opts javac java jar
-
-#	javac_opts="$(java-pkg_javac-args) -encoding ISO-8859-1"
+	javac_opts="$(java-pkg_javac-args) -encoding ISO-8859-1"
 	javac="$(java-config -c)"
 	java="$(java-config -J)"
 	jar="$(java-config -j)"
