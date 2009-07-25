@@ -31,6 +31,7 @@ multilib-native_src_configure_internal() {
 	econf \
 		--sbindir=/sbin \
 		--enable-dmeventd \
+		--enable-pkgconfig \
 		$(use_enable selinux) \
 		CLDFLAGS="${LDFLAGS}" || die "econf failed"
 	}
@@ -46,6 +47,9 @@ multilib-native_src_install_internal() {
 	mv "${D}"/usr/$(get_libdir) "${D}"/ || die "move libdir"
 	dolib.a lib/ioctl/libdevmapper.a || die "dolib.a"
 	gen_usr_ldscript libdevmapper.so
+
+
+	mv "${D}"/usr/lib/pkgconfig "${D}"/usr/$(get_libdir)
 
 	insinto /etc
 	doins "${FILESDIR}"/dmtab
