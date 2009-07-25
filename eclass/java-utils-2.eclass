@@ -2647,7 +2647,7 @@ java-pkg_switch-vm() {
 		export JDK_HOME=${JAVA_HOME}
 
 		# Setup GCJ environment for packages that use gcj directly
-		java-pkg_native_init_ 1
+		java-pkg_native_init_
 
 		#TODO If you know a better solution let us know.
 		java-pkg_append_ LD_LIBRARY_PATH "$(java-config -g LDPATH)"
@@ -2863,6 +2863,7 @@ java-pkg_native-select-current-jdk-gcj() {
 # @param $1 - gcc gcj profile
 # ------------------------------------------------------------------------------
 java-pkg_native-set-env() {
+	# TODO: check cross compiling is working...
 	local gcj_java_home gcc_branch_ver gcc_config_ver gcc_slot
 	local gcc_profile="${1}"
 
@@ -2872,21 +2873,20 @@ java-pkg_native-set-env() {
 	fi
 	local libgcj_abi_version="$(java-pkg_native-tc-abi ${gcc_profile})"
 	local gccbin="$(gcc-config -B ${gcc_profile})"
-	# TODO: it's probably worth getting cross compiling working...
-	#CTARGET="${CTARGET:-${CHOST}}"
+	local gcj_target="$($gccbin/gcj -dumpmachine)"
+	[[ -z gcc_target ]] && die "gcj binary missing for ${gcc_profile}"
+
 	# Construct the gcj-jdk JAVA_HOME in the same way as the gcj-jdk
 	# ebuild just in case it's not installed yet
-	gcc_branch_ver="$(get_version_component_range 1-2 ${gcc_profile/$CHOST-})"
-	gcc_config_ver="${gcc_config_ver:-$(replace_version_separator 3 '-' ${gcc_profile/$CHOST-})}"
+	gcc_branch_ver="$(get_version_component_range 1-2 ${gcc_profile/$gcj_target-})"
+	gcc_config_ver="${gcc_config_ver:-$(replace_version_separator 3 '-' ${gcc_profile/$gcj_target-})}"
 	if use multislot ; then
-		gcc_slot="${CHOST}-${gcc_config_ver}"
+		gcc_slot="${gcj_target}-${gcc_config_ver}"
 	else
 		gcc_slot="${gcc_branch_ver}"
 	fi
-	# Construct the gcj-jdk JAVA_HOME in the same way as the gcj-jdk
-	# ebuild just in case it's not installed yet
 	gcj_java_home="/usr/$(get_libdir)/gcj-jdk-${gcc_slot}-${libgcj_abi_version}"
-	[[ -d "${gcj_java_home}" ]] || die "dev-java/gcj-jdk-${gcc_slot} is needed to compile native packages with gcj"
+	[[ -d "${gcj_java_home}" ]] || die "dev-java/gcj-jdk-${gcc_config_ver} needs to be installed to compile native packages with gcj"
 	JAVA_PKG_NATIVE_BIN_FLAGS="-Wl,-rpath ${gcj_java_home}/lib/${ABI} -Wl,-Bsymbolic -findirect-dispatch -fjni"
 
 	export GCJ="${gccbin}/gcj"
@@ -2900,7 +2900,6 @@ java-pkg_native-set-env() {
 #
 # Check for issues
 #
-# @param $1 - flag to skip filter gcjflags if set
 # @return 0 - procede with native build
 # @return 1 - skip native build
 # ------------------------------------------------------------------------------
@@ -2919,12 +2918,12 @@ java-pkg_native_init_() {
 
 	# Is the current system VM gcj-jdk?  Is GCJ available?
 	# If so, use the gcc-config profile for that gcj-jdk
-	#einfo "Checking current java-config system VM profile..."
+	#einfo "Checking current java-config system VM profile ..."
 	gcc_profile=$(java-pkg_native-select-current-jdk-gcj)
 	# If not, find a suitable version
 	if [[ "${?}" != "0" ]]; then
 			#einfo "Unable to match a gcc-config profile to current java-config system VM"
-			#einfo "Attempting to determine suitable gcc-config profile for this system..."
+			#einfo "Attempting to determine suitable gcc-config profile for this system ..."
 			gcc_profile=$(java-pkg_native-find-supported-gcj)
 	else
 			einfo "System Java VM is gcj-jdk. Using selected profile."
@@ -2933,14 +2932,11 @@ java-pkg_native_init_() {
 		# Do we want to die here?
 		ewarn "java native tools unusable!"
 		return 1
-	else
-		einfo "Java native build enabled! ;-)"
 	fi
 
-	einfo "Using gcc-config profile: ${gcc_profile} to build native pkg..."
+	einfo "Using gcc-config profile: ${gcc_profile} to build native pkg ..."
 
 	java-pkg_native-set-env ${gcc_profile}
-	[[ -n ${skip_cflags} ]] || java-pkg_gcjflags
 
 	return 0
 }
@@ -2957,6 +2953,8 @@ java-pkg_native_init_() {
 # ------------------------------------------------------------------------------
 java-pkg_gen-native-cp() {
 	java-pkg_native_init_ || return 0
+
+	java-pkg_gcjflags
 
 	local pkg cp item lib
 	for pkg in ${@} ; do
@@ -2985,6 +2983,9 @@ java-pkg_gen-native-cp() {
 # ------------------------------------------------------------------------------
 java-pkg_donative() {
 	java-pkg_native_init_ || return 0
+
+	java-pkg_gcjflags
+
 	einfo "Compile Java source to native ..."
 
 	local buildpath="${S}/build/native"
@@ -3035,6 +3036,9 @@ java-pkg_donative() {
 # ------------------------------------------------------------------------------
 java-pkg_donative-bin() {
 	java-pkg_native_init_ || return 0
+
+	java-pkg_gcjflags
+
 	[ -z "${1}" ] && die "set the main function to call for the binary!"
 
 	if [ ".jar" == "${2: -4:4}" ] ; then
@@ -3091,6 +3095,8 @@ java-pkg_donative-bin() {
 java-pkg_skip-cachejar() {
 	java-pkg_native_init_ || return 0
 
+	java-pkg_gcjflags
+
 	if [[ ${1} =~ ^[0-9]+$ ]] ; then
 		CHECKREQS_MEMORY="${1}"
 		check_reqs_conditional && return 0
@@ -3113,6 +3119,9 @@ java-pkg_skip-cachejar() {
 # ------------------------------------------------------------------------------
 java-pkg_cachejar() {
 	java-pkg_native_init_ || return 0
+
+	java-pkg_gcjflags
+
 	pushd "${D}" >/dev/null || die "This function is for src_install!"
 
 	local jars jar
@@ -3132,6 +3141,8 @@ java-pkg_cachejar() {
 # ------------------------------------------------------------------------------
 java-pkg_cachejar_() {
 	java-pkg_native_init_ || return 0
+
+	java-pkg_gcjflags
 
 	local jars
 	[ ${#} -lt 1 ] \
@@ -3194,6 +3205,9 @@ java-pkg_do_reg-cachejar_() {
 # ------------------------------------------------------------------------------
 java-pkg_reg-cachejar_() {
 	java-pkg_native_init_ || return 0
+
+	java-pkg_gcjflags
+
 	[ -z "${JAVA_PKG_CLASSPATH}" ] && return 0
 
 	# For each ABI:
