@@ -289,6 +289,9 @@ pkg_postinst() {
 	einfo "For help with using portage please consult the Gentoo Handbook"
 	einfo "at http://www.gentoo.org/doc/en/handbook/handbook-x86.xml?part=3"
 	einfo
+	einfo "For setup instructions after switching to portage-multilib"
+	einfo "read doc/portage-multilib-instructions inside the multilib overlay"
+	einfo
 
 	if [ $MINOR_UPGRADE = 0 ] ; then
 		elog "If you're upgrading from a pre-2.2 version of portage you might"
