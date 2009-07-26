@@ -28,6 +28,6 @@ src_unpack() {
 }
 
 multilib-native_src_install_internal() {
-        multilib-native_check_inherited_funcs src_install
-        prep_ml_binaries /usr/bin/libIDL-config-2
+	multilib-native_check_inherited_funcs src_install
+	prep_ml_binaries /usr/bin/libIDL-config-2
 }
