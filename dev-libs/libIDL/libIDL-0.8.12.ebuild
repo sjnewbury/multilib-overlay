@@ -26,3 +26,8 @@ src_unpack() {
 	gnome2_src_unpack
 	epunt_cxx
 }
+
+multilib-native_src_install_internal() {
+	multilib-native_check_inherited_funcs src_install
+	prep_ml_binaries /usr/bin/libIDL-config-2
+}
