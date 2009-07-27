@@ -52,6 +52,7 @@ NO-AUTO-FLAG="
 	virtual/libc
 	virtual/libiconv
 	virtual/libintl
+	virtual/os-headers
 	virtual/poppler-utils
 	www-plugins/adobe-flash
 	x11-apps/xhost
