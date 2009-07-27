@@ -1,0 +1,10 @@
+# ChangeLog for media-libs/libmpcdecsv7
+# Copyright 1999-2009 Gentoo Foundation; Distributed under the GPL v2
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libmpcdecsv7/ChangeLog,v 1.1 2009/07/26 12:17:43 ssuominen Exp $
+
+*libmpcdecsv7-1.2.6 (26 Jul 2009)
+
+  26 Jul 2009; Samuli Suominen <ssuominen@gentoo.org>
+  +libmpcdecsv7-1.2.6.ebuild:
+  Initial commit for transition package.
+
