@@ -35,12 +35,17 @@ esac
 #		AS CC CXX FC LD ASFLAGS CFLAGS CXXFLAGS FCFLAGS FFLAGS LDFLAGS
 #		CHOST CBUILD CDEFINE LIBDIR S CCACHE_DIR myconf PYTHON PERLBIN
 #		QMAKE QMAKESPEC QTBINDIR CMAKE_BUILD_DIR mycmakeargs KDE_S
-#		ECONF_SOURCE MY_LIBDIR MOZLIBDIR SDKDIR G2CONF"
+#		ECONF_SOURCE MY_LIBDIR MOZLIBDIR SDKDIR"
 EMULTILIB_SAVE_VARS="${EMULTILIB_SAVE_VARS}
 		AS CC CXX FC LD ASFLAGS CFLAGS CXXFLAGS FCFLAGS FFLAGS LDFLAGS
 		CHOST CBUILD CDEFINE LIBDIR S CCACHE_DIR myconf PYTHON PERLBIN
 		QMAKE QMAKESPEC QTBINDIR CMAKE_BUILD_DIR mycmakeargs KDE_S
-		ECONF_SOURCE MY_LIBDIR MOZLIBDIR SDKDIR G2CONF"
+		ECONF_SOURCE MY_LIBDIR MOZLIBDIR SDKDIR"
+
+# @VARIABLE: EMULTILIB_SOURCE_TOP_DIRNAME
+# @DESCRIPTION: On initialisation of multilib environment this gets incremented by 1
+# EMULTILIB_INITIALISED=""
+EMULTILIB_INITIALISED=""
 
 # @VARIABLE: EMULTILIB_SOURCE_TOP_DIRNAME
 # @DESCRIPTION:
@@ -256,7 +261,7 @@ multilib-native_setup_abi_env() {
 	fi
 
 	export PYTHON PERLBIN QMAKESPEC
-	EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${1})]=1
+	let EMULTILIB_INITIALISED++
 }
 
 # Internal function
@@ -298,31 +303,8 @@ multilib-native_src_generic() {
 			local abilist=""
 			if has_multilib_profile ; then
 				abilist=$(get_install_abis)
-				if [[ "${1/_*}" != "pkg" ]] || [[ "${1/*_}" = "setup" ]]; then
+				if [[ "${1/_*}" != "pkg" ]]; then
 					einfo "${1/src_/} multilib ${PN} for ABIs: ${abilist}"
-					# We initialise the variables early and unconditionally, whether
-					# building for multilib or not.  This allows multilib-native ebuilds
-					# to always make use of them.
-					if [[ -z ${EMULTILIB_S[0]} ]]; then
-						multilib-native_save_abi_env "INIT"
-
-						[[ -n ${MULTILIB_DEBUG} ]] && \
-							einfo "MULTILIB_DEBUG: Determining EMULTILIB_SOURCE_TOPDIR from S and WORKDIR"
-						EMULTILIB_RELATIVE_BUILD_DIR="${S#*${WORKDIR}\/}"
-						EMULTILIB_SOURCE_TOP_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
-						# If ${EMULTILIB_SOURCE_TOP_DIRNAME} is
-						# empty, then we assume ${S} points to the top level.
-						# (This should never happen.)
-						if [[ -z ${EMULTILIB_SOURCE_TOP_DIRNAME} ]]; then
-							ewarn "Unable to determine dirname of the source topdir:"
-							ewarn "Assuming S points to the top level"
-							EMULTILIB_SOURCE_TOP_DIRNAME=${EMULTILIB_RELATIVE_BUILD_DIR}
-						fi
-						EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
-						[[ -n ${MULTILIB_DEBUG} ]] && \
-							einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_TOPDIR=\"${EMULTILIB_SOURCE_TOPDIR}\""
-					fi
-
 				fi
 			elif is_crosscompile || tc-is-cross-compiler ; then
 				abilist=${DEFAULT_ABI}
@@ -367,6 +349,31 @@ multilib-native_src_generic_sub() {
 	# We need to deal with this by finding the top-level of the source
 	# tree and keeping track of ${S} relative to it.
 	#
+	# We initialise the variables early and unconditionally (except only
+	# while no multilib environment has been initialised), whether
+	# building for multilib or not.  This allows multilib-native ebuilds
+	# to always make use of them. (It is intended for this to happen for
+	# each phase until multilib is initialised, this allows ebuilds to
+	# modify the common environment, right up until we setup a build dir.)
+	if [[ -z ${EMULTILIB_INITIALISED} ]]; then
+		multilib-native_save_abi_env "INIT"
+
+		[[ -n ${MULTILIB_DEBUG} ]] && \
+			einfo "MULTILIB_DEBUG: Determining EMULTILIB_SOURCE_TOPDIR from S and WORKDIR"
+		EMULTILIB_RELATIVE_BUILD_DIR="${S#*${WORKDIR}\/}"
+		EMULTILIB_SOURCE_TOP_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
+		# If ${EMULTILIB_SOURCE_TOP_DIRNAME} is
+		# empty, then we assume ${S} points to the top level.
+		# (This should never happen.)
+		if [[ -z ${EMULTILIB_SOURCE_TOP_DIRNAME} ]]; then
+			ewarn "Unable to determine dirname of the source topdir:"
+			ewarn "Assuming S points to the top level"
+			EMULTILIB_SOURCE_TOP_DIRNAME=${EMULTILIB_RELATIVE_BUILD_DIR}
+		fi
+		EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
+		[[ -n ${MULTILIB_DEBUG} ]] && \
+			einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_TOPDIR=\"${EMULTILIB_SOURCE_TOPDIR}\""
+	fi
 	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
 
 		# If this is the src_prepare phase we only need to run for the
@@ -385,23 +392,14 @@ multilib-native_src_generic_sub() {
 			fi
 		fi
 
-		# Is this our first run for this ABI?
-		multilib_debug "EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${ABI})]" "${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${ABI})]}"
-		
-		if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${ABI})]} ]]; then
-			# Restore INIT and setup multilib environment
-			# for this ABI
-			multilib-native_restore_abi_env "INIT"
-			multilib-native_setup_abi_env "${ABI}"
-		else
-			# Restore the environment for this ABI
-			multilib-native_restore_abi_env "${ABI}"
-
-		fi
-
-		# most phases require a build tree
 		if [[ "${1}" != "pkg_setup" && "${1}" != "pkg_postrm" ]]; then
+			# Is this our first run for this ABI?
 			if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
+
+				# Restore INIT and setup multilib environment
+				# for this ABI
+				multilib-native_restore_abi_env "INIT"
+				multilib-native_setup_abi_env "${ABI}"
 
 				# Prepare build dir
 				if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
@@ -412,6 +410,10 @@ multilib-native_src_generic_sub() {
 					einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
 					mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
 				fi
+			else
+				# If we are already setup then restore the
+				# environment
+				multilib-native_restore_abi_env "${ABI}"
 			fi
 		fi
 
@@ -430,7 +432,8 @@ multilib-native_src_generic_sub() {
 
 	multilib-native_${1}_internal
 
-	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
+	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile && \
+				[[ "${1/_*}" != "pkg" ]]; then
 		# Now save the environment
 		multilib-native_save_abi_env "${ABI}"
 	fi
