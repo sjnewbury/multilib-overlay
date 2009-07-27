@@ -22,7 +22,7 @@ RDEPEND=">=gnome-base/libbonobo-2[lib32?]
 	>=x11-libs/gtk+-2.14.0[lib32?]
 	>=net-libs/libsoup-2.4[lib32?]
 	>=gnome-base/libgtop-2.13.3[lib32?]
-	eds? ( >=gnome-extra/evolution-data-server-1.3 )
+	eds? ( >=gnome-extra/evolution-data-server-1.3[lib32?] )
 	>=gnome-base/gconf-2[lib32?]
 	|| ( dev-libs/elfutils dev-libs/libelf )
 	>=sys-devel/gdb-5.1"
