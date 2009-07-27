@@ -300,17 +300,16 @@ multilib-native_src_generic() {
 				abilist=$(get_install_abis)
 				if [[ "${1/_*}" != "pkg" ]] || [[ "${1/*_}" = "setup" ]]; then
 					einfo "${1/src_/} multilib ${PN} for ABIs: ${abilist}"
+					# We initialise the variables early and unconditionally, whether
+					# building for multilib or not.  This allows multilib-native ebuilds
+					# to always make use of them.
+					if [[ -z ${EMULTILIB_S[0]} ]]; then
+						multilib-native_save_abi_env "INIT"
 
-					# If this is the first time through, initialise the source path
-					# variables early and unconditionally, whether building for
-					# multilib or not.  This allows multilib-native ebuilds to always
-					# make use of them.  Then save the initial environment.
-					if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]} ]]; then
 						[[ -n ${MULTILIB_DEBUG} ]] && \
 							einfo "MULTILIB_DEBUG: Determining EMULTILIB_SOURCE_TOPDIR from S and WORKDIR"
 						EMULTILIB_RELATIVE_BUILD_DIR="${S#*${WORKDIR}\/}"
 						EMULTILIB_SOURCE_TOP_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
-
 						# If ${EMULTILIB_SOURCE_TOP_DIRNAME} is
 						# empty, then we assume ${S} points to the top level.
 						# (This should never happen.)
@@ -322,9 +321,6 @@ multilib-native_src_generic() {
 						EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
 						[[ -n ${MULTILIB_DEBUG} ]] && \
 							einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_TOPDIR=\"${EMULTILIB_SOURCE_TOPDIR}\""
-
-						multilib-native_save_abi_env "INIT"
-						EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]=1
 					fi
 
 				fi
