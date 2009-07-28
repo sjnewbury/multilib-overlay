@@ -45,7 +45,7 @@ pkg_setup() {
 	fi
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	local dir
 	for dir in m4 lib/m4 libextra/m4 ; do
 		rm -f "${dir}/lt"* "${dir}/libtool.m4"

@@ -28,7 +28,7 @@ DEPEND="${RDEPEND}
 
 BASH_COMPLETION_NAME="dbus"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# description ?
 	epatch "${FILESDIR}"/${PN}-introspection.patch
 }

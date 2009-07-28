@@ -22,7 +22,7 @@ RDEPEND="tiff? ( media-libs/tiff[lib32?] )
 DEPEND="${RDEPEND}
 	python? ( >=dev-lang/swig-1.3.31 )"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	cd "${S}"
 	sed -i -e "/PYTHON=/s:^:# :" configure.ac
 	

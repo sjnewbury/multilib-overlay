@@ -32,7 +32,7 @@ DEPEND="${RDEPEND}
 		!xfce-extra/notification-daemon-xfce
 		!x11-misc/xfce4-notifyd"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-report-sound-capability.patch
 }
 

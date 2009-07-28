@@ -29,7 +29,7 @@ DEPEND="${RDEPEND}
 	x11-proto/xextproto
 	nls? ( sys-devel/gettext[lib32?] dev-util/intltool )"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	cd "${S}"
 	epatch "${FILESDIR}"/${P}-m4.patch
 	epatch "${FILESDIR}"/${P}-automake.patch

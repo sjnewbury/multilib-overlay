@@ -21,7 +21,7 @@ DEPEND="readline? ( sys-libs/readline[lib32?] )
 	sys-devel/gettext[lib32?]"
 RDEPEND="${DEPEND}"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	cd "${S}"
 	sed -i -e 's:tail +:tail -n +:' "${S}"/tests/test.sh ||\
 		die "Failed to fix-up tail for POSIX compliance"

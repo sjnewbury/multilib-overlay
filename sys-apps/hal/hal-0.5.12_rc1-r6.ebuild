@@ -129,7 +129,7 @@ pkg_setup() {
 	fi
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# Only apply one of the policy patches.  Bug #267042
 	if use policykit ; then
 		rm "${WORKDIR}/${PATCHNAME}/patches/0001-plugdev-dbus-policy.patch"

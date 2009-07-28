@@ -40,7 +40,7 @@ pkg_setup() {
 	G2CONF="${G2CONF} $(use_with X x) $(use_enable debug)"
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	gnome2_src_prepare
 
 	# make config file location host specific so that a 32bit and 64bit pango

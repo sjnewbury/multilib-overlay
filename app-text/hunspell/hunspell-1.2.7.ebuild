@@ -24,7 +24,7 @@ RDEPEND="${DEPEND}"
 
 S=${WORKDIR}/${MY_P}
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	cd "${S}"
 
 	# Upstream package creates some executables which names are too generic

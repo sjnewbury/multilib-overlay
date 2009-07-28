@@ -18,7 +18,7 @@ IUSE=""
 DEPEND=""
 RDEPEND=""
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-ppc64-load_acquire.patch
 	epatch "${FILESDIR}"/${P}-ppc-asm.patch
 }

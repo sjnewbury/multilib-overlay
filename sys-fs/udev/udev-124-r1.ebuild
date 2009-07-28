@@ -70,7 +70,7 @@ sed_helper_dir() {
 	sed -e "s#/lib/udev#${udev_helper_dir}#" -i "$@"
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# patches go here...
 	# Bug #223757, Bug #208578
 	epatch "${FILESDIR}/${PN}-122-rules-update.diff"

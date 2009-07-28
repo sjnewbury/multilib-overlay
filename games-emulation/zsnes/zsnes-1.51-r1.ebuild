@@ -26,7 +26,7 @@ DEPEND="${RDEPEND}
 
 S=${WORKDIR}/${PN}_${PV//./_}/src
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	cd "${S}"
 
 	# Fixing compilation without libpng installed

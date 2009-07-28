@@ -129,7 +129,7 @@ pkg_setup() {
 	fi
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	EPATCH_MULTI_MSG="Applying Gentoo Patchset ..." \
 	EPATCH_SUFFIX="patch" \
 	EPATCH_SOURCE="${WORKDIR}/${PATCHNAME}/patches/" \

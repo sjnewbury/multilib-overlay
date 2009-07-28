@@ -187,7 +187,7 @@ pkg_setup() {
 	enewuser ldap 439 -1 /usr/$(get_libdir)/openldap ldap
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# According to MDK, the link order needs to be changed so that
 	# on systems w/ MD5 passwords the system crypt library is used
 	# (the net result is that "passwd" can be used to change ldap passwords w/

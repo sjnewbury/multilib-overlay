@@ -45,7 +45,7 @@ pkg_setup() {
 	java-pkg-opt-2_pkg_setup
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# Apply our patches
 	cd "${S}" || die "cd failed"
 	EPATCH_SUFFIX="patch" \

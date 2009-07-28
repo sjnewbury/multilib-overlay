@@ -24,7 +24,7 @@ RDEPEND="${DEPEND}"
 
 S=${WORKDIR}/FTGL/unix
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# Use the correct includedir for pkg-config
 	epatch \
 		"${FILESDIR}"/${P}-ftgl.pc.in.patch \

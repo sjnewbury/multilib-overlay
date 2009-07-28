@@ -52,7 +52,7 @@ pkg_setup() {
 	java-pkg-opt-2_pkg_setup
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# Fix default port name for rimap auth mechanism.
 	sed -e '/define DEFAULT_REMOTE_SERVICE/s:imap:imap2:' \
 		-i saslauthd/auth_rimap.c || die "sed failed"

@@ -26,7 +26,7 @@ DEPEND="${RDEPEND}
 VARTEXFONTS=${T}/fonts
 S=${WORKDIR}/${P/_}
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-1.0_beta2-flags.patch
 	AT_M4DIR="m4" eautoreconf
 }

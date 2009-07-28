@@ -22,7 +22,7 @@ DEPEND="gpm? ( sys-libs/gpm )"
 
 S=${WORKDIR}/${MY_P}
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	[[ -n ${PV_SNAP} ]] && epatch "${WORKDIR}"/${MY_P}-${PV_SNAP}-patch.sh
 	epatch "${FILESDIR}"/${PN}-5.6-gfbsd.patch
 	epatch "${FILESDIR}"/${PN}-5.7-emacs.patch #270527

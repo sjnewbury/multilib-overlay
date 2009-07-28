@@ -58,7 +58,7 @@ set_gtk2_confdir() {
 	GTK2_CONFDIR=${GTK2_CONFDIR:=/etc/gtk-2.0}
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# use an arch-specific config directory so that 32bit and 64bit versions
 	# dont clash on multilib systems
 	has_multilib_profile && epatch "${FILESDIR}/${PN}-2.8.0-multilib.patch"

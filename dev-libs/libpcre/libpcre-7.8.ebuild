@@ -25,7 +25,7 @@ RDEPEND="zlib? ( sys-libs/zlib[lib32?] )
 
 S=${WORKDIR}/${MY_P}
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	cd "${S}"
 	elibtoolize
 }

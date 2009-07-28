@@ -50,7 +50,7 @@ pkg_setup() {
 	export EXTRA_EMAKE="${EXTRA_EMAKE} ORBIT_IDL=/usr/bin/orbit-idl-2"
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	gnome2_src_prepare
 
 	# Do not start gconfd when installing schemas, fix bug #238276, upstream ?

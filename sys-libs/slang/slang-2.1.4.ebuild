@@ -22,7 +22,7 @@ RDEPEND="sys-libs/ncurses[-minimal,lib32?]
 	readline? ( sys-libs/readline[lib32?] )"
 DEPEND="${RDEPEND}"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-2.1.2-slsh-libs.patch \
 		"${FILESDIR}"/${PN}-2.1.3-uclibc.patch
 }

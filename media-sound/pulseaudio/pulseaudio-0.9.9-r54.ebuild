@@ -69,7 +69,7 @@ pkg_setup() {
 	enewuser pulse -1 -1 /var/run/pulse pulse,audio
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${PN}-0.9.8-svn2074.patch"
 	epatch "${FILESDIR}/${PN}-0.9.8-polkit.patch"
 	epatch "${FILESDIR}/${PN}-0.9.8-bt-nohal.patch"

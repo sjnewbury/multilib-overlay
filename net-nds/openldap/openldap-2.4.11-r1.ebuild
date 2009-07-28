@@ -165,7 +165,7 @@ pkg_setup() {
 	enewuser ldap 439 -1 /usr/$(get_libdir)/openldap ldap
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# ensure correct SLAPI path by default
 	sed -i -e 's,\(#define LDAPI_SOCK\).*,\1 "/var/run/openldap/slapd.sock",' \
 		"${S}"/include/ldap_defaults.h

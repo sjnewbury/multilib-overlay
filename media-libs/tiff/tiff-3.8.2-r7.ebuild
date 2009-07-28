@@ -21,7 +21,7 @@ RDEPEND="jpeg? ( >=media-libs/jpeg-6b[lib32?] )
 	zlib? ( >=sys-libs/zlib-1.1.3-r2[lib32?] )"
 DEPEND="${RDEPEND}"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch "${WORKDIR}"/${P}-tiff2pdf-20080903.patch
 	epatch "${FILESDIR}"/${P}-tiffsplit.patch
 	if use jbig; then

@@ -22,7 +22,7 @@ DEPEND=""
 
 S=${WORKDIR}/${MY_P}
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	chmod ug+w Makefile
 
 	EPATCH_SUFFIX="patch"

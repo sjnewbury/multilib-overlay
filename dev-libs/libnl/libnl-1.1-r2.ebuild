@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
 IUSE=""
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-vlan-header.patch
 	epatch "${FILESDIR}"/${P}-minor-leaks.patch
 	epatch "${FILESDIR}"/${P}-glibc-2.8-ULONG_MAX.patch

@@ -70,7 +70,7 @@ pkg_setup() {
 	fi
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# patches for bugs #40224 #145917 #198147 #217097
 	epatch \
 		"${FILESDIR}"/${P}-libcaca-new-api.patch \

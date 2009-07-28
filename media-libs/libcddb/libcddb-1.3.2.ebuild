@@ -19,7 +19,7 @@ DEPEND="doc? ( app-doc/doxygen )"
 
 RESTRICT="test"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# needed for sane .so versionning on FreeBSD
 	elibtoolize
 }

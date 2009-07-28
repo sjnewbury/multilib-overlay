@@ -34,7 +34,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.19[lib32?]"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# http://code.google.com/p/libproxy/issues/detail?id=23
 	epatch "${FILESDIR}/${P}-fix-dbus-includes.patch"
 

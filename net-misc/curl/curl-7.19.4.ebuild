@@ -46,7 +46,7 @@ DEPEND="${RDEPEND}
 # used - but can do without in self test: net-misc/stunnel
 #S="${WORKDIR}"/${MY_P}
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/curl-7.17.0-strip-ldflags.patch
 }
 

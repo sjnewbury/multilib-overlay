@@ -29,7 +29,7 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# Fix QA warnings, bug #257281, upstream #466791
 	epatch "${FILESDIR}/${P}-compilewarnings.patch"
 

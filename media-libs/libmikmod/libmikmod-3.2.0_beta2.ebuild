@@ -22,7 +22,7 @@ DEPEND="${RDEPEND}"
 
 S=${WORKDIR}/${MY_P}
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-64bit.patch \
 		"${FILESDIR}"/${P}-autotools.patch \
 		"${FILESDIR}"/${P}-info.patch \

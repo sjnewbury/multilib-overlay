@@ -20,7 +20,7 @@ IUSE="nls static"
 DEPEND="nls? ( sys-devel/gettext[lib32?] )"
 RDEPEND=""
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	cd "${S}"
 	[[ -n ${DEB_VER} ]] && epatch "${WORKDIR}"/${PN}_${PV}-${DEB_VER}.diff
 	epatch "${FILESDIR}"/${PN}-2.5.34-isatty.patch #119598

@@ -33,7 +33,7 @@ DEPEND="${RDEPEND}
 	)"
 PDEPEND="app-admin/eselect-fontconfig"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epunt_cxx #74077
 	epatch "${FILESDIR}"/${P}-parallel.patch
 	# Neeeded to get a sane .so versionning on fbsd, please dont drop

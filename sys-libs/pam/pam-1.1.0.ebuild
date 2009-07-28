@@ -76,7 +76,7 @@ pkg_setup() {
 	check_old_modules
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${MY_PN}-0.99.8.1-xtests.patch"
 
 	# Remove NIS dependencies, see bug #235431

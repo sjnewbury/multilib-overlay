@@ -35,7 +35,7 @@ DEPEND="sys-devel/flex
 RDEPEND="${CDEPEND}
 	sys-auth/pambase[consolekit]"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch \
 		"${FILESDIR}/4.31-as_needed.patch" \
 		"${FILESDIR}/4.34-conditional_libsbc.patch"

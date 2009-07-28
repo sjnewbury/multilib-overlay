@@ -32,7 +32,7 @@ DEPEND="${RDEPEND}
 	)"
 PDEPEND="app-admin/eselect-fontconfig"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-latin-reorder.patch   #130466
 	epunt_cxx #74077
 

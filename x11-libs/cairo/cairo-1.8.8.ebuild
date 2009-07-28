@@ -50,7 +50,7 @@ DEPEND="${RDEPEND}
 	X? ( x11-proto/renderproto )
 	xcb? ( x11-proto/xcb-proto )"
 
-multilib-native_src_prepare() {
+multilib-native_multilib-native_src_prepare_internal() {
 	# ClearType-like patches applied by ArchLinux
 	use cleartype && epatch "${FILESDIR}"/cairo-1.2.4-lcd-cleartype-like.diff
 

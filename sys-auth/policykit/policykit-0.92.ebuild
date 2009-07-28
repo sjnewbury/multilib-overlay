@@ -36,7 +36,7 @@ pkg_setup() {
 	enewuser polkituser -1 "-1" /dev/null polkituser
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# Add zsh completions
 	if use zsh-completion; then
 		epatch "${FILESDIR}/${P}-zsh-completions.patch"

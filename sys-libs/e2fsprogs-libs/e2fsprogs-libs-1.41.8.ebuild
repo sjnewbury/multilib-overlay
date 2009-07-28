@@ -23,7 +23,7 @@ DEPEND="nls? ( sys-devel/gettext )
 	dev-util/pkgconfig[lib32?]
 	sys-devel/bc"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# stupid configure script clobbers CC for us
 	sed -i '/if test -z "$CC" ; then CC=cc; fi/d' configure
 }

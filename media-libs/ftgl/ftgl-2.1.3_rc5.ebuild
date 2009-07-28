@@ -29,7 +29,7 @@ DEPEND=">=media-libs/freetype-2.0.9[lib32?]
 
 S="${WORKDIR}"/${MY_P2}
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	cd "${S}"
 	epatch "${FILESDIR}"/${P}-gentoo.patch
 	AT_M4DIR=m4 eautoreconf

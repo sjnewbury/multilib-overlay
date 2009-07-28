@@ -19,7 +19,7 @@ RDEPEND="examples? ( =dev-libs/glib-2*[lib32?] )"
 DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1 )"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	if ! use examples; then
 		sed "s/^\(SUBDIRS =.*\)examples\(.*\)$/\1\2/" \
 			-i Makefile.am Makefile.in || die "sed failed."

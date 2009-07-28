@@ -26,7 +26,7 @@ DEPEND="${DEPEND}
 # NOTES:
 # man pages are built (and installed) when doc is enabled
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-ldflags.patch
 	epatch "${FILESDIR}"/${P}-tests.patch
 

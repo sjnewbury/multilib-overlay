@@ -37,7 +37,7 @@ DEPEND="tcl? ( >=dev-lang/tcl-8.4[lib32?] )
 RDEPEND="tcl? ( dev-lang/tcl[lib32?] )
 	java? ( >=virtual/jre-1.4 )"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	cd "${S}"
 	for (( i=1 ; i<=${PATCHNO} ; i++ ))
 	do
