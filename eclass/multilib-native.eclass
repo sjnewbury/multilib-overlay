@@ -35,12 +35,12 @@ esac
 #		AS CC CXX FC LD ASFLAGS CFLAGS CXXFLAGS FCFLAGS FFLAGS LDFLAGS
 #		CHOST CBUILD CDEFINE LIBDIR S CCACHE_DIR myconf PYTHON PERLBIN
 #		QMAKE QMAKESPEC QTBINDIR CMAKE_BUILD_DIR mycmakeargs KDE_S
-#		ECONF_SOURCE MY_LIBDIR MOZLIBDIR SDKDIR G2CONF MY_LIBDIR"
+#		ECONF_SOURCE MY_LIBDIR MOZLIBDIR SDKDIR G2CONF"
 EMULTILIB_SAVE_VARS="${EMULTILIB_SAVE_VARS}
 		AS CC CXX FC LD ASFLAGS CFLAGS CXXFLAGS FCFLAGS FFLAGS LDFLAGS
 		CHOST CBUILD CDEFINE LIBDIR S CCACHE_DIR myconf PYTHON PERLBIN
 		QMAKE QMAKESPEC QTBINDIR CMAKE_BUILD_DIR mycmakeargs KDE_S
-		ECONF_SOURCE MY_LIBDIR MOZLIBDIR SDKDIR G2CONF MY_LIBDIR"
+		ECONF_SOURCE MY_LIBDIR MOZLIBDIR SDKDIR G2CONF"
 
 # @VARIABLE: EMULTILIB_SOURCE_TOP_DIRNAME
 # @DESCRIPTION:
@@ -349,8 +349,9 @@ multilib-native_src_generic() {
 		# Save the environment for this ABI
 		multilib-native_save_abi_env "${ABI}"
 
-		# If this is the default ABI update the INIT env
-		[[ "${ABI}" == "${DEFAULT_ABI}" ]] && \
+		# If this is the default ABI and we have a build tree,
+		# update the INIT environment
+		[[ "${ABI}" == "${DEFAULT_ABI}" ]] && [[ -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
 			multilib-native_save_abi_env "INIT"
 
 		# This assures the environment is correctly configured for non-multilib
