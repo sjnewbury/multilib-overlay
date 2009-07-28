@@ -78,7 +78,7 @@ multilib-native_pkg_setup() {
 # @USAGE:
 # @DESCRIPTION: This is a multilib wrapper for the src_unpack phase
 multilib-native_src_unpack() {
-	multilib-native_src_unpack_internal
+	multilib-native_src_generic src_unpack
 }
 
 # @FUNCTION: multilib-native_src_prepare
@@ -343,7 +343,18 @@ multilib-native_src_generic() {
 			fi
 		fi
 	fi
-	multilib-native_src_generic_sub ${1}
+	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
+		multilib-native_src_generic_sub ${1}
+
+		# Save the environment
+		multilib-native_save_abi_env "${ABI}"
+
+		# This assures the environment is correctly configured for non-multilib
+		# phases such as src_unpack from ebuilds.
+		multilib-native_restore_abi_env "INIT"
+	else
+		multilib-native_${1}_internal
+	fi
 }
 
 # @FUNCTION: multilib-native_src_generic_sub
@@ -371,77 +382,78 @@ multilib-native_src_generic_sub() {
 	# We need to deal with this by finding the top-level of the source
 	# tree and keeping track of ${S} relative to it.
 	#
-	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
 
-		# If this is the src_prepare phase we only need to run for the
-		# DEFAULT_ABI when we are building out of the source tree since
-		# it is shared between each ABI.
-		if [[ "${1}" == "src_prepare" ]] && \
-				!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
-				([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
-			if [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
-				einfo "Skipping ${1} for ${ABI}"
-				return
-			else
-				einfo "Running ${1} for default ABI"
-				multilib-native_${1}_internal
-				return
-			fi
-		fi
-
-		# Is this our first run for this ABI?
-		multilib_debug "EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${ABI})]" "${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${ABI})]}"
-		
-		if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${ABI})]} ]]; then
-			# Restore INIT and setup multilib environment
-			# for this ABI
-			multilib-native_restore_abi_env "INIT"
-			multilib-native_setup_abi_env "${ABI}"
+	# If this is the src_prepare phase we only need to run for the
+	# DEFAULT_ABI when we are building out of the source tree since
+	# it is shared between each ABI.
+	if [[ "${1}" == "src_prepare" ]] && \
+			!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
+			([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
+		if [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
+			einfo "Skipping ${1} for ${ABI}"
+			return
 		else
-			# Restore the environment for this ABI
-			multilib-native_restore_abi_env "${ABI}"
-
+			einfo "Running ${1} for default ABI"
+			multilib-native_${1}_internal
+			return
 		fi
-
-		# most phases require a build tree
-		if [[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]]; then
-			if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
-
-				# Prepare build dir
-				if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
-					([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]]); then
-					einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
-					cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
-				else
-					einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
-					mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
-				fi
-			fi
-		fi
-
-		# qt-build.eclass sets these in pkg_setup, but that results
-		# in the path always pointing to the primary ABI libdir.
-		# These need to run on each pass to set correctly.
-		QTBASEDIR=/usr/"$(get_libdir)"/qt4
-		QTLIBDIR=/usr/"$(get_libdir)"/qt4
-		QTPCDIR=/usr/"$(get_libdir)"/pkgconfig
-		QTPLUGINDIR="${QTLIBDIR}"/plugins
-
-		export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
-
-		[[ -d "${S}" ]] && cd "${S}"
 	fi
 
+	# Is this our first run for this ABI?
+	multilib_debug "EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${ABI})]" \
+					"${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${ABI})]}"
+		
+	if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${ABI})]} ]]; then
+
+		# Restore INIT and setup multilib environment
+		# for this ABI
+		multilib-native_restore_abi_env "INIT"
+		multilib-native_setup_abi_env "${ABI}"
+	else
+		# Restore the environment for this ABI
+		multilib-native_restore_abi_env "${ABI}"
+	fi
+
+	# Most phases require a build tree, if it has already been
+	# unpacked but there exists no build directory set one up
+	if [[ "${1}" != "src_unpack" ]]; then
+		if [[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]] && [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
+			# Prepare build dir
+			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
+					([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]]); then
+				einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
+				cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
+			else
+				einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
+				mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
+			fi
+		fi
+	fi
+
+	# qt-build.eclass sets these in pkg_setup, but that results
+	# in the path always pointing to the primary ABI libdir.
+	# These need to run on each pass to set correctly.
+	QTBASEDIR=/usr/"$(get_libdir)"/qt4
+	QTLIBDIR=/usr/"$(get_libdir)"/qt4
+	QTPCDIR=/usr/"$(get_libdir)"/pkgconfig
+	QTPLUGINDIR="${QTLIBDIR}"/plugins
+
+	export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
+
+	[[ -d "${S}" ]] && cd "${S}"
+
+	# Call the "real" phase function
 	multilib-native_${1}_internal
 
-	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
-		# Now save the environment
-		multilib-native_save_abi_env "${ABI}"
+	if [[ "${1}" == "src_unpack" ]]; then
+		if [[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]] && [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
+			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
+					([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]]); then
+				einfo "Moving source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
+				mv "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
+			fi
+		fi
 	fi
-
-	# This assures the environment is correctly configured for non-multilib
-	# phases such as src_unpack from ebuilds.
-	multilib-native_restore_abi_env "INIT"
 }
 
 # @FUNCTION: multilib-native_src_prepare_internal
