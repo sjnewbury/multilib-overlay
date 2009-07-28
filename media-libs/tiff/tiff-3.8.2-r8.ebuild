@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/tiff/tiff-3.8.2-r8.ebuild,v 1.1 2009/07/14 15:17:13 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/tiff/tiff-3.8.2-r8.ebuild,v 1.5 2009/07/26 12:42:52 ranger Exp $
 
 EAPI="2"
 
@@ -13,7 +13,7 @@ SRC_URI="ftp://ftp.remotesensing.org/pub/libtiff/${P}.tar.gz
 
 LICENSE="as-is"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha ~amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="jpeg jbig nocxx zlib"
 
 RDEPEND="jpeg? ( >=media-libs/jpeg-6b[lib32?] )

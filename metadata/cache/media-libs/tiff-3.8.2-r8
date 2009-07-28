@@ -6,7 +6,7 @@ ftp://ftp.remotesensing.org/pub/libtiff/tiff-3.8.2.tar.gz mirror://gentoo/tiff-3
 http://www.remotesensing.org/libtiff/
 as-is
 Library for manipulation of TIFF (Tag Image File Format) images
-~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd
+alpha ~amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd
 base eutils libtool multilib multilib-native portability toolchain-funcs
 jpeg jbig nocxx zlib lib32
 
