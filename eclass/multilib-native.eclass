@@ -35,12 +35,12 @@ esac
 #		AS CC CXX FC LD ASFLAGS CFLAGS CXXFLAGS FCFLAGS FFLAGS LDFLAGS
 #		CHOST CBUILD CDEFINE LIBDIR S CCACHE_DIR myconf PYTHON PERLBIN
 #		QMAKE QMAKESPEC QTBINDIR CMAKE_BUILD_DIR mycmakeargs KDE_S
-#		ECONF_SOURCE MY_LIBDIR MOZLIBDIR SDKDIR G2CONF"
+#		ECONF_SOURCE MY_LIBDIR MOZLIBDIR SDKDIR G2CONF MY_LIBDIR"
 EMULTILIB_SAVE_VARS="${EMULTILIB_SAVE_VARS}
 		AS CC CXX FC LD ASFLAGS CFLAGS CXXFLAGS FCFLAGS FFLAGS LDFLAGS
 		CHOST CBUILD CDEFINE LIBDIR S CCACHE_DIR myconf PYTHON PERLBIN
 		QMAKE QMAKESPEC QTBINDIR CMAKE_BUILD_DIR mycmakeargs KDE_S
-		ECONF_SOURCE MY_LIBDIR MOZLIBDIR SDKDIR G2CONF"
+		ECONF_SOURCE MY_LIBDIR MOZLIBDIR SDKDIR G2CONF MY_LIBDIR"
 
 # @VARIABLE: EMULTILIB_SOURCE_TOP_DIRNAME
 # @DESCRIPTION:
@@ -346,8 +346,12 @@ multilib-native_src_generic() {
 	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
 		multilib-native_src_generic_sub ${1}
 
-		# Save the environment
+		# Save the environment for this ABI
 		multilib-native_save_abi_env "${ABI}"
+
+		# If this is the default ABI update the INIT env
+		[[ "${ABI}" == "${DEFAULT_ABI}" ]] && \
+			multilib-native_save_abi_env "INIT"
 
 		# This assures the environment is correctly configured for non-multilib
 		# phases such as src_unpack from ebuilds.
@@ -416,7 +420,7 @@ multilib-native_src_generic_sub() {
 
 	# Most phases require a build tree, if it has already been
 	# unpacked but there exists no build directory set one up
-	if [[ "${1}" != "src_unpack" ]]; then
+	if [[ "${1/*_}" != "unpack" ]]; then
 		if [[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]] && [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
 			# Prepare build dir
 			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
@@ -445,7 +449,7 @@ multilib-native_src_generic_sub() {
 	# Call the "real" phase function
 	multilib-native_${1}_internal
 
-	if [[ "${1}" == "src_unpack" ]]; then
+	if [[ "${1/*_}" = "unpack" ]]; then
 		if [[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]] && [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
 			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 					([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]]); then
