@@ -220,24 +220,6 @@ multilib-native_setup_abi_env() {
 		PERLBIN="/usr/bin/perl-${ABI}"
 	fi
 
-	# S should not be redefined for the CMake !CMAKE_IN_SOURCE_BUILD case,
-	# otherwise ECONF_SOURCE should point to the _prepared_ source dir and
-	# S into the build directory
-	if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
-		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
-		[[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] && \
-			S="${CMAKE_BUILD_DIR}"
-	else
-		S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
-		if [[ -n ${MULTILIB_EXT_SOURCE_BUILD} ]]; then
-			ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
-		fi
-	fi
-
-	# If KDE_S is defined then the kde.eclass is in use
-	if [[ -n ${KDE_S} ]]; then
-		KDE_S="${S}"
-	fi
 
 	# ccache is ABI dependent
 	if [[ -z ${CCACHE_DIR} ]] ; then 
@@ -415,27 +397,49 @@ multilib-native_src_generic_sub() {
 	fi
 
 	# Most phases require a build tree, if it has already been
-	# unpacked but there exists no build directory set one up
-	if [[ "${1/*_}" != "unpack" ]]; then
-		if [[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]] && [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
-			# Prepare build dir
-			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
-					([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]]); then
-				einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
-				cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
-			else
-				einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
-				mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
+	# unpacked but there exists no build directory set one up,
+	# if on the other hand we're good to go, point S and friends
+	# into the build tree
+	if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
+		if [[ "${1/*_}" != "unpack" ]]; then
+			if [[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]]; then
+				# We're already unpacked, so prepare build dir
+				if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
+						([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]]); then
+					einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
+					cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
+				else
+					einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
+					mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
+				fi
 			fi
 		fi
+	else
+		# S should not be redefined for the CMake !CMAKE_IN_SOURCE_BUILD case,
+		# otherwise ECONF_SOURCE should point to the _prepared_ source dir and
+		# S into the build directory
+		if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
+			CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+			[[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] && \
+				S="${CMAKE_BUILD_DIR}"
+		else
+			S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+			if [[ -n ${MULTILIB_EXT_SOURCE_BUILD} ]]; then
+				ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+			fi
+		fi
+		# If KDE_S is defined then the kde.eclass is in use
+		if [[ -n ${KDE_S} ]]; then
+			KDE_S="${S}"
+		fi
 	fi
-
 
 	[[ -d "${S}" ]] && cd "${S}"
 
 	# Call the "real" phase function
 	multilib-native_${1}_internal
 
+	# If we've just unpacked the source move it into place
 	if [[ "${1/*_}" = "unpack" ]]; then
 		if [[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]] && [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
 			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
