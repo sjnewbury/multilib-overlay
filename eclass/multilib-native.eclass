@@ -329,6 +329,22 @@ multilib-native_src_generic() {
 	fi
 }
 
+# @FUNCTION: multilib-native_EBD
+# @USAGE:
+# @DESCRIPTION: This function configures an "External Build Directory"
+multilib-native_EBD() {
+	einfo "Configuring for an external build directory ..."
+	if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
+		einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
+		mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
+	fi
+	if [[ -n "${CMAKE_BUILD_TYPE}" ]];then
+		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"	
+	else
+		ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+	fi
+}
+
 # @FUNCTION: multilib-native_src_generic_sub
 # @USAGE: <phase>
 # @DESCRIPTION: This function gets used for each ABI pass of each phase
@@ -337,10 +353,10 @@ multilib-native_src_generic_sub() {
 
 # We support two kinds of build, by default we copy the source dir for each
 # ABI. Where supportable with the underlying package we can just create an
-# external build dir (objdir) this requires a modified ebuild which makes use
+# external build dir this requires a modified ebuild which makes use
 # of the EMULTILIB_SOURCE_TOPDIR variable (which points the the top of the
 # original source dir) to install files.  This latter behaviour is enabled with
-# MULTILIB_EXT_SOURCE_BUILD (MOSB).  For CMake based packages default is
+# MULTILIB_EXT_SOURCE_BUILD.  For CMake based packages default is
 # reversed and the CMAKE_IN_SOURCE_BUILD environment variable is used to 
 # specify the former behaviour.
 #
@@ -370,15 +386,7 @@ multilib-native_src_generic_sub() {
 	if ([[ "${1/*_}" == "unpack" ]] || [[ "${1/*_}" == "prepare" ]]) && \
 			!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 			([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
-		if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
-			einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
-			mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
-		fi
-		if [[ -n "${CMAKE_BUILD_TYPE}" ]];then
-			CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"	
-		else
-			ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
-		fi
+		multilib-native_MEBD
 		if [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
 			einfo "Skipping ${1} for ${ABI}"
 			return
@@ -400,8 +408,13 @@ multilib-native_src_generic_sub() {
 		else
 			S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 		fi
-		einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
-		cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
+		if [[ -z "${CMAKE_IN_SOURCE_BUILD}" ]] || \
+			[[ -n "${MULTILIB_EXT_SOURCE_BUILD}" ]]; then
+			multilib-native_EBD
+		else
+			einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
+			cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
+		fi
 	fi
 # If KDE_S is defined then the kde.eclass is in use
 	if [[ -n ${KDE_S} ]]; then
