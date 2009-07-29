@@ -260,6 +260,7 @@ multilib-native_save_abi_env() {
 	local _var _array
 	for _var in ${EMULTILIB_SAVE_VARS}; do
 		_array="EMULTILIB_${_var}"
+		[[ -z ${!_var} ]] && continue
 		multilib_debug ${_array}[$(multilib-native_abi_to_index_key ${1})] "${!_var}"
 		eval "${_array}[$(multilib-native_abi_to_index_key ${1})]"=\"${!_var}\"
 	done
@@ -275,6 +276,7 @@ multilib-native_restore_abi_env() {
 	local _var _array
 	for _var in ${EMULTILIB_SAVE_VARS}; do
 		_array="EMULTILIB_${_var}[$(multilib-native_abi_to_index_key ${1})]"
+		[[ -z ${!_array} ]] && continue
 		multilib_debug "${_var}" "${!_array}"
 		export ${_var}="${!_array}"
 	done
