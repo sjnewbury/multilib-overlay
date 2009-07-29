@@ -272,53 +272,41 @@ multilib-native_restore_abi_env() {
 # @USAGE: <phase>
 # @DESCRIPTION: Run each phase for each "install ABI"
 multilib-native_src_generic() {
-	if [[ -n ${EMULTILIB_PKG} ]]; then
-		if [[ -z ${OABI} ]] ; then
-			local abilist=""
-			if has_multilib_profile ; then
-				abilist=$(get_install_abis)
-				if [[ "${1/_*}" != "pkg" ]] || [[ "${1/*_}" = "setup" ]]; then
-					einfo "${1/src_/} multilib ${PN} for ABIs: ${abilist}"
-
-					# If this is the first time through, initialise the source path
-					# variables early and unconditionally, whether building for
-					# multilib or not.  This allows multilib-native ebuilds to always
-					# make use of them.  Then save the initial environment.
-					if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]} ]]; then
-						[[ -n ${MULTILIB_DEBUG} ]] && \
-							einfo "MULTILIB_DEBUG: Determining EMULTILIB_SOURCE_TOPDIR from S and WORKDIR"
-						EMULTILIB_RELATIVE_BUILD_DIR="${S#*${WORKDIR}\/}"
-						EMULTILIB_SOURCE_TOP_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
-
-						# If ${EMULTILIB_SOURCE_TOP_DIRNAME} is
-						# empty, then we assume ${S} points to the top level.
-						# (This should never happen.)
-						if [[ -z ${EMULTILIB_SOURCE_TOP_DIRNAME} ]]; then
-							ewarn "Unable to determine dirname of the source topdir:"
-							ewarn "Assuming S points to the top level"
-							EMULTILIB_SOURCE_TOP_DIRNAME=${EMULTILIB_RELATIVE_BUILD_DIR}
-						fi
-						EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
-						[[ -n ${MULTILIB_DEBUG} ]] && \
-							einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_TOPDIR=\"${EMULTILIB_SOURCE_TOPDIR}\""
-						multilib-native_save_abi_env "INIT"
-						EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]=1
-					fi
-
+	if [[ -n ${EMULTILIB_PKG} ]] && [[ -z ${OABI} ]] ; then
+		local abilist=""
+		if has_multilib_profile ; then
+			abilist=$(get_install_abis)
+			if [[ "${1/_*}" != "pkg" ]] || \
+					[[ "${1/*_}" = "setup" ]]; then
+				einfo "${1/src_/} multilib ${PN} for ABIs: ${abilist}"
+# If this is the first time through, initialise the source path variables early
+# and unconditionally, whether building for multilib or not.  This allows
+# multilib-native ebuilds to always make use of them.  Then save the initial
+# environment.
+				if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]} ]]; then
+					[[ -n ${MULTILIB_DEBUG} ]] && \
+						einfo "MULTILIB_DEBUG: Determining EMULTILIB_SOURCE_TOPDIR from S and WORKDIR"
+					EMULTILIB_RELATIVE_BUILD_DIR="${S#*${WORKDIR}\/}"
+					EMULTILIB_SOURCE_TOP_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
+					EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
+					[[ -n ${MULTILIB_DEBUG} ]] && \
+						einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_TOPDIR=\"${EMULTILIB_SOURCE_TOPDIR}\""
+					multilib-native_save_abi_env "INIT"
+					EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]=1
 				fi
-			elif is_crosscompile || tc-is-cross-compiler ; then
-				abilist=${DEFAULT_ABI}
 			fi
-			if [[ -n ${abilist} ]] ; then
-				OABI=${ABI}
-				for ABI in ${abilist} ; do
-					export ABI
-					multilib-native_src_generic ${1}
-				done
-				ABI=${OABI}
-				unset OABI
-				return 0
-			fi
+		elif is_crosscompile || tc-is-cross-compiler ; then
+			abilist=${DEFAULT_ABI}
+		fi
+		if [[ -n ${abilist} ]] ; then
+			OABI=${ABI}
+			for ABI in ${abilist} ; do
+				export ABI
+				multilib-native_src_generic ${1}
+			done
+			ABI=${OABI}
+			unset OABI
+			return 0
 		fi
 	fi
 	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
@@ -329,7 +317,8 @@ multilib-native_src_generic() {
 
 		# If this is the default ABI and we have a build tree,
 		# update the INIT environment
-		[[ "${ABI}" == "${DEFAULT_ABI}" ]] && [[ -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
+		[[ "${ABI}" == "${DEFAULT_ABI}" ]] && \
+				[[ -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
 			multilib-native_save_abi_env "INIT"
 
 		# This assures the environment is correctly configured for non-multilib
@@ -364,11 +353,32 @@ multilib-native_src_generic_sub() {
 # keeping track of ${S} relative to it.
 #
 
-# If this is the src_prepare phase we only need to run for the DEFAULT_ABI when
-# we are building out of the source tree since it is shared between each ABI.
-	if [[ "${1/*_}" == "prepare" ]] && \
+# Is this our first run for this ABI?
+	if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${ABI})]} ]]; then
+# Restore INIT and setup multilib environment for this ABI
+		multilib-native_restore_abi_env "INIT"
+		multilib-native_setup_abi_env "${ABI}"
+	else
+# Restore the environment for this ABI
+		multilib-native_restore_abi_env "${ABI}"
+	fi
+
+# If this is the unpack or prepare phase we only need to run for the
+# DEFAULT_ABI when we are building out of the source tree since it is shared
+# between each ABI.  When that's the case also define the BUILD/SOURCE
+# path variables, and create the build directory.
+	if ([[ "${1/*_}" == "unpack" ]] || [[ "${1/*_}" == "prepare" ]]) && \
 			!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 			([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
+		if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
+			einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
+			mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
+		fi
+		if [[ -n "${CMAKE_BUILD_TYPE}" ]];then
+			CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"	
+		else
+			ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+		fi
 		if [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
 			einfo "Skipping ${1} for ${ABI}"
 			return
@@ -379,70 +389,39 @@ multilib-native_src_generic_sub() {
 		fi
 	fi
 
-# Is this our first run for this ABI?
-	if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${ABI})]} ]]; then
-
-# Restore INIT and setup multilib environment
-# for this ABI
-		multilib-native_restore_abi_env "INIT"
-		multilib-native_setup_abi_env "${ABI}"
-	else
-# Restore the environment for this ABI
-		multilib-native_restore_abi_env "${ABI}"
-	fi
-
 # Most phases require a build tree, if it has already been unpacked but there
-# exists no build directory set one up, if on the other hand we're good to go,
-# point S and friends into the build tree
-	if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
-		if [[ "${1/*_}" != "unpack" ]]; then
-			if [[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]]; then
+# exists no build directory set one up.
+	if [[ "${1/*_}" != "unpack" ]] && \
+			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
+			[[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]]; then
 # We're already unpacked, so prepare build dir
-				if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
-						([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]]); then
-					einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
-					cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
-				else
-					einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
-					mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
-				fi
-			fi
-		fi
-	else
-# S should not be redefined for the CMake !CMAKE_IN_SOURCE_BUILD case,
-# otherwise ECONF_SOURCE should point to the _prepared_ source dir and S into
-# the build directory
-		if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
-			CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
-			[[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] && \
-				S="${CMAKE_BUILD_DIR}"
+		if [[ -n "${CMAKE_BUILD_TYPE}" ]];then
+			S="${CMAKE_BUILD_DIR}"
 		else
 			S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
-			if [[ -n ${MULTILIB_EXT_SOURCE_BUILD} ]]; then
-				ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
-			fi
 		fi
-# If KDE_S is defined then the kde.eclass is in use
-		if [[ -n ${KDE_S} ]]; then
-			KDE_S="${S}"
-		fi
+		einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
+		cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
 	fi
+# If KDE_S is defined then the kde.eclass is in use
+	if [[ -n ${KDE_S} ]]; then
+		KDE_S="${S}"
+	fi
+
+# if we're good to go, point S and friends into the build tree
 
 	[[ -d "${S}" ]] && cd "${S}"
 
 # Call the "real" phase function
 	multilib-native_${1}_internal
 
-# If we've just unpacked the source, and we're building in the source tree,
-# move it into place
+# If we've just unpacked the source, move it into place
 	if [[ "${1/*_}" = "unpack" ]] && \
 			([[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]] && \
-				[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]) && \
-			([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
-					([[ -z "${CMAKE_BUILD_TYPE}" ]] && \
-						[[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
+			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]); then
 		einfo "Moving source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
 		mv "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
+		S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 	fi
 }
 
