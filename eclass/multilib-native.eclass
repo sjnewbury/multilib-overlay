@@ -146,8 +146,7 @@ multilib_debug() {
 # @USAGE: <ABI>
 # @RETURN: <index key>
 multilib-native_abi_to_index_key() {
-# Until we can count on bash version > 4, we can't use associative
-# arrays.
+# Until we can count on bash version > 4, we can't use associative arrays.
 	local index=0 element=""
 	if [[ -z "${EMULTILIB_ARRAY_INDEX}" ]]; then
 		local abilist=""
@@ -167,12 +166,11 @@ multilib-native_abi_to_index_key() {
 # in cmake-utils.eclass.  We handle the build dir ourselves. 
 # Determine using IN or OUT source build
 _check_build_dir() {
-# @ECLASS-VARIABLE: CMAKE_USE_DIR
-# @DESCRIPTION:
-# Sets the directory where we are working with cmake.
-# For example when application uses autotools and only one
-# plugin needs to be done by cmake.
-# By default it uses ${S}.
+	# @ECLASS-VARIABLE: CMAKE_USE_DIR
+	# @DESCRIPTION:
+	# Sets the directory where we are working with cmake.
+	# For example when application uses autotools and only one
+	# plugin needs to be done by cmake. By default it uses ${S}.
 	: ${CMAKE_USE_DIR:=${S}}
 
 # in/out source build
@@ -188,8 +186,7 @@ multilib-native_setup_abi_env() {
 	[[ -z $(multilib-native_abi_to_index_key ${1}) ]] && \
 						die "Unknown ABI (${1})" 
 
-# Set the CHOST native first so that we pick up the native
-#202811.
+# Set the CHOST native first so that we pick up the native #202811.
 	export CHOST=$(get_abi_CHOST ${DEFAULT_ABI})
 	export AS="$(tc-getAS)"
 	export CC="$(tc-getCC)"
@@ -208,11 +205,10 @@ multilib-native_setup_abi_env() {
 	export LDFLAGS="${LDFLAGS} -L/${LIBDIR} -L/usr/${LIBDIR} $(get_abi_CFLAGS)"
 	export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 
-# If we aren't building for the DEFAULT ABI we may need to use some
-# ABI specific programs during the build.  The python binary is
-# sometimes used to find the python install dir but there may be more
-# than one version installed.  Use the system default python to find
-# the ABI specific version.
+# If we aren't building for the DEFAULT ABI we may need to use some ABI
+# specific programs during the build.  The python binary is sometimes used to
+# find the python install dir but there may be more than one version installed.
+# Use the system default python to find the ABI specific version.
 	if ! [[ "${ABI}" == "${DEFAULT_ABI}" ]]; then
 		pyver=$(python --version 2>&1)
 		pyver=${pyver/Python /python}
@@ -220,7 +216,6 @@ multilib-native_setup_abi_env() {
 		PYTHON="/usr/bin/${pyver}-${ABI}"
 		PERLBIN="/usr/bin/perl-${ABI}"
 	fi
-
 
 # ccache is ABI dependent
 	if [[ -z ${CCACHE_DIR} ]] ; then 
