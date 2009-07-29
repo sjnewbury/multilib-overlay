@@ -146,8 +146,8 @@ multilib_debug() {
 # @USAGE: <ABI>
 # @RETURN: <index key>
 multilib-native_abi_to_index_key() {
-	# Until we can count on bash version > 4, we can't use associative
-	# arrays.
+# Until we can count on bash version > 4, we can't use associative
+# arrays.
 	local index=0 element=""
 	if [[ -z "${EMULTILIB_ARRAY_INDEX}" ]]; then
 		local abilist=""
@@ -167,15 +167,15 @@ multilib-native_abi_to_index_key() {
 # in cmake-utils.eclass.  We handle the build dir ourselves. 
 # Determine using IN or OUT source build
 _check_build_dir() {
-	# @ECLASS-VARIABLE: CMAKE_USE_DIR
-	# @DESCRIPTION:
-	# Sets the directory where we are working with cmake.
-	# For example when application uses autotools and only one
-	# plugin needs to be done by cmake.
-	# By default it uses ${S}.
+# @ECLASS-VARIABLE: CMAKE_USE_DIR
+# @DESCRIPTION:
+# Sets the directory where we are working with cmake.
+# For example when application uses autotools and only one
+# plugin needs to be done by cmake.
+# By default it uses ${S}.
 	: ${CMAKE_USE_DIR:=${S}}
 
-	# in/out source build
+# in/out source build
 	echo ">>> Working in BUILD_DIR: \"$CMAKE_BUILD_DIR\""
 }
 
@@ -185,10 +185,11 @@ _check_build_dir() {
 # @DESCRIPTION: Setup initial environment for ABI, flags, workarounds etc.
 multilib-native_setup_abi_env() {
 	local pyver="" libsuffix=""
-	[[ -z $(multilib-native_abi_to_index_key ${1}) ]] && die "Unknown ABI (${1})" 
+	[[ -z $(multilib-native_abi_to_index_key ${1}) ]] && \
+						die "Unknown ABI (${1})" 
 
-	# Set the CHOST native first so that we pick up the native
-	# toolchain and not a cross-compiler by accident #202811.
+# Set the CHOST native first so that we pick up the native
+#202811.
 	export CHOST=$(get_abi_CHOST ${DEFAULT_ABI})
 	export AS="$(tc-getAS)"
 	export CC="$(tc-getCC)"
@@ -207,11 +208,11 @@ multilib-native_setup_abi_env() {
 	export LDFLAGS="${LDFLAGS} -L/${LIBDIR} -L/usr/${LIBDIR} $(get_abi_CFLAGS)"
 	export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 
-	# If we aren't building for the DEFAULT ABI we may need to use some
-	# ABI specific programs during the build.  The python binary is
-	# sometimes used to find the python install dir but there may be more
-	# than one version installed.  Use the system default python to find
-	# the ABI specific version.
+# If we aren't building for the DEFAULT ABI we may need to use some
+# ABI specific programs during the build.  The python binary is
+# sometimes used to find the python install dir but there may be more
+# than one version installed.  Use the system default python to find
+# the ABI specific version.
 	if ! [[ "${ABI}" == "${DEFAULT_ABI}" ]]; then
 		pyver=$(python --version 2>&1)
 		pyver=${pyver/Python /python}
@@ -221,7 +222,7 @@ multilib-native_setup_abi_env() {
 	fi
 
 
-	# ccache is ABI dependent
+# ccache is ABI dependent
 	if [[ -z ${CCACHE_DIR} ]] ; then 
 		CCACHE_DIR="/var/tmp/ccache-${1}"
 	else
@@ -258,9 +259,11 @@ multilib-native_restore_abi_env() {
 	local _var _array
 	for _var in ${EMULTILIB_SAVE_VARS}; do
 		_array="EMULTILIB_${_var}[$(multilib-native_abi_to_index_key ${1})]"
-		if !(declare -p EMULTILIB_${_var} &>/dev/null) || [[ -z ${!_array} ]]; then
+		if !(declare -p EMULTILIB_${_var} &>/dev/null) || \
+						[[ -z ${!_array} ]]; then
 			if (declare -p ${_var} &>/dev/null); then
-				[[ -n ${MULTILIB_DEBUG} ]] && einfo "MULTILIB_DEBUG: unsetting ${_var}"
+				[[ -n ${MULTILIB_DEBUG} ]] && \
+					einfo "MULTILIB_DEBUG: unsetting ${_var}"
 				unset ${_var}
 			fi
 			continue
@@ -274,68 +277,55 @@ multilib-native_restore_abi_env() {
 # @USAGE: <phase>
 # @DESCRIPTION: Run each phase for each "install ABI"
 multilib-native_src_generic() {
-	if [[ -n ${EMULTILIB_PKG} ]]; then
-		if [[ -z ${OABI} ]] ; then
-			local abilist=""
-			if has_multilib_profile ; then
-				abilist=$(get_install_abis)
-				if [[ "${1/_*}" != "pkg" ]] || [[ "${1/*_}" = "setup" ]]; then
-					einfo "${1/src_/} multilib ${PN} for ABIs: ${abilist}"
+	if [[ -n ${EMULTILIB_PKG} ]] && [[ -z ${OABI} ]] ; then
+		local abilist=""
+		if has_multilib_profile ; then
+			abilist=$(get_install_abis)
+			if [[ "${1/_*}" != "pkg" ]] || \
+					[[ "${1/*_}" = "setup" ]]; then
+				einfo "${1/src_/} multilib ${PN} for ABIs: ${abilist}"
 
-					# If this is the first time through, initialise the source path
-					# variables early and unconditionally, whether building for
-					# multilib or not.  This allows multilib-native ebuilds to always
-					# make use of them.  Then save the initial environment.
-					if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]} ]]; then
-						[[ -n ${MULTILIB_DEBUG} ]] && \
-							einfo "MULTILIB_DEBUG: Determining EMULTILIB_SOURCE_TOPDIR from S and WORKDIR"
-						EMULTILIB_RELATIVE_BUILD_DIR="${S#*${WORKDIR}\/}"
-						EMULTILIB_SOURCE_TOP_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
-
-						# If ${EMULTILIB_SOURCE_TOP_DIRNAME} is
-						# empty, then we assume ${S} points to the top level.
-						# (This should never happen.)
-						if [[ -z ${EMULTILIB_SOURCE_TOP_DIRNAME} ]]; then
-							ewarn "Unable to determine dirname of the source topdir:"
-							ewarn "Assuming S points to the top level"
-							EMULTILIB_SOURCE_TOP_DIRNAME=${EMULTILIB_RELATIVE_BUILD_DIR}
-						fi
-						EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
-						[[ -n ${MULTILIB_DEBUG} ]] && \
-							einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_TOPDIR=\"${EMULTILIB_SOURCE_TOPDIR}\""
-						multilib-native_save_abi_env "INIT"
-						EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]=1
-					fi
-
+# If this is the first time through, initialise the source path variables early
+# and unconditionally, whether building for multilib or not.  This allows
+# multilib-native ebuilds to always make use of them.  Then save the initial
+# environment.
+				if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]} ]]; then
+					[[ -n ${MULTILIB_DEBUG} ]] && \
+						einfo "MULTILIB_DEBUG: Determining EMULTILIB_SOURCE_TOPDIR from S and WORKDIR"
+					EMULTILIB_SOURCE_TOP_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
+					EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
+					[[ -n ${MULTILIB_DEBUG} ]] && \
+						einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_TOPDIR=\"${EMULTILIB_SOURCE_TOPDIR}\""
+					multilib-native_save_abi_env "INIT"
+					EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]=1
 				fi
-			elif is_crosscompile || tc-is-cross-compiler ; then
-				abilist=${DEFAULT_ABI}
 			fi
-			if [[ -n ${abilist} ]] ; then
-				OABI=${ABI}
-				for ABI in ${abilist} ; do
-					export ABI
-					multilib-native_src_generic ${1}
-				done
-				ABI=${OABI}
-				unset OABI
-				return 0
-			fi
+		elif is_crosscompile || tc-is-cross-compiler ; then
+			abilist=${DEFAULT_ABI}
+		fi
+		if [[ -n ${abilist} ]] ; then
+			OABI=${ABI}
+			for ABI in ${abilist} ; do
+				export ABI
+				multilib-native_src_generic ${1}
+			done
+			ABI=${OABI}
+			unset OABI
+			return 0
 		fi
 	fi
 	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
 		multilib-native_src_generic_sub ${1}
-
-		# Save the environment for this ABI
+# Save the environment for this ABI.
 		multilib-native_save_abi_env "${ABI}"
 
-		# If this is the default ABI and we have a build tree,
-		# update the INIT environment
-		[[ "${ABI}" == "${DEFAULT_ABI}" ]] && [[ -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
-			multilib-native_save_abi_env "INIT"
-
-		# This assures the environment is correctly configured for non-multilib
-		# phases such as src_unpack from ebuilds.
+# If this is the default ABI and we have a build tree, update the INIT
+# environment.
+		[[ "${ABI}" == "${DEFAULT_ABI}" ]] && \
+				[[ -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
+				multilib-native_save_abi_env "INIT"
+# This assures the environment is correctly configured for non-multilib
+# phases such as src_unpack from ebuilds.
 		multilib-native_restore_abi_env "INIT"
 	else
 		multilib-native_${1}_internal
@@ -348,29 +338,26 @@ multilib-native_src_generic() {
 multilib-native_src_generic_sub() {
 	EMULTILIB_config_vars=""
 
-	# We support two kinds of build, by default we copy the source dir for
-	# each ABI. Where supportable with the underlying package we can just
-	# create an external build dir (objdir) this requires a modified ebuild
-	# which makes use of the EMULTILIB_SOURCE_TOPDIR variable (which points
-	# the the top of the original source dir) to install files.  This
-	# latter behaviour is enabled with MULTILIB_EXT_SOURCE_BUILD (MOSB).
-	# For CMake based packages default is reversed and the
-	# CMAKE_IN_SOURCE_BUILD environment variable is used to specify the
-	# former behaviour.
-	#
-	# With multilib builds "S" eventually points into the build tree, but
-	# initially "S" points to the source the same as non-multilib
-	# packages. Sometimes, however, packages assume a directory structure
-	# ABOVE "S". ("S" is set to a subdirectory of the tree they unpack
-	# into ${WORKDIR})
-	#
-	# We need to deal with this by finding the top-level of the source
-	# tree and keeping track of ${S} relative to it.
-	#
+# We support two kinds of build, by default we copy the source dir for each
+# ABI. Where supportable with the underlying package we can just create an
+# external build dir (objdir) this requires a modified ebuild which makes use
+# of the EMULTILIB_SOURCE_TOPDIR variable (which points the the top of the
+# original source dir) to install files.  This latter behaviour is enabled with
+# MULTILIB_EXT_SOURCE_BUILD (MOSB).  For CMake based packages default is
+# reversed and the CMAKE_IN_SOURCE_BUILD environment variable is used to 
+# specify the former behaviour.
+#
+# With multilib builds "S" eventually points into the build tree, but
+# initially "S" points to the source the same as non-multilib packages.
+# Sometimes, however, packages assume a directory structure ABOVE "S". ("S" is
+# set to a subdirectory of the tree they unpack into ${WORKDIR}.)
+#
+# We need to deal with this by finding the top-level of the source tree and
+# keeping track of ${S} relative to it.
+#
 
-	# If this is the src_prepare phase we only need to run for the
-	# DEFAULT_ABI when we are building out of the source tree since
-	# it is shared between each ABI.
+# If this is the src_prepare phase we only need to run for the DEFAULT_ABI when
+# we are building out of the source tree since it is shared between each ABI.
 	if [[ "${1/*_}" == "prepare" ]] && \
 			!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 			([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
@@ -384,26 +371,25 @@ multilib-native_src_generic_sub() {
 		fi
 	fi
 
-	# Is this our first run for this ABI?
+# Is this our first run for this ABI?
 	if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${ABI})]} ]]; then
 
-		# Restore INIT and setup multilib environment
-		# for this ABI
+# Restore INIT and setup multilib environment
+# for this ABI
 		multilib-native_restore_abi_env "INIT"
 		multilib-native_setup_abi_env "${ABI}"
 	else
-		# Restore the environment for this ABI
+# Restore the environment for this ABI
 		multilib-native_restore_abi_env "${ABI}"
 	fi
 
-	# Most phases require a build tree, if it has already been
-	# unpacked but there exists no build directory set one up,
-	# if on the other hand we're good to go, point S and friends
-	# into the build tree
+# Most phases require a build tree, if it has already been unpacked but there
+# exists no build directory set one up, if on the other hand we're good to go,
+# point S and friends into the build tree
 	if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
 		if [[ "${1/*_}" != "unpack" ]]; then
 			if [[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]]; then
-				# We're already unpacked, so prepare build dir
+# We're already unpacked, so prepare build dir
 				if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 						([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]]); then
 					einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
@@ -415,9 +401,9 @@ multilib-native_src_generic_sub() {
 			fi
 		fi
 	else
-		# S should not be redefined for the CMake !CMAKE_IN_SOURCE_BUILD case,
-		# otherwise ECONF_SOURCE should point to the _prepared_ source dir and
-		# S into the build directory
+# S should not be redefined for the CMake !CMAKE_IN_SOURCE_BUILD case,
+# otherwise ECONF_SOURCE should point to the _prepared_ source dir and S into
+# the build directory
 		if [[ -n "${CMAKE_BUILD_TYPE}" ]]; then
 			CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 			[[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] && \
@@ -428,7 +414,7 @@ multilib-native_src_generic_sub() {
 				ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 			fi
 		fi
-		# If KDE_S is defined then the kde.eclass is in use
+# If KDE_S is defined then the kde.eclass is in use
 		if [[ -n ${KDE_S} ]]; then
 			KDE_S="${S}"
 		fi
@@ -436,11 +422,11 @@ multilib-native_src_generic_sub() {
 
 	[[ -d "${S}" ]] && cd "${S}"
 
-	# Call the "real" phase function
+# Call the "real" phase function
 	multilib-native_${1}_internal
 
-	# If we've just unpacked the source, and we're building in the source tree,
-	# move it into place
+# If we've just unpacked the source, and we're building in the source tree,
+# move it into place
 	if [[ "${1/*_}" = "unpack" ]] && \
 			([[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]] && \
 				[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]) && \
@@ -454,42 +440,42 @@ multilib-native_src_generic_sub() {
 
 # @FUNCTION: multilib-native_src_prepare_internal
 # @USAGE:
-# @DESCRIPTION: Override this function if you want to use a custom src_configure.
+# @DESCRIPTION: Override this function if you want a custom src_configure.
 multilib-native_src_prepare_internal() {
 	multilib-native_check_inherited_funcs src_prepare
 }
 
 # @FUNCTION: multilib-native_src_configure_internal
 # @USAGE:
-# @DESCRIPTION: Override this function if you want to use a custom src_configure.
+# @DESCRIPTION: Override this function if you want a custom src_configure.
 multilib-native_src_configure_internal() {
 	multilib-native_check_inherited_funcs src_configure
 }
 
 # @FUNCTION: multilib-native_src_compile_internal
 # @USAGE:
-# @DESCRIPTION: Override this function if you want to use a custom src_compile.
+# @DESCRIPTION: Override this function if you want a custom src_compile.
 multilib-native_src_compile_internal() {
 	multilib-native_check_inherited_funcs src_compile
 }
 
 # @FUNCTION: multilib-native_src_install_internal
 # @USAGE:
-# @DESCRIPTION: Override this function if you want to use a custom src_install
+# @DESCRIPTION: Override this function if you want a custom src_install
 multilib-native_src_install_internal() {
 	multilib-native_check_inherited_funcs src_install
 }
 
 # @FUNCTION: multilib-native_pkg_setup_internal
 # @USAGE:
-# @DESCRIPTION: Override this function if you want to use a custom pkg_setup
+# @DESCRIPTION: Override this function if you want a custom pkg_setup
 multilib-native_pkg_setup_internal() {
 	multilib-native_check_inherited_funcs pkg_setup
 }
 
 # @FUNCTION: multilib-native_src_unpack_internal
 # @USAGE:
-# @DESCRIPTION: Override this function if you want to use a custom src_unpack
+# @DESCRIPTION: Override this function if you want a custom src_unpack
 multilib-native_src_unpack_internal() {
 	multilib-native_check_inherited_funcs src_unpack
 }
@@ -497,7 +483,7 @@ multilib-native_src_unpack_internal() {
 
 # @FUNCTION: multilib-native_pkg_preinst_internal
 # @USAGE:
-# @DESCRIPTION: Override this function if you want to use a custom pkg_preinst
+# @DESCRIPTION: Override this function if you want a custom pkg_preinst
 multilib-native_pkg_preinst_internal() {
 	multilib-native_check_inherited_funcs pkg_preinst
 }
@@ -505,7 +491,7 @@ multilib-native_pkg_preinst_internal() {
 
 # @FUNCTION: multilib-native_pkg_postinst_internal
 # @USAGE:
-# @DESCRIPTION: Override this function if you want to use a custom pkg_postinst
+# @DESCRIPTION: Override this function if you want a custom pkg_postinst
 multilib-native_pkg_postinst_internal() {
 	multilib-native_check_inherited_funcs pkg_postinst
 }
@@ -513,7 +499,7 @@ multilib-native_pkg_postinst_internal() {
 
 # @FUNCTION: multilib-native_pkg_postrm_internal
 # @USAGE:
-# @DESCRIPTION: Override this function if you want to use a custom pkg_postrm
+# @DESCRIPTION: Override this function if you want a custom pkg_postrm
 multilib-native_pkg_postrm_internal() {
 	multilib-native_check_inherited_funcs pkg_postrm
 }
@@ -523,10 +509,10 @@ multilib-native_pkg_postrm_internal() {
 # @USAGE: <phase>
 # @DESCRIPTION: Checks all inherited eclasses for requested phase function
 multilib-native_check_inherited_funcs() {
-	# check all eclasses for given function, in order of inheritance.
-	# if none provides it, the var stays empty. If more have it, the last one wins.
-	# Ignore the ones we inherit ourselves, base doesn't matter, as we default
-	# on it
+# Check all eclasses for given function, in order of inheritance.
+# If none provides it, the var stays empty. If more have it, the last one wins.
+# Ignore the ones we inherit ourselves, base doesn't matter, as we default on
+# it.
 	local declared_func=""
 	if [[ -z ${EMULTILIB_INHERITED} ]]; then
 		if [[ -f "${T}"/eclass-debug.log ]]; then
@@ -550,8 +536,8 @@ multilib-native_check_inherited_funcs() {
 		fi
 	done
 
-	# now if $declared_func is still empty, none of the inherited eclasses
-	# provides it, so default on base.eclass. Do nothing for pkg_post*
+# Now if $declared_func is still empty, none of the inherited eclasses provides
+# it, so default on base.eclass. Do nothing for pkg_post*
 	if [[ -z "${declared_func}" ]]; then
 		if [[ "${1/_*}" != "src" ]]; then
 			declared_func="return"
