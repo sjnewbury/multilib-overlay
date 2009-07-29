@@ -277,8 +277,10 @@ multilib-native_restore_abi_env() {
 	for _var in ${EMULTILIB_SAVE_VARS}; do
 		_array="EMULTILIB_${_var}[$(multilib-native_abi_to_index_key ${1})]"
 		if !(declare -p EMULTILIB_${_var} &>/dev/null) || [[ -z ${!_array} ]]; then
-			[[ -n MULTILIB_DEBUG ]] && einfo "MULTILIB_DEBUG: unsetting ${_var}"
-			unset ${_var}
+			if (declare -p ${_var} &>/dev/null); then
+				[[ -n MULTILIB_DEBUG ]] && einfo "MULTILIB_DEBUG: unsetting ${_var}"
+				unset ${_var}
+			fi
 			continue
 		fi
 		multilib_debug "${_var}" "${!_array}"
