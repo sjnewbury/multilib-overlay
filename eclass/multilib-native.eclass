@@ -260,7 +260,7 @@ multilib-native_save_abi_env() {
 	local _var _array
 	for _var in ${EMULTILIB_SAVE_VARS}; do
 		_array="EMULTILIB_${_var}"
-		[[ -z ${!_var} ]] && continue
+		declare -p "${_var}" &>/dev/null || continue
 		multilib_debug ${_array}[$(multilib-native_abi_to_index_key ${1})] "${!_var}"
 		eval "${_array}[$(multilib-native_abi_to_index_key ${1})]"=\"${!_var}\"
 	done
@@ -276,7 +276,7 @@ multilib-native_restore_abi_env() {
 	local _var _array
 	for _var in ${EMULTILIB_SAVE_VARS}; do
 		_array="EMULTILIB_${_var}[$(multilib-native_abi_to_index_key ${1})]"
-		[[ -z ${!_array} ]] && continue
+		declare -p "EMULTILIB_${_var}" &>/dev/null || continue
 		multilib_debug "${_var}" "${!_array}"
 		export ${_var}="${!_array}"
 	done
@@ -315,7 +315,7 @@ multilib-native_src_generic() {
 						EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
 						[[ -n ${MULTILIB_DEBUG} ]] && \
 							einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_TOPDIR=\"${EMULTILIB_SOURCE_TOPDIR}\""
-
+						multilib-native_setup_abi_env "INIT"
 						multilib-native_save_abi_env "INIT"
 						EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]=1
 					fi
