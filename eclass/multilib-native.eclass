@@ -34,13 +34,15 @@ esac
 # EMULTILIB_SAVE_VARS="${EMULTILIB_SAVE_VARS}
 #		AS CC CXX FC LD ASFLAGS CFLAGS CXXFLAGS FCFLAGS FFLAGS LDFLAGS
 #		CHOST CBUILD CDEFINE LIBDIR S CCACHE_DIR myconf PYTHON PERLBIN
-#		QMAKE QMAKESPEC QTBINDIR CMAKE_BUILD_DIR mycmakeargs KDE_S
-#		ECONF_SOURCE MY_LIBDIR MOZLIBDIR SDKDIR G2CONF"
+#		QMAKE QMAKESPEC QTBINDIR  QTBASEDIR QTLIBDIR QTPCDIR
+#		QTPLUGINDIR CMAKE_BUILD_DIR mycmakeargs KDE_S ECONF_SOURCE
+#		MY_LIBDIR MOZLIBDIR SDKDIR G2CONF PKG_CONFIG_PATH"
 EMULTILIB_SAVE_VARS="${EMULTILIB_SAVE_VARS}
 		AS CC CXX FC LD ASFLAGS CFLAGS CXXFLAGS FCFLAGS FFLAGS LDFLAGS
 		CHOST CBUILD CDEFINE LIBDIR S CCACHE_DIR myconf PYTHON PERLBIN
-		QMAKE QMAKESPEC QTBINDIR CMAKE_BUILD_DIR mycmakeargs KDE_S
-		ECONF_SOURCE MY_LIBDIR MOZLIBDIR SDKDIR G2CONF"
+		QMAKE QMAKESPEC QTBINDIR  QTBASEDIR QTLIBDIR QTPCDIR
+		QTPLUGINDIR CMAKE_BUILD_DIR mycmakeargs KDE_S ECONF_SOURCE
+		MY_LIBDIR MOZLIBDIR SDKDIR G2CONF PKG_CONFIG_PATH"
 
 # @VARIABLE: EMULTILIB_SOURCE_TOP_DIRNAME
 # @DESCRIPTION:
@@ -203,18 +205,7 @@ multilib-native_setup_abi_env() {
 	export CDEFINE="${CDEFINE} $(get_abi_CDEFINE $1)"
 	export LIBDIR=$(get_abi_LIBDIR $1)
 	export LDFLAGS="${LDFLAGS} -L/${LIBDIR} -L/usr/${LIBDIR} $(get_abi_CFLAGS)"
-
-	# Hack to get mysql.eclass to work: mysql.eclass only sets MY_LIBDIR
-	# if it isn't already unset, this results in it being defined during
-	# the src_unpack phase and always being set to the DEFAULT_ABI libdir.
-	# mysql_version_is_at_least is defined in mysql_fx.eclass, which is
-	# inherited by mysql.eclass, if it exists then the ebuild has
-	# inherited mysql.eclass.
-	#
-	# Ideally we should make src_unpack multilib instead. <-- TODO!
-	if mysql_version_is_at_least &>/dev/null; then
-		[[ -n ${MY_LIBDIR} ]] && export MY_LIBDIR=/usr/$(get_libdir)/mysql
-	fi
+	export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 
 	# If we aren't building for the DEFAULT ABI we may need to use some
 	# ABI specific programs during the build.  The python binary is
@@ -391,7 +382,7 @@ multilib-native_src_generic_sub() {
 	# If this is the src_prepare phase we only need to run for the
 	# DEFAULT_ABI when we are building out of the source tree since
 	# it is shared between each ABI.
-	if [[ "${1}" == "src_prepare" ]] && \
+	if [[ "${1/*_}" == "prepare" ]] && \
 			!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 			([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
 		if [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
@@ -405,9 +396,6 @@ multilib-native_src_generic_sub() {
 	fi
 
 	# Is this our first run for this ABI?
-	multilib_debug "EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${ABI})]" \
-					"${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${ABI})]}"
-		
 	if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${ABI})]} ]]; then
 
 		# Restore INIT and setup multilib environment
@@ -435,15 +423,6 @@ multilib-native_src_generic_sub() {
 		fi
 	fi
 
-	# qt-build.eclass sets these in pkg_setup, but that results
-	# in the path always pointing to the primary ABI libdir.
-	# These need to run on each pass to set correctly.
-	QTBASEDIR=/usr/"$(get_libdir)"/qt4
-	QTLIBDIR=/usr/"$(get_libdir)"/qt4
-	QTPCDIR=/usr/"$(get_libdir)"/pkgconfig
-	QTPLUGINDIR="${QTLIBDIR}"/plugins
-
-	export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 
 	[[ -d "${S}" ]] && cd "${S}"
 
