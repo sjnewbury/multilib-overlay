@@ -272,55 +272,68 @@ multilib-native_restore_abi_env() {
 # @USAGE: <phase>
 # @DESCRIPTION: Run each phase for each "install ABI"
 multilib-native_src_generic() {
-	if [[ -n ${EMULTILIB_PKG} ]] && [[ -z ${OABI} ]] ; then
-		local abilist=""
-		if has_multilib_profile ; then
-			abilist=$(get_install_abis)
-			if [[ "${1/_*}" != "pkg" ]] || \
-					[[ "${1/*_}" = "setup" ]]; then
-				einfo "${1/src_/} multilib ${PN} for ABIs: ${abilist}"
+	if [[ -n ${EMULTILIB_PKG} ]]; then
+		if [[ -z ${OABI} ]] ; then
+			local abilist=""
+			if has_multilib_profile ; then
+				abilist=$(get_install_abis)
+				if [[ "${1/_*}" != "pkg" ]] || [[ "${1/*_}" = "setup" ]]; then
+					einfo "${1/src_/} multilib ${PN} for ABIs: ${abilist}"
 
-# If this is the first time through, initialise the source path variables early
-# and unconditionally, whether building for multilib or not.  This allows
-# multilib-native ebuilds to always make use of them.  Then save the initial
-# environment.
-				if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]} ]]; then
-					[[ -n ${MULTILIB_DEBUG} ]] && \
-						einfo "MULTILIB_DEBUG: Determining EMULTILIB_SOURCE_TOPDIR from S and WORKDIR"
-					EMULTILIB_SOURCE_TOP_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
-					EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
-					[[ -n ${MULTILIB_DEBUG} ]] && \
-						einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_TOPDIR=\"${EMULTILIB_SOURCE_TOPDIR}\""
-					multilib-native_save_abi_env "INIT"
-					EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]=1
+					# If this is the first time through, initialise the source path
+					# variables early and unconditionally, whether building for
+					# multilib or not.  This allows multilib-native ebuilds to always
+					# make use of them.  Then save the initial environment.
+					if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]} ]]; then
+						[[ -n ${MULTILIB_DEBUG} ]] && \
+							einfo "MULTILIB_DEBUG: Determining EMULTILIB_SOURCE_TOPDIR from S and WORKDIR"
+						EMULTILIB_RELATIVE_BUILD_DIR="${S#*${WORKDIR}\/}"
+						EMULTILIB_SOURCE_TOP_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
+
+						# If ${EMULTILIB_SOURCE_TOP_DIRNAME} is
+						# empty, then we assume ${S} points to the top level.
+						# (This should never happen.)
+						if [[ -z ${EMULTILIB_SOURCE_TOP_DIRNAME} ]]; then
+							ewarn "Unable to determine dirname of the source topdir:"
+							ewarn "Assuming S points to the top level"
+							EMULTILIB_SOURCE_TOP_DIRNAME=${EMULTILIB_RELATIVE_BUILD_DIR}
+						fi
+						EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
+						[[ -n ${MULTILIB_DEBUG} ]] && \
+							einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_TOPDIR=\"${EMULTILIB_SOURCE_TOPDIR}\""
+						multilib-native_save_abi_env "INIT"
+						EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]=1
+					fi
+
 				fi
+			elif is_crosscompile || tc-is-cross-compiler ; then
+				abilist=${DEFAULT_ABI}
 			fi
-		elif is_crosscompile || tc-is-cross-compiler ; then
-			abilist=${DEFAULT_ABI}
-		fi
-		if [[ -n ${abilist} ]] ; then
-			OABI=${ABI}
-			for ABI in ${abilist} ; do
-				export ABI
-				multilib-native_src_generic ${1}
-			done
-			ABI=${OABI}
-			unset OABI
-			return 0
+			if [[ -n ${abilist} ]] ; then
+				OABI=${ABI}
+				for ABI in ${abilist} ; do
+					export ABI
+					multilib-native_src_generic ${1}
+				done
+				ABI=${OABI}
+				unset OABI
+				return 0
+			fi
 		fi
 	fi
 	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
 		multilib-native_src_generic_sub ${1}
-# Save the environment for this ABI.
+
+		# Save the environment for this ABI
 		multilib-native_save_abi_env "${ABI}"
 
-# If this is the default ABI and we have a build tree, update the INIT
-# environment.
-		[[ "${ABI}" == "${DEFAULT_ABI}" ]] && \
-				[[ -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
-				multilib-native_save_abi_env "INIT"
-# This assures the environment is correctly configured for non-multilib
-# phases such as src_unpack from ebuilds.
+		# If this is the default ABI and we have a build tree,
+		# update the INIT environment
+		[[ "${ABI}" == "${DEFAULT_ABI}" ]] && [[ -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
+			multilib-native_save_abi_env "INIT"
+
+		# This assures the environment is correctly configured for non-multilib
+		# phases such as src_unpack from ebuilds.
 		multilib-native_restore_abi_env "INIT"
 	else
 		multilib-native_${1}_internal
