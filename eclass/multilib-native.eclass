@@ -439,15 +439,16 @@ multilib-native_src_generic_sub() {
 	# Call the "real" phase function
 	multilib-native_${1}_internal
 
-	# If we've just unpacked the source move it into place
-	if [[ "${1/*_}" = "unpack" ]]; then
-		if [[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]] && [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
-			if [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
-					([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]]); then
-				einfo "Moving source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
-				mv "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
-			fi
-		fi
+	# If we've just unpacked the source, and we're building in the source tree,
+	# move it into place
+	if [[ "${1/*_}" = "unpack" ]] && \
+			([[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]] && \
+				[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]) && \
+			([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
+					([[ -z "${CMAKE_BUILD_TYPE}" ]] && \
+						[[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
+		einfo "Moving source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
+		mv "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
 	fi
 }
 
