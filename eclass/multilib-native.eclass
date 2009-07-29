@@ -260,7 +260,7 @@ multilib-native_save_abi_env() {
 	local _var _array
 	for _var in ${EMULTILIB_SAVE_VARS}; do
 		_array="EMULTILIB_${_var}"
-		declare -p "${_var}" &>/dev/null || continue
+		declare -p ${_var} &>/dev/null || continue
 		multilib_debug ${_array}[$(multilib-native_abi_to_index_key ${1})] "${!_var}"
 		eval "${_array}[$(multilib-native_abi_to_index_key ${1})]"=\"${!_var}\"
 	done
@@ -276,7 +276,11 @@ multilib-native_restore_abi_env() {
 	local _var _array
 	for _var in ${EMULTILIB_SAVE_VARS}; do
 		_array="EMULTILIB_${_var}[$(multilib-native_abi_to_index_key ${1})]"
-		declare -p "EMULTILIB_${_var}" &>/dev/null || continue
+		if !(declare -p EMULTILIB_${_var} &>/dev/null) || [[ -z ${!_array} ]]; then
+			[[ -n MULTILIB_DEBUG ]] && einfo "MULTILIB_DEBUG: unsetting ${_var}"
+			unset ${_var}
+			continue
+		fi
 		multilib_debug "${_var}" "${!_array}"
 		export ${_var}="${!_array}"
 	done
@@ -315,7 +319,23 @@ multilib-native_src_generic() {
 						EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
 						[[ -n ${MULTILIB_DEBUG} ]] && \
 							einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_TOPDIR=\"${EMULTILIB_SOURCE_TOPDIR}\""
-						multilib-native_setup_abi_env "INIT"
+#CHOST=$(get_abi_CHOST ${DEFAULT_ABI})
+#AS="$(tc-getAS)"
+#CC="$(tc-getCC)"
+#CXX="$(tc-getCXX)"
+#FC="$(tc-getFC)"
+#LD="$(tc-getLD) $(get_abi_LDFLAGS)"
+#ASFLAGS="${ASFLAGS} $(get_abi_ASFLAGS)"
+#CFLAGS="${CFLAGS} $(get_abi_CFLAGS)"
+#CXXFLAGS="${CXXFLAGS} $(get_abi_CFLAGS)"
+#FCFLAGS="${FCFLAGS} ${CFLAGS}"
+#FFLAGS="${FFLAGS} ${CFLAGS}"
+#CHOST=$(get_abi_CHOST $1)
+#CBUILD=$(get_abi_CHOST $1)
+#CDEFINE="${CDEFINE} $(get_abi_CDEFINE $1)"
+#LIBDIR=$(get_abi_LIBDIR $1)
+#LDFLAGS="${LDFLAGS} -L/${LIBDIR} -L/usr/${LIBDIR} $(get_abi_CFLAGS)"
+#PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 						multilib-native_save_abi_env "INIT"
 						EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]=1
 					fi
