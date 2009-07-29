@@ -321,23 +321,6 @@ multilib-native_src_generic() {
 						EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
 						[[ -n ${MULTILIB_DEBUG} ]] && \
 							einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_TOPDIR=\"${EMULTILIB_SOURCE_TOPDIR}\""
-#CHOST=$(get_abi_CHOST ${DEFAULT_ABI})
-#AS="$(tc-getAS)"
-#CC="$(tc-getCC)"
-#CXX="$(tc-getCXX)"
-#FC="$(tc-getFC)"
-#LD="$(tc-getLD) $(get_abi_LDFLAGS)"
-#ASFLAGS="${ASFLAGS} $(get_abi_ASFLAGS)"
-#CFLAGS="${CFLAGS} $(get_abi_CFLAGS)"
-#CXXFLAGS="${CXXFLAGS} $(get_abi_CFLAGS)"
-#FCFLAGS="${FCFLAGS} ${CFLAGS}"
-#FFLAGS="${FFLAGS} ${CFLAGS}"
-#CHOST=$(get_abi_CHOST $1)
-#CBUILD=$(get_abi_CHOST $1)
-#CDEFINE="${CDEFINE} $(get_abi_CDEFINE $1)"
-#LIBDIR=$(get_abi_LIBDIR $1)
-#LDFLAGS="${LDFLAGS} -L/${LIBDIR} -L/usr/${LIBDIR} $(get_abi_CFLAGS)"
-#PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
 						multilib-native_save_abi_env "INIT"
 						EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]=1
 					fi
