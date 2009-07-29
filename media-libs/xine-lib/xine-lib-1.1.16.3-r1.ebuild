@@ -4,6 +4,8 @@
 
 EAPI=1
 
+MULTILIB_EXT_SOURCE_BUILD=1
+
 inherit autotools eutils flag-o-matic toolchain-funcs multilib multilib-native
 
 # This should normally be empty string, unless a release has a suffix.
@@ -115,9 +117,9 @@ multilib-native_src_compile_internal() {
 
 	# Too many file names are the same (xine_decoder.c), change the builddir
 	# So that the relative path is used to identify them.
-	mkdir "${WORKDIR}/build"
+	# (Using multilib-native external build directory support)
 
-	ECONF_SOURCE="${S}" econf \
+	 econf \
 		$(use_enable gnome gnomevfs) \
 		$(use_enable nls) \
 		$(use_enable ipv6) \
@@ -180,6 +182,7 @@ multilib-native_src_install_internal() {
 		docdir="/usr/share/doc/${PF}" htmldir="/usr/share/doc/${PF}/html" \
 		install || die "emake install failed."
 
+	cd "${EMULTILIB_SOURCE_TOPDIR}"
 	dodoc ChangeLog
 
 	prep_ml_binaries /usr/bin/xine-config 
