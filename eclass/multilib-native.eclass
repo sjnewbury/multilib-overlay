@@ -386,7 +386,7 @@ multilib-native_src_generic_sub() {
 	if ([[ "${1/*_}" == "unpack" ]] || [[ "${1/*_}" == "prepare" ]]) && \
 			!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 			([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
-		multilib-native_MEBD
+		multilib-native_EBD
 		if [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
 			einfo "Skipping ${1} for ${ABI}"
 			return
