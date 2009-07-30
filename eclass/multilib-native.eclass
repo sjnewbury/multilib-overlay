@@ -317,17 +317,17 @@ multilib-native_src_generic() {
 	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
 		multilib-native_src_generic_sub ${1}
 
-		# Save the environment for this ABI
+# Save the environment for this ABI
 		multilib-native_save_abi_env "${ABI}"
 
-		# If this is the default ABI and we have a build tree,
-		# update the INIT environment
+# If this is the default ABI and we have a build tree, update the INIT
+# environment
 		[[ "${ABI}" == "${DEFAULT_ABI}" ]] && \
 				[[ -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
 			multilib-native_save_abi_env "INIT"
 
-		# This assures the environment is correctly configured for non-multilib
-		# phases such as src_unpack from ebuilds.
+# This assures the environment is correctly configured for non-multilib phases
+# such as a src_unpack override in ebuilds.
 		multilib-native_restore_abi_env "INIT"
 	else
 		multilib-native_${1}_internal
