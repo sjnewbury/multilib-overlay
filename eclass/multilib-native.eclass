@@ -333,11 +333,9 @@ multilib-native_src_generic() {
 # @USAGE:
 # @DESCRIPTION: This function configures an "External Build Directory"
 multilib-native_EBD() {
-	einfo "Configuring for an external build directory ..."
-	if [[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
-		einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
-		mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
-	fi
+	einfo "Configuring external build directory for ABI: ${ABI} ..."
+	einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
+	mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
 	if [[ -n "${CMAKE_BUILD_TYPE}" ]];then
 		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"	
 	else
@@ -386,7 +384,7 @@ multilib-native_src_generic_sub() {
 	if ([[ "${1/*_}" == "unpack" ]] || [[ "${1/*_}" == "prepare" ]]) && \
 			!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 			([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
-		multilib-native_EBD
+		[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && multilib-native_EBD
 		if [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
 			einfo "Skipping ${1} for ${ABI}"
 			return
@@ -408,8 +406,8 @@ multilib-native_src_generic_sub() {
 		else
 			S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 		fi
-		if [[ -z "${CMAKE_IN_SOURCE_BUILD}" ]] || \
-			[[ -n "${MULTILIB_EXT_SOURCE_BUILD}" ]]; then
+		if !([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
+			([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
 			multilib-native_EBD
 		else
 			einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
