@@ -203,7 +203,12 @@ multilib-native_setup_abi_env() {
 	export CDEFINE="${CDEFINE} $(get_abi_CDEFINE $1)"
 	export LIBDIR=$(get_abi_LIBDIR $1)
 	export LDFLAGS="${LDFLAGS} -L/${LIBDIR} -L/usr/${LIBDIR} $(get_abi_CFLAGS)"
-	export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
+
+	if [[ -z PKG_CONFIG_PATH ]]; then
+		export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
+	else
+		PKG_CONFIG_PATH="${PKG_CONFIG_PATH/lib*\//$(get_libdir)/}:/usr/$(get_libdir)/pkgconfig"
+	fi
 
 # If we aren't building for the DEFAULT ABI we may need to use some ABI
 # specific programs during the build.  The python binary is sometimes used to
