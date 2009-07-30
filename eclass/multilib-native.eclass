@@ -406,6 +406,8 @@ multilib-native_src_generic_sub() {
 		else
 			S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 		fi
+# If KDE_S is defined then the kde.eclass is in use
+		[[ -n ${KDE_S} ]] && KDE_S="${S}"
 		if !([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 			([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
 			multilib-native_EBD
@@ -413,10 +415,6 @@ multilib-native_src_generic_sub() {
 			einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
 			cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
 		fi
-	fi
-# If KDE_S is defined then the kde.eclass is in use
-	if [[ -n ${KDE_S} ]]; then
-		KDE_S="${S}"
 	fi
 
 # if we're good to go, point S and friends into the build tree
@@ -433,6 +431,7 @@ multilib-native_src_generic_sub() {
 		einfo "Moving source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
 		mv "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
 		S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+		[[ -n ${KDE_S} ]] && KDE_S="${S}"
 	fi
 }
 
