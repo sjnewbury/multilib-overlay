@@ -56,18 +56,18 @@ done
 
 RDEPEND="
 	>=sys-devel/binutils-2.16.1
-	>=dev-libs/nss-3.12.2
-	>=dev-libs/nspr-4.7.3
-	>=dev-db/sqlite-3.6.7
-	>=app-text/hunspell-1.2
+	>=dev-libs/nss-3.12.2[lib32?]
+	>=dev-libs/nspr-4.7.3[lib32?]
+	>=dev-db/sqlite-3.6.7[lib32?]
+	>=app-text/hunspell-1.2[lib32?]
 
-	>=net-libs/xulrunner-${XUL_PV}[java=]
+	>=net-libs/xulrunner-${XUL_PV}[java=,lib32?]
 
-	>=x11-libs/cairo-1.8.8[X]
-	x11-libs/pango[X]"
+	>=x11-libs/cairo-1.8.8[X,lib32?]
+	x11-libs/pango[X,lib32?]"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 PDEPEND="restrict-javascript? ( >=www-plugins/noscript-1.8.7 )"
 
@@ -101,7 +101,7 @@ linguas() {
 	done
 }
 
-multilib-native_pkg_setup_internal(){
+pkg_setup(){
 	if ! use bindist && ! use iceweasel; then
 		elog "You are enabling official branding. You may not redistribute this build"
 		elog "to any users on your network or the internet. Doing so puts yourself into"
@@ -110,7 +110,7 @@ multilib-native_pkg_setup_internal(){
 	fi
 }
 
-multilib-native_src_unpack_internal() {
+src_unpack() {
 	unpack ${A}
 
 	if use iceweasel; then
@@ -241,16 +241,17 @@ multilib-native_src_compile_internal() {
 }
 
 multilib-native_src_install_internal() {
+	MOZILLA_FIVE_HOME="/usr/$(get_libdir)/${PN}"
 	emake DESTDIR="${D}" install || die "emake install failed"
 	rm "${D}"/usr/bin/firefox
 
 	linguas
 	for X in ${linguas}; do
-		[[ ${X} != "en" ]] && xpi_install "${WORKDIR}"/"${P}-${X}"
+		[[ ${X} != "en" ]] && xpi_install "${WORKDIR}/${P}-${X}"
 	done
 
 	cp "${FILESDIR}"/gentoo-default-prefs.js \
-		"${D}"${MOZILLA_FIVE_HOME}/defaults/preferences/all-gentoo.js
+		"${D}${MOZILLA_FIVE_HOME}/defaults/preferences/all-gentoo.js"
 
 	local LANG=${linguas%% *}
 	if [[ -n ${LANG} && ${LANG} != "en" ]]; then
@@ -283,22 +284,15 @@ multilib-native_src_install_internal() {
 		echo "StartupNotify=true" >> "${D}"/usr/share/applications/${PN}-${DESKTOP_PV}.desktop
 	fi
 
-	# Create /usr/bin/firefox
-	cat <<EOF >"${D}"/usr/bin/firefox
-#!/bin/sh
-export LD_LIBRARY_PATH="${MOZILLA_FIVE_HOME}\${LD_LIBRARY_PATH+":\${LD_LIBRARY_PATH}"}"
-exec "${MOZILLA_FIVE_HOME}"/firefox "\$@"
-EOF
-
-	fperms 0755 /usr/bin/firefox
+	dosym "${MOZILLA_FIVE_HOME}/firefox" "/usr/bin/firefox-${ABI}"
+	dosym "firefox-${ABI}" "/usr/bin/firefox"
 
 	# Plugins dir
 	ln -s "${D}"/usr/$(get_libdir)/{nsbrowser,mozilla-firefox}/plugins
 }
 
 pkg_postinst() {
-	ewarn "All the packages built against ${PN} won't compile,"
-	ewarn "any package that fails to build warrants a bug report."
+	ewarn "If firefox says \"Couldn't load XPCOM\", try running revdep-rebuild"
 	elog
 
 	# Update mimedb for the new .desktop file
