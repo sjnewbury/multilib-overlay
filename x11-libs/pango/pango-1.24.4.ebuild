@@ -36,7 +36,7 @@ function multilib_enabled() {
 	has_multilib_profile || ( use x86 && [ "$(get_libdir)" = "lib32" ] )
 }
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF} $(use_with X x)"
 }
 

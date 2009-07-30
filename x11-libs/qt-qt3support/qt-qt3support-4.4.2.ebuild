@@ -29,7 +29,7 @@ QT4_EXTRACT_DIRECTORIES="${QT4_TARGET_DIRECTORIES}
 src/tools/uic/
 "
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	QT4_BUILT_WITH_USE_CHECK="${QT4_BUILT_WITH_USE_CHECK}
 		~x11-libs/qt-core-${PV} qt3support
 		~x11-libs/qt-gui-${PV} qt3support

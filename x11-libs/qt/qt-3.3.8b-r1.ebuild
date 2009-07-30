@@ -53,7 +53,7 @@ S="${WORKDIR}/qt-x11-${SRCTYPE}-${PV}"
 
 QTBASE="/usr/qt/3"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if use immqt && use immqt-bc ; then
 		ewarn
 		ewarn "immqt and immqt-bc are exclusive. You cannot set both."

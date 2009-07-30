@@ -21,7 +21,7 @@ DEPEND="${RDEPEND}
 CONFIGURE_OPTIONS="$(use_enable ipv6)
 	--with-encodingsdir=/usr/share/fonts/encodings"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	# No such function yet
 	# x-modular_pkg_setup
 

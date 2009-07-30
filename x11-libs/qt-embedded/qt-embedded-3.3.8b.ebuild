@@ -32,7 +32,7 @@ S=${WORKDIR}/qt-embedded-free-${PV}
 
 QTBASE=/usr/qt/3-embedded
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	ewarn "Note: this ebuild provides a Qt/Embedded setup that is suitable for testing,"
 	ewarn "but definitely not tailored for real embedded systems."
 	ewarn "I advise you select your own featureset (e.g. by editing this ebuild)"

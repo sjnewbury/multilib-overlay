@@ -32,7 +32,7 @@ DEPEND="${RDEPEND}
 	sys-devel/flex
 	x11-misc/xbitmaps"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	# clean up orphaned cruft left over by motif-config
 	local i l count=0
 	for i in "${ROOT}"usr/bin/{mwm,uil,xmbind} \

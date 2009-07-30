@@ -23,7 +23,7 @@ DEPEND="${RDEPEND}
 	dev-libs/libxslt
 	>=x11-proto/xcb-proto-1.2"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	CONFIGURE_OPTIONS="$(use_enable doc build-docs)
 		$(use_enable selinux xselinux)
 		--enable-xinput"

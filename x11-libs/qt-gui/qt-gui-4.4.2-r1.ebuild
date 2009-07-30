@@ -51,7 +51,7 @@ QT4_EXTRACT_DIRECTORIES="
 src/tools/rcc/
 tools/shared/"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	use glib && QT4_BUILT_WITH_USE_CHECK="${QT4_BUILT_WITH_USE_CHECK}
 		~x11-libs/qt-core-${PV} glib"
 	use qt3support && QT4_BUILT_WITH_USE_CHECK="${QT4_BUILT_WITH_USE_CHECK}

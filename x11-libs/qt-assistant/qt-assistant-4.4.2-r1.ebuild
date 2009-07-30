@@ -26,7 +26,7 @@ doc/qch/
 src/3rdparty/clucene/
 tools/shared/fontpanel"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	qt4-build_pkg_setup
 
 	if ! built_with_use x11-libs/qt-sql sqlite; then

@@ -46,7 +46,7 @@ src/3rdparty/sha1/
 src/script/
 translations/"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	qt4-build_pkg_setup
 
 	if has_version x11-libs/qt-core; then

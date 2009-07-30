@@ -11,7 +11,7 @@ DESCRIPTION="Low-level pixel manipulation routines"
 KEYWORDS="~alpha amd64 ~arm hppa ia64 ~mips ppc ppc64 ~s390 sh sparc x86 ~x86-fbsd"
 IUSE="altivec mmx sse2"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	CONFIGURE_OPTIONS="
 		$(use_enable altivec vmx)
 		--disable-gtk"

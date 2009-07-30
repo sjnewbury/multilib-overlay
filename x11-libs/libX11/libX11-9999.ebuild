@@ -31,7 +31,7 @@ DEPEND="${RDEPEND}
 	x11-proto/xextproto
 	>=x11-misc/util-macros-1.2.1"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	CONFIGURE_OPTIONS="$(use_enable ipv6)
 		$(use_with xcb)"
 	# xorg really doesn't like xlocale disabled.

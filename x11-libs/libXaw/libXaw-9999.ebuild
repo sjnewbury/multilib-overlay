@@ -20,7 +20,7 @@ RDEPEND="x11-libs/libX11[lib32?]
 	x11-proto/xproto"
 DEPEND="${RDEPEND}"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	# No such function yet
 	# x-modular_pkg_setup
 

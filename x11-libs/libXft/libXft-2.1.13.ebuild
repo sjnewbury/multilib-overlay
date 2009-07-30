@@ -21,7 +21,7 @@ RDEPEND="x11-libs/libXrender[lib32?]
 	>=media-libs/fontconfig-2.2[lib32?]"
 DEPEND="${RDEPEND}"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	# No such function yet
 	# x-modular_pkg_setup
 

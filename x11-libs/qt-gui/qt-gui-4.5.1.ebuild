@@ -50,7 +50,7 @@ include/
 src/
 tools/shared/"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if use raster; then
 		ewarn "WARNING: You have enabled raster backend rendering engine."
 		ewarn "This is a new feature and may lead to composite problems"

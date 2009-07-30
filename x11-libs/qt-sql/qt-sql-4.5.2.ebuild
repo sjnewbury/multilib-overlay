@@ -35,7 +35,7 @@ PATCHES=(
 	"${FILESDIR}/qt-4.5-nolibx11.diff"
 )
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if ! (use firebird || use mysql || use odbc || use postgres || use sqlite); then
 		ewarn "You need to enable at least one SQL driver. Enable at least"
 		ewarn "one of these USE flags: \"firebird mysql odbc postgres sqlite\""
