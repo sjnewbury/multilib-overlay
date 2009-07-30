@@ -15,28 +15,28 @@ KEYWORDS=""
 IUSE="cups debug doc jpeg jpeg2k tiff test vim-syntax xinerama"
 
 # FIXME: configure says >=xrandr-1.2.99 but remi tells me it's broken
-RDEPEND="x11-libs/libXrender
-	x11-libs/libX11
-	x11-libs/libXi
-	x11-libs/libXt
-	x11-libs/libXext
-	>=x11-libs/libXrandr-1.2
-	x11-libs/libXcursor
-	x11-libs/libXfixes
-	x11-libs/libXcomposite
-	x11-libs/libXdamage
-	xinerama? ( x11-libs/libXinerama )
-	>=dev-libs/glib-2.21.3
-	>=x11-libs/pango-1.20
-	>=dev-libs/atk-1.13
-	>=x11-libs/cairo-1.6[X]
-	media-libs/fontconfig
+RDEPEND="x11-libs/libXrender[lib32?]
+	x11-libs/libX11[lib32?]
+	x11-libs/libXi[lib32?]
+	x11-libs/libXt[lib32?]
+	x11-libs/libXext[lib32?]
+	>=x11-libs/libXrandr-1.2[lib32?]
+	x11-libs/libXcursor[lib32?]
+	x11-libs/libXfixes[lib32?]
+	x11-libs/libXcomposite[lib32?]
+	x11-libs/libXdamage[lib32?]
+	xinerama? ( x11-libs/libXinerama[lib32?] )
+	>=dev-libs/glib-2.21.3[lib32?]
+	>=x11-libs/pango-1.20[lib32?]
+	>=dev-libs/atk-1.13[lib32?]
+	>=x11-libs/cairo-1.6[X,lib32?]
+	media-libs/fontconfig[lib32?]
 	x11-misc/shared-mime-info
-	>=media-libs/libpng-1.2.1
-	cups? ( net-print/cups )
-	jpeg? ( >=media-libs/jpeg-6b-r2 )
-	jpeg2k? ( media-libs/jasper )
-	tiff? ( >=media-libs/tiff-3.5.7 )
+	>=media-libs/libpng-1.2.1[lib32?]
+	cups? ( net-print/cups[lib32?] )
+	jpeg? ( >=media-libs/jpeg-6b-r2[lib32?] )
+	jpeg2k? ( media-libs/jasper[lib32?] )
+	tiff? ( >=media-libs/tiff-3.5.7[lib32?] )
 	!<gnome-base/gail-1000"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9[lib32?]
@@ -98,6 +98,10 @@ multilib-native_src_configure_internal() {
 	# Passing --disable-debug is not recommended for production use
 	use debug && myconf="${myconf} --enable-debug=yes"
 
+	if use lib32 && ! is_final_abi; then
+			myconf="${myconf} --program-suffix=-${ABI}"
+	fi
+
 	econf ${myconf}
 }
 
@@ -127,12 +131,17 @@ multilib-native_src_install_internal() {
 	rm "${D}/etc/gtk-2.0/gtk.immodules"
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	set_gtk2_confdir
 
 	if [ -d "${ROOT}${GTK2_CONFDIR}" ]; then
-		gtk-query-immodules-2.0  > "${ROOT}${GTK2_CONFDIR}/gtk.immodules"
-		gdk-pixbuf-query-loaders > "${ROOT}${GTK2_CONFDIR}/gdk-pixbuf.loaders"
+		if use lib32 && ! is_final_abi; then
+			gtk-query-immodules-2.0-${ABI} > "${ROOT}${GTK2_CONFDIR}/gtk.immodules"
+			gdk-pixbuf-query-loaders-${ABI} > "${ROOT}${GTK2_CONFDIR}/gdk-pixbuf.loaders"
+		else
+			gtk-query-immodules-2.0  > "${ROOT}${GTK2_CONFDIR}/gtk.immodules"
+			gdk-pixbuf-query-loaders > "${ROOT}${GTK2_CONFDIR}/gdk-pixbuf.loaders"
+		fi
 	else
 		ewarn "The destination path ${ROOT}${GTK2_CONFDIR} doesn't exist;"
 		ewarn "to complete the installation of GTK+, please create the"
