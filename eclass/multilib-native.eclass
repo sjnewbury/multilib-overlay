@@ -417,9 +417,14 @@ multilib-native_src_generic_sub() {
 		fi
 	fi
 
-# if we're good to go, point S and friends into the build tree
-
-	[[ -d "${S}" ]] && cd "${S}"
+# After the unpack phase, some eclasses change into the unpacked source tree
+# (gnome2.eclass for example), we need to change back to the WORKDIR otherwise
+# the next ABI tree will get unpacked into a subdir of previous tree.
+	if [[ "${1/*_}" != "unpack" ]]; then
+		[[ -d "${S}" ]] && cd "${S}"
+	else
+		[[ -d "${WORKDIR}" ]] && cd "${WORKDIR}"
+	fi
 
 # Call the "real" phase function
 	multilib-native_${1}_internal
