@@ -6,7 +6,7 @@ EAPI="2"
 
 inherit eutils autotools gnome2 python versionator subversion multilib-native
 
-MY_MAJORV="2.25"
+MY_MAJORV="2.27"
 #$(get_version_component_range 1-2)
 
 DESCRIPTION="Extensions for the Epiphany web browser"
