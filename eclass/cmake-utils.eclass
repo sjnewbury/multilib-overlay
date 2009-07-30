@@ -7,7 +7,7 @@
 # kde@gentoo.org
 #
 # @CODE
-# TomÃ¡Å¡ ChvÃ¡tal <scarabeus@gentoo.org>
+# Tomáš Chvátal <scarabeus@gentoo.org>
 # Maciej Mrozowski <reavertm@poczta.fm>
 # (undisclosed contributors)
 # Original author: Zephyrus (zephyrus@mirach.it)

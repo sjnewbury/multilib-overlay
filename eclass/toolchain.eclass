@@ -1,6 +1,6 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.396 2009/04/04 16:52:40 grobian Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.402 2009/07/05 19:56:42 vapier Exp $
 #
 # Maintainer: Toolchain Ninjas <toolchain@gentoo.org>
 
@@ -135,7 +135,7 @@ if [[ ${ETYPE} == "gcc-library" ]] ; then
 	IUSE="nls build test"
 	SLOT="${CTARGET}-${SO_VERSION_SLOT:-5}"
 else
-	IUSE="multislot test"
+	IUSE="multislot nptl test"
 
 	if [[ ${PN} != "kgcc64" && ${PN} != gcc-* ]] ; then
 		IUSE="${IUSE} altivec build fortran nls nocxx"
@@ -157,6 +157,7 @@ else
 			tc_version_is_at_least "4.2" && IUSE="${IUSE} openmp"
 			tc_version_is_at_least "4.2" && IUSE="${IUSE} nsplugin"
 			tc_version_is_at_least "4.3" && IUSE="${IUSE} fixed-point"
+			tc_version_is_at_least "4.4" && IUSE="${IUSE} graphite"
 		fi
 	fi
 
@@ -354,15 +355,9 @@ get_gcc_src_uri() {
 	# >= gcc-4.3 uses ecj.jar and we only add gcj as a use flag under certain
 	# conditions
 	if [[ ${PN} != "kgcc64" && ${PN} != gcc-* ]] ; then
-		if tc_version_is_at_least "4.3"; then
-			if [ ${GCC_BRANCH_VER}  == "4.4" ]; then
-				GCC_SRC_URI="${GCC_SRC_URI}
-				gcj? ( ftp://sourceware.org/pub/java/ecj-4.3.jar )"
-			else
-				GCC_SRC_URI="${GCC_SRC_URI}
-				gcj? ( ftp://sourceware.org/pub/java/ecj-${GCC_BRANCH_VER}.jar )"
-			fi
-		fi
+		tc_version_is_at_least "4.3" && \
+			GCC_SRC_URI="${GCC_SRC_URI}
+			gcj? ( ftp://sourceware.org/pub/java/ecj-4.3.jar )"
 	fi
 
 	echo "${GCC_SRC_URI}"
@@ -888,6 +883,8 @@ gcc_pkg_setup() {
 
 	want_libssp && libc_has_ssp && \
 		die "libssp cannot be used with a glibc that has been patched to provide ssp symbols"
+
+	unset LANGUAGES #265283
 }
 
 gcc-compiler_pkg_preinst() {
@@ -1094,9 +1091,12 @@ gcc_src_unpack() {
 	${ETYPE}_src_unpack || die "failed to ${ETYPE}_src_unpack"
 
 	# protoize don't build on FreeBSD, skip it
-	if ! is_crosscompile && ! use elibc_FreeBSD ; then
-		# enable protoize / unprotoize
-		sed -i -e '/^LANGUAGES =/s:$: proto:' "${S}"/gcc/Makefile.in
+	## removed in 4.5, bug #270558 --de.
+	if [[ ${GCCMAJOR}.${GCCMINOR} < 4.5 ]]; then
+		if ! is_crosscompile && ! use elibc_FreeBSD ; then
+			# enable protoize / unprotoize
+			sed -i -e '/^LANGUAGES =/s:$: proto:' "${S}"/gcc/Makefile.in
+		fi
 	fi
 
 	fix_files=""
@@ -1118,28 +1118,16 @@ gcc_src_unpack() {
 		fi
 	fi
 
-#	# Misdesign in libstdc++ (Redhat)
-#	if [[ ${GCCMAJOR} -ge 3 ]] && [[ -e ${S}/libstdc++-v3/config/cpu/i486/atomicity.h ]] ; then
-#		cp -pPR "${S}"/libstdc++-v3/config/cpu/i{4,3}86/atomicity.h
-#	fi
-#
 	# >= gcc-4.3 doesn't bundle ecj.jar, so copy it
 	if [[ ${GCCMAJOR}.${GCCMINOR} > 4.2 ]] &&
 		use gcj ; then
-		if [ ${GCC_BRANCH_VER} == "4.4" ]; then
-			cp -pPR "${DISTDIR}/ecj-4.3.jar" "${S}/ecj.jar" || die
-		else
-			cp -pPR "${DISTDIR}/ecj-${GCC_BRANCH_VER}.jar" "${S}/ecj.jar" || die
-		fi
+		cp -pPR "${DISTDIR}/ecj-4.3.jar" "${S}/ecj.jar" || die
 	fi
 
 	# disable --as-needed from being compiled into gcc specs
 	# natively when using a gcc version < 3.4.4
 	# http://gcc.gnu.org/bugzilla/show_bug.cgi?id=14992
-	if [[ ${GCCMAJOR} < 3 ]] || \
-	   [[ ${GCCMAJOR}.${GCCMINOR} < 3.4 ]] || \
-	   [[ ${GCCMAJOR}.${GCCMINOR}.${GCCMICRO} < 3.4.4 ]]
-	then
+	if ! tc_version_is_at_least 3.4.4 ; then
 		sed -i -e s/HAVE_LD_AS_NEEDED/USE_LD_AS_NEEDED/g "${S}"/gcc/config.in
 	fi
 
@@ -1347,6 +1335,12 @@ gcc_do_configure() {
 	# users to control this feature in the event they need the support.
 	tc_version_is_at_least "4.3" && confgcc="${confgcc} $(use_enable fixed-point)"
 
+	# graphite support was added in 4.4, which depends upon external libraries
+	# for optimizations.  This option allows users to determine if they want
+	# these optimizations and libraries pulled in
+	tc_version_is_at_least "4.4" && \
+		confgcc="${confgcc} $(use_with graphite ppl) $(use_with graphite cloog)"
+
 
 	[[ $(tc-is-softfloat) == "yes" ]] && confgcc="${confgcc} --with-float=soft"
 
@@ -1411,7 +1405,7 @@ gcc_do_configure() {
 	# __cxa_atexit is "essential for fully standards-compliant handling of
 	# destructors", but apparently requires glibc.
 	if [[ ${CTARGET} == *-uclibc* ]] ; then
-		confgcc="${confgcc} --disable-__cxa_atexit --enable-target-optspace"
+		confgcc="${confgcc} --disable-__cxa_atexit --enable-target-optspace $(use_enable nptl tls)"
 		[[ ${GCCMAJOR}.${GCCMINOR} == 3.3 ]] && confgcc="${confgcc} --enable-sjlj-exceptions"
 		if tc_version_is_at_least 3.4 && [[ ${GCCMAJOR}.${GCCMINOR} < 4.3 ]] ; then
 			confgcc="${confgcc} --enable-clocale=uclibc"
@@ -1429,6 +1423,7 @@ gcc_do_configure() {
 	# create a sparc*linux*-{gcc,g++} that can handle -m32 and -m64 (biarch)
 	if [[ ${CTARGET} == sparc*linux* ]] \
 		&& is_multilib \
+		&& ! is_crosscompile \
 		&& [[ ${GCCMAJOR}.${GCCMINOR} > 4.2 ]]
 	then
 		confgcc="${confgcc} --enable-targets=all"
