@@ -361,8 +361,6 @@ multilib-native_EBD() {
 # @USAGE: <phase>
 # @DESCRIPTION: This function gets used for each ABI pass of each phase
 multilib-native_src_generic_sub() {
-	EMULTILIB_config_vars=""
-
 # We support two kinds of build: By default we copy/move the source dir for
 # each ABI. Where supported with the underlying package, we can just create an
 # external build dir.  This requires a modified ebuild which makes use of the
