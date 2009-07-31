@@ -15,7 +15,7 @@ DEPEND="~x11-libs/qt-assistant-${PV}:${SLOT}[$(get_ml_usedeps)]
 	~x11-libs/qt-dbus-${PV}:${SLOT}[$(get_ml_usedeps)]
 	~x11-libs/qt-gui-${PV}:${SLOT}[$(get_ml_usedeps)]
 	~x11-libs/qt-opengl-${PV}:${SLOT}[$(get_ml_usedeps)]
-	|| ( ~x11-libs/qt-phonon-${PV}:${SLOT}[lib32?] media-sound/phonon[$(get_ml_usedeps)] )
+	|| ( ~x11-libs/qt-phonon-${PV}:${SLOT}[$(get_ml_usedeps)] media-sound/phonon[$(get_ml_usedeps)] )
 	kde? ( media-sound/phonon[$(get_ml_usedeps)] )
 	~x11-libs/qt-qt3support-${PV}:${SLOT}[$(get_ml_usedeps)]
 	~x11-libs/qt-script-${PV}:${SLOT}[$(get_ml_usedeps)]

@@ -31,7 +31,7 @@ RDEPEND=">=sys-apps/dbus-1.2[$(get_ml_usedeps)]
 	>=sys-auth/policykit-0.8[$(get_ml_usedeps)]
 	>=dev-libs/libnl-1.1[$(get_ml_usedeps)]
 	>=net-wireless/wpa_supplicant-0.5.10[dbus]
-	|| ( sys-libs/e2fsprogs-libs[lib32?] <sys-fs/e2fsprogs-1.41.0[$(get_ml_usedeps)] )
+	|| ( sys-libs/e2fsprogs-libs[$(get_ml_usedeps)] <sys-fs/e2fsprogs-1.41.0[$(get_ml_usedeps)] )
 	avahi? ( net-dns/avahi[autoipd,$(get_ml_usedeps)] )
 	gnutls? (
 		nss? ( >=dev-libs/nss-3.11[$(get_ml_usedeps)] )
