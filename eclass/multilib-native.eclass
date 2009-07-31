@@ -277,6 +277,21 @@ multilib-native_restore_abi_env() {
 # @USAGE: <phase>
 # @DESCRIPTION: Run each phase for each "install ABI"
 multilib-native_src_generic() {
+# If this is the first time through, initialise the source path variables early
+# and unconditionally, whether building for multilib or not.  This allows
+# multilib-native ebuilds to always make use of them.  Then save the initial
+# environment.
+	if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]} ]]; then
+		[[ -n ${MULTILIB_DEBUG} ]] && \
+			einfo "MULTILIB_DEBUG: Determining EMULTILIB_SOURCE_TOPDIR from S and WORKDIR"
+		EMULTILIB_RELATIVE_BUILD_DIR="${S#*${WORKDIR}\/}"
+		EMULTILIB_SOURCE_TOP_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
+		EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
+		[[ -n ${MULTILIB_DEBUG} ]] && \
+			einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_TOPDIR=\"${EMULTILIB_SOURCE_TOPDIR}\""
+		multilib-native_save_abi_env "INIT"
+		EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]=1
+	fi
 	if [[ -n ${EMULTILIB_PKG} ]] && [[ -z ${OABI} ]] ; then
 		local abilist=""
 		if has_multilib_profile ; then
@@ -284,21 +299,6 @@ multilib-native_src_generic() {
 			if [[ "${1/_*}" != "pkg" ]] || \
 					[[ "${1/*_}" = "setup" ]]; then
 				einfo "${1/src_/} multilib ${PN} for ABIs: ${abilist}"
-# If this is the first time through, initialise the source path variables early
-# and unconditionally, whether building for multilib or not.  This allows
-# multilib-native ebuilds to always make use of them.  Then save the initial
-# environment.
-				if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]} ]]; then
-					[[ -n ${MULTILIB_DEBUG} ]] && \
-						einfo "MULTILIB_DEBUG: Determining EMULTILIB_SOURCE_TOPDIR from S and WORKDIR"
-					EMULTILIB_RELATIVE_BUILD_DIR="${S#*${WORKDIR}\/}"
-					EMULTILIB_SOURCE_TOP_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
-					EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
-					[[ -n ${MULTILIB_DEBUG} ]] && \
-						einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_TOPDIR=\"${EMULTILIB_SOURCE_TOPDIR}\""
-					multilib-native_save_abi_env "INIT"
-					EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]=1
-				fi
 			fi
 		elif is_crosscompile || tc-is-cross-compiler ; then
 			abilist=${DEFAULT_ABI}
@@ -387,9 +387,11 @@ multilib-native_src_generic_sub() {
 # between each ABI.  When that's the case also define the BUILD/SOURCE
 # path variables, and create the build directory.
 	if ([[ "${1/*_}" == "unpack" ]] || [[ "${1/*_}" == "prepare" ]]) && \
-			!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
-			([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
-		[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && multilib-native_EBD
+				!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
+				([[ -z "${CMAKE_BUILD_TYPE}" ]] && \
+				[[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
+		[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] \
+			&& multilib-native_EBD
 		if [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
 			einfo "Skipping ${1} for ${ABI}"
 			return
@@ -525,9 +527,9 @@ multilib-native_check_inherited_funcs() {
 		if [[ -f "${T}"/eclass-debug.log ]]; then
 			EMULTILIB_INHERITED="$(grep EXPORT_FUNCTIONS "${T}"/eclass-debug.log | cut -d ' ' -f 4 | cut -d '_' -f 1)"
 		else
-			ewarn "you are using a packet manager that do not provide "${T}"/eclass-debug.log"
-			ewarn "join #gentoo-multilib-overlay on freenode to help finding another way for you"
-			ewarn "falling back to old behaviour"
+			ewarn "You are using a package manager that does not provide "${T}"/eclass-debug.log."
+			ewarn "Join #gentoo-multilib-overlay on freenode to help finding another way for you."
+			ewarn "Falling back to old behaviour ..."
 			EMULTILIB_INHERITED="${INHERITED}"
 		fi
 		EMULTILIB_INHERITED="${EMULTILIB_INHERITED//base/}"
