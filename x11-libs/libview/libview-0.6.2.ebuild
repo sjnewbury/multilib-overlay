@@ -15,10 +15,10 @@ SLOT="0"
 KEYWORDS="amd64 x86"
 IUSE=""
 
-RDEPEND=">=x11-libs/gtk+-2.4.0[lib32?]
-		 >=dev-cpp/gtkmm-2.4[lib32?]"
+RDEPEND=">=x11-libs/gtk+-2.4.0[$(get_ml_usedeps)]
+		 >=dev-cpp/gtkmm-2.4[$(get_ml_usedeps)]"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[lib32?]"
+	dev-util/pkgconfig[$(get_ml_usedeps)]"
 
 G2CONF="--enable-deprecated"
 

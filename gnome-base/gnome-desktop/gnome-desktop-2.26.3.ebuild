@@ -14,14 +14,14 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc"
 
-RDEPEND=">=x11-libs/gtk+-2.14.0[lib32?]
-	>=dev-libs/glib-2.19.1[lib32?]
-	>=x11-libs/libXrandr-1.2[lib32?]
-	>=gnome-base/gconf-2[lib32?]
-	>=x11-libs/startup-notification-0.5[lib32?]"
+RDEPEND=">=x11-libs/gtk+-2.14.0[$(get_ml_usedeps)]
+	>=dev-libs/glib-2.19.1[$(get_ml_usedeps)]
+	>=x11-libs/libXrandr-1.2[$(get_ml_usedeps)]
+	>=gnome-base/gconf-2[$(get_ml_usedeps)]
+	>=x11-libs/startup-notification-0.5[$(get_ml_usedeps)]"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.9[lib32?]
+	>=dev-util/pkgconfig-0.9[$(get_ml_usedeps)]
 	>=app-text/gnome-doc-utils-0.3.2
 	doc? ( >=dev-util/gtk-doc-1.4 )
 	~app-text/docbook-xml-dtd-4.1.2

@@ -23,20 +23,20 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-
 KERNEL_IUSE="kernel_linux kernel_FreeBSD"
 IUSE="X acpi apm crypt consolekit debug dell disk-partition doc laptop policykit selinux ${KERNEL_IUSE}"
 
-RDEPEND=">=dev-libs/dbus-glib-0.61[lib32?]
-		 >=dev-libs/glib-2.14[lib32?]
-		 >=dev-libs/expat-1.95.8[lib32?]
-		 =virtual/libusb-0*[lib32?]
-		 >=sys-apps/pciutils-2.2.7-r1[lib32?]
+RDEPEND=">=dev-libs/dbus-glib-0.61[$(get_ml_usedeps)]
+		 >=dev-libs/glib-2.14[$(get_ml_usedeps)]
+		 >=dev-libs/expat-1.95.8[$(get_ml_usedeps)]
+		 =virtual/libusb-0*[$(get_ml_usedeps)]
+		 >=sys-apps/pciutils-2.2.7-r1[$(get_ml_usedeps)]
 		 >=dev-util/gperf-3.0.3
 		   sys-apps/usbutils
 		   virtual/eject
 		 amd64? ( >=sys-apps/dmidecode-2.7 )
-		 dell? ( >=sys-libs/libsmbios-0.13.4[lib32?] )
-		 disk-partition? ( >=sys-apps/parted-1.8.0[lib32?] )
+		 dell? ( >=sys-libs/libsmbios-0.13.4[$(get_ml_usedeps)] )
+		 disk-partition? ( >=sys-apps/parted-1.8.0[$(get_ml_usedeps)] )
 		 ia64? ( >=sys-apps/dmidecode-2.7 )
 		 kernel_linux?	(
-							>=sys-fs/udev-117[lib32?]
+							>=sys-fs/udev-117[$(get_ml_usedeps)]
 							>=sys-apps/util-linux-2.16
 							>=sys-kernel/linux-headers-2.6.19
 							crypt?	( >=sys-fs/cryptsetup-1.0.5 )
@@ -49,14 +49,14 @@ RDEPEND=">=dev-libs/dbus-glib-0.61[lib32?]
 					)
 		 policykit?	(
 		 					sys-auth/consolekit[policykit]
-							sys-auth/policykit[pam,lib32?]
+							sys-auth/policykit[pam,$(get_ml_usedeps)]
 		 			)"
 DEPEND="${RDEPEND}
-		dev-util/pkgconfig[lib32?]
+		dev-util/pkgconfig[$(get_ml_usedeps)]
 		>=dev-util/intltool-0.35
 		doc?	(
 					app-text/xmlto
-					dev-libs/libxml2[lib32?]
+					dev-libs/libxml2[$(get_ml_usedeps)]
 					dev-util/gtk-doc
 					app-text/docbook-sgml-utils
 				)

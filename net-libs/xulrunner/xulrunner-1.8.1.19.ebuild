@@ -19,15 +19,15 @@ LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE=""
 
-RDEPEND=">=sys-libs/zlib-1.1.4[lib32?]
+RDEPEND=">=sys-libs/zlib-1.1.4[$(get_ml_usedeps)]
 	>=sys-devel/binutils-2.16.1
-	>=dev-libs/nss-3.11.5[lib32?]
-	>=dev-libs/nspr-4.6.5-r1[lib32?]
+	>=dev-libs/nss-3.11.5[$(get_ml_usedeps)]
+	>=dev-libs/nspr-4.6.5-r1[$(get_ml_usedeps)]
 	java? ( >=virtual/jre-1.4 )"
 
 DEPEND="java? ( >=virtual/jdk-1.4 )
 	${RDEPEND}
-	dev-util/pkgconfig[lib32?]"
+	dev-util/pkgconfig[$(get_ml_usedeps)]"
 
 S="${WORKDIR}/mozilla"
 

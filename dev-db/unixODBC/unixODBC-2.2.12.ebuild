@@ -21,10 +21,10 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="qt3 gnome"
 
-RDEPEND=">=sys-libs/readline-4.1[lib32?]
-		>=sys-libs/ncurses-5.2[lib32?]
-		qt3? ( =x11-libs/qt-3*[lib32?] )
-		gnome? ( gnome-base/libgnomeui[lib32?] )
+RDEPEND=">=sys-libs/readline-4.1[$(get_ml_usedeps)]
+		>=sys-libs/ncurses-5.2[$(get_ml_usedeps)]
+		qt3? ( =x11-libs/qt-3*[$(get_ml_usedeps)] )
+		gnome? ( gnome-base/libgnomeui[$(get_ml_usedeps)] )
 		sys-devel/libtool"
 DEPEND="${RDEPEND}
 	gnome? ( dev-util/cvs )" # see Bug 173256

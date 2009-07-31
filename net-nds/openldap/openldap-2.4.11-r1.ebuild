@@ -21,21 +21,21 @@ IUSE_CONTRIB="smbkrb5passwd kerberos"
 IUSE="${IUSE_DAEMON} ${IUSE_BACKEND} ${IUSE_OVERLAY} ${IUSE_OPTIONAL} ${IUSE_CONTRIB}"
 
 # samba adding openssl is intentional --jokey
-RDEPEND="sys-libs/ncurses[lib32?]
-	tcpd? ( sys-apps/tcp-wrappers[lib32?] )
-	ssl? ( !gnutls? ( dev-libs/openssl[lib32?] )
-		gnutls? ( net-libs/gnutls[lib32?] ) )
-	sasl? ( dev-libs/cyrus-sasl[lib32?] )
+RDEPEND="sys-libs/ncurses[$(get_ml_usedeps)]
+	tcpd? ( sys-apps/tcp-wrappers[$(get_ml_usedeps)] )
+	ssl? ( !gnutls? ( dev-libs/openssl[$(get_ml_usedeps)] )
+		gnutls? ( net-libs/gnutls[$(get_ml_usedeps)] ) )
+	sasl? ( dev-libs/cyrus-sasl[$(get_ml_usedeps)] )
 	!minimal? (
-		odbc? ( !iodbc? ( dev-db/unixODBC[lib32?] )
-			iodbc? ( dev-db/libiodbc[lib32?] ) )
-		slp? ( net-libs/openslp[lib32?] )
-		perl? ( dev-lang/perl[-build,lib32?] )
-		samba? ( !gnutls? ( dev-libs/openssl[lib32?] )
-			gnutls? ( net-libs/gnutls[lib32?] ) )
-		berkdb? ( sys-libs/db:4.5[lib32?] )
+		odbc? ( !iodbc? ( dev-db/unixODBC[$(get_ml_usedeps)] )
+			iodbc? ( dev-db/libiodbc[$(get_ml_usedeps)] ) )
+		slp? ( net-libs/openslp[$(get_ml_usedeps)] )
+		perl? ( dev-lang/perl[-build,$(get_ml_usedeps)] )
+		samba? ( !gnutls? ( dev-libs/openssl[$(get_ml_usedeps)] )
+			gnutls? ( net-libs/gnutls[$(get_ml_usedeps)] ) )
+		berkdb? ( sys-libs/db:4.5[$(get_ml_usedeps)] )
 		smbkrb5passwd? (
-			dev-libs/openssl[lib32?]
+			dev-libs/openssl[$(get_ml_usedeps)]
 			app-crypt/heimdal )
 	)
 	selinux? ( sec-policy/selinux-openldap )"

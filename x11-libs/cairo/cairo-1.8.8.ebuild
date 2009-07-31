@@ -18,20 +18,20 @@ IUSE="cleartype debug directfb doc glitz opengl svg X xcb"
 # Test causes a circular depend on gtk+... since gtk+ needs cairo but test needs gtk+ so we need to block it
 RESTRICT="test"
 
-RDEPEND="media-libs/fontconfig[lib32?]
-	>=media-libs/freetype-2.1.9[lib32?]
-	sys-libs/zlib[lib32?]
-	media-libs/libpng[lib32?]
-	>=x11-libs/pixman-0.12.0[lib32?]
+RDEPEND="media-libs/fontconfig[$(get_ml_usedeps)]
+	>=media-libs/freetype-2.1.9[$(get_ml_usedeps)]
+	sys-libs/zlib[$(get_ml_usedeps)]
+	media-libs/libpng[$(get_ml_usedeps)]
+	>=x11-libs/pixman-0.12.0[$(get_ml_usedeps)]
 	directfb? ( >=dev-libs/DirectFB-0.9.24 )
-	glitz? ( >=media-libs/glitz-0.5.1[lib32?] )
+	glitz? ( >=media-libs/glitz-0.5.1[$(get_ml_usedeps)] )
 	svg? ( dev-libs/libxml2 )
-	X? ( 	>=x11-libs/libXrender-0.6[lib32?]
-		x11-libs/libXext[lib32?]
-		x11-libs/libX11[lib32?]
-		x11-libs/libXft[lib32?] )
-	xcb? (	>=x11-libs/libxcb-0.92[lib32?]
-		x11-libs/xcb-util[lib32?] )"
+	X? ( 	>=x11-libs/libXrender-0.6[$(get_ml_usedeps)]
+		x11-libs/libXext[$(get_ml_usedeps)]
+		x11-libs/libX11[$(get_ml_usedeps)]
+		x11-libs/libXft[$(get_ml_usedeps)] )
+	xcb? (	>=x11-libs/libxcb-0.92[$(get_ml_usedeps)]
+		x11-libs/xcb-util[$(get_ml_usedeps)] )"
 #	test? (
 #	pdf test
 #	x11-libs/pango
@@ -44,7 +44,7 @@ RDEPEND="media-libs/fontconfig[lib32?]
 #	>=gnome-base/librsvg-2.15.0
 
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.19[lib32?]
+	>=dev-util/pkgconfig-0.19[$(get_ml_usedeps)]
 	doc? (	>=dev-util/gtk-doc-1.6
 		~app-text/docbook-xml-dtd-4.2 )
 	X? ( x11-proto/renderproto )

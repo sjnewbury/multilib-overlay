@@ -15,21 +15,21 @@ KEYWORDS="~amd64 ~arm ~hppa ~ppc ~ppc64 ~sh ~sparc ~x86"
 
 IUSE="alsa cups debug doc gstreamer old-daemons test-programs usb"
 
-CDEPEND="alsa? ( media-libs/alsa-lib[lib32?] )
+CDEPEND="alsa? ( media-libs/alsa-lib[$(get_ml_usedeps)] )
 	gstreamer? (
-		>=media-libs/gstreamer-0.10[lib32?]
-		>=media-libs/gst-plugins-base-0.10[lib32?] )
-	usb? ( dev-libs/libusb[lib32?] )
-	cups? ( net-print/cups[lib32?] )
-	sys-fs/udev[lib32?]
-	dev-libs/glib[lib32?]
-	sys-apps/dbus[lib32?]
-	media-libs/libsndfile[lib32?]
-	>=dev-libs/libnl-1.1[lib32?]
+		>=media-libs/gstreamer-0.10[$(get_ml_usedeps)]
+		>=media-libs/gst-plugins-base-0.10[$(get_ml_usedeps)] )
+	usb? ( dev-libs/libusb[$(get_ml_usedeps)] )
+	cups? ( net-print/cups[$(get_ml_usedeps)] )
+	sys-fs/udev[$(get_ml_usedeps)]
+	dev-libs/glib[$(get_ml_usedeps)]
+	sys-apps/dbus[$(get_ml_usedeps)]
+	media-libs/libsndfile[$(get_ml_usedeps)]
+	>=dev-libs/libnl-1.1[$(get_ml_usedeps)]
 	!net-wireless/bluez-libs
 	!net-wireless/bluez-utils"
 DEPEND="sys-devel/flex
-	>=dev-util/pkgconfig-0.20[lib32?]
+	>=dev-util/pkgconfig-0.20[$(get_ml_usedeps)]
 	doc? ( dev-util/gtk-doc )
 	${CDEPEND}"
 RDEPEND="${CDEPEND}

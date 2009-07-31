@@ -13,9 +13,9 @@ DESCRIPTION="X.Org Xcomposite library"
 
 KEYWORDS=""
 
-RDEPEND="x11-libs/libX11[lib32?]
-	x11-libs/libXfixes[lib32?]
-	x11-libs/libXext[lib32?]
+RDEPEND="x11-libs/libX11[$(get_ml_usedeps)]
+	x11-libs/libXfixes[$(get_ml_usedeps)]
+	x11-libs/libXext[$(get_ml_usedeps)]
 	=x11-proto/compositeproto-9999
 	x11-proto/xproto"
 DEPEND="${RDEPEND}"

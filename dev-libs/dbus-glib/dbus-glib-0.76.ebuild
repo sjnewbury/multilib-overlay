@@ -15,13 +15,13 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="doc selinux debug"
 
-RDEPEND=">=sys-apps/dbus-1.1.0[lib32?]
-	>=dev-libs/glib-2.6[lib32?]
+RDEPEND=">=sys-apps/dbus-1.1.0[$(get_ml_usedeps)]
+	>=dev-libs/glib-2.6[$(get_ml_usedeps)]
 	selinux? ( sys-libs/libselinux )
-	>=dev-libs/libxml2-2.6.21[lib32?]"
+	>=dev-libs/libxml2-2.6.21[$(get_ml_usedeps)]"
 	# expat code now sucks.. libxml2 is the default
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[lib32?]
+	dev-util/pkgconfig[$(get_ml_usedeps)]
 	doc? ( app-doc/doxygen app-text/xmlto )"
 
 src_unpack() {

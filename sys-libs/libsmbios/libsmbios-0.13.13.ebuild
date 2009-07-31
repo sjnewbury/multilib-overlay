@@ -15,8 +15,8 @@ SLOT="0"
 KEYWORDS="amd64 ia64 x86"
 IUSE="test"
 
-DEPEND="dev-libs/libxml2[lib32?]
-	sys-libs/zlib[lib32?]
+DEPEND="dev-libs/libxml2[$(get_ml_usedeps)]
+	sys-libs/zlib[$(get_ml_usedeps)]
 	test? ( dev-util/cppunit )"
 RDEPEND=${DEPEND}
 

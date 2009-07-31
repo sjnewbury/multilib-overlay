@@ -18,9 +18,9 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="qt3"
 
-DEPEND=">=sys-libs/readline-4.1[lib32?]
-		>=sys-libs/ncurses-5.2[lib32?]
-		qt3? ( =x11-libs/qt-3*[lib32?] )"
+DEPEND=">=sys-libs/readline-4.1[$(get_ml_usedeps)]
+		>=sys-libs/ncurses-5.2[$(get_ml_usedeps)]
+		qt3? ( =x11-libs/qt-3*[$(get_ml_usedeps)] )"
 RDEPEND="${DEPEND}"
 
 # the configure.in patch is required for 'use qt3'

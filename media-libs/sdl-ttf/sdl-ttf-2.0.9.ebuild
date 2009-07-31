@@ -16,9 +16,9 @@ SLOT="0"
 KEYWORDS="alpha amd64 hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="X"
 
-DEPEND="X? ( x11-libs/libXt[lib32?] )
-	media-libs/libsdl[lib32?]
-	>=media-libs/freetype-2.3[lib32?]"
+DEPEND="X? ( x11-libs/libXt[$(get_ml_usedeps)] )
+	media-libs/libsdl[$(get_ml_usedeps)]
+	>=media-libs/freetype-2.3[$(get_ml_usedeps)]"
 
 S=${WORKDIR}/${MY_P}
 

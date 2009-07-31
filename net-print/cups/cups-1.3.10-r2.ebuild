@@ -19,24 +19,24 @@ IUSE="acl avahi dbus gnutls java jpeg kerberos ldap pam perl php png ppds python
 
 COMMON_DEPEND="acl? ( kernel_linux? ( sys-apps/acl sys-apps/attr ) )
 	avahi? ( net-dns/avahi )
-	dbus? ( sys-apps/dbus[lib32?] )
-	gnutls? ( net-libs/gnutls[lib32?] )
+	dbus? ( sys-apps/dbus[$(get_ml_usedeps)] )
+	gnutls? ( net-libs/gnutls[$(get_ml_usedeps)] )
 	java? ( >=virtual/jre-1.4 )
-	jpeg? ( >=media-libs/jpeg-6b[lib32?] )
+	jpeg? ( >=media-libs/jpeg-6b[$(get_ml_usedeps)] )
 	kerberos? ( virtual/krb5 )
 	ldap? ( net-nds/openldap )
 	pam? ( virtual/pam )
-	perl? ( dev-lang/perl[lib32?] )
+	perl? ( dev-lang/perl[$(get_ml_usedeps)] )
 	php? ( dev-lang/php )
-	png? ( >=media-libs/libpng-1.2.1[lib32?] )
-	python? ( dev-lang/python[lib32?] )
+	png? ( >=media-libs/libpng-1.2.1[$(get_ml_usedeps)] )
+	python? ( dev-lang/python[$(get_ml_usedeps)] )
 	slp? ( >=net-libs/openslp-1.0.4 )
-	ssl? ( !gnutls? ( >=dev-libs/openssl-0.9.8g[lib32?] ) )
-	tiff? ( >=media-libs/tiff-3.5.5[lib32?] )
+	ssl? ( !gnutls? ( >=dev-libs/openssl-0.9.8g[$(get_ml_usedeps)] ) )
+	tiff? ( >=media-libs/tiff-3.5.5[$(get_ml_usedeps)] )
 	xinetd? ( sys-apps/xinetd )
 	zeroconf? ( !avahi? ( net-misc/mDNSResponder ) )
-	app-text/libpaper[lib32?]
-	dev-libs/libgcrypt[lib32?]"
+	app-text/libpaper[$(get_ml_usedeps)]
+	dev-libs/libgcrypt[$(get_ml_usedeps)]"
 
 DEPEND="${COMMON_DEPEND}
 	!<net-print/foomatic-filters-ppds-20070501

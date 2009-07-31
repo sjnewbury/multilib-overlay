@@ -18,7 +18,7 @@ IUSE="doc emacs java mono nls"
 COMMON_DEPEND="emacs? ( virtual/emacs )
 	mono? ( >=dev-lang/mono-0.95 )"
 DEPEND="${COMMON_DEPEND}
-	nls? ( >=sys-devel/gettext-0.17[lib32?] )
+	nls? ( >=sys-devel/gettext-0.17[$(get_ml_usedeps)] )
 	java? ( >=virtual/jdk-1.4 dev-java/gjdoc )"
 RDEPEND="${COMMON_DEPEND}
 	nls? ( virtual/libintl )

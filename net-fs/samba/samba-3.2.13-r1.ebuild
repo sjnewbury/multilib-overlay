@@ -21,17 +21,17 @@ RDEPEND="dev-libs/popt
 	dev-libs/iniparser
 	virtual/libiconv
 	acl? ( kernel_linux? ( virtual/acl ) )
-	cups? ( net-print/cups[lib32?] )
+	cups? ( net-print/cups[$(get_ml_usedeps)] )
 	ipv6? ( sys-apps/xinetd )
 	ads? ( virtual/krb5 sys-fs/e2fsprogs )
-	ldap? ( net-nds/openldap[lib32?] )
+	ldap? ( net-nds/openldap[$(get_ml_usedeps)] )
 	pam? ( virtual/pam )
-	readline? ( sys-libs/readline[lib32?] )
+	readline? ( sys-libs/readline[$(get_ml_usedeps)] )
 	selinux? ( sec-policy/selinux-samba )
 	swat? ( sys-apps/xinetd )
 	syslog? ( virtual/logger )
 	fam? ( virtual/fam )
-	caps? ( sys-libs/libcap[lib32?] )
+	caps? ( sys-libs/libcap[$(get_ml_usedeps)] )
 	lib32? ( fam? ( dev-libs/libgamin[lib32] ) )
 	lib32? ( pam? ( sys-libs/pam[lib32] ) )"
 DEPEND="${RDEPEND}"

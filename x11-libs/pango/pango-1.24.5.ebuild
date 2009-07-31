@@ -15,16 +15,16 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86
 IUSE="X debug"
 
 # FIXME: add gobject-introspection dependency when it is available
-RDEPEND="dev-libs/glib:2[lib32?]
-	>=media-libs/fontconfig-2.5.0[lib32?]
-	media-libs/freetype:2[lib32?]
-	>=x11-libs/cairo-1.7.6[lib32?]
+RDEPEND="dev-libs/glib:2[$(get_ml_usedeps)]
+	>=media-libs/fontconfig-2.5.0[$(get_ml_usedeps)]
+	media-libs/freetype:2[$(get_ml_usedeps)]
+	>=x11-libs/cairo-1.7.6[$(get_ml_usedeps)]
 	X? (
-		x11-libs/libXrender[lib32?]
-		x11-libs/libX11[lib32?]
-		x11-libs/libXft[lib32?] )"
+		x11-libs/libXrender[$(get_ml_usedeps)]
+		x11-libs/libX11[$(get_ml_usedeps)]
+		x11-libs/libXft[$(get_ml_usedeps)] )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[lib32?]
+	dev-util/pkgconfig[$(get_ml_usedeps)]
 	doc? (
 		>=dev-util/gtk-doc-1
 		~app-text/docbook-xml-dtd-4.1.2 )

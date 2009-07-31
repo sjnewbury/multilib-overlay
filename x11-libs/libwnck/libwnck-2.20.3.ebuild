@@ -14,15 +14,15 @@ SLOT="0"
 KEYWORDS="arm sh"
 IUSE="doc"
 
-RDEPEND=">=x11-libs/gtk+-2.11.3[lib32?]
-	>=dev-libs/glib-2.13.0[lib32?]
-	>=x11-libs/startup-notification-0.4[lib32?]
-	x11-libs/libX11[lib32?]
-	x11-libs/libXres[lib32?]
-	x11-libs/libXext[lib32?]"
+RDEPEND=">=x11-libs/gtk+-2.11.3[$(get_ml_usedeps)]
+	>=dev-libs/glib-2.13.0[$(get_ml_usedeps)]
+	>=x11-libs/startup-notification-0.4[$(get_ml_usedeps)]
+	x11-libs/libX11[$(get_ml_usedeps)]
+	x11-libs/libXres[$(get_ml_usedeps)]
+	x11-libs/libXext[$(get_ml_usedeps)]"
 DEPEND="${RDEPEND}
-	sys-devel/gettext[lib32?]
-	>=dev-util/pkgconfig-0.9[lib32?]
+	sys-devel/gettext[$(get_ml_usedeps)]
+	>=dev-util/pkgconfig-0.9[$(get_ml_usedeps)]
 	>=dev-util/intltool-0.35
 	doc? ( >=dev-util/gtk-doc-1 )"
 

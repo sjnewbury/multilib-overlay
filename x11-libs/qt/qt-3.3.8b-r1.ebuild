@@ -24,23 +24,23 @@ KEYWORDS="alpha amd64 hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="cups debug doc examples firebird ipv6 mysql nas nis odbc opengl postgres sqlite xinerama immqt immqt-bc"
 
 RDEPEND="
-	media-libs/jpeg[lib32?]
-	>=media-libs/freetype-2[lib32?]
-	>=media-libs/libmng-1.0.9[lib32?]
-	media-libs/libpng[lib32?]
-	sys-libs/zlib[lib32?]
-	x11-libs/libXft[lib32?]
-	x11-libs/libXcursor[lib32?]
-	x11-libs/libXi[lib32?]
-	x11-libs/libXrandr[lib32?]
-	x11-libs/libSM[lib32?]
-	cups? ( net-print/cups[lib32?] )
+	media-libs/jpeg[$(get_ml_usedeps)]
+	>=media-libs/freetype-2[$(get_ml_usedeps)]
+	>=media-libs/libmng-1.0.9[$(get_ml_usedeps)]
+	media-libs/libpng[$(get_ml_usedeps)]
+	sys-libs/zlib[$(get_ml_usedeps)]
+	x11-libs/libXft[$(get_ml_usedeps)]
+	x11-libs/libXcursor[$(get_ml_usedeps)]
+	x11-libs/libXi[$(get_ml_usedeps)]
+	x11-libs/libXrandr[$(get_ml_usedeps)]
+	x11-libs/libSM[$(get_ml_usedeps)]
+	cups? ( net-print/cups[$(get_ml_usedeps)] )
 	firebird? ( dev-db/firebird )
-	mysql? ( virtual/mysql[lib32?] )
-	nas? ( >=media-libs/nas-1.5[lib32?] )
-	opengl? ( virtual/opengl[lib32?] virtual/glu[lib32?] )
-	postgres? ( virtual/postgresql-base[lib32?] )
-	xinerama? ( x11-libs/libXinerama[lib32?] )"
+	mysql? ( virtual/mysql[$(get_ml_usedeps)] )
+	nas? ( >=media-libs/nas-1.5[$(get_ml_usedeps)] )
+	opengl? ( virtual/opengl[lib32?] virtual/glu[$(get_ml_usedeps)] )
+	postgres? ( virtual/postgresql-base[$(get_ml_usedeps)] )
+	xinerama? ( x11-libs/libXinerama[$(get_ml_usedeps)] )"
 DEPEND="${RDEPEND}
 	x11-proto/inputproto
 	x11-proto/xextproto

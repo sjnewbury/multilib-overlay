@@ -10,9 +10,9 @@ SLOT="4"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 -sparc ~x86 ~x86-fbsd"
 IUSE=""
 
-DEPEND="~x11-libs/qt-gui-${PV}[debug=,lib32?]
-	~x11-libs/qt-sql-${PV}[debug=,sqlite,lib32?]
-	~x11-libs/qt-webkit-${PV}[debug=,lib32?]"
+DEPEND="~x11-libs/qt-gui-${PV}[debug=,$(get_ml_usedeps)]
+	~x11-libs/qt-sql-${PV}[debug=,sqlite,$(get_ml_usedeps)]
+	~x11-libs/qt-webkit-${PV}[debug=,$(get_ml_usedeps)]"
 RDEPEND="${DEPEND}"
 
 # Pixeltool isn't really assistant related, but it relies on

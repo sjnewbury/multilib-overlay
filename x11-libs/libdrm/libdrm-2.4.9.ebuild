@@ -18,7 +18,7 @@ IUSE=""
 RESTRICT="test" # see bug #236845
 
 RDEPEND="dev-libs/libpthread-stubs
-	sys-fs/udev[lib32?]"
+	sys-fs/udev[$(get_ml_usedeps)]"
 DEPEND="${RDEPEND}"
 
 PATCHES=(

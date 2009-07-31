@@ -10,10 +10,10 @@ SLOT="4"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="qt3support"
 
-DEPEND="~x11-libs/qt-core-${PV}[debug=,qt3support=,lib32?]
-	~x11-libs/qt-gui-${PV}[debug=,qt3support=,lib32?]
-	virtual/opengl[lib32?]
-	virtual/glu[lib32?]"
+DEPEND="~x11-libs/qt-core-${PV}[debug=,qt3support=,$(get_ml_usedeps)]
+	~x11-libs/qt-gui-${PV}[debug=,qt3support=,$(get_ml_usedeps)]
+	virtual/opengl[$(get_ml_usedeps)]
+	virtual/glu[$(get_ml_usedeps)]"
 RDEPEND="${DEPEND}"
 
 QT4_TARGET_DIRECTORIES="src/opengl"

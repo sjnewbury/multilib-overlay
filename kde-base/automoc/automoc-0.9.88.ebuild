@@ -18,7 +18,7 @@ SLOT="0"
 KEYWORDS="alpha amd64 hppa ia64 ppc ppc64 x86 ~x86-fbsd"
 IUSE=""
 
-DEPEND="x11-libs/qt-core:4[lib32?]"
+DEPEND="x11-libs/qt-core:4[$(get_ml_usedeps)]"
 RDEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${MY_P}"

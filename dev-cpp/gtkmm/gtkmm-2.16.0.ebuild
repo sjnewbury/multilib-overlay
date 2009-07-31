@@ -14,14 +14,14 @@ SLOT="2.4"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc examples test"
 
-RDEPEND=">=dev-cpp/glibmm-2.19[lib32?]
-	>=x11-libs/gtk+-2.15.5[lib32?]
-	>=dev-cpp/cairomm-1.2.2[lib32?]
-	>=dev-cpp/pangomm-2.14.0[lib32?]
-	>=dev-libs/atk-1.9.1[lib32?]"
+RDEPEND=">=dev-cpp/glibmm-2.19[$(get_ml_usedeps)]
+	>=x11-libs/gtk+-2.15.5[$(get_ml_usedeps)]
+	>=dev-cpp/cairomm-1.2.2[$(get_ml_usedeps)]
+	>=dev-cpp/pangomm-2.14.0[$(get_ml_usedeps)]
+	>=dev-libs/atk-1.9.1[$(get_ml_usedeps)]"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[lib32?]"
+	dev-util/pkgconfig[$(get_ml_usedeps)]"
 
 DOCS="AUTHORS CHANGES ChangeLog PORTING NEWS README"
 

@@ -15,11 +15,11 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="3dnow altivec +cxx debug doc ogg sse"
 
-RDEPEND="ogg? ( >=media-libs/libogg-1.1.3[lib32?] )"
+RDEPEND="ogg? ( >=media-libs/libogg-1.1.3[$(get_ml_usedeps)] )"
 DEPEND="${RDEPEND}
 	x86? ( dev-lang/nasm )
 	!elibc_uclibc? ( sys-devel/gettext )
-	dev-util/pkgconfig[lib32?]"
+	dev-util/pkgconfig[$(get_ml_usedeps)]"
 
 PATCHES=( "${FILESDIR}/${P}-asneeded.patch"
 	"${FILESDIR}/${P}-cflags.patch"

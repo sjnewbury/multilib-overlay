@@ -17,16 +17,16 @@ IUSE="nls readline debug selinux device-mapper"
 
 # specific version for gettext needed
 # to fix bug 85999
-DEPEND=">=sys-fs/e2fsprogs-1.27[lib32?]
-	>=sys-libs/ncurses-5.2[lib32?]
-	nls? ( >=sys-devel/gettext-0.12.1-r2[lib32?] )
-	readline? ( >=sys-libs/readline-4.1-r4[lib32?] )
-	selinux? ( sys-libs/libselinux[lib32?] )
+DEPEND=">=sys-fs/e2fsprogs-1.27[$(get_ml_usedeps)]
+	>=sys-libs/ncurses-5.2[$(get_ml_usedeps)]
+	nls? ( >=sys-devel/gettext-0.12.1-r2[$(get_ml_usedeps)] )
+	readline? ( >=sys-libs/readline-4.1-r4[$(get_ml_usedeps)] )
+	selinux? ( sys-libs/libselinux[$(get_ml_usedeps)] )
 	device-mapper? ( || (
 		>=sys-fs/lvm2-2.02.45
-		sys-fs/device-mapper[lib32?] )
+		sys-fs/device-mapper[$(get_ml_usedeps)] )
 	)
-	dev-libs/check[lib32?]"
+	dev-libs/check[$(get_ml_usedeps)]"
 
 ml-native_src_configure() {
 	econf \

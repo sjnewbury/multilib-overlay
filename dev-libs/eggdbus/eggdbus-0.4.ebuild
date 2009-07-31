@@ -15,13 +15,13 @@ SLOT="1"
 KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="debug doc +largefile test"
 
-RDEPEND=">=dev-libs/dbus-glib-0.73[lib32?]
-	>=dev-libs/glib-2.19:2[lib32?]
-	>=sys-apps/dbus-1.0[lib32?]"
+RDEPEND=">=dev-libs/dbus-glib-0.73[$(get_ml_usedeps)]
+	>=dev-libs/glib-2.19:2[$(get_ml_usedeps)]
+	>=sys-apps/dbus-1.0[$(get_ml_usedeps)]"
 DEPEND="${DEPEND}
 	doc? ( dev-libs/libxslt
 		>=dev-util/gtk-doc-1.3 )
-	dev-util/pkgconfig[lib32?]"
+	dev-util/pkgconfig[$(get_ml_usedeps)]"
 
 # NOTES:
 # man pages are built (and installed) when doc is enabled

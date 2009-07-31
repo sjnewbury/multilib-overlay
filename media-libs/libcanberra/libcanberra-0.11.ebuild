@@ -15,16 +15,16 @@ SLOT="0"
 KEYWORDS="alpha amd64 ~arm ~hppa ia64 ppc ppc64 ~sh sparc x86 ~x86-fbsd"
 IUSE="alsa doc gstreamer +gtk oss"
 
-RDEPEND="media-libs/libvorbis[lib32?]
-	sys-devel/libtool[lib32?]
-	alsa? ( media-libs/alsa-lib[lib32?] )
+RDEPEND="media-libs/libvorbis[$(get_ml_usedeps)]
+	sys-devel/libtool[$(get_ml_usedeps)]
+	alsa? ( media-libs/alsa-lib[$(get_ml_usedeps)] )
 	gstreamer? ( >=media-libs/gstreamer-0.10.15 )
-	pulse? ( media-sound/pulseaudio[lib32?] )
-	gtk? ( dev-libs/glib:2[lib32?]
-		>=x11-libs/gtk+-2.13.4:2[lib32?]
-		>=gnome-base/gconf-2[lib32?] )"
+	pulse? ( media-sound/pulseaudio[$(get_ml_usedeps)] )
+	gtk? ( dev-libs/glib:2[$(get_ml_usedeps)]
+		>=x11-libs/gtk+-2.13.4:2[$(get_ml_usedeps)]
+		>=gnome-base/gconf-2[$(get_ml_usedeps)] )"
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.17[lib32?]
+	>=dev-util/pkgconfig-0.17[$(get_ml_usedeps)]
 	doc? ( >=dev-util/gtk-doc-1.9 )"
 
 ml-native_src_configure() {

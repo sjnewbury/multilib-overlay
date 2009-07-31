@@ -19,7 +19,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh -sparc ~x86 ~x86-
 IUSE=""
 
 RDEPEND=""
-DEPEND="dev-util/pkgconfig[lib32?]"
+DEPEND="dev-util/pkgconfig[$(get_ml_usedeps)]"
 
 ml-native_src_prepare() {
 	epatch "${FILESDIR}/${PN}-0.7-amd64.patch"

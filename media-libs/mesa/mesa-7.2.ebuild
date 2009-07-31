@@ -54,20 +54,20 @@ IUSE="${IUSE_VIDEO_CARDS}
 
 RDEPEND=">=app-admin/eselect-opengl-1.0.6-r1
 	dev-libs/expat
-	>=x11-libs/libX11-1.1.5[xcb?,lib32?]
-	>=x11-libs/libXext-1.0.4[lib32?]
-	>=x11-libs/libXxf86vm-1.0.2[lib32?]
-	>=x11-libs/libXi-1.1.3[lib32?]
+	>=x11-libs/libX11-1.1.5[xcb?,$(get_ml_usedeps)]
+	>=x11-libs/libXext-1.0.4[$(get_ml_usedeps)]
+	>=x11-libs/libXxf86vm-1.0.2[$(get_ml_usedeps)]
+	>=x11-libs/libXi-1.1.3[$(get_ml_usedeps)]
 	>=x11-libs/libXmu-1.0.3
-	>=x11-libs/libXdamage-1.1.1[lib32?]
-	>=x11-libs/libdrm-2.3.1[lib32?]
-	>=x11-libs/libICE-1.0.4[lib32?]
+	>=x11-libs/libXdamage-1.1.1[$(get_ml_usedeps)]
+	>=x11-libs/libdrm-2.3.1[$(get_ml_usedeps)]
+	>=x11-libs/libICE-1.0.4[$(get_ml_usedeps)]
 	motif? ( >=x11-libs/openmotif-2.3.1-r1 )
 	doc? ( >=app-doc/opengl-manpages-20001215 )
 	!<=x11-base/xorg-x11-6.9"
 DEPEND="${RDEPEND}
 	!<=x11-proto/xf86driproto-2.0.3
-	dev-util/pkgconfig[lib32?]
+	dev-util/pkgconfig[$(get_ml_usedeps)]
 	>=x11-misc/makedepend-1.0.1
 	>=x11-proto/inputproto-1.4.4
 	>=x11-proto/xextproto-7.0.3

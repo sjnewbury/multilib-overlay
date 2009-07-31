@@ -32,11 +32,11 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~ppc ~ppc64 ~s390 ~sh ~sparc ~spa
 IUSE="doc java nocxx tcl test"
 
 # the entire testsuite needs the TCL functionality
-DEPEND="tcl? ( >=dev-lang/tcl-8.4[lib32?] )
-	test? ( >=dev-lang/tcl-8.4[lib32?] )
+DEPEND="tcl? ( >=dev-lang/tcl-8.4[$(get_ml_usedeps)] )
+	test? ( >=dev-lang/tcl-8.4[$(get_ml_usedeps)] )
 	java? ( >=virtual/jdk-1.5 )
 	>=sys-devel/binutils-2.16.1"
-RDEPEND="tcl? ( dev-lang/tcl[lib32?] )
+RDEPEND="tcl? ( dev-lang/tcl[$(get_ml_usedeps)] )
 	java? ( >=virtual/jre-1.5 )"
 
 src_unpack() {

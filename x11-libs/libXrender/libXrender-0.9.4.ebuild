@@ -13,7 +13,7 @@ DESCRIPTION="X.Org Xrender library"
 
 KEYWORDS="~alpha amd64 ~arm hppa ia64 ~mips ppc ppc64 ~s390 sh sparc x86 ~x86-fbsd"
 
-RDEPEND="x11-libs/libX11[lib32?]
+RDEPEND="x11-libs/libX11[$(get_ml_usedeps)]
 		>=x11-proto/renderproto-0.9.3
 		x11-proto/xproto"
 DEPEND="${RDEPEND}"

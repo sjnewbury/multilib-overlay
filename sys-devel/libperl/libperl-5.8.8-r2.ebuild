@@ -82,15 +82,15 @@ KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fb
 
 RESTRICT="test"
 
-DEPEND="berkdb? ( sys-libs/db[lib32?] )
-	gdbm? ( >=sys-libs/gdbm-1.8.0[lib32?] )
+DEPEND="berkdb? ( sys-libs/db[$(get_ml_usedeps)] )
+	gdbm? ( >=sys-libs/gdbm-1.8.0[$(get_ml_usedeps)] )
 	elibc_FreeBSD? ( sys-freebsd/freebsd-mk-defs )"
 
 RDEPEND="
-	berkdb? ( sys-libs/db[lib32?] )
-	gdbm? ( >=sys-libs/gdbm-1.8.0[lib32?] )"
+	berkdb? ( sys-libs/db[$(get_ml_usedeps)] )
+	gdbm? ( >=sys-libs/gdbm-1.8.0[$(get_ml_usedeps)] )"
 
-PDEPEND="~dev-lang/perl-${PV}[lib32?]"
+PDEPEND="~dev-lang/perl-${PV}[$(get_ml_usedeps)]"
 
 pkg_setup() {
 	# I think this should rather be displayed if you *have* 'ithreads'

@@ -17,7 +17,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
 IUSE=""
 
-DEPEND="x11-libs/qt-core:4[lib32?]"
+DEPEND="x11-libs/qt-core:4[$(get_ml_usedeps)]"
 RDEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${PN}4-${PV}"

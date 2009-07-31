@@ -18,12 +18,12 @@ RESTRICT="test"
 # glib higher dep than in configure.in comes from a runtime version check and ensures that
 # timeout_add_seconds is available for any packages that depend on pygobject and use it
 # python high dep for a fixed python-config, as aclocal.m4/configure in the tarball requires it to function properly
-RDEPEND=">=dev-lang/python-2.4.4-r5[lib32?]
-	>=dev-libs/glib-2.13.5[lib32?]
-	!<dev-python/pygtk-2.9[lib32?]"
+RDEPEND=">=dev-lang/python-2.4.4-r5[$(get_ml_usedeps)]
+	>=dev-libs/glib-2.13.5[$(get_ml_usedeps)]
+	!<dev-python/pygtk-2.9[$(get_ml_usedeps)]"
 DEPEND="${RDEPEND}
 	doc? ( dev-libs/libxslt >=app-text/docbook-xsl-stylesheets-1.70.1 )
-	>=dev-util/pkgconfig-0.12.0[lib32?]"
+	>=dev-util/pkgconfig-0.12.0[$(get_ml_usedeps)]"
 
 DOCS="AUTHORS ChangeLog NEWS README"
 

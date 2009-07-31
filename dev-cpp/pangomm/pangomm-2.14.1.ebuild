@@ -14,13 +14,13 @@ SLOT="2.4"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc"
 
-RDEPEND=">=x11-libs/pango-1.21.4[lib32?]
-	>=dev-cpp/glibmm-2.14.1[lib32?]
-	>=dev-cpp/cairomm-1.2.2[lib32?]
-	!<dev-cpp/gtkmm-2.13:2.4[lib32?]"
+RDEPEND=">=x11-libs/pango-1.21.4[$(get_ml_usedeps)]
+	>=dev-cpp/glibmm-2.14.1[$(get_ml_usedeps)]
+	>=dev-cpp/cairomm-1.2.2[$(get_ml_usedeps)]
+	!<dev-cpp/gtkmm-2.13:2.4[$(get_ml_usedeps)]"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[lib32?]"
+	dev-util/pkgconfig[$(get_ml_usedeps)]"
 
 DOCS="AUTHORS CHANGES ChangeLog PORTING NEWS README"
 

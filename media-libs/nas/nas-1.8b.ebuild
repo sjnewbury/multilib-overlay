@@ -13,13 +13,13 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="doc"
 
-RDEPEND="x11-libs/libXt[lib32?]
-	x11-libs/libXau[lib32?]
-	x11-libs/libXaw[lib32?]
-	x11-libs/libX11[lib32?]
-	x11-libs/libXres[lib32?]
-	x11-libs/libXTrap[lib32?]
-	x11-libs/libXp[lib32?]"
+RDEPEND="x11-libs/libXt[$(get_ml_usedeps)]
+	x11-libs/libXau[$(get_ml_usedeps)]
+	x11-libs/libXaw[$(get_ml_usedeps)]
+	x11-libs/libX11[$(get_ml_usedeps)]
+	x11-libs/libXres[$(get_ml_usedeps)]
+	x11-libs/libXTrap[$(get_ml_usedeps)]
+	x11-libs/libXp[$(get_ml_usedeps)]"
 DEPEND="${RDEPEND}
 	x11-misc/gccmakedep
 	x11-misc/imake

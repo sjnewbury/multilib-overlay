@@ -14,13 +14,13 @@ SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc examples libffi test"
 
-RDEPEND=">=dev-lang/python-2.4.4-r5[lib32?]
-	>=dev-libs/glib-2.16[lib32?]
-	!<dev-python/pygtk-2.13[lib32?]
+RDEPEND=">=dev-lang/python-2.4.4-r5[$(get_ml_usedeps)]
+	>=dev-libs/glib-2.16[$(get_ml_usedeps)]
+	!<dev-python/pygtk-2.13[$(get_ml_usedeps)]
 	libffi? ( virtual/libffi )"
 DEPEND="${RDEPEND}
 	doc? ( dev-libs/libxslt >=app-text/docbook-xsl-stylesheets-1.70.1 )
-	>=dev-util/pkgconfig-0.12.0[lib32?]"
+	>=dev-util/pkgconfig-0.12.0[$(get_ml_usedeps)]"
 
 DOCS="AUTHORS ChangeLog ChangeLog.pre-$(get_version_component_range 1-2)
 	NEWS README"

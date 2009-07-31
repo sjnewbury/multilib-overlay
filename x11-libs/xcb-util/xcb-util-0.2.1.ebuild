@@ -17,7 +17,7 @@ LICENSE="X11"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="test"
 
-RDEPEND=">=x11-libs/libxcb-1[lib32?]"
+RDEPEND=">=x11-libs/libxcb-1[$(get_ml_usedeps)]"
 DEPEND="${RDEPEND}
 	>=dev-util/gperf-3.0.1
 	x11-proto/xproto

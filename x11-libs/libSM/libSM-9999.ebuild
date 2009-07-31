@@ -14,7 +14,7 @@ DESCRIPTION="X.Org SM library"
 KEYWORDS=""
 IUSE="ipv6"
 
-RDEPEND="x11-libs/libICE[lib32?]
+RDEPEND="x11-libs/libICE[$(get_ml_usedeps)]
 	x11-libs/xtrans
 	x11-proto/xproto
 	|| ( sys-libs/e2fsprogs-libs[lib32] sys-fs/e2fsprogs[lib32] )"

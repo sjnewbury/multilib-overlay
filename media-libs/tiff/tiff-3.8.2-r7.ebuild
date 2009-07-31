@@ -16,9 +16,9 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="jpeg jbig nocxx zlib"
 
-RDEPEND="jpeg? ( >=media-libs/jpeg-6b[lib32?] )
-	jbig? ( >=media-libs/jbigkit-1.6-r1[lib32?] )
-	zlib? ( >=sys-libs/zlib-1.1.3-r2[lib32?] )"
+RDEPEND="jpeg? ( >=media-libs/jpeg-6b[$(get_ml_usedeps)] )
+	jbig? ( >=media-libs/jbigkit-1.6-r1[$(get_ml_usedeps)] )
+	zlib? ( >=sys-libs/zlib-1.1.3-r2[$(get_ml_usedeps)] )"
 DEPEND="${RDEPEND}"
 
 ml-native_src_prepare() {

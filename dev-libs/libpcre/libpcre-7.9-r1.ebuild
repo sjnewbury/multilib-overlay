@@ -21,7 +21,7 @@ SLOT="3"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ~ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="bzip2 +cxx doc unicode zlib static-libs"
 
-DEPEND="dev-util/pkgconfig[lib32?]"
+DEPEND="dev-util/pkgconfig[$(get_ml_usedeps)]"
 RDEPEND=""
 
 S=${WORKDIR}/${MY_P}

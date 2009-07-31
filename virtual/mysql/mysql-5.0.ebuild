@@ -13,6 +13,6 @@ IUSE="lib32"
 
 DEPEND=""
 RDEPEND="|| (
-	=dev-db/mysql-${PV}*[lib32?]
-	=dev-db/mysql-community-${PV}*[lib32?]
+	=dev-db/mysql-${PV}*[$(get_ml_usedeps)]
+	=dev-db/mysql-community-${PV}*[$(get_ml_usedeps)]
 )"

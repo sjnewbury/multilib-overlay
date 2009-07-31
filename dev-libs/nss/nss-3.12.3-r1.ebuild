@@ -19,8 +19,8 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="utils"
 
-DEPEND=">=dev-libs/nspr-${NSPR_VER}[lib32?]
-	>=dev-db/sqlite-3.5[lib32?]"
+DEPEND=">=dev-libs/nspr-${NSPR_VER}[$(get_ml_usedeps)]
+	>=dev-db/sqlite-3.5[$(get_ml_usedeps)]"
 RDEPEND="${DEPEND}"
 
 ml-native_src_prepare() {

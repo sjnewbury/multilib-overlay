@@ -20,11 +20,11 @@ KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd"
 KERNEL_IUSE="kernel_linux kernel_FreeBSD"
 IUSE="X acpi apm crypt debug dell disk-partition doc laptop selinux ${KERNEL_IUSE}"
 
-RDEPEND=">=dev-libs/dbus-glib-0.61[lib32?]
-		 >=dev-libs/glib-2.14[lib32?]
-		 >=dev-libs/expat-1.95.8[lib32?]
-		 =virtual/libusb-0*[lib32?]
-		 >=sys-apps/pciutils-2.2.7-r1[lib32?]
+RDEPEND=">=dev-libs/dbus-glib-0.61[$(get_ml_usedeps)]
+		 >=dev-libs/glib-2.14[$(get_ml_usedeps)]
+		 >=dev-libs/expat-1.95.8[$(get_ml_usedeps)]
+		 =virtual/libusb-0*[$(get_ml_usedeps)]
+		 >=sys-apps/pciutils-2.2.7-r1[$(get_ml_usedeps)]
 		 >=dev-util/gperf-3.0.3
 		   sys-apps/usbutils
 		   virtual/eject
@@ -33,7 +33,7 @@ RDEPEND=">=dev-libs/dbus-glib-0.61[lib32?]
 		 disk-partition? ( >=sys-apps/parted-1.8.0 )
 		 ia64? ( >=sys-apps/dmidecode-2.7 )
 		 kernel_linux?	(
-							>=sys-fs/udev-117[lib32?]
+							>=sys-fs/udev-117[$(get_ml_usedeps)]
 							>=sys-apps/util-linux-2.13
 							>=sys-kernel/linux-headers-2.6.19
 							crypt?	( >=sys-fs/cryptsetup-1.0.5 )
@@ -42,7 +42,7 @@ RDEPEND=">=dev-libs/dbus-glib-0.61[lib32?]
 		 x86? ( >=sys-apps/dmidecode-2.7 )
 		 selinux? ( sys-libs/libselinux sec-policy/selinux-hal )"
 DEPEND="${RDEPEND}
-		dev-util/pkgconfig[lib32?]
+		dev-util/pkgconfig[$(get_ml_usedeps)]
 		>=dev-util/intltool-0.35
 		doc?	(
 					app-text/xmlto

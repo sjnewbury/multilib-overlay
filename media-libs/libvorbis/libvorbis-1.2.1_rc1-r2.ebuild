@@ -18,7 +18,7 @@ IUSE="+aotuv doc"
 
 RDEPEND=">=media-libs/libogg-1"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[lib32?]"
+	dev-util/pkgconfig[$(get_ml_usedeps)]"
 S="${WORKDIR}/${MY_P}"
 
 src_unpack() {

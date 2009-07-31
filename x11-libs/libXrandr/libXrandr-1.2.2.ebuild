@@ -14,9 +14,9 @@ DESCRIPTION="X.Org Xrandr library"
 KEYWORDS="alpha amd64 arm ~hppa ia64 ~mips ppc ppc64 s390 sh sparc ~x86 ~x86-fbsd"
 IUSE=""
 
-RDEPEND="x11-libs/libX11[lib32?]
-	x11-libs/libXext[lib32?]
-	x11-libs/libXrender[lib32?]
+RDEPEND="x11-libs/libX11[$(get_ml_usedeps)]
+	x11-libs/libXext[$(get_ml_usedeps)]
+	x11-libs/libXrender[$(get_ml_usedeps)]
 	>=x11-proto/randrproto-1.2
 	x11-proto/xproto"
 DEPEND="${RDEPEND}

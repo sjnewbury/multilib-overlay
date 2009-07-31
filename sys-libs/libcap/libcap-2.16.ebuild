@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ~ppc ppc64 s390 sh sparc x86"
 IUSE="pam"
 
-RDEPEND="sys-apps/attr[lib32?]
+RDEPEND="sys-apps/attr[$(get_ml_usedeps)]
 	pam? ( virtual/pam )"
 DEPEND="${RDEPEND}
 	sys-kernel/linux-headers"

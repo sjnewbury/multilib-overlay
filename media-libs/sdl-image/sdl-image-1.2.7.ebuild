@@ -16,11 +16,11 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="gif jpeg tiff png"
 
-DEPEND="sys-libs/zlib[lib32?]
-	>=media-libs/libsdl-1.2.10[lib32?]
-	png? ( >=media-libs/libpng-1.2.1[lib32?] )
-	jpeg? ( >=media-libs/jpeg-6b[lib32?] )
-	tiff? ( media-libs/tiff[lib32?] )"
+DEPEND="sys-libs/zlib[$(get_ml_usedeps)]
+	>=media-libs/libsdl-1.2.10[$(get_ml_usedeps)]
+	png? ( >=media-libs/libpng-1.2.1[$(get_ml_usedeps)] )
+	jpeg? ( >=media-libs/jpeg-6b[$(get_ml_usedeps)] )
+	tiff? ( media-libs/tiff[$(get_ml_usedeps)] )"
 RDEPEND="${DEPEND}"
 
 S=${WORKDIR}/${MY_P}

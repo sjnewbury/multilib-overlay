@@ -15,8 +15,8 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE=""
 
-RDEPEND="virtual/opengl[lib32?]
-	virtual/glu[lib32?]
+RDEPEND="virtual/opengl[$(get_ml_usedeps)]
+	virtual/glu[$(get_ml_usedeps)]
 	!media-libs/glut"
 DEPEND="${RDEPEND}"
 

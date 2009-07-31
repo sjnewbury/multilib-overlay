@@ -20,19 +20,19 @@ SLOT="3.5"
 KEYWORDS="~alpha amd64 ~hppa ~ia64 ppc ppc64 ~sparc x86 ~x86-fbsd"
 IUSE="alsa esd artswrappersuid jack mp3 nas vorbis"
 
-RDEPEND="x11-libs/qt:3[lib32?]
-	>=dev-libs/glib-2[lib32?]
-	alsa? ( media-libs/alsa-lib[lib32?] )
-	vorbis? ( media-libs/libogg[lib32?]
-			media-libs/libvorbis[lib32?] )
-	esd? ( media-sound/esound[lib32?] )
-	jack? ( >=media-sound/jack-audio-connection-kit-0.90[lib32?] )
-	mp3? ( media-libs/libmad[lib32?] )
-	nas? ( media-libs/nas[lib32?] )
-	media-libs/audiofile[lib32?]"
+RDEPEND="x11-libs/qt:3[$(get_ml_usedeps)]
+	>=dev-libs/glib-2[$(get_ml_usedeps)]
+	alsa? ( media-libs/alsa-lib[$(get_ml_usedeps)] )
+	vorbis? ( media-libs/libogg[$(get_ml_usedeps)]
+			media-libs/libvorbis[$(get_ml_usedeps)] )
+	esd? ( media-sound/esound[$(get_ml_usedeps)] )
+	jack? ( >=media-sound/jack-audio-connection-kit-0.90[$(get_ml_usedeps)] )
+	mp3? ( media-libs/libmad[$(get_ml_usedeps)] )
+	nas? ( media-libs/nas[$(get_ml_usedeps)] )
+	media-libs/audiofile[$(get_ml_usedeps)]"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[lib32?]"
+	dev-util/pkgconfig[$(get_ml_usedeps)]"
 
 ml-native_src_prepare() {
 	epatch "${FILESDIR}/arts-1.5.0-bindnow.patch" \

@@ -17,10 +17,10 @@ KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="debug sdl xv"
 
 RDEPEND="dev-libs/popt
-	sdl? ( >=media-libs/libsdl-1.2.5[lib32?] )
-	xv? ( x11-libs/libXv[lib32?] )"
+	sdl? ( >=media-libs/libsdl-1.2.5[$(get_ml_usedeps)] )
+	xv? ( x11-libs/libXv[$(get_ml_usedeps)] )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[lib32?]"
+	dev-util/pkgconfig[$(get_ml_usedeps)]"
 
 ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${PN}-0.99-2.6.patch

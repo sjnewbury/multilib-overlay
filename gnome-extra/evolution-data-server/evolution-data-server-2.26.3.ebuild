@@ -14,28 +14,28 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="doc ipv6 kerberos gnome-keyring krb4 ldap ssl"
 
-RDEPEND=">=dev-libs/glib-2.16.1[lib32?]
-	>=x11-libs/gtk+-2.14[lib32?]
-	>=gnome-base/orbit-2.9.8[lib32?]
-	>=gnome-base/libbonobo-2.20.3[lib32?]
-	>=gnome-base/gconf-2[lib32?]
-	>=gnome-base/libglade-2[lib32?]
-	>=gnome-base/libgnome-2[lib32?]
-	>=dev-libs/libxml2-2[lib32?]
-	>=net-libs/libsoup-2.4[lib32?]
-	>=dev-libs/libgweather-2.25.4[lib32?]
-	>=dev-libs/libical-0.43[lib32?]
-	gnome-keyring? ( >=gnome-base/gnome-keyring-2.20.1[lib32?] )
-	>=dev-db/sqlite-3.5[lib32?]
+RDEPEND=">=dev-libs/glib-2.16.1[$(get_ml_usedeps)]
+	>=x11-libs/gtk+-2.14[$(get_ml_usedeps)]
+	>=gnome-base/orbit-2.9.8[$(get_ml_usedeps)]
+	>=gnome-base/libbonobo-2.20.3[$(get_ml_usedeps)]
+	>=gnome-base/gconf-2[$(get_ml_usedeps)]
+	>=gnome-base/libglade-2[$(get_ml_usedeps)]
+	>=gnome-base/libgnome-2[$(get_ml_usedeps)]
+	>=dev-libs/libxml2-2[$(get_ml_usedeps)]
+	>=net-libs/libsoup-2.4[$(get_ml_usedeps)]
+	>=dev-libs/libgweather-2.25.4[$(get_ml_usedeps)]
+	>=dev-libs/libical-0.43[$(get_ml_usedeps)]
+	gnome-keyring? ( >=gnome-base/gnome-keyring-2.20.1[$(get_ml_usedeps)] )
+	>=dev-db/sqlite-3.5[$(get_ml_usedeps)]
 	ssl? (
-		>=dev-libs/nspr-4.4[lib32?]
-		>=dev-libs/nss-3.9[lib32?] )
-	>=gnome-base/libgnomeui-2[lib32?]
-	sys-libs/zlib[lib32?]
-	=sys-libs/db-4*[lib32?]
-	ldap? ( >=net-nds/openldap-2.0[lib32?] )
+		>=dev-libs/nspr-4.4[$(get_ml_usedeps)]
+		>=dev-libs/nss-3.9[$(get_ml_usedeps)] )
+	>=gnome-base/libgnomeui-2[$(get_ml_usedeps)]
+	sys-libs/zlib[$(get_ml_usedeps)]
+	=sys-libs/db-4*[$(get_ml_usedeps)]
+	ldap? ( >=net-nds/openldap-2.0[$(get_ml_usedeps)] )
 	kerberos? ( virtual/krb5 )
-	krb4? ( app-crypt/mit-krb5[krb4,lib32?] )"
+	krb4? ( app-crypt/mit-krb5[krb4,$(get_ml_usedeps)] )"
 
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9

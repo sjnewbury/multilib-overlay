@@ -14,27 +14,27 @@ SLOT="2"
 KEYWORDS="alpha amd64 ~arm ~hppa ia64 ~mips ppc ppc64 ~sh sparc x86 ~x86-fbsd"
 IUSE="acl avahi doc fam gnutls hal ipv6 kerberos samba ssl"
 
-RDEPEND=">=gnome-base/gconf-2[lib32?]
-	>=dev-libs/glib-2.9.3[lib32?]
-	>=dev-libs/libxml2-2.6[lib32?]
-	app-arch/bzip2[lib32?]
+RDEPEND=">=gnome-base/gconf-2[$(get_ml_usedeps)]
+	>=dev-libs/glib-2.9.3[$(get_ml_usedeps)]
+	>=dev-libs/libxml2-2.6[$(get_ml_usedeps)]
+	app-arch/bzip2[$(get_ml_usedeps)]
 	fam? ( virtual/fam )
 	gnome-base/gnome-mime-data
 	>=x11-misc/shared-mime-info-0.14
-	>=dev-libs/dbus-glib-0.71[lib32?]
-	samba? ( >=net-fs/samba-3[lib32?] )
+	>=dev-libs/dbus-glib-0.71[$(get_ml_usedeps)]
+	samba? ( >=net-fs/samba-3[$(get_ml_usedeps)] )
 	gnutls?	(
-				net-libs/gnutls[lib32?]
+				net-libs/gnutls[$(get_ml_usedeps)]
 				!gnome-extra/gnome-vfs-sftp
 			)
 	ssl?	(
 		!gnutls?	(
-				>=dev-libs/openssl-0.9.5[lib32?]
+				>=dev-libs/openssl-0.9.5[$(get_ml_usedeps)]
 				!gnome-extra/gnome-vfs-sftp
 				)
 		)
-	hal? ( >=sys-apps/hal-0.5.7[lib32?] )
-	avahi? ( >=net-dns/avahi-0.6[lib32?] )
+	hal? ( >=sys-apps/hal-0.5.7[$(get_ml_usedeps)] )
+	avahi? ( >=net-dns/avahi-0.6[$(get_ml_usedeps)] )
 	kerberos? ( virtual/krb5 )
 	acl? (
 		sys-apps/acl
@@ -44,7 +44,7 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	gnome-base/gnome-common
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.9[lib32?]
+	>=dev-util/pkgconfig-0.9[$(get_ml_usedeps)]
 	>=dev-util/gtk-doc-am-1.10-r1
 	doc? ( >=dev-util/gtk-doc-1 )"
 PDEPEND="hal? ( >=gnome-base/gnome-mount-0.6 )"

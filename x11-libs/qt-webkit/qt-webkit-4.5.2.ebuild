@@ -10,10 +10,10 @@ SLOT="4"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 -sparc ~x86 ~x86-fbsd"
 IUSE="kde"
 
-DEPEND="~x11-libs/qt-core-${PV}[debug=,ssl,lib32?]
-	~x11-libs/qt-gui-${PV}[debug=,lib32?]
-	!kde? ( || ( ~x11-libs/qt-phonon-${PV}:${SLOT}[debug=,lib32?] media-sound/phonon[lib32?] ) )
-	kde? ( media-sound/phonon[lib32?] )"
+DEPEND="~x11-libs/qt-core-${PV}[debug=,ssl,$(get_ml_usedeps)]
+	~x11-libs/qt-gui-${PV}[debug=,$(get_ml_usedeps)]
+	!kde? ( || ( ~x11-libs/qt-phonon-${PV}:${SLOT}[debug=,lib32?] media-sound/phonon[$(get_ml_usedeps)] ) )
+	kde? ( media-sound/phonon[$(get_ml_usedeps)] )"
 RDEPEND="${DEPEND}"
 
 QT4_TARGET_DIRECTORIES="src/3rdparty/webkit/WebCore tools/designer/src/plugins/qwebview"

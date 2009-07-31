@@ -14,10 +14,10 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE=""
 
-RDEPEND=">=dev-libs/glib-2[lib32?]
-	>=net-print/cups-1.3.8[lib32?]"
+RDEPEND=">=dev-libs/glib-2[$(get_ml_usedeps)]
+	>=net-print/cups-1.3.8[$(get_ml_usedeps)]"
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.9[lib32?]
+	>=dev-util/pkgconfig-0.9[$(get_ml_usedeps)]
 	>=dev-util/intltool-0.28"
 
 DOCS="AUTHORS ChangeLog NEWS"

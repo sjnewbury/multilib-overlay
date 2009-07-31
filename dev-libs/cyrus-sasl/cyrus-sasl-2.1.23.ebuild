@@ -23,16 +23,16 @@ SLOT="2"
 IUSE="authdaemond berkdb crypt gdbm kerberos ldap mysql ntlm_unsupported_patch pam postgres sample srp ssl urandom"
 
 RDEPEND="authdaemond? ( || ( >=net-mail/courier-imap-3.0.7 >=mail-mta/courier-0.46 ) )
-		berkdb? ( >=sys-libs/db-3.2[lib32?] )
-		gdbm? ( >=sys-libs/gdbm-1.8.0[lib32?] )
+		berkdb? ( >=sys-libs/db-3.2[$(get_ml_usedeps)] )
+		gdbm? ( >=sys-libs/gdbm-1.8.0[$(get_ml_usedeps)] )
 		java? ( >=virtual/jre-1.4 )
 		kerberos? ( virtual/krb5 )
-		ldap? ( >=net-nds/openldap-2.0.25[lib32?] )
+		ldap? ( >=net-nds/openldap-2.0.25[$(get_ml_usedeps)] )
 		mysql? ( virtual/mysql )
 		ntlm_unsupported_patch? ( >=net-fs/samba-3.0.9 )
 		pam? ( virtual/pam )
 		postgres? ( >=virtual/postgresql-base-7.2 )
-		ssl? ( >=dev-libs/openssl-0.9.6d[lib32?] )"
+		ssl? ( >=dev-libs/openssl-0.9.6d[$(get_ml_usedeps)] )"
 DEPEND="${RDEPEND}
 		>=sys-apps/sed-4
 		java? ( >=virtual/jdk-1.4 )"

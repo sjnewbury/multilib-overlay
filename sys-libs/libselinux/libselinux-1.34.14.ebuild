@@ -19,10 +19,10 @@ LICENSE="public-domain"
 SLOT="0"
 KEYWORDS="alpha amd64 mips ppc sparc x86"
 
-DEPEND="=sys-libs/libsepol-${SEPOL_VER}*[lib32?]
+DEPEND="=sys-libs/libsepol-${SEPOL_VER}*[$(get_ml_usedeps)]
 	dev-lang/swig"
 
-RDEPEND="=sys-libs/libsepol-${SEPOL_VER}*[lib32?]"
+RDEPEND="=sys-libs/libsepol-${SEPOL_VER}*[$(get_ml_usedeps)]"
 
 src_unpack() {
 	unpack ${A}

@@ -23,11 +23,11 @@ IUSE="selinux +devfs-compat -extras"
 
 COMMON_DEPEND="selinux? ( sys-libs/libselinux )
 	extras? (
-		sys-apps/acl[lib32?]
+		sys-apps/acl[$(get_ml_usedeps)]
 		>=sys-apps/usbutils-0.82
-		dev-libs/libusb[lib32?]
-		sys-apps/pciutils[lib32?]
-		dev-libs/glib:2[lib32?]
+		dev-libs/libusb[$(get_ml_usedeps)]
+		sys-apps/pciutils[$(get_ml_usedeps)]
+		dev-libs/glib:2[$(get_ml_usedeps)]
 	)
 	>=sys-apps/util-linux-2.16"
 

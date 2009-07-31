@@ -10,12 +10,12 @@ SLOT="4"
 KEYWORDS="alpha amd64 arm hppa ~ia64 ~mips ppc ~ppc64 ~sparc x86 ~x86-fbsd"
 IUSE="+accessibility kde phonon"
 
-DEPEND="~x11-libs/qt-core-${PV}[debug=,qt3support,lib32?]
-	~x11-libs/qt-gui-${PV}[accessibility=,debug=,qt3support,lib32?]
-	~x11-libs/qt-sql-${PV}[debug=,qt3support,lib32?]
-	phonon? ( || ( ~x11-libs/qt-phonon-${PV}[debug=,lib32?]
-		media-sound/phonon[gstreamer,lib32?] )
-		kde? ( media-sound/phonon[lib32?] ) )"
+DEPEND="~x11-libs/qt-core-${PV}[debug=,qt3support,$(get_ml_usedeps)]
+	~x11-libs/qt-gui-${PV}[accessibility=,debug=,qt3support,$(get_ml_usedeps)]
+	~x11-libs/qt-sql-${PV}[debug=,qt3support,$(get_ml_usedeps)]
+	phonon? ( || ( ~x11-libs/qt-phonon-${PV}[debug=,$(get_ml_usedeps)]
+		media-sound/phonon[gstreamer,$(get_ml_usedeps)] )
+		kde? ( media-sound/phonon[$(get_ml_usedeps)] ) )"
 RDEPEND="${DEPEND}"
 
 QT4_TARGET_DIRECTORIES="

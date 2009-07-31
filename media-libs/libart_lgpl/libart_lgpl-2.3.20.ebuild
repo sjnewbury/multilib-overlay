@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE=""
 
-DEPEND="dev-util/pkgconfig[lib32?]"
+DEPEND="dev-util/pkgconfig[$(get_ml_usedeps)]"
 RDEPEND=""
 
 DOCS="AUTHORS ChangeLog NEWS README"

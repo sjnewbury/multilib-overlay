@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
 IUSE="selinux"
 
-DEPEND="selinux? ( sys-libs/libselinux[lib32?] )"
+DEPEND="selinux? ( sys-libs/libselinux[$(get_ml_usedeps)] )"
 RDEPEND="!sys-apps/coldplug
 	!<sys-fs/device-mapper-1.02.19-r1"
 RDEPEND="${DEPEND} ${RDEPEND}

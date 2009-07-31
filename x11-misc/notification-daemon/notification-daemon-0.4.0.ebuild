@@ -17,18 +17,18 @@ SLOT="0"
 KEYWORDS="alpha amd64 ~arm ~hppa ~ia64 ppc ppc64 ~sh ~sparc x86 ~x86-fbsd"
 IUSE="gstreamer"
 
-RDEPEND=">=dev-libs/glib-2.4.0[lib32?]
-		 >=x11-libs/gtk+-2.4.0[lib32?]
-		 >=gnome-base/gconf-2.4.0[lib32?]
-		 >=x11-libs/libsexy-0.1.3[lib32?]
-		 >=dev-libs/dbus-glib-0.71[lib32?]
-		 x11-libs/libwnck[lib32?]
-		 ~x11-libs/libnotify-0.4.5[lib32?]
-		 >=gnome-base/libglade-2[lib32?]
-		 gstreamer? ( >=media-libs/gstreamer-0.10[lib32?] )"
+RDEPEND=">=dev-libs/glib-2.4.0[$(get_ml_usedeps)]
+		 >=x11-libs/gtk+-2.4.0[$(get_ml_usedeps)]
+		 >=gnome-base/gconf-2.4.0[$(get_ml_usedeps)]
+		 >=x11-libs/libsexy-0.1.3[$(get_ml_usedeps)]
+		 >=dev-libs/dbus-glib-0.71[$(get_ml_usedeps)]
+		 x11-libs/libwnck[$(get_ml_usedeps)]
+		 ~x11-libs/libnotify-0.4.5[$(get_ml_usedeps)]
+		 >=gnome-base/libglade-2[$(get_ml_usedeps)]
+		 gstreamer? ( >=media-libs/gstreamer-0.10[$(get_ml_usedeps)] )"
 DEPEND="${RDEPEND}
 		dev-util/intltool
-		>=sys-devel/gettext-0.14[lib32?]
+		>=sys-devel/gettext-0.14[$(get_ml_usedeps)]
 		!xfce-extra/notification-daemon-xfce
 		!x11-misc/xfce4-notifyd"
 

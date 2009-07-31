@@ -13,12 +13,12 @@ SLOT="4"
 KEYWORDS="amd64 hppa ppc ppc64 x86"
 IUSE="dbus"
 
-DEPEND="~x11-libs/qt-gui-${PV}[lib32?]
+DEPEND="~x11-libs/qt-gui-${PV}[$(get_ml_usedeps)]
 	!<=x11-libs/qt-4.4.0_alpha:${SLOT}
 	!media-sound/phonon
-	media-libs/gstreamer[lib32?]
-	media-libs/gst-plugins-base[lib32?]
-	dbus? ( =x11-libs/qt-dbus-${PV}[lib32?] )"
+	media-libs/gstreamer[$(get_ml_usedeps)]
+	media-libs/gst-plugins-base[$(get_ml_usedeps)]
+	dbus? ( =x11-libs/qt-dbus-${PV}[$(get_ml_usedeps)] )"
 RDEPEND="${DEPEND}"
 
 QT4_TARGET_DIRECTORIES="

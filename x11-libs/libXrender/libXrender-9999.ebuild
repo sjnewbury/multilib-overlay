@@ -13,7 +13,7 @@ DESCRIPTION="X.Org Xrender library"
 
 KEYWORDS=""
 
-RDEPEND="x11-libs/libX11[lib32?]
+RDEPEND="x11-libs/libX11[$(get_ml_usedeps)]
 		=x11-proto/renderproto-9999
 		x11-proto/xproto"
 DEPEND="${RDEPEND}"
