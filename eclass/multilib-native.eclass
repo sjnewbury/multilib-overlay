@@ -292,6 +292,7 @@ multilib-native_src_generic() {
 		multilib-native_save_abi_env "INIT"
 		EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]=1
 	fi
+
 	if [[ -n ${EMULTILIB_PKG} ]] && [[ -z ${OABI} ]] ; then
 		local abilist=""
 		if has_multilib_profile ; then
@@ -314,6 +315,7 @@ multilib-native_src_generic() {
 			return 0
 		fi
 	fi
+
 	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
 		multilib-native_src_generic_sub ${1}
 
