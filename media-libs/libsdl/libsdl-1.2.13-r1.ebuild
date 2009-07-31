@@ -39,7 +39,7 @@ RDEPEND="audio? ( >=media-libs/audiofile-0.1.9[$(get_ml_usedeps)] )
 	svga? ( >=media-libs/svgalib-1.4.2[$(get_ml_usedeps)] )
 	aalib? ( media-libs/aalib[$(get_ml_usedeps)] )
 	libcaca? ( >=media-libs/libcaca-0.9-r1[$(get_ml_usedeps)] )
-	opengl? ( virtual/opengl[$(get_ml_usedeps)] virtual/glu[$(get_ml_usedeps)] )
+	opengl? ( virtual/opengl[lib32?] virtual/glu[$(get_ml_usedeps)] )
 	pulseaudio? ( media-sound/pulseaudio[$(get_ml_usedeps)] )"
 DEPEND="${RDEPEND}
 	nas? (

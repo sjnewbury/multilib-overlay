@@ -26,8 +26,8 @@ RDEPEND="sdl? ( >=media-libs/libsdl-1.2.10[$(get_ml_usedeps)] )
 	encode? (
 		faac? ( media-libs/faac[$(get_ml_usedeps)] )
 		mp3? ( media-sound/lame[$(get_ml_usedeps)] )
-		vorbis? ( media-libs/libvorbis[$(get_ml_usedeps)] media-libs/libogg[$(get_ml_usedeps)] )
-		theora? ( media-libs/libtheora[$(get_ml_usedeps)] media-libs/libogg[$(get_ml_usedeps)] )
+		vorbis? ( media-libs/libvorbis[lib32?] media-libs/libogg[$(get_ml_usedeps)] )
+		theora? ( media-libs/libtheora[lib32?] media-libs/libogg[$(get_ml_usedeps)] )
 		x264? ( >=media-libs/x264-0.0.20081006[$(get_ml_usedeps)] )
 		xvid? ( >=media-libs/xvid-1.1.0[$(get_ml_usedeps)] ) )
 	faad? ( >=media-libs/faad2-2.6.1[$(get_ml_usedeps)] )
@@ -39,8 +39,8 @@ RDEPEND="sdl? ( >=media-libs/libsdl-1.2.10[$(get_ml_usedeps)] )
 	jpeg2k? ( >=media-libs/openjpeg-1.3-r2[$(get_ml_usedeps)] )
 	schroedinger? ( media-libs/schroedinger[$(get_ml_usedeps)] )
 	speex? ( >=media-libs/speex-1.2_beta3[$(get_ml_usedeps)] )
-	X? ( x11-libs/libX11[$(get_ml_usedeps)] x11-libs/libXext[$(get_ml_usedeps)] )
-	amr? ( media-libs/amrnb[$(get_ml_usedeps)] media-libs/amrwb[$(get_ml_usedeps)] )"
+	X? ( x11-libs/libX11[lib32?] x11-libs/libXext[$(get_ml_usedeps)] )
+	amr? ( media-libs/amrnb[lib32?] media-libs/amrwb[$(get_ml_usedeps)] )"
 
 DEPEND="${RDEPEND}
 	>=sys-devel/make-3.81

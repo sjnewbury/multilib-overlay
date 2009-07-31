@@ -23,7 +23,7 @@ DEPEND="media-libs/libpng[$(get_ml_usedeps)]
 	cups? ( net-print/cups[$(get_ml_usedeps)] )
 	firebird? ( dev-db/firebird[$(get_ml_usedeps)] )
 	mysql? ( virtual/mysql[$(get_ml_usedeps)] )
-	opengl? ( virtual/opengl[$(get_ml_usedeps)] virtual/glu[$(get_ml_usedeps)] )
+	opengl? ( virtual/opengl[lib32?] virtual/glu[$(get_ml_usedeps)] )
 	postgres? ( virtual/postgresql-server[$(get_ml_usedeps)] )"
 RDEPEND="${DEPEND}"
 PDEPEND="odbc? ( ~dev-db/qt-unixODBC-3.3.8[$(get_ml_usedeps)] )"

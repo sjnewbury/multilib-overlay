@@ -20,7 +20,7 @@ RDEPEND="~x11-libs/qt-core-${PV}[$(get_ml_usedeps)]
 	~x11-libs/qt-xmlpatterns-${PV}[$(get_ml_usedeps)]
 	dbus? ( ~x11-libs/qt-dbus-${PV}[$(get_ml_usedeps)] )
 	opengl? ( ~x11-libs/qt-opengl-${PV}[$(get_ml_usedeps)] )
-	|| ( ~x11-libs/qt-phonon-${PV}[$(get_ml_usedeps)] media-sound/phonon[$(get_ml_usedeps)] )
+	|| ( ~x11-libs/qt-phonon-${PV}[lib32?] media-sound/phonon[$(get_ml_usedeps)] )
 	qt3support? ( ~x11-libs/qt-qt3support-${PV}[$(get_ml_usedeps)] )
 	~x11-libs/qt-webkit-${PV}[$(get_ml_usedeps)]
 	~x11-libs/qt-test-${PV}[$(get_ml_usedeps)]

@@ -17,7 +17,7 @@ IUSE="ipv6"
 RDEPEND="x11-libs/libICE[$(get_ml_usedeps)]
 	x11-libs/xtrans
 	x11-proto/xproto
-	|| ( sys-libs/e2fsprogs-libs[lib32] sys-fs/e2fsprogs[$(get_ml_usedeps)] )"
+	|| ( sys-libs/e2fsprogs-libs[lib32] sys-fs/e2fsprogs[lib32] )"
 DEPEND="${RDEPEND}"
 
 CONFIGURE_OPTIONS="$(use_enable ipv6)"

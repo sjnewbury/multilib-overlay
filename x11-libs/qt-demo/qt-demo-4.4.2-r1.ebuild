@@ -25,7 +25,7 @@ DEPEND="~x11-libs/qt-assistant-${PV}:${SLOT}[$(get_ml_usedeps)]
 	~x11-libs/qt-test-${PV}:${SLOT}[$(get_ml_usedeps)]
 	~x11-libs/qt-webkit-${PV}:${SLOT}[$(get_ml_usedeps)]
 	~x11-libs/qt-xmlpatterns-${PV}:${SLOT}[$(get_ml_usedeps)]
-	|| ( ~x11-libs/qt-phonon-${PV}:${SLOT}[$(get_ml_usedeps)] media-sound/phonon[$(get_ml_usedeps)] )"
+	|| ( ~x11-libs/qt-phonon-${PV}:${SLOT}[lib32?] media-sound/phonon[$(get_ml_usedeps)] )"
 RDEPEND="${DEPEND}"
 
 QT4_TARGET_DIRECTORIES="demos
