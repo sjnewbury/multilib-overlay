@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/virtual/mysql/mysql-4.1.ebuild,v 1.5 2008/12/14 20:15:11 klausman Exp $
 
+inherit multilib
+
 DESCRIPTION="Virtual for MySQL client or database"
 HOMEPAGE="http://dev.mysql.com"
 SRC_URI=""

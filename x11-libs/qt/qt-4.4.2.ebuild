@@ -4,6 +4,8 @@
 
 EAPI="2"
 
+inherit multilib-native
+
 DESCRIPTION="The Qt toolkit is a comprehensive C++ application development framework."
 HOMEPAGE="http://www.trolltech.com/"
 

@@ -4,6 +4,8 @@
 
 EAPI=2
 
+inherit multilib
+
 DESCRIPTION="Virtual for libusb"
 HOMEPAGE="http://libusb.sourceforge.net/"
 SRC_URI=""
