@@ -7,14 +7,17 @@
 # Steven Newbury <steve@snewbury.org.uk>
 # @BLURB: Provide infrastructure for native multilib ebuilds
 
-IUSE="${IUSE} lib32"
+local _ABI
+for _ABI in $(get_install_abis); do
+	if use multilib_${_ABI}; then
+		IUSE="${IUSE} multilib_${_ABI}"
+		EMULTILIB_PKG="true"
+	fi
+done
 
 DEPEND="${DEPEND} sys-apps/abi-wrapper"
 RDEPEND="${RDEPEND} sys-apps/abi-wrapper"
 
-if use lib32; then
-	EMULTILIB_PKG="true"
-fi
 
 inherit base multilib
 
@@ -161,6 +164,10 @@ multilib-native_src_generic() {
 		if [[ -n ${abilist} ]] ; then
 			OABI=${ABI}
 			for ABI in ${abilist} ; do
+				if ! use multilib_${_ABI}; then
+					ewarn "ABI ${ABI} is not in USE, skipping ..."
+					continue
+				fi
 				export ABI
 				multilib-native_src_generic ${1}
 			done
@@ -579,4 +586,18 @@ prep_ml_binaries() {
 			fi
 		done
 	fi		
+}
+
+# @FUNCTION get_ml_usedeps
+# @USAGE:
+# @RETURN: USE dependencies
+# @DESCRIPTION: Function to generate USE dependencies from get_install_abis()
+get_ml_usedeps() {
+	local abilist="" _ABI="" usedeps
+	abilist=$(get_install_abis)
+	for _ABI in ${abilist}; do
+		[[ -n ${usedeps} ]] && usedeps="${usedeps},"
+		usedeps="$(usedeps)multilib_${_ABI}?"
+	done
+	echo ${usedeps}
 }
