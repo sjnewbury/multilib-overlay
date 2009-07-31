@@ -597,7 +597,7 @@ get_ml_usedeps() {
 	abilist=$(get_install_abis)
 	for _ABI in ${abilist}; do
 		[[ -n ${usedeps} ]] && usedeps="${usedeps},"
-		usedeps="$(usedeps)multilib_${_ABI}?"
+		usedeps="${usedeps}multilib_${_ABI}?"
 	done
 	echo ${usedeps}
 }
