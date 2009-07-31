@@ -281,6 +281,13 @@ multilib-native_src_generic() {
 # and unconditionally, whether building for multilib or not.  This allows
 # multilib-native ebuilds to always make use of them.  Then save the initial
 # environment.
+#
+# Sometimes, packages assume a directory structure ABOVE "S". ("S" is set to a
+# subdirectory of the tree they unpack into ${WORKDIR}.)
+#
+# We need to deal with this by finding the top-level of the source tree and
+# keeping track of ${S} relative to it.
+
 	if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]} ]]; then
 		[[ -n ${MULTILIB_DEBUG} ]] && \
 			einfo "MULTILIB_DEBUG: Determining EMULTILIB_SOURCE_TOPDIR from S and WORKDIR"
@@ -356,31 +363,20 @@ multilib-native_EBD() {
 multilib-native_src_generic_sub() {
 	EMULTILIB_config_vars=""
 
-# We support two kinds of build, by default we copy the source dir for each
-# ABI. Where supportable with the underlying package we can just create an
-# external build dir this requires a modified ebuild which makes use
-# of the EMULTILIB_SOURCE_TOPDIR variable (which points the the top of the
-# original source dir) to install files.  This latter behaviour is enabled with
-# MULTILIB_EXT_SOURCE_BUILD.  For CMake based packages default is
-# reversed and the CMAKE_IN_SOURCE_BUILD environment variable is used to 
-# specify the former behaviour.
-#
-# With multilib builds "S" eventually points into the build tree, but
-# initially "S" points to the source the same as non-multilib packages.
-# Sometimes, however, packages assume a directory structure ABOVE "S". ("S" is
-# set to a subdirectory of the tree they unpack into ${WORKDIR}.)
-#
-# We need to deal with this by finding the top-level of the source tree and
-# keeping track of ${S} relative to it.
+# We support two kinds of build: By default we copy/move the source dir for
+# each ABI. Where supported with the underlying package, we can just create an
+# external build dir.  This requires a modified ebuild which makes use of the
+# EMULTILIB_SOURCE_TOPDIR variable (which points the the top of the original
+# source dir) to install doc files etc.  This latter behaviour is enabled with
+# MULTILIB_EXT_SOURCE_BUILD.  For CMake based packages default is reversed and
+# the CMAKE_IN_SOURCE_BUILD environment variable is used to specify the former
+# behaviour.
 #
 
-# Is this our first run for this ABI?
 	if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${ABI})]} ]]; then
-# Restore INIT and setup multilib environment for this ABI
 		multilib-native_restore_abi_env "INIT"
 		multilib-native_setup_abi_env "${ABI}"
 	else
-# Restore the environment for this ABI
 		multilib-native_restore_abi_env "${ABI}"
 	fi
 
@@ -417,6 +413,10 @@ multilib-native_src_generic_sub() {
 		fi
 # If KDE_S is defined then the kde.eclass is in use
 		[[ -n ${KDE_S} ]] && KDE_S="${S}"
+
+
+# If we're using a separate build directory, set it up, otherwise the build
+# directory is a copy of the source directory.
 		if !([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
 			([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
 			multilib-native_EBD
@@ -438,7 +438,9 @@ multilib-native_src_generic_sub() {
 # Call the "real" phase function
 	multilib-native_${1}_internal
 
-# If we've just unpacked the source, move it into place
+# If we've just unpacked the source, move it into place.  We don't have to
+# about handling any other case since the build directory would already exist
+# by this point.
 	if [[ "${1/*_}" = "unpack" ]] && \
 			([[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]] && \
 			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]); then
