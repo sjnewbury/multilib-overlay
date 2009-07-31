@@ -19,25 +19,25 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86"
 IUSE="coverage debug gstreamer pango soup sqlite svg xslt jit gnome"
 
-RDEPEND=">=x11-libs/gtk+-2.8[$(get_ml_usedeps)?]
-	>=dev-libs/icu-3.8.1-r1[$(get_ml_usedeps)?]
-	>=net-misc/curl-7.15[$(get_ml_usedeps)?]
-	media-libs/jpeg[$(get_ml_usedeps)?]
-	media-libs/libpng[$(get_ml_usedeps)?]
-	dev-libs/libxml2[$(get_ml_usedeps)?]
-	sqlite? ( >=dev-db/sqlite-3[$(get_ml_usedeps)?] )
+RDEPEND=">=x11-libs/gtk+-2.8[lib32?]
+	>=dev-libs/icu-3.8.1-r1[lib32?]
+	>=net-misc/curl-7.15[lib32?]
+	media-libs/jpeg[lib32?]
+	media-libs/libpng[lib32?]
+	dev-libs/libxml2[lib32?]
+	sqlite? ( >=dev-db/sqlite-3[lib32?] )
 	gstreamer? (
-		>=media-libs/gst-plugins-base-0.10[$(get_ml_usedeps)?]
-		>=gnome-base/gnome-vfs-2.0[$(get_ml_usedeps)?]
+		>=media-libs/gst-plugins-base-0.10[lib32?]
+		>=gnome-base/gnome-vfs-2.0[lib32?]
 		)
-	gnome? ( >=gnome-base/gnome-keyring-0.4[$(get_ml_usedeps)?] )
-	soup? ( >=net-libs/libsoup-2.23.1[$(get_ml_usedeps)?] )
-	xslt? ( dev-libs/libxslt[$(get_ml_usedeps)?] )
-	pango? ( x11-libs/pango[$(get_ml_usedeps)?] )"
+	gnome? ( >=gnome-base/gnome-keyring-0.4[lib32?] )
+	soup? ( >=net-libs/libsoup-2.23.1[lib32?] )
+	xslt? ( dev-libs/libxslt[lib32?] )
+	pango? ( x11-libs/pango[lib32?] )"
 
 DEPEND="${RDEPEND}
 	dev-util/gperf
-	dev-util/pkgconfig[$(get_ml_usedeps)?]
+	dev-util/pkgconfig[lib32?]
 	dev-util/gtk-doc
 	virtual/perl-Text-Balanced"
 

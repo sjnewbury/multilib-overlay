@@ -14,10 +14,10 @@ SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="accessibility"
 
-RDEPEND=">=x11-libs/gtk+-2.12[$(get_ml_usedeps)?]"
+RDEPEND=">=x11-libs/gtk+-2.12[lib32?]"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.31
-	>=dev-util/pkgconfig-0.9[$(get_ml_usedeps)?]"
+	>=dev-util/pkgconfig-0.9[lib32?]"
 
 DOCS="AUTHORS ChangeLog NEWS README"
 

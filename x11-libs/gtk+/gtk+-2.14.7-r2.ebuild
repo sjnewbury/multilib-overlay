@@ -15,32 +15,32 @@ SLOT="2"
 KEYWORDS="alpha amd64 arm ~hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="cups debug doc jpeg jpeg2k tiff vim-syntax xinerama"
 
-RDEPEND="x11-libs/libXrender[$(get_ml_usedeps)?]
-	x11-libs/libX11[$(get_ml_usedeps)?]
-	x11-libs/libXi[$(get_ml_usedeps)?]
-	x11-libs/libXt[$(get_ml_usedeps)?]
-	x11-libs/libXext[$(get_ml_usedeps)?]
-	>=x11-libs/libXrandr-1.2[$(get_ml_usedeps)?]
-	x11-libs/libXcursor[$(get_ml_usedeps)?]
-	x11-libs/libXfixes[$(get_ml_usedeps)?]
-	x11-libs/libXcomposite[$(get_ml_usedeps)?]
-	x11-libs/libXdamage[$(get_ml_usedeps)?]
-	xinerama? ( x11-libs/libXinerama[$(get_ml_usedeps)?] )
-	>=dev-libs/glib-2.17.6[$(get_ml_usedeps)?]
-	>=x11-libs/pango-1.20[$(get_ml_usedeps)?]
-	>=dev-libs/atk-1.13[$(get_ml_usedeps)?]
-	>=x11-libs/cairo-1.6[X,$(get_ml_usedeps)?]
-	media-libs/fontconfig[$(get_ml_usedeps)?]
+RDEPEND="x11-libs/libXrender[lib32?]
+	x11-libs/libX11[lib32?]
+	x11-libs/libXi[lib32?]
+	x11-libs/libXt[lib32?]
+	x11-libs/libXext[lib32?]
+	>=x11-libs/libXrandr-1.2[lib32?]
+	x11-libs/libXcursor[lib32?]
+	x11-libs/libXfixes[lib32?]
+	x11-libs/libXcomposite[lib32?]
+	x11-libs/libXdamage[lib32?]
+	xinerama? ( x11-libs/libXinerama[lib32?] )
+	>=dev-libs/glib-2.17.6[lib32?]
+	>=x11-libs/pango-1.20[lib32?]
+	>=dev-libs/atk-1.13[lib32?]
+	>=x11-libs/cairo-1.6[X,lib32?]
+	media-libs/fontconfig[lib32?]
 	x11-misc/shared-mime-info
-	>=media-libs/libpng-1.2.1[$(get_ml_usedeps)?]
-	dev-libs/expat[$(get_ml_usedeps)?]
-	cups? ( net-print/cups[$(get_ml_usedeps)?] )
-	jpeg? ( >=media-libs/jpeg-6b-r2[$(get_ml_usedeps)?] )
-	jpeg2k? ( media-libs/jasper[$(get_ml_usedeps)?] )
-	tiff? ( >=media-libs/tiff-3.5.7[$(get_ml_usedeps)?] )
+	>=media-libs/libpng-1.2.1[lib32?]
+	dev-libs/expat[lib32?]
+	cups? ( net-print/cups[lib32?] )
+	jpeg? ( >=media-libs/jpeg-6b-r2[lib32?] )
+	jpeg2k? ( media-libs/jasper[lib32?] )
+	tiff? ( >=media-libs/tiff-3.5.7[lib32?] )
 	!<gnome-base/gail-1000"
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.9[$(get_ml_usedeps)?]
+	>=dev-util/pkgconfig-0.9[lib32?]
 	x11-proto/xextproto
 	x11-proto/xproto
 	x11-proto/inputproto

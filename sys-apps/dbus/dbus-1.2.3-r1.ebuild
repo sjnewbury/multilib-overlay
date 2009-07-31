@@ -15,14 +15,14 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="debug doc selinux X"
 
-RDEPEND="X? ( x11-libs/libXt x11-libs/libX11[$(get_ml_usedeps)?] )
+RDEPEND="X? ( x11-libs/libXt x11-libs/libX11[lib32?] )
 	selinux? ( sys-libs/libselinux
 				sec-policy/selinux-dbus )
-	>=dev-libs/expat-1.95.8[$(get_ml_usedeps)?]
-	sys-libs/e2fsprogs-libs[$(get_ml_usedeps)?]
+	>=dev-libs/expat-1.95.8[lib32?]
+	sys-libs/e2fsprogs-libs[lib32?]
 	!<sys-apps/dbus-0.91"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[$(get_ml_usedeps)?]
+	dev-util/pkgconfig[lib32?]
 	doc? (	app-doc/doxygen
 		app-text/xmlto )"
 

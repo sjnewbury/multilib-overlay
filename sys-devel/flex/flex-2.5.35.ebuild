@@ -17,7 +17,7 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="nls static"
 
-DEPEND="nls? ( sys-devel/gettext[$(get_ml_usedeps)?] )"
+DEPEND="nls? ( sys-devel/gettext[lib32?] )"
 RDEPEND=""
 
 ml-native_src_prepare() {

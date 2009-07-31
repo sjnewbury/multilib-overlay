@@ -15,15 +15,15 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE=""
 
-RDEPEND=">=dev-libs/glib-2.4.0[$(get_ml_usedeps)?]
-		 >=x11-libs/gtk+-2.4.0[$(get_ml_usedeps)?]
-		 >=gnome-base/gconf-2.4.0[$(get_ml_usedeps)?]
-		 >=x11-libs/libsexy-0.1.3[$(get_ml_usedeps)?]
-		 >=dev-libs/dbus-glib-0.71[$(get_ml_usedeps)?]
-		 x11-libs/libwnck[$(get_ml_usedeps)?]"
+RDEPEND=">=dev-libs/glib-2.4.0[lib32?]
+		 >=x11-libs/gtk+-2.4.0[lib32?]
+		 >=gnome-base/gconf-2.4.0[lib32?]
+		 >=x11-libs/libsexy-0.1.3[lib32?]
+		 >=dev-libs/dbus-glib-0.71[lib32?]
+		 x11-libs/libwnck[lib32?]"
 DEPEND="${RDEPEND}
 		=sys-devel/automake-1.9*
-		>=sys-devel/gettext-0.14[$(get_ml_usedeps)?]
+		>=sys-devel/gettext-0.14[lib32?]
 		!xfce-extra/notification-daemon-xfce"
 
 DOCS="AUTHORS ChangeLog NEWS"

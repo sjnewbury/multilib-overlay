@@ -15,15 +15,15 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE=""
 
-RDEPEND="x11-libs/libX11[$(get_ml_usedeps)?]
-	x11-libs/libSM[$(get_ml_usedeps)?]
-	x11-libs/libICE[$(get_ml_usedeps)?]
-	x11-libs/libxcb[$(get_ml_usedeps)?]
-	>=x11-libs/xcb-util-0.3[$(get_ml_usedeps)?]"
+RDEPEND="x11-libs/libX11[lib32?]
+	x11-libs/libSM[lib32?]
+	x11-libs/libICE[lib32?]
+	x11-libs/libxcb[lib32?]
+	>=x11-libs/xcb-util-0.3[lib32?]"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[$(get_ml_usedeps)?]
+	dev-util/pkgconfig[lib32?]
 	x11-proto/xproto
-	x11-libs/libXt[$(get_ml_usedeps)?]"
+	x11-libs/libXt[lib32?]"
 
 ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed."

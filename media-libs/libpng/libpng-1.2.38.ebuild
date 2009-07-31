@@ -15,7 +15,7 @@ SLOT="1.2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE=""
 
-RDEPEND="sys-libs/zlib[$(get_ml_usedeps)?]"
+RDEPEND="sys-libs/zlib[lib32?]"
 DEPEND="${RDEPEND}
 	app-arch/lzma-utils"
 

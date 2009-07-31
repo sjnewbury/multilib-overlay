@@ -14,19 +14,19 @@ KEYWORDS="amd64 hppa ~ppc ppc64 x86"
 IUSE=""
 
 DEPEND="
-	~x11-libs/qt-assistant-${PV}:${SLOT}[$(get_ml_usedeps)?]
-	~x11-libs/qt-core-${PV}:${SLOT}[$(get_ml_usedeps)?]
-	~x11-libs/qt-dbus-${PV}:${SLOT}[$(get_ml_usedeps)?]
-	~x11-libs/qt-gui-${PV}:${SLOT}[$(get_ml_usedeps)?]
-	~x11-libs/qt-opengl-${PV}:${SLOT}[$(get_ml_usedeps)?]
-	~x11-libs/qt-phonon-${PV}:${SLOT}[$(get_ml_usedeps)?]
-	~x11-libs/qt-qt3support-${PV}:${SLOT}[$(get_ml_usedeps)?]
-	~x11-libs/qt-script-${PV}:${SLOT}[$(get_ml_usedeps)?]
-	~x11-libs/qt-sql-${PV}:${SLOT}[$(get_ml_usedeps)?]
-	~x11-libs/qt-svg-${PV}:${SLOT}[$(get_ml_usedeps)?]
-	~x11-libs/qt-test-${PV}:${SLOT}[$(get_ml_usedeps)?]
-	~x11-libs/qt-webkit-${PV}:${SLOT}[$(get_ml_usedeps)?]
-	~x11-libs/qt-xmlpatterns-${PV}:${SLOT}[$(get_ml_usedeps)?]
+	~x11-libs/qt-assistant-${PV}:${SLOT}[lib32?]
+	~x11-libs/qt-core-${PV}:${SLOT}[lib32?]
+	~x11-libs/qt-dbus-${PV}:${SLOT}[lib32?]
+	~x11-libs/qt-gui-${PV}:${SLOT}[lib32?]
+	~x11-libs/qt-opengl-${PV}:${SLOT}[lib32?]
+	~x11-libs/qt-phonon-${PV}:${SLOT}[lib32?]
+	~x11-libs/qt-qt3support-${PV}:${SLOT}[lib32?]
+	~x11-libs/qt-script-${PV}:${SLOT}[lib32?]
+	~x11-libs/qt-sql-${PV}:${SLOT}[lib32?]
+	~x11-libs/qt-svg-${PV}:${SLOT}[lib32?]
+	~x11-libs/qt-test-${PV}:${SLOT}[lib32?]
+	~x11-libs/qt-webkit-${PV}:${SLOT}[lib32?]
+	~x11-libs/qt-xmlpatterns-${PV}:${SLOT}[lib32?]
 	!<=x11-libs/qt-4.4.0_alpha:${SLOT}
 	"
 RDEPEND="${DEPEND}"

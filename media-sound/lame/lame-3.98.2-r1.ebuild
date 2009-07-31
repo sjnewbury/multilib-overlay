@@ -19,11 +19,11 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="debug mmx mp3rtp sndfile gtk"
 
-RDEPEND=">=sys-libs/ncurses-5.2[$(get_ml_usedeps)?]
-	sndfile? ( >=media-libs/libsndfile-1.0.2[$(get_ml_usedeps)?] )
-	gtk? ( =x11-libs/gtk+-1.2*[$(get_ml_usedeps)?] )"
+RDEPEND=">=sys-libs/ncurses-5.2[lib32?]
+	sndfile? ( >=media-libs/libsndfile-1.0.2[lib32?] )
+	gtk? ( =x11-libs/gtk+-1.2*[lib32?] )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[$(get_ml_usedeps)?]
+	dev-util/pkgconfig[lib32?]
 	mmx? ( dev-lang/nasm )"
 
 ml-native_src_prepare() {

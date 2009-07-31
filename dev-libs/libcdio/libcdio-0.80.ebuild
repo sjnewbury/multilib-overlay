@@ -15,11 +15,11 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="cddb minimal +cxx"
 
-RDEPEND="cddb? ( >=media-libs/libcddb-1.0.1[$(get_ml_usedeps)?] )
+RDEPEND="cddb? ( >=media-libs/libcddb-1.0.1[lib32?] )
 	virtual/libintl"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
-	dev-util/pkgconfig[$(get_ml_usedeps)?]"
+	dev-util/pkgconfig[lib32?]"
 
 ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${P}-minimal.patch

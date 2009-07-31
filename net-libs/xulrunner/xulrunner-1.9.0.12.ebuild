@@ -21,16 +21,16 @@ IUSE=""
 
 RDEPEND="java? ( >=virtual/jre-1.4 )
 	>=sys-devel/binutils-2.16.1
-	>=dev-libs/nss-3.12.2[$(get_ml_usedeps)?]
-	>=dev-libs/nspr-4.7.4[$(get_ml_usedeps)?]
-	>=app-text/hunspell-1.1.9[$(get_ml_usedeps)?]
-	>=media-libs/lcms-1.17[$(get_ml_usedeps)?]
-	x11-libs/cairo[X,$(get_ml_usedeps)?]
-	x11-libs/pango[X,$(get_ml_usedeps)?]"
+	>=dev-libs/nss-3.12.2[lib32?]
+	>=dev-libs/nspr-4.7.4[lib32?]
+	>=app-text/hunspell-1.1.9[lib32?]
+	>=media-libs/lcms-1.17[lib32?]
+	x11-libs/cairo[X,lib32?]
+	x11-libs/pango[X,lib32?]"
 
 DEPEND="java? ( >=virtual/jdk-1.4 )
 	${RDEPEND}
-	dev-util/pkgconfig[$(get_ml_usedeps)?]"
+	dev-util/pkgconfig[lib32?]"
 
 S="${WORKDIR}/mozilla"
 

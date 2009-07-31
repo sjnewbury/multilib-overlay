@@ -14,7 +14,7 @@ LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="tools"
-DEPEND="tools? ( >=media-libs/tiff-3.8.2[$(get_ml_usedeps)?] )"
+DEPEND="tools? ( >=media-libs/tiff-3.8.2[lib32?] )"
 RDEPEND=${DEPEND}
 
 S="${WORKDIR}/OpenJPEG_v1_3"

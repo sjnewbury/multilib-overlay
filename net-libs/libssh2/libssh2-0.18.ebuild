@@ -15,9 +15,9 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="gcrypt"
 
-DEPEND="!gcrypt? ( dev-libs/openssl[$(get_ml_usedeps)?] )
-	gcrypt? ( dev-libs/libgcrypt[$(get_ml_usedeps)?] )
-	sys-libs/zlib[$(get_ml_usedeps)?]"
+DEPEND="!gcrypt? ( dev-libs/openssl[lib32?] )
+	gcrypt? ( dev-libs/libgcrypt[lib32?] )
+	sys-libs/zlib[lib32?]"
 RDEPEND=${DEPEND}
 
 ml-native_src_configure() {

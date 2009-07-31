@@ -18,14 +18,14 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="debug doc expat pam zsh-completion nls"
 
-RDEPEND=">=dev-libs/glib-2.14[$(get_ml_usedeps)?]
-	>=dev-libs/eggdbus-0.4[$(get_ml_usedeps)?]
-	expat? ( dev-libs/expat[$(get_ml_usedeps)?] )
+RDEPEND=">=dev-libs/glib-2.14[lib32?]
+	>=dev-libs/eggdbus-0.4[lib32?]
+	expat? ( dev-libs/expat[lib32?] )
 	pam? ( virtual/pam )"
 DEPEND="${RDEPEND}
 	dev-libs/libxslt
 	app-text/docbook-xsl-stylesheets
-	>=dev-util/pkgconfig-0.18[$(get_ml_usedeps)?]
+	>=dev-util/pkgconfig-0.18[lib32?]
 	>=dev-util/intltool-0.36
 	>=dev-util/gtk-doc-am-1.10-r1
 	doc? ( >=dev-util/gtk-doc-1.10 )"

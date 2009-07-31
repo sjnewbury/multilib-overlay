@@ -14,13 +14,13 @@ SLOT="0"
 KEYWORDS="alpha amd64 ~arm hppa ia64 ppc ppc64 ~sh sparc x86 ~x86-fbsd"
 IUSE="debug python"
 
-RDEPEND=">=dev-libs/glib-2.15.2[$(get_ml_usedeps)?]
+RDEPEND=">=dev-libs/glib-2.15.2[lib32?]
 	python? (
 		>=dev-lang/python-2.4.4-r5
 		dev-python/pygtk )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
-	>=dev-util/pkgconfig-0.9[$(get_ml_usedeps)?]
+	>=dev-util/pkgconfig-0.9[lib32?]
 	>=dev-util/intltool-0.40"
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"

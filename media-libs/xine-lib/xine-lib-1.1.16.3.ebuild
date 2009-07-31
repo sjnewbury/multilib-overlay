@@ -30,60 +30,60 @@ gnome sdl speex +theora ipv6 altivec opengl aac -fbcon +xv xvmc
 +modplug -gtk pulseaudio -mmap -truetype wavpack +musepack +xcb -jack
 -real +vis"
 
-RDEPEND="X? ( x11-libs/libXext[$(get_ml_usedeps)?]
-	x11-libs/libX11[$(get_ml_usedeps)?] )
-	xv? ( x11-libs/libXv[$(get_ml_usedeps)?] )
-	xvmc? ( x11-libs/libXvMC[$(get_ml_usedeps)?] )
-	xinerama? ( x11-libs/libXinerama[$(get_ml_usedeps)?] )
+RDEPEND="X? ( x11-libs/libXext[lib32?]
+	x11-libs/libX11[lib32?] )
+	xv? ( x11-libs/libXv[lib32?] )
+	xvmc? ( x11-libs/libXvMC[lib32?] )
+	xinerama? ( x11-libs/libXinerama[lib32?] )
 	win32codecs? ( >=media-libs/win32codecs-0.50 )
-	esd? ( media-sound/esound[$(get_ml_usedeps)?] )
-	dvd? ( >=media-libs/libdvdcss-1.2.7[$(get_ml_usedeps)?] )
-	arts? ( kde-base/arts[$(get_ml_usedeps)?] )
-	alsa? ( media-libs/alsa-lib[$(get_ml_usedeps)?] )
-	aalib? ( media-libs/aalib[$(get_ml_usedeps)?] )
-	directfb? ( >=dev-libs/DirectFB-0.9.9[$(get_ml_usedeps)?] )
-	gnome? ( >=gnome-base/gnome-vfs-2.0[$(get_ml_usedeps)?] )
-	flac? ( >=media-libs/flac-1.1.2[$(get_ml_usedeps)?] )
-	sdl? ( >=media-libs/libsdl-1.1.5[$(get_ml_usedeps)?] )
-	dxr3? ( >=media-libs/libfame-0.9.0[$(get_ml_usedeps)?] )
-	vorbis? ( media-libs/libogg[lib32?] media-libs/libvorbis[$(get_ml_usedeps)?] )
-	theora? ( media-libs/libogg[lib32?] media-libs/libvorbis[lib32?] >=media-libs/libtheora-1.0_alpha6[$(get_ml_usedeps)?] )
-	speex? ( media-libs/libogg[lib32?] media-libs/libvorbis[lib32?] media-libs/speex[$(get_ml_usedeps)?] )
-	libcaca? ( >=media-libs/libcaca-0.99_beta14[$(get_ml_usedeps)?] )
-	samba? ( net-fs/samba[$(get_ml_usedeps)?] )
-	mng? ( media-libs/libmng[$(get_ml_usedeps)?] )
-	vcd? ( media-video/vcdimager[$(get_ml_usedeps)?] )
-	a52? ( >=media-libs/a52dec-0.7.4-r5[$(get_ml_usedeps)?] )
-	mad? ( media-libs/libmad[$(get_ml_usedeps)?] )
-	imagemagick? ( media-gfx/imagemagick[$(get_ml_usedeps)?] )
-	dts? ( media-libs/libdca[$(get_ml_usedeps)?] )
-	aac? ( >=media-libs/faad2-2.6.1[$(get_ml_usedeps)?] )
-	>=media-video/ffmpeg-0.4.9_p20070129[$(get_ml_usedeps)?]
-	modplug? ( media-libs/libmodplug[$(get_ml_usedeps)?] )
+	esd? ( media-sound/esound[lib32?] )
+	dvd? ( >=media-libs/libdvdcss-1.2.7[lib32?] )
+	arts? ( kde-base/arts[lib32?] )
+	alsa? ( media-libs/alsa-lib[lib32?] )
+	aalib? ( media-libs/aalib[lib32?] )
+	directfb? ( >=dev-libs/DirectFB-0.9.9[lib32?] )
+	gnome? ( >=gnome-base/gnome-vfs-2.0[lib32?] )
+	flac? ( >=media-libs/flac-1.1.2[lib32?] )
+	sdl? ( >=media-libs/libsdl-1.1.5[lib32?] )
+	dxr3? ( >=media-libs/libfame-0.9.0[lib32?] )
+	vorbis? ( media-libs/libogg[lib32?] media-libs/libvorbis[lib32?] )
+	theora? ( media-libs/libogg[lib32?] media-libs/libvorbis[lib32?] >=media-libs/libtheora-1.0_alpha6[lib32?] )
+	speex? ( media-libs/libogg[lib32?] media-libs/libvorbis[lib32?] media-libs/speex[lib32?] )
+	libcaca? ( >=media-libs/libcaca-0.99_beta14[lib32?] )
+	samba? ( net-fs/samba[lib32?] )
+	mng? ( media-libs/libmng[lib32?] )
+	vcd? ( media-video/vcdimager[lib32?] )
+	a52? ( >=media-libs/a52dec-0.7.4-r5[lib32?] )
+	mad? ( media-libs/libmad[lib32?] )
+	imagemagick? ( media-gfx/imagemagick[lib32?] )
+	dts? ( media-libs/libdca[lib32?] )
+	aac? ( >=media-libs/faad2-2.6.1[lib32?] )
+	>=media-video/ffmpeg-0.4.9_p20070129[lib32?]
+	modplug? ( media-libs/libmodplug[lib32?] )
 	nls? ( virtual/libintl )
-	gtk? ( =x11-libs/gtk+-2*[$(get_ml_usedeps)?] )
-	pulseaudio? ( media-sound/pulseaudio[$(get_ml_usedeps)?] )
-	truetype? ( =media-libs/freetype-2*[lib32?] media-libs/fontconfig[$(get_ml_usedeps)?] )
+	gtk? ( =x11-libs/gtk+-2*[lib32?] )
+	pulseaudio? ( media-sound/pulseaudio[lib32?] )
+	truetype? ( =media-libs/freetype-2*[lib32?] media-libs/fontconfig[lib32?] )
 	virtual/libiconv
-	wavpack? ( >=media-sound/wavpack-4.31[$(get_ml_usedeps)?] )
-	musepack? ( media-libs/libmpcdec[$(get_ml_usedeps)?] )
-	xcb? ( >=x11-libs/libxcb-1.0[$(get_ml_usedeps)?] )
-	jack? ( >=media-sound/jack-audio-connection-kit-0.100[$(get_ml_usedeps)?] )
+	wavpack? ( >=media-sound/wavpack-4.31[lib32?] )
+	musepack? ( media-libs/libmpcdec[lib32?] )
+	xcb? ( >=x11-libs/libxcb-1.0[lib32?] )
+	jack? ( >=media-sound/jack-audio-connection-kit-0.100[lib32?] )
 	real? (
 		x86? ( media-libs/win32codecs )
 		x86-fbsd? ( media-libs/win32codecs )
 		amd64? ( media-libs/amd64codecs ) )"
 
 DEPEND="${RDEPEND}
-	X? ( x11-libs/libXt[$(get_ml_usedeps)?]
+	X? ( x11-libs/libXt[lib32?]
 		 x11-proto/xproto
 		 x11-proto/videoproto
 		 x11-proto/xf86vidmodeproto
 		 xinerama? ( x11-proto/xineramaproto ) )
 	v4l? ( virtual/os-headers )
-	dev-util/pkgconfig[$(get_ml_usedeps)?]
-	sys-devel/libtool[$(get_ml_usedeps)?]
-	nls? ( sys-devel/gettext[$(get_ml_usedeps)?] )"
+	dev-util/pkgconfig[lib32?]
+	sys-devel/libtool[lib32?]
+	nls? ( sys-devel/gettext[lib32?] )"
 
 ml-native_src_compile() {
 	#prevent quicktime crashing

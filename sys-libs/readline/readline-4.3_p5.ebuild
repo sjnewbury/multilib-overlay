@@ -40,7 +40,7 @@ IUSE=""
 
 # We must be certain that we have a bash that is linked
 # to its internal readline, else we may get problems.
-RDEPEND=">=sys-libs/ncurses-5.2-r2[$(get_ml_usedeps)?]"
+RDEPEND=">=sys-libs/ncurses-5.2-r2[lib32?]"
 DEPEND="${RDEPEND}
 	>=app-shells/bash-2.05b-r2"
 

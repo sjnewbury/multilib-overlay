@@ -14,10 +14,10 @@ SLOT="2"
 KEYWORDS="~mips"
 IUSE="doc"
 
-RDEPEND=">=dev-libs/libsigc++-2.0.11[$(get_ml_usedeps)?]
-	>=dev-libs/glib-2.7[$(get_ml_usedeps)?]"
+RDEPEND=">=dev-libs/libsigc++-2.0.11[lib32?]
+	>=dev-libs/glib-2.7[lib32?]"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[$(get_ml_usedeps)?]
+	dev-util/pkgconfig[lib32?]
 	doc? ( app-doc/doxygen )"
 
 DOCS="AUTHORS CHANGES ChangeLog NEWS README"

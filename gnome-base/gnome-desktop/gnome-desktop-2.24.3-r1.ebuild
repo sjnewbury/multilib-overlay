@@ -16,20 +16,20 @@ IUSE="doc"
 
 # FIXME: Python deps are needed for gnome-about but not
 # listed in configure.ac
-RDEPEND=">=dev-libs/libxml2-2.4.20[$(get_ml_usedeps)?]
-	>=x11-libs/gtk+-2.11.3[$(get_ml_usedeps)?]
-	>=dev-libs/glib-2.15.4[$(get_ml_usedeps)?]
-	>=x11-libs/libXrandr-1.2[$(get_ml_usedeps)?]
-	>=gnome-base/gconf-2[$(get_ml_usedeps)?]
-	>=gnome-base/libgnomeui-2.6[$(get_ml_usedeps)?]
-	>=x11-libs/startup-notification-0.5[$(get_ml_usedeps)?]
-	>=dev-python/pygtk-2.8[$(get_ml_usedeps)?]
-	>=dev-python/pygobject-2.14[$(get_ml_usedeps)?]
-	>=dev-python/libgnome-python-2.22[$(get_ml_usedeps)?]"
+RDEPEND=">=dev-libs/libxml2-2.4.20[lib32?]
+	>=x11-libs/gtk+-2.11.3[lib32?]
+	>=dev-libs/glib-2.15.4[lib32?]
+	>=x11-libs/libXrandr-1.2[lib32?]
+	>=gnome-base/gconf-2[lib32?]
+	>=gnome-base/libgnomeui-2.6[lib32?]
+	>=x11-libs/startup-notification-0.5[lib32?]
+	>=dev-python/pygtk-2.8[lib32?]
+	>=dev-python/pygobject-2.14[lib32?]
+	>=dev-python/libgnome-python-2.22[lib32?]"
 DEPEND="${RDEPEND}
 	app-text/scrollkeeper
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.9[$(get_ml_usedeps)?]
+	>=dev-util/pkgconfig-0.9[lib32?]
 	>=app-text/gnome-doc-utils-0.3.2
 	doc? ( >=dev-util/gtk-doc-1.4 )
 	~app-text/docbook-xml-dtd-4.1.2

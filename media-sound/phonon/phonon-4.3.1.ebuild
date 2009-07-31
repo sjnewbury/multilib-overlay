@@ -19,17 +19,17 @@ IUSE="debug gstreamer +xcb +xine"
 RDEPEND="
 	!kde-base/phonon-xine
 	!x11-libs/qt-phonon:4
-	>=x11-libs/qt-test-4.4.0:4[$(get_ml_usedeps)?]
-	>=x11-libs/qt-dbus-4.4.0:4[$(get_ml_usedeps)?]
-	>=x11-libs/qt-gui-4.4.0:4[$(get_ml_usedeps)?]
-	>=x11-libs/qt-opengl-4.4.0:4[$(get_ml_usedeps)?]
+	>=x11-libs/qt-test-4.4.0:4[lib32?]
+	>=x11-libs/qt-dbus-4.4.0:4[lib32?]
+	>=x11-libs/qt-gui-4.4.0:4[lib32?]
+	>=x11-libs/qt-opengl-4.4.0:4[lib32?]
 	gstreamer? (
-		media-libs/gstreamer[$(get_ml_usedeps)?]
-		media-libs/gst-plugins-base[$(get_ml_usedeps)?]
+		media-libs/gstreamer[lib32?]
+		media-libs/gst-plugins-base[lib32?]
 	)
 	xine? (
-		>=media-libs/xine-lib-1.1.15-r1[xcb?,$(get_ml_usedeps)?]
-		xcb? ( x11-libs/libxcb[$(get_ml_usedeps)?] )
+		>=media-libs/xine-lib-1.1.15-r1[xcb?,lib32?]
+		xcb? ( x11-libs/libxcb[lib32?] )
 	)
 "
 

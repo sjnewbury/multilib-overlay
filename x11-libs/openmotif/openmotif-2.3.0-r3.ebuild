@@ -21,12 +21,12 @@ IUSE="doc examples jpeg png xft"
 RDEPEND="!x11-libs/motif-config
 	!x11-libs/lesstif
 	!<=x11-libs/openmotif-2.3.0
-	x11-libs/libXmu[$(get_ml_usedeps)?]
-	x11-libs/libXp[$(get_ml_usedeps)?]
+	x11-libs/libXmu[lib32?]
+	x11-libs/libXp[lib32?]
 	virtual/libiconv
-	xft? ( x11-libs/libXft[$(get_ml_usedeps)?] )
-	jpeg? ( media-libs/jpeg[$(get_ml_usedeps)?] )
-	png? ( media-libs/libpng[$(get_ml_usedeps)?] )"
+	xft? ( x11-libs/libXft[lib32?] )
+	jpeg? ( media-libs/jpeg[lib32?] )
+	png? ( media-libs/libpng[lib32?] )"
 
 DEPEND="${RDEPEND}
 	sys-devel/flex

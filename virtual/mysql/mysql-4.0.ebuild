@@ -13,5 +13,5 @@ IUSE="lib32"
 
 DEPEND=""
 RDEPEND="|| (
-	=dev-db/mysql-${PV}*[$(get_ml_usedeps)?]
+	=dev-db/mysql-${PV}*[lib32?]
 )"

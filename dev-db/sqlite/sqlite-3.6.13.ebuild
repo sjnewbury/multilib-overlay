@@ -20,7 +20,7 @@ IUSE="debug doc soundex tcl +threadsafe"
 RESTRICT="!tcl? ( test )"
 
 RDEPEND="tcl? ( dev-lang/tcl )
-	sys-libs/readline[$(get_ml_usedeps)?]"
+	sys-libs/readline[lib32?]"
 DEPEND="${RDEPEND}
 	doc? ( app-arch/unzip )"
 

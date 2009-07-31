@@ -15,9 +15,9 @@ DESCRIPTION="GTK+ Xfce4 theme engine"
 KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~ppc ~ppc64 sparc x86 ~x86-fbsd"
 IUSE=""
 
-RDEPEND=">=x11-libs/gtk+-2.6:2[$(get_ml_usedeps)?]
-	>=dev-libs/glib-2.6:2[$(get_ml_usedeps)?]
-	x11-libs/cairo[$(get_ml_usedeps)?]
-	x11-libs/pango[$(get_ml_usedeps)?]"
+RDEPEND=">=x11-libs/gtk+-2.6:2[lib32?]
+	>=dev-libs/glib-2.6:2[lib32?]
+	x11-libs/cairo[lib32?]
+	x11-libs/pango[lib32?]"
 
 DOCS="AUTHORS ChangeLog NEWS README"

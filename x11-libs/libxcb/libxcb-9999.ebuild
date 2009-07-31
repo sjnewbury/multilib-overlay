@@ -17,8 +17,8 @@ PATCHES="${FILESDIR}/xcb-*.patch"
 LICENSE="X11"
 KEYWORDS=""
 IUSE="doc selinux"
-RDEPEND="x11-libs/libXau[$(get_ml_usedeps)?]
-	x11-libs/libXdmcp[$(get_ml_usedeps)?]
+RDEPEND="x11-libs/libXau[lib32?]
+	x11-libs/libXdmcp[lib32?]
 	dev-libs/libpthread-stubs"
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )

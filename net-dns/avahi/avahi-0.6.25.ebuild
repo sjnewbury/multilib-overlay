@@ -15,29 +15,29 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="bookmarks howl-compat mdnsresponder-compat gdbm dbus doc mono gtk python qt3 qt4 autoipd kernel_linux test ipv6"
 
-RDEPEND=">=dev-libs/libdaemon-0.11-r1[$(get_ml_usedeps)?]
-	dev-libs/expat[$(get_ml_usedeps)?]
-	>=dev-libs/glib-2[$(get_ml_usedeps)?]
-	gdbm? ( sys-libs/gdbm[$(get_ml_usedeps)?] )
-	qt3? ( x11-libs/qt:3[$(get_ml_usedeps)?] )
+RDEPEND=">=dev-libs/libdaemon-0.11-r1[lib32?]
+	dev-libs/expat[lib32?]
+	>=dev-libs/glib-2[lib32?]
+	gdbm? ( sys-libs/gdbm[lib32?] )
+	qt3? ( x11-libs/qt:3[lib32?] )
 	qt4? (
 		|| (
-			x11-libs/qt-core:4[$(get_ml_usedeps)?]
-			x11-libs/qt:4[$(get_ml_usedeps)?]
+			x11-libs/qt-core:4[lib32?]
+			x11-libs/qt:4[lib32?]
 		)
 	)
 	gtk? (
-		>=x11-libs/gtk+-2.4.0[$(get_ml_usedeps)?]
-		>=gnome-base/libglade-2.4.0[$(get_ml_usedeps)?]
+		>=x11-libs/gtk+-2.4.0[lib32?]
+		>=gnome-base/libglade-2.4.0[lib32?]
 	)
 	dbus? (
-		>=sys-apps/dbus-0.30[$(get_ml_usedeps)?]
+		>=sys-apps/dbus-0.30[lib32?]
 		python? (
 			|| (
-				dev-python/dbus-python[$(get_ml_usedeps)?]
+				dev-python/dbus-python[lib32?]
 				(
-					<sys-apps/dbus-0.90[$(get_ml_usedeps)?]
-					>=sys-apps/dbus-0.30[$(get_ml_usedeps)?]
+					<sys-apps/dbus-0.90[lib32?]
+					>=sys-apps/dbus-0.30[lib32?]
 				)
 			)
 		)
@@ -50,16 +50,16 @@ RDEPEND=">=dev-libs/libdaemon-0.11-r1[$(get_ml_usedeps)?]
 	mdnsresponder-compat? ( !net-misc/mDNSResponder )
 	python? (
 		>=virtual/python-2.4
-		gtk? ( >=dev-python/pygtk-2[$(get_ml_usedeps)?] )
+		gtk? ( >=dev-python/pygtk-2[lib32?] )
 	)
 	bookmarks? (
-		dev-python/twisted[$(get_ml_usedeps)?]
-		dev-python/twisted-web[$(get_ml_usedeps)?]
+		dev-python/twisted[lib32?]
+		dev-python/twisted-web[lib32?]
 	)
-	kernel_linux? ( sys-libs/libcap[$(get_ml_usedeps)?] )"
+	kernel_linux? ( sys-libs/libcap[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
-	>=dev-util/pkgconfig-0.9.0[$(get_ml_usedeps)?]
+	>=dev-util/pkgconfig-0.9.0[lib32?]
 	doc? (
 		app-doc/doxygen
 		mono? ( >=virtual/monodoc-1.1.8 )

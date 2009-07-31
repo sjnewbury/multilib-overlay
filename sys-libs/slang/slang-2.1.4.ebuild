@@ -15,11 +15,11 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="cjk pcre png readline"
 
-RDEPEND="sys-libs/ncurses[-minimal,$(get_ml_usedeps)?]
-	pcre? ( dev-libs/libpcre[$(get_ml_usedeps)?] )
-	png? ( media-libs/libpng[$(get_ml_usedeps)?] )
-	cjk? ( dev-libs/oniguruma[$(get_ml_usedeps)?] )
-	readline? ( sys-libs/readline[$(get_ml_usedeps)?] )"
+RDEPEND="sys-libs/ncurses[-minimal,lib32?]
+	pcre? ( dev-libs/libpcre[lib32?] )
+	png? ( media-libs/libpng[lib32?] )
+	cjk? ( dev-libs/oniguruma[lib32?] )
+	readline? ( sys-libs/readline[lib32?] )"
 DEPEND="${RDEPEND}"
 
 ml-native_src_prepare() {

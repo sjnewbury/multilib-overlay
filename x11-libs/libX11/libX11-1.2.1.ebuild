@@ -17,10 +17,10 @@ IUSE="ipv6 +xcb"
 RDEPEND=">=x11-libs/xtrans-1.2.3
 	x11-proto/kbproto
 	>=x11-proto/xproto-7.0.15
-	xcb? ( >=x11-libs/libxcb-1.2[$(get_ml_usedeps)?] )
+	xcb? ( >=x11-libs/libxcb-1.2[lib32?] )
 	!xcb? (
-		x11-libs/libXau[$(get_ml_usedeps)?]
-		x11-libs/libXdmcp[$(get_ml_usedeps)?]
+		x11-libs/libXau[lib32?]
+		x11-libs/libXdmcp[lib32?]
 	)"
 DEPEND="${RDEPEND}
 	x11-proto/xf86bigfontproto

@@ -16,7 +16,7 @@ IUSE="debug"
 
 RDEPEND=">=dev-libs/glib-2.6"
 DEPEND="${RDEPEND}
-		dev-util/pkgconfig[$(get_ml_usedeps)?]
+		dev-util/pkgconfig[lib32?]
 		>=dev-util/intltool-0.35"
 
 DOCS="AUTHORS ChangeLog NEWS README"

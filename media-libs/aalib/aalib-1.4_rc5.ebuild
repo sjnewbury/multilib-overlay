@@ -21,13 +21,13 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="X slang gpm"
 
-RDEPEND="X? ( x11-libs/libX11[$(get_ml_usedeps)?] )
+RDEPEND="X? ( x11-libs/libX11[lib32?] )
 	slang? ( >=sys-libs/slang-1.4.2 )"
 
 DEPEND="${RDEPEND}
-	>=sys-libs/ncurses-5.1[$(get_ml_usedeps)?]
+	>=sys-libs/ncurses-5.1[lib32?]
 	X? ( x11-proto/xproto )
-	gpm? ( sys-libs/gpm[$(get_ml_usedeps)?] )"
+	gpm? ( sys-libs/gpm[lib32?] )"
 
 src_unpack() {
 	unpack ${A}

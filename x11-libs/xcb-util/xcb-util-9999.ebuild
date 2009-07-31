@@ -18,10 +18,10 @@ LICENSE="X11"
 KEYWORDS=""
 IUSE="test"
 
-RDEPEND=">=x11-libs/libxcb-1[$(get_ml_usedeps)?]"
+RDEPEND=">=x11-libs/libxcb-1[lib32?]"
 DEPEND="${RDEPEND}
 	>=dev-util/gperf-3.0.1
-	dev-util/pkgconfig[$(get_ml_usedeps)?]
+	dev-util/pkgconfig[lib32?]
 	x11-proto/xproto
 	test? ( >=dev-libs/check-0.9.4 )"
 

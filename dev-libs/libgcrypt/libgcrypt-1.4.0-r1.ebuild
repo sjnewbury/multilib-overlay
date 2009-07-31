@@ -17,7 +17,7 @@ KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fb
 IUSE="nls bindist idea"
 
 RDEPEND="nls? ( virtual/libintl )
-	>=dev-libs/libgpg-error-1.5[$(get_ml_usedeps)?]"
+	>=dev-libs/libgpg-error-1.5[lib32?]"
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )"
 

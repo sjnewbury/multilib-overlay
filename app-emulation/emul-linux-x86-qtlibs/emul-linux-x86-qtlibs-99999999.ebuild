@@ -22,7 +22,7 @@ RDEPEND="
 	>=app-emulation/emul-linux-x86-baselibs-20081109
 		>=app-emulation/emul-linux-x86-soundlibs-20081109
 		>=app-emulation/emul-linux-x86-xlibs-20081109
-	=x11-libs/qt-3*[$(get_ml_usedeps)?]
+	=x11-libs/qt-3*[lib32?]
 )"
 
 pkg_postinst() {

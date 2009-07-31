@@ -17,11 +17,11 @@ IUSE="nls readline debug"
 
 # specific version for gettext needed
 # to fix bug 85999
-DEPEND=">=sys-fs/e2fsprogs-1.27[$(get_ml_usedeps)?]
-	>=sys-libs/ncurses-5.2[$(get_ml_usedeps)?]
-	nls? ( >=sys-devel/gettext-0.12.1-r2[$(get_ml_usedeps)?] )
-	readline? ( >=sys-libs/readline-4.1-r4[$(get_ml_usedeps)?] )
-	dev-libs/check[$(get_ml_usedeps)?]"
+DEPEND=">=sys-fs/e2fsprogs-1.27[lib32?]
+	>=sys-libs/ncurses-5.2[lib32?]
+	nls? ( >=sys-devel/gettext-0.12.1-r2[lib32?] )
+	readline? ( >=sys-libs/readline-4.1-r4[lib32?] )
+	dev-libs/check[lib32?]"
 
 src_unpack() {
 	unpack ${A}

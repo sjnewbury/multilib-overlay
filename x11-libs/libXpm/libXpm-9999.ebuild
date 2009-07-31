@@ -13,9 +13,9 @@ DESCRIPTION="X.Org Xpm library"
 
 KEYWORDS=""
 
-RDEPEND="x11-libs/libX11[$(get_ml_usedeps)?]
-	x11-libs/libXt[$(get_ml_usedeps)?]
-	x11-libs/libXext[$(get_ml_usedeps)?]"
+RDEPEND="x11-libs/libX11[lib32?]
+	x11-libs/libXt[lib32?]
+	x11-libs/libXext[lib32?]"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	x11-proto/xproto"

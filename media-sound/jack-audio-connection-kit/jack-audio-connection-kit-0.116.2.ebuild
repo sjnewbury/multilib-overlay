@@ -15,13 +15,13 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
 IUSE="3dnow altivec alsa coreaudio doc debug examples mmx oss sse cpudetection"
 
-RDEPEND=">=media-libs/libsndfile-1.0.0[$(get_ml_usedeps)?]
+RDEPEND=">=media-libs/libsndfile-1.0.0[lib32?]
 	sys-libs/ncurses
-	alsa? ( >=media-libs/alsa-lib-0.9.1[$(get_ml_usedeps)?] )
-	media-libs/libsamplerate[$(get_ml_usedeps)?]
+	alsa? ( >=media-libs/alsa-lib-0.9.1[lib32?] )
+	media-libs/libsamplerate[lib32?]
 	!media-sound/jack-cvs"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[$(get_ml_usedeps)?]
+	dev-util/pkgconfig[lib32?]
 	doc? ( app-doc/doxygen )"
 
 src_unpack() {

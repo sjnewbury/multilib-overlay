@@ -15,7 +15,7 @@ SLOT="0.3"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc +examples test"
 
-RDEPEND="examples? ( =dev-libs/glib-2*[$(get_ml_usedeps)?] )"
+RDEPEND="examples? ( =dev-libs/glib-2*[lib32?] )"
 DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1 )"
 

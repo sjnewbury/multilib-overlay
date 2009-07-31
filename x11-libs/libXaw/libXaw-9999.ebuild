@@ -13,10 +13,10 @@ DESCRIPTION="X.Org Xaw library"
 
 KEYWORDS=""
 
-RDEPEND="x11-libs/libX11[$(get_ml_usedeps)?]
-	x11-libs/libXt[$(get_ml_usedeps)?]
-	x11-libs/libXmu[$(get_ml_usedeps)?]
-	x11-libs/libXpm[$(get_ml_usedeps)?]
+RDEPEND="x11-libs/libX11[lib32?]
+	x11-libs/libXt[lib32?]
+	x11-libs/libXmu[lib32?]
+	x11-libs/libXpm[lib32?]
 	x11-proto/xproto"
 DEPEND="${RDEPEND}"
 

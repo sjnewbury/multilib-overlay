@@ -26,8 +26,8 @@ SRC_URI="ftp://xmlsoft.org/${PN}/${P}.tar.gz
 		${XSTS_HOME}/${XSTS_NAME_2}/${XSTS_TARBALL_2} )"
 
 RDEPEND="sys-libs/zlib
-	python?   ( dev-lang/python[$(get_ml_usedeps)?] )
-	readline? ( sys-libs/readline[$(get_ml_usedeps)?] )"
+	python?   ( dev-lang/python[lib32?] )
+	readline? ( sys-libs/readline[lib32?] )"
 
 DEPEND="${RDEPEND}
 	hppa? ( >=sys-devel/binutils-2.15.92.0.2 )"

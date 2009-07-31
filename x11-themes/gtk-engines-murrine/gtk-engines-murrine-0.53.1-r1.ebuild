@@ -19,9 +19,9 @@ SLOT="0"
 KEYWORDS="amd64 ppc x86 ~x86-fbsd"
 IUSE=""
 
-RDEPEND=">=x11-libs/gtk+-2.8[$(get_ml_usedeps)?]"
+RDEPEND=">=x11-libs/gtk+-2.8[lib32?]"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[$(get_ml_usedeps)?]"
+	dev-util/pkgconfig[lib32?]"
 
 S="${WORKDIR}/${MY_P}"
 

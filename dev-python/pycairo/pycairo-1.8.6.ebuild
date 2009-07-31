@@ -16,9 +16,9 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="examples"
 
-RDEPEND=">=x11-libs/cairo-1.8.6[$(get_ml_usedeps)?]"
+RDEPEND=">=x11-libs/cairo-1.8.6[lib32?]"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[$(get_ml_usedeps)?]"
+	dev-util/pkgconfig[lib32?]"
 
 PYTHON_MODNAME="cairo"
 DOCS="AUTHORS NEWS doc/*"

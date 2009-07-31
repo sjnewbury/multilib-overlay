@@ -14,8 +14,8 @@ DESCRIPTION="X.Org X11 library"
 KEYWORDS="alpha amd64 arm hppa ia64 ~m68k ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="ipv6 xcb"
 RDEPEND=">=x11-libs/xtrans-1.0.1
-	x11-libs/libXau[$(get_ml_usedeps)?]
-	x11-libs/libXdmcp[$(get_ml_usedeps)?]
+	x11-libs/libXau[lib32?]
+	x11-libs/libXdmcp[lib32?]
 	x11-proto/kbproto
 	>=x11-proto/xproto-7.0.6
 	xcb? ( >=x11-libs/libxcb-1.0 )"

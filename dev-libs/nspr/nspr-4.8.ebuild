@@ -17,7 +17,7 @@ SLOT="0"
 KEYWORDS=""
 IUSE="ipv6 debug"
 
-DEPEND=">=dev-db/sqlite-3.5[$(get_ml_usedeps)?]"
+DEPEND=">=dev-db/sqlite-3.5[lib32?]"
 RDEPEND="${DEPEND}"
 
 ml-native_src_prepare() {

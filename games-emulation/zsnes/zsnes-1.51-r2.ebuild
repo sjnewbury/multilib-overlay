@@ -15,11 +15,11 @@ SLOT="0"
 KEYWORDS="-* amd64 x86 ~x86-fbsd"
 IUSE="ao custom-cflags opengl png lib32"
 
-RDEPEND="media-libs/libsdl[$(get_ml_usedeps)?]
-	>=sys-libs/zlib-1.2.3-r1[$(get_ml_usedeps)?]
-	ao? ( media-libs/libao[$(get_ml_usedeps)?] )
-	opengl? ( virtual/opengl[$(get_ml_usedeps)?] )
-	png? ( media-libs/libpng[$(get_ml_usedeps)?] )"
+RDEPEND="media-libs/libsdl[lib32?]
+	>=sys-libs/zlib-1.2.3-r1[lib32?]
+	ao? ( media-libs/libao[lib32?] )
+	opengl? ( virtual/opengl[lib32?] )
+	png? ( media-libs/libpng[lib32?] )"
 DEPEND="${RDEPEND}
 	dev-lang/nasm
 	amd64? ( >=sys-apps/portage-2.1 )"

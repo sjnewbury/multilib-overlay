@@ -13,9 +13,9 @@ DESCRIPTION="X.Org Xpm library"
 
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 
-RDEPEND="x11-libs/libX11[$(get_ml_usedeps)?]
-	x11-libs/libXt[$(get_ml_usedeps)?]
-	x11-libs/libXext[$(get_ml_usedeps)?]"
+RDEPEND="x11-libs/libX11[lib32?]
+	x11-libs/libXt[lib32?]
+	x11-libs/libXext[lib32?]"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	x11-proto/xproto"

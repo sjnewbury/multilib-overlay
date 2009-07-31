@@ -17,9 +17,9 @@ LICENSE="MPL-1.1 GPL-2 LGPL-2.1"
 IUSE="ncurses nls readline"
 KEYWORDS="alpha amd64 ~arm hppa ia64 ppc ppc64 ~sh sparc x86 ~x86-fbsd"
 
-DEPEND="readline? ( sys-libs/readline[$(get_ml_usedeps)?] )
-	ncurses? ( sys-libs/ncurses[$(get_ml_usedeps)?] )
-	sys-devel/gettext[$(get_ml_usedeps)?]"
+DEPEND="readline? ( sys-libs/readline[lib32?] )
+	ncurses? ( sys-libs/ncurses[lib32?] )
+	sys-devel/gettext[lib32?]"
 RDEPEND="${DEPEND}"
 
 S=${WORKDIR}/${MY_P}

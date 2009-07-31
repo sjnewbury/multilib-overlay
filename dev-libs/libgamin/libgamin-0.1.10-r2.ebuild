@@ -20,12 +20,12 @@ IUSE="debug kernel_linux python"
 
 RESTRICT="test" # need gam-server
 
-RDEPEND="python? ( dev-lang/python[$(get_ml_usedeps)?] )
+RDEPEND="python? ( dev-lang/python[lib32?] )
 	!app-admin/fam
 	!<app-admin/gamin-0.1.10"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[$(get_ml_usedeps)?]"
+	dev-util/pkgconfig[lib32?]"
 
 S="${WORKDIR}/${MY_P}"
 

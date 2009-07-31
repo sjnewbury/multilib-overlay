@@ -15,13 +15,13 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="X aalib svga fbcon directfb 3dfx debug mmx vis"
 
-RDEPEND=">=media-libs/libgii-1.0.2[$(get_ml_usedeps)?]
-	X? ( x11-libs/libXt[$(get_ml_usedeps)?]
-		x11-libs/libXxf86dga[$(get_ml_usedeps)?]
-		x11-libs/libXxf86vm[$(get_ml_usedeps)?]
-		x11-libs/libXt[$(get_ml_usedeps)?] )
-	svga? ( >=media-libs/svgalib-1.4.2[$(get_ml_usedeps)?] )
-	aalib? ( >=media-libs/aalib-1.2-r1[$(get_ml_usedeps)?] )"
+RDEPEND=">=media-libs/libgii-1.0.2[lib32?]
+	X? ( x11-libs/libXt[lib32?]
+		x11-libs/libXxf86dga[lib32?]
+		x11-libs/libXxf86vm[lib32?]
+		x11-libs/libXt[lib32?] )
+	svga? ( >=media-libs/svgalib-1.4.2[lib32?] )
+	aalib? ( >=media-libs/aalib-1.2-r1[lib32?] )"
 DEPEND="${RDEPEND}
 	X? ( x11-proto/xf86dgaproto
 		x11-proto/xf86vidmodeproto

@@ -14,11 +14,11 @@ DESCRIPTION="X.Org Xfont library"
 KEYWORDS="~alpha amd64 ~arm hppa ia64 ~m68k ~mips ppc ppc64 ~s390 sh sparc x86 ~x86-fbsd"
 IUSE="ipv6"
 
-RDEPEND="x11-libs/xtrans[$(get_ml_usedeps)?]
-	x11-libs/libfontenc[$(get_ml_usedeps)?]
+RDEPEND="x11-libs/xtrans[lib32?]
+	x11-libs/libfontenc[lib32?]
 	x11-proto/xproto
 	x11-proto/fontsproto
-	>=media-libs/freetype-2[$(get_ml_usedeps)?]"
+	>=media-libs/freetype-2[lib32?]"
 DEPEND="${RDEPEND}
 	x11-proto/fontcacheproto"
 

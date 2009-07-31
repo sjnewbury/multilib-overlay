@@ -15,10 +15,10 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="tiff jpeg zlib python"
 
-RDEPEND="tiff? ( media-libs/tiff[$(get_ml_usedeps)?] )
-	jpeg? ( media-libs/jpeg[$(get_ml_usedeps)?] )
-	zlib? ( sys-libs/zlib[$(get_ml_usedeps)?] )
-	python? ( dev-lang/python[$(get_ml_usedeps)?] )"
+RDEPEND="tiff? ( media-libs/tiff[lib32?] )
+	jpeg? ( media-libs/jpeg[lib32?] )
+	zlib? ( sys-libs/zlib[lib32?] )
+	python? ( dev-lang/python[lib32?] )"
 DEPEND="${RDEPEND}
 	python? ( >=dev-lang/swig-1.3.31 )"
 

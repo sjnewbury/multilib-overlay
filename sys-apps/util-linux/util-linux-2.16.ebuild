@@ -32,8 +32,8 @@ RDEPEND="!sys-process/schedutils
 	>=sys-libs/ncurses-5.2-r2
 	!<sys-libs/e2fsprogs-libs-1.41.8
 	!<sys-fs/e2fsprogs-1.41.8
-	selinux? ( sys-libs/libselinux[$(get_ml_usedeps)?] )
-	slang? ( sys-libs/slang[$(get_ml_usedeps)?] )"
+	selinux? ( sys-libs/libselinux[lib32?] )
+	slang? ( sys-libs/slang[lib32?] )"
 DEPEND="${RDEPEND}
 	>=sys-devel/libtool-2
 	nls? ( sys-devel/gettext )

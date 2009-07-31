@@ -20,13 +20,13 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~spar
 IUSE="cracklib nls elibc_FreeBSD selinux vim-syntax audit test elibc_glibc debug"
 
 RDEPEND="nls? ( virtual/libintl )
-	cracklib? ( >=sys-libs/cracklib-2.8.3[$(get_ml_usedeps)?] )
+	cracklib? ( >=sys-libs/cracklib-2.8.3[lib32?] )
 	audit? ( sys-process/audit )
-	selinux? ( >=sys-libs/libselinux-1.28[$(get_ml_usedeps)?] )
+	selinux? ( >=sys-libs/libselinux-1.28[lib32?] )
 	elibc_glibc? ( >=sys-libs/glibc-2.7 )"
 DEPEND="${RDEPEND}
 	sys-devel/flex
-	nls? ( sys-devel/gettext[$(get_ml_usedeps)?] )"
+	nls? ( sys-devel/gettext[lib32?] )"
 PDEPEND="sys-auth/pambase
 	vim-syntax? ( app-vim/pam-syntax )"
 

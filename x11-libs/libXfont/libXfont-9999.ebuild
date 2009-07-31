@@ -10,11 +10,11 @@ DESCRIPTION="X.Org Xfont library"
 KEYWORDS=""
 IUSE="ipv6"
 
-RDEPEND="x11-libs/xtrans[$(get_ml_usedeps)?]
-	x11-libs/libfontenc[$(get_ml_usedeps)?]
+RDEPEND="x11-libs/xtrans[lib32?]
+	x11-libs/libfontenc[lib32?]
 	x11-proto/xproto
 	x11-proto/fontsproto
-	>=media-libs/freetype-2[$(get_ml_usedeps)?]"
+	>=media-libs/freetype-2[lib32?]"
 DEPEND="${RDEPEND}
 	x11-proto/fontcacheproto"
 

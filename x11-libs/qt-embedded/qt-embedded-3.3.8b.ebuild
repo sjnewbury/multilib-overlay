@@ -15,18 +15,18 @@ SLOT="3"
 KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="cups debug doc firebird gif ipv6 mysql nis odbc opengl postgres sqlite"
 
-DEPEND="media-libs/libpng[$(get_ml_usedeps)?]
-	media-libs/jpeg[$(get_ml_usedeps)?]
-	media-libs/libmng[$(get_ml_usedeps)?]
-	media-libs/lcms[$(get_ml_usedeps)?]
-	sys-libs/zlib[$(get_ml_usedeps)?]
-	cups? ( net-print/cups[$(get_ml_usedeps)?] )
-	firebird? ( dev-db/firebird[$(get_ml_usedeps)?] )
-	mysql? ( virtual/mysql[$(get_ml_usedeps)?] )
-	opengl? ( virtual/opengl[lib32?] virtual/glu[$(get_ml_usedeps)?] )
-	postgres? ( virtual/postgresql-server[$(get_ml_usedeps)?] )"
+DEPEND="media-libs/libpng[lib32?]
+	media-libs/jpeg[lib32?]
+	media-libs/libmng[lib32?]
+	media-libs/lcms[lib32?]
+	sys-libs/zlib[lib32?]
+	cups? ( net-print/cups[lib32?] )
+	firebird? ( dev-db/firebird[lib32?] )
+	mysql? ( virtual/mysql[lib32?] )
+	opengl? ( virtual/opengl[lib32?] virtual/glu[lib32?] )
+	postgres? ( virtual/postgresql-server[lib32?] )"
 RDEPEND="${DEPEND}"
-PDEPEND="odbc? ( ~dev-db/qt-unixODBC-3.3.8[$(get_ml_usedeps)?] )"
+PDEPEND="odbc? ( ~dev-db/qt-unixODBC-3.3.8[lib32?] )"
 
 S=${WORKDIR}/qt-embedded-free-${PV}
 

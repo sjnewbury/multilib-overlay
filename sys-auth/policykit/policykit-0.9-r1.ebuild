@@ -16,15 +16,15 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 IUSE="bash-completion doc pam selinux zsh-completion"
 
-RDEPEND=">=dev-libs/glib-2.6[$(get_ml_usedeps)?]
-	>=dev-libs/dbus-glib-0.73[$(get_ml_usedeps)?]
-	dev-libs/expat[$(get_ml_usedeps)?]
+RDEPEND=">=dev-libs/glib-2.6[lib32?]
+	>=dev-libs/dbus-glib-0.73[lib32?]
+	dev-libs/expat[lib32?]
 	pam? ( virtual/pam )
-	selinux? ( sys-libs/libselinux[$(get_ml_usedeps)?] )"
+	selinux? ( sys-libs/libselinux[lib32?] )"
 DEPEND="${RDEPEND}
 	dev-libs/libxslt
 	app-text/docbook-xsl-stylesheets
-	>=dev-util/pkgconfig-0.18[$(get_ml_usedeps)?]
+	>=dev-util/pkgconfig-0.18[lib32?]
 	>=dev-util/intltool-0.36
 	>=dev-util/gtk-doc-am-1.10-r1
 	doc? ( >=dev-util/gtk-doc-1.10 )"

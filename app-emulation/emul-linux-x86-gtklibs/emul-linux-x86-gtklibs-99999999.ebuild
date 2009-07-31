@@ -15,11 +15,11 @@ IUSE="-nodep kerberos xfce"
 
 RDEPEND="
 !nodep? (
-	dev-libs/atk[$(get_ml_usedeps)]
-	x11-libs/cairo[$(get_ml_usedeps)]
-	x11-libs/gtk+[$(get_ml_usedeps)]
-	x11-libs/pango[$(get_ml_usedeps)]
-	x11-themes/gtk-engines[$(get_ml_usedeps)]
-	xfce? ( x11-themes/gtk-engines-xfce[$(get_ml_usedeps)] )
+	dev-libs/atk[lib32]
+	x11-libs/cairo[lib32]
+	x11-libs/gtk+[lib32]
+	x11-libs/pango[lib32]
+	x11-themes/gtk-engines[lib32]
+	xfce? ( x11-themes/gtk-engines-xfce[lib32] )
 )
 "

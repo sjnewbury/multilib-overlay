@@ -21,13 +21,13 @@ IUSE="nls debug"
 MY_AVAILABLE_LINGUAS=" az ca cs da de el es et eu fi fr ga gl hr hu it ja ko lt nl nn no pl pt_BR pt ro ru sk sl sr sv tr uk vi"
 IUSE="${IUSE} ${MY_AVAILABLE_LINGUAS// / linguas_}"
 
-RDEPEND="=dev-libs/glib-1.2*[$(get_ml_usedeps)?]
-	x11-libs/libXi[$(get_ml_usedeps)?]
-	x11-libs/libXt[$(get_ml_usedeps)?]"
+RDEPEND="=dev-libs/glib-1.2*[lib32?]
+	x11-libs/libXi[lib32?]
+	x11-libs/libXt[lib32?]"
 DEPEND="${RDEPEND}
 	x11-proto/inputproto
 	x11-proto/xextproto
-	nls? ( sys-devel/gettext[$(get_ml_usedeps)?] dev-util/intltool )"
+	nls? ( sys-devel/gettext[lib32?] dev-util/intltool )"
 
 ml-native_src_prepare() {
 	cd "${S}"

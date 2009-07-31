@@ -14,12 +14,12 @@ SLOT="0"
 KEYWORDS="alpha amd64 ~arm ~hppa ia64 ~mips ppc ppc64 ~sh sparc x86 ~x86-fbsd"
 IUSE="doc esd"
 
-RDEPEND=">=gnome-base/gconf-2[$(get_ml_usedeps)?]
-	>=dev-libs/glib-2.16[$(get_ml_usedeps)?]
+RDEPEND=">=gnome-base/gconf-2[lib32?]
+	>=dev-libs/glib-2.16[lib32?]
 	gnome-base/gvfs
-	>=gnome-base/gnome-vfs-2.5.3[$(get_ml_usedeps)?]
-	>=gnome-base/libbonobo-2.13[$(get_ml_usedeps)?]
-	>=dev-libs/popt-1.7[$(get_ml_usedeps)?]
+	>=gnome-base/gnome-vfs-2.5.3[lib32?]
+	>=gnome-base/libbonobo-2.13[lib32?]
+	>=dev-libs/popt-1.7[lib32?]
 	esd? (
 		>=media-sound/esound-0.2.26
 		>=media-libs/audiofile-0.2.3
@@ -27,7 +27,7 @@ RDEPEND=">=gnome-base/gconf-2[$(get_ml_usedeps)?]
 
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.17[$(get_ml_usedeps)?]
+	>=dev-util/pkgconfig-0.17[lib32?]
 	doc? ( >=dev-util/gtk-doc-1 )"
 
 DOCS="AUTHORS ChangeLog NEWS README"

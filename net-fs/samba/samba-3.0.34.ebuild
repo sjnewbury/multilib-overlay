@@ -23,20 +23,20 @@ IUSE="acl ads async automount caps cups debug doc examples ipv6 kernel_linux lda
 RDEPEND="dev-libs/popt
 	virtual/libiconv
 	acl?       ( kernel_linux? ( sys-apps/acl ) )
-	cups?      ( net-print/cups[$(get_ml_usedeps)?] )
+	cups?      ( net-print/cups[lib32?] )
 	ipv6?      ( sys-apps/xinetd )
 	ads?       ( virtual/krb5 )
-	ldap?      ( net-nds/openldap[$(get_ml_usedeps)?] )
+	ldap?      ( net-nds/openldap[lib32?] )
 	pam?       ( virtual/pam )
-	python?    ( dev-lang/python[$(get_ml_usedeps)?] )
-	readline?  ( sys-libs/readline[$(get_ml_usedeps)?] )
+	python?    ( dev-lang/python[lib32?] )
+	readline?  ( sys-libs/readline[lib32?] )
 	selinux?   ( sec-policy/selinux-samba )
 	swat?      ( sys-apps/xinetd )
 	syslog?    ( virtual/logger )
 	fam?       ( virtual/fam )
-	caps?      ( sys-libs/libcap[$(get_ml_usedeps)?] )
-	lib32?     ( fam? ( dev-libs/libgamin[$(get_ml_usedeps)] ) )
-	lib32?     ( pam? ( sys-libs/pam[$(get_ml_usedeps)] ) )"
+	caps?      ( sys-libs/libcap[lib32?] )
+	lib32?     ( fam? ( dev-libs/libgamin[lib32] ) )
+	lib32?     ( pam? ( sys-libs/pam[lib32] ) )"
 DEPEND="${RDEPEND}"
 
 # Tests are broken now :-(

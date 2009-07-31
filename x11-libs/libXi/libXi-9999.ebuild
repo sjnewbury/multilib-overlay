@@ -13,8 +13,8 @@ DESCRIPTION="X.Org Xi library"
 
 KEYWORDS=""
 
-RDEPEND="x11-libs/libX11[$(get_ml_usedeps)?]
-	x11-libs/libXext[$(get_ml_usedeps)?]"
+RDEPEND="x11-libs/libX11[lib32?]
+	x11-libs/libXext[lib32?]"
 DEPEND="${RDEPEND}
 	x11-proto/xproto
 	=x11-proto/inputproto-9999"

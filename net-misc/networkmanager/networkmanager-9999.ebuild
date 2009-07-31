@@ -24,23 +24,23 @@ IUSE="crypt doc gnome"
 
 # Yes, I know that configure will accept libnl 1.0-pre8, however we only have
 # 1.1 in the tree, therefore dep on it.
-RDEPEND=">=sys-apps/dbus-0.60[$(get_ml_usedeps)?]
-	>=sys-apps/hal-0.5.10[$(get_ml_usedeps)?]
+RDEPEND=">=sys-apps/dbus-0.60[lib32?]
+	>=sys-apps/hal-0.5.10[lib32?]
 	sys-apps/iproute2
-	>=dev-libs/libnl-1.1[$(get_ml_usedeps)?]
+	>=dev-libs/libnl-1.1[lib32?]
 	>=net-misc/dhcdbd-1.4
 	>=net-wireless/wireless-tools-28_pre9
 	>=net-wireless/wpa_supplicant-0.4.8
 	>=dev-libs/glib-2.8
 	gnome? ( >=x11-libs/gtk+-2.8
-		>=gnome-base/libglade-2[$(get_ml_usedeps)?]
-		>=gnome-base/gnome-keyring-0.4[$(get_ml_usedeps)?]
+		>=gnome-base/libglade-2[lib32?]
+		>=gnome-base/gnome-keyring-0.4[lib32?]
 		>=gnome-base/gnome-panel-2
-		>=gnome-base/gconf-2[$(get_ml_usedeps)?]
-		>=gnome-base/libgnomeui-2[$(get_ml_usedeps)?] )
-	crypt? ( dev-libs/libgcrypt[$(get_ml_usedeps)?] )"
+		>=gnome-base/gconf-2[lib32?]
+		>=gnome-base/libgnomeui-2[lib32?] )
+	crypt? ( dev-libs/libgcrypt[lib32?] )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[$(get_ml_usedeps)?]
+	dev-util/pkgconfig[lib32?]
 	dev-util/intltool"
 PDEPEND="gnome? ( =gnome-extra/nm-applet-9999 )"
 

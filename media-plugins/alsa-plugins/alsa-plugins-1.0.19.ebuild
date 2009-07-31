@@ -20,17 +20,17 @@ IUSE="debug ffmpeg jack libsamplerate pulseaudio speex"
 RDEPEND=">=media-libs/alsa-lib-${PV}
 	ffmpeg? ( media-video/ffmpeg
 		media-libs/alsa-lib[alsa_pcm_plugins_rate] )
-	jack? ( >=media-sound/jack-audio-connection-kit-0.98[$(get_ml_usedeps)?] )
+	jack? ( >=media-sound/jack-audio-connection-kit-0.98[lib32?] )
 	libsamplerate? (
-		media-libs/libsamplerate[$(get_ml_usedeps)?]
+		media-libs/libsamplerate[lib32?]
 		media-libs/alsa-lib[alsa_pcm_plugins_rate] )
 	pulseaudio? ( media-sound/pulseaudio )
-	speex? ( media-libs/speex[$(get_ml_usedeps)?]
+	speex? ( media-libs/speex[lib32?]
 		media-libs/alsa-lib[alsa_pcm_plugins_rate] )
 	!media-plugins/alsa-jack"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[$(get_ml_usedeps)?]"
+	dev-util/pkgconfig[lib32?]"
 
 S="${WORKDIR}/${MY_P}"
 

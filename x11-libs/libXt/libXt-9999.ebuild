@@ -14,8 +14,8 @@ DESCRIPTION="X.Org Xt library"
 
 KEYWORDS=""
 
-RDEPEND="x11-libs/libX11[$(get_ml_usedeps)?]
-	x11-libs/libSM[$(get_ml_usedeps)?]
+RDEPEND="x11-libs/libX11[lib32?]
+	x11-libs/libSM[lib32?]
 	x11-proto/xproto
 	x11-proto/kbproto"
 DEPEND="${RDEPEND}"

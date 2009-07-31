@@ -16,8 +16,8 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="alsa oss"
 
-RDEPEND="media-libs/audiofile[$(get_ml_usedeps)?]
-	alsa? ( media-libs/alsa-lib[$(get_ml_usedeps)?] )"
+RDEPEND="media-libs/audiofile[lib32?]
+	alsa? ( media-libs/alsa-lib[lib32?] )"
 DEPEND="${RDEPEND}"
 
 S=${WORKDIR}/${MY_P}

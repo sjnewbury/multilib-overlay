@@ -22,19 +22,19 @@ RDEPEND="dev-libs/popt
 	virtual/libiconv
 	acl? ( kernel_linux? ( virtual/acl ) )
 	cifsupcall? ( sys-apps/keyutils )
-	cups? ( net-print/cups[$(get_ml_usedeps)?] )
+	cups? ( net-print/cups[lib32?] )
 	ipv6? ( sys-apps/xinetd )
 	ads? ( virtual/krb5 sys-fs/e2fsprogs )
-	ldap? ( net-nds/openldap[$(get_ml_usedeps)?] )
+	ldap? ( net-nds/openldap[lib32?] )
 	pam? ( virtual/pam )
-	readline? ( sys-libs/readline[$(get_ml_usedeps)?] )
+	readline? ( sys-libs/readline[lib32?] )
 	selinux? ( sec-policy/selinux-samba )
 	swat? ( sys-apps/xinetd )
 	syslog? ( virtual/logger )
 	fam? ( virtual/fam )
-	caps? ( sys-libs/libcap[$(get_ml_usedeps)?] )
-	lib32? ( fam? ( dev-libs/libgamin[$(get_ml_usedeps)] ) )
-	lib32? ( pam? ( sys-libs/pam[$(get_ml_usedeps)] ) )"
+	caps? ( sys-libs/libcap[lib32?] )
+	lib32? ( fam? ( dev-libs/libgamin[lib32] ) )
+	lib32? ( pam? ( sys-libs/pam[lib32] ) )"
 DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${MY_P}"

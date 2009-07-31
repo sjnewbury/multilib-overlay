@@ -18,10 +18,10 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 IUSE="nfs nls"
 
-RDEPEND=">=sys-apps/attr-2.4[$(get_ml_usedeps)?]
-	nfs? ( net-libs/libnfsidmap[$(get_ml_usedeps)?] )"
+RDEPEND=">=sys-apps/attr-2.4[lib32?]
+	nfs? ( net-libs/libnfsidmap[lib32?] )"
 DEPEND="${RDEPEND}
-	nls? ( sys-devel/gettext[$(get_ml_usedeps)?] )"
+	nls? ( sys-devel/gettext[lib32?] )"
 
 src_unpack() {
 	unpack ${MY_P}.tar.gz

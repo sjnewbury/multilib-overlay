@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="doc examples"
 
-RDEPEND=">=x11-libs/cairo-1.2.0[$(get_ml_usedeps)?]"
+RDEPEND=">=x11-libs/cairo-1.2.0[lib32?]"
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )"
 

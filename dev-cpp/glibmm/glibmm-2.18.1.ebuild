@@ -14,10 +14,10 @@ SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc examples"
 
-RDEPEND=">=dev-libs/libsigc++-2.2[$(get_ml_usedeps)?]
-		 >=dev-libs/glib-2.17.3[$(get_ml_usedeps)?]"
+RDEPEND=">=dev-libs/libsigc++-2.2[lib32?]
+		 >=dev-libs/glib-2.17.3[lib32?]"
 DEPEND="${RDEPEND}
-		dev-util/pkgconfig[$(get_ml_usedeps)?]
+		dev-util/pkgconfig[lib32?]
 		doc? ( app-doc/doxygen )"
 
 DOCS="AUTHORS ChangeLog NEWS README"

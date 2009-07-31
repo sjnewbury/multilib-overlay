@@ -15,14 +15,14 @@ SLOT="0"
 KEYWORDS="alpha amd64 ~arm ~hppa ~ia64 ppc ppc64 ~sh ~sparc x86 ~x86-fbsd"
 IUSE="doc"
 
-RDEPEND=">=x11-libs/gtk+-2.6[$(get_ml_usedeps)?]
-		>=dev-libs/glib-2.6[$(get_ml_usedeps)?]
-		>=dev-libs/dbus-glib-0.76[$(get_ml_usedeps)?]"
+RDEPEND=">=x11-libs/gtk+-2.6[lib32?]
+		>=dev-libs/glib-2.6[lib32?]
+		>=dev-libs/dbus-glib-0.76[lib32?]"
 DEPEND="${RDEPEND}
 		doc? ( >=dev-util/gtk-doc-1.4 )"
-PDEPEND="|| ( x11-misc/notification-daemon[$(get_ml_usedeps)?]
-		x11-misc/notification-daemon-xfce[$(get_ml_usedeps)?]
-		x11-misc/xfce4-notifyd[$(get_ml_usedeps)?] )"
+PDEPEND="|| ( x11-misc/notification-daemon[lib32?]
+		x11-misc/notification-daemon-xfce[lib32?]
+		x11-misc/xfce4-notifyd[lib32?] )"
 
 ml-native_src_install() {
 	emake install DESTDIR="${D}" || die "make install failed"

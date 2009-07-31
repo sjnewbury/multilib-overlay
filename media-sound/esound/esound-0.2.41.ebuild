@@ -16,14 +16,14 @@ IUSE="alsa debug doc ipv6 tcpd"
 
 # esound comes with arts support, but it hasn't been tested yet, feel free to
 # submit patches/improvements
-COMMON_DEPEND=">=media-libs/audiofile-0.2.3[$(get_ml_usedeps)?]
-	alsa? ( >=media-libs/alsa-lib-0.5.10b[$(get_ml_usedeps)?] )
+COMMON_DEPEND=">=media-libs/audiofile-0.2.3[lib32?]
+	alsa? ( >=media-libs/alsa-lib-0.5.10b[lib32?] )
 	doc?  ( app-text/docbook-sgml-utils )
-	tcpd? ( >=sys-apps/tcp-wrappers-7.6-r2[$(get_ml_usedeps)?] )"
-#	arts? ( kde-base/arts[$(get_ml_usedeps)?] )
+	tcpd? ( >=sys-apps/tcp-wrappers-7.6-r2[lib32?] )"
+#	arts? ( kde-base/arts[lib32?] )
 
 DEPEND="${COMMON_DEPEND}
-	dev-util/pkgconfig[$(get_ml_usedeps)?]"
+	dev-util/pkgconfig[lib32?]"
 
 RDEPEND="${COMMON_DEPEND}
 	app-admin/eselect-esd"

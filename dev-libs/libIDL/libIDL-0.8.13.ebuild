@@ -14,11 +14,11 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE=""
 
-RDEPEND=">=dev-libs/glib-2.4[$(get_ml_usedeps)?]"
+RDEPEND=">=dev-libs/glib-2.4[lib32?]"
 DEPEND="${RDEPEND}
 	sys-devel/flex
 	sys-devel/bison
-	dev-util/pkgconfig[$(get_ml_usedeps)?]"
+	dev-util/pkgconfig[lib32?]"
 
 DOCS="AUTHORS BUGS ChangeLog HACKING MAINTAINERS NEWS README"
 

@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="ipv6 debug"
 
-DEPEND=">=dev-db/sqlite-3.5[$(get_ml_usedeps)?]"
+DEPEND=">=dev-db/sqlite-3.5[lib32?]"
 RDEPEND="${DEPEND}"
 
 ml-native_src_prepare() {

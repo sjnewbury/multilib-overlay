@@ -15,29 +15,29 @@ KEYWORDS="alpha amd64 hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE_INPUT_DEVICES="input_devices_wacom"
 IUSE="+accessibility cups +dbus debug +glib mng nas nis tiff +qt3support xinerama ${IUSE_INPUT_DEVICES}"
 
-RDEPEND="media-libs/fontconfig[$(get_ml_usedeps)?]
-	>=media-libs/freetype-2[$(get_ml_usedeps)?]
-	media-libs/jpeg[$(get_ml_usedeps)?]
-	media-libs/libpng[$(get_ml_usedeps)?]
-	sys-libs/zlib[$(get_ml_usedeps)?]
-	x11-libs/libXrandr[$(get_ml_usedeps)?]
-	x11-libs/libXcursor[$(get_ml_usedeps)?]
-	x11-libs/libXfont[$(get_ml_usedeps)?]
-	x11-libs/libSM[$(get_ml_usedeps)?]
-	~x11-libs/qt-core-${PV}[$(get_ml_usedeps)?]
-	~x11-libs/qt-script-${PV}[$(get_ml_usedeps)?]
-	cups? ( net-print/cups[$(get_ml_usedeps)?] )
-	dbus? ( ~x11-libs/qt-dbus-${PV}[$(get_ml_usedeps)?] )
-	input_devices_wacom? ( x11-libs/libXi[$(get_ml_usedeps)?] x11-drivers/linuxwacom )
-	mng? ( >=media-libs/libmng-1.0.9[$(get_ml_usedeps)?] )
-	nas? ( >=media-libs/nas-1.5[$(get_ml_usedeps)?] )
-	tiff? ( media-libs/tiff[$(get_ml_usedeps)?] )
-	xinerama? ( x11-libs/libXinerama[$(get_ml_usedeps)?] )"
+RDEPEND="media-libs/fontconfig[lib32?]
+	>=media-libs/freetype-2[lib32?]
+	media-libs/jpeg[lib32?]
+	media-libs/libpng[lib32?]
+	sys-libs/zlib[lib32?]
+	x11-libs/libXrandr[lib32?]
+	x11-libs/libXcursor[lib32?]
+	x11-libs/libXfont[lib32?]
+	x11-libs/libSM[lib32?]
+	~x11-libs/qt-core-${PV}[lib32?]
+	~x11-libs/qt-script-${PV}[lib32?]
+	cups? ( net-print/cups[lib32?] )
+	dbus? ( ~x11-libs/qt-dbus-${PV}[lib32?] )
+	input_devices_wacom? ( x11-libs/libXi[lib32?] x11-drivers/linuxwacom )
+	mng? ( >=media-libs/libmng-1.0.9[lib32?] )
+	nas? ( >=media-libs/nas-1.5[lib32?] )
+	tiff? ( media-libs/tiff[lib32?] )
+	xinerama? ( x11-libs/libXinerama[lib32?] )"
 DEPEND="${RDEPEND}
 	xinerama? ( x11-proto/xineramaproto )
 	x11-proto/xextproto
 	x11-proto/inputproto"
-PDEPEND="qt3support? ( ~x11-libs/qt-qt3support-${PV}[$(get_ml_usedeps)?] )"
+PDEPEND="qt3support? ( ~x11-libs/qt-qt3support-${PV}[lib32?] )"
 
 QT4_TARGET_DIRECTORIES="
 src/gui

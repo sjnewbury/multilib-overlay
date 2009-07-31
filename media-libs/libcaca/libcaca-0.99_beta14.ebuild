@@ -17,18 +17,18 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="doc imlib mono ncurses nocxx opengl ruby slang X"
 
-RDEPEND="ncurses? ( >=sys-libs/ncurses-5.3[$(get_ml_usedeps)?] )
-	slang? ( >=sys-libs/slang-1.4[$(get_ml_usedeps)?] )
-	imlib? ( media-libs/imlib2[$(get_ml_usedeps)?] )
-	X? ( x11-libs/libX11 x11-libs/libXt[$(get_ml_usedeps)?] )
-	opengl? ( virtual/opengl[$(get_ml_usedeps)?]
-		  media-libs/freeglut[$(get_ml_usedeps)?]
-		  media-libs/ftgl[$(get_ml_usedeps)?] )
+RDEPEND="ncurses? ( >=sys-libs/ncurses-5.3[lib32?] )
+	slang? ( >=sys-libs/slang-1.4[lib32?] )
+	imlib? ( media-libs/imlib2[lib32?] )
+	X? ( x11-libs/libX11 x11-libs/libXt[lib32?] )
+	opengl? ( virtual/opengl[lib32?]
+		  media-libs/freeglut[lib32?]
+		  media-libs/ftgl[lib32?] )
 	mono? ( dev-lang/mono )
 	ruby? ( virtual/ruby )
-	x11-libs/pango[$(get_ml_usedeps)?]"
+	x11-libs/pango[lib32?]"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[$(get_ml_usedeps)?]
+	dev-util/pkgconfig[lib32?]
 	doc? ( app-doc/doxygen
 		virtual/latex-base
 		|| ( dev-texlive/texlive-fontsrecommended app-text/tetex app-text/ptex ) )"

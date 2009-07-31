@@ -15,11 +15,11 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="bash-completion debug doc test"
 
-RDEPEND=">=sys-apps/dbus-1.1.0[$(get_ml_usedeps)?]
-	>=dev-libs/glib-2.10[$(get_ml_usedeps)?]
-	>=dev-libs/expat-1.95.8[$(get_ml_usedeps)?]"
+RDEPEND=">=sys-apps/dbus-1.1.0[lib32?]
+	>=dev-libs/glib-2.10[lib32?]
+	>=dev-libs/expat-1.95.8[lib32?]"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[$(get_ml_usedeps)?]
+	dev-util/pkgconfig[lib32?]
 	sys-devel/gettext
 	doc? (
 		app-doc/doxygen

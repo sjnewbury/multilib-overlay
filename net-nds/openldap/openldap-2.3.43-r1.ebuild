@@ -23,35 +23,35 @@ IUSE="berkdb crypt debug gdbm ipv6 kerberos minimal odbc overlays perl samba sas
 # mine at work)!
 # Robin H. Johnson <robbat2@gentoo.org> March 8, 2004
 
-RDEPEND="sys-libs/ncurses[$(get_ml_usedeps)?]
-	tcpd? ( sys-apps/tcp-wrappers[$(get_ml_usedeps)?] )
-	ssl? ( dev-libs/openssl[$(get_ml_usedeps)?] )
-	sasl? ( dev-libs/cyrus-sasl[$(get_ml_usedeps)?] )
+RDEPEND="sys-libs/ncurses[lib32?]
+	tcpd? ( sys-apps/tcp-wrappers[lib32?] )
+	ssl? ( dev-libs/openssl[lib32?] )
+	sasl? ( dev-libs/cyrus-sasl[lib32?] )
 	!minimal? (
-		odbc? ( dev-db/unixODBC[$(get_ml_usedeps)?] )
-		slp? ( net-libs/openslp[$(get_ml_usedeps)?] )
+		odbc? ( dev-db/unixODBC[lib32?] )
+		slp? ( net-libs/openslp[lib32?] )
 		perl? ( dev-lang/perl[-build] )
 		samba? ( dev-libs/openssl )
 		kerberos? ( virtual/krb5 )
 		berkdb? (
-			|| ( 	sys-libs/db:4.5[$(get_ml_usedeps)?]
-				sys-libs/db:4.4[$(get_ml_usedeps)?]
-				sys-libs/db:4.3[$(get_ml_usedeps)?]
-				>=sys-libs/db-4.2.52_p2-r1:4.2[$(get_ml_usedeps)?]
+			|| ( 	sys-libs/db:4.5[lib32?]
+				sys-libs/db:4.4[lib32?]
+				sys-libs/db:4.3[lib32?]
+				>=sys-libs/db-4.2.52_p2-r1:4.2[lib32?]
 			)
 		)
 		!berkdb? (
-			gdbm? ( sys-libs/gdbm[$(get_ml_usedeps)?] )
+			gdbm? ( sys-libs/gdbm[lib32?] )
 			!gdbm? (
-				|| (	sys-libs/db:4.5[$(get_ml_usedeps)?]
-					sys-libs/db:4.4[$(get_ml_usedeps)?]
-					sys-libs/db:4.3[$(get_ml_usedeps)?]
-					>=sys-libs/db-4.2.52_p2-r1:4.2[$(get_ml_usedeps)?]
+				|| (	sys-libs/db:4.5[lib32?]
+					sys-libs/db:4.4[lib32?]
+					sys-libs/db:4.3[lib32?]
+					>=sys-libs/db-4.2.52_p2-r1:4.2[lib32?]
 				)
 			)
 		)
 		smbkrb5passwd? (
-			dev-libs/openssl[$(get_ml_usedeps)?]
+			dev-libs/openssl[lib32?]
 			app-crypt/heimdal
 		)
 	)

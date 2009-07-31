@@ -15,12 +15,12 @@ LICENSE="GPL-2"
 KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="debug nls"
 
-RDEPEND=">=dev-libs/glib-2.8[$(get_ml_usedeps)?]
-	>=media-libs/gstreamer-0.10.19.1[$(get_ml_usedeps)?]
-	>=dev-libs/liboil-0.3.14[$(get_ml_usedeps)?]"
+RDEPEND=">=dev-libs/glib-2.8[lib32?]
+	>=media-libs/gstreamer-0.10.19.1[lib32?]
+	>=dev-libs/liboil-0.3.14[lib32?]"
 DEPEND="${RDEPEND}
 	nls? ( >=sys-devel/gettext-0.11.5 )
-	dev-util/pkgconfig[$(get_ml_usedeps)?]"
+	dev-util/pkgconfig[lib32?]"
 
 DOCS="AUTHORS README RELEASE"
 

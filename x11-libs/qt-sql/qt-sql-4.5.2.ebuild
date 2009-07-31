@@ -10,12 +10,12 @@ SLOT="4"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="firebird iconv mysql odbc postgres qt3support +sqlite"
 
-DEPEND="~x11-libs/qt-core-${PV}[debug=,qt3support=,$(get_ml_usedeps)?]
-	firebird? ( dev-db/firebird[$(get_ml_usedeps)?] )
-	mysql? ( virtual/mysql[$(get_ml_usedeps)?] )
-	odbc? ( dev-db/unixODBC[$(get_ml_usedeps)?] )
-	postgres? ( virtual/postgresql-base[$(get_ml_usedeps)?] )
-	sqlite? ( dev-db/sqlite:3[$(get_ml_usedeps)?] )"
+DEPEND="~x11-libs/qt-core-${PV}[debug=,qt3support=,lib32?]
+	firebird? ( dev-db/firebird[lib32?] )
+	mysql? ( virtual/mysql[lib32?] )
+	odbc? ( dev-db/unixODBC[lib32?] )
+	postgres? ( virtual/postgresql-base[lib32?] )
+	sqlite? ( dev-db/sqlite:3[lib32?] )"
 RDEPEND="${DEPEND}"
 
 QT4_TARGET_DIRECTORIES="src/sql src/plugins/sqldrivers"

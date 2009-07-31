@@ -27,7 +27,7 @@ IUSE="doc"
 RDEPEND=">=media-libs/freetype-2.2.1
 	>=dev-libs/expat-1.95.3"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[$(get_ml_usedeps)?]
+	dev-util/pkgconfig[lib32?]
 	doc? (
 		app-text/docbook-sgml-utils[jadetex]
 		=app-text/docbook-sgml-dtd-3.1*

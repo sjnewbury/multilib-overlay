@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE=""
 
-RDEPEND=">=dev-libs/libgpg-error-1.5[$(get_ml_usedeps)?]"
+RDEPEND=">=dev-libs/libgpg-error-1.5[lib32?]"
 DEPEND="${RDEPEND}"
 
 pkg_setup() {

@@ -14,19 +14,19 @@ SLOT="2"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="doc examples"
 
-RDEPEND=">=dev-libs/glib-2.8.0[$(get_ml_usedeps)?]
-	>=x11-libs/pango-1.16.0[$(get_ml_usedeps)?]
-	>=dev-libs/atk-1.12.0[$(get_ml_usedeps)?]
-	>=x11-libs/gtk+-2.11.6[$(get_ml_usedeps)?]
-	>=gnome-base/libglade-2.5.0[$(get_ml_usedeps)?]
-	>=dev-lang/python-2.4.4-r5[$(get_ml_usedeps)?]
-	>=dev-python/pycairo-1.0.2[$(get_ml_usedeps)?]
-	>=dev-python/pygobject-2.14[$(get_ml_usedeps)?]
-	!arm? ( dev-python/numeric[$(get_ml_usedeps)?] )"
+RDEPEND=">=dev-libs/glib-2.8.0[lib32?]
+	>=x11-libs/pango-1.16.0[lib32?]
+	>=dev-libs/atk-1.12.0[lib32?]
+	>=x11-libs/gtk+-2.11.6[lib32?]
+	>=gnome-base/libglade-2.5.0[lib32?]
+	>=dev-lang/python-2.4.4-r5[lib32?]
+	>=dev-python/pycairo-1.0.2[lib32?]
+	>=dev-python/pygobject-2.14[lib32?]
+	!arm? ( dev-python/numeric[lib32?] )"
 
 DEPEND="${RDEPEND}
 	doc? ( dev-libs/libxslt >=app-text/docbook-xsl-stylesheets-1.70.1 )
-	>=dev-util/pkgconfig-0.9[$(get_ml_usedeps)?]"
+	>=dev-util/pkgconfig-0.9[lib32?]"
 
 ml-native_src_prepare() {
 	# fix for bug #209531

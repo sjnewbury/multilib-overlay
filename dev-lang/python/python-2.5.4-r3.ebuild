@@ -35,18 +35,18 @@ IUSE="berkdb build doc elibc_uclibc examples gdbm ipv6 ncurses readline sqlite s
 #       do not conflict with the ones in python proper. - liquidx
 
 DEPEND=">=app-admin/eselect-python-20080925
-		>=sys-libs/zlib-1.1.3[$(get_ml_usedeps)?]
+		>=sys-libs/zlib-1.1.3[lib32?]
 		!build? (
-			sqlite? ( >=dev-db/sqlite-3[$(get_ml_usedeps)?] )
-			tk? ( >=dev-lang/tk-8.0[$(get_ml_usedeps)?] )
-			ncurses? ( >=sys-libs/ncurses-5.2[$(get_ml_usedeps)?]
-						readline? ( >=sys-libs/readline-4.1[$(get_ml_usedeps)?] ) )
-			berkdb? ( || ( sys-libs/db:4.5[lib32?] sys-libs/db:4.4[lib32?] sys-libs/db:4.3[$(get_ml_usedeps)?]
-							sys-libs/db:4.2[$(get_ml_usedeps)?] ) )
-			gdbm? ( sys-libs/gdbm[$(get_ml_usedeps)?] )
-			ssl? ( dev-libs/openssl[$(get_ml_usedeps)?] )
+			sqlite? ( >=dev-db/sqlite-3[lib32?] )
+			tk? ( >=dev-lang/tk-8.0[lib32?] )
+			ncurses? ( >=sys-libs/ncurses-5.2[lib32?]
+						readline? ( >=sys-libs/readline-4.1[lib32?] ) )
+			berkdb? ( || ( sys-libs/db:4.5[lib32?] sys-libs/db:4.4[lib32?] sys-libs/db:4.3[lib32?]
+							sys-libs/db:4.2[lib32?] ) )
+			gdbm? ( sys-libs/gdbm[lib32?] )
+			ssl? ( dev-libs/openssl[lib32?] )
 			doc? ( dev-python/python-docs:${SLOT} )
-			xml? ( dev-libs/expat[$(get_ml_usedeps)?] )
+			xml? ( dev-libs/expat[lib32?] )
 	)"
 RDEPEND="${DEPEND}"
 PDEPEND="${DEPEND} app-admin/python-updater"

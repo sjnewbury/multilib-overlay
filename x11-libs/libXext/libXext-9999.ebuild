@@ -13,7 +13,7 @@ DESCRIPTION="X.Org Xext library"
 
 KEYWORDS=""
 
-RDEPEND=">=x11-libs/libX11-1.2[$(get_ml_usedeps)?]
+RDEPEND=">=x11-libs/libX11-1.2[lib32?]
 	=x11-proto/xextproto-9999"
 DEPEND="${RDEPEND}
 	=x11-proto/xproto-9999"

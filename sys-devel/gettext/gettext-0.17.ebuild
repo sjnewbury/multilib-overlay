@@ -16,10 +16,10 @@ KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fb
 IUSE="acl doc emacs nls nocxx openmp java"
 
 DEPEND="virtual/libiconv
-	dev-libs/libxml2[$(get_ml_usedeps)?]
-	sys-libs/ncurses[$(get_ml_usedeps)?]
-	dev-libs/expat[$(get_ml_usedeps)?]
-	acl? ( kernel_linux? ( sys-apps/acl[$(get_ml_usedeps)?] ) )"
+	dev-libs/libxml2[lib32?]
+	sys-libs/ncurses[lib32?]
+	dev-libs/expat[lib32?]
+	acl? ( kernel_linux? ( sys-apps/acl[lib32?] ) )"
 PDEPEND="emacs? ( app-emacs/po-mode )"
 RDEPEND="${DEPEND}
 	java? ( >=virtual/jdk-1.4 )"

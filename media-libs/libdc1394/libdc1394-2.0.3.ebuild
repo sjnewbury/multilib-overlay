@@ -15,9 +15,9 @@ SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 IUSE="X doc juju"
 
-RDEPEND=">=sys-libs/libraw1394-1.2.0[$(get_ml_usedeps)?]
+RDEPEND=">=sys-libs/libraw1394-1.2.0[lib32?]
 		juju? ( >=sys-kernel/linux-headers-2.6.23-r3 )
-		X? ( x11-libs/libSM[lib32?] x11-libs/libXv[$(get_ml_usedeps)?] )"
+		X? ( x11-libs/libSM[lib32?] x11-libs/libXv[lib32?] )"
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )"
 
