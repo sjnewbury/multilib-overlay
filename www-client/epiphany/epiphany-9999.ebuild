@@ -87,7 +87,7 @@ ml-native_src_configure() {
 #		--enable-certificate-manager
 #		$(use_enable spell spell-checker)
 
-	if use lib32 && ! is_final_abi; then
+	if has_multilib_profile && ! is_final_abi; then
 		gnome2_src_configure "--program-suffix=-${ABI}"
 	else
 		gnome2_src_configure

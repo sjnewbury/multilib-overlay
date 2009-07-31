@@ -123,9 +123,7 @@ src_prepare() {
 }
 
 ml-native_src_configure() {
-	if ! use lib32; then
-		unset QMAKESPEC
-	fi
+	[[ -z ${EMULTILIB_PKG} ]] && unset QMAKESPEC
 
 	myconf="${myconf}
 		$(qt_use glib)

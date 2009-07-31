@@ -19,7 +19,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
 IUSE="alsa avahi caps jack lirc oss tcpd X hal dbus libsamplerate gnome bluetooth policykit asyncns +glib test doc"
 
-RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[$(get_ml_usedeps)] x11-libs/libICE[$(get_ml_usedeps)] x11-libs/libXtst[$(get_ml_usedeps)] )
+RDEPEND="X? ( x11-libs/libX11[$(get_ml_usedeps)] x11-libs/libSM[$(get_ml_usedeps)] x11-libs/libICE[$(get_ml_usedeps)] x11-libs/libXtst[$(get_ml_usedeps)] )
 	caps? ( sys-libs/libcap[$(get_ml_usedeps)] )
 	libsamplerate? ( >=media-libs/libsamplerate-0.1.1-r1[$(get_ml_usedeps)] )
 	alsa? ( >=media-libs/alsa-lib-1.0.19[$(get_ml_usedeps)] )

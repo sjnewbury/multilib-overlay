@@ -29,6 +29,8 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
+PROVIDE="virtual/fam[$(get_ml_usedeps)]"
+
 ml-native_src_prepare() {
 	# Fix QA warnings, bug #257281, upstream #466791
 	epatch "${FILESDIR}/${P}-compilewarnings.patch"

@@ -44,7 +44,7 @@ src_unpack() {
 			"${FILESDIR}"/${PN}-1.0.19-automagic_jack.patch
 
 	# cheap fix for multilib
-	use lib32 && epatch "${FILESDIR}/${PN}-1.0.19-no-jack-revdep.patch"
+	has_multilib_profile && epatch "${FILESDIR}/${PN}-1.0.19-no-jack-revdep.patch"
 	
 	rm M4/libtool.m4 M4/lt*.m4 || die "rm failed"
 

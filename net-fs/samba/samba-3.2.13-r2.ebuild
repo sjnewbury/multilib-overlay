@@ -32,9 +32,7 @@ RDEPEND="dev-libs/popt
 	swat? ( sys-apps/xinetd )
 	syslog? ( virtual/logger )
 	fam? ( virtual/fam )
-	caps? ( sys-libs/libcap[$(get_ml_usedeps)] )
-	lib32? ( fam? ( dev-libs/libgamin[lib32] ) )
-	lib32? ( pam? ( sys-libs/pam[lib32] ) )"
+	caps? ( sys-libs/libcap[$(get_ml_usedeps)] )"
 DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${MY_P}"

@@ -50,7 +50,7 @@ ml-native_src_configure() {
 		replace-flags -march=* -DMARCH_CENSORED
 	fi
 
-	if use lib32 && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
+	if has_multilib_profile && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
 		myconf="${myconf} --program-suffix=32"
 	fi
 	
@@ -126,7 +126,7 @@ ml-native_pkg_postinst() {
 	echo
 
 	if [[ ${ROOT} = / ]]; then
-		if use lib32 && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
+		if has_multilib_profile && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
 			ebegin "Creating global 32bit font cache"
 			/usr/bin/fc-cache32 -sr
 			eend $?

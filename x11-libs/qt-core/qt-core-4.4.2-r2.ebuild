@@ -115,7 +115,7 @@ src_unpack() {
 }
 
 ml-native_src_configure() {
-	unset QMAKESPEC
+	[[ -z ${EMULTILIB_PKG} ]] && unset QMAKESPEC
 	local myconf
 
 	myconf="${myconf}

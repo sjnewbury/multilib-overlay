@@ -9,7 +9,7 @@ SRC_URI=""
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm hppa ia64 mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
-IUSE="lib32"
+IUSE="$(get_ml_useflags)"
 
 DEPEND=""
 RDEPEND="=dev-db/mysql-${PV}*[$(get_ml_usedeps)]"

@@ -140,7 +140,7 @@ ml-native_src_prepare() {
 	epatch "${FILESDIR}"/perl-hppa-pa7200-configure.patch
 
 	if use amd64 || use ppc64; then
-		if use lib32 && ( [[ "${ABI}" == "x86" ]] || \
+		if has_multilib_profile && ( [[ "${ABI}" == "x86" ]] || \
 					[[ "${ABI}" == "ppc" ]] ); then
 			epatch "${FILESDIR}"/${P}-lib32.patch
 		else

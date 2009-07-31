@@ -32,7 +32,7 @@ ml-native_src_prepare() {
 uyesno() { use $1 && echo yes || echo no ; }
 pemake() {
 
-	if use lib32 && [[ "${ABI}" == "x86" ]]; then
+	if has_multilib_profile && [[ "${ABI}" == "x86" ]]; then
 		CROSS_COMPILE="x86_64-pc-linux-gnu"
 	else
 		CROSS_COMPILE="${CHOST}"

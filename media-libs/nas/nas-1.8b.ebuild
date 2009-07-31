@@ -44,7 +44,7 @@ ml-native_src_install() {
 
 	# rename example nasd.conf.eg to nasd.conf and change it so that NAS
 	# doesn't change mixer's settings (inspired by Debian package):
-	if  (use lib32 && is_final_abi) || ! use lib32; then
+	if  (has_multilib_profile && is_final_abi) || ! has_multilib_profile; then
 		mv "${D}"/etc/nas/nasd.conf{.eg,}
 		sed -i -e 's,\(MixerInit.*\)"\(.*\)",\1"no",' "${D}"/etc/nas/nasd.conf
 	fi

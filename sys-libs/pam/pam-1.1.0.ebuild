@@ -32,7 +32,7 @@ PDEPEND="sys-auth/pambase
 
 S="${WORKDIR}/${MY_P}"
 
-PROVIDE="virtual/pam"
+PROVIDE="virtual/pam[$(get_ml_usedeps)]"
 
 check_old_modules() {
 	local retval="0"

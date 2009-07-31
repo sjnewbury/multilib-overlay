@@ -107,9 +107,8 @@ src_unpack() {
 }
 
 ml-native_src_configure() {
-	if ! use lib32; then
-		unset QMAKESPEC
-	fi
+	[[ -z ${EMULTILIB_PKG} ]] && unset QMAKESPEC
+
 	local myconf
 
 	myconf="${myconf}

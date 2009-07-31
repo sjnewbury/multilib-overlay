@@ -55,7 +55,7 @@ ml-native_src_configure() {
 	# needed to avoid gcc looping internaly
 	use hppa && export CFLAGS="-O1 -pipe"
 
-	if use lib32 && ! is_final_abi; then
+	if has_multilib_profile && ! is_final_abi; then
 		myconf="${myconf} --disable-python"
 	fi
 

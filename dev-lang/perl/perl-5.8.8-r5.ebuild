@@ -324,7 +324,7 @@ ml-native_src_install() {
 
 	rm "${D}"/usr/bin/perl
 
-	if use lib32; then
+	if has_multilib_profile; then
 		cp perl perl${MY_PV}-${ABI}
 		dobin perl${MY_PV}-${ABI}
 		ln -s perl${MY_PV}-${ABI} "${D}"/usr/bin/perl-${ABI}

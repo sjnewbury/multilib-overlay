@@ -71,7 +71,7 @@ ml-native_src_configure() {
 	fi
 
 	local myconf
-	if use lib32 && ! is_final_abi; then
+	if [[ -n ${EMULTILIB_PKG} ]] && ! is_final_abi; then
 		myconf="--enable-directfb=no"
 	else
 		myconf="$(use_enable directfb)"

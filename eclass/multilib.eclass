@@ -704,11 +704,25 @@ prep_ml_binaries() {
 # @RETURN: USE dependencies
 # @DESCRIPTION: Function to generate USE dependencies from get_install_abis()
 get_ml_usedeps() {
-	local abilist="" _ABI="" usedeps
+	local abilist="" _ABI="" usedeps=""
 	abilist=$(get_install_abis)
 	for _ABI in ${abilist}; do
 		[[ -n ${usedeps} ]] && usedeps="${usedeps},"
 		usedeps="${usedeps}multilib_${_ABI}?"
 	done
+	[[ -z ${usedeps} ]] && usedeps="multilib_${DEFAULT_ABI}?"
 	echo ${usedeps}
+}
+
+# @FUNCTION get_ml_useflags
+# @RETURN: USE flags
+# @DESCRIPTION: Function to generate IUSE flags from get_install_abis()
+get_ml_useflags() {
+	local abilist="" _ABI="" useflags=""
+	abilist=$(get_install_abis)
+	for _ABI in ${abilist}; do
+		useflags="${useflags} multilib_${_ABI}"
+	done
+	[[ -z ${useflags} ]] && useflags="multilib_${DEFAULT_ABI}"
+	echo ${useflags}
 }

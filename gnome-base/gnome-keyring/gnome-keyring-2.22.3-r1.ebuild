@@ -21,8 +21,7 @@ RDEPEND=">=dev-libs/glib-2.8[$(get_ml_usedeps)]
 	 hal? ( >=sys-apps/hal-0.5.7[$(get_ml_usedeps)] )
 	 pam? ( virtual/pam )
 	 >=dev-libs/libgcrypt-1.2.2[$(get_ml_usedeps)]
-	 >=dev-libs/libtasn1-0.3.4[$(get_ml_usedeps)]
-	 lib32? ( pam? ( sys-libs/pam[lib32] ) )"
+	 >=dev-libs/libtasn1-0.3.4[$(get_ml_usedeps)]"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.35

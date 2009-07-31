@@ -13,20 +13,20 @@ SRC_URI="mirror://sourceforge/zsnes/${PN}${PV//./}src.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="-* amd64 x86 ~x86-fbsd"
-IUSE="ao custom-cflags opengl png lib32"
+IUSE="ao custom-cflags opengl png multilib_x86"
 
-RDEPEND="media-libs/libsdl[$(get_ml_usedeps)]
-	>=sys-libs/zlib-1.2.3-r1[$(get_ml_usedeps)]
-	ao? ( media-libs/libao[$(get_ml_usedeps)] )
-	opengl? ( virtual/opengl[$(get_ml_usedeps)] )
-	png? ( media-libs/libpng[$(get_ml_usedeps)] )"
+RDEPEND="media-libs/libsdl[multilib_x86]
+	>=sys-libs/zlib-1.2.3-r1[multilib_x86]
+	ao? ( media-libs/libao[multilib_x86] )
+	opengl? ( virtual/opengl[multilib_x86] )
+	png? ( media-libs/libpng[multilib_x86] )"
 DEPEND="${RDEPEND}
 	dev-lang/nasm
 	amd64? ( >=sys-apps/portage-2.1 )"
 
 S=${WORKDIR}/${PN}_${PV//./_}/src
 
-ml-native_src_prepare() {
+src_prepare() {
 	cd "${S}"
 
 	# Fixing compilation without libpng installed

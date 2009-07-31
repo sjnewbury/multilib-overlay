@@ -98,7 +98,7 @@ ml-native_src_configure() {
 	# Passing --disable-debug is not recommended for production use
 	use debug && myconf="${myconf} --enable-debug=yes"
 
-	if use lib32 && ! is_final_abi; then
+	if has_multilib_profile && ! is_final_abi; then
 			myconf="${myconf} --program-suffix=-${ABI}"
 	fi
 
@@ -135,7 +135,7 @@ ml-native_pkg_postinst() {
 	set_gtk2_confdir
 
 	if [ -d "${ROOT}${GTK2_CONFDIR}" ]; then
-		if use lib32 && ! is_final_abi; then
+		if has_multilib_profile && ! is_final_abi; then
 			gtk-query-immodules-2.0-${ABI} > "${ROOT}${GTK2_CONFDIR}/gtk.immodules"
 			gdk-pixbuf-query-loaders-${ABI} > "${ROOT}${GTK2_CONFDIR}/gdk-pixbuf.loaders"
 		else

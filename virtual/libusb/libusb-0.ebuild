@@ -11,7 +11,7 @@ SRC_URI=""
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
-IUSE="lib32"
+IUSE="$(get_ml_useflags)"
 
 DEPEND=""
 RDEPEND="|| ( >=dev-libs/libusb-0.1.12-r1:0[$(get_ml_usedeps)] dev-libs/libusb-compat[$(get_ml_usedeps)] )"
