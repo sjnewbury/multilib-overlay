@@ -277,29 +277,7 @@ multilib-native_restore_abi_env() {
 # @USAGE: <phase>
 # @DESCRIPTION: Run each phase for each "install ABI"
 multilib-native_src_generic() {
-# If this is the first time through, initialise the source path variables early
-# and unconditionally, whether building for multilib or not.  This allows
-# multilib-native ebuilds to always make use of them.  Then save the initial
-# environment.
-#
-# Sometimes, packages assume a directory structure ABOVE "S". ("S" is set to a
-# subdirectory of the tree they unpack into ${WORKDIR}.)
-#
-# We need to deal with this by finding the top-level of the source tree and
-# keeping track of ${S} relative to it.
-
-	if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]} ]]; then
-		[[ -n ${MULTILIB_DEBUG} ]] && \
-			einfo "MULTILIB_DEBUG: Determining EMULTILIB_SOURCE_TOPDIR from S and WORKDIR"
-		EMULTILIB_RELATIVE_BUILD_DIR="${S#*${WORKDIR}\/}"
-		EMULTILIB_SOURCE_TOP_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
-		EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
-		[[ -n ${MULTILIB_DEBUG} ]] && \
-			einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_TOPDIR=\"${EMULTILIB_SOURCE_TOPDIR}\""
-		multilib-native_save_abi_env "INIT"
-		EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]=1
-	fi
-
+# Recurse this function for each ABI from get_install_abis()
 	if [[ -n ${EMULTILIB_PKG} ]] && [[ -z ${OABI} ]] ; then
 		local abilist=""
 		if has_multilib_profile ; then
@@ -321,6 +299,28 @@ multilib-native_src_generic() {
 			unset OABI
 			return 0
 		fi
+	fi
+
+# If this is the first time through, initialise the source path variables early
+# and unconditionally, whether building for multilib or not.  (This allows
+# multilib-native ebuilds to always make use of them.)  Then save the initial
+# environment.
+#
+# Sometimes, packages assume a directory structure ABOVE "S". ("S" is set to a
+# subdirectory of the tree they unpack into ${WORKDIR}.)  We need to deal with
+# this by finding the top-level of the source tree and keeping track of ${S}
+# relative to it.
+
+	if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]} ]]; then
+		[[ -n ${MULTILIB_DEBUG} ]] && \
+			einfo "MULTILIB_DEBUG: Determining EMULTILIB_SOURCE_TOPDIR from S and WORKDIR"
+		EMULTILIB_RELATIVE_BUILD_DIR="${S#*${WORKDIR}\/}"
+		EMULTILIB_SOURCE_TOP_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
+		EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
+		[[ -n ${MULTILIB_DEBUG} ]] && \
+			einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_TOPDIR=\"${EMULTILIB_SOURCE_TOPDIR}\""
+		multilib-native_save_abi_env "INIT"
+		EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]=1
 	fi
 
 	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
