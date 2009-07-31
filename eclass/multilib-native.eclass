@@ -45,7 +45,7 @@ EMULTILIB_SAVE_VARS="${EMULTILIB_SAVE_VARS}
 		MY_LIBDIR MOZLIBDIR SDKDIR G2CONF PKG_CONFIG_PATH"
 
 # @VARIABLE: EMULTILIB_SOURCE_TOP_DIRNAME
-# @DESCRIPTION:
+# @DESCRIPTION: Holds the name of the top-level source directory
 # EMULTILIB_SOURCE_TOP_DIRNAME=""
 EMULTILIB_SOURCE_TOP_DIRNAME=""
 
@@ -380,6 +380,7 @@ multilib-native_setup_abi_env() {
 # @FUNCTION: multilib-native_abi_to_index_key
 # @USAGE: <ABI>
 # @RETURN: <index key>
+# @DESCRIPTION: Return an array index key for a given ABI
 multilib-native_abi_to_index_key() {
 # Until we can count on bash version > 4, we can't use associative arrays.
 	local index=0 element=""
