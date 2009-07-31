@@ -23,6 +23,4 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS ChangeLog NEWS README THANKS
 	use doc && dodoc doc/libtasn1.ps
-
-	prep_ml_binaries /usr/bin/libtasn1-config 
 }
