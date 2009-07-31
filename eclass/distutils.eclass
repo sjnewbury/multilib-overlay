@@ -32,11 +32,11 @@ esac
 # Normally only a -py21- ebuild would set PYTHON_SLOT_VERSION.
 if [[ $(number_abis) -gt 1 ]] ; then
 	if [ "${PYTHON_SLOT_VERSION}" = "2.1" ] ; then
-		DEPEND="=dev-lang/python-2.1*[lib32?]"
+		DEPEND="=dev-lang/python-2.1*[$(get_ml_usedeps)]"
 	elif [ "${PYTHON_SLOT_VERSION}" = "2.3" ] ; then
-		DEPEND="=dev-lang/python-2.3*[lib32?]"
+		DEPEND="=dev-lang/python-2.3*[$(get_ml_usedeps)]"
 	else
-		DEPEND="virtual/python[lib32?]"
+		DEPEND="virtual/python[$(get_ml_usedeps)]"
 	fi
 else
 	if [ "${PYTHON_SLOT_VERSION}" = "2.1" ] ; then

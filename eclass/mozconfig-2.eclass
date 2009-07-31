@@ -8,22 +8,22 @@ inherit multilib flag-o-matic mozcoreconf
 
 IUSE="debug gnome ipv6 xinerama"
 
-RDEPEND="x11-libs/libXrender[lib32?]
-	x11-libs/libXt[lib32?]
-	x11-libs/libXmu[lib32?]
-	>=media-libs/jpeg-6b[lib32?]
-	>=media-libs/libpng-1.2.1[lib32?]
-	dev-libs/expat[lib32?]
+RDEPEND="x11-libs/libXrender[$(get_ml_usedeps)]
+	x11-libs/libXt[$(get_ml_usedeps)]
+	x11-libs/libXmu[$(get_ml_usedeps)]
+	>=media-libs/jpeg-6b[$(get_ml_usedeps)]
+	>=media-libs/libpng-1.2.1[$(get_ml_usedeps)]
+	dev-libs/expat[$(get_ml_usedeps)]
 	app-arch/zip
 	app-arch/unzip
-	>=x11-libs/gtk+-2.8.6[lib32?]
-	>=dev-libs/glib-2.8.2[lib32?]
-	>=x11-libs/pango-1.10.1[lib32?]
-	>=dev-libs/libIDL-0.8.0[lib32?]
-	gnome? ( >=gnome-base/gnome-vfs-2.3.5[lib32?]
-		>=gnome-base/libgnomeui-2.2.0[lib32?] )
+	>=x11-libs/gtk+-2.8.6[$(get_ml_usedeps)]
+	>=dev-libs/glib-2.8.2[$(get_ml_usedeps)]
+	>=x11-libs/pango-1.10.1[$(get_ml_usedeps)]
+	>=dev-libs/libIDL-0.8.0[$(get_ml_usedeps)]
+	gnome? ( >=gnome-base/gnome-vfs-2.3.5[$(get_ml_usedeps)]
+		>=gnome-base/libgnomeui-2.2.0[$(get_ml_usedeps)] )
 	!<x11-base/xorg-x11-6.7.0-r2
-	>=x11-libs/cairo-1.0.0[lib32?]"
+	>=x11-libs/cairo-1.0.0[$(get_ml_usedeps)]"
 	#According to bugs #18573, #204520, and couple of others in Mozilla's
 	#bugzilla. libmng and mng support has been removed in 2003.
 
