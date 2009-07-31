@@ -14,7 +14,7 @@ ipv6 debug
 
 2
 
-compile configure install postinst postrm preinst prepare setup unpack
+compile configure install postinst postrm preinst prepare unpack
 
 
 
