@@ -243,7 +243,6 @@ multilib-native_src_compile_internal() {
 multilib-native_src_install_internal() {
 	MOZILLA_FIVE_HOME="/usr/$(get_libdir)/${PN}"
 	emake DESTDIR="${D}" install || die "emake install failed"
-	rm "${D}"/usr/bin/firefox
 
 	linguas
 	for X in ${linguas}; do
@@ -284,8 +283,7 @@ multilib-native_src_install_internal() {
 		echo "StartupNotify=true" >> "${D}"/usr/share/applications/${PN}-${DESKTOP_PV}.desktop
 	fi
 
-	dosym "${MOZILLA_FIVE_HOME}/firefox" "/usr/bin/firefox-${ABI}"
-	dosym "firefox-${ABI}" "/usr/bin/firefox"
+	prep_ml_binaries "/usr/bin/firefox"
 
 	# Plugins dir
 	ln -s "${D}"/usr/$(get_libdir)/{nsbrowser,mozilla-firefox}/plugins

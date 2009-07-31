@@ -46,16 +46,16 @@ done
 
 RDEPEND="java? ( virtual/jre )
 	>=sys-devel/binutils-2.16.1
-	>=dev-libs/nss-3.12.2
-	>=dev-libs/nspr-4.7.4
-	>=app-text/hunspell-1.1.9
-	>=media-libs/lcms-1.17
-	x11-libs/cairo[X]
-	x11-libs/pango[X]
-	xulrunner? ( >=net-libs/xulrunner-1.9${MY_PV} )"
+	>=dev-libs/nss-3.12.2[lib32?]
+	>=dev-libs/nspr-4.7.4[lib32?]
+	>=app-text/hunspell-1.1.9[lib32?]
+	>=media-libs/lcms-1.17[lib32?]
+	x11-libs/cairo[X,lib32?]
+	x11-libs/pango[X,lib32?]
+	xulrunner? ( >=net-libs/xulrunner-1.9${MY_PV}[lib32?] )"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	java? ( >=dev-java/java-config-0.2.0 )"
 
 PDEPEND="restrict-javascript? ( www-plugins/noscript )"
@@ -91,7 +91,7 @@ linguas() {
 	done
 }
 
-multilib-native_pkg_setup_internal(){
+pkg_setup(){
 	if ! use bindist && ! use iceweasel; then
 		elog "You are enabling official branding. You may not redistribute this build"
 		elog "to any users on your network or the internet. Doing so puts yourself into"
@@ -101,7 +101,7 @@ multilib-native_pkg_setup_internal(){
 	fi
 }
 
-multilib-native_src_unpack_internal() {
+src_unpack() {
 	! use xulrunner && unpack xulrunner-1.9${MY_PV}.tar.bz2
 	unpack ${P}.tar.bz2 ${PATCH}.tar.bz2
 
@@ -122,7 +122,11 @@ multilib-native_src_unpack_internal() {
 
 multilib-native_src_prepare_internal() {
 	# Remove the patches we don't need
-	use xulrunner && rm "${WORKDIR}"/patch/*noxul* || rm "${WORKDIR}"/patch/*xulonly*
+	if use xulrunner; then
+		rm "${WORKDIR}"/patch/*noxul*
+	else
+		rm "${WORKDIR}"/patch/*xulonly*
+	fi
 
 	# Apply our patches
 	cd "${S}" || die "cd failed"
@@ -273,6 +277,8 @@ EOF
 		echo "pref(\"general.useragent.vendor\",\"Gentoo\");" \
 			>> "${D}"${MOZILLA_FIVE_HOME}/defaults/pref/vendor.js
 	fi
+
+	prep_ml_binaries "/usr/bin/firefox"
 
 }
 
