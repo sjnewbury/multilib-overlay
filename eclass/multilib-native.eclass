@@ -571,33 +571,3 @@ _check_build_dir() {
 # in/out source build
 	echo ">>> Working in BUILD_DIR: \"$CMAKE_BUILD_DIR\""
 }
-
-# @FUNCTION prep_ml_binaries
-# @USAGE:
-# @DESCRIPTION: Use wrapper to support non-default binaries 
-prep_ml_binaries() {
-	if [[ -n $EMULTILIB_PKG ]] ; then
-		for binary in "$@"; do
-			mv ${D}/${binary} ${D}/${binary}-${ABI}
-			echo mv ${D}/${binary} ${D}/${binary}-${ABI}
-			if is_final_abi; then
-				ln -s /usr/bin/abi-wrapper ${D}/${binary}
-				echo ln -s /usr/bin/abi-wrapper ${D}/${binary}
-			fi
-		done
-	fi		
-}
-
-# @FUNCTION get_ml_usedeps
-# @USAGE:
-# @RETURN: USE dependencies
-# @DESCRIPTION: Function to generate USE dependencies from get_install_abis()
-get_ml_usedeps() {
-	local abilist="" _ABI="" usedeps
-	abilist=$(get_install_abis)
-	for _ABI in ${abilist}; do
-		[[ -n ${usedeps} ]] && usedeps="${usedeps},"
-		usedeps="${usedeps}multilib_${_ABI}?"
-	done
-	echo ${usedeps}
-}
