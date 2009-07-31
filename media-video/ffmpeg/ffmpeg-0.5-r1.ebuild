@@ -19,7 +19,7 @@ IUSE="+3dnow +3dnowext alsa altivec amr custom-cflags debug dirac doc ieee1394
 	  xvid network zlib sdl X mp3 oss schroedinger +hardcoded-tables bindist
 	  v4l v4l2 speex +ssse3 vhook jpeg2k"
 
-RDEPEND="vhook? ( >=media-libs/imlib2-1.4.0[lib32?] >=media-libs/freetype-2[$(get_ml_usedeps)] )
+RDEPEND="vhook? ( >=media-libs/imlib2-1.4.0[$(get_ml_usedeps)] >=media-libs/freetype-2[$(get_ml_usedeps)] )
 	sdl? ( >=media-libs/libsdl-1.2.10[$(get_ml_usedeps)] )
 	alsa? ( media-libs/alsa-lib[$(get_ml_usedeps)] )
 	encode? (
@@ -30,8 +30,8 @@ RDEPEND="vhook? ( >=media-libs/imlib2-1.4.0[lib32?] >=media-libs/freetype-2[$(ge
 				<media-sound/lame-3.98[$(get_ml_usedeps)]
 			)
 		)
-		vorbis? ( media-libs/libvorbis[lib32?] media-libs/libogg[$(get_ml_usedeps)] )
-		theora? ( media-libs/libtheora[lib32?] media-libs/libogg[$(get_ml_usedeps)] )
+		vorbis? ( media-libs/libvorbis[$(get_ml_usedeps)] media-libs/libogg[$(get_ml_usedeps)] )
+		theora? ( media-libs/libtheora[$(get_ml_usedeps)] media-libs/libogg[$(get_ml_usedeps)] )
 		x264? ( >=media-libs/x264-0.0.20081006[$(get_ml_usedeps)] )
 		xvid? ( >=media-libs/xvid-1.1.0[$(get_ml_usedeps)] ) )
 	faad? ( >=media-libs/faad2-2.6.1[$(get_ml_usedeps)] )
@@ -44,7 +44,7 @@ RDEPEND="vhook? ( >=media-libs/imlib2-1.4.0[lib32?] >=media-libs/freetype-2[$(ge
 	schroedinger? ( media-libs/schroedinger[$(get_ml_usedeps)] )
 	speex? ( >=media-libs/speex-1.2_beta3[$(get_ml_usedeps)] )
 	X? ( x11-libs/libX11 x11-libs/libXext[$(get_ml_usedeps)] )
-	amr? ( media-libs/amrnb[lib32?] media-libs/amrwb[$(get_ml_usedeps)] )"
+	amr? ( media-libs/amrnb[$(get_ml_usedeps)] media-libs/amrwb[$(get_ml_usedeps)] )"
 
 DEPEND="${RDEPEND}
 	>=sys-devel/make-3.81

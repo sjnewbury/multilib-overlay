@@ -38,7 +38,7 @@ RDEPEND="
 	firebird? ( dev-db/firebird )
 	mysql? ( virtual/mysql[$(get_ml_usedeps)] )
 	nas? ( >=media-libs/nas-1.5[$(get_ml_usedeps)] )
-	opengl? ( virtual/opengl[lib32?] virtual/glu[$(get_ml_usedeps)] )
+	opengl? ( virtual/opengl[$(get_ml_usedeps)] virtual/glu[$(get_ml_usedeps)] )
 	postgres? ( virtual/postgresql-base[$(get_ml_usedeps)] )
 	xinerama? ( x11-libs/libXinerama[$(get_ml_usedeps)] )"
 DEPEND="${RDEPEND}

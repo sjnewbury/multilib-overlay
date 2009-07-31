@@ -33,7 +33,7 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog* NEWS README THANKS"
 
 function multilib_enabled() {
-	has_multilib_profile || ( use x86 && [ "$(get_libdir)" = "lib32" ] )
+	has_multilib_profile || ( use x86 && [ "$(get_libdir)" = "$(get_ml_usedeps)" ] )
 }
 
 ml-native_pkg_setup() {

@@ -127,7 +127,7 @@ ml-native_src_prepare() {
 	epatch "${FILESDIR}"/perl-hppa-pa7200-configure.patch
 
 	[[ $(get_libdir) == lib64 ]] && epatch "${FILESDIR}"/${P}-lib64.patch
-	[[ $(get_libdir) == lib32 ]] && epatch "${FILESDIR}"/${P}-lib32.patch
+	[[ $(get_libdir) == $(get_ml_usedeps) ]] && epatch "${FILESDIR}"/${P}-lib32.patch
 
 	[[ ${CHOST} == *-dragonfly* ]] && epatch "${FILESDIR}"/${P}-dragonfly-clean.patch
 	[[ ${CHOST} == *-freebsd* ]] && epatch "${FILESDIR}"/${P}-fbsdhints.patch

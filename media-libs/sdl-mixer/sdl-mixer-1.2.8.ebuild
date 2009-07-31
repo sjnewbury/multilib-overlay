@@ -19,7 +19,7 @@ IUSE="mp3 mikmod timidity vorbis"
 DEPEND=">=media-libs/libsdl-1.2.10[$(get_ml_usedeps)]
 	timidity? ( media-sound/timidity++ )
 	mp3? ( >=media-libs/smpeg-0.4.4-r1[$(get_ml_usedeps)] )
-	vorbis? ( >=media-libs/libvorbis-1.0_beta4[lib32?] media-libs/libogg[$(get_ml_usedeps)] )
+	vorbis? ( >=media-libs/libvorbis-1.0_beta4[$(get_ml_usedeps)] media-libs/libogg[$(get_ml_usedeps)] )
 	mikmod? ( >=media-libs/libmikmod-3.1.10[$(get_ml_usedeps)] )"
 
 S=${WORKDIR}/${MY_P}

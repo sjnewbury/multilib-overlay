@@ -12,7 +12,7 @@ IUSE="kde"
 
 DEPEND="~x11-libs/qt-core-${PV}[debug=,ssl,$(get_ml_usedeps)]
 	~x11-libs/qt-gui-${PV}[debug=,$(get_ml_usedeps)]
-	!kde? ( || ( ~x11-libs/qt-phonon-${PV}:${SLOT}[debug=,lib32?] media-sound/phonon[$(get_ml_usedeps)] ) )
+	!kde? ( || ( ~x11-libs/qt-phonon-${PV}:${SLOT}[debug=,$(get_ml_usedeps)] media-sound/phonon[$(get_ml_usedeps)] ) )
 	kde? ( media-sound/phonon[$(get_ml_usedeps)] )"
 RDEPEND="${DEPEND}"
 

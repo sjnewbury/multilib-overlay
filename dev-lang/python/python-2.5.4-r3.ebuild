@@ -41,7 +41,7 @@ DEPEND=">=app-admin/eselect-python-20080925
 			tk? ( >=dev-lang/tk-8.0[$(get_ml_usedeps)] )
 			ncurses? ( >=sys-libs/ncurses-5.2[$(get_ml_usedeps)]
 						readline? ( >=sys-libs/readline-4.1[$(get_ml_usedeps)] ) )
-			berkdb? ( || ( sys-libs/db:4.5[lib32?] sys-libs/db:4.4[lib32?] sys-libs/db:4.3[$(get_ml_usedeps)]
+			berkdb? ( || ( sys-libs/db:4.5[$(get_ml_usedeps)?] sys-libs/db:4.4[$(get_ml_usedeps)] sys-libs/db:4.3[$(get_ml_usedeps)]
 							sys-libs/db:4.2[$(get_ml_usedeps)] ) )
 			gdbm? ( sys-libs/gdbm[$(get_ml_usedeps)] )
 			ssl? ( dev-libs/openssl[$(get_ml_usedeps)] )

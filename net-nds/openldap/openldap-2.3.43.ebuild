@@ -309,8 +309,8 @@ ml-native_src_configure() {
 		${myconf} || die "configure failed"
 
 	#convert the output of perl -MExtUtils::Embed -e ldopts to reasonable values
-	[[ $(get_libdir) == lib32 ]] && sed -i '/^MOD_LIBS/ {s/lib64/lib32/g; s/x86_64/i686/g}' ./servers/slapd/back-perl/Makefile
-	[[ $(get_libdir) == lib32 ]] && sed -i '/^PERL_CPPFLAGS/ {s/lib64/lib32/g; s/x86_64/i686/g}' ./servers/slapd/back-perl/Makefile
+	[[ $(get_libdir) == $(get_ml_usedeps) ]] && sed -i '/^MOD_LIBS/ {s/lib64/lib32/g; s/x86_64/i686/g}' ./servers/slapd/back-perl/Makefile
+	[[ $(get_libdir) == $(get_ml_usedeps) ]] && sed -i '/^PERL_CPPFLAGS/ {s/lib64/lib32/g; s/x86_64/i686/g}' ./servers/slapd/back-perl/Makefile
 }
 
 ml-native_src_compile() {
