@@ -149,11 +149,11 @@ multilib-native_src_install_internal() {
 
 	# xulrunner registration, the gentoo way
 	insinto /etc/gre.d
-	newins "${FILESDIR}"/${PN}.conf ${PV}.conf
+	newins "${FILESDIR}"/${PN}.conf ${PV}-${ABI}.conf
 	sed -i -e \
 		"s|version|${PV}|
 			s|instpath|${MOZILLA_FIVE_HOME}|" \
-		"${D}"/etc/gre.d/${PV}.conf
+		"${D}"/etc/gre.d/${PV}-${ABI}.conf
 
 	prep_ml_binaries /usr/bin/xulrunner-config 
 }

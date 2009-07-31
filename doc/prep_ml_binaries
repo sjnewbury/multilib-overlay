@@ -38,3 +38,4 @@ x11-libs/pango prep_ml_binaries /usr/bin/pango-querymodules
 x11-libs/qt-core prep_ml_binaries /usr/bin/qmake /usr/bin/moc /usr/bin/rcc /usr/bin/uic
 dev-util/pkgconfig prep_ml_binaries /usr/bin/pkg-config
 dev-libs/libIDL prep_ml_binaries /usr/bin/libIDL-config-2
+www-client/mozilla-firefox prep_ml_binaries /usr/bin/firefox

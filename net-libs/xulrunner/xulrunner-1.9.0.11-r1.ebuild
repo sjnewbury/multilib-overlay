@@ -157,4 +157,9 @@ multilib-native_src_install_internal() {
 	fi
 
 	prep_ml_binaries /usr/bin/xulrunner-config 
+
+	# each ABI should generate exactly one /etc/gre.d/*.system.conf file
+	for conf in "${D}"/etc/gre.d/*.system.conf ; do
+		mv "${conf}" "${conf%.conf}-${ABI}.conf"
+	done
 }
