@@ -8,7 +8,7 @@ GPL-2
 A fast, multi-threaded, multi-user SQL database server.
 alpha hppa ppc sparc x86
 base eutils flag-o-matic multilib multilib-native portability toolchain-funcs
-berkdb debug innodb perl readline ssl static tcpd lib32
+berkdb debug innodb perl readline ssl static tcpd multilib_amd64
 
 perl? ( dev-perl/DBI dev-perl/DBD-mysql )
 

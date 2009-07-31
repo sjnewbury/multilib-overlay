@@ -1,5 +1,5 @@
->=x11-libs/gtk+-2.8[lib32?] >=dev-libs/icu-3.8.1-r1[lib32?] >=net-misc/curl-7.15[lib32?] media-libs/jpeg[lib32?] media-libs/libpng[lib32?] dev-libs/libxml2[lib32?] sqlite? ( >=dev-db/sqlite-3[lib32?] ) gstreamer? ( >=media-libs/gst-plugins-base-0.10[lib32?] >=gnome-base/gnome-vfs-2.0[lib32?] ) gnome? ( >=gnome-base/gnome-keyring-0.4[lib32?] ) soup? ( >=net-libs/libsoup-2.23.1[lib32?] ) xslt? ( dev-libs/libxslt[lib32?] ) pango? ( x11-libs/pango[lib32?] ) dev-util/gperf dev-util/pkgconfig[lib32?] dev-util/gtk-doc virtual/perl-Text-Balanced =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool dev-util/subversion net-misc/rsync sys-apps/abi-wrapper
->=x11-libs/gtk+-2.8[lib32?] >=dev-libs/icu-3.8.1-r1[lib32?] >=net-misc/curl-7.15[lib32?] media-libs/jpeg[lib32?] media-libs/libpng[lib32?] dev-libs/libxml2[lib32?] sqlite? ( >=dev-db/sqlite-3[lib32?] ) gstreamer? ( >=media-libs/gst-plugins-base-0.10[lib32?] >=gnome-base/gnome-vfs-2.0[lib32?] ) gnome? ( >=gnome-base/gnome-keyring-0.4[lib32?] ) soup? ( >=net-libs/libsoup-2.23.1[lib32?] ) xslt? ( dev-libs/libxslt[lib32?] ) pango? ( x11-libs/pango[lib32?] ) sys-apps/abi-wrapper
+>=x11-libs/gtk+-2.8[multilib_amd64?] >=dev-libs/icu-3.8.1-r1[multilib_amd64?] >=net-misc/curl-7.15[multilib_amd64?] media-libs/jpeg[multilib_amd64?] media-libs/libpng[multilib_amd64?] dev-libs/libxml2[multilib_amd64?] sqlite? ( >=dev-db/sqlite-3[multilib_amd64?] ) gstreamer? ( >=media-libs/gst-plugins-base-0.10[multilib_amd64?] >=gnome-base/gnome-vfs-2.0[multilib_amd64?] ) gnome? ( >=gnome-base/gnome-keyring-0.4[multilib_amd64?] ) soup? ( >=net-libs/libsoup-2.23.1[multilib_amd64?] ) xslt? ( dev-libs/libxslt[multilib_amd64?] ) pango? ( x11-libs/pango[multilib_amd64?] ) dev-util/gperf dev-util/pkgconfig[multilib_amd64?] dev-util/gtk-doc virtual/perl-Text-Balanced =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool dev-util/subversion net-misc/rsync sys-apps/abi-wrapper
+>=x11-libs/gtk+-2.8[multilib_amd64?] >=dev-libs/icu-3.8.1-r1[multilib_amd64?] >=net-misc/curl-7.15[multilib_amd64?] media-libs/jpeg[multilib_amd64?] media-libs/libpng[multilib_amd64?] dev-libs/libxml2[multilib_amd64?] sqlite? ( >=dev-db/sqlite-3[multilib_amd64?] ) gstreamer? ( >=media-libs/gst-plugins-base-0.10[multilib_amd64?] >=gnome-base/gnome-vfs-2.0[multilib_amd64?] ) gnome? ( >=gnome-base/gnome-keyring-0.4[multilib_amd64?] ) soup? ( >=net-libs/libsoup-2.23.1[multilib_amd64?] ) xslt? ( dev-libs/libxslt[multilib_amd64?] ) pango? ( x11-libs/pango[multilib_amd64?] ) sys-apps/abi-wrapper
 0
 
 
@@ -8,7 +8,7 @@ LGPL-2 LGPL-2.1 BSD
 Open source web browser engine
 ~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86
 autotools base eutils libtool multilib multilib-native portability subversion toolchain-funcs
-coverage debug gstreamer pango soup sqlite svg xslt jit gnome lib32
+coverage debug gstreamer pango soup sqlite svg xslt jit gnome multilib_amd64
 
 
 

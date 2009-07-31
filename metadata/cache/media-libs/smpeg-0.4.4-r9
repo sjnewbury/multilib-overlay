@@ -8,7 +8,7 @@ LGPL-2
 SDL MPEG Player Library
 alpha amd64 arm hppa ia64 mips ppc ppc64 sh sparc x86 ~x86-fbsd
 autotools base eutils libtool multilib multilib-native portability toolchain-funcs
-X debug mmx opengl lib32
+X debug mmx opengl multilib_amd64
 
 
 

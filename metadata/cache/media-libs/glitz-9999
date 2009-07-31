@@ -8,7 +8,7 @@ BSD
 An OpenGL image compositing library
 
 autotools base eutils git libtool multilib multilib-native portability toolchain-funcs
-lib32
+multilib_amd64
 
 
 

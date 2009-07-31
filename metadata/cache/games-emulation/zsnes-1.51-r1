@@ -1,5 +1,5 @@
-media-libs/libsdl[lib32?] >=sys-libs/zlib-1.2.3-r1[lib32?] ao? ( media-libs/libao[lib32?] ) opengl? ( virtual/opengl[lib32?] ) png? ( media-libs/libpng[lib32?] ) dev-lang/nasm amd64? ( >=sys-apps/portage-2.1 ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
-media-libs/libsdl[lib32?] >=sys-libs/zlib-1.2.3-r1[lib32?] ao? ( media-libs/libao[lib32?] ) opengl? ( virtual/opengl[lib32?] ) png? ( media-libs/libpng[lib32?] )
+media-libs/libsdl[multilib_x86] >=sys-libs/zlib-1.2.3-r1[multilib_x86] ao? ( media-libs/libao[multilib_x86] ) opengl? ( virtual/opengl[multilib_x86] ) png? ( media-libs/libpng[multilib_x86] ) dev-lang/nasm amd64? ( >=sys-apps/portage-2.1 ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+media-libs/libsdl[multilib_x86] >=sys-libs/zlib-1.2.3-r1[multilib_x86] ao? ( media-libs/libao[multilib_x86] ) opengl? ( virtual/opengl[multilib_x86] ) png? ( media-libs/libpng[multilib_x86] ) sys-apps/abi-wrapper
 0
 mirror://sourceforge/zsnes/zsnes151src.tar.bz2
 
@@ -7,14 +7,14 @@ http://www.zsnes.com/ http://ipherswipsite.com/zsnes/
 GPL-2
 SNES (Super Nintendo) emulator that uses x86 assembly
 -* amd64 x86 ~x86-fbsd
-autotools base eutils flag-o-matic games libtool multilib portability toolchain-funcs
-ao custom-cflags opengl png lib32
+autotools base eutils flag-o-matic games libtool multilib multilib-native portability toolchain-funcs
+ao custom-cflags opengl png multilib_x86 multilib_amd64
 
 
 
 2
 
-compile configure install postinst preinst prepare setup unpack
+compile configure install postinst postrm preinst prepare setup unpack
 
 
 

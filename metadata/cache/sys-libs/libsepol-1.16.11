@@ -8,7 +8,7 @@ GPL-2
 SELinux binary policy representation library
 alpha amd64 mips ppc sparc x86
 base eutils multilib multilib-native portability toolchain-funcs
-lib32
+multilib_amd64
 
 
 

@@ -1,5 +1,5 @@
 
-!nodep? ( dev-libs/atk[lib32] x11-libs/cairo[lib32] x11-libs/gtk+[lib32] x11-libs/pango[lib32] x11-themes/gtk-engines[lib32] xfce? ( x11-themes/gtk-engines-xfce[lib32] ) )
+!nodep? ( dev-libs/atk[multilib_amd64?] x11-libs/cairo[multilib_amd64?] x11-libs/gtk+[multilib_amd64?] x11-libs/pango[multilib_amd64?] x11-themes/gtk-engines[multilib_amd64?] xfce? ( x11-themes/gtk-engines-xfce[multilib_amd64?] ) )
 0
 
 
@@ -7,7 +7,7 @@ http://www.gentoo.org/
 GPL-2
 Metapackage to provide 32bit libraries via multilib
 -* amd64
-
+multilib toolchain-funcs
 -nodep kerberos xfce
 
 

@@ -8,7 +8,7 @@ LGPL-2.1
 A library for applications dealing with netlink socket
 ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86
 base eutils linux-info multilib multilib-native portability toolchain-funcs versionator
-lib32
+multilib_amd64
 
 
 

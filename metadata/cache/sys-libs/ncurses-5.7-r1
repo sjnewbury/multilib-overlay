@@ -8,7 +8,7 @@ MIT
 console display library
 ~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd
 base eutils flag-o-matic multilib multilib-native portability toolchain-funcs
-ada +cxx debug doc gpm minimal profile trace unicode lib32
+ada +cxx debug doc gpm minimal profile trace unicode multilib_amd64
 
 
 

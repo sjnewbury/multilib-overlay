@@ -1,5 +1,5 @@
-berkdb? ( sys-libs/db[lib32?] ) gdbm? ( >=sys-libs/gdbm-1.8.0[lib32?] ) elibc_FreeBSD? ( sys-freebsd/freebsd-mk-defs ) sys-apps/abi-wrapper
-berkdb? ( sys-libs/db[lib32?] ) gdbm? ( >=sys-libs/gdbm-1.8.0[lib32?] ) sys-apps/abi-wrapper
+berkdb? ( sys-libs/db[multilib_amd64?] ) gdbm? ( >=sys-libs/gdbm-1.8.0[multilib_amd64?] ) elibc_FreeBSD? ( sys-freebsd/freebsd-mk-defs ) sys-apps/abi-wrapper
+berkdb? ( sys-libs/db[multilib_amd64?] ) gdbm? ( >=sys-libs/gdbm-1.8.0[multilib_amd64?] ) sys-apps/abi-wrapper
 1
 mirror://cpan/src/perl-5.8.8.tar.bz2
 test
@@ -8,9 +8,9 @@ http://www.perl.org
 Larry Wall's Practical Extraction and Reporting Language
 alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd
 base eutils flag-o-matic multilib multilib-native portability toolchain-funcs
-berkdb debug gdbm ithreads lib32
+berkdb debug gdbm ithreads multilib_amd64
 
-~dev-lang/perl-5.8.8[lib32?]
+~dev-lang/perl-5.8.8[multilib_amd64?]
 
 2
 

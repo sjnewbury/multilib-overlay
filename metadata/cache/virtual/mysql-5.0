@@ -1,5 +1,5 @@
 
-|| ( =dev-db/mysql-5.0*[lib32?] =dev-db/mysql-community-5.0*[lib32?] )
+|| ( =dev-db/mysql-5.0*[multilib_amd64?] =dev-db/mysql-community-5.0*[multilib_amd64?] )
 0
 
 
@@ -7,8 +7,8 @@ http://dev.mysql.com
 GPL-2
 Virtual for MySQL client or database
 alpha amd64 arm hppa ia64 ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd
-
-lib32
+multilib toolchain-funcs
+multilib_amd64
 
 
 

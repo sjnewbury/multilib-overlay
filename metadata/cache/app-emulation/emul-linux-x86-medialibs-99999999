@@ -7,7 +7,7 @@ http://www.gentoo.org/
 GPL-2
 Metapackage to provide 32bit libraries via multilib
 -* amd64
-
+multilib toolchain-funcs
 -nodep
 
 

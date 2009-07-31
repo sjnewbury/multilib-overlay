@@ -8,7 +8,7 @@ LGPL-2.1
 library that provides direct access to the IEEE 1394 bus
 ~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86
 autotools base eutils libtool multilib multilib-native portability toolchain-funcs
-juju lib32
+juju multilib_amd64
 
 
 
