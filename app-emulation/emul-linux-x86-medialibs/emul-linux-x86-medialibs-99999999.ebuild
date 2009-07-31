@@ -4,6 +4,8 @@
 
 EAPI="2"
 
+inherit multilib
+
 DESCRIPTION="Metapackage to provide 32bit libraries via multilib"
 HOMEPAGE="http://www.gentoo.org/"
 LICENSE="GPL-2"
