@@ -23,7 +23,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${P}-64bit.patch
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# From upstream Makefile. Define this if your host multiplies
 	# floats faster than integers, e.g. on a SPARCstation.
 	use sparc && append-flags -DUSE_FLOAT_MUL -DFAST
@@ -32,7 +32,7 @@ multilib-native_src_compile_internal() {
 		LD="$(tc-getCC)" AR="$(tc-getAR)" CC="$(tc-getCC)" || die "emake failed."
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	dodir /usr/bin /usr/$(get_libdir) /usr/include/gsm /usr/share/man/man{1,3}
 
 	emake -j1 INSTALL_ROOT="${D}"/usr \

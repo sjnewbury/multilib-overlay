@@ -70,7 +70,7 @@ pkg_setup() {
 	fi
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# patches for bugs #40224 #145917 #198147 #217097
 	epatch \
 		"${FILESDIR}"/${P}-libcaca-new-api.patch \
@@ -83,7 +83,7 @@ multilib-native_src_prepare_internal() {
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf=
 	if [[ $(tc-arch) != "x86" ]] ; then
 		myconf="${myconf} --disable-nasm"
@@ -141,7 +141,7 @@ multilib-native_src_configure_internal() {
 		${myconf}
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc BUGS CREDITS README README-SDL.txt README.CVS TODO WhatsNew
 	dohtml -r ./

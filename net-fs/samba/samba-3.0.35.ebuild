@@ -78,7 +78,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# fails with that
 	filter-ldflags -m32 -m64
 	
@@ -171,7 +171,7 @@ src_test() {
 	emake test || die "tests failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	cd "${S}/source"
 
 	emake DESTDIR="${D}" install-everything || die "emake install-everything failed"
@@ -318,7 +318,7 @@ pkg_preinst() {
 	fi
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	if use python ; then
 		python_version
 		python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages/samba
@@ -352,7 +352,7 @@ multilib-native_pkg_postinst_internal() {
 	ewarn "Otherwise they might not be able to connect to the volumes."
 }
 
-multilib-native_pkg_postrm_internal() {
+ml-native_pkg_postrm() {
 	if use python ; then
 		python_version
 		python_mod_cleanup /usr/$(get_libdir)/python${PYVER}/site-packages/samba

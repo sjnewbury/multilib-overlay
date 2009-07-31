@@ -32,7 +32,7 @@ DEPEND="${RDEPEND}
 	)"
 PDEPEND="app-admin/eselect-fontconfig"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${P}-latin-reorder.patch   #130466
 	epunt_cxx #74077
 
@@ -42,7 +42,7 @@ multilib-native_src_prepare_internal() {
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 	if tc-is-cross-compiler; then
 		myconf="--with-arch=${ARCH}"
@@ -62,7 +62,7 @@ multilib-native_src_configure_internal() {
 		${myconf} || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die
 
 	#fc-lang directory contains language coverage datafiles
@@ -113,7 +113,7 @@ pkg_preinst() {
 	eend $?
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	einfo "Cleaning broken symlinks in "${ROOT}"etc/fonts/conf.d/"
 	find -L "${ROOT}"etc/fonts/conf.d/ -type l -delete
 

@@ -29,7 +29,7 @@ src/
 include/
 tools/"
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	myconf="${myconf} -qt3support
 		$(qt_use phonon gstreamer)
 		$(qt_use phonon)

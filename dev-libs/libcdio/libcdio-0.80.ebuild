@@ -21,7 +21,7 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	dev-util/pkgconfig[lib32?]"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${P}-minimal.patch
 	epatch "${FILESDIR}"/${P}-fix-pkgconfig.patch
 	epatch "${FILESDIR}"/${P}-fbsd.patch
@@ -41,7 +41,7 @@ multilib-native_src_prepare_internal() {
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		$(use_enable cddb) \
 		$(use_with !minimal cd-drive) \
@@ -59,7 +59,7 @@ multilib-native_src_configure_internal() {
 		--disable-maintainer-mode || die "configure failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc AUTHORS ChangeLog NEWS README THANKS
 }

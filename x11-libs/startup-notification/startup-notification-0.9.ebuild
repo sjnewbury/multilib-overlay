@@ -21,7 +21,7 @@ DEPEND="${RDEPEND}
 	x11-proto/xproto
 	x11-libs/libXt[lib32?]"
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 	dodoc AUTHORS ChangeLog NEWS README doc/startup-notification.txt
 }

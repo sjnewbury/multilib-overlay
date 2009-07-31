@@ -61,7 +61,7 @@ src_unpack() {
 	sed -i s/UNKNOWN/SVN-r${FFMPEG_SVN_REV}/ "${S}/version.sh"
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	replace-flags -O0 -O2
 	#x86, what a wonderful arch....
 	replace-flags -O1 -O2
@@ -190,12 +190,12 @@ multilib-native_src_configure_internal() {
 		${myconf} || die "configure failed"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake version.h || die #252269
 	emake || die "make failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "Install Failed"
 
 	dodoc Changelog README INSTALL

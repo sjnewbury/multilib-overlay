@@ -26,7 +26,7 @@ doc/qch/
 src/3rdparty/clucene/
 tools/shared/fontpanel"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	qt4-build_pkg_setup
 
 	if ! built_with_use x11-libs/qt-sql sqlite; then
@@ -34,7 +34,7 @@ multilib-native_pkg_setup_internal() {
 	fi
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 	myconf="${myconf} -no-xkb -no-tablet -no-fontconfig -no-xrender -no-xrandr
 		-no-xfixes -no-xcursor -no-xinerama -no-xshape -no-sm -no-opengl
@@ -51,7 +51,7 @@ multilib-native_src_configure_internal() {
 	qt4-build_src_configure
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	qt4-build_src_install
 
 	# install correct assistant icon, bug 241208

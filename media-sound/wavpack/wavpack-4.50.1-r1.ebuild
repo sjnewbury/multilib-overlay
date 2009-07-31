@@ -14,16 +14,16 @@ SLOT="0"
 KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc x86 ~x86-fbsd"
 IUSE="mmx"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${P}-gcc44.patch
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf $(use_enable mmx)
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc ChangeLog README
 }

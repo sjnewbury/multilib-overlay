@@ -30,7 +30,7 @@ src_unpack() {
 	epatch "${FILESDIR}/${PN}-sparc-cpuinfo.patch"
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf=""
 
 	# CPU Detection (dynsimd) uses asm routines which requires 3dnow, mmx and sse.
@@ -62,7 +62,7 @@ multilib-native_src_configure_internal() {
 		${myconf} || die "configure failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "install failed"
 	dodoc AUTHORS TODO README
 

@@ -30,7 +30,7 @@ src_unpack() {
 	[ ! -z "$BUGFIX_PATCH" ] && epatch "${BUGFIX_PATCH}"
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# fix up paths for multilib
 	sed -i -e "/^LIBDIR/s/lib/$(get_libdir)/" src/Makefile \
 		|| die "Fix for multilib LIBDIR failed."

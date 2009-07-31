@@ -18,11 +18,11 @@ IUSE=""
 DEPEND=""
 RDEPEND=""
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${P}-ppc64-load_acquire.patch
 	epatch "${FILESDIR}"/${P}-ppc-asm.patch
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake pkgdatadir="/usr/share/doc/${PF}" DESTDIR="${D}" install || die
 }

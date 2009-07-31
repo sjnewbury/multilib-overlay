@@ -18,7 +18,7 @@ S=${WORKDIR}/${MY_P}
 
 PYTHON_MODNAME="Pyrex"
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	DOCS="CHANGES.txt INSTALL.txt ToDo.txt USAGE.txt"
 	distutils_src_install
 

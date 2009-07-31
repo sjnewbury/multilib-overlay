@@ -37,13 +37,13 @@ pkg_setup() {
 	G2CONF="${G2CONF} --disable-schemas-install $(use_enable esd)"
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	gnome2_src_prepare
 
 	use branding && epatch "${FILESDIR}"/${P}-branding.patch
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	gnome2_src_install
 
 	if use branding; then

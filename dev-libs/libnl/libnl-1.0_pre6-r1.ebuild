@@ -28,6 +28,6 @@ src_unpack() {
 	epatch "${FILESDIR}/${P}-__u64_x86_64.patch"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die
 }

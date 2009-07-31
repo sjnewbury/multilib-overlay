@@ -36,7 +36,7 @@ QT4_TARGET_DIRECTORIES="demos
 QT4_EXTRACT_DIRECTORIES="${QT4_TARGET_DIRECTORIES}
 	doc/src/images"
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# Doesn't find qt-gui and fails linking
 	sed -e '/QT_BUILD_TREE/ s:=:+=:' \
 		-i "${S}"/examples/tools/plugandpaint/plugandpaint.pro \
@@ -45,7 +45,7 @@ multilib-native_src_configure_internal() {
 	qt4-build_src_configure
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	insinto ${QTDOCDIR}/src
 	doins -r "${S}"/doc/src/images || die "Installing images failed."
 

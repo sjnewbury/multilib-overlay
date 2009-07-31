@@ -35,7 +35,7 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf --disable-dependency-tracking \
 		--with-package-name="Gentoo GStreamer ebuild" \
 		--with-package-origin="http://www.gentoo.org" \
@@ -44,7 +44,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable nls)
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 	dodoc AUTHORS ChangeLog NEWS README RELEASE
 

@@ -46,7 +46,7 @@ src_unpack() {
 	fi
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# Do not hardcode used CFLAGS, LDFLAGS etc. into icu-config
 	# Bug 202059
 	# http://bugs.icu-project.org/trac/ticket/6102
@@ -61,14 +61,14 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${P}-TestDisplayNamesMeta.patch"
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		--enable-static \
 		$(use_enable debug) \
 		$(use_enable examples samples)
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
 	dohtml ../readme.html

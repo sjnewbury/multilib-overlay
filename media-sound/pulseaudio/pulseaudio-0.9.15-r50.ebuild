@@ -77,12 +77,12 @@ pkg_setup() {
 	enewuser pulse -1 -1 /var/run/pulse pulse,audio
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}/${P}-bsd.patch"
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# To properly fix CVE-2008-0008
 	append-flags -UNDEBUG
 
@@ -115,7 +115,7 @@ multilib-native_src_configure_internal() {
 		|| die "econf failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	newconfd "${FILESDIR}/pulseaudio.conf.d" pulseaudio

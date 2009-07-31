@@ -22,7 +22,7 @@ DEPEND="${RDEPEND}"
 
 S=${WORKDIR}/${MY_P}
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${P}-64bit.patch \
 		"${FILESDIR}"/${P}-autotools.patch \
 		"${FILESDIR}"/${P}-info.patch \
@@ -30,7 +30,7 @@ multilib-native_src_prepare_internal() {
 	AT_M4DIR=${S} eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		--enable-af \
 		$(use_enable alsa) \
@@ -38,7 +38,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable oss)
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS NEWS README TODO
 	dohtml docs/*.html

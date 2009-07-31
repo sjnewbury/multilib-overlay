@@ -33,13 +33,13 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	append-flags -D_FILE_OFFSET_BITS=64
 
 	econf $(use_enable sse) $(use_enable ogg)
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" docdir="/usr/share/doc/${PF}" \
 		install || die "emake install failed."
 

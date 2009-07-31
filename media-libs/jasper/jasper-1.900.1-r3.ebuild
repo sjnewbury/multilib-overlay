@@ -30,7 +30,7 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		$(use_enable jpeg libjpeg) \
 		$(use_enable opengl) \
@@ -38,11 +38,11 @@ multilib-native_src_configure_internal() {
 		|| die
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake || die "If you got undefined references to OpenGL related libraries,please try 'eselect opengl set xorg-x11' before emerging. See bug #133609."
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" install || die
 	dodoc NEWS README doc/*
 }

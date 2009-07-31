@@ -37,7 +37,7 @@ src_unpack() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	gnome2_src_install
 	rm -fr "${D}"/usr/share/doc/glibmm-2.4
 	if use doc ; then

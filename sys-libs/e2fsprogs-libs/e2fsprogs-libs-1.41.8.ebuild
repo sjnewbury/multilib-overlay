@@ -23,12 +23,12 @@ DEPEND="nls? ( sys-devel/gettext )
 	dev-util/pkgconfig[lib32?]
 	sys-devel/bc"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# stupid configure script clobbers CC for us
 	sed -i '/if test -z "$CC" ; then CC=cc; fi/d' configure
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# We want to use the "bsd" libraries while building on Darwin, but while
 	# building on other Gentoo/*BSD we prefer elf-naming scheme.
 	local libtype
@@ -49,7 +49,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable nls)
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake STRIP=: DESTDIR="${D}" install || die
 
 	set -- "${D}"/usr/$(get_libdir)/*.a

@@ -29,7 +29,7 @@ src"
 QCONFIG_ADD="phonon"
 QCONFIG_DEFINE="QT_GSTREAMER"
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	myconf="${myconf} -phonon -no-opengl -no-svg
 		$(qt_use dbus qdbus)"
 
@@ -37,7 +37,7 @@ multilib-native_src_configure_internal() {
 }
 
 # bug 265586
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	qt4-build_src_install
 	insinto ${QTHEADERDIR}
 	doins -r "${S}"/include/Phonon || die "failed to install Phonon headers"

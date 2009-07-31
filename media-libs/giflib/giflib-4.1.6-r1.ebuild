@@ -33,7 +33,7 @@ src_unpack() {
 	epunt_cxx
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf="--disable-gl $(use_enable X x11) --x-libraries=/usr/$(get_libdir)"
 	# prevent circular depend #111455
 	if has_version media-libs/urt ; then
@@ -44,7 +44,7 @@ multilib-native_src_configure_internal() {
 	econf ${myconf}
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc AUTHORS BUGS ChangeLog NEWS ONEWS README TODO doc/*.txt
 	use doc && dohtml -r doc

@@ -33,7 +33,7 @@ src_unpack() {
 	epatch "${FILESDIR}/${P}-dont-crash-without-display.patch"	#259891
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf --disable-static \
 		$(use_enable alsa) \
 		$(use_enable gstreamer) \
@@ -46,7 +46,7 @@ multilib-native_src_configure_internal() {
 	# tdb support would need a split-out from samba before we can use it
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	# we must delay gconf schema installation due to sandbox
 	export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL="1"
 
@@ -61,11 +61,11 @@ multilib-native_src_install_internal() {
 	dodoc README
 }
 
-multilib-native_pkg_preinst_internal() {
+ml-native_pkg_preinst() {
 	gnome2_gconf_savelist
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	gnome2_gconf_install
 }
 

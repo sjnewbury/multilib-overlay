@@ -34,7 +34,7 @@ src_unpack() {
 	AT_M4DIR="m4" eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf $(use_enable ogg) \
 		$(use_enable sse) \
 		$(use_enable 3dnow) \
@@ -57,7 +57,7 @@ src_test() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 
 	rm -rf "${D}"/usr/share/doc/${P}

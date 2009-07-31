@@ -25,7 +25,7 @@ src/plugins/imageformats/svg
 src/plugins/iconengines/svgiconengine"
 QT4_EXTRACT_DIRECTORIES="${QT4_TARGET_DIRECTORIES}"
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 	myconf="${myconf} -svg -no-xkb -no-tablet -no-fontconfig -no-xrender -no-xrandr
 		-no-xfixes -no-xcursor -no-xinerama -no-xshape -no-sm -no-opengl

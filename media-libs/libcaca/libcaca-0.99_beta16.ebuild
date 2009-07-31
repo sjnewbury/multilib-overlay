@@ -44,7 +44,7 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# temp font fix #44128
 	export VARTEXFONTS="${T}/fonts"
 
@@ -63,7 +63,7 @@ multilib-native_src_compile_internal() {
 	unset VARTEXFONTS
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS ChangeLog NEWS NOTES README
 

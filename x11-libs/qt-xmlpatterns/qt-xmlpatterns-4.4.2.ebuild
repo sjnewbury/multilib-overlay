@@ -22,7 +22,7 @@ QT4_EXTRACT_DIRECTORIES="${QT4_TARGET_DIRECTORIES}"
 QCONFIG_ADD="xmlpatterns"
 QCONFIG_DEFINE="QT_XMLPATTERNS"
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	local myconf
 	myconf="${myconf} -xmlpatterns"
 

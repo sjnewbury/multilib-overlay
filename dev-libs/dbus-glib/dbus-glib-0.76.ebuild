@@ -30,7 +30,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-introspection.patch
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf=""
 
 	econf \
@@ -54,7 +54,7 @@ multilib-native_src_configure_internal() {
 	use selinux && addwrite /selinux/access
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	dodoc AUTHORS ChangeLog HACKING NEWS README

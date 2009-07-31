@@ -22,12 +22,12 @@ RDEPEND="sys-libs/ncurses[-minimal,lib32?]
 	readline? ( sys-libs/readline[lib32?] )"
 DEPEND="${RDEPEND}"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${PN}-2.1.2-slsh-libs.patch \
 		"${FILESDIR}"/${PN}-2.1.3-uclibc.patch
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 
 	if use readline; then
@@ -43,14 +43,14 @@ multilib-native_src_configure_internal() {
 		${myconf}
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake -j1 elf static || die "emake elf static failed"
 
 	cd slsh
 	emake -j1 slsh || die "emake slsh failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake -j1 DESTDIR="${D}" install-all || die "emake install-all failed"
 
 	rm -rf "${D}"/usr/share/doc/{slang,slsh}

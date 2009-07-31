@@ -74,7 +74,7 @@ pkg_setup() {
 	fi
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	G2CONF="${G2CONF}
 		--disable-scrollkeeper
 		--with-distributor-name=Gentoo

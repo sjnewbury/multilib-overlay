@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 mips ppc ppc64 sparc x86"
 IUSE=""
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" install || die "make install failed"
 
 	# remove the docs installed by make install, since I'll install

@@ -62,7 +62,7 @@ src_unpack() {
 	done
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	econf \
 		--enable-static \
 		$(use_enable debug) \
@@ -71,7 +71,7 @@ multilib-native_src_compile_internal() {
 	emake -j1 || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
 	dohtml ../readme.html

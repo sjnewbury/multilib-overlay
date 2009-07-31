@@ -85,7 +85,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# compilation with -O0 fails on amd64, see bug #171231
 	if use amd64 && [ ${ABI} = "amd64" ]; then
 		replace-flags -O0 -O2
@@ -146,7 +146,7 @@ multilib-native_src_compile_internal() {
 	emake || die "make failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	cd build_unix && einstall libdir="${D}/usr/$(get_libdir)" STRIP="none" || die
 
 	db_src_install_usrbinslot

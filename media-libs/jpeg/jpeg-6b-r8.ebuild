@@ -35,7 +35,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	tc-export CC RANLIB AR
 	econf \
 		--enable-shared \
@@ -46,7 +46,7 @@ multilib-native_src_compile_internal() {
 	emake -C "${WORKDIR}"/extra || die "make extra failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake install DESTDIR="${D}" || die "install"
 	emake -C "${WORKDIR}"/extra install DESTDIR="${D}" || die "install extra"
 

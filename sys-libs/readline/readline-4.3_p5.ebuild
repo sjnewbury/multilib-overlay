@@ -56,13 +56,13 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	append-cppflags -D_GNU_SOURCE
 	econf --with-curses --disable-static || die
 	emake -C shlib || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake -C shlib DESTDIR="${D}" install || die
 	rm -f "${D}"/usr/lib*/*.so
 }

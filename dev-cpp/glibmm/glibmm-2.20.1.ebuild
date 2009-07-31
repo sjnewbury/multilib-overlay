@@ -48,7 +48,7 @@ src_test() {
 }
 
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	gnome2_src_install
 
 	if ! use doc && ! use examples; then

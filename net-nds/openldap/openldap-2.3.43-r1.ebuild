@@ -187,7 +187,7 @@ pkg_setup() {
 	enewuser ldap 439 -1 /usr/$(get_libdir)/openldap ldap
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# According to MDK, the link order needs to be changed so that
 	# on systems w/ MD5 passwords the system crypt library is used
 	# (the net result is that "passwd" can be used to change ldap passwords w/
@@ -231,7 +231,7 @@ multilib-native_src_prepare_internal() {
 	fi
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 
 	#Fix for glibc-2.8 and ucred. Bug 228457.
@@ -309,7 +309,7 @@ multilib-native_src_configure_internal() {
 		${myconf} || die "configure failed"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake depend || die "make depend failed"
 	emake || die "make failed"
 
@@ -366,7 +366,7 @@ src_test() {
 	cd tests ; make tests || die "make tests failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	dodoc ANNOUNCEMENT CHANGES COPYRIGHT README "${FILESDIR}"/DB_CONFIG.fast.example

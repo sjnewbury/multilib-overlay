@@ -27,7 +27,7 @@ src_unpack() {
 	unpack ${MY_P}.tar.gz
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	cd "${S}"
 	if use nfs ; then
 		cp "${DISTDIR}"/acl-2.2.42-CITI_NFS4_ALL-2.dif . || die
@@ -52,7 +52,7 @@ multilib-native_src_prepare_internal() {
 	strip-linguas po
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	unset PLATFORM #184564
 	export OPTIMIZER=${CFLAGS}
 	export DEBUG=-DNDEBUG
@@ -64,7 +64,7 @@ multilib-native_src_configure_internal() {
 		|| die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DIST_ROOT="${D}" install install-dev install-lib || die
 	prepalldocs
 

@@ -18,7 +18,7 @@ RDEPEND=">=sys-libs/libraw1394-1.2.0
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )"
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	local myconf=""
 
 	econf \
@@ -33,7 +33,7 @@ multilib-native_src_compile_internal() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "install failed"
 	dodoc NEWS README AUTHORS ChangeLog
 	use doc && dohtml doc/html/*

@@ -26,7 +26,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-2.3.19-crosscompile.patch
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	multilib-native_check_inherited_funcs src_install
 	prep_ml_binaries /usr/bin/libart2-config 
 }

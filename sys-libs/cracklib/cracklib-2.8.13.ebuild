@@ -43,7 +43,7 @@ multilib_src_configure_internal() {
 		$(use_with python)
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	rm -r "${D}"/usr/share/cracklib
 

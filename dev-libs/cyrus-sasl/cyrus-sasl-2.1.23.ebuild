@@ -52,7 +52,7 @@ pkg_setup() {
 	java-pkg-opt-2_pkg_setup
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# Fix default port name for rimap auth mechanism.
 	sed -e '/define DEFAULT_REMOTE_SERVICE/s:imap:imap2:' \
 		-i saslauthd/auth_rimap.c || die "sed failed"
@@ -90,7 +90,7 @@ multilib-native_src_prepare_internal() {
 	AT_M4DIR="${S}/cmulocal ${S}/config" eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# Fix QA issues.
 	append-flags -fno-strict-aliasing
 	append-flags -D_XOPEN_SOURCE -D_XOPEN_SOURCE_EXTENDED -D_BSD_SOURCE -DLDAP_DEPRECATED
@@ -153,7 +153,7 @@ multilib-native_src_configure_internal() {
 		${myconf} || die "econf failed"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# We force -j1 for bug #110066.
 	emake -j1 || die "emake failed"
 
@@ -169,7 +169,7 @@ multilib-native_src_compile_internal() {
 	emake testsaslauthd || die "emake testsaslauthd failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake -j1 DESTDIR="${D}" install || die "emake install failed"
 	keepdir /var/lib/sasl2 /etc/sasl2
 

@@ -25,7 +25,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${P}.patch
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	distutils_src_install
 	distutils_python_version
 

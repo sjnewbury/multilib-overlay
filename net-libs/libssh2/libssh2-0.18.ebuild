@@ -20,11 +20,11 @@ DEPEND="!gcrypt? ( dev-libs/openssl[lib32?] )
 	sys-libs/zlib[lib32?]"
 RDEPEND=${DEPEND}
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf $(use_enable libgcrypt) || die "econf failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc README
 }

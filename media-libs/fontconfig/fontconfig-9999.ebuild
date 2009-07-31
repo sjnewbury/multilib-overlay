@@ -34,7 +34,7 @@ DEPEND="${RDEPEND}
 	)"
 PDEPEND="app-admin/eselect-fontconfig"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epunt_cxx #74077
 	# Neeeded to get a sane .so versionning on fbsd, please dont drop
 	# If you have to run eautoreconf, you can also leave the elibtoolize call as
@@ -44,7 +44,7 @@ multilib-native_src_prepare_internal() {
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 	if tc-is-cross-compiler; then
 		myconf="--with-arch=${ARCH}"
@@ -64,7 +64,7 @@ multilib-native_src_configure_internal() {
 		${myconf} || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die
 
 	#fc-lang directory contains language coverage datafiles
@@ -95,7 +95,7 @@ multilib-native_src_install_internal() {
 	doenvd "${T}"/37fontconfig
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	echo
 	ewarn "Please make fontconfig configuration changes in /etc/fonts/conf.d/"
 	ewarn "and NOT to /etc/fonts/fonts.conf, as it will be replaced!"

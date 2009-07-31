@@ -25,7 +25,7 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	nls? ( sys-devel/gettext[lib32?] )"
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# Disable static archives, dependency tracking and examples
 	# to speed up build time
 	econf \
@@ -39,7 +39,7 @@ multilib-native_src_configure_internal() {
 		--with-package-origin="http://packages.gentoo.org/package/media-libs/gstreamer"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 	dodoc AUTHORS ChangeLog NEWS MAINTAINERS README RELEASE
 

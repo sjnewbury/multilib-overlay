@@ -24,7 +24,7 @@ PDEPEND="emacs? ( app-emacs/po-mode )"
 RDEPEND="${DEPEND}
 	java? ( >=virtual/jdk-1.4 )"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	cd "${S}"
 
 	epunt_cxx
@@ -52,7 +52,7 @@ multilib-native_src_prepare_internal() {
 	fi
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf=""
 	# Build with --without-included-gettext (on glibc systems)
 	if use elibc_glibc ; then
@@ -76,7 +76,7 @@ multilib-native_src_configure_internal() {
 		|| die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake install DESTDIR="${D}" || die "install failed"
 	use nls || rm -r "${D}"/usr/share/locale
 	dosym msgfmt /usr/bin/gmsgfmt #43435
@@ -116,13 +116,13 @@ multilib-native_src_install_internal() {
 	dodoc AUTHORS ChangeLog NEWS README THANKS
 }
 
-multilib-native_pkg_preinst_internal() {
+ml-native_pkg_preinst() {
 	# older gettext's sometimes installed libintl ...
 	# need to keep the linked version or the system
 	# could die (things like sed link against it :/)
 	preserve_old_lib /{,usr/}$(get_libdir)/libintl$(get_libname 7)
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	preserve_old_lib_notify /{,usr/}$(get_libdir)/libintl$(get_libname 7)
 }

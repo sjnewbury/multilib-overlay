@@ -43,14 +43,14 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	cd "${S}"
 #	epatch "${FILESDIR}/${P}-autoconf-CXX.patch"
 	gtkdocize
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# It doesn't compile on alpha without this LDFLAGS
 	use alpha && append-ldflags "-Wl,--no-relax"
 
@@ -78,6 +78,6 @@ multilib-native_src_configure_internal() {
 		|| die "configure failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "Install failed"
 }

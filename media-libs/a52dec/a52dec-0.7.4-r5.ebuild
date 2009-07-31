@@ -21,7 +21,7 @@ IUSE="oss djbfft"
 RDEPEND="djbfft? ( sci-libs/djbfft[lib32?] )"
 DEPEND="${RDEPEND}"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}/${P}-build.patch"
 	epatch "${FILESDIR}/${P}-freebsd.patch"
 
@@ -29,7 +29,7 @@ multilib-native_src_prepare_internal() {
 	epunt_cxx
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	filter-flags -fprefetch-loop-arrays
 
 	local myconf="--enable-shared"
@@ -39,11 +39,11 @@ multilib-native_src_configure_internal() {
 		${myconf} || die
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake CFLAGS="${CFLAGS}" || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" docdir=/usr/share/doc/${PF}/html install || die
 
 	insinto /usr/include/a52dec

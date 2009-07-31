@@ -32,7 +32,7 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake -j1 DESTDIR="${D}" install || die
 	dodoc AUTHORS BUGS ChangeLog HACKING MAINTAINERS NEWS README TODO
 }

@@ -21,7 +21,7 @@ DEPEND="${RDEPEND}
 
 src_configure() { :; }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	strip-flags
 	filter-flags -O?
 	append-flags -O2
@@ -30,7 +30,7 @@ multilib-native_src_compile_internal() {
 	emake -j1 || die "emake failed."
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake -j1 DESTDIR="${D}" install || die "emake install failed."
 	dodoc AUTHORS BUG-REPORTING HACKING NEWS README
 }

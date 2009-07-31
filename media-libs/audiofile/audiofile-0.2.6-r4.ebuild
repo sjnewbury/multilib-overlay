@@ -38,11 +38,11 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf --enable-largefile || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" install || die
 	dodoc ACKNOWLEDGEMENTS AUTHORS ChangeLog README TODO NEWS NOTES
 

@@ -26,7 +26,7 @@ RDEPEND=""
 
 S=${WORKDIR}/${MY_P}
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	sed -i -e "s:libdir=@libdir@:libdir=/$(get_libdir):" libpcre.pc.in || die "Fixing libpcre pkgconfig files failed"
 	sed -i -e "s:-lpcre ::" libpcrecpp.pc.in || die "Fixing libpcrecpp pkgconfig files failed"
 	echo "Requires: libpcre = @PACKAGE_VERSION@" >> libpcrecpp.pc.in
@@ -35,7 +35,7 @@ multilib-native_src_prepare_internal() {
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf --with-match-limit-recursion=8192 \
 		$(use_enable unicode utf8) $(use_enable unicode unicode-properties) \
 		$(use_enable cxx cpp) \
@@ -48,7 +48,7 @@ multilib-native_src_configure_internal() {
 		|| die "econf failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	gen_usr_ldscript -a pcre

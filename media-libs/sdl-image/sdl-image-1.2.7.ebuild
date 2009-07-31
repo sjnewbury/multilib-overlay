@@ -25,7 +25,7 @@ RDEPEND="${DEPEND}"
 
 S=${WORKDIR}/${MY_P}
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		$(use_enable gif) \
 		$(use_enable jpeg jpg) \
@@ -41,7 +41,7 @@ multilib-native_src_configure_internal() {
 		|| die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dobin .libs/showimage || die "dobin failed"
 	dodoc CHANGES README

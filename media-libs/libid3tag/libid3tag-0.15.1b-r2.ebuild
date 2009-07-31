@@ -28,15 +28,15 @@ src_unpack() {
 	epatch "${FILESDIR}/${PV}"/*.patch
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf $(use_enable debug debugging) || die "configure failed"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake || die "make failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make install DESTDIR="${D}" || die "make install failed"
 
 	dodoc CHANGES CREDITS README TODO VERSION

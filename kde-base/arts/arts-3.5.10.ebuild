@@ -34,7 +34,7 @@ RDEPEND="x11-libs/qt:3[lib32?]
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}/arts-1.5.0-bindnow.patch" \
 		"${FILESDIR}/arts-1.5.9-glibc2.8-build-fix.patch" \
 		"${FILESDIR}/arts-1.5.10-unfortify.diff"
@@ -53,7 +53,7 @@ multilib-native_src_prepare_internal() {
 	rm -f "${S}/configure"
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	myconf="$(use_enable alsa) $(use_enable vorbis)
 			$(use_enable mp3 libmad) $(use_with jack)
 			$(use_with esd) $(use_with nas)
@@ -67,7 +67,7 @@ multilib-native_src_configure_internal() {
 	kde_src_configure
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	kde_src_install
 
 	# used for realtime priority, but off by default as it is a security hazard

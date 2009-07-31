@@ -37,7 +37,7 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	local myconf
 
 	if use qt3 && ! use mips ; then
@@ -54,7 +54,7 @@ multilib-native_src_compile_internal() {
 	emake -j1 || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake -j1 DESTDIR="${D}" install || die "emake install failed"
 
 	dodoc AUTHORS ChangeLog NEWS README*

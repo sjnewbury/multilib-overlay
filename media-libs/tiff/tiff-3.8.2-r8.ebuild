@@ -21,7 +21,7 @@ RDEPEND="jpeg? ( >=media-libs/jpeg-6b[lib32?] )
 	zlib? ( >=sys-libs/zlib-1.1.3-r2[lib32?] )"
 DEPEND="${RDEPEND}"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${WORKDIR}"/${P}-tiff2pdf-20080903.patch
 	epatch "${FILESDIR}"/${P}-tiffsplit.patch
 	if use jbig; then
@@ -34,7 +34,7 @@ multilib-native_src_prepare_internal() {
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		$(use_enable !nocxx cxx) \
 		$(use_enable zlib) \
@@ -44,7 +44,7 @@ multilib-native_src_configure_internal() {
 		--with-docdir=/usr/share/doc/${PF}
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake install DESTDIR="${D}" || die "make install failed"
 	dodoc README TODO VERSION
 }

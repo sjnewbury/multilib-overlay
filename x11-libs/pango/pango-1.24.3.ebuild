@@ -36,11 +36,11 @@ function multilib_enabled() {
 	has_multilib_profile || ( use x86 && [ "$(get_libdir)" = "lib32" ] )
 }
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	G2CONF="${G2CONF} $(use_with X x) $(use_enable debug)"
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	gnome2_src_prepare
 
 	# make config file location host specific so that a 32bit and 64bit pango
@@ -56,7 +56,7 @@ multilib-native_src_prepare_internal() {
 	sed -e '/@cd "$(DESTDIR)$(man1dir)" && gzip -c pango-view.1 > preload.1.gz && $(RM) preload.1/d' -i pango-view/Makefile.{in,am} || die 
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 
 	if use debug ; then
@@ -66,14 +66,14 @@ multilib-native_src_configure_internal() {
 	econf $(use_with X x) ${myconf} || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	gnome2_src_install
 	rm "${D}/etc/pango/pango.modules"
 
 	prep_ml_binaries /usr/bin/pango-querymodules
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	if [ "${ROOT}" = "/" ] ; then
 		einfo "Generating modules listing..."
 

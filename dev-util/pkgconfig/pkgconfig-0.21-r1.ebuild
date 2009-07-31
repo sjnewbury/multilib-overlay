@@ -19,7 +19,7 @@ DEPEND=""
 
 S=${WORKDIR}/${MY_P}
 
-multilib-native_src_unpack_internal() {
+ml-native_src_unpack() {
 	unpack "${A}"
 	cd "${S}"
 
@@ -28,7 +28,7 @@ multilib-native_src_unpack_internal() {
 	use ppc64 && use hardened && replace-flags -O[2-3] -O1
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	local myconf
 
 	# Force using all the requirements when linking, so that needed -pthread
@@ -52,7 +52,7 @@ multilib-native_src_compile_internal() {
 	emake || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" install || die "Installation failed"
 
 	dodoc AUTHORS ChangeLog NEWS README

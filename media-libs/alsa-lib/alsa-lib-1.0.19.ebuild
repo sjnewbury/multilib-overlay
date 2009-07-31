@@ -48,7 +48,7 @@ src_unpack() {
 	epunt_cxx
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 	use elibc_uclibc && myconf="--without-versioned"
 
@@ -75,7 +75,7 @@ multilib-native_src_configure_internal() {
 		|| die "configure failed"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake || die "make failed"
 
 	if use doc; then
@@ -85,7 +85,7 @@ multilib-native_src_compile_internal() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	dodoc ChangeLog TODO || die

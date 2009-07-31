@@ -26,7 +26,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	if use kernel_linux ; then
 		CONFIG_CHECK="~INOTIFY"
 		linux-info_pkg_setup
@@ -49,7 +49,7 @@ src_unpack() {
 	ln -s $(type -P true) py-compile
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	gnome2_pkg_postinst
 	if use python; then
 		python_version
@@ -57,7 +57,7 @@ multilib-native_pkg_postinst_internal() {
 	fi
 }
 
-multilib-native_pkg_postrm_internal() {
+ml-native_pkg_postrm() {
 	gnome2_pkg_postrm
 	if use python; then
 		python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/GMenuSimpleEditor

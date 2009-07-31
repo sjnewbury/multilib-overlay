@@ -27,11 +27,11 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	econf --docdir=/usr/share/doc/${PF}
 	emake || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die
 }

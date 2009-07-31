@@ -32,7 +32,7 @@ S=${WORKDIR}/qt-embedded-free-${PV}
 
 QTBASE=/usr/qt/3-embedded
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	ewarn "Note: this ebuild provides a Qt/Embedded setup that is suitable for testing,"
 	ewarn "but definitely not tailored for real embedded systems."
 	ewarn "I advise you select your own featureset (e.g. by editing this ebuild)"
@@ -56,7 +56,7 @@ multilib-native_pkg_setup_internal() {
 	fi
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	cd ${S}
 
 	sed -i -e 's:read acceptance:acceptance=yes:' configure
@@ -68,7 +68,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-3.3.8-castfix.patch
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	addwrite "${QTBASE}/etc/settings"
 
 	use gif && myconf="${myconf} -qt-gif" || myconf="${myconf} -no-gif"
@@ -88,7 +88,7 @@ multilib-native_src_configure_internal() {
 		-embedded -no-sql-odbc || die
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 
 	export LD_LIBRARY_PATH="${S}/lib:${LD_LIBRARY_PATH}"
 
@@ -104,7 +104,7 @@ multilib-native_src_compile_internal() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	INSTALL_ROOT="${D}" emake install
 
 	# fix .prl files

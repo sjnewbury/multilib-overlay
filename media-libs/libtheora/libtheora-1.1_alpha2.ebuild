@@ -26,12 +26,12 @@ DEPEND="${RDEPEND}
 VARTEXFONTS=${T}/fonts
 S=${WORKDIR}/${P/_}
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${PN}-1.0_beta2-flags.patch
 	AT_M4DIR="m4" eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	use x86 && filter-flags -fforce-addr -frename-registers #200549
 	use doc || export ac_cv_prog_HAVE_DOXYGEN="false"
 
@@ -47,7 +47,7 @@ multilib-native_src_configure_internal() {
 		${myconf}
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" docdir=/usr/share/doc/${PF} \
 		install || die "emake install failed"
 

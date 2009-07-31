@@ -125,7 +125,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	local myconf
 
 	if use hppa || use elibc_FreeBSD; then
@@ -158,7 +158,7 @@ multilib-native_src_compile_internal() {
 	emake sepermitlockdir="/var/run/sepermit" || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install \
 		 sepermitlockdir="/var/run/sepermit" || die "make install failed"
 

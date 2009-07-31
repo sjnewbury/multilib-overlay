@@ -48,7 +48,7 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	tc-export CC
 
 	cd "${S}"/unix
@@ -57,7 +57,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable debug symbols) || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	#short version number
 	local v1
 	v1=${PV%.*}

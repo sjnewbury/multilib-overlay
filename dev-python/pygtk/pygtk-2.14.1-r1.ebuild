@@ -31,7 +31,7 @@ DEPEND="${RDEPEND}
 		 )
 	>=dev-util/pkgconfig-0.9[lib32?]"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# Fix declaration of codegen in .pc
 	epatch "${FILESDIR}/${PN}-2.13.0-fix-codegen-location.patch"
 
@@ -53,12 +53,12 @@ multilib-native_src_prepare_internal() {
 	AT_M4DIR="m4" eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	use hppa && append-flags -ffunction-sections
 	econf $(use_enable doc docs) --enable-thread
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS ChangeLog INSTALL MAPPING NEWS README THREADS TODO
 
@@ -75,13 +75,13 @@ src_test() {
 	Xemake check-local || die "tests failed"
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	python_version
 	python_need_rebuild
 	python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages/gtk-2.0
 }
 
-multilib-native_pkg_postrm_internal() {
+ml-native_pkg_postrm() {
 	python_version
 	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/gtk-2.0
 	rm -f "${ROOT}"/usr/$(get_libdir)/python${PYVER}/site-packages/pygtk.{py,pth}

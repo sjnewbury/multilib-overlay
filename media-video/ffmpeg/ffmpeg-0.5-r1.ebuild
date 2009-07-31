@@ -54,7 +54,7 @@ DEPEND="${RDEPEND}
 	v4l? ( sys-kernel/linux-headers )
 	v4l2? ( sys-kernel/linux-headers )"
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf="${EXTRA_ECONF}"
 
 	# enabled by default
@@ -182,12 +182,12 @@ multilib-native_src_configure_internal() {
 		${myconf} || die "configure failed"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake version.h || die #252269
 	emake || die "make failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "Install Failed"
 
 	dodoc Changelog README INSTALL

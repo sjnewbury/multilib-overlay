@@ -28,7 +28,7 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake install DESTDIR="${D}" || die "emake install failed"
 	dodoc Changes README
 	dohtml doc/*

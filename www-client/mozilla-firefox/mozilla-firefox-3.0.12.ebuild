@@ -62,7 +62,7 @@ PDEPEND="restrict-javascript? ( www-plugins/noscript )"
 
 S="${WORKDIR}/mozilla"
 
-# Needed by multilib-native_src_compile_internal() and src_install().
+# Needed by ml-native_src_compile() and src_install().
 # Would do in pkg_setup but that loses the export attribute, they
 # become pure shell variables.
 export MOZ_CO_PROJECT=browser
@@ -122,7 +122,7 @@ src_unpack() {
 	fi
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# Remove the patches we don't need
 	if use xulrunner; then
 		rm "${WORKDIR}"/patch/*noxul*
@@ -147,7 +147,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${WORKDIR}"/patch/000_flex-configure-LANG.patch
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	declare MOZILLA_FIVE_HOME="/usr/$(get_libdir)/${PN}"
 	MEXTENSIONS="default,typeaheadfind"
 
@@ -218,13 +218,13 @@ multilib-native_src_configure_internal() {
 		"${S}"/toolkit/content/buildconfig.html
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# Should the build use multiprocessing? Not enabled by default, as it tends to break
 	[ "${WANT_MP}" = "true" ] && jobs=${MAKEOPTS} || jobs="-j1"
 	emake ${jobs} || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	declare MOZILLA_FIVE_HOME="/usr/$(get_libdir)/${PN}"
 
 	emake DESTDIR="${D}" install || die "emake install failed"

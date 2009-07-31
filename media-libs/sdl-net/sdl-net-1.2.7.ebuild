@@ -20,7 +20,7 @@ DEPEND=">=media-libs/libsdl-1.2.5[lib32?]"
 
 S=${WORKDIR}/${MY_P}
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc CHANGES README
 }

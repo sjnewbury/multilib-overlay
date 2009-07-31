@@ -34,7 +34,7 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# For some reasons the polyp/pulse plugin does fail with alsaplayer with a
 	# failed assert. As the code works just fine with asserts disabled, for now
 	# disable them waiting for a better solution.
@@ -49,7 +49,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	use debug || append-flags -DNDEBUG
 
 	econf \
@@ -62,7 +62,7 @@ multilib-native_src_configure_internal() {
 		|| die "econf failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install
 
 	cd "${S}/doc"

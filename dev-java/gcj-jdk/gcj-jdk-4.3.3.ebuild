@@ -57,7 +57,7 @@ src_unpack() {
 	mkdir -p ${S}
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	# jre lib paths ...
 	local gccbin=$(gcc-config -B ${CTARGET}-${GCC_CONFIG_VER})
 	local libgcjpath=$(gcc-config -L ${CTARGET}-${GCC_CONFIG_VER})

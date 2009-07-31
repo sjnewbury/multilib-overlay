@@ -18,7 +18,7 @@ IUSE="ipv6 debug"
 DEPEND=">=dev-db/sqlite-3.5[lib32?]"
 RDEPEND="${DEPEND}"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	cd "${S}"
 	mkdir build inst
 	epatch "${FILESDIR}"/${PN}-4.6.1-config.patch
@@ -31,7 +31,7 @@ multilib-native_src_prepare_internal() {
 		mozilla/nsprpub/config/rules.mk
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	cd "${S}"/build
 
 	echo > "${T}"/test.c
@@ -54,12 +54,12 @@ multilib-native_src_configure_internal() {
 		${myconf} || die "econf failed"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	cd ${S}/build
 	make CC="$(tc-getCC)" CXX="$(tc-getCXX)" || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	# Their build system is royally fucked, as usual
 	MINOR_VERSION=7
 	cd "${S}"/build
@@ -87,10 +87,10 @@ multilib-native_src_install_internal() {
 	prep_ml_binaries /usr/bin/nspr-config 
 }
 
-multilib-native_pkg_preinst_internal() {
+ml-native_pkg_preinst() {
 	preserve_old_lib /usr/$(get_libdir)/nspr/lib{nspr,plc,plds}4.so.6
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	preserve_old_lib_notify /usr/$(get_libdir)/nspr/lib{nspr,plc,plds}4.so.6
 }

@@ -25,7 +25,7 @@ include/
 src/
 doc/"
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	myconf="${myconf} -no-xkb  -no-fontconfig -no-xrender -no-xrandr
 		-no-xfixes -no-xcursor -no-xinerama -no-xshape -no-sm -no-opengl
 		-no-nas-sound -no-dbus -iconv -no-cups -no-nis -no-gif -no-libpng
@@ -35,7 +35,7 @@ multilib-native_src_configure_internal() {
 	qt4-build_src_configure
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	qt4-build_src_install
 	insinto ${QTDOCDIR}
 	doins -r "${S}"/doc/qch/ || die "Installing qch documentation failed"

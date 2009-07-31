@@ -49,7 +49,7 @@ pkg_setup() {
 	export EXTRA_EMAKE="${EXTRA_EMAKE} ORBIT_IDL=/usr/bin/orbit-idl-2"
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	gnome2_src_prepare
 
 	# Do not start gconfd when installing schemas, fix bug #238276, upstream ?
@@ -65,7 +65,7 @@ multilib-native_src_prepare_internal() {
 #	sh "${S}"/tests/runtests.sh || die "running tests failed"
 #}
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	gnome2_src_install
 
 	keepdir /etc/gconf/gconf.xml.mandatory

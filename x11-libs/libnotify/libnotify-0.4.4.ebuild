@@ -23,7 +23,7 @@ DEPEND="${RDEPEND}
 PDEPEND="|| ( x11-misc/notification-daemon[lib32?]
 			x11-misc/notification-daemon-xfce[lib32?] )"
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake install DESTDIR="${D}" || die "make install failed"
 	dodoc AUTHORS ChangeLog NEWS
 }

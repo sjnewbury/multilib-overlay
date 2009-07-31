@@ -35,7 +35,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	econf \
 		$(use_enable !nocxx cxx) \
 		$(use_enable zlib) \
@@ -47,7 +47,7 @@ multilib-native_src_compile_internal() {
 	emake || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make install DESTDIR="${D}" || die "make install failed"
 	dodoc README TODO VERSION
 }

@@ -26,7 +26,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-disable-raw-capture.patch
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	if has_version '>=sys-libs/glibc-2.4' ; then
 		append-flags "-DCLK_TCK=CLOCKS_PER_SEC"
 	fi
@@ -35,7 +35,7 @@ multilib-native_src_compile_internal() {
 	emake || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" install || die
 	dodoc NEWS README AUTHORS
 }

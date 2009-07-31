@@ -34,7 +34,7 @@ src_unpack() {
 	sed -i -e "s:-mcpu=750::g" configure
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# gcc-3.4 and k6 with -ftracer causes code generation problems #49472
 	if [[ "$(gcc-major-version)$(gcc-minor-version)" == "34" ]]; then
 		is-flag -march=k6* && filter-flags -ftracer
@@ -45,7 +45,7 @@ multilib-native_src_configure_internal() {
 	econf || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 
 	rm -rf "${D}"/usr/share/doc/*

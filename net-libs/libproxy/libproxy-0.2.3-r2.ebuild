@@ -34,7 +34,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.19[lib32?]"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# http://code.google.com/p/libproxy/issues/detail?id=23
 	epatch "${FILESDIR}/${P}-fix-dbus-includes.patch"
 
@@ -59,7 +59,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 
 	# xulrunner:1.9 => mozilla;   seamonkey => seamonkey;
@@ -80,11 +80,11 @@ multilib-native_src_configure_internal() {
 		$(use_with python)
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake LIBDL="$(dlopen_lib)" || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" LIBDL="$(dlopen_lib)" install || die "emake install failed!"
 	dodoc AUTHORS NEWS README ChangeLog || die "dodoc failed"
 }

@@ -14,14 +14,14 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
 IUSE=""
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${P}-vlan-header.patch
 	epatch "${FILESDIR}"/${P}-minor-leaks.patch
 	epatch "${FILESDIR}"/${P}-glibc-2.8-ULONG_MAX.patch
 	epatch "${FILESDIR}"/${P}-flags.patch
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die
 	dodoc ChangeLog
 }

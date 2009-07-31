@@ -19,7 +19,7 @@ RDEPEND="examples? ( =dev-libs/glib-2*[lib32?] )"
 DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1 )"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	if ! use examples; then
 		sed "s/^\(SUBDIRS =.*\)examples\(.*\)$/\1\2/" \
 			-i Makefile.am Makefile.in || die "sed failed."
@@ -32,7 +32,7 @@ multilib-native_src_prepare_internal() {
 
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	strip-flags
 	filter-flags -O?
 	append-flags -O2
@@ -40,7 +40,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable doc gtk-doc)
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 	dodoc AUTHORS BUG-REPORTING HACKING NEWS README || die "dodoc failed."
 }

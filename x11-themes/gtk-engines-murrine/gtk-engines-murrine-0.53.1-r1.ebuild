@@ -33,11 +33,11 @@ src_unpack() {
 	epatch "${FILESDIR}/${P}-use-gtk_free.patch"
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf --enable-animation || die "econf failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
 	dodir /usr/share/themes

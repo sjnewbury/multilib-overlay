@@ -40,7 +40,7 @@ pkg_setup() {
 		$(use_enable python)"
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	gnome2_src_prepare
 
 	# FIXME: tarball generated with broken gtk-doc, revisit me.

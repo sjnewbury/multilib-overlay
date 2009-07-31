@@ -165,7 +165,7 @@ pkg_setup() {
 	enewuser ldap 439 -1 /usr/$(get_libdir)/openldap ldap
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# ensure correct SLAPI path by default
 	sed -i -e 's,\(#define LDAPI_SOCK\).*,\1 "/var/run/openldap/slapd.sock",' \
 		"${S}"/include/ldap_defaults.h
@@ -275,7 +275,7 @@ src_configure() {
 		${myconf} || die "configure failed"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake depend || die "emake depend failed"
 	emake CC=$(tc-getCC) AR=$(tc-getAR) || die "emake failed"
 
@@ -329,7 +329,7 @@ src_test() {
 	cd tests ; make tests || die "make tests failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	dodoc ANNOUNCEMENT CHANGES COPYRIGHT README "${FILESDIR}"/DB_CONFIG.fast.example

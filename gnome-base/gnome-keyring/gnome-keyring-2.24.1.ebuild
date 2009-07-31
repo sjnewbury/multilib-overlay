@@ -35,7 +35,7 @@ DOCS="AUTHORS ChangeLog NEWS README TODO"
 # upstream bug: http://bugzilla.gnome.org/show_bug.cgi?id=553164
 RESTRICT="test"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable debug)
 		$(use_enable hal)
@@ -47,7 +47,7 @@ multilib-native_pkg_setup_internal() {
 		--enable-ssh-agent"
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	gnome2_src_prepare
 
 	# Fix configure with recent libtasn1, bug #266554

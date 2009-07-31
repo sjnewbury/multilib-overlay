@@ -46,11 +46,11 @@ DEPEND="${RDEPEND}
 # used - but can do without in self test: net-misc/stunnel
 #S="${WORKDIR}"/${MY_P}
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}"/curl-7.17.0-strip-ldflags.patch
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 
 	myconf="$(use_enable ldap)
 		$(use_enable ldap ldaps)
@@ -95,7 +95,7 @@ multilib-native_src_configure_internal() {
 	econf ${myconf} || die 'configure failed'
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "installed failed for current version"
 	rm -rf "${D}"/etc/
 

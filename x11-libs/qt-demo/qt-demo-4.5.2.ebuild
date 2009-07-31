@@ -35,14 +35,14 @@ QT4_EXTRACT_DIRECTORIES="${QT4_TARGET_DIRECTORIES}
 	include/
 	tools/"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# patch errors in arthurwidgets and plugandpaint
 	epatch "${FILESDIR}"/qt-demo-4.5.0-fixes.patch
 
 	qt4-build_src_prepare
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	insinto ${QTDOCDIR}/src
 	doins -r "${S}"/doc/src/images || die "Installing images failed."
 

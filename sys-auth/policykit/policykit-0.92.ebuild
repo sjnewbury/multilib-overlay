@@ -36,7 +36,7 @@ pkg_setup() {
 	enewuser polkituser -1 "-1" /dev/null polkituser
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# Add zsh completions
 	if use zsh-completion; then
 		epatch "${FILESDIR}/${P}-zsh-completions.patch"
@@ -47,7 +47,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 
 	local conf=
 
@@ -74,7 +74,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable nls)
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
 	dodoc NEWS README AUTHORS ChangeLog || die "dodoc failed"

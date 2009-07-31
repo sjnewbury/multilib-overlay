@@ -24,7 +24,7 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die
 	mv "${D}"/usr/share/doc/{${PN},${PF}} || die
 }

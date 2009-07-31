@@ -22,7 +22,7 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	local myconf=""
 	if use juju; then
 		myconf="--with-juju-dir"
@@ -34,7 +34,7 @@ multilib-native_src_compile_internal() {
 	emake || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "install failed"
 	dodoc AUTHORS ChangeLog NEWS README
 }

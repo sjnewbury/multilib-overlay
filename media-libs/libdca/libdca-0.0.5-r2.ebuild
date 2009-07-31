@@ -28,13 +28,13 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	econf $(use_enable oss) $(use_enable debug)
 
 	emake OPT_CFLAGS="" || die "emake failed."
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 	dodoc AUTHORS ChangeLog NEWS README TODO doc/${PN}.txt
 }

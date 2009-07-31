@@ -20,7 +20,7 @@ RDEPEND="sys-apps/attr[lib32?]
 DEPEND="${RDEPEND}
 	sys-kernel/linux-headers"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${PV}/*.patch
 	sed -i -e '/cap_setfcap.*morgan/s:^:#:' pam_cap/capability.conf
 	sed -i \
@@ -30,12 +30,12 @@ multilib-native_src_prepare_internal() {
 		Make.Rules
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	tc-export BUILD_CC CC AR RANLIB
 	emake lib=$(get_libdir) || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake install lib=$(get_libdir) DESTDIR="${D}" || die
 
 	gen_usr_ldscript libcap.so

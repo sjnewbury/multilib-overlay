@@ -26,7 +26,7 @@ DEPEND="${RDEPEND}
 		>=dev-util/gtk-doc-1.11
 		~app-text/docbook-xml-dtd-4.1.2 )"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	if use ppc64 && use hardened ; then
 		replace-flags -O[2-3] -O1
 		epatch "${FILESDIR}/glib-2.6.3-testglib-ssp.patch"
@@ -51,7 +51,7 @@ multilib-native_src_prepare_internal() {
 	[[ ${CHOST} == *-freebsd* ]] && elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 
 	epunt_cxx
@@ -76,7 +76,7 @@ multilib-native_src_configure_internal() {
 		  --with-threads=posix
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "Installation failed"
 
 	# Do not install charset.alias even if generated, leave it to libiconv

@@ -41,7 +41,7 @@ src/corelib/thread/
 src/corelib/tools/
 "
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 	myconf="${myconf} -dbus-linked"
 

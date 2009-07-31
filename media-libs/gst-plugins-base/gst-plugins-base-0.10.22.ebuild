@@ -25,12 +25,12 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS README RELEASE"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${P}-CVE-2009-0586.patch
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# GStreamer doesn't handle optimization.
 	strip-flags
 	replace-flags -O3 -O2
@@ -39,6 +39,6 @@ multilib-native_src_configure_internal() {
 		$(use_enable nls)
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	gnome2_src_install
 }

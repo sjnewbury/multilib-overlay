@@ -31,7 +31,7 @@ src/sql
 src/3rdparty
 src/tools"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	if ! (use firebird || use mysql || use odbc || use postgres || use sqlite); then
 		ewarn "You need to enable at least one SQL driver. Enable at least"
 		ewarn "one of these USE flags: \"firebird mysql odbc postgres sqlite\""
@@ -45,13 +45,13 @@ src_unpack() {
 	qt4-build_src_unpack
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	qt4-build_src_prepare
 	sed -e '/pg_config --libs/d' -i "${S}"/configure \
 		|| die 'Sed to fix postgresql usage in ./configure failed.'
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# Don't support sqlite2 anymore
 	myconf="${myconf} -no-sql-sqlite2
 		$(qt_use mysql sql-mysql plugin) $(use mysql && echo "-I/usr/include/mysql -L/usr/$(get_libdir)/mysql ")

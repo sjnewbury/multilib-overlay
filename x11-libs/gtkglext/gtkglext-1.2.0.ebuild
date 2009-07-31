@@ -26,7 +26,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog* INSTALL NEWS README* TODO"
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	G2CONF="--x-libraries=/usr/$(get_libdir)"
 	gnome2_src_configure
 }

@@ -23,7 +23,7 @@ src_unpack() {
 	unpack ${P}.tar.gz
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${PN}-4.15-libtool.patch #99593
 
 	elibtoolize
@@ -38,30 +38,30 @@ multilib-native_src_prepare_internal() {
 #	sed -i '/^pkgdatadir/s:/@PACKAGE@::' $(find -name Makefile.in)
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# file uses things like strndup() and wcwidth()
 	append-flags -D_GNU_SOURCE
 
 	econf || die
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake || die
 
 	use python && cd python && distutils_src_compile
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc ChangeLog MAINT README
 
 	use python && cd python && distutils_src_install
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	use python && distutils_pkg_postinst
 }
 
-multilib-native_pkg_postrm_internal() {
+ml-native_pkg_postrm() {
 	use python && distutils_pkg_postrm
 }

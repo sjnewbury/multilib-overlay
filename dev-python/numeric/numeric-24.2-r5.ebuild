@@ -44,7 +44,7 @@ src_test() {
 		|| die "test failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	distutils_src_install
 
 	# install various README from packages

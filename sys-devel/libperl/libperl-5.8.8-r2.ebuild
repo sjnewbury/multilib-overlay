@@ -108,7 +108,7 @@ pkg_setup() {
 	fi
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 
 	# Fix the build scripts to create libperl with a soname of ${SLOT}.
 	# We basically add:
@@ -164,7 +164,7 @@ myconf() {
 	myconf=( "${myconf[@]}" "$@" )
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	declare -a myconf
 
 	# Perl has problems compiling with -Os in your flags
@@ -283,14 +283,14 @@ multilib-native_src_configure_internal() {
 		"${myconf[@]}" || die "Unable to configure"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake -j1 -f Makefile depend || die "Couldn't make libperl$(get_libname) depends"
 	emake -j1 -f Makefile LIBPERL=${LIBPERL} ${LIBPERL} || die "Unable to make libperl$(get_libname)"
 	mkdir "${WORKDIR}/libperl.${ABI}"
 	mv ${LIBPERL} "${WORKDIR}/libperl.${ABI}"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 
 	export LC_ALL="C"
 
@@ -372,7 +372,7 @@ EOF
 	fi
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 
 	# Make sure we do not have stale/invalid libperl.so 's ...
 	if [ -f "${ROOT}usr/$(get_libdir)/libperl$(get_libname)" -a ! -L "${ROOT}usr/$(get_libdir)/libperl$(get_libname)" ]

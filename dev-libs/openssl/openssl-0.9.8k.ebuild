@@ -54,7 +54,7 @@ src_unpack() {
 		|| sed -i '/^MANDIR=/s:=.*:=/usr/share/man:' Makefile.org
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# Try to derice users and work around broken ass toolchains
 	if [[ $(gcc-major-version) == "3" ]] ; then
 		filter-flags -fprefetch-loop-arrays -freduce-all-givs -funroll-loops
@@ -74,7 +74,7 @@ multilib-native_src_prepare_internal() {
 	./config --test-sanity || die "I AM NOT SANE"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	unset APPS #197996
 
 	tc-export CC AR RANLIB
@@ -138,7 +138,7 @@ src_test() {
 	emake -j1 test || die "make test failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake -j1 INSTALL_PREFIX="${D}" install || die
 	dodoc CHANGES* FAQ NEWS README doc/*.txt doc/c-indentation.el
 	dohtml doc/*
@@ -175,10 +175,10 @@ multilib-native_src_install_internal() {
 	keepdir /etc/ssl/private
 }
 
-multilib-native_pkg_preinst_internal() {
+ml-native_pkg_preinst() {
 	preserve_old_lib /usr/$(get_libdir)/lib{crypto,ssl}.so.0.9.{6,7}
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	preserve_old_lib_notify /usr/$(get_libdir)/lib{crypto,ssl}.so.0.9.{6,7}
 }

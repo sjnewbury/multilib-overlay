@@ -134,7 +134,7 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local acpi="$(use_enable acpi)"
 	local backend=
 	local hardware=
@@ -209,7 +209,7 @@ multilib-native_src_configure_internal() {
 	|| die "configure failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die
 	dodoc AUTHORS ChangeLog NEWS README || die "docs failed"
 

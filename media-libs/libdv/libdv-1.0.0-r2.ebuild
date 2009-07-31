@@ -22,14 +22,14 @@ RDEPEND="dev-libs/popt
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${PN}-0.99-2.6.patch
 	epatch "${WORKDIR}"/${PN}-1.0.0-pic.patch
 	elibtoolize
 	epunt_cxx #74497
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		$(use_with debug) \
 		--disable-gtk --disable-gtktest \
@@ -38,7 +38,7 @@ multilib-native_src_configure_internal() {
 		|| die "econf failed."
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 	dodoc AUTHORS ChangeLog INSTALL NEWS README* TODO
 }

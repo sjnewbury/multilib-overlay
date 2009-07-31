@@ -31,11 +31,11 @@ src_unpack() {
 	sed -i 's/^\(SUBDIRS =.*\)tests\(.*\)$/\1\2/' Makefile.in || die "sed failed"
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf $(use_enable doc docs) || die "econf failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc README ChangeLog
 }

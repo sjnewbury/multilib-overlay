@@ -23,13 +23,13 @@ RDEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${MY_P}"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	if [[ ${ELIBC} = uclibc ]]; then
 		append-flags -pthread
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	cmake-utils_src_install
 	prep_ml_binaries /usr/bin/automoc4
 }

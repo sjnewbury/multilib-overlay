@@ -36,7 +36,7 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# Dont use custom optimiziations, as it gives problems
 	# on some archs
 	strip-flags
@@ -52,7 +52,7 @@ multilib-native_src_compile_internal() {
 	emake || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make install DESTDIR="${D}" || die
 
 	dodoc AUTHORS ChangeLog NEWS README

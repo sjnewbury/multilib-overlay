@@ -45,7 +45,7 @@ pkg_setup() {
 	java-pkg-opt-2_pkg_setup
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# Apply our patches
 	cd "${S}" || die "cd failed"
 	EPATCH_SUFFIX="patch" \
@@ -58,7 +58,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${WORKDIR}"/patch/000_flex-configure-LANG.patch
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	declare MOZILLA_FIVE_HOME="/usr/$(get_libdir)/${PN}-1.9"
 
 	####################################
@@ -133,7 +133,7 @@ multilib-native_src_configure_internal() {
 		"${S}"/toolkit/content/buildconfig.html
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	declare MOZILLA_FIVE_HOME="/usr/$(get_libdir)/${PN}-1.9"
 
 	emake DESTDIR="${D}" install || die "emake install failed"

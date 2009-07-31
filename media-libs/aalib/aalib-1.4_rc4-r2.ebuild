@@ -34,7 +34,7 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		$(use_with slang slang-driver) \
 		$(use_with X x11-driver) \
@@ -42,7 +42,7 @@ multilib-native_src_configure_internal() {
 		|| die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" install || die
 	dodoc ANNOUNCE AUTHORS ChangeLog NEWS README*
 

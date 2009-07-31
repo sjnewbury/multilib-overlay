@@ -28,14 +28,14 @@ src_unpack() {
 	epatch "${FILESDIR}"/0001-daemon-use-sys-ioctl.h-for-ioctl.patch #222099
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		--libdir=/$(get_libdir) \
 		--sysconfdir=/etc/gpm \
 		|| die "econf failed"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# workaround broken release
 	find -name '*.o' | xargs rm
 	emake clean || die
@@ -44,7 +44,7 @@ multilib-native_src_compile_internal() {
 	emake EMACS=: || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake install DESTDIR="${D}" EMACS=: ELISP="" || die "make install failed"
 
 	dosym libgpm.so.1.20.0 /$(get_libdir)/libgpm.so.1

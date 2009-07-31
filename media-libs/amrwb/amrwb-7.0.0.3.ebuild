@@ -28,7 +28,7 @@ src_unpack() {
 	cp "${DISTDIR}"/${SPEC_VER}.zip .
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 	dodoc AUTHORS ChangeLog NEWS README TODO
 }

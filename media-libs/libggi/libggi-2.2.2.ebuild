@@ -27,7 +27,7 @@ DEPEND="${RDEPEND}
 		x11-proto/xf86vidmodeproto
 		x11-proto/xextproto )"
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf=""
 
 	use svga || myconf="${myconf} --disable-svga --disable-vgagl"
@@ -56,7 +56,7 @@ multilib-native_src_configure_internal() {
 		${myconf}
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR=${D} install || die "emake install failed."
 
 	dodoc ChangeLog* FAQ NEWS README

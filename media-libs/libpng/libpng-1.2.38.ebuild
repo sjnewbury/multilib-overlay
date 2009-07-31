@@ -19,12 +19,12 @@ RDEPEND="sys-libs/zlib[lib32?]"
 DEPEND="${RDEPEND}
 	app-arch/lzma-utils"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# So we get sane .so versioning on FreeBSD
 	elibtoolize
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die
 	dodoc ANNOUNCE CHANGES KNOWNBUG README TODO Y2KINFO
 

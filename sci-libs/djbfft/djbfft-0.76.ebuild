@@ -28,7 +28,7 @@ pkg_setup() {
 	LIBDJBFFT="libdjbfft.so.${MY_PV}"
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# mask out everything, which is not suggested by the author (RTFM)!
 	ALLOWED_FLAGS="-fstack-protector -march -mcpu -pipe -mpreferred-stack-boundary -ffast-math -m32 -m64"
 	strip-flags
@@ -49,11 +49,11 @@ multilib-native_src_prepare_internal() {
 	einfo "conf-cc: $(<conf-cc)"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake LIBDJBFFT="$LIBDJBFFT" LIBPERMS="$LIBPERMS" || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make LIBDJBFFT="$LIBDJBFFT" setup check || die "install  failed"
 	dosym "${LIBDJBFFT}" /usr/$(get_libdir)/libdjbfft.so
 	dosym "${LIBDJBFFT}" /usr/$(get_libdir)/libdjbfft.so.${MY_PV%%.*}

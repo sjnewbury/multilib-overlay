@@ -36,7 +36,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	addpredict "/root/.gnome2_private"
 
 	gnome2_src_compile

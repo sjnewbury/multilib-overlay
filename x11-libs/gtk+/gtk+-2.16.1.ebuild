@@ -58,7 +58,7 @@ set_gtk2_confdir() {
 	GTK2_CONFDIR=${GTK2_CONFDIR:=/etc/gtk-2.0}
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# use an arch-specific config directory so that 32bit and 64bit versions
 	# dont clash on multilib systems
 	has_multilib_profile && epatch "${FILESDIR}/${PN}-2.8.0-multilib.patch"
@@ -78,7 +78,7 @@ multilib-native_src_prepare_internal() {
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# png always on to display icons (foser)
 	local myconf="$(use_enable doc gtk-doc) \
 		$(use_with jpeg libjpeg) \
@@ -105,7 +105,7 @@ src_test() {
 	Xemake check || die "tests failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "Installation failed"
 
 	set_gtk2_confdir
@@ -126,7 +126,7 @@ multilib-native_src_install_internal() {
 	rm "${D}/etc/gtk-2.0/gtk.immodules"
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	set_gtk2_confdir
 
 	if [ -d "${ROOT}${GTK2_CONFDIR}" ]; then

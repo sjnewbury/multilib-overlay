@@ -29,7 +29,7 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# Fix QA warnings, bug #257281, upstream #466791
 	epatch "${FILESDIR}/${P}-compilewarnings.patch"
 
@@ -49,7 +49,7 @@ multilib-native_src_prepare_internal() {
 	ln -s $(type -P true) "${S}"/py-compile
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf --disable-debug \
 		--disable-server \
 		$(use_enable kernel_linux inotify) \
@@ -57,20 +57,20 @@ multilib-native_src_configure_internal() {
 		$(use_with python)
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "installation failed"
 
 	dodoc AUTHORS ChangeLog README TODO NEWS doc/*txt || die "dodoc failed"
 	dohtml doc/* || die "dohtml failed"
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	if use python; then
 		python_version
 		python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages
 	fi
 }
 
-multilib-native_pkg_postrm_internal() {
+ml-native_pkg_postrm() {
 	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages
 }

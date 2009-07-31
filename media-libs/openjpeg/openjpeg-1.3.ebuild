@@ -26,14 +26,14 @@ src_unpack() {
 	cp "${FILESDIR}"/${P}-codec-Makefile "${S}"/codec/Makefile
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake CC="$(tc-getCC)" AR="$(tc-getAR)" COMPILERFLAGS="${CFLAGS} -std=c99 -fPIC" || die "emake failed"
 	if use tools; then
 		emake -C codec CC="$(tc-getCC)" || die "emake failed"
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" INSTALL_LIBDIR="/usr/$(get_libdir)" install || die "install failed"
 	if use tools; then
 		emake -C codec DESTDIR="${D}" INSTALL_BINDIR="/usr/bin" install || die "install failed"

@@ -18,6 +18,6 @@ RDEPEND="x11-libs/xtrans
 	x11-proto/xproto"
 DEPEND="${RDEPEND}"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	CONFIGURE_OPTIONS="$(use_enable ipv6)"
 }

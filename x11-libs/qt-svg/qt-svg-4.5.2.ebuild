@@ -32,7 +32,7 @@ src/3rdparty"
 QCONFIG_ADD="svg"
 QCONFIG_DEFINE="QT_SVG"
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	myconf="${myconf} $(qt_use iconv) -svg -no-xkb  -no-fontconfig -no-xrender -no-xrandr
 		-no-xfixes -no-xcursor -no-xinerama -no-xshape -no-sm -no-opengl
 		-no-nas-sound -no-dbus -no-cups -no-nis -no-gif -no-libpng

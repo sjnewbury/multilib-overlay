@@ -20,7 +20,7 @@ DEPEND=">=dev-libs/libxml2-2.6.27[lib32?]
 
 SRC_URI="ftp://xmlsoft.org/${PN}/${P}.tar.gz"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# we still require the 1.1.8 patch for the .m4 file, to add
 	# the CXXFLAGS defines <obz@gentoo.org>
 	epatch "${FILESDIR}/libxslt.m4-${PN}-1.1.8.patch"
@@ -44,7 +44,7 @@ multilib-native_src_prepare_internal() {
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# Always pass --with-debugger. It is required by third parties (see
 	# e.g. bug #98345)
 	local myconf="--with-debugger \
@@ -56,7 +56,7 @@ multilib-native_src_configure_internal() {
 	econf ${myconf} || die "configure failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "Installation failed"
 
 	dodoc AUTHORS ChangeLog Copyright FEATURES NEWS README TODO

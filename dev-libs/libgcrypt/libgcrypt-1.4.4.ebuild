@@ -23,7 +23,7 @@ pkg_setup() {
 	[[ $(tc-arch) == x86 && $(gcc-version) == 4.1 ]] && replace-flags -O3 -O2
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# --disable-padlock-support for bug #201917
 	econf \
 		--disable-padlock-support \
@@ -32,7 +32,7 @@ multilib-native_src_configure_internal() {
 		--enable-noexecstack
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS ChangeLog NEWS README* THANKS TODO
 

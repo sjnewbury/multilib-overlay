@@ -21,7 +21,7 @@ RDEPEND="x11-libs/libXrender[lib32?]
 	>=media-libs/fontconfig-2.2[lib32?]"
 DEPEND="${RDEPEND}"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	# No such function yet
 	# x-modular_pkg_setup
 
@@ -31,7 +31,7 @@ multilib-native_pkg_setup_internal() {
 	filter-ldflags -Wl,-Bdirect
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	multilib-native_check_inherited_funcs src_install
 	prep_ml_binaries /usr/bin/xft-config 
 }

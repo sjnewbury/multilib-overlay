@@ -28,7 +28,7 @@ pkg_setup() {
 	G2CONF="${G2CONF} $(use_enable doc docs) $(use_with libffi ffi)"
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	gnome2_src_unpack
 
 	# Fix FHS compliance, see upstream bug #535524
@@ -49,7 +49,7 @@ src_test() {
 	Xemake check || die "tests failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	gnome2_src_install
 
 	if use examples; then
@@ -64,7 +64,7 @@ multilib-native_src_install_internal() {
 		"${D}"/usr/$(get_libdir)/python${PYVER}/site-packages/pygtk.pth-2.0
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	python_version
 	python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages/gtk-2.0
 	alternatives_auto_makesym /usr/$(get_libdir)/python${PYVER}/site-packages/pygtk.py pygtk.py-[0-9].[0-9]

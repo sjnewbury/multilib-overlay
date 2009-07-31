@@ -38,7 +38,7 @@ src_unpack() {
 	fi
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# --disable-padlock-support for bug#201917
 	econf \
 		--disable-padlock-support \
@@ -49,7 +49,7 @@ multilib-native_src_configure_internal() {
 		|| die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" install || die
 	dodoc AUTHORS BUGS ChangeLog NEWS README* THANKS TODO VERSION
 

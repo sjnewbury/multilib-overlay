@@ -30,13 +30,13 @@ src_unpack() {
 		Makefile || die "sed failed"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake STRIP=true LD="$(tc-getCC) ${LDFLAGS}" CC="$(tc-getCC)" \
 		POPT="${CFLAGS}" M_ARCH="" AR="$(tc-getAR)" \
 		|| die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake STRIP=true GLEW_DEST="${D}/usr" LIBDIR="${D}/usr/$(get_libdir)" \
 		M_ARCH="" install || die "emake install failed"
 

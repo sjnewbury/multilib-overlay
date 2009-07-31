@@ -93,7 +93,7 @@ src_unpack() {
 	AT_M4DIR="${S}/cmulocal ${S}/config" eautoreconf
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# Fix QA issues.
 	append-flags -fno-strict-aliasing
 	append-flags -D_XOPEN_SOURCE -D_XOPEN_SOURCE_EXTENDED -D_BSD_SOURCE -DLDAP_DEPRECATED
@@ -170,7 +170,7 @@ multilib-native_src_compile_internal() {
 	emake testsaslauthd || die "emake testsaslauthd failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake -j1 DESTDIR="${D}" install || die "emake install failed"
 	keepdir /var/lib/sasl2 /etc/sasl2
 

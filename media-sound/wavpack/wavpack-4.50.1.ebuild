@@ -20,12 +20,12 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	econf $(use_enable mmx)
 	emake || die "emake failed."
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 	dodoc ChangeLog README
 }

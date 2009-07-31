@@ -38,7 +38,7 @@ src_unpack() {
 	epatch "${FILESDIR}/${P}-debug.patch"
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# Strict aliasing problem
 	append-flags -fno-strict-aliasing
 
@@ -52,7 +52,7 @@ multilib-native_src_configure_internal() {
 		--disable-dependency-tracking
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake -j1 DESTDIR="${D}" install  || die "Installation failed"
 	mv "${D}/usr/bin/"{esd,esound-esd}
 

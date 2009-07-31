@@ -48,7 +48,7 @@ src_unpack() {
 	epunt_cxx
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# USE zlib support breaks gnome2
 	# (libgnomeprint for instance fails to compile with
 	# fresh install, and existing) - <azarah@gentoo.org> (22 Dec 2002).
@@ -85,7 +85,7 @@ multilib-native_src_configure_internal() {
 	done
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "Installation failed"
 
 	dodoc AUTHORS ChangeLog Copyright NEWS README* TODO*
@@ -103,7 +103,7 @@ multilib-native_src_install_internal() {
 	prep_ml_binaries /usr/bin/xml2-config 
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	if use python; then
 		python_version
 		python_need_rebuild
@@ -130,6 +130,6 @@ multilib-native_pkg_postinst_internal() {
 	fi
 }
 
-multilib-native_pkg_postrm_internal() {
+ml-native_pkg_postrm() {
 	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages
 }

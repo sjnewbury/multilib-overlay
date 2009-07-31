@@ -22,11 +22,11 @@ DEPEND="X? ( x11-libs/libXt[lib32?] )
 
 S=${WORKDIR}/${MY_P}
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf $(use_with X x) || die "econf failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc CHANGES README
 }

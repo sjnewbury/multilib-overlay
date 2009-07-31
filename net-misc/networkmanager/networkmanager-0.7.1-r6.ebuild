@@ -57,7 +57,7 @@ DEPEND="${RDEPEND}
 
 S=${WORKDIR}/${MY_P}
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 
 	# Fix up the dbus conf file to use plugdev group
 	epatch "${FILESDIR}/${PN}-0.7.1-confchanges.patch"
@@ -75,7 +75,7 @@ multilib-native_src_prepare_internal() {
 
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	ECONF="--disable-more-warnings
 		--localstatedir=/var
 		--with-distro=gentoo
@@ -109,7 +109,7 @@ multilib-native_src_configure_internal() {
 	econf ${ECONF}
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
 	# Need to keep the /var/run/NetworkManager directory

@@ -40,14 +40,14 @@ src_unpack() {
 		"${S}"/doc/manual.sgml
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	econf \
 		$(use_enable debug debug all) \
 		$(use_enable doc build-docs)
 	emake || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake -j1 DESTDIR="${D}" install || die "make install failed"
 	dodoc AUTHORS NEWS README
 	use doc && dohtml doc/html/*.html

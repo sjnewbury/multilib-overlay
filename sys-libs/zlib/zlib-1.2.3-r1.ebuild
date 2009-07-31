@@ -34,7 +34,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	tc-export AR CC RANLIB
 	case ${CHOST} in
 	*-mingw*|mingw*)
@@ -49,7 +49,7 @@ multilib-native_src_compile_internal() {
 	esac
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	einstall libdir="${D}"/$(get_libdir) || die
 	rm "${D}"/$(get_libdir)/libz.a
 	insinto /usr/include

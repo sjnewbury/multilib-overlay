@@ -14,7 +14,7 @@ IUSE=""
 DEPEND="!<media-libs/libdc1394-1.2.2"
 RDEPEND="${DEPEND}"
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die
 	dodoc AUTHORS ChangeLog NEWS README
 }

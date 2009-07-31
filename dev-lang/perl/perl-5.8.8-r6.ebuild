@@ -47,7 +47,7 @@ PDEPEND=">=app-admin/perl-cleaner-1.03
 			>=perl-core/Test-Harness-2.56
 		)"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	# I think this should rather be displayed if you *have* 'ithreads'
 	# in USE if it could break things ...
 	if use ithreads
@@ -69,7 +69,7 @@ multilib-native_pkg_setup_internal() {
 	fi
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 
 	# Get -lpthread linked before -lc.  This is needed
 	# when using glibc >= 2.3, or else runtime signal
@@ -166,7 +166,7 @@ myconf() {
 	myconf=( "${myconf[@]}" "$@" )
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	declare -a myconf
 
 	# some arches and -O do not mix :)
@@ -296,7 +296,7 @@ multilib-native_src_configure_internal() {
 		"${myconf[@]}" || die "Unable to configure"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 
 	# would like to bracket this with a test for the existence of a
 	# dotfile, but can't clean it automatically now.
@@ -304,12 +304,12 @@ multilib-native_src_compile_internal() {
 	emake -j1 || die "Unable to make"
 }
 
-multilib-native_src_test_internal() {
+ml-native_src_test() {
 	use elibc_uclibc && export MAKEOPTS="${MAKEOPTS} -j1"
 	emake -i test CCDLFLAGS= || die "test failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 
 	export LC_ALL="C"
 
@@ -607,7 +607,7 @@ src_remove_extra_files()
 	popd > /dev/null
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	INC=$(perl -e 'for $line (@INC) { next if $line eq "."; next if $line =~ m/'${MY_PV}'|etc|local|perl$/; print "$line\n" }')
 	if [[ "${ROOT}" = "/" ]]
 	then

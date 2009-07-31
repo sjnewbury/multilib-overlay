@@ -40,7 +40,7 @@ RDEPEND="${COMMON_DEPEND}
 # We need the lib/rcscripts/addon support
 PROVIDE="virtual/dev-manager"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	udev_helper_dir="/$(get_libdir)/udev"
 
 	# comparing kernel version without linux-info.eclass to not pull
@@ -90,7 +90,7 @@ src_unpack() {
 	fi
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# patches go here...
 
 	# change rules back to group uucp instead of dialout for now
@@ -124,7 +124,7 @@ multilib-native_src_prepare_internal() {
 	fi
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	filter-flags -fprefetch-loop-arrays
 
 	econf \
@@ -138,7 +138,7 @@ multilib-native_src_configure_internal() {
 	emake || die "compiling udev failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	local scriptdir="${FILESDIR}/136"
 
 	into /

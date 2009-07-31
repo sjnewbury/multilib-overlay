@@ -19,6 +19,6 @@ src_unpack() {
 	epatch "${FILESDIR}/${P}-libdir.patch"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" LIBDIR="/usr/$(get_libdir)" install || die
 }

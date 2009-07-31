@@ -33,12 +33,12 @@ src_unpack() {
  
 src_configure() { :; }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	econf --with-jpeg $(use_with lcms) || die "econf failed"
 	emake || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" install || die "make install failed"
 
 	dodoc CHANGES README*

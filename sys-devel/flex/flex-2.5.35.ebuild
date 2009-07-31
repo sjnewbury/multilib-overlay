@@ -20,7 +20,7 @@ IUSE="nls static"
 DEPEND="nls? ( sys-devel/gettext[lib32?] )"
 RDEPEND=""
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	cd "${S}"
 	[[ -n ${DEB_VER} ]] && epatch "${WORKDIR}"/${PN}_${PV}-${DEB_VER}.diff
 	epatch "${FILESDIR}"/${PN}-2.5.34-isatty.patch #119598
@@ -29,12 +29,12 @@ multilib-native_src_prepare_internal() {
 	sed -i 's:^LDFLAGS:LOADLIBES:' tests/test-pthread/Makefile.in #262989
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	use static && append-ldflags -static
 	econf $(use_enable nls) || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake install DESTDIR="${D}" || die "make install failed"
 	dodoc AUTHORS ChangeLog NEWS ONEWS README* THANKS TODO
 	dosym flex /usr/bin/lex

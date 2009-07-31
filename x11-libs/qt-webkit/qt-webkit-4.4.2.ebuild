@@ -33,7 +33,7 @@ src_unpack() {
 	qt4-build_src_unpack
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 	myconf="${myconf} -webkit"
 	qt4-build_src_configure

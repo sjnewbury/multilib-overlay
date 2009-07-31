@@ -22,13 +22,13 @@ DEPEND="gpm? ( sys-libs/gpm )"
 
 S=${WORKDIR}/${MY_P}
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	[[ -n ${PV_SNAP} ]] && epatch "${WORKDIR}"/${MY_P}-${PV_SNAP}-patch.sh
 	epatch "${FILESDIR}"/${PN}-5.6-gfbsd.patch
 	epatch "${FILESDIR}"/${PN}-5.7-emacs.patch #270527
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	unset TERMINFO #115036
 	# The ebuild keeps failing if this variable is set when a
 	# crossdev compiler is installed so is better to remove it
@@ -57,7 +57,7 @@ do_configure() {
 	"
 	# We need the basic terminfo files in /etc, bug #37026.  We will
 	# add '--with-terminfo-dirs' and then populate /etc/terminfo in
-	# multilib-native_src_install_internal() ...
+	# ml-native_src_install() ...
 #		$(use_with berkdb hashed-db)
 	econf \
 		--libdir="/$(get_libdir)" \
@@ -88,7 +88,7 @@ do_configure() {
 		|| die "configure failed"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# A little hack to fix parallel builds ... they break when
 	# generating sources so if we generate the sources first (in
 	# non-parallel), we can then build the rest of the package
@@ -106,7 +106,7 @@ multilib-native_src_compile_internal() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	# install unicode version second so that the binaries in /usr/bin
 	# support both wide and narrow
 	cd "${WORKDIR}"/narrowc.${ABI}

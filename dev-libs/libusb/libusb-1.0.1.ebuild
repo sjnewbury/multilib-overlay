@@ -17,12 +17,12 @@ IUSE="debug doc"
 DEPEND="doc? ( app-doc/doxygen )"
 RDEPEND=""
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		$(use_enable debug debug-log)
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	default
 
 	if use doc ; then
@@ -31,7 +31,7 @@ multilib-native_src_compile_internal() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS ChangeLog NEWS PORTING README THANKS TODO
 

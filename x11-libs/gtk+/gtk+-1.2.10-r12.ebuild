@@ -29,7 +29,7 @@ DEPEND="${RDEPEND}
 	x11-proto/xextproto
 	nls? ( sys-devel/gettext[lib32?] dev-util/intltool )"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	cd "${S}"
 	epatch "${FILESDIR}"/${P}-m4.patch
 	epatch "${FILESDIR}"/${P}-automake.patch
@@ -41,7 +41,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf=
 	use nls || myconf="${myconf} --disable-nls"
 	strip-linguas ${MY_AVAILABLE_LINGUAS}
@@ -59,7 +59,7 @@ multilib-native_src_configure_internal() {
 		${myconf} || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make install DESTDIR="${D}" || die
 
 	dodoc AUTHORS ChangeLog* HACKING

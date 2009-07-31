@@ -51,7 +51,7 @@ PDEPEND="${DEPEND} app-admin/python-updater"
 
 PROVIDE="virtual/python"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	if tc-is-cross-compiler; then
 		epatch "${FILESDIR}"/python-2.5-cross-printf.patch
 		epatch "${FILESDIR}"/python-2.6-chflags-cross.patch
@@ -83,7 +83,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# Disable extraneous modules with extra dependencies.
 	if use build; then
 		export PYTHON_DISABLE_MODULES="readline pyexpat dbm gdbm bsddb _curses _curses_panel _tkinter _sqlite3"
@@ -165,7 +165,7 @@ multilib-native_src_configure_internal() {
 		${myconf}
 }
 
-multilib-native_src_test_internal() {
+ml-native_src_test() {
 	# Tests won't work when cross compiling.
 	if tc-is-cross-compiler; then
 		elog "Disabling tests due to crosscompiling."
@@ -206,7 +206,7 @@ multilib-native_src_test_internal() {
 	elog "and run the tests separately."
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	# ahuemer, 20090529:
 	# -j1 was removed from python-2.6.2-r1.ebuild in portage
 	# we seem to still need it, because otherwise building fails!
@@ -250,14 +250,14 @@ multilib-native_src_install_internal() {
 	rmdir "${D}"/usr/$(get_libdir)/${PN}${PYVER}/lib-old
 }
 
-multilib-native_pkg_postrm_internal() {
+ml-native_pkg_postrm() {
 	eselect python update --ignore 3.0 --ignore 3.1
 
 	python_mod_cleanup /usr/lib/python${PYVER}
 	[[ "$(get_libdir)" != "lib" ]] && python_mod_cleanup /usr/$(get_libdir)/python${PYVER}
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	eselect python update --ignore 3.0 --ignore 3.1
 
 	python_mod_optimize -x "(site-packages|test)" /usr/lib/python${PYVER}

@@ -25,17 +25,17 @@ DEPEND="${RDEPEND}
 	test? ( dev-python/pygobject[lib32?] )
 	dev-util/pkgconfig[lib32?]"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# disable pyc compiling
 	mv "${S}"/py-compile "${S}"/py-compile.orig
 	ln -s $(type -P true) "${S}"/py-compile
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf --docdir=/usr/share/doc/dbus-python-${PV}
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	if use examples; then
@@ -44,12 +44,12 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	python_version
 	python_need_rebuild
 	python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages/dbus
 }
 
-multilib-native_pkg_postrm_internal() {
+ml-native_pkg_postrm() {
 	python_mod_cleanup
 }

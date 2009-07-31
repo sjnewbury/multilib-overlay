@@ -27,14 +27,14 @@ DEPEND="${RDEPEND}
 	x11-proto/xcmiscproto
 	>=x11-misc/util-macros-0.99.0_p20051007"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	CONFIGURE_OPTIONS="$(use_enable ipv6)
 		$(use_with xcb)"
 	# xorg really doesn't like xlocale disabled.
 	# $(use_enable nls xlocale)
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# [Cross-Compile Love] Disable {C,LD}FLAGS and redefine CC= for 'makekeys'
 	( filter-flags -m* ; cd src/util && make CC=$(tc-getBUILD_CC) CFLAGS="${CFLAGS}" LDFLAGS="" clean all)
 	x-modular_src_make

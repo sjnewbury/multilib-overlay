@@ -28,7 +28,7 @@ DEPEND="${RDEPEND}
 	doc? ( dev-libs/libxslt >=app-text/docbook-xsl-stylesheets-1.70.1 )
 	>=dev-util/pkgconfig-0.9[lib32?]"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# fix for bug #209531
 	epatch "${FILESDIR}/${PN}-2.12.1-fix-amd64.patch"
 
@@ -42,14 +42,14 @@ multilib-native_src_prepare_internal() {
 	ln -s $(type -P true) "${S}"/py-compile
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	use hppa && append-flags -ffunction-sections
 	econf $(use_enable doc docs) --enable-thread
 	# possible problems with parallel builds (#45776)
 	#emake -j1 || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	python_need_rebuild
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS ChangeLog INSTALL MAPPING NEWS README THREADS TODO
@@ -66,12 +66,12 @@ src_test() {
 	Xemake check-local || die "tests failed"
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	python_version
 	python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages/gtk-2.0
 }
 
-multilib-native_pkg_postrm_internal() {
+ml-native_pkg_postrm() {
 	python_version
 	python_mod_cleanup /usr/$(get_libdir)/python${PYVER}/site-packages/gtk-2.0
 	rm -f "${ROOT}"/usr/$(get_libdir)/python${PYVER}/site-packages/pygtk.{py,pth}

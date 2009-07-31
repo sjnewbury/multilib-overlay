@@ -28,7 +28,7 @@ RDEPEND=""
 
 S=${WORKDIR}/${MY_PN}/build/generic
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 
 	if use pic; then
@@ -38,7 +38,7 @@ multilib-native_src_configure_internal() {
 	econf ${myconf}
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc "${S}"/../../{AUTHORS,ChangeLog*,CodingStyle,README,TODO}
 

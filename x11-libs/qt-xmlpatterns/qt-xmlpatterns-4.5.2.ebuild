@@ -28,7 +28,7 @@ PATCHES=(
 	"${FILESDIR}/qt-4.5-nolibx11.diff"
 )
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	myconf="${myconf} -xmlpatterns"
 	qt4-build_src_configure
 }

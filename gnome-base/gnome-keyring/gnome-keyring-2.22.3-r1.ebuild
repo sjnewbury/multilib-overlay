@@ -32,7 +32,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable debug)
 		$(use_enable hal)

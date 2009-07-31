@@ -50,7 +50,7 @@ include/
 src/
 tools/shared/"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	if use raster; then
 		ewarn "WARNING: You have enabled raster backend rendering engine."
 		ewarn "This is a new feature and may lead to composite problems"
@@ -73,7 +73,7 @@ src_unpack() {
 	qt4-build_src_unpack
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	qt4-build_src_prepare
 
 	# Don't build plugins this go around, because they depend on qt3support lib
@@ -89,7 +89,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-ppc-pixmap-fix-backport-196152.patch
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	export PATH="${S}/bin:${PATH}"
 	export LD_LIBRARY_PATH="${S}/lib:${LD_LIBRARY_PATH}"
 
@@ -118,7 +118,7 @@ multilib-native_src_configure_internal() {
 	qt4-build_src_configure
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	QCONFIG_ADD="x11sm xshape xcursor xfixes xrandr xrender xkb fontconfig
 		$(usev accessibility) $(usev xinerama) $(usev cups) $(usev nas)
 		gif png system-png system-jpeg

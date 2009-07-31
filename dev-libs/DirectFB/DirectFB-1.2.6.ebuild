@@ -65,7 +65,7 @@ src_unpack() {
 		configure
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	local vidcards card input inputdrivers
 	if [[ ${VIDEO_CARDS+set} == "set" ]] ; then
 		for card in ${VIDEO_CARDS} ; do
@@ -125,7 +125,7 @@ multilib-native_src_compile_internal() {
 	emake || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc fb.modes AUTHORS ChangeLog NEWS README* TODO
 	dohtml -r docs/html/*

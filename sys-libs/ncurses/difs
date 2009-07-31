@@ -33,7 +33,7 @@
 +	epatch "${FILESDIR}"/${PN}-5.7-emacs.patch #270527
  }
  
- multilib-native_src_configure_internal() {
+ ml-native_src_configure() {
 -	# The ebuild keeps failing if this variable is set when a
 -	# crossdev compiler is installed so is better to remove it
 -	#tc-export BUILD_CC
@@ -79,7 +79,7 @@
  	# We need the basic terminfo files in /etc, bug #37026.  We will
  	# add '--with-terminfo-dirs' and then populate /etc/terminfo in
 -	# src_install() ...
-+	# multilib-native_src_install_internal() ...
++	# ml-native_src_install() ...
  #		$(use_with berkdb hashed-db)
  	econf \
  		--libdir="/$(get_libdir)" \
@@ -110,7 +110,7 @@
 -	fi
  }
  
- multilib-native_src_install_internal() {
+ ml-native_src_install() {
  	# install unicode version second so that the binaries in /usr/bin
  	# support both wide and narrow
 -	cd "${WORKDIR}"/narrowc.${ABI}

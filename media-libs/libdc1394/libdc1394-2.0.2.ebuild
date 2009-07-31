@@ -17,7 +17,7 @@ DEPEND=">=sys-libs/libraw1394-1.2.0
 		juju? ( >=sys-kernel/linux-headers-2.6.23-r3 )
 		X? ( x11-libs/libSM x11-libs/libXv )"
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	local myconf=""
 	if use juju; then
 		myconf="--with-juju-dir"
@@ -31,7 +31,7 @@ multilib-native_src_compile_internal() {
 	emake || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "install failed"
 	dodoc NEWS README AUTHORS ChangeLog
 }

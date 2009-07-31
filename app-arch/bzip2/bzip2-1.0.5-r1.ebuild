@@ -17,7 +17,7 @@ IUSE="static"
 
 DEPEND=""
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	cd "${S}"
 	epatch "${FILESDIR}"/${PN}-1.0.4-makefile-CFLAGS.patch
 	epatch "${FILESDIR}"/${PN}-1.0.4-saneso.patch
@@ -39,7 +39,7 @@ multilib-native_src_prepare_internal() {
 		bzip2.1 bzip2.txt Makefile-libbz2_so manual.{html,ps,xml} || die
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	local makeopts="
 		CC=$(tc-getCC)
 		AR=$(tc-getAR)
@@ -50,7 +50,7 @@ multilib-native_src_compile_internal() {
 	emake LDFLAGS="${LDFLAGS}" ${makeopts} all || die "Make failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake PREFIX="${D}"/usr LIBDIR=$(get_libdir) install || die
 	dodoc README* CHANGES bzip2.txt manual.*
 

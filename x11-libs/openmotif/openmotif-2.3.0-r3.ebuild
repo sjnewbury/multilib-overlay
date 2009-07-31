@@ -32,7 +32,7 @@ DEPEND="${RDEPEND}
 	sys-devel/flex
 	x11-misc/xbitmaps"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	# clean up orphaned cruft left over by motif-config
 	local i l count=0
 	for i in "${ROOT}"usr/bin/{mwm,uil,xmbind} \
@@ -58,7 +58,7 @@ multilib-native_pkg_setup_internal() {
 		einfo "Cleaned up ${count} orphaned symlinks in ${ROOT}usr/share/man"
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}/${P}-sensitivity-invisible.patch"
 	epatch "${FILESDIR}/${P}-fix-nedit-segfaults.patch"
 	epatch "${FILESDIR}/${P}-freebsd-libiconv.patch"
@@ -76,7 +76,7 @@ multilib-native_src_prepare_internal() {
 	AT_M4DIR=. eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# get around some LANG problems in make (#15119)
 	unset LANG
 
@@ -95,11 +95,11 @@ multilib-native_src_configure_internal() {
 		$(use_enable png)
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake -j1 || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake -j1 DESTDIR="${D}" install || die "emake install failed"
 
 	# mwm default configs

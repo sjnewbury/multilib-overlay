@@ -95,7 +95,7 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	#prevent quicktime crashing
 	append-flags -frename-registers -ffunction-sections
 
@@ -177,7 +177,7 @@ multilib-native_src_compile_internal() {
 	emake || die "emake failed."
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" \
 		docdir="/usr/share/doc/${PF}" htmldir="/usr/share/doc/${PF}/html" \
 		install || die "emake install failed."

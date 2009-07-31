@@ -24,7 +24,7 @@ src_test() {
 	einfo "testing currently broken - bypassing"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake install DESTDIR="${D}" || die "emake install failed"
 	insinto /usr/include/
 	doins -r include/smbios/

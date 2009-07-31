@@ -20,11 +20,11 @@ DEPEND="selinux? ( sys-libs/libselinux )"
 
 S=${WORKDIR}/${PN}.${PV}
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf --sbindir=/sbin $(use_enable selinux) || die "econf failed"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake || die "compile problem"
 }
 
@@ -49,12 +49,12 @@ src_install() {
 	dodoc INSTALL INTRO README VERSION WHATS_NEW
 }
 
-multilib-native_pkg_preinst_internal() {
+ml-native_pkg_preinst() {
 	local l=${ROOT}/$(get_libdir)/libdevmapper.so.1.01
 	[[ -e ${l} ]] && cp "${l}" "${D}"/$(get_libdir)/
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	preserve_old_lib_notify /$(get_libdir)/libdevmapper.so.1.01
 
 	elog "device-mapper volumes are no longer automatically created for"

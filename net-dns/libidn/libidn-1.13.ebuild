@@ -32,7 +32,7 @@ src_unpack() {
 	rm "${S}/java/${P}.jar" || die
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		$(use_enable nls) \
 		$(use_enable java) \
@@ -41,7 +41,7 @@ multilib-native_src_configure_internal() {
 		|| die
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake || die
 
 	if use emacs; then
@@ -49,7 +49,7 @@ multilib-native_src_compile_internal() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake install DESTDIR="${D}" || die
 	dodoc AUTHORS ChangeLog FAQ NEWS README THANKS TODO || die
 

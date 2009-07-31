@@ -48,7 +48,7 @@ DEPEND="java? ( >=virtual/jdk-1.4 )
 
 S="${WORKDIR}/mozilla-${MAJ_PV}"
 
-# Needed by multilib-native_src_compile_internal() and src_install().
+# Needed by ml-native_src_compile() and src_install().
 # Would do in pkg_setup but that loses the export attribute, they
 # become pure shell variables.
 export BUILD_OFFICIAL=1
@@ -58,7 +58,7 @@ pkg_setup(){
 	java-pkg-opt-2_pkg_setup
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# Apply our patches
 	EPATCH_SUFFIX="patch" \
 	EPATCH_FORCE="yes" \
@@ -83,7 +83,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	####################################
 	#
 	# mozconfig, CFLAGS and CXXFLAGS setup
@@ -182,7 +182,7 @@ multilib-native_src_configure_internal() {
 		"${S}"/toolkit/content/buildconfig.html
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
 	rm "${D}"/usr/bin/xulrunner

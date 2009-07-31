@@ -64,7 +64,7 @@ pkg_setup() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	gnome2_src_install
 	# Need to keep the /var/run/NetworkManager directory
 	keepdir /var/run/NetworkManager

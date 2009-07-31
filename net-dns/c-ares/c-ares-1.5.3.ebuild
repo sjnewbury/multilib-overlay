@@ -17,11 +17,11 @@ IUSE=""
 
 DEPEND=""
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf --enable-shared || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die
 	dodoc CHANGES NEWS README*
 }

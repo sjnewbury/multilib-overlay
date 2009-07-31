@@ -30,7 +30,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README* TODO"
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# We need to unset IDL_DIR, which is set by RSI's IDL.  This causes certain
 	# files to be not found by autotools when compiling ORBit.  See bug #58540
 	# for more information.  Please don't remove -- 8/18/06
@@ -51,7 +51,7 @@ src_test() {
 	emake -j1 check || die "tests failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	multilib-native_check_inherited_funcs src_install
 	prep_ml_binaries /usr/bin/orbit2-config 
 }

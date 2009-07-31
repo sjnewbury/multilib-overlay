@@ -26,7 +26,7 @@ CONFIGURE_OPTIONS="$(use_enable ipv6)
 	--with-bzip2
 	--with-encodingsdir=/usr/share/fonts/encodings"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	# No such function yet
 	# x-modular_pkg_setup
 

@@ -25,13 +25,13 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	use berkdb || export ac_cv_lib_dbm_main=no ac_cv_lib_ndbm_main=no
 	econf --includedir=/usr/include/gdbm || die
 	emake || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake -j1 INSTALL_ROOT="${D}" install install-compat || die
 	mv "${D}"/usr/include/gdbm/gdbm.h "${D}"/usr/include/ || die
 	dodoc ChangeLog NEWS README

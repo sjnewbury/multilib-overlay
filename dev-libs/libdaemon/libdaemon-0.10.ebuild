@@ -14,7 +14,7 @@ IUSE="doc"
 RDEPEND=""
 DEPEND="doc? ( app-doc/doxygen )"
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	econf --disable-lynx || die "econf failed"
 	emake || die "emake failed"
 
@@ -24,7 +24,7 @@ multilib-native_src_compile_internal() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" install || die "make install failed"
 
 	if use doc; then

@@ -35,7 +35,7 @@ DEPEND="sys-devel/flex
 RDEPEND="${CDEPEND}
 	sys-auth/pambase[consolekit]"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch \
 		"${FILESDIR}/4.31-as_needed.patch" \
 		"${FILESDIR}/4.34-conditional_libsbc.patch"
@@ -48,7 +48,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# the order is the same as ./configure --help
 
 	# we don't need the other daemons either with the new
@@ -82,7 +82,7 @@ multilib-native_src_configure_internal() {
 		--localstatedir=/var
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	dodoc AUTHORS ChangeLog README || die

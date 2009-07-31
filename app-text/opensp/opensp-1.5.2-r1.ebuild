@@ -28,7 +28,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-1.5-gcc34.patch
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	#
 	# The following filters are taken from openjade's ebuild. See bug #100828.
 	#
@@ -61,7 +61,7 @@ src_test() {
 	SANDBOX_PREDICT="${SANDBOX_PREDICT%:/}"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" \
 		pkgdocdir=/usr/share/doc/${PF} install || die "Installation failed"
 

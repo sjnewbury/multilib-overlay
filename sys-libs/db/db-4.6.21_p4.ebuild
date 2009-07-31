@@ -37,7 +37,7 @@ DEPEND="tcl? ( >=dev-lang/tcl-8.4[lib32?] )
 RDEPEND="tcl? ( dev-lang/tcl[lib32?] )
 	java? ( >=virtual/jre-1.4 )"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	cd "${S}"
 	for (( i=1 ; i<=${PATCHNO} ; i++ ))
 	do
@@ -75,7 +75,7 @@ multilib-native_src_prepare_internal() {
 		-e "s/__EDIT_DB_VERSION__/$DB_VERSION/g" configure
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# compilation with -O0 fails on amd64, see bug #171231
 	if use amd64 && [ ${ABI} = "amd64" ]; then
 		replace-flags -O0 -O2
@@ -134,7 +134,7 @@ multilib-native_src_configure_internal() {
 	    && mv Makefile.cpy Makefile
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	cd build_unix && einstall libdir="${D}/usr/$(get_libdir)" STRIP="none" || die
 
 	db_src_install_usrbinslot

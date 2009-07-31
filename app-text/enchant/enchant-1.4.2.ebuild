@@ -38,7 +38,7 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	econf $(use_enable aspell) \
 		$(use_enable hunspell myspell) \
 		$(use_enable zemberek) \
@@ -47,12 +47,12 @@ multilib-native_src_compile_internal() {
 	emake || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS BUGS ChangeLog HACKING MAINTAINERS NEWS README TODO
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	ewarn "Starting with ${PN}-1.4.0 default spell checking engine has changed"
 	ewarn "from aspell to hunspell. In case you used aspell dictionaries to"
 	ewarn "check spelling you need either reemerge ${PN} with aspell USE flag"

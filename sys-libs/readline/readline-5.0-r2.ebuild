@@ -46,14 +46,14 @@ src_unpack() {
 	epatch "${FILESDIR}"/readline-5.0-parallel.patch
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# the --libdir= is needed because if lib64 is a directory, it will default
 	# to using that... even if CONF_LIBDIR isnt set or we're using a version
 	# of portage without CONF_LIBDIR support.
 	econf --with-curses --libdir=/usr/$(get_libdir) || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	# portage 2.0.50's einstall causes sandbox violations if lib64 is a
 	# directory, since readline's configure automatically sets libdir for you.
 	make DESTDIR="${D}" install || die

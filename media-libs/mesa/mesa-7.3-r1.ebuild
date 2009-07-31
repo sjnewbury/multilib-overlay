@@ -117,7 +117,7 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 
 	# This is where we might later change to build xlib/osmesa
@@ -164,7 +164,7 @@ multilib-native_src_configure_internal() {
 	econf ${myconf} || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	dodir /usr
 	emake \
 		DESTDIR="${D}" \

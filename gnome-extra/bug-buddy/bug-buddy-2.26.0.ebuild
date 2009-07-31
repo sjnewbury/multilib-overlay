@@ -42,4 +42,4 @@ pkg_setup() {
 		$(use_enable eds)"
 }
 
-multilib-native_pkg_setup_internal() { :; }
+ml-native_pkg_setup() { :; }

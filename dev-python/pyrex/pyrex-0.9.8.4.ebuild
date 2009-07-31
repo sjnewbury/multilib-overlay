@@ -23,7 +23,7 @@ PYTHON_MODNAME="Pyrex"
 # This version doesn't work with older setuptools #218815
 RDEPEND="!<dev-python/setuptools-0.6_rc8"
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	DOCS="CHANGES.txt ToDo.txt USAGE.txt"
 	distutils_src_install
 

@@ -23,7 +23,7 @@ src_unpack() {
 	epunt_cxx
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc CHANGES AUTHORS
 

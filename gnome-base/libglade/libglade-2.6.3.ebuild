@@ -26,7 +26,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# patch to stop make install installing the xml catalog
 	# because we do it ourselves in postinst()
 	epatch "${FILESDIR}"/Makefile.in.am-2.4.2-xmlcatalog.patch
@@ -37,7 +37,7 @@ multilib-native_src_compile_internal() {
 	gnome2_src_compile
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	dodir /etc/xml
 	gnome2_src_install
 }

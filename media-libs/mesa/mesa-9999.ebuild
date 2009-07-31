@@ -123,7 +123,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf r600
 
 	# Configurable DRI drivers
@@ -198,7 +198,7 @@ multilib-native_src_configure_internal() {
 		${myconf}
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	dodir /usr
 	emake DESTDIR="${D}" install || die "Installation failed"
 

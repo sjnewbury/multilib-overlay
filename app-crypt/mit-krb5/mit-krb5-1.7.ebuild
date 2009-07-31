@@ -34,13 +34,13 @@ src_unpack() {
 	unpack ./${MY_P}.tar.gz
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	EPATCH_SUFFIX="patch" epatch "${PATCHDIR}"
 	einfo "Regenerating configure scripts (be patient)"
 	./util/reconf --force
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	append-flags "-I/usr/include/et"
 	econf \
 		--without-krb4 \
@@ -50,7 +50,7 @@ multilib-native_src_configure_internal() {
 		--enable-kdc-replay-cache || die
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake -j1 || die
 
 	if use doc ; then
@@ -65,7 +65,7 @@ src_test() {
 	einfo "Tests do not run in sandbox, they need mit-krb5 to be already installed to test it."
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake \
 		DESTDIR="${D}" \
 		EXAMPLEDIR=/usr/share/doc/${PF}/examples \

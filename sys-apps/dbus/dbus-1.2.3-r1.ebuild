@@ -39,7 +39,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# so we can get backtraces from apps
 	append-flags -rdynamic
 
@@ -78,7 +78,7 @@ src_test() {
 	DBUS_VERBOSE=1 make check || die "make check failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	# initscript

@@ -38,7 +38,7 @@ DEPEND="${RDEPEND}
 #	${FILESDIR}/arts-1.5.4-multilib.patch
 #	${FILESDIR}/arts-1.5.9-glibc2.8-build-fix.patch"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 
 	epatch "${FILESDIR}/arts-1.5.0-bindnow.patch"
 	epatch "${FILESDIR}/arts-1.5.4-multilib.patch"
@@ -63,7 +63,7 @@ multilib-native_src_prepare_internal() {
 	rm -f "${S}/configure"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	myconf="$(use_enable alsa) $(use_enable vorbis)
 			$(use_enable mp3 libmad) $(use_with jack)
 			$(use_with esd) $(use_with nas)
@@ -78,7 +78,7 @@ multilib-native_src_compile_internal() {
 	kde_src_compile
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	kde_src_install
 
 	# used for realtime priority, but off by default as it is a security hazard

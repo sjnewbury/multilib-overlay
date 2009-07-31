@@ -29,18 +29,18 @@ DEPEND=">=media-libs/freetype-2.0.9[lib32?]
 
 S="${WORKDIR}"/${MY_P2}
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	cd "${S}"
 	epatch "${FILESDIR}"/${P}-gentoo.patch
 	AT_M4DIR=m4 eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	strip-flags # ftgl is sensitive - bug #112820
 	econf
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	rm -rf "${D}"/usr/share/doc/ftgl
 	dodoc AUTHORS BUGS ChangeLog INSTALL NEWS README TODO \

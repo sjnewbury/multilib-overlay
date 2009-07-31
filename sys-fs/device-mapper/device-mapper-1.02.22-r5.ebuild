@@ -28,15 +28,15 @@ src_unpack() {
 	epatch "${FILESDIR}"/device-mapper-1.02.22-export-format-r1.diff
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf --sbindir=/sbin $(use_enable selinux) --enable-dmeventd || die "econf failed"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake || die "compile problem"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake install DESTDIR="${D}" || die
 
 	# move shared libs to /
@@ -62,12 +62,12 @@ multilib-native_src_install_internal() {
 	dodoc INSTALL INTRO README VERSION WHATS_NEW
 }
 
-multilib-native_pkg_preinst_internal() {
+ml-native_pkg_preinst() {
 	local l="${ROOT}"/$(get_libdir)/libdevmapper.so.1.01
 	[[ -e ${l} ]] && cp "${l}" "${D}"/$(get_libdir)/
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	preserve_old_lib_notify /$(get_libdir)/libdevmapper.so.1.01
 
 	elog "device-mapper volumes are no longer automatically created for"

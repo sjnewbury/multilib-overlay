@@ -83,7 +83,7 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# To properly fix CVE-2008-0008
 	append-flags -UNDEBUG
 
@@ -114,7 +114,7 @@ multilib-native_src_compile_internal() {
 	emake || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake -j1 DESTDIR="${D}" install || die "make install failed"
 
 	newconfd "${FILESDIR}/pulseaudio.conf.d" pulseaudio

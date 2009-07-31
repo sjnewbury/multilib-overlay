@@ -21,7 +21,7 @@ DEPEND="nls? ( sys-devel/gettext[lib32?] )
 	sys-devel/autoconf"
 RDEPEND=""
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${PN}-2.4.39-gettext.patch
 	epatch "${FILESDIR}"/${PN}-2.4.43-linguas.patch #205948
 	epatch "${FILESDIR}"/${PN}-2.4.24-only-symlink-when-needed.patch
@@ -37,7 +37,7 @@ multilib-native_src_prepare_internal() {
 	strip-linguas po
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	unset PLATFORM #184564
 	export OPTIMIZER=${CFLAGS}
 	export DEBUG=-DNDEBUG
@@ -49,7 +49,7 @@ multilib-native_src_configure_internal() {
 		|| die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DIST_ROOT="${D}" install install-lib install-dev || die
 	# the man-pages packages provides the man2 files
 	rm -r "${D}"/usr/share/man/man2

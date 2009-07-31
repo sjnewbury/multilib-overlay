@@ -24,12 +24,12 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-3.6-regexp-CVE-2007-4770+4771.diff
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	econf --enable-static $(use_enable debug) || die "econf failed"
 	emake -j1 || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dohtml ../readme.html ../license.html
 

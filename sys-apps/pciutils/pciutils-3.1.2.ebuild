@@ -25,7 +25,7 @@ src_unpack() {
 	cp "${FILESDIR}"/pcimodules.c . || die
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	sed -i -e "/^LIBDIR=/s:/lib:/$(get_libdir):" Makefile
 }
 
@@ -51,11 +51,11 @@ pemake() {
 		"$@"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	pemake OPT="${CFLAGS}" all pcimodules || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	pemake DESTDIR="${D}" install install-lib || die
 	dosbin pcimodules || die
 	doman "${FILESDIR}"/pcimodules.8

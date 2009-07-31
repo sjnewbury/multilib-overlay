@@ -26,7 +26,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS README RELEASE"
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# gst doesnt handle opts well, last tested with 0.10.15
 	strip-flags
 	replace-flags "-O3" "-O2"
@@ -35,6 +35,6 @@ multilib-native_src_configure_internal() {
 		$(use_enable nls)
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	gnome2_src_install
 }

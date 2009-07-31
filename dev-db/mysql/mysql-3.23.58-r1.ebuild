@@ -66,7 +66,7 @@ src_unpack() {
 
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# bug #11681; get b0rked code when using -march=k6 with this package.
 	replace-cpu-flags k6 k6-2 k6-3 i586
 
@@ -123,7 +123,7 @@ multilib-native_src_compile_internal() {
 	make || die "compile problem"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make install DESTDIR="${D}" benchdir_root=/usr/share/mysql || die
 
 	# eeek, not sure whats going on here.. are these needed by anything?

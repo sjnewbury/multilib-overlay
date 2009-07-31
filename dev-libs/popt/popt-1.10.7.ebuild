@@ -24,7 +24,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-1.10.7-scrub-lame-gettext.patch
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	econf \
 		--without-included-gettext \
 		$(use_enable nls) \
@@ -32,7 +32,7 @@ multilib-native_src_compile_internal() {
 	emake || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake install DESTDIR="${D}" || die
 	dodoc CHANGES README
 }

@@ -45,7 +45,7 @@ pkg_setup() {
 	fi
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	local dir
 	for dir in m4 lib/m4 libextra/m4 ; do
 		rm -f "${dir}/lt"* "${dir}/libtool.m4"
@@ -60,7 +60,7 @@ multilib-native_src_prepare_internal() {
 	elibtoolize # for sane .so versioning on FreeBSD
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 	use bindist && myconf="--without-lzo" || myconf="$(use_with lzo)"
 	econf  \
@@ -72,7 +72,7 @@ multilib-native_src_configure_internal() {
 		${myconf}
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
 	dodoc AUTHORS ChangeLog NEWS README THANKS doc/TODO

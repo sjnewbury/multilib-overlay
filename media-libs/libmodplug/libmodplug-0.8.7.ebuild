@@ -19,7 +19,7 @@ IUSE=""
 RDEPEND=""
 DEPEND="dev-util/pkgconfig[lib32?]"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}/${PN}-0.8.4-timidity-patches.patch"
 	epatch "${FILESDIR}/${PN}-0.8.4-endian.patch"
 
@@ -28,7 +28,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die
 	dodoc AUTHORS ChangeLog README TODO
 

@@ -23,7 +23,7 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	econf \
 		$(use_with digitalradio drm)\
 		--without-xmms
@@ -31,7 +31,7 @@ multilib-native_src_compile_internal() {
 	emake || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die
 
 	dodoc AUTHORS ChangeLog NEWS README README.linux TODO

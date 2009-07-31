@@ -20,7 +20,7 @@ RDEPEND="${DEPEND}"
 QT4_TARGET_DIRECTORIES="src/testlib"
 QT4_EXTRACT_DIRECTORIES="${QT4_TARGET_DIRECTORIES}"
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 	myconf="${myconf} -no-xkb -no-tablet -no-fontconfig -no-xrender -no-xrandr
 		-no-xfixes -no-xcursor -no-xinerama -no-xshape -no-sm -no-opengl

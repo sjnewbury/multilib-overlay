@@ -29,7 +29,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${P}-CVE-2008-5187.patch #248057
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# imlib2 has diff configure options for x86/amd64 mmx
 	local myconf=""
 	if [[ $(tc-arch) == "amd64" ]] ; then
@@ -53,7 +53,7 @@ multilib-native_src_configure_internal() {
 	"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	multilib-native_check_inherited_funcs src_install
 	prep_ml_binaries /usr/bin/imlib2-config 
 }

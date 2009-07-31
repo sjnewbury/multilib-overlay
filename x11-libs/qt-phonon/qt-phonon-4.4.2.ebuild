@@ -34,7 +34,7 @@ QCONFIG_DEFINE="QT_GSTREAMER"
 QT4_BUILT_WITH_USE_CHECK="~x11-libs/qt-core-${PV} glib
 ~x11-libs/qt-gui-${PV} glib"
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 	myconf="${myconf} -phonon -no-opengl -no-svg
 		$(qt_use dbus qdbus)"

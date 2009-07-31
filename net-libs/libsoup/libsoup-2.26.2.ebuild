@@ -32,14 +32,14 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS NEWS README"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-static
 		$(use_with gnome)
 		$(use_enable ssl)"
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	gnome2_src_prepare
 
 	# Fix test to follow POSIX (for x86-fbsd)

@@ -15,13 +15,13 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc sparc x86"
 IUSE=""
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	./configure --prefix=/usr --host=${CHOST} || die
 
 	emake || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR=${D} install || die
 
 	# remove the docs installed by make install, since I'll install

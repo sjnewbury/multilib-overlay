@@ -76,7 +76,7 @@ pkg_setup() {
 	check_old_modules
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}/${MY_PN}-0.99.8.1-xtests.patch"
 
 	# Remove NIS dependencies, see bug #235431
@@ -93,7 +93,7 @@ multilib-native_src_prepare_internal() {
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 
 	if use hppa || use elibc_FreeBSD; then
@@ -117,11 +117,11 @@ multilib-native_src_configure_internal() {
 		${myconf} || die "econf failed"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake sepermitlockdir="/var/run/sepermit" || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install \
 		 sepermitlockdir="/var/run/sepermit" || die "make install failed"
 

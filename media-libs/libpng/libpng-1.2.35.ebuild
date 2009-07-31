@@ -22,14 +22,14 @@ DEPEND="${RDEPEND}
 
 S=${WORKDIR}/${PN}-${MY_PV}
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${PN}-1.2.24-pngconf-setjmp.patch
 
 	# So we get sane .so versioning on FreeBSD
 	elibtoolize
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die
 
 	dodoc ANNOUNCE CHANGES KNOWNBUG README TODO Y2KINFO
@@ -37,7 +37,7 @@ multilib-native_src_install_internal() {
 	prep_ml_binaries /usr/bin/libpng-config /usr/bin/libpng12-config 
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	# the libpng authors really screwed around between 1.2.1 and 1.2.3
 	if [[ -f ${ROOT}/usr/$(get_libdir)/libpng.so.3.1.2.1 ]] ; then
 		rm -f "${ROOT}"/usr/$(get_libdir)/libpng.so.3.1.2.1

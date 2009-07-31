@@ -23,14 +23,14 @@ DEPEND="${RDEPEND}
 PYTHON_MODNAME="cairo"
 DOCS="AUTHORS NEWS doc/*"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# don't run py-compile
 	sed -i \
 		-e '/if test -n "$$dlist"; then/,/else :; fi/d' \
 		cairo/Makefile.in || die "sed in cairo/Makefile.in failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	distutils_src_install
 
 	if use examples ; then

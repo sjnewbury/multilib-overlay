@@ -33,7 +33,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	econf \
 		--libdir=/$(get_libdir) \
 		--sysconfdir=/etc/gpm \
@@ -52,7 +52,7 @@ multilib-native_src_compile_internal() {
 #	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make install DESTDIR="${D}" EMACS=: ELISP="" || die "make install failed"
 	# fix lib symlinks since the default is missing/bogus
 	dosym libgpm.so.1.19.0 /$(get_libdir)/libgpm.so.1

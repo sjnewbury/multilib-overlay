@@ -24,7 +24,7 @@ DEPEND="${RDEPEND}
 
 S=${WORKDIR}/${MY_P}
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	#use aotuv && epatch "${WORKDIR}"/${PN}-1.2.1_rc1-aotuv_beta5.7.patch
 
 	sed -e 's:-O20::g' -e 's:-mfused-madd::g' -e 's:-mcpu=750::g' \
@@ -33,7 +33,7 @@ multilib-native_src_prepare_internal() {
 	AT_M4DIR=m4 eautoreconf
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
 	rm -rf "${D}"/usr/share/doc/${PN}*

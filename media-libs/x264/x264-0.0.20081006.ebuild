@@ -29,7 +29,7 @@ src_unpack() {
 	epatch "${FILESDIR}/${PN}-onlylib-20080406.patch"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	local myconf=""
 	use debug && myconf="${myconf} --enable-debug"
 	./configure --prefix=/usr \
@@ -46,7 +46,7 @@ multilib-native_src_compile_internal() {
 	emake CC="$(tc-getCC)" || die "make failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" install || die
 	dodoc AUTHORS doc/*.txt
 }

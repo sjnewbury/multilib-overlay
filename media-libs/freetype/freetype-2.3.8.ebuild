@@ -26,7 +26,7 @@ DEPEND="X?	( x11-libs/libX11[lib32?]
 RDEPEND="${DEPEND}
 		!<media-libs/fontconfig-2.3.2-r2"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	enable_option() {
 		sed -i -e "/#define $1/a #define $1" \
 			include/freetype/config/ftoption.h \
@@ -74,14 +74,14 @@ multilib-native_src_prepare_internal() {
 	epunt_cxx
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	append-flags -fno-strict-aliasing
 
 	type -P gmake &> /dev/null && export GNUMAKE=gmake
 	econf
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake || die "emake failed"
 
 	if use utils; then
@@ -90,7 +90,7 @@ multilib-native_src_compile_internal() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
 	dodoc ChangeLog README

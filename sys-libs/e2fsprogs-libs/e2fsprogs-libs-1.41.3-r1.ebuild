@@ -22,7 +22,7 @@ DEPEND="nls? ( sys-devel/gettext )
 	dev-util/pkgconfig[lib32?]
 	sys-devel/bc"
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	export LDCONFIG=/bin/true
 	export CC=$(tc-getCC)
 
@@ -42,13 +42,13 @@ multilib-native_src_configure_internal() {
 
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	export LDCONFIG=/bin/true
 	export CC=$(tc-getCC)
 	emake STRIP=/bin/true || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	export LDCONFIG=/bin/true
 	export CC=$(tc-getCC)
 

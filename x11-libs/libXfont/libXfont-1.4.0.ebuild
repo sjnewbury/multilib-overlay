@@ -22,7 +22,7 @@ RDEPEND="x11-libs/xtrans[lib32?]
 DEPEND="${RDEPEND}
 	x11-proto/fontcacheproto"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	CONFIGURE_OPTIONS="$(use_enable ipv6)
 		--with-bzip2
 		--with-encodingsdir=/usr/share/fonts/encodings"

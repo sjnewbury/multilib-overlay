@@ -93,7 +93,7 @@ pkg_setup() {
 	enewgroup lpadmin 106
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# disable configure automagic for acl/attr, upstream bug STR #2723
 	epatch "${FILESDIR}/${PN}-1.3.0-configure.patch"
 
@@ -105,7 +105,7 @@ multilib-native_src_prepare_internal() {
 	eautoconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# Fails to compile on SH
 	use sh && replace-flags -O? -O0
 
@@ -179,7 +179,7 @@ multilib-native_src_configure_internal() {
 	sed -i -e 's:cups_serverbin=.*:cups_serverbin=/usr/libexec/cups:' cups-config
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake BUILDROOT="${D}" install || die "emake install failed"
 	dodoc {CHANGES{,-1.{0,1}},CREDITS,README}.txt || die "dodoc install failed"
 

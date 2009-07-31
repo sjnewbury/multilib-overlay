@@ -57,7 +57,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	append-flags -D_GNU_SOURCE
 
 	# the --libdir= is needed because if lib64 is a directory, it will default
@@ -73,7 +73,7 @@ multilib-native_src_compile_internal() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die
 	dodir /$(get_libdir)
 

@@ -25,7 +25,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/opensp-1.5.1-gcc41.patch
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	#
 	# The following filters are taken from openjade's ebuild. See bug #100828.
 	#
@@ -48,6 +48,6 @@ multilib-native_src_compile_internal() {
 	emake pkgdocdir=/usr/share/doc/${PF} || die "parallel make failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" pkgdocdir=/usr/share/doc/${PF} install || die
 }

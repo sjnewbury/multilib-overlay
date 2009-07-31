@@ -25,7 +25,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	# Do NOT compile with --disable-debug/--enable-debug=no
 	# FIXME: fix autofoo and report upstream
 	if use debug ; then
@@ -46,7 +46,7 @@ src_unpack() {
 	ln -s $(type -P true) py-compile
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	gnome2_src_install
 
 	# Prefix menu, bug #256614
@@ -57,7 +57,7 @@ multilib-native_src_install_internal() {
 	doexe "${FILESDIR}/10-xdg-menu-gnome" || die "doexe failed"
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	gnome2_pkg_postinst
 	if use python; then
 		python_version
@@ -70,7 +70,7 @@ multilib-native_pkg_postinst_internal() {
 	ewarn "See bug #256614 for details about this change."
 }
 
-multilib-native_pkg_postrm_internal() {
+ml-native_pkg_postrm() {
 	gnome2_pkg_postrm
 	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/GMenuSimpleEditor
 }

@@ -25,13 +25,13 @@ DEPEND="${RDEPEND}
 	doc? (	app-doc/doxygen
 		app-text/xmlto )"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# Tests were restricted because of this
 	sed -e 's/.*bus_dispatch_test.*/printf ("Disabled due to excess noise\\n");/' \
 		-e '/"dispatch"/d' -i "${S}/bus/test-main.c"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# so we can get backtraces from apps
 	append-flags -rdynamic
 
@@ -68,7 +68,7 @@ src_test() {
 	DBUS_VERBOSE=1 make check || die "make check failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	# initscript

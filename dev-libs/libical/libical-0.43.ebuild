@@ -14,13 +14,13 @@ SLOT="0"
 KEYWORDS="alpha amd64 ~arm hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE=""
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# Fix 66377
 	LDFLAGS="${LDFLAGS} -lpthread" econf || die "Configuration failed"
 	emake || die "Compilation failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 	dodoc AUTHORS ChangeLog NEWS README TEST THANKS TODO doc/*.txt
 }

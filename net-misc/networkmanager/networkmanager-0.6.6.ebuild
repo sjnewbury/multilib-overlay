@@ -69,7 +69,7 @@ src_prepare () {
 	epatch "${FILESDIR}/${PN}-0.6.5-confchanges.patch"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	gnome2_src_install
 	# Need to keep the /var/run/NetworkManager directory
 	keepdir /var/run/NetworkManager

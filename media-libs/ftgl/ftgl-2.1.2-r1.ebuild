@@ -24,7 +24,7 @@ RDEPEND="${DEPEND}"
 
 S=${WORKDIR}/FTGL/unix
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# Use the correct includedir for pkg-config
 	epatch \
 		"${FILESDIR}"/${PV}-ftgl.pc.in.patch \
@@ -45,14 +45,14 @@ multilib-native_src_prepare_internal() {
 	AT_M4DIR=m4 eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	strip-flags # ftgl is sensitive - bug #112820
 	econf \
 		--enable-shared \
 		|| die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	einstall || die
 	dodoc README.txt
 }

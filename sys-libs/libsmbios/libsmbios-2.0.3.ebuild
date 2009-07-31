@@ -22,11 +22,11 @@ RDEPEND=${DEPEND}
 
 RESTRICT=test
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}/libsmbios-2.0.3-gcc44.patch"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake install DESTDIR="${D}" || die "emake install failed"
 	insinto /usr/include/
 	doins -r include/smbios/

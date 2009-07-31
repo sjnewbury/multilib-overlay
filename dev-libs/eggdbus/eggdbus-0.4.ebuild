@@ -26,14 +26,14 @@ DEPEND="${DEPEND}
 # NOTES:
 # man pages are built (and installed) when doc is enabled
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${P}-ldflags.patch
 	epatch "${FILESDIR}"/${P}-tests.patch
 
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# ansi: build fails with
 	# verbose-mode: looks useless
 	# large-file: not sure usefull
@@ -48,7 +48,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable test tests)
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
 	dodoc AUTHORS ChangeLog HACKING NEWS README || die "dodoc failed"

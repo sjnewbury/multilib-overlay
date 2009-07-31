@@ -51,7 +51,7 @@ src_unpack() {
 	fi
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	local myconf
 
 	if use qt3 && ! use mips ; then
@@ -92,7 +92,7 @@ multilib-native_src_compile_internal() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake -j1 DESTDIR="${D}" install || die "emake install failed"
 
 	if use gnome;

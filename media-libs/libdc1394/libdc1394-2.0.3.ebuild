@@ -21,7 +21,7 @@ RDEPEND=">=sys-libs/libraw1394-1.2.0[lib32?]
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )"
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf=""
 	if use juju; then
 		myconf="--with-juju-dir"
@@ -35,14 +35,14 @@ multilib-native_src_configure_internal() {
 		|| die "econf failed"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake || die "emake failed"
 	if use doc ; then
 		emake doc || die "emake doc failed"
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "install failed"
 	dodoc NEWS README AUTHORS ChangeLog
 	use doc && dohtml doc/html/*

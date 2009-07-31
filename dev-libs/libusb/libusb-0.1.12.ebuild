@@ -41,14 +41,14 @@ src_unpack() {
 	${S}/doc/manual.sgml
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		$(use_enable debug debug all) \
 		$(use_enable doc build-docs) \
 		|| die "econf failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake -j1 DESTDIR="${D}" install || die "make install failed"
 	dodoc AUTHORS NEWS README || die "dodoc failed"
 	if use doc ; then

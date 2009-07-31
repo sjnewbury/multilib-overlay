@@ -101,7 +101,7 @@ src_unpack() {
 	fi
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# patches go here...
 	if ! use devfs-compat; then
 		# see Bug #269359
@@ -143,7 +143,7 @@ multilib-native_src_prepare_internal() {
 	fi
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	filter-flags -fprefetch-loop-arrays
 
 	econf \
@@ -158,7 +158,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable extras)
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	local scriptdir="${FILESDIR}/136"
 
 	into /

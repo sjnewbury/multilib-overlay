@@ -18,17 +18,17 @@ IUSE=""
 RDEPEND=">=media-libs/openal-1.6.372[lib32?]"
 DEPEND="${RDEPEND}"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# Link against openal and pthread
 	sed -i -e 's/libalut_la_LIBADD = .*/& -lopenal -lpthread/' src/Makefile.am
 	AT_M4DIR="${S}/admin/autotools/m4" eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf --libdir=/usr/$(get_libdir)
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS ChangeLog NEWS README
 	dohtml doc/*

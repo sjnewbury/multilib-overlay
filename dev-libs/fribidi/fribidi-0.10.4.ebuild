@@ -22,12 +22,12 @@ src_unpack() {
 	epatch ${FILESDIR}/${PN}-macos.patch
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake || die "emake failed"
 	make test || die "make test failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	einstall || die
 	dodoc AUTHORS NEWS README ChangeLog THANKS TODO ANNOUNCE
 

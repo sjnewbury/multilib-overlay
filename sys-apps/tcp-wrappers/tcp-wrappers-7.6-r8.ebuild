@@ -22,7 +22,7 @@ DEPEND=""
 
 S=${WORKDIR}/${MY_P}
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	chmod ug+w Makefile
 
 	EPATCH_SUFFIX="patch"
@@ -33,7 +33,7 @@ multilib-native_src_prepare_internal() {
 	use ipv6 && epatch ${PATCHDIR}/${P}-ipv6-1.14.diff
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	tc-export AR CC RANLIB
 
 	local myconf="-DHAVE_WEAKSYMS"
@@ -52,7 +52,7 @@ multilib-native_src_compile_internal() {
 		linux || die "emake linux failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	dosbin tcpd tcpdchk tcpdmatch safe_finger try-from || die
 
 	doman *.[358]

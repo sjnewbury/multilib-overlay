@@ -65,7 +65,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	append-cppflags -D_GNU_SOURCE
 
 	econf --with-curses || die
@@ -79,7 +79,7 @@ multilib-native_src_compile_internal() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die
 	gen_usr_ldscript -a readline history #4411
 

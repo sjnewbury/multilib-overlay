@@ -42,7 +42,7 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# Bug 48839: pam fails to build on ia64
 	# The problem is that it attempts to link a shared object against
 	# libglib.a; this library needs to be built with -fPIC.  Since
@@ -57,7 +57,7 @@ multilib-native_src_compile_internal() {
 	emake || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make install DESTDIR="${D}" || die
 
 	dodoc AUTHORS ChangeLog README* INSTALL NEWS

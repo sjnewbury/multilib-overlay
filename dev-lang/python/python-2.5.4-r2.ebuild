@@ -54,7 +54,7 @@ DEPEND=">=sys-libs/zlib-1.1.3[lib32?]
 PDEPEND="${DEPEND} app-admin/python-updater"
 PROVIDE="virtual/python"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 
 	if tc-is-cross-compiler ; then
 		epatch "${FILESDIR}"/python-2.4.4-test-cross.patch \
@@ -88,7 +88,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# disable extraneous modules with extra dependencies
 	if use build; then
 		export PYTHON_DISABLE_MODULES="readline pyexpat dbm gdbm bsddb _curses _curses_panel _tkinter _sqlite3"
@@ -177,7 +177,7 @@ multilib-native_src_configure_internal() {
 		${myconf}
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	dodir /usr
 	emake DESTDIR="${D}" altinstall maninstall || die
 

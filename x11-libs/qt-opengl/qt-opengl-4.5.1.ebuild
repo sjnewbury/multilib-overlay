@@ -28,7 +28,7 @@ src/3rdparty"
 QCONFIG_ADD="opengl"
 QCONFIG_DEFINE="QT_OPENGL"
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	myconf="${myconf} -opengl
 		$(qt_use qt3support)"
 

@@ -15,7 +15,7 @@ IUSE="altivec mmx sse sse2"
 CONFIGURE_OPTIONS="$(use_enable altivec vmx) $(use_enable mmx) \
 $(use_enable sse2) --disable-gtk"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	if use sse2 && ! use sse; then
 		eerror "You enabled SSE2 but have SSE disabled. This is an invalid"
 		eerror "configuration. Either do USE='sse' or USE='-sse2'"

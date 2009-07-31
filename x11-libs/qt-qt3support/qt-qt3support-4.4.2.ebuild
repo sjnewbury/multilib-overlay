@@ -29,7 +29,7 @@ QT4_EXTRACT_DIRECTORIES="${QT4_TARGET_DIRECTORIES}
 src/tools/uic/
 "
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	QT4_BUILT_WITH_USE_CHECK="${QT4_BUILT_WITH_USE_CHECK}
 		~x11-libs/qt-core-${PV} qt3support
 		~x11-libs/qt-gui-${PV} qt3support
@@ -40,7 +40,7 @@ multilib-native_pkg_setup_internal() {
 	qt4-build_pkg_setup
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 	myconf="${myconf} -qt3support -no-gstreamer -no-phonon
 		$(qt_use accessibility)"

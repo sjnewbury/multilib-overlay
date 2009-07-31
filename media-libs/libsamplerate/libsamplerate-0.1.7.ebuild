@@ -28,14 +28,14 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		--disable-fftw \
 		$(use_enable sndfile) \
 		--disable-dependency-tracking
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc AUTHORS ChangeLog NEWS README
 	dohtml doc/*.html doc/*.css doc/*.png

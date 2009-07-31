@@ -23,7 +23,7 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc README ChangeLog debian/changelog debian/NEWS
 	dodir /etc

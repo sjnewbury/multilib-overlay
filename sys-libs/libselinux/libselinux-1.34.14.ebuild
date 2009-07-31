@@ -31,7 +31,7 @@ src_unpack() {
 	[ ! -z "${BUGFIX_PATCH}" ] && epatch "${BUGFIX_PATCH}"
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# fix up paths for multilib
 	sed -i -e "/^LIBDIR/s/lib/$(get_libdir)/" src/Makefile \
 		|| die "Fix for multilib LIBDIR failed."
@@ -39,7 +39,7 @@ multilib-native_src_prepare_internal() {
 		|| die "Fix for multilib SHLIBDIR failed."
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	python_version
 	emake LDFLAGS="-fPIC ${LDFLAGS}" all || die
 	emake PYLIBVER="python${PYVER}" LDFLAGS="-fPIC ${LDFLAGS}" pywrap || die
@@ -48,7 +48,7 @@ multilib-native_src_compile_internal() {
 	cat "${FILESDIR}/compat.py" >> "${S}/src/selinux.py" || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	python_version
 	make DESTDIR="${D}" PYLIBVER="python${PYVER}" install install-pywrap || die
 }

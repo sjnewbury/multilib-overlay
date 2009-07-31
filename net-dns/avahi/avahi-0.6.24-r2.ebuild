@@ -104,7 +104,7 @@ pkg_preinst() {
 	fi
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	use ipv6 && sed -i -e s/use-ipv6=no/use-ipv6=yes/ avahi-daemon/avahi-daemon.conf
 
 	sed -i -e "s:\\.\\./\\.\\./\\.\\./doc/avahi-docs/html/:../../../doc/${PF}/html/:" doxygen_to_devhelp.xsl
@@ -118,7 +118,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf=""
 
 	if use python
@@ -159,14 +159,14 @@ multilib-native_src_configure_internal() {
 		|| die "econf failed"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	use sh && replace-flags -O? -O0
 	emake || die "emake failed"
 
 	use doc && emake avahi.devhelp
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake install py_compile=true DESTDIR="${D}" || die "make install failed"
 	use bookmarks || rm -f "${D}"/usr/bin/avahi-bookmarks
 

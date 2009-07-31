@@ -22,7 +22,7 @@ src_unpack() {
 	epatch "${FILESDIR}/${PN}-1.0_pre5-__u64_x86_64.patch"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" LIBDIR="/usr/$(get_libdir)" install || die
 	insinto /usr/share/pkgconfig/
 	doins "${FILESDIR}"/libnl-1.pc

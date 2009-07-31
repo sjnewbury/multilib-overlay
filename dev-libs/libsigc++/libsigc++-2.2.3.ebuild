@@ -35,7 +35,7 @@ src_unpack() {
 	fi
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	filter-flags -fno-exceptions
 
 	local myconf
@@ -46,7 +46,7 @@ multilib-native_src_configure_internal() {
 	econf ${myconf} || die "econf failed."
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" install || die "make install failed."
 	rm -fr "${D}"/usr/share
 	dodoc AUTHORS ChangeLog README NEWS TODO

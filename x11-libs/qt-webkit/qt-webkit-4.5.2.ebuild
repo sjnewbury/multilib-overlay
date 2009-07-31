@@ -24,12 +24,12 @@ tools/"
 QCONFIG_ADD="webkit"
 QCONFIG_DEFINE="QT_WEBKIT"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	[[ $(tc-arch) == "ppc64" ]] && append-flags -mminimal-toc #241900
 	qt4-build_src_prepare
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# This fixes relocation overflows on alpha
 	use alpha && append-ldflags "-Wl,--no-relax"
 	myconf="${myconf} -webkit"

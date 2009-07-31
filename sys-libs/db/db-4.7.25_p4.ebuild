@@ -43,7 +43,7 @@ src_unpack() {
 	unpack "${MY_P}".tar.gz
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	cd "${S}/.."
 	for (( i=1 ; i<=${PATCHNO} ; i++ ))
 	do
@@ -81,7 +81,7 @@ multilib-native_src_prepare_internal() {
 		-e "s/__EDIT_DB_VERSION__/$DB_VERSION/g" configure
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# compilation with -O0 fails on amd64, see bug #171231
 	if use amd64; then
 		replace-flags -O0 -O2
@@ -119,7 +119,7 @@ multilib-native_src_configure_internal() {
 		"$@"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake install DESTDIR="${D}" || die
 
 	db_src_install_usrbinslot
@@ -140,10 +140,10 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	db_fix_so
 }
 
-multilib-native_pkg_postrm_internal() {
+ml-native_pkg_postrm() {
 	db_fix_so
 }

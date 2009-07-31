@@ -52,7 +52,7 @@ QT4_EXTRACT_DIRECTORIES="
 src/tools/rcc/
 tools/shared/"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	use glib && QT4_BUILT_WITH_USE_CHECK="${QT4_BUILT_WITH_USE_CHECK}
 		~x11-libs/qt-core-${PV} glib"
 	use qt3support && QT4_BUILT_WITH_USE_CHECK="${QT4_BUILT_WITH_USE_CHECK}
@@ -71,7 +71,7 @@ src_unpack() {
 	qt4-build_src_unpack
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# Apply bugfix patches from qt-copy (KDE)
 	epatch "${FILESDIR}"/0195-compositing-properties.diff
 	epatch "${FILESDIR}"/0203-qtexthtmlparser-link-color.diff
@@ -100,7 +100,7 @@ multilib-native_src_prepare_internal() {
 	qt4-build_src_prepare
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	export PATH="${S}/bin:${PATH}"
 	export LD_LIBRARY_PATH="${S}/lib:${LD_LIBRARY_PATH}"
 
@@ -129,7 +129,7 @@ multilib-native_src_configure_internal() {
 	qt4-build_src_configure
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	QCONFIG_ADD="x11sm xshape xcursor xfixes xrandr xrender xkb fontconfig
 		$(use input_devices_wacom && echo tablet) $(usev accessibility)
 		$(usev xinerama) $(usev cups) $(usev nas) gif png system-png system-jpeg

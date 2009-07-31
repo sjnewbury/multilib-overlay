@@ -28,7 +28,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${P}-respect-make.patch
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake CC=$(tc-getCC) || die "emake failed"
 }
 
@@ -36,7 +36,7 @@ src_test() {
 	LD_LIBRARY_PATH="${S}"/libjbig make test || die "make test failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	dobin pbmtools/jbgtopbm pbmtools/pbmtojbg || die "dobin"
 	doman pbmtools/jbgtopbm.1 pbmtools/pbmtojbg.1
 

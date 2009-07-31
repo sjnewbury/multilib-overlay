@@ -28,7 +28,7 @@ DOCS="alsoftrc.sample"
 
 PATCHES=( "${FILESDIR}/${P}-pa.patch" )
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local mycmakeargs="$(cmake-utils_use alsa ALSA)
 		$(cmake-utils_use oss OSS)
 		$(cmake-utils_use portaudio PORTAUDIO)

@@ -33,7 +33,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README TODO kewring-intro.txt"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_enable debug)
 		$(use_enable hal)
@@ -46,7 +46,7 @@ multilib-native_pkg_setup_internal() {
 #		$(use_enable valgrind)
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	gnome2_src_prepare
 
 	# Remove silly CFLAGS

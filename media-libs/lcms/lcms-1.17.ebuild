@@ -23,7 +23,7 @@ RDEPEND="tiff? ( media-libs/tiff[lib32?] )
 DEPEND="${RDEPEND}
 	python? ( >=dev-lang/swig-1.3.31 )"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	cd "${S}"
 
 	# Fix multilib-strict; bug #185294
@@ -40,7 +40,7 @@ multilib-native_src_prepare_internal() {
 	fi
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		--disable-dependency-tracking \
 		$(use_with jpeg) \
@@ -50,7 +50,7 @@ multilib-native_src_configure_internal() {
 		|| die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake \
 		DESTDIR="${D}" \
 		BINDIR="${D}"/usr/bin \

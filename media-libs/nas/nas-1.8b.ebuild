@@ -26,7 +26,7 @@ DEPEND="${RDEPEND}
 	app-text/rman
 	x11-proto/xproto"
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	xmkmf || die "xmkmf failed."
 	touch doc/man/lib/tmp.{_man,man}
 	emake \
@@ -35,7 +35,7 @@ multilib-native_src_compile_internal() {
 		RANLIB="$(tc-getRANLIB)" World || die "emake failed."
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 	emake DESTDIR="${D}" install.man || die "emake install.man failed."
 

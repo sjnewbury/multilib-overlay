@@ -21,7 +21,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${P}-glibc-2.8-ULONG_MAX.patch
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die
 	dodoc ChangeLog
 }

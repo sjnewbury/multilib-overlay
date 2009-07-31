@@ -21,16 +21,16 @@ IUSE=""
 DEPEND="virtual/opengl"
 
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}/${P}-libtool2-fix.patch"
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf --x-libraries="/usr/$(get_libdir)" || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" install || die
 	dodoc AUTHORS ChangeLog README TODO
 }

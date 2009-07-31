@@ -53,7 +53,7 @@ S="${WORKDIR}/qt-x11-${SRCTYPE}-${PV}"
 
 QTBASE="/usr/qt/3"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	if use immqt && use immqt-bc ; then
 		ewarn
 		ewarn "immqt and immqt-bc are exclusive. You cannot set both."
@@ -99,7 +99,7 @@ multilib-native_pkg_setup_internal() {
 	export PLATFORM="${PLATNAME}-${PLATCXX}"
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	cd "${S}"
 
 	sed -i -e 's:read acceptance:acceptance=yes:' configure
@@ -176,7 +176,7 @@ multilib-native_src_prepare_internal() {
 		"${S}"/qmake/Makefile.unix || die
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	export SYSCONF="${D}${QTBASE}"/etc/settings
 
 	# Let's just allow writing to these directories during Qt emerge
@@ -215,7 +215,7 @@ multilib-native_src_configure_internal() {
 		-fast -no-sql-odbc ${myconf} -dlopen-opengl || die
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake src-qmake src-moc sub-src || die
 
 	export DYLD_LIBRARY_PATH="${S}/lib:/usr/X11R6/lib:${DYLD_LIBRARY_PATH}"
@@ -239,7 +239,7 @@ multilib-native_src_compile_internal() {
 
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	# binaries
 	into ${QTBASE}
 	dobin bin/*

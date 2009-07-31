@@ -19,7 +19,7 @@ DEPEND=">=dev-lang/perl-5.6[lib32?]
 	sys-devel/bison"
 RDEPEND=""
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS ChangeLog NEWS README THANKS
 	use doc && dodoc doc/libtasn1.ps

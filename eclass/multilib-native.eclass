@@ -208,7 +208,7 @@ multilib-native_src_generic() {
 # such as a src_unpack override in ebuilds.
 		multilib-native_restore_abi_env "INIT"
 	else
-		multilib-native_${1}_internal
+		ml-native_${1}
 	fi
 }
 
@@ -249,7 +249,7 @@ multilib-native_src_generic_sub() {
 			return
 		else
 			einfo "Running ${1} for default ABI"
-			multilib-native_${1}_internal
+			ml-native_${1}
 			return
 		fi
 	fi
@@ -290,7 +290,7 @@ multilib-native_src_generic_sub() {
 	fi
 
 # Call the "real" phase function
-	multilib-native_${1}_internal
+	ml-native_${1}
 
 # If we've just unpacked the source, move it into place.  We don't have to
 # worry about handling any other case since the build directory would already
@@ -481,69 +481,69 @@ multilib-native_check_inherited_funcs() {
 	${declared_func}
 }
 
-# @FUNCTION: multilib-native_src_prepare_internal
+# @FUNCTION: ml-native_src_prepare
 # @USAGE:
 # @DESCRIPTION: Override this function if you want a custom src_configure.
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	multilib-native_check_inherited_funcs src_prepare
 }
 
-# @FUNCTION: multilib-native_src_configure_internal
+# @FUNCTION: ml-native_src_configure
 # @USAGE:
 # @DESCRIPTION: Override this function if you want a custom src_configure.
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	multilib-native_check_inherited_funcs src_configure
 }
 
-# @FUNCTION: multilib-native_src_compile_internal
+# @FUNCTION: ml-native_src_compile
 # @USAGE:
 # @DESCRIPTION: Override this function if you want a custom src_compile.
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	multilib-native_check_inherited_funcs src_compile
 }
 
-# @FUNCTION: multilib-native_src_install_internal
+# @FUNCTION: ml-native_src_install
 # @USAGE:
 # @DESCRIPTION: Override this function if you want a custom src_install
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	multilib-native_check_inherited_funcs src_install
 }
 
-# @FUNCTION: multilib-native_pkg_setup_internal
+# @FUNCTION: ml-native_pkg_setup
 # @USAGE:
 # @DESCRIPTION: Override this function if you want a custom pkg_setup
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	multilib-native_check_inherited_funcs pkg_setup
 }
 
-# @FUNCTION: multilib-native_src_unpack_internal
+# @FUNCTION: ml-native_src_unpack
 # @USAGE:
 # @DESCRIPTION: Override this function if you want a custom src_unpack
-multilib-native_src_unpack_internal() {
+ml-native_src_unpack() {
 	multilib-native_check_inherited_funcs src_unpack
 }
 
 
-# @FUNCTION: multilib-native_pkg_preinst_internal
+# @FUNCTION: ml-native_pkg_preinst
 # @USAGE:
 # @DESCRIPTION: Override this function if you want a custom pkg_preinst
-multilib-native_pkg_preinst_internal() {
+ml-native_pkg_preinst() {
 	multilib-native_check_inherited_funcs pkg_preinst
 }
 
 
-# @FUNCTION: multilib-native_pkg_postinst_internal
+# @FUNCTION: ml-native_pkg_postinst
 # @USAGE:
 # @DESCRIPTION: Override this function if you want a custom pkg_postinst
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	multilib-native_check_inherited_funcs pkg_postinst
 }
 
 
-# @FUNCTION: multilib-native_pkg_postrm_internal
+# @FUNCTION: ml-native_pkg_postrm
 # @USAGE:
 # @DESCRIPTION: Override this function if you want a custom pkg_postrm
-multilib-native_pkg_postrm_internal() {
+ml-native_pkg_postrm() {
 	multilib-native_check_inherited_funcs pkg_postrm
 }
 

@@ -59,7 +59,7 @@ pkg_setup() {
 		--with-libdb=/usr/$(get_libdir)"
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	gnome2_src_prepare
 
 	# Adjust to gentoo's /etc/service
@@ -105,7 +105,7 @@ multilib-native_src_prepare_internal() {
 	append-cppflags "-I$(db_includedir)"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	gnome2_src_install
 
 	if use ldap; then

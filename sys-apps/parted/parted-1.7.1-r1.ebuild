@@ -30,7 +30,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/parted-1.7.1-fix-seg.patch
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		$(use_with readline) \
 		$(use_enable nls) \
@@ -38,7 +38,7 @@ multilib-native_src_configure_internal() {
 		--disable-Werror || die "Configure failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make install DESTDIR="${D}" || die "Install failed"
 	dodoc AUTHORS BUGS ChangeLog NEWS README THANKS TODO
 	dodoc doc/{API,FAT,USER.jp}

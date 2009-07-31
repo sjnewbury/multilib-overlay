@@ -19,21 +19,21 @@ RDEPEND=${DEPEND}
 
 S="${WORKDIR}/OpenJPEG_v1_3"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${P}-Makefile.patch #258373
 	cp "${FILESDIR}"/${P}-codec-Makefile "${S}"/codec/Makefile
 	epatch "${FILESDIR}"/${P}-freebsd.patch #253012
 	epatch "${FILESDIR}"/${P}-darwin.patch # needs to go after freebsd patch
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake CC="$(tc-getCC)" AR="$(tc-getAR)" LIBRARIES="-lm" COMPILERFLAGS="${CFLAGS} -std=c99 -fPIC" || die "emake failed"
 	if use tools; then
 		emake -C codec CC="$(tc-getCC)" || die "emake failed"
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" INSTALL_LIBDIR="/usr/$(get_libdir)" install || die "install failed"
 	if use tools; then
 		emake -C codec DESTDIR="${D}" INSTALL_BINDIR="/usr/bin" install || die "install failed"

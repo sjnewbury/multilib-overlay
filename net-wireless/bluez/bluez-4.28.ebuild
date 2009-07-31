@@ -42,7 +42,7 @@ src_unpack() {
 	fi
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# the order is the same as ./configure --help
 
 	# we don't need the other daemons either with the new
@@ -76,7 +76,7 @@ multilib-native_src_configure_internal() {
 		--localstatedir=/var
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	dodoc AUTHORS ChangeLog README || die

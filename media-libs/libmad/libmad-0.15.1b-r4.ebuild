@@ -30,7 +30,7 @@ src_unpack() {
 	epunt_cxx #74490
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf="--enable-accuracy"
 	# --enable-speed		 optimize for speed over accuracy
 	# --enable-accuracy		 optimize for accuracy over speed
@@ -51,7 +51,7 @@ multilib-native_src_configure_internal() {
 		${myconf} || die "configure failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake install DESTDIR="${D}" || die "make install failed"
 
 	dodoc CHANGES CREDITS README TODO VERSION

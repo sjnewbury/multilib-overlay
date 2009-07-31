@@ -34,7 +34,7 @@ src_unpack() {
 	AT_M4DIR="${S}/m4" eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		--enable-af \
 		$(use_enable esd) \
@@ -43,7 +43,7 @@ multilib-native_src_configure_internal() {
 		|| die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" install || die
 	dodoc AUTHORS NEWS README TODO
 	dohtml docs/*.html

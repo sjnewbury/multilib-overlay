@@ -23,7 +23,7 @@ src_unpack() {
 	epunt_cxx
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" install || die "make install failed"
 
 	find "${D}" -name '*.la' -delete

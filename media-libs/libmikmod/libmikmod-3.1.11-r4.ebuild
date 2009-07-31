@@ -37,7 +37,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	econf --enable-af \
 		$(use_enable esd) \
 		$(use_enable alsa) \
@@ -45,7 +45,7 @@ multilib-native_src_compile_internal() {
 	emake || die "emake failed."
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 	dodoc AUTHORS NEWS README TODO
 	dohtml docs/*.html

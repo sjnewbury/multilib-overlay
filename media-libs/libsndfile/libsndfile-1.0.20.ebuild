@@ -52,7 +52,7 @@ src_unpack() {
 	epunt_cxx
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf $(use_enable sqlite) \
 		$(use_enable alsa) \
 		$(use_enable jack) \
@@ -64,7 +64,7 @@ multilib-native_src_configure_internal() {
 	emake || die "emake failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" htmldocdir="/usr/share/doc/${PF}/html" install || die "emake install failed."
 	dodoc AUTHORS ChangeLog NEWS README
 }

@@ -24,7 +24,7 @@ RDEPEND="${DEPEND}"
 
 S=${WORKDIR}/${MY_P}
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	cd "${S}"
 
 	# Upstream package creates some executables which names are too generic
@@ -35,7 +35,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# I wanted to put the include files in /usr/include/hunspell
 	# but this means the openoffice build won't find them.
 	econf \
@@ -45,7 +45,7 @@ multilib-native_src_configure_internal() {
 		|| die "econf failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS ChangeLog NEWS README THANKS TODO license.hunspell || die "installing docs failed"
 	# hunspell is derived from myspell

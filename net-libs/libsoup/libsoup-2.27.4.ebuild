@@ -39,7 +39,7 @@ pkg_setup() {
 		$(use_enable ssl)"
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	gnome2_src_prepare
 
 	# Fix test to follow POSIX (for x86-fbsd)

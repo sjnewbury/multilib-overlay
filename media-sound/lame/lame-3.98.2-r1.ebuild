@@ -26,7 +26,7 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	mmx? ( dev-lang/nasm )"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	cd "${S}"
 
 	# The frontened tries to link staticly, but we prefer shared libs
@@ -51,7 +51,7 @@ multilib-native_src_prepare_internal() {
 	epunt_cxx # embedded bug #74498
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	use sndfile && myconf="--with-fileio=sndfile"
 	# The user sets compiler optimizations... But if you'd like
 	# lame to choose it's own... uncomment one of these (experiMENTAL)
@@ -68,7 +68,7 @@ multilib-native_src_configure_internal() {
 		${myconf} || die "econf failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" pkghtmldir="/usr/share/doc/${PF}/html" install || die
 
 	dodoc API ChangeLog HACKING README* STYLEGUIDE TODO USAGE || die

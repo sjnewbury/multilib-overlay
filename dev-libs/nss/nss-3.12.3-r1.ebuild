@@ -23,7 +23,7 @@ DEPEND=">=dev-libs/nspr-${NSPR_VER}[lib32?]
 	>=dev-db/sqlite-3.5[lib32?]"
 RDEPEND="${DEPEND}"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	cd "${S}"/mozilla/security/coreconf
 	# hack nspr paths
 	echo 'INCLUDES += -I/usr/include/nspr -I$(DIST)/include/dbm' \
@@ -50,7 +50,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-executable-stacks.patch
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	strip-flags
 
 	echo > "${T}"/test.c
@@ -73,7 +73,7 @@ multilib-native_src_compile_internal() {
 	emake -j1 BUILD_OPT=1 XCFLAGS="${CFLAGS}" CC="$(tc-getCC)" || die "nss make failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	MINOR_VERSION=12
 	cd "${S}"/mozilla/security/dist
 

@@ -25,12 +25,12 @@ RDEPEND="zlib? ( sys-libs/zlib[lib32?] )
 
 S=${WORKDIR}/${MY_P}
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	cd "${S}"
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# Enable building of static libs too - grep and others
 	# depend on them being built: bug 164099
 	econf --with-match-limit-recursion=8192 \
@@ -44,7 +44,7 @@ multilib-native_src_configure_internal() {
 		|| die "econf failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	dodoc doc/*.txt AUTHORS

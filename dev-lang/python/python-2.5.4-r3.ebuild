@@ -53,7 +53,7 @@ PDEPEND="${DEPEND} app-admin/python-updater"
 
 PROVIDE="virtual/python"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 
 	if tc-is-cross-compiler; then
 		epatch "${FILESDIR}"/python-2.4.4-test-cross.patch \
@@ -85,7 +85,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# Disable extraneous modules with extra dependencies.
 	if use build; then
 		export PYTHON_DISABLE_MODULES="readline pyexpat dbm gdbm bsddb _curses _curses_panel _tkinter _sqlite3"
@@ -167,12 +167,12 @@ multilib-native_src_configure_internal() {
 		${myconf}
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	src_configure
 	emake || die "emake failed"
 }
 
-multilib-native_src_test_internal() {
+ml-native_src_test() {
 	# Tests won't work when cross compiling.
 	if tc-is-cross-compiler; then
 		elog "Disabling tests due to crosscompiling."
@@ -213,7 +213,7 @@ multilib-native_src_test_internal() {
 	elog "and run the tests separately."
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" altinstall maninstall || die "emake altinstall maninstall failed"
 
 	mv "${D}"/usr/bin/python${PYVER}-config "${D}"/usr/bin/python-config-${PYVER}

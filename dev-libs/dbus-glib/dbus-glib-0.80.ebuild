@@ -28,12 +28,12 @@ DEPEND="${RDEPEND}
 
 BASH_COMPLETION_NAME="dbus"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# description ?
 	epatch "${FILESDIR}"/${PN}-introspection.patch
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		$(use_enable bash-completion) \
 		$(use_enable debug verbose-mode) \
@@ -46,7 +46,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable doc gtk-doc)
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	dodoc AUTHORS ChangeLog HACKING NEWS README || die "dodoc failed."

@@ -27,7 +27,7 @@ RDEPEND="${DEPEND}"
 QT4_TARGET_DIRECTORIES="src/sql src/plugins/sqldrivers"
 QT4_EXTRACT_DIRECTORIES="${QT4_TARGET_DIRECTORIES}"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	if ! (use firebird || use mysql || use odbc || use postgres || use sqlite); then
 		ewarn "You need to enable at least one SQL driver. Enable at least"
 		ewarn "one of these USE flags: \"firebird mysql odbc postgres sqlite\""
@@ -44,14 +44,14 @@ src_unpack() {
 	qt4-build_src_unpack
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	sed -e '/pg_config --libs/d' -i "${S}"/configure \
 		|| die 'Sed to fix postgresql usage in ./configure failed.'
 
 	qt4-build_src_prepare
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 	# Don't support sqlite2 anymore
 	myconf="${myconf} -no-sql-sqlite2

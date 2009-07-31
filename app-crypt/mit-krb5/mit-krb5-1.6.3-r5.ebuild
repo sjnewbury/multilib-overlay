@@ -47,7 +47,7 @@ src_unpack() {
 	done
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# needed to work with sys-libs/e2fsprogs-libs <- should be removed!!
 	append-flags "-I/usr/include/et"
 	econf \
@@ -58,7 +58,7 @@ multilib-native_src_configure_internal() {
 		--enable-kdc-replay-cache || die
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake -j1 || die
 
 	if use doc ; then
@@ -73,7 +73,7 @@ src_test() {
 	einfo "Tests do not run in sandbox, have a lot of dependencies and are therefore completely disabled."
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake \
 		DESTDIR="${D}" \
 		EXAMPLEDIR=/usr/share/doc/${PF}/examples \

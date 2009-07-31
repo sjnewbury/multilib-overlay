@@ -33,7 +33,7 @@ src_unpack() {
 		|| die "sed timidity/config.h failed"
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		--disable-dependency-tracking \
 		$(use_enable timidity music-midi) \
@@ -45,7 +45,7 @@ multilib-native_src_configure_internal() {
 		|| die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc CHANGES README
 }

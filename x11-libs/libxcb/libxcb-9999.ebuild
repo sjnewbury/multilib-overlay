@@ -30,7 +30,7 @@ CONFIGURE_OPTIONS="$(use_enable doc build-docs)
 	$(use_enable selinux xselinux)
 	--enable-xinput"
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" install || die
 }
 	

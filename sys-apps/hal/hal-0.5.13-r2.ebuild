@@ -129,7 +129,7 @@ pkg_setup() {
 	fi
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# Only apply one of the policy patches.  Bug #267042
 	if use policykit ; then
 		rm "${WORKDIR}/${PATCHNAME}/patches/0001-plugdev-dbus-policy.patch"
@@ -146,7 +146,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local acpi="$(use_enable acpi)"
 	local backend=
 	local hardware=
@@ -230,7 +230,7 @@ multilib-native_src_configure_internal() {
 	|| die "configure failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die
 	dodoc AUTHORS ChangeLog NEWS README || die "docs failed"
 

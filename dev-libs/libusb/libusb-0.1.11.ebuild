@@ -28,7 +28,7 @@ src_unpack() {
 	sed -i -e 's:-Werror::' Makefile.am
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	elibtoolize
 	econf \
 		$(use_enable debug debug all) \
@@ -36,7 +36,7 @@ multilib-native_src_configure_internal() {
 		|| die "econf failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR=${D} install || die
 	dodoc AUTHORS NEWS README || die
 	if use doc; then

@@ -72,7 +72,7 @@ src_unpack() {
 
 src_configure() { :; }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# fails with that
 	filter-ldflags -m32 -m64
 	
@@ -146,7 +146,7 @@ src_test() {
 	emake test || die "tests failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	cd "${S}/source"
 
 	emake DESTDIR="${D}" install-everything || die "emake install-everything failed"
@@ -266,7 +266,7 @@ pkg_preinst() {
 	fi
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	if use swat ; then
 		einfo "swat must be enabled by xinetd:"
 		einfo "  change the /etc/xinetd.d/swat configuration"

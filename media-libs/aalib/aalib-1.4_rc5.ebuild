@@ -44,7 +44,7 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		$(use_with slang slang-driver) \
 		$(use_with X x11-driver) \
@@ -52,11 +52,11 @@ multilib-native_src_configure_internal() {
 }
 
 # Is this really necessary?
-#multilib-native_src_compile_internal() {
+#ml-native_src_compile() {
 #	emake CC="$(tc-getCC)" || die
 #}
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" install || die
 	dodoc ANNOUNCE AUTHORS ChangeLog NEWS README*
 

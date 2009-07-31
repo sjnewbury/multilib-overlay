@@ -20,10 +20,10 @@ for PACKAGE in ${PACKAGES}; do
 		if [[ -z ${EBUILD_PREP_ML} ]]; then
 			EBUILD_CHANGED="yes"
 			echo -e "\033[1;31m\"${PREP_ML}\" added automatically to ${EBUILD}\033[0m"
-			if [[ -z "$(grep multilib-native_src_install_internal ${EBUILD})" ]]; then
-				echo -e "\nmultilib-native_src_install_internal() {\n\tmultilib-native_check_inherited_funcs src_install\n\t${PREP_ML}\n}" >> ${EBUILD}
+			if [[ -z "$(grep ml-native_src_install ${EBUILD})" ]]; then
+				echo -e "\nml-native_src_install() {\n\tmultilib-native_check_inherited_funcs src_install\n\t${PREP_ML}\n}" >> ${EBUILD}
 			else
-				sed -i "/^multilib-native_src_install_internal.*/ { :asdf ; /\n\}/! { N ; b asdf  }; s@\n\}\$@\n\n\t${PREP_ML}&@ }" ${EBUILD}
+				sed -i "/^ml-native_src_install.*/ { :asdf ; /\n\}/! { N ; b asdf  }; s@\n\}\$@\n\n\t${PREP_ML}&@ }" ${EBUILD}
 			fi
 		fi
 	done

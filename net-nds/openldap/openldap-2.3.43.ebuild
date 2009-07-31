@@ -166,7 +166,7 @@ openldap_find_versiontags() {
 
 }
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	if has_version "<=dev-lang/perl-5.8.8_rc1" && built_with_use dev-lang/perl minimal ; then
 		die "You must have a complete (USE='-minimal') Perl install to use the perl backend!"
 	fi
@@ -188,7 +188,7 @@ multilib-native_pkg_setup_internal() {
 	enewuser ldap 439 -1 /usr/$(get_libdir)/openldap ldap
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# According to MDK, the link order needs to be changed so that
 	# on systems w/ MD5 passwords the system crypt library is used
 	# (the net result is that "passwd" can be used to change ldap passwords w/
@@ -231,7 +231,7 @@ multilib-native_src_prepare_internal() {
 	fi
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 
 	#Fix for glibc-2.8 and ucred. Bug 228457.
@@ -313,7 +313,7 @@ multilib-native_src_configure_internal() {
 	[[ $(get_libdir) == lib32 ]] && sed -i '/^PERL_CPPFLAGS/ {s/lib64/lib32/g; s/x86_64/i686/g}' ./servers/slapd/back-perl/Makefile
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake depend || die "make depend failed"
 	emake || die "make failed"
 
@@ -369,7 +369,7 @@ src_test() {
 	cd tests ; make tests || die "make tests failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 
 	dodoc ANNOUNCEMENT CHANGES COPYRIGHT README "${FILESDIR}"/DB_CONFIG.fast.example
@@ -481,7 +481,7 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-multilib-native_pkg_preinst_internal() {
+ml-native_pkg_preinst() {
 	# keep old libs if any
 	LIBSUFFIXES=".so.2.0.130 -2.2.so.7"
 	for LIBSUFFIX in ${LIBSUFFIXES} ; do
@@ -491,7 +491,7 @@ multilib-native_pkg_preinst_internal() {
 	done
 }
 
-multilib-native_pkg_postinst_internal() {
+ml-native_pkg_postinst() {
 	if ! use minimal ; then
 		# You cannot build SSL certificates during src_install that will make
 		# binary packages containing your SSL key, which is both a security risk

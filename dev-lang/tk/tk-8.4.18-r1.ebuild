@@ -39,7 +39,7 @@ pkg_setup() {
 	fi
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	cd "${S}"
 	epatch "${FILESDIR}"/remove-control-v-8.4.9.diff
 	epatch "${FILESDIR}"/${PN}-8.4.9-man.patch
@@ -62,7 +62,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	tc-export CC
 	cd "${S}"/unix
 
@@ -74,7 +74,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable debug symbols) || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	#short version number
 	local v1
 	v1=${PV%.*}

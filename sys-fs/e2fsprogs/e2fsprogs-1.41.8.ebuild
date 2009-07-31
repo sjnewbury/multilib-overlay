@@ -31,7 +31,7 @@ pkg_setup() {
 	fi
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${PN}-1.38-tests-locale.patch #99766
 	epatch "${FILESDIR}"/${PN}-1.41.8-makefile.patch
 	epatch "${FILESDIR}"/${PN}-1.40-fbsd.patch
@@ -58,7 +58,7 @@ multilib-native_src_prepare_internal() {
 	touch lib/ss/ss_err.h
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# Keep the package from doing silly things #261411
 	export VARTEXFONTS=${T}/fonts
 
@@ -84,7 +84,7 @@ multilib-native_src_configure_internal() {
 		--disable-uuidd
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	if [[ ${CHOST} != *-uclibc ]] && grep -qs 'USE_INCLUDED_LIBINTL.*yes' config.{log,status} ; then
 		eerror "INTL sanity check failed, aborting build."
 		eerror "Please post your ${S}/config.log file as an"
@@ -108,7 +108,7 @@ pkg_preinst() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	# need to set root_libdir= manually as any --libdir options in the
 	# econf above (i.e. multilib) will screw up the default #276465
 	emake \

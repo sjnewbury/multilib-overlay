@@ -52,7 +52,7 @@ src_prepare() {
 	AT_M4DIR="${S}/m4" eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	tc-export CC CXX RANLIB AR
 
 	# the debug option is bogus ... all it does is add extra
@@ -67,7 +67,7 @@ multilib-native_src_configure_internal() {
 		|| die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc CHANGES README* TODO
 

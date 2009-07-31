@@ -39,7 +39,7 @@ DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )
 	virtual/os-headers"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	if [[ ${PV} == "9999" ]] ; then
 		eautoreconf
 	else
@@ -48,7 +48,7 @@ multilib-native_src_prepare_internal() {
 	use uclibc && sed -i -e s/versionsort/alphasort/g -e s/strverscmp.h/dirent.h/g mount/lomount.c
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf \
 		$(use_enable nls) \
 		--enable-agetty \
@@ -73,7 +73,7 @@ multilib-native_src_configure_internal() {
 		$(use_with slang)
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake install DESTDIR="${D}" || die "install failed"
 	dodoc AUTHORS NEWS README* TODO docs/*
 

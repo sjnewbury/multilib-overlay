@@ -47,7 +47,7 @@ src/3rdparty/sha1/
 src/script/
 translations/"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	qt4-build_pkg_setup
 
 	if has_version x11-libs/qt-core; then
@@ -121,7 +121,7 @@ src_prepare(){
 	epatch "${FILESDIR}/${PN}-4.5-boilerplate.diff"
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	if ! use lib32; then
 		unset QMAKESPEC
 	fi
@@ -150,13 +150,13 @@ multilib-native_src_configure_internal() {
 	qt4-build_src_configure
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# bug #259736
 	unset QMAKESPEC
 	qt4-build_src_compile
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	dobin "${S}"/bin/{qmake,moc,rcc,uic} || die "dobin failed."
 
 	install_directories src/{corelib,xml,network,plugins/codecs}

@@ -24,13 +24,13 @@ QT4_EXTRACT_DIRECTORIES="${QT4_TARGET_DIRECTORIES}"
 QCONFIG_ADD="opengl"
 QCONFIG_DEFINE="QT_OPENGL"
 
-multilib-native_pkg_setup_internal() {
+ml-native_pkg_setup() {
 	use qt3support && QT4_BUILT_WITH_USE_CHECK="${QT4_BUILT_WITH_USE_CHECK}
 		~x11-libs/qt-core-${PV} qt3support"
 	qt4-build_pkg_setup
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 	myconf="${myconf} -opengl
 		$(qt_use qt3support)"

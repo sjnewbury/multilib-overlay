@@ -58,7 +58,7 @@ src_unpack() {
 	[[ ${CHOST} == *-freebsd* ]] && elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 
 	epunt_cxx
@@ -80,7 +80,7 @@ multilib-native_src_configure_internal() {
 		  --with-threads=posix || die "configure failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "Installation failed"
 
 	# Do not install charset.alias even if generated, leave it to libiconv

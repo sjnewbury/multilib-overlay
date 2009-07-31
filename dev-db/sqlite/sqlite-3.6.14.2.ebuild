@@ -36,7 +36,7 @@ pkg_setup() {
 	fi
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# note: this sandbox fix is no longer needed with sandbox-1.3+
 	epatch "${FILESDIR}"/sandbox-fix2.patch
 
@@ -45,7 +45,7 @@ multilib-native_src_prepare_internal() {
 	epunt_cxx
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# Enable column metadata, bug #266651
 	append-cppflags -DSQLITE_ENABLE_COLUMN_METADATA
 
@@ -59,7 +59,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable tcl)
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake TCLLIBDIR="/usr/$(get_libdir)/${P}" || die "emake failed"
 }
 
@@ -71,7 +71,7 @@ src_test() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake \
 		DESTDIR="${D}" \
 		TCLLIBDIR="/usr/$(get_libdir)/${P}" \

@@ -19,7 +19,7 @@ RDEPEND="X? ( x11-libs/libX11 x11-libs/libXxf86dga )"
 DEPEND="${RDEPEND}
 	kernel_linux? ( >=sys-kernel/linux-headers-2.6.11 )"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	epatch "${FILESDIR}"/${PN}-0.9.0-linux26-headers.patch \
 		"${FILESDIR}"/${P}-configure-cpuid-pic.patch \
 		"${FILESDIR}"/${P}-libtool_1.5_compat.patch
@@ -27,12 +27,12 @@ multilib-native_src_prepare_internal() {
 	AT_M4DIR=m4 eautoreconf
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	econf $(use_with X x) $(use_enable X x) || die
 	emake || die "emake failed."
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed."
 	dodoc ChangeLog* FAQ NEWS README
 }

@@ -19,16 +19,16 @@ DEPEND="doc? ( app-doc/doxygen )"
 
 RESTRICT="test"
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# needed for sane .so versionning on FreeBSD
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	econf --without-cdio
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	emake || die "emake failed."
 
 	# Create API docs if needed and possible
@@ -38,7 +38,7 @@ multilib-native_src_compile_internal() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS ChangeLog NEWS README THANKS TODO
 

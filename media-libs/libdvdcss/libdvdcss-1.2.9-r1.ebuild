@@ -43,7 +43,7 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# See bug #98854, requires access to fonts cache for TeX
 	# No need to use addwrite, just set TeX font cache in the sandbox
 	use doc && export VARTEXFONTS="${T}/fonts"
@@ -55,7 +55,7 @@ multilib-native_src_compile_internal() {
 	emake || die
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make install DESTDIR="${D}" || die
 
 	dodoc AUTHORS ChangeLog NEWS README

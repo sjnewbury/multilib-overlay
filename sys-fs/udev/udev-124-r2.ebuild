@@ -70,7 +70,7 @@ sed_helper_dir() {
 	sed -e "s#/lib/udev#${udev_helper_dir}#" -i "$@"
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# patches go here...
 	# Bug #223757, Bug #208578
 	epatch "${FILESDIR}/${PN}-122-rules-update.diff"
@@ -109,7 +109,7 @@ multilib-native_src_prepare_internal() {
 		-e "/ =/s-/lib-/$(get_libdir)-"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	filter-flags -fprefetch-loop-arrays
 
 	if [[ -z ${extras} ]]; then
@@ -130,7 +130,7 @@ multilib-native_src_compile_internal() {
 		${myconf} || die "compiling udev failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	into /
 	emake \
 		DESTDIR="${D}" \

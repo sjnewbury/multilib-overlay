@@ -28,7 +28,7 @@ src_unpack() {
 	epatch "${FILESDIR}/${P}-setuptools-workaround.patch"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	DOCS="CHANGES.txt ToDo.txt USAGE.txt"
 	distutils_src_install
 

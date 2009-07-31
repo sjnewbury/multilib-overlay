@@ -16,7 +16,7 @@ IUSE=""
 
 DEPEND=""
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" install || die
 	dodoc AUTHORS ChangeLog NEWS README
 }

@@ -30,7 +30,7 @@ src_unpack() {
 	epunt_cxx #74490
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	use ppc && append-flags -fno-strict-aliasing
 
 	local myconf="--enable-accuracy"
@@ -52,7 +52,7 @@ multilib-native_src_configure_internal() {
 		${myconf} || die "configure failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	emake install DESTDIR="${D}" || die "make install failed"
 
 	dodoc CHANGES CREDITS README TODO VERSION

@@ -67,7 +67,7 @@ src_unpack() {
 #	sh "${S}"/tests/runtests.sh || die "running tests failed"
 #}
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	gnome2_src_install
 
 	keepdir /etc/gconf/gconf.xml.mandatory

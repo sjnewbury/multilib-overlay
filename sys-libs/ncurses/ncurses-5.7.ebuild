@@ -30,7 +30,7 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-5.6-gfbsd.patch
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	# The ebuild keeps failing if this variable is set when a
 	# crossdev compiler is installed so is better to remove it
 	#tc-export BUILD_CC
@@ -101,7 +101,7 @@ do_configure() {
 		|| die "configure failed"
 }
 
-multilib-native_src_compile_internal() {
+ml-native_src_compile() {
 	# A little hack to fix parallel builds ... they break when
 	# generating sources so if we generate the sources first (in
 	# non-parallel), we can then build the rest of the package
@@ -121,7 +121,7 @@ multilib-native_src_compile_internal() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	# install unicode version second so that the binaries in /usr/bin
 	# support both wide and narrow
 	cd "${WORKDIR}"/narrowc.${ABI}

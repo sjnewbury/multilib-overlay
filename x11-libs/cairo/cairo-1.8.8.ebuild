@@ -50,7 +50,7 @@ DEPEND="${RDEPEND}
 	X? ( x11-proto/renderproto )
 	xcb? ( x11-proto/xcb-proto )"
 
-multilib-native_multilib-native_src_prepare_internal() {
+ml-native_multilib-native_src_prepare() {
 	# ClearType-like patches applied by ArchLinux
 	use cleartype && epatch "${FILESDIR}"/cairo-1.2.4-lcd-cleartype-like.diff
 
@@ -58,7 +58,7 @@ multilib-native_multilib-native_src_prepare_internal() {
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	#gets rid of fbmmx.c inlining warnings
 	append-flags -finline-limit=1200
 
@@ -82,7 +82,7 @@ multilib-native_src_configure_internal() {
 		|| die "configure failed"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	make DESTDIR="${D}" install || die "Installation failed"
 	dodoc AUTHORS ChangeLog NEWS README
 }

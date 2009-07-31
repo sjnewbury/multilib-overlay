@@ -31,7 +31,7 @@ DEPEND="java? ( >=virtual/jdk-1.4 )
 
 S="${WORKDIR}/mozilla"
 
-# Needed by multilib-native_src_compile_internal() and multilib-native_src_install_internal().
+# Needed by ml-native_src_compile_internal() and multilib-native_src_install().
 # Would do in pkg_setup but that loses the export attribute, they
 # become pure shell variables.
 export MOZ_CO_PROJECT=xulrunner
@@ -57,7 +57,7 @@ src_unpack() {
 	unpack ${P}-source.tar.bz2  ${PATCH}.tar.bz2
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# Apply our patches
 	cd "${S}" || die "cd failed"
 	EPATCH_SUFFIX="patch" \
@@ -67,7 +67,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf || die "failed  running eautoreconf"
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	declare MOZILLA_FIVE_HOME="/usr/$(get_libdir)/${PN}"
 
 	####################################
@@ -128,7 +128,7 @@ multilib-native_src_configure_internal() {
 	edit_makefiles
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	declare MOZILLA_FIVE_HOME="/usr/$(get_libdir)/${PN}"
 	emake DESTDIR="${D}" install || die "emake install failed"
 

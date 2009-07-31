@@ -33,13 +33,13 @@ src_unpack() {
 	qt4-build_src_unpack
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	# Apply bugfix patches from qt-copy (KDE)
 	epatch "${FILESDIR}"/0249-webkit-stale-frame-pointer.diff
 	qt4-build_src_prepare
 }
 
-multilib-native_src_configure_internal() {
+ml-native_src_configure() {
 	local myconf
 	myconf="${myconf} -webkit"
 	qt4-build_src_configure
