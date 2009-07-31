@@ -39,7 +39,7 @@ RDEPEND="
 		x11-libs/qt-core
 		x11-libs/qt-gui
 		x11-libs/qt-webkit
-		x11-libs/qt-phonon
+		|| ( x11-libs/qt-phonon media-sound/phonon )
 	)
 	amd64? (
 		dev-libs/glib:2[lib32]
@@ -60,7 +60,7 @@ RDEPEND="
 		x11-libs/qt-core[lib32]
 		x11-libs/qt-gui[lib32]
 		x11-libs/qt-webkit[lib32]
-		x11-libs/qt-phonon[lib32]
+		|| ( x11-libs/qt-phonon[lib32] media-sound/phonon[lib32] )
 	)
 	media-fonts/ttf-bitstream-vera"
 
