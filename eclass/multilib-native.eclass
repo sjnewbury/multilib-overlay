@@ -9,10 +9,11 @@
 
 inherit base multilib
 
+IUSE="${IUSE} $(get_ml_useflags)"
+
 local _ABI
 for _ABI in $(get_install_abis); do
 	if use multilib_${_ABI}; then
-		IUSE="${IUSE} multilib_${_ABI}"
 		EMULTILIB_PKG="true"
 	fi
 done
@@ -150,9 +151,15 @@ multilib_debug() {
 multilib-native_src_generic() {
 # Recurse this function for each ABI from get_install_abis()
 	if [[ -n ${EMULTILIB_PKG} ]] && [[ -z ${OABI} ]] ; then
-		local abilist=""
+		local abilist="" _ABI
 		if has_multilib_profile ; then
-			abilist=$(get_install_abis)
+			for _ABI in $(get_install_abis); do
+				if use multilib_${_ABI}; then
+					abilist="${abilist} ${_ABI}"
+				else
+					ewarn "ABI: ${_ABI} available in profile but USE=multilib_${_ABI} not set, disabling ..."
+				fi
+			done
 			if [[ "${1/_*}" != "pkg" ]] || \
 					[[ "${1/*_}" = "setup" ]]; then
 				einfo "${1/src_/} multilib ${PN} for ABIs: ${abilist}"
