@@ -14,14 +14,14 @@ SLOT="0"
 KEYWORDS="arm sh"
 IUSE="debug python kernel_linux"
 
-RDEPEND=">=dev-libs/glib-2.6[lib32?]
+RDEPEND=">=dev-libs/glib-2.6[$(get_ml_usedeps)?]
 	python? (
 		>=dev-lang/python-2.4.4-r5
 		dev-python/pygtk
 	)"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
-	>=dev-util/pkgconfig-0.9[lib32?]
+	>=dev-util/pkgconfig-0.9[$(get_ml_usedeps)?]
 	>=dev-util/intltool-0.35"
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"

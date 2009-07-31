@@ -17,9 +17,9 @@ SLOT="0"
 KEYWORDS="alpha amd64 hppa ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE=""
 
-DEPEND=">=media-libs/freetype-2.0.9[lib32?]
-	virtual/opengl[lib32?]
-	virtual/glut[lib32?]"
+DEPEND=">=media-libs/freetype-2.0.9[$(get_ml_usedeps)?]
+	virtual/opengl[$(get_ml_usedeps)?]
+	virtual/glut[$(get_ml_usedeps)?]"
 RDEPEND="${DEPEND}"
 
 S=${WORKDIR}/FTGL/unix

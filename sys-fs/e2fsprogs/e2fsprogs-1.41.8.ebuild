@@ -15,12 +15,12 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="nls elibc_FreeBSD"
 
-RDEPEND="~sys-libs/${PN}-libs-${PV}[lib32?]
-	>=sys-apps/util-linux-2.16[lib32?]
+RDEPEND="~sys-libs/${PN}-libs-${PV}[$(get_ml_usedeps)?]
+	>=sys-apps/util-linux-2.16[$(get_ml_usedeps)?]
 	nls? ( virtual/libintl )"
 DEPEND="${RDEPEND}
-	nls? ( sys-devel/gettext[lib32?] )
-	dev-util/pkgconfig[lib32?]
+	nls? ( sys-devel/gettext[$(get_ml_usedeps)?] )
+	dev-util/pkgconfig[$(get_ml_usedeps)?]
 	sys-apps/texinfo"
 
 pkg_setup() {

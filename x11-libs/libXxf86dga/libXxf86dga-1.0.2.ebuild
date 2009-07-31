@@ -13,8 +13,8 @@ DESCRIPTION="X.Org Xxf86dga library"
 
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 
-RDEPEND="x11-libs/libX11[lib32?]
-	x11-libs/libXext[lib32?]"
+RDEPEND="x11-libs/libX11[$(get_ml_usedeps)?]
+	x11-libs/libXext[$(get_ml_usedeps)?]"
 DEPEND="${RDEPEND}
 	x11-proto/xproto
 	>=x11-proto/xf86dgaproto-2.0.3"

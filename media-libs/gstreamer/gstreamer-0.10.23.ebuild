@@ -18,12 +18,12 @@ SLOT=${PV_MAJ_MIN}
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="nls test"
 
-RDEPEND=">=dev-libs/glib-2.12:2[lib32?]
-	dev-libs/libxml2[lib32?]
-	>=dev-libs/check-0.9.2[lib32?]"
+RDEPEND=">=dev-libs/glib-2.12:2[$(get_ml_usedeps)?]
+	dev-libs/libxml2[$(get_ml_usedeps)?]
+	>=dev-libs/check-0.9.2[$(get_ml_usedeps)?]"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[lib32?]
-	nls? ( sys-devel/gettext[lib32?] )"
+	dev-util/pkgconfig[$(get_ml_usedeps)?]
+	nls? ( sys-devel/gettext[$(get_ml_usedeps)?] )"
 
 ml-native_src_configure() {
 	# Disable static archives, dependency tracking and examples

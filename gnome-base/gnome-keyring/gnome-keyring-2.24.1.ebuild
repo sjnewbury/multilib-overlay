@@ -14,19 +14,19 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="debug doc hal pam test"
 
-RDEPEND=">=dev-libs/glib-2.16[lib32?]
-	 >=x11-libs/gtk+-2.6[lib32?]
-	 gnome-base/gconf[lib32?]
-	 >=sys-apps/dbus-1.0[lib32?]
-	 hal? ( >=sys-apps/hal-0.5.7[lib32?] )
+RDEPEND=">=dev-libs/glib-2.16[$(get_ml_usedeps)?]
+	 >=x11-libs/gtk+-2.6[$(get_ml_usedeps)?]
+	 gnome-base/gconf[$(get_ml_usedeps)?]
+	 >=sys-apps/dbus-1.0[$(get_ml_usedeps)?]
+	 hal? ( >=sys-apps/hal-0.5.7[$(get_ml_usedeps)?] )
 	 pam? ( virtual/pam )
-	 >=dev-libs/libgcrypt-1.2.2[lib32?]
-	 >=dev-libs/libtasn1-0.3.4[lib32?]
-	 lib32? ( pam? ( sys-libs/pam[lib32] ) )"
+	 >=dev-libs/libgcrypt-1.2.2[$(get_ml_usedeps)?]
+	 >=dev-libs/libtasn1-0.3.4[$(get_ml_usedeps)?]
+	 lib32? ( pam? ( sys-libs/pam[$(get_ml_usedeps)] ) )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.35
-	>=dev-util/pkgconfig-0.9[lib32?]
+	>=dev-util/pkgconfig-0.9[$(get_ml_usedeps)?]
 	dev-util/gtk-doc-am
 	doc? ( dev-util/gtk-doc )"
 

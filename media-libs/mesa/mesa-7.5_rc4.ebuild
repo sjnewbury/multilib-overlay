@@ -77,7 +77,7 @@ RDEPEND="!<=x11-base/xorg-x11-6.9
 	doc? ( app-doc/opengl-manpages )
 "
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[lib32?]
+	dev-util/pkgconfig[$(get_ml_usedeps)?]
 	x11-misc/makedepend
 	>=x11-proto/dri2proto-1.99.3
 	>=x11-proto/glproto-1.4.8

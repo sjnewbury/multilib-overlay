@@ -27,7 +27,7 @@ RDEPEND="nls? ( virtual/libintl )
 	audit? ( sys-process/audit )
 	selinux? ( >=sys-libs/libselinux-1.28 )"
 DEPEND="${RDEPEND}
-	sys-devel/flex[lib32?]
+	sys-devel/flex[$(get_ml_usedeps)?]
 	test? ( elibc_glibc? ( >=sys-libs/glibc-2.4 ) )
 	nls? ( sys-devel/gettext )"
 PDEPEND="sys-auth/pambase

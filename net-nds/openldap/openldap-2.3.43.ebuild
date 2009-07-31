@@ -23,40 +23,40 @@ IUSE="berkdb crypt debug gdbm ipv6 kerberos minimal odbc overlays perl samba sas
 # mine at work)!
 # Robin H. Johnson <robbat2@gentoo.org> March 8, 2004
 
-RDEPEND="sys-libs/ncurses[lib32?]
-	tcpd? ( sys-apps/tcp-wrappers[lib32?] )
-	ssl? ( dev-libs/openssl[lib32?] )
-	sasl? ( dev-libs/cyrus-sasl[lib32?] )
+RDEPEND="sys-libs/ncurses[$(get_ml_usedeps)?]
+	tcpd? ( sys-apps/tcp-wrappers[$(get_ml_usedeps)?] )
+	ssl? ( dev-libs/openssl[$(get_ml_usedeps)?] )
+	sasl? ( dev-libs/cyrus-sasl[$(get_ml_usedeps)?] )
 	!minimal? (
-		odbc? ( dev-db/unixODBC[lib32?] )
-		slp? ( net-libs/openslp[lib32?] )
-		perl? ( dev-lang/perl[-build,lib32?] )
-		samba? ( dev-libs/openssl[lib32?] )
+		odbc? ( dev-db/unixODBC[$(get_ml_usedeps)?] )
+		slp? ( net-libs/openslp[$(get_ml_usedeps)?] )
+		perl? ( dev-lang/perl[-build,$(get_ml_usedeps)?] )
+		samba? ( dev-libs/openssl[$(get_ml_usedeps)?] )
 		kerberos? ( virtual/krb5 )
 		berkdb? (
-			|| ( 	sys-libs/db:4.5[lib32?]
-				sys-libs/db:4.4[lib32?]
-				sys-libs/db:4.3[lib32?]
-				>=sys-libs/db-4.2.52_p2-r1:4.2[lib32?]
+			|| ( 	sys-libs/db:4.5[$(get_ml_usedeps)?]
+				sys-libs/db:4.4[$(get_ml_usedeps)?]
+				sys-libs/db:4.3[$(get_ml_usedeps)?]
+				>=sys-libs/db-4.2.52_p2-r1:4.2[$(get_ml_usedeps)?]
 			)
 		)
 		!berkdb? (
-			gdbm? ( sys-libs/gdbm[lib32?] )
+			gdbm? ( sys-libs/gdbm[$(get_ml_usedeps)?] )
 			!gdbm? (
-				|| (	sys-libs/db:4.5[lib32?]
-					sys-libs/db:4.4[lib32?]
-					sys-libs/db:4.3[lib32?]
-					>=sys-libs/db-4.2.52_p2-r1:4.2[lib32?]
+				|| (	sys-libs/db:4.5[$(get_ml_usedeps)?]
+					sys-libs/db:4.4[$(get_ml_usedeps)?]
+					sys-libs/db:4.3[$(get_ml_usedeps)?]
+					>=sys-libs/db-4.2.52_p2-r1:4.2[$(get_ml_usedeps)?]
 				)
 			)
 		)
 		smbkrb5passwd? (
-			dev-libs/openssl[lib32?]
+			dev-libs/openssl[$(get_ml_usedeps)?]
 			app-crypt/heimdal
 		)
 	)
 	selinux? ( sec-policy/selinux-openldap )
-	sys-devel/libtool[lib32?]"
+	sys-devel/libtool[$(get_ml_usedeps)?]"
 DEPEND="${RDEPEND}"
 
 # for tracking versions
@@ -309,8 +309,8 @@ ml-native_src_configure() {
 		${myconf} || die "configure failed"
 
 	#convert the output of perl -MExtUtils::Embed -e ldopts to reasonable values
-	[[ $(get_libdir) == lib32 ]] && sed -i '/^MOD_LIBS/ {s/lib64/lib32/g; s/x86_64/i686/g}' ./servers/slapd/back-perl/Makefile
-	[[ $(get_libdir) == lib32 ]] && sed -i '/^PERL_CPPFLAGS/ {s/lib64/lib32/g; s/x86_64/i686/g}' ./servers/slapd/back-perl/Makefile
+	[[ $(get_libdir) == lib32 ]] && sed -i '/^MOD_LIBS/ {s/lib64/$(get_ml_usedeps)/g; s/x86_64/i686/g}' ./servers/slapd/back-perl/Makefile
+	[[ $(get_libdir) == lib32 ]] && sed -i '/^PERL_CPPFLAGS/ {s/lib64/$(get_ml_usedeps)/g; s/x86_64/i686/g}' ./servers/slapd/back-perl/Makefile
 }
 
 ml-native_src_compile() {

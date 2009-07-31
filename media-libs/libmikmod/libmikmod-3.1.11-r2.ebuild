@@ -18,8 +18,8 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="oss esd alsa"
 
-DEPEND=">=media-libs/audiofile-0.2.3[lib32?]
-	alsa? ( >=media-libs/alsa-lib-0.5.9[lib32?] )
+DEPEND=">=media-libs/audiofile-0.2.3[$(get_ml_usedeps)?]
+	alsa? ( >=media-libs/alsa-lib-0.5.9[$(get_ml_usedeps)?] )
 	esd? ( >=media-sound/esound-0.2.19 )"
 
 src_unpack() {

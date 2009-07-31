@@ -15,36 +15,36 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86"
 IUSE="alsa avahi caps jack lirc oss tcpd X hal dbus libsamplerate gnome bluetooth policykit asyncns"
 
-RDEPEND="X? ( x11-libs/libX11[lib32?] )
-	caps? ( sys-libs/libcap[lib32?] )
-	>=media-libs/audiofile-0.2.6-r1[lib32?]
-	libsamplerate? ( >=media-libs/libsamplerate-0.1.1-r1[lib32?] )
-	>=media-libs/libsndfile-1.0.10[lib32?]
-	>=dev-libs/liboil-0.3.6[lib32?]
-	alsa? ( >=media-libs/alsa-lib-1.0.10[lib32?] )
-	>=dev-libs/glib-2.4.0[lib32?]
-	avahi? ( >=net-dns/avahi-0.6.12[lib32?] )
-	>=dev-libs/liboil-0.3.0[lib32?]
-	jack? ( >=media-sound/jack-audio-connection-kit-0.100[lib32?] )
-	tcpd? ( sys-apps/tcp-wrappers[lib32?] )
-	lirc? ( app-misc/lirc[lib32?] )
-	dbus? ( >=sys-apps/dbus-1.0.0[lib32?] )
-	gnome? ( >=gnome-base/gconf-2.4.0[lib32?] )
+RDEPEND="X? ( x11-libs/libX11[$(get_ml_usedeps)?] )
+	caps? ( sys-libs/libcap[$(get_ml_usedeps)?] )
+	>=media-libs/audiofile-0.2.6-r1[$(get_ml_usedeps)?]
+	libsamplerate? ( >=media-libs/libsamplerate-0.1.1-r1[$(get_ml_usedeps)?] )
+	>=media-libs/libsndfile-1.0.10[$(get_ml_usedeps)?]
+	>=dev-libs/liboil-0.3.6[$(get_ml_usedeps)?]
+	alsa? ( >=media-libs/alsa-lib-1.0.10[$(get_ml_usedeps)?] )
+	>=dev-libs/glib-2.4.0[$(get_ml_usedeps)?]
+	avahi? ( >=net-dns/avahi-0.6.12[$(get_ml_usedeps)?] )
+	>=dev-libs/liboil-0.3.0[$(get_ml_usedeps)?]
+	jack? ( >=media-sound/jack-audio-connection-kit-0.100[$(get_ml_usedeps)?] )
+	tcpd? ( sys-apps/tcp-wrappers[$(get_ml_usedeps)?] )
+	lirc? ( app-misc/lirc[$(get_ml_usedeps)?] )
+	dbus? ( >=sys-apps/dbus-1.0.0[$(get_ml_usedeps)?] )
+	gnome? ( >=gnome-base/gconf-2.4.0[$(get_ml_usedeps)?] )
 	hal? (
-		>=sys-apps/hal-0.5.7[lib32?]
-		>=sys-apps/dbus-1.0.0[lib32?]
+		>=sys-apps/hal-0.5.7[$(get_ml_usedeps)?]
+		>=sys-apps/dbus-1.0.0[$(get_ml_usedeps)?]
 	)
 	app-admin/eselect-esd
 	bluetooth? (
-		>=net-wireless/bluez-libs-3[lib32?]
-		>=sys-apps/dbus-1.0.0[lib32?]
+		>=net-wireless/bluez-libs-3[$(get_ml_usedeps)?]
+		>=sys-apps/dbus-1.0.0[$(get_ml_usedeps)?]
 	)
-	policykit? ( sys-auth/policykit[lib32?] )
-	asyncns? ( net-libs/libasyncns[lib32?] )
-	>=sys-devel/libtool-1.5.24[lib32?]" # it's a valid RDEPEND, libltdl.so is used
+	policykit? ( sys-auth/policykit[$(get_ml_usedeps)?] )
+	asyncns? ( net-libs/libasyncns[$(get_ml_usedeps)?] )
+	>=sys-devel/libtool-1.5.24[$(get_ml_usedeps)?]" # it's a valid RDEPEND, libltdl.so is used
 DEPEND="${RDEPEND}
-	dev-libs/libatomic_ops[lib32?]
-	dev-util/pkgconfig[lib32?]"
+	dev-libs/libatomic_ops[$(get_ml_usedeps)?]
+	dev-util/pkgconfig[$(get_ml_usedeps)?]"
 
 # alsa-utils dep is for the alsasound init.d script (see bug #155707)
 # bluez-utils dep is for the bluetooth init.d script

@@ -21,14 +21,14 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="alsa jack minimal sqlite"
 
-RDEPEND="!minimal? ( >=media-libs/flac-1.2.1[lib32?]
-		>=media-libs/libogg-1.1.3[lib32?]
-		>=media-libs/libvorbis-1.2.1_rc1[lib32?] )
-	alsa? ( media-libs/alsa-lib[lib32?] )
-	sqlite? ( >=dev-db/sqlite-3.2[lib32?] )
-	jack? ( media-sound/jack-audio-connection-kit[lib32?] )"
+RDEPEND="!minimal? ( >=media-libs/flac-1.2.1[$(get_ml_usedeps)?]
+		>=media-libs/libogg-1.1.3[$(get_ml_usedeps)?]
+		>=media-libs/libvorbis-1.2.1_rc1[$(get_ml_usedeps)?] )
+	alsa? ( media-libs/alsa-lib[$(get_ml_usedeps)?] )
+	sqlite? ( >=dev-db/sqlite-3.2[$(get_ml_usedeps)?] )
+	jack? ( media-sound/jack-audio-connection-kit[$(get_ml_usedeps)?] )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[lib32?]"
+	dev-util/pkgconfig[$(get_ml_usedeps)?]"
 
 S=${WORKDIR}/${MY_P}
 

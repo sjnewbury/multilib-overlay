@@ -14,7 +14,7 @@ DESCRIPTION="X.Org SM library"
 KEYWORDS="alpha amd64 arm ~hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="ipv6"
 
-RDEPEND="x11-libs/libICE[lib32?]
+RDEPEND="x11-libs/libICE[$(get_ml_usedeps)?]
 	x11-libs/xtrans
 	x11-proto/xproto"
 DEPEND="${RDEPEND}"

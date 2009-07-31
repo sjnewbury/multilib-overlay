@@ -18,13 +18,13 @@ KEYWORDS="alpha amd64 arm hppa ia64 -mips ppc ppc64 sh -sparc x86"
 IUSE="debug fbcon fusion gif jpeg mmx png sdl sse sysfs truetype v4l v4l2 X zlib"
 
 #	fusion? ( >=dev-libs/linux-fusion-8.0.0 )
-RDEPEND="sdl? ( media-libs/libsdl[lib32?] )
-	gif? ( media-libs/giflib[lib32?] )
-	png? ( media-libs/libpng[lib32?] )
-	jpeg? ( media-libs/jpeg[lib32?] )
-	sysfs? ( sys-fs/sysfsutils[lib32?] )
-	zlib? ( sys-libs/zlib[lib32?] )
-	truetype? ( >=media-libs/freetype-2.0.1[lib32?] )
+RDEPEND="sdl? ( media-libs/libsdl[$(get_ml_usedeps)?] )
+	gif? ( media-libs/giflib[$(get_ml_usedeps)?] )
+	png? ( media-libs/libpng[$(get_ml_usedeps)?] )
+	jpeg? ( media-libs/jpeg[$(get_ml_usedeps)?] )
+	sysfs? ( sys-fs/sysfsutils[$(get_ml_usedeps)?] )
+	zlib? ( sys-libs/zlib[$(get_ml_usedeps)?] )
+	truetype? ( >=media-libs/freetype-2.0.1[$(get_ml_usedeps)?] )
 	X? ( x11-libs/libXext x11-libs/libX11 )"
 DEPEND="${RDEPEND}
 	X? ( x11-proto/xextproto x11-proto/xproto )"

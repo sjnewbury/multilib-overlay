@@ -15,15 +15,15 @@ KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="doc"
 
 # gail dep at 1.19.6 to ensure both gail and libgnomecanvas aren't providing GailCanvas (got moved to here with gail-1.19.6)
-RDEPEND=">=x11-libs/gtk+-2.0.3[lib32?]
-	>=media-libs/libart_lgpl-2.3.8[lib32?]
-	>=x11-libs/pango-1.0.1[lib32?]
-	>=gnome-base/libglade-2[lib32?]"
+RDEPEND=">=x11-libs/gtk+-2.0.3[$(get_ml_usedeps)?]
+	>=media-libs/libart_lgpl-2.3.8[$(get_ml_usedeps)?]
+	>=x11-libs/pango-1.0.1[$(get_ml_usedeps)?]
+	>=gnome-base/libglade-2[$(get_ml_usedeps)?]"
 
 DEPEND="${RDEPEND}
 	sys-devel/gettext
 	>=dev-util/intltool-0.35
-	>=dev-util/pkgconfig-0.18[lib32?]
+	>=dev-util/pkgconfig-0.18[$(get_ml_usedeps)?]
 	doc? ( >=dev-util/gtk-doc-1 )"
 
 DOCS="AUTHORS ChangeLog NEWS README"

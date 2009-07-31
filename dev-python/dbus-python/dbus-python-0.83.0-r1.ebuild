@@ -16,14 +16,14 @@ LICENSE="MIT"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="examples test"
 
-RDEPEND=">=dev-lang/python-2.4.4-r5[lib32?]
-	>=dev-python/pyrex-0.9.3-r2[lib32?]
-	>=dev-libs/dbus-glib-0.71[lib32?]
-	>=sys-apps/dbus-1.1.1[lib32?]"
+RDEPEND=">=dev-lang/python-2.4.4-r5[$(get_ml_usedeps)?]
+	>=dev-python/pyrex-0.9.3-r2[$(get_ml_usedeps)?]
+	>=dev-libs/dbus-glib-0.71[$(get_ml_usedeps)?]
+	>=sys-apps/dbus-1.1.1[$(get_ml_usedeps)?]"
 
 DEPEND="${RDEPEND}
-	test? ( dev-python/pygobject[lib32?] )
-	dev-util/pkgconfig[lib32?]"
+	test? ( dev-python/pygobject[$(get_ml_usedeps)?] )
+	dev-util/pkgconfig[$(get_ml_usedeps)?]"
 
 ml-native_src_prepare() {
 	# disable pyc compiling

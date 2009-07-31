@@ -13,13 +13,13 @@ SLOT="4"
 KEYWORDS="alpha amd64 hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="doc glib +qt3support ssl"
 
-RDEPEND="sys-libs/zlib[lib32?]
-	glib? ( dev-libs/glib[lib32?] )
-	ssl? ( dev-libs/openssl[lib32?] )
+RDEPEND="sys-libs/zlib[$(get_ml_usedeps)?]
+	glib? ( dev-libs/glib[$(get_ml_usedeps)?] )
+	ssl? ( dev-libs/openssl[$(get_ml_usedeps)?] )
 	!<=x11-libs/qt-4.4.0_alpha:${SLOT}"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[lib32?]"
-PDEPEND="qt3support? ( ~x11-libs/qt-gui-${PV}[lib32?] )"
+	dev-util/pkgconfig[$(get_ml_usedeps)?]"
+PDEPEND="qt3support? ( ~x11-libs/qt-gui-${PV}[$(get_ml_usedeps)?] )"
 
 QT4_TARGET_DIRECTORIES="
 src/tools/moc/

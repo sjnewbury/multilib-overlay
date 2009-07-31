@@ -10,8 +10,8 @@ SLOT="4"
 KEYWORDS="alpha amd64 arm hppa ~ia64 ~mips ppc ~ppc64 ~sparc x86 ~x86-fbsd"
 IUSE=""
 
-DEPEND="~x11-libs/qt-core-${PV}[debug=,lib32?]
-	>=sys-apps/dbus-1.0.2[lib32?]"
+DEPEND="~x11-libs/qt-core-${PV}[debug=,$(get_ml_usedeps)?]
+	>=sys-apps/dbus-1.0.2[$(get_ml_usedeps)?]"
 RDEPEND="${DEPEND}"
 
 QT4_TARGET_DIRECTORIES="

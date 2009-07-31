@@ -13,9 +13,9 @@ SLOT="4"
 KEYWORDS="alpha amd64 hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="+accessibility"
 
-DEPEND="~x11-libs/qt-core-${PV}[lib32?]
-	~x11-libs/qt-gui-${PV}[lib32?]
-	~x11-libs/qt-sql-${PV}[lib32?]
+DEPEND="~x11-libs/qt-core-${PV}[$(get_ml_usedeps)?]
+	~x11-libs/qt-gui-${PV}[$(get_ml_usedeps)?]
+	~x11-libs/qt-sql-${PV}[$(get_ml_usedeps)?]
 	!<=x11-libs/qt-4.4.0_alpha:${SLOT}"
 RDEPEND="${DEPEND}"
 

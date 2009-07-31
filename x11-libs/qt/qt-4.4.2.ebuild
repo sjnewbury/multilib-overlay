@@ -14,14 +14,14 @@ KEYWORDS="alpha amd64 hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="dbus opengl qt3support"
 
 DEPEND=""
-RDEPEND="~x11-libs/qt-gui-${PV}[lib32?]
-	~x11-libs/qt-svg-${PV}[lib32?]
-	~x11-libs/qt-test-${PV}[lib32?]
-	~x11-libs/qt-sql-${PV}[lib32?]
-	~x11-libs/qt-script-${PV}[lib32?]
-	~x11-libs/qt-assistant-${PV}[lib32?]
-	~x11-libs/qt-xmlpatterns-${PV}[lib32?]
-	!sparc? ( !alpha? ( !ia64? ( !x86-fbsd? ( ~x11-libs/qt-webkit-${PV}[lib32?] ) ) ) )
-	dbus? ( ~x11-libs/qt-dbus-${PV}[lib32?] )
-	opengl? ( ~x11-libs/qt-opengl-${PV}[lib32?] )
-	qt3support? ( ~x11-libs/qt-qt3support-${PV}[lib32?] )"
+RDEPEND="~x11-libs/qt-gui-${PV}[$(get_ml_usedeps)?]
+	~x11-libs/qt-svg-${PV}[$(get_ml_usedeps)?]
+	~x11-libs/qt-test-${PV}[$(get_ml_usedeps)?]
+	~x11-libs/qt-sql-${PV}[$(get_ml_usedeps)?]
+	~x11-libs/qt-script-${PV}[$(get_ml_usedeps)?]
+	~x11-libs/qt-assistant-${PV}[$(get_ml_usedeps)?]
+	~x11-libs/qt-xmlpatterns-${PV}[$(get_ml_usedeps)?]
+	!sparc? ( !alpha? ( !ia64? ( !x86-fbsd? ( ~x11-libs/qt-webkit-${PV}[$(get_ml_usedeps)?] ) ) ) )
+	dbus? ( ~x11-libs/qt-dbus-${PV}[$(get_ml_usedeps)?] )
+	opengl? ( ~x11-libs/qt-opengl-${PV}[$(get_ml_usedeps)?] )
+	qt3support? ( ~x11-libs/qt-qt3support-${PV}[$(get_ml_usedeps)?] )"

@@ -23,26 +23,26 @@ IUSE="3dnow aac alsa altivec amr debug dirac doc ieee1394 encode gsm ipv6 mmx mm
 	  test theora threads x264 xvid network zlib sdl X mp3 oss schroedinger
 	  hardcoded-tables bindist v4l v4l2 speex ssse3 vhook"
 
-RDEPEND="vhook? ( >=media-libs/imlib2-1.4.0[lib32?] >=media-libs/freetype-2[lib32?] )
-	sdl? ( >=media-libs/libsdl-1.2.10[lib32?] )
-	alsa? ( media-libs/alsa-lib[lib32?] )
+RDEPEND="vhook? ( >=media-libs/imlib2-1.4.0[lib32?] >=media-libs/freetype-2[$(get_ml_usedeps)?] )
+	sdl? ( >=media-libs/libsdl-1.2.10[$(get_ml_usedeps)?] )
+	alsa? ( media-libs/alsa-lib[$(get_ml_usedeps)?] )
 	encode? (
-		aac? ( media-libs/faac[lib32?] )
-		mp3? ( media-sound/lame[lib32?] )
-		vorbis? ( media-libs/libvorbis[lib32?] media-libs/libogg[lib32?] )
-		theora? ( media-libs/libtheora[lib32?] media-libs/libogg[lib32?] )
-		x264? ( >=media-libs/x264-0.0.20081006[lib32?] )
-		xvid? ( >=media-libs/xvid-1.1.0[lib32?] ) )
-	aac? ( >=media-libs/faad2-2.6.1[lib32?] )
-	zlib? ( sys-libs/zlib[lib32?] )
-	ieee1394? ( media-libs/libdc1394[lib32?]
-				sys-libs/libraw1394[lib32?] )
-	dirac? ( media-video/dirac[lib32?] )
-	gsm? ( >=media-sound/gsm-1.0.12-r1[lib32?] )
-	schroedinger? ( media-libs/schroedinger[lib32?] )
-	speex? ( >=media-libs/speex-1.2_beta3[lib32?] )
-	X? ( x11-libs/libX11[lib32?] x11-libs/libXext[lib32?] )
-	amr? ( media-libs/amrnb[lib32?] media-libs/amrwb[lib32?] )"
+		aac? ( media-libs/faac[$(get_ml_usedeps)?] )
+		mp3? ( media-sound/lame[$(get_ml_usedeps)?] )
+		vorbis? ( media-libs/libvorbis[lib32?] media-libs/libogg[$(get_ml_usedeps)?] )
+		theora? ( media-libs/libtheora[lib32?] media-libs/libogg[$(get_ml_usedeps)?] )
+		x264? ( >=media-libs/x264-0.0.20081006[$(get_ml_usedeps)?] )
+		xvid? ( >=media-libs/xvid-1.1.0[$(get_ml_usedeps)?] ) )
+	aac? ( >=media-libs/faad2-2.6.1[$(get_ml_usedeps)?] )
+	zlib? ( sys-libs/zlib[$(get_ml_usedeps)?] )
+	ieee1394? ( media-libs/libdc1394[$(get_ml_usedeps)?]
+				sys-libs/libraw1394[$(get_ml_usedeps)?] )
+	dirac? ( media-video/dirac[$(get_ml_usedeps)?] )
+	gsm? ( >=media-sound/gsm-1.0.12-r1[$(get_ml_usedeps)?] )
+	schroedinger? ( media-libs/schroedinger[$(get_ml_usedeps)?] )
+	speex? ( >=media-libs/speex-1.2_beta3[$(get_ml_usedeps)?] )
+	X? ( x11-libs/libX11[lib32?] x11-libs/libXext[$(get_ml_usedeps)?] )
+	amr? ( media-libs/amrnb[lib32?] media-libs/amrwb[$(get_ml_usedeps)?] )"
 
 DEPEND="${RDEPEND}
 	>=sys-devel/make-3.81

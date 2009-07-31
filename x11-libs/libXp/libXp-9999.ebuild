@@ -13,8 +13,8 @@ DESCRIPTION="X.Org Xp library"
 
 KEYWORDS=""
 
-RDEPEND="x11-libs/libX11[lib32?]
-	x11-libs/libXext[lib32?]
-	x11-libs/libXau[lib32?]
+RDEPEND="x11-libs/libX11[$(get_ml_usedeps)?]
+	x11-libs/libXext[$(get_ml_usedeps)?]
+	x11-libs/libXau[$(get_ml_usedeps)?]
 	x11-proto/printproto"
 DEPEND="${RDEPEND}"

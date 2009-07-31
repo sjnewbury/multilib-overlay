@@ -19,12 +19,12 @@ SLOT=${PV_MAJ_MIN}
 KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="debug nls test"
 
-RDEPEND=">=dev-libs/glib-2.12[lib32?]
-	>=dev-libs/libxml2-2.4.9[lib32?]
-	>=dev-libs/check-0.9.2[lib32?]"
+RDEPEND=">=dev-libs/glib-2.12[$(get_ml_usedeps)?]
+	>=dev-libs/libxml2-2.4.9[$(get_ml_usedeps)?]
+	>=dev-libs/check-0.9.2[$(get_ml_usedeps)?]"
 DEPEND="${RDEPEND}
 	nls? ( >=sys-devel/gettext-0.11.5 )
-	dev-util/pkgconfig[lib32?]
+	dev-util/pkgconfig[$(get_ml_usedeps)?]
 	!<media-libs/gst-plugins-ugly-0.10.6-r1
 	!=media-libs/gst-plugins-good-0.10.8"
 

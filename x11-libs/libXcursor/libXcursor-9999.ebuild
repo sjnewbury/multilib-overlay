@@ -13,9 +13,9 @@ DESCRIPTION="X.Org Xcursor library"
 
 KEYWORDS=""
 
-RDEPEND="x11-libs/libXrender[lib32?]
-	x11-libs/libXfixes[lib32?]
-	x11-libs/libX11[lib32?]
+RDEPEND="x11-libs/libXrender[$(get_ml_usedeps)?]
+	x11-libs/libXfixes[$(get_ml_usedeps)?]
+	x11-libs/libX11[$(get_ml_usedeps)?]
 	x11-proto/xproto"
 DEPEND="${RDEPEND}"
 

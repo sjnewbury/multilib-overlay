@@ -21,8 +21,8 @@ IUSE="utils"
 
 S="${WORKDIR}/mozilla"
 
-DEPEND=">=dev-libs/nspr-${NSPR_VER}[lib32?]
-	>=dev-db/sqlite-3.5[lib32?]"
+DEPEND=">=dev-libs/nspr-${NSPR_VER}[$(get_ml_usedeps)?]
+	>=dev-db/sqlite-3.5[$(get_ml_usedeps)?]"
 
 ml-native_src_prepare() {
 	cd "${S}"/security/coreconf

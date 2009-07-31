@@ -52,20 +52,20 @@ IUSE="${IUSE_VIDEO_CARDS}
 
 RDEPEND="app-admin/eselect-opengl
 	dev-libs/expat
-	x11-libs/libX11[xcb?,lib32?]
-	x11-libs/libXext[lib32?]
-	x11-libs/libXxf86vm[lib32?]
-	x11-libs/libXi[lib32?]
-	x11-libs/libXmu[lib32?]
-	x11-libs/libXdamage[lib32?]
-	>=x11-libs/libdrm-2.4.3[lib32?]
-	x11-libs/libICE[lib32?]
+	x11-libs/libX11[xcb?,$(get_ml_usedeps)?]
+	x11-libs/libXext[$(get_ml_usedeps)?]
+	x11-libs/libXxf86vm[$(get_ml_usedeps)?]
+	x11-libs/libXi[$(get_ml_usedeps)?]
+	x11-libs/libXmu[$(get_ml_usedeps)?]
+	x11-libs/libXdamage[$(get_ml_usedeps)?]
+	>=x11-libs/libdrm-2.4.3[$(get_ml_usedeps)?]
+	x11-libs/libICE[$(get_ml_usedeps)?]
 	motif? ( x11-libs/openmotif )
 	doc? ( app-doc/opengl-manpages )
 	!<=x11-base/xorg-x11-6.9"
 DEPEND="${RDEPEND}
 	!<=x11-proto/xf86driproto-2.0.3
-	dev-util/pkgconfig[lib32?]
+	dev-util/pkgconfig[$(get_ml_usedeps)?]
 	x11-misc/makedepend
 	x11-proto/inputproto
 	x11-proto/xextproto

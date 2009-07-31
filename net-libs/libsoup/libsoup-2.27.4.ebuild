@@ -15,15 +15,15 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 # Do NOT build with --disable-debug/--enable-debug=no - gnome2.eclass takes care of that
 IUSE="debug doc gnome ssl"
 
-RDEPEND=">=dev-libs/glib-2.15.3[lib32?]
-	>=dev-libs/libxml2-2[lib32?]
+RDEPEND=">=dev-libs/glib-2.15.3[$(get_ml_usedeps)?]
+	>=dev-libs/libxml2-2[$(get_ml_usedeps)?]
 	gnome? (
-		net-libs/libproxy[lib32?]
-		>=gnome-base/gconf-2[lib32?]
-		dev-db/sqlite:3[lib32?] )
-	ssl? ( >=net-libs/gnutls-1[lib32?] )"
+		net-libs/libproxy[$(get_ml_usedeps)?]
+		>=gnome-base/gconf-2[$(get_ml_usedeps)?]
+		dev-db/sqlite:3[$(get_ml_usedeps)?] )
+	ssl? ( >=net-libs/gnutls-1[$(get_ml_usedeps)?] )"
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.9[lib32?]
+	>=dev-util/pkgconfig-0.9[$(get_ml_usedeps)?]
 	doc? ( >=dev-util/gtk-doc-1 )"
 #	test? (
 #		www-servers/apache

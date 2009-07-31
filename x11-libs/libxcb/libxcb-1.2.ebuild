@@ -15,8 +15,8 @@ SRC_URI="http://xcb.freedesktop.org/dist/${P}.tar.bz2"
 LICENSE="X11"
 KEYWORDS=""
 IUSE="doc selinux"
-RDEPEND="x11-libs/libXau[lib32?]
-	x11-libs/libXdmcp[lib32?]
+RDEPEND="x11-libs/libXau[$(get_ml_usedeps)?]
+	x11-libs/libXdmcp[$(get_ml_usedeps)?]
 	dev-libs/libpthread-stubs"
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )

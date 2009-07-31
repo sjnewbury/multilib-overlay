@@ -18,7 +18,7 @@ IUSE="debug"
 DEPEND="dev-util/gperf"
 
 RDEPEND="${DEPEND}
-	>=sys-libs/zlib-1.1.3[lib32?]"
+	>=sys-libs/zlib-1.1.3[$(get_ml_usedeps)?]"
 
 src_unpack() {
 	unpack ${A}

@@ -18,6 +18,6 @@ RDEPEND="
 	>=app-emulation/emul-linux-x86-baselibs-20081109
 	>=app-emulation/emul-linux-x86-soundlibs-20081109
 	>=app-emulation/emul-linux-x86-xlibs-20081109
-	media-libs/speex[lib32]
+	media-libs/speex[$(get_ml_usedeps)]
 )
 "

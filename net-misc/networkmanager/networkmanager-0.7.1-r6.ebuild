@@ -23,21 +23,21 @@ KEYWORDS="~arm ~amd64 ~ppc ~x86"
 IUSE="avahi doc nss gnutls dhclient dhcpcd resolvconf connection-sharing"
 # modemmanager"
 
-RDEPEND=">=sys-apps/dbus-1.2[lib32?]
-	>=dev-libs/dbus-glib-0.75[lib32?]
-	>=sys-apps/hal-0.5.10[lib32?]
+RDEPEND=">=sys-apps/dbus-1.2[$(get_ml_usedeps)?]
+	>=dev-libs/dbus-glib-0.75[$(get_ml_usedeps)?]
+	>=sys-apps/hal-0.5.10[$(get_ml_usedeps)?]
 	>=net-wireless/wireless-tools-28_pre9
-	>=dev-libs/glib-2.16[lib32?]
-	>=sys-auth/policykit-0.8[lib32?]
-	>=dev-libs/libnl-1.1[lib32?]
+	>=dev-libs/glib-2.16[$(get_ml_usedeps)?]
+	>=sys-auth/policykit-0.8[$(get_ml_usedeps)?]
+	>=dev-libs/libnl-1.1[$(get_ml_usedeps)?]
 	>=net-wireless/wpa_supplicant-0.5.10[dbus]
-	|| ( sys-libs/e2fsprogs-libs[lib32?] <sys-fs/e2fsprogs-1.41.0[lib32?] )
-	avahi? ( net-dns/avahi[autoipd,lib32?] )
+	|| ( sys-libs/e2fsprogs-libs[lib32?] <sys-fs/e2fsprogs-1.41.0[$(get_ml_usedeps)?] )
+	avahi? ( net-dns/avahi[autoipd,$(get_ml_usedeps)?] )
 	gnutls? (
-		nss? ( >=dev-libs/nss-3.11[lib32?] )
-		!nss? ( dev-libs/libgcrypt[lib32?]
-			net-libs/gnutls[lib32?] ) )
-	!gnutls? ( >=dev-libs/nss-3.11[lib32?] )
+		nss? ( >=dev-libs/nss-3.11[$(get_ml_usedeps)?] )
+		!nss? ( dev-libs/libgcrypt[$(get_ml_usedeps)?]
+			net-libs/gnutls[$(get_ml_usedeps)?] ) )
+	!gnutls? ( >=dev-libs/nss-3.11[$(get_ml_usedeps)?] )
 	dhclient? (
 		dhcpcd? ( >=net-misc/dhcpcd-4.0.0_rc3 )
 		!dhcpcd? ( >=net-misc/dhcp-3.0.0 ) )
@@ -48,7 +48,7 @@ RDEPEND=">=sys-apps/dbus-1.2[lib32?]
 		net-firewall/iptables )"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[lib32?]
+	dev-util/pkgconfig[$(get_ml_usedeps)?]
 	dev-util/intltool
 	net-dialup/ppp
 	doc? ( >=dev-util/gtk-doc-1.8 )"

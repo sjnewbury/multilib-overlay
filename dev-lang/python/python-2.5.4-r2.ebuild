@@ -34,18 +34,18 @@ IUSE="+xml ncurses gdbm ssl readline tk berkdb ipv6 build ucs2 sqlite doc +threa
 # NOTE: dev-python/{elementtree,celementtree,pysqlite,ctypes,cjkcodecs}
 #       do not conflict with the ones in python proper. - liquidx
 
-DEPEND=">=sys-libs/zlib-1.1.3[lib32?]
+DEPEND=">=sys-libs/zlib-1.1.3[$(get_ml_usedeps)?]
 		!build? (
-			sqlite? ( >=dev-db/sqlite-3[lib32?] )
-			tk? ( >=dev-lang/tk-8.0[lib32?] )
-			ncurses? ( >=sys-libs/ncurses-5.2[lib32?]
-						readline? ( >=sys-libs/readline-4.1[lib32?] ) )
-			berkdb? ( || ( sys-libs/db:4.5[lib32?] sys-libs/db:4.4[lib32?] sys-libs/db:4.3[lib32?]
-							sys-libs/db:4.2[lib32?] ) )
-			gdbm? ( sys-libs/gdbm[lib32?] )
-			ssl? ( dev-libs/openssl[lib32?] )
+			sqlite? ( >=dev-db/sqlite-3[$(get_ml_usedeps)?] )
+			tk? ( >=dev-lang/tk-8.0[$(get_ml_usedeps)?] )
+			ncurses? ( >=sys-libs/ncurses-5.2[$(get_ml_usedeps)?]
+						readline? ( >=sys-libs/readline-4.1[$(get_ml_usedeps)?] ) )
+			berkdb? ( || ( sys-libs/db:4.5[lib32?] sys-libs/db:4.4[lib32?] sys-libs/db:4.3[$(get_ml_usedeps)?]
+							sys-libs/db:4.2[$(get_ml_usedeps)?] ) )
+			gdbm? ( sys-libs/gdbm[$(get_ml_usedeps)?] )
+			ssl? ( dev-libs/openssl[$(get_ml_usedeps)?] )
 			doc? ( dev-python/python-docs:2.5 )
-		xml? ( dev-libs/expat[lib32?] )
+		xml? ( dev-libs/expat[$(get_ml_usedeps)?] )
 	)"
 
 # NOTE: changed RDEPEND to PDEPEND to resolve bug 88777. - kloeri

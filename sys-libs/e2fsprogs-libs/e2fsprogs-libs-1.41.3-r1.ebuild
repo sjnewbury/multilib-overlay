@@ -19,7 +19,7 @@ RDEPEND="!sys-libs/com_err
 	!sys-libs/ss
 	!<sys-fs/e2fsprogs-1.41"
 DEPEND="nls? ( sys-devel/gettext )
-	dev-util/pkgconfig[lib32?]
+	dev-util/pkgconfig[$(get_ml_usedeps)?]
 	sys-devel/bc"
 
 ml-native_src_configure() {

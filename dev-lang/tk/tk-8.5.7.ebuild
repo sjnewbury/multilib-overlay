@@ -19,11 +19,11 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="debug threads truetype"
 
-RDEPEND="x11-libs/libX11[lib32?]
-	~dev-lang/tcl-${PV}[lib32?]"
+RDEPEND="x11-libs/libX11[$(get_ml_usedeps)?]
+	~dev-lang/tcl-${PV}[$(get_ml_usedeps)?]"
 DEPEND="${RDEPEND}
-	truetype? ( x11-libs/libXft[lib32?] )
-	x11-libs/libXt[lib32?]
+	truetype? ( x11-libs/libXft[$(get_ml_usedeps)?] )
+	x11-libs/libXt[$(get_ml_usedeps)?]
 	x11-proto/xproto"
 
 S="${WORKDIR}/${MY_P}"

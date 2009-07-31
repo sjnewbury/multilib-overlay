@@ -26,9 +26,9 @@ PERL_OLDVERSEN="5.8.0 5.8.2 5.8.4 5.8.5 5.8.6 5.8.7"
 
 DEPEND="berkdb? ( sys-libs/db )
 	gdbm? ( >=sys-libs/gdbm-1.8.3 )
-	>=sys-devel/libperl-${PV}-r1[lib32?]
+	>=sys-devel/libperl-${PV}-r1[$(get_ml_usedeps)?]
 	elibc_FreeBSD? ( sys-freebsd/freebsd-mk-defs )
-	<sys-devel/libperl-5.9[lib32?]
+	<sys-devel/libperl-5.9[$(get_ml_usedeps)?]
 	!<perl-core/File-Spec-0.87
 	!<perl-core/Test-Simple-0.47-r1"
 

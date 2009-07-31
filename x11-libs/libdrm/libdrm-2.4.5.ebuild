@@ -18,9 +18,9 @@ IUSE=""
 RESTRICT="test" # see bug #236845
 
 RDEPEND="dev-libs/libpthread-stubs
-	sys-fs/udev[lib32?]"
+	sys-fs/udev[$(get_ml_usedeps)?]"
 DEPEND="${RDEPEND}
-	x11-libs/cairo[lib32?]"
+	x11-libs/cairo[$(get_ml_usedeps)?]"
 
 # FIXME, we should try to see how we can fit the --enable-udev configure flag
 

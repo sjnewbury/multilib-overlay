@@ -10,13 +10,13 @@ SLOT="4"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~x86 ~x86-fbsd"
 IUSE="dbus"
 
-DEPEND="~x11-libs/qt-gui-${PV}[debug=,glib,qt3support,lib32?]
+DEPEND="~x11-libs/qt-gui-${PV}[debug=,glib,qt3support,$(get_ml_usedeps)?]
 	!kde-base/phonon-kde
 	!kde-base/phonon-xine
 	!media-sound/phonon
-	media-libs/gstreamer[lib32?]
-	media-libs/gst-plugins-base[lib32?]
-	dbus? ( =x11-libs/qt-dbus-${PV}[debug=,lib32?] )"
+	media-libs/gstreamer[$(get_ml_usedeps)?]
+	media-libs/gst-plugins-base[$(get_ml_usedeps)?]
+	dbus? ( =x11-libs/qt-dbus-${PV}[debug=,$(get_ml_usedeps)?] )"
 RDEPEND="${DEPEND}"
 
 QT4_TARGET_DIRECTORIES="

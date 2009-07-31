@@ -10,7 +10,7 @@ SLOT="4"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="iconv"
 
-DEPEND="~x11-libs/qt-core-${PV}[debug=,lib32?]"
+DEPEND="~x11-libs/qt-core-${PV}[debug=,$(get_ml_usedeps)?]"
 RDEPEND="${DEPEND}"
 
 QT4_TARGET_DIRECTORIES="src/testlib"

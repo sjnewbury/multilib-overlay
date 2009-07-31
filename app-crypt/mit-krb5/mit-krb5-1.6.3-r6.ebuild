@@ -20,8 +20,8 @@ KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
 IUSE="krb4 doc"
 
 RDEPEND="!virtual/krb5
-	>=sys-libs/e2fsprogs-libs-1.41.0[lib32?]
-	dev-libs/openssl[lib32?]"
+	>=sys-libs/e2fsprogs-libs-1.41.0[$(get_ml_usedeps)?]
+	dev-libs/openssl[$(get_ml_usedeps)?]"
 
 DEPEND="${RDEPEND}
 	doc? ( virtual/latex-base )"

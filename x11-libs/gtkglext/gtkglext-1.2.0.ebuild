@@ -15,14 +15,14 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="doc"
 
-RDEPEND=">=dev-libs/glib-2[lib32?]
-	>=x11-libs/gtk+-2[lib32?]
-	>=x11-libs/pango-1[X,lib32?]
+RDEPEND=">=dev-libs/glib-2[$(get_ml_usedeps)?]
+	>=x11-libs/gtk+-2[$(get_ml_usedeps)?]
+	>=x11-libs/pango-1[X,$(get_ml_usedeps)?]
 	virtual/glu
 	virtual/opengl"
 DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-0.10 )
-	dev-util/pkgconfig[lib32?]"
+	dev-util/pkgconfig[$(get_ml_usedeps)?]"
 
 DOCS="AUTHORS ChangeLog* INSTALL NEWS README* TODO"
 

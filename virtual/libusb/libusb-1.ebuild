@@ -14,4 +14,4 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~spar
 IUSE="lib32"
 
 DEPEND=""
-RDEPEND="dev-libs/libusb:1[lib32?]"
+RDEPEND="dev-libs/libusb:1[$(get_ml_usedeps)?]"

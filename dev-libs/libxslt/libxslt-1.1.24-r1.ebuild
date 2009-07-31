@@ -14,9 +14,9 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="crypt debug examples python"
 
-DEPEND=">=dev-libs/libxml2-2.6.27[lib32?]
-	crypt?  ( >=dev-libs/libgcrypt-1.1.92[lib32?] )
-	python? ( dev-lang/python[lib32?] )"
+DEPEND=">=dev-libs/libxml2-2.6.27[$(get_ml_usedeps)?]
+	crypt?  ( >=dev-libs/libgcrypt-1.1.92[$(get_ml_usedeps)?] )
+	python? ( dev-lang/python[$(get_ml_usedeps)?] )"
 
 SRC_URI="ftp://xmlsoft.org/${PN}/${P}.tar.gz"
 

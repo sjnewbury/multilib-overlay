@@ -16,11 +16,11 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 ~sh sparc x86 ~x86-fbsd"
 IUSE="mp3 mikmod timidity vorbis"
 
-DEPEND=">=media-libs/libsdl-1.2.10[lib32?]
+DEPEND=">=media-libs/libsdl-1.2.10[$(get_ml_usedeps)?]
 	timidity? ( media-sound/timidity++ )
-	mp3? ( >=media-libs/smpeg-0.4.4-r1[lib32?] )
-	vorbis? ( >=media-libs/libvorbis-1.0_beta4[lib32?] media-libs/libogg[lib32?] )
-	mikmod? ( >=media-libs/libmikmod-3.1.10[lib32?] )"
+	mp3? ( >=media-libs/smpeg-0.4.4-r1[$(get_ml_usedeps)?] )
+	vorbis? ( >=media-libs/libvorbis-1.0_beta4[lib32?] media-libs/libogg[$(get_ml_usedeps)?] )
+	mikmod? ( >=media-libs/libmikmod-3.1.10[$(get_ml_usedeps)?] )"
 
 S=${WORKDIR}/${MY_P}
 

@@ -19,20 +19,20 @@ SLOT="0"
 KEYWORDS=""
 IUSE="dbus examples pcre python"
 
-RDEPEND=">=www-client/epiphany-${MY_MAJORV}[lib32?]
-	app-text/opensp[lib32?]
-	>=dev-libs/glib-2.15.5[lib32?]
-	>=gnome-base/gconf-2.0[lib32?]
-	>=dev-libs/libxml2-2.6[lib32?]
-	>=x11-libs/gtk+-2.11.6[lib32?]
-	>=gnome-base/libglade-2[lib32?]
-	dbus? ( >=dev-libs/dbus-glib-0.34[lib32?] )
-	pcre? ( >=dev-libs/libpcre-3.9-r2[lib32?] )
+RDEPEND=">=www-client/epiphany-${MY_MAJORV}[$(get_ml_usedeps)?]
+	app-text/opensp[$(get_ml_usedeps)?]
+	>=dev-libs/glib-2.15.5[$(get_ml_usedeps)?]
+	>=gnome-base/gconf-2.0[$(get_ml_usedeps)?]
+	>=dev-libs/libxml2-2.6[$(get_ml_usedeps)?]
+	>=x11-libs/gtk+-2.11.6[$(get_ml_usedeps)?]
+	>=gnome-base/libglade-2[$(get_ml_usedeps)?]
+	dbus? ( >=dev-libs/dbus-glib-0.34[$(get_ml_usedeps)?] )
+	pcre? ( >=dev-libs/libpcre-3.9-r2[$(get_ml_usedeps)?] )
 	python? ( >=dev-python/pygtk-2.11 )"
 DEPEND="${RDEPEND}
 	  gnome-base/gnome-common
 	>=dev-util/intltool-0.40
-	>=dev-util/pkgconfig-0.20[lib32?]
+	>=dev-util/pkgconfig-0.20[$(get_ml_usedeps)?]
 	>=app-text/gnome-doc-utils-0.3.2"
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"

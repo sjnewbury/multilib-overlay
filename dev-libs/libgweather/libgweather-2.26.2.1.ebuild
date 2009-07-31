@@ -15,11 +15,11 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="python doc"
 
-RDEPEND=">=x11-libs/gtk+-2.11[lib32?]
-	>=dev-libs/glib-2.13[lib32?]
-	>=gnome-base/gconf-2.8[lib32?]
-	>=net-libs/libsoup-2.25.1:2.4[gnome,lib32?]
-	>=dev-libs/libxml2-2.6.0[lib32?]
+RDEPEND=">=x11-libs/gtk+-2.11[$(get_ml_usedeps)?]
+	>=dev-libs/glib-2.13[$(get_ml_usedeps)?]
+	>=gnome-base/gconf-2.8[$(get_ml_usedeps)?]
+	>=net-libs/libsoup-2.25.1:2.4[gnome,$(get_ml_usedeps)?]
+	>=dev-libs/libxml2-2.6.0[$(get_ml_usedeps)?]
 	python? (
 		>=dev-python/pygobject-2
 		>=dev-python/pygtk-2 )

@@ -18,29 +18,29 @@ KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 # bug reports to be marked INVALID.
 IUSE="oss alsa esd arts nas X dga xv xinerama fbcon directfb ggi svga aalib opengl libcaca +audio +video +joystick custom-cflags pulseaudio"
 
-RDEPEND="audio? ( >=media-libs/audiofile-0.1.9[lib32?] )
-	alsa? ( media-libs/alsa-lib[lib32?] )
-	esd? ( >=media-sound/esound-0.2.19[lib32?] )
-	arts? ( kde-base/arts[lib32?] )
+RDEPEND="audio? ( >=media-libs/audiofile-0.1.9[$(get_ml_usedeps)?] )
+	alsa? ( media-libs/alsa-lib[$(get_ml_usedeps)?] )
+	esd? ( >=media-sound/esound-0.2.19[$(get_ml_usedeps)?] )
+	arts? ( kde-base/arts[$(get_ml_usedeps)?] )
 	nas? (
-		media-libs/nas[lib32?]
-		x11-libs/libXt[lib32?]
-		x11-libs/libXext[lib32?]
-		x11-libs/libX11[lib32?]
+		media-libs/nas[$(get_ml_usedeps)?]
+		x11-libs/libXt[$(get_ml_usedeps)?]
+		x11-libs/libXext[$(get_ml_usedeps)?]
+		x11-libs/libX11[$(get_ml_usedeps)?]
 	)
 	X? (
-		x11-libs/libXt[lib32?]
-		x11-libs/libXext[lib32?]
-		x11-libs/libX11[lib32?]
-		x11-libs/libXrandr[lib32?]
+		x11-libs/libXt[$(get_ml_usedeps)?]
+		x11-libs/libXext[$(get_ml_usedeps)?]
+		x11-libs/libX11[$(get_ml_usedeps)?]
+		x11-libs/libXrandr[$(get_ml_usedeps)?]
 	)
-	directfb? ( >=dev-libs/DirectFB-0.9.19[lib32?] )
-	ggi? ( >=media-libs/libggi-2.0_beta3[lib32?] )
-	svga? ( >=media-libs/svgalib-1.4.2[lib32?] )
-	aalib? ( media-libs/aalib[lib32?] )
-	libcaca? ( >=media-libs/libcaca-0.9-r1[lib32?] )
-	opengl? ( virtual/opengl[lib32?] virtual/glu[lib32?] )
-	pulseaudio? ( media-sound/pulseaudio[lib32?] )"
+	directfb? ( >=dev-libs/DirectFB-0.9.19[$(get_ml_usedeps)?] )
+	ggi? ( >=media-libs/libggi-2.0_beta3[$(get_ml_usedeps)?] )
+	svga? ( >=media-libs/svgalib-1.4.2[$(get_ml_usedeps)?] )
+	aalib? ( media-libs/aalib[$(get_ml_usedeps)?] )
+	libcaca? ( >=media-libs/libcaca-0.9-r1[$(get_ml_usedeps)?] )
+	opengl? ( virtual/opengl[lib32?] virtual/glu[$(get_ml_usedeps)?] )
+	pulseaudio? ( media-sound/pulseaudio[$(get_ml_usedeps)?] )"
 DEPEND="${RDEPEND}
 	nas? (
 		x11-proto/xextproto

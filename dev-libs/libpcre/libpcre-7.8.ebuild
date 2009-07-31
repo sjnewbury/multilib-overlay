@@ -17,11 +17,11 @@ SLOT="3"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="bzip2 +cxx doc unicode zlib"
 
-DEPEND="dev-util/pkgconfig[lib32?]
-	zlib? ( sys-libs/zlib[lib32?] )
-	bzip2? ( app-arch/bzip2[lib32?] )"
-RDEPEND="zlib? ( sys-libs/zlib[lib32?] )
-	 bzip2? ( app-arch/bzip2[lib32?] )"
+DEPEND="dev-util/pkgconfig[$(get_ml_usedeps)?]
+	zlib? ( sys-libs/zlib[$(get_ml_usedeps)?] )
+	bzip2? ( app-arch/bzip2[$(get_ml_usedeps)?] )"
+RDEPEND="zlib? ( sys-libs/zlib[$(get_ml_usedeps)?] )
+	 bzip2? ( app-arch/bzip2[$(get_ml_usedeps)?] )"
 
 S=${WORKDIR}/${MY_P}
 

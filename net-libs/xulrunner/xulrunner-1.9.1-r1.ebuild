@@ -32,19 +32,19 @@ RDEPEND="java? ( >=virtual/jre-1.4 )
 	python? ( >=dev-lang/python-2.3 )
 
 	>=sys-devel/binutils-2.16.1
-	>=dev-libs/nss-3.12.3[lib32?]
-	>=dev-libs/nspr-4.8[lib32?]
-	media-libs/alsa-lib[lib32?]
-	>=dev-db/sqlite-3.6.7[lib32?]
-	>=app-text/hunspell-1.2[lib32?]
-	>=media-libs/lcms-1.17[lib32?]
+	>=dev-libs/nss-3.12.3[$(get_ml_usedeps)?]
+	>=dev-libs/nspr-4.8[$(get_ml_usedeps)?]
+	media-libs/alsa-lib[$(get_ml_usedeps)?]
+	>=dev-db/sqlite-3.6.7[$(get_ml_usedeps)?]
+	>=app-text/hunspell-1.2[$(get_ml_usedeps)?]
+	>=media-libs/lcms-1.17[$(get_ml_usedeps)?]
 
-	>=x11-libs/cairo-1.8.8[X,lib32?]
-	x11-libs/pango[X,lib32?]"
+	>=x11-libs/cairo-1.8.8[X,$(get_ml_usedeps)?]
+	x11-libs/pango[X,$(get_ml_usedeps)?]"
 
 DEPEND="java? ( >=virtual/jdk-1.4 )
 	${RDEPEND}
-	dev-util/pkgconfig[lib32?]"
+	dev-util/pkgconfig[$(get_ml_usedeps)?]"
 
 S="${WORKDIR}/mozilla-${MAJ_PV}"
 

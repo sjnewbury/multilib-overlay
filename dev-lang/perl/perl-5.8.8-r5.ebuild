@@ -27,13 +27,13 @@ PERL_OLDVERSEN="5.8.0 5.8.2 5.8.4 5.8.5 5.8.6 5.8.7"
 
 DEPEND="berkdb? ( sys-libs/db )
 	gdbm? ( >=sys-libs/gdbm-1.8.3 )
-	>=sys-devel/libperl-${PV}-r1[lib32?]
+	>=sys-devel/libperl-${PV}-r1[$(get_ml_usedeps)?]
 	elibc_FreeBSD? ( sys-freebsd/freebsd-mk-defs )
-	<sys-devel/libperl-5.9[lib32?]
+	<sys-devel/libperl-5.9[$(get_ml_usedeps)?]
 	!<perl-core/File-Spec-0.87
 	!<perl-core/Test-Simple-0.47-r1"
 
-RDEPEND="~sys-devel/libperl-${PV}[lib32?]
+RDEPEND="~sys-devel/libperl-${PV}[$(get_ml_usedeps)?]
 	berkdb? ( sys-libs/db )
 	gdbm? ( >=sys-libs/gdbm-1.8.3 )
 	build? (
@@ -127,7 +127,7 @@ ml-native_src_prepare() {
 	epatch "${FILESDIR}"/perl-hppa-pa7200-configure.patch
 
 	[[ $(get_libdir) == lib64 ]] && epatch "${FILESDIR}"/${P}-lib64.patch
-	[[ $(get_libdir) == lib32 ]] && epatch "${FILESDIR}"/${P}-lib32.patch
+	[[ $(get_libdir) == lib32 ]] && epatch "${FILESDIR}"/${P}-$(get_ml_usedeps).patch
 
 	[[ ${CHOST} == *-dragonfly* ]] && epatch "${FILESDIR}"/${P}-dragonfly-clean.patch
 	[[ ${CHOST} == *-freebsd* ]] && epatch "${FILESDIR}"/${P}-fbsdhints.patch

@@ -14,14 +14,14 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc encode examples"
 
-RDEPEND="media-libs/libogg[lib32?]
-	encode? ( media-libs/libvorbis[lib32?] )
-	examples? ( media-libs/libpng[lib32?]
-		media-libs/libvorbis[lib32?]
-		media-libs/libsdl[lib32?] )"
+RDEPEND="media-libs/libogg[$(get_ml_usedeps)?]
+	encode? ( media-libs/libvorbis[$(get_ml_usedeps)?] )
+	examples? ( media-libs/libpng[$(get_ml_usedeps)?]
+		media-libs/libvorbis[$(get_ml_usedeps)?]
+		media-libs/libsdl[$(get_ml_usedeps)?] )"
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )
-	dev-util/pkgconfig[lib32?]"
+	dev-util/pkgconfig[$(get_ml_usedeps)?]"
 
 VARTEXFONTS=${T}/fonts
 S=${WORKDIR}/${P/_}

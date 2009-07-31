@@ -17,10 +17,10 @@ IUSE="doc rle X"
 
 DEPEND="!media-libs/libungif
 	X? (
-		x11-libs/libXt[lib32?]
-		x11-libs/libX11[lib32?]
-		x11-libs/libICE[lib32?]
-		x11-libs/libSM[lib32?]
+		x11-libs/libXt[$(get_ml_usedeps)?]
+		x11-libs/libX11[$(get_ml_usedeps)?]
+		x11-libs/libICE[$(get_ml_usedeps)?]
+		x11-libs/libSM[$(get_ml_usedeps)?]
 	)
 	rle? ( media-libs/urt )"
 

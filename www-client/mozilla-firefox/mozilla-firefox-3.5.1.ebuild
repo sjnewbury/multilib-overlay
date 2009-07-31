@@ -56,18 +56,18 @@ done
 
 RDEPEND="
 	>=sys-devel/binutils-2.16.1
-	>=dev-libs/nss-3.12.2[lib32?]
-	>=dev-libs/nspr-4.7.3[lib32?]
-	>=dev-db/sqlite-3.6.7[lib32?]
-	>=app-text/hunspell-1.2[lib32?]
+	>=dev-libs/nss-3.12.2[$(get_ml_usedeps)?]
+	>=dev-libs/nspr-4.7.3[$(get_ml_usedeps)?]
+	>=dev-db/sqlite-3.6.7[$(get_ml_usedeps)?]
+	>=app-text/hunspell-1.2[$(get_ml_usedeps)?]
 
-	>=net-libs/xulrunner-${XUL_PV}[java=,lib32?]
+	>=net-libs/xulrunner-${XUL_PV}[java=,$(get_ml_usedeps)?]
 
-	>=x11-libs/cairo-1.8.8[X,lib32?]
-	x11-libs/pango[X,lib32?]"
+	>=x11-libs/cairo-1.8.8[X,$(get_ml_usedeps)?]
+	x11-libs/pango[X,$(get_ml_usedeps)?]"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[lib32?]"
+	dev-util/pkgconfig[$(get_ml_usedeps)?]"
 
 PDEPEND="restrict-javascript? ( >=www-plugins/noscript-1.8.7 )"
 

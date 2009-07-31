@@ -17,22 +17,22 @@ IUSE="gnome kde networkmanager python seamonkey webkit xulrunner"
 
 RDEPEND="
 	gnome? ( 
-		x11-libs/libX11[lib32?]
-		x11-libs/libXmu[lib32?]
-		gnome-base/gconf[lib32?] )
+		x11-libs/libX11[$(get_ml_usedeps)?]
+		x11-libs/libXmu[$(get_ml_usedeps)?]
+		gnome-base/gconf[$(get_ml_usedeps)?] )
 	kde? (
-		x11-libs/libX11[lib32?]
-		x11-libs/libXmu[lib32?] )
-	networkmanager? ( net-misc/networkmanager[lib32?] )
-	python? ( >=dev-lang/python-2.5[lib32?] )
-	webkit? ( net-libs/webkit-gtk[lib32?] )
-	xulrunner? ( >=net-libs/xulrunner-1.9.0.11-r1:1.9[lib32?] )
-	!xulrunner? ( seamonkey? ( www-client/seamonkey[lib32?] ) )
+		x11-libs/libX11[$(get_ml_usedeps)?]
+		x11-libs/libXmu[$(get_ml_usedeps)?] )
+	networkmanager? ( net-misc/networkmanager[$(get_ml_usedeps)?] )
+	python? ( >=dev-lang/python-2.5[$(get_ml_usedeps)?] )
+	webkit? ( net-libs/webkit-gtk[$(get_ml_usedeps)?] )
+	xulrunner? ( >=net-libs/xulrunner-1.9.0.11-r1:1.9[$(get_ml_usedeps)?] )
+	!xulrunner? ( seamonkey? ( www-client/seamonkey[$(get_ml_usedeps)?] ) )
 "
 # Since xulrunner-1.9.0.11-r1 its shipped mozilla-js.pc is fixed so we can use it
 
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.19[lib32?]"
+	>=dev-util/pkgconfig-0.19[$(get_ml_usedeps)?]"
 
 ml-native_src_prepare() {
 	# http://code.google.com/p/libproxy/issues/detail?id=23

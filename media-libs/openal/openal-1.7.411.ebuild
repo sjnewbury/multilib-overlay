@@ -17,8 +17,8 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="alsa debug oss portaudio"
 
-RDEPEND="alsa? ( media-libs/alsa-lib[lib32?] )
-	portaudio? ( >=media-libs/portaudio-19_pre[lib32?] )"
+RDEPEND="alsa? ( media-libs/alsa-lib[$(get_ml_usedeps)?] )
+	portaudio? ( >=media-libs/portaudio-19_pre[$(get_ml_usedeps)?] )"
 DEPEND="${RDEPEND}"
 
 S=${WORKDIR}/${MY_P}

@@ -19,16 +19,16 @@ KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="debug doc ldap"
 
 # FIXME: add policykit support
-RDEPEND=">=dev-libs/glib-2.14[lib32?]
-	>=x11-libs/gtk+-2.8.16[lib32?]
-	>=dev-libs/dbus-glib-0.74[lib32?]
-	>=sys-apps/dbus-1[lib32?]
-	>=gnome-base/orbit-2.4[lib32?]
-	>=dev-libs/libxml2-2[lib32?]
+RDEPEND=">=dev-libs/glib-2.14[$(get_ml_usedeps)?]
+	>=x11-libs/gtk+-2.8.16[$(get_ml_usedeps)?]
+	>=dev-libs/dbus-glib-0.74[$(get_ml_usedeps)?]
+	>=sys-apps/dbus-1[$(get_ml_usedeps)?]
+	>=gnome-base/orbit-2.4[$(get_ml_usedeps)?]
+	>=dev-libs/libxml2-2[$(get_ml_usedeps)?]
 	ldap? ( net-nds/openldap )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
-	>=dev-util/pkgconfig-0.9[lib32?]
+	>=dev-util/pkgconfig-0.9[$(get_ml_usedeps)?]
 	>=dev-util/gtk-doc-am-1.10
 	doc? ( >=dev-util/gtk-doc-1 )"
 
