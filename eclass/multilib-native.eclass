@@ -7,6 +7,8 @@
 # Steven Newbury <steve@snewbury.org.uk>
 # @BLURB: Provide infrastructure for native multilib ebuilds
 
+inherit base multilib
+
 local _ABI
 for _ABI in $(get_install_abis); do
 	if use multilib_${_ABI}; then
@@ -17,9 +19,6 @@ done
 
 DEPEND="${DEPEND} sys-apps/abi-wrapper"
 RDEPEND="${RDEPEND} sys-apps/abi-wrapper"
-
-
-inherit base multilib
 
 case "${EAPI:-0}" in
 	2)
