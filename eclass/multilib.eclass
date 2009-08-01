@@ -704,12 +704,44 @@ prep_ml_binaries() {
 # @RETURN: USE dependencies
 # @DESCRIPTION: Function to generate USE dependencies from get_install_abis()
 get_ml_usedeps() {
-	local usedeps=""
-	for x in $(get_install_abis); do
-		[[ -n ${usedeps} ]] && usedeps="${usedeps},"
-		usedeps="${usedeps}multilib_${x}?"
+	local order=""
+
+	if [[ -z ${MULTILIB_ABIS} ]] ; then
+		return 0
+	fi
+
+	for x in ${MULTILIB_ABIS} ; do
+		if [[ ${x} != "${DEFAULT_ABI}" ]] ; then
+			hasq ${x} ${ABI_DENY} || ordera="${ordera} ${x}"
+		fi
 	done
-	echo ${usedeps}
+	hasq ${DEFAULT_ABI} ${ABI_DENY} || order="${ordera} ${DEFAULT_ABI}"
+		if [[ -n ${ABI_ALLOW} ]] ; then
+		local ordera=""
+		for x in ${order} ; do
+			if hasq ${x} ${ABI_ALLOW} ; then
+				ordera="${ordera} ${x}"
+			fi
+		done
+		order=${ordera}
+	fi
+
+	if [[ -z ${order} ]] ; then
+		die "The ABI list is empty.  Are you using a proper multilib profile?  Perhaps your USE flags or MULTILIB_ABIS are too restrictive for this package."
+	fi
+
+	local ordera=""
+	for x in ${order}; do
+		if use multilib_${x}; then
+			[[ -n ${ordera} ]] && ordera="${ordera},"
+			ordera="${ordera}multilib_${x}"
+		fi
+	done
+
+	[[ "$(echo ${ordera})" == "multilib_${DEFAULT_ABI}" ]] || [[ -z $ordera ]] && ordera=${x}
+	order=${ordera}
+
+	echo ${order}
 	return 0
 }
 
@@ -747,6 +779,7 @@ get_ml_useflags() {
 	for x in ${order}; do
 		ordera="${ordera} multilib_${x}"
 	done
+	[[ "$(echo ${ordera})" == "multilib_${DEFAULT_ABI}" ]] && ordera=""
 	order=${ordera}
 
 	echo ${order}
