@@ -11,13 +11,6 @@ inherit base multilib
 
 IUSE="${IUSE} $(get_ml_useflags)"
 
-local _ABI
-for _ABI in $(get_install_abis); do
-	if use multilib_${_ABI}; then
-		EMULTILIB_PKG="true"
-	fi
-done
-
 DEPEND="${DEPEND} sys-apps/abi-wrapper"
 RDEPEND="${RDEPEND} sys-apps/abi-wrapper"
 
@@ -46,6 +39,11 @@ EMULTILIB_SAVE_VARS="${EMULTILIB_SAVE_VARS}
 		QMAKE QMAKESPEC QTBINDIR  QTBASEDIR QTLIBDIR QTPCDIR
 		QTPLUGINDIR CMAKE_BUILD_DIR mycmakeargs KDE_S ECONF_SOURCE
 		MY_LIBDIR MOZLIBDIR SDKDIR G2CONF PKG_CONFIG_PATH"
+
+# @VARIABLE: EMULTILIB_ABILIST
+# @DESCRIPTION: Holds the list of ABIs to build
+# EMULTILIB_SOURCE_TOP_DIRNAME=""
+EMULTILIB_ABILIST=""
 
 # @VARIABLE: EMULTILIB_SOURCE_TOP_DIRNAME
 # @DESCRIPTION: Holds the name of the top-level source directory
@@ -149,28 +147,40 @@ multilib_debug() {
 # @USAGE: <phase>
 # @DESCRIPTION: Run each phase for each "install ABI"
 multilib-native_src_generic() {
-# Recurse this function for each ABI from get_install_abis()
-	if [[ -n ${EMULTILIB_PKG} ]] && [[ -z ${OABI} ]] ; then
-		local abilist="" _ABI
+# Recurse this function for each ABI
+
+
+	if [[ -z ${OABI} ]] ; then
 		if has_multilib_profile ; then
-			for _ABI in $(get_install_abis); do
-				if use multilib_${_ABI}; then
-					abilist="${abilist} ${_ABI}"
+			if [[ -z ${EMULTILIB_ABILIST} ]]; then
+					local _ABI=""
+				EMULTILIB_ABILIST="$(get_all_abis)"
+				for _ABI in ${EMULTILIB_ABILIST}; do
+					if ! use multilib_${_ABI}; then
+						EMULTILIB_ABILIST="${EMULTILIB_ABILIST/$_ABI}"
+						ewarn "ABI: ${_ABI} available in profile but USE=multilib_${_ABI} not set, disabling ..."
+					fi
+				done
+				if [[ ${EMULTILIB_ABILIST} == "${DEFAULT_ABI}" ]] || \
+						[[ $(echo ${EMULTILIB_ABILIST}) == "" ]]; then
+					unset EMULTILIB_PKG
+					EMULTILIB_ABILIST=default
+					einfo "No multilib USE flags set; emerging for default ABI"
 				else
-					ewarn "ABI: ${_ABI} available in profile but USE=multilib_${_ABI} not set, disabling ..."
+					EMULTILIB_PKG=true
+				
 				fi
-			done
-			if [[ "${1/_*}" != "pkg" ]] || \
-					[[ "${1/*_}" = "setup" ]]; then
-				einfo "${1/src_/} multilib ${PN} for ABIs: ${abilist}"
-			fi
+				multilib_debug EMULTILIB_ABILIST $EMULTILIB_ABILIST
+				multilib_debug EMULTILIB_PKG $EMULTILIB_PKG
+			fi 
+			einfo "${1/src_/} multilib ${PN} for ABIs: ${EMULTILIB_ABILIST}"
 		elif is_crosscompile || tc-is-cross-compiler ; then
-			abilist=${DEFAULT_ABI}
+			EMULTILIB_ABILIST=${DEFAULT_ABI}
 		fi
-		if [[ -n ${abilist} ]] ; then
+		if [[ -n ${EMULTILIB_PKG} ]] ; then
 			OABI=${ABI}
-			for ABI in ${abilist} ; do
-				if ! use multilib_${_ABI}; then
+			for ABI in ${EMULTILIB_ABILIST} ; do
+				if ! use multilib_${ABI}; then
 					ewarn "ABI ${ABI} is not in USE, skipping ..."
 					continue
 				fi
@@ -182,6 +192,7 @@ multilib-native_src_generic() {
 			return 0
 		fi
 	fi
+	multilib_debug EMULTILIB_PKG $EMULTILIB_PKG
 
 # If this is the first time through, initialise the source path variables early
 # and unconditionally, whether building for multilib or not.  (This allows
@@ -202,7 +213,7 @@ multilib-native_src_generic() {
 		[[ -n ${MULTILIB_DEBUG} ]] && \
 			einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_TOPDIR=\"${EMULTILIB_SOURCE_TOPDIR}\""
 		multilib-native_save_abi_env "INIT"
-		EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]=1
+		EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]=true
 	fi
 
 	if [[ -n ${EMULTILIB_PKG} ]] && has_multilib_profile; then
@@ -224,6 +235,8 @@ multilib-native_src_generic() {
 		ml-native_${1}
 	fi
 }
+
+
 
 # Internal function
 # @FUNCTION: multilib-native_src_generic_sub
@@ -268,8 +281,10 @@ multilib-native_src_generic_sub() {
 	fi
 
 # Most phases require a build tree, if it has already been unpacked but there
-# exists no build directory set one up.
-	if [[ "${1/*_}" != "unpack" ]] && \
+# exists no build directory set one up. (Exclude unpack, post*, and pre*)
+	if (! ([[ ! "${1/unpack}" == "${1}" ]] || \
+			[[ ! "${1/post}" == "${1}" ]] || \
+			[[ ! "${1/pre}" == "${1}" ]])) && \
 			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
 			[[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]]; then
 # We're already unpacked, so prepare build dir
@@ -308,7 +323,7 @@ multilib-native_src_generic_sub() {
 # If we've just unpacked the source, move it into place.  We don't have to
 # worry about handling any other case since the build directory would already
 # exist by this point.
-	if [[ "${1/*_}" = "unpack" ]] && \
+	if [[ ! "${1/unpack}" == "${1}" ]] && \
 			([[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]] && \
 			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]); then
 		einfo "Moving source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
@@ -386,7 +401,7 @@ multilib-native_setup_abi_env() {
 	fi
 
 	export PYTHON PERLBIN QMAKESPEC
-	EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${1})]=1
+	EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${1})]=true
 }
 
 # Internal function
@@ -398,9 +413,9 @@ multilib-native_abi_to_index_key() {
 # Until we can count on bash version > 4, we can't use associative arrays.
 	local index=0 element=""
 	if [[ -z "${EMULTILIB_ARRAY_INDEX}" ]]; then
-		local abilist=""
-		abilist=$(get_install_abis)
-		EMULTILIB_ARRAY_INDEX=(INIT ${abilist})
+		local EMULTILIB_ABILIST=""
+		EMULTILIB_ABILIST=$(get_install_abis)
+		EMULTILIB_ARRAY_INDEX=(INIT ${EMULTILIB_ABILIST})
 	fi
 	for element in ${EMULTILIB_ARRAY_INDEX[@]}; do
 		[[ "${element}" == "${1}" ]] && echo "${index}"
