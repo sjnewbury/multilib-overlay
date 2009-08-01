@@ -1,5 +1,5 @@
 
-!nodep? ( dev-libs/atk[multilib_amd64?] x11-libs/cairo[multilib_amd64?] x11-libs/gtk+[multilib_amd64?] x11-libs/pango[multilib_amd64?] x11-themes/gtk-engines[multilib_amd64?] xfce? ( x11-themes/gtk-engines-xfce[multilib_amd64?] ) )
+!nodep? ( dev-libs/atk[amd64] x11-libs/cairo[amd64] x11-libs/gtk+[amd64] x11-libs/pango[amd64] x11-themes/gtk-engines[amd64] xfce? ( x11-themes/gtk-engines-xfce[amd64] ) )
 0
 
 

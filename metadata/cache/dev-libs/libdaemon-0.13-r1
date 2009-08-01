@@ -8,7 +8,7 @@ LGPL-2.1
 Simple library for creating daemon processes in C
 ~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd
 base eutils libtool multilib multilib-native portability toolchain-funcs
-doc examples multilib_amd64
+doc examples multilib_x86 multilib_amd64
 
 
 

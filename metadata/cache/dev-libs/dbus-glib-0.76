@@ -1,5 +1,5 @@
->=sys-apps/dbus-1.1.0[multilib_amd64?] >=dev-libs/glib-2.6[multilib_amd64?] selinux? ( sys-libs/libselinux ) >=dev-libs/libxml2-2.6.21[multilib_amd64?] dev-util/pkgconfig[multilib_amd64?] doc? ( app-doc/doxygen app-text/xmlto ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
->=sys-apps/dbus-1.1.0[multilib_amd64?] >=dev-libs/glib-2.6[multilib_amd64?] selinux? ( sys-libs/libselinux ) >=dev-libs/libxml2-2.6.21[multilib_amd64?] sys-apps/abi-wrapper
+>=sys-apps/dbus-1.1.0[amd64] >=dev-libs/glib-2.6[amd64] selinux? ( sys-libs/libselinux ) >=dev-libs/libxml2-2.6.21[amd64] dev-util/pkgconfig[amd64] doc? ( app-doc/doxygen app-text/xmlto ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+>=sys-apps/dbus-1.1.0[amd64] >=dev-libs/glib-2.6[amd64] selinux? ( sys-libs/libselinux ) >=dev-libs/libxml2-2.6.21[amd64] sys-apps/abi-wrapper
 0
 http://dbus.freedesktop.org/releases/dbus-glib/dbus-glib-0.76.tar.gz
 
@@ -8,7 +8,7 @@ http://dbus.freedesktop.org/
 D-Bus bindings for glib
 alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd
 autotools base eutils libtool multilib multilib-native portability toolchain-funcs
-doc selinux debug multilib_amd64
+doc selinux debug multilib_x86 multilib_amd64
 
 
 

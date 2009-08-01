@@ -1,5 +1,5 @@
-nls? ( virtual/libintl ) >=dev-libs/libgpg-error-1.5[multilib_amd64?] nls? ( sys-devel/gettext ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
-nls? ( virtual/libintl ) >=dev-libs/libgpg-error-1.5[multilib_amd64?] sys-apps/abi-wrapper
+nls? ( virtual/libintl ) >=dev-libs/libgpg-error-1.5[amd64] nls? ( sys-devel/gettext ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+nls? ( virtual/libintl ) >=dev-libs/libgpg-error-1.5[amd64] sys-apps/abi-wrapper
 0
 mirror://gnupg/libgcrypt/libgcrypt-1.4.0.tar.bz2 !bindist? ( idea? ( mirror://gentoo/libgcrypt-1.4.0-idea.diff.bz2 ) )
 
@@ -8,7 +8,7 @@ LGPL-2.1
 general purpose crypto library based on the code used in GnuPG
 alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd
 autotools base eutils libtool multilib multilib-native portability toolchain-funcs
-nls bindist idea multilib_amd64
+nls bindist idea multilib_x86 multilib_amd64
 
 
 

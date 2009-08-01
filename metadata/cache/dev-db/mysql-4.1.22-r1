@@ -8,7 +8,7 @@ GPL-2
 Based on the base eclass
 amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd
 autotools base eutils flag-o-matic gnuconfig libtool multilib multilib-native mysql mysql_fx portability toolchain-funcs versionator
-big-tables debug embedded minimal perl selinux ssl static latin1 cluster extraengine raid berkdb multilib_amd64
+big-tables debug embedded minimal perl selinux ssl static latin1 cluster extraengine raid berkdb multilib_x86 multilib_amd64
 
 perl? ( >=dev-perl/DBD-mysql-2.9004 ) =virtual/mysql-4.1
 

@@ -1,5 +1,5 @@
->=dev-cpp/glibmm-2.19[multilib_amd64?] >=x11-libs/gtk+-2.15.5[multilib_amd64?] >=dev-cpp/cairomm-1.2.2[multilib_amd64?] >=dev-cpp/pangomm-2.14.0[multilib_amd64?] >=dev-libs/atk-1.9.1[multilib_amd64?] dev-util/pkgconfig[multilib_amd64?] >=sys-apps/sed-4 sys-apps/abi-wrapper
->=dev-cpp/glibmm-2.19[multilib_amd64?] >=x11-libs/gtk+-2.15.5[multilib_amd64?] >=dev-cpp/cairomm-1.2.2[multilib_amd64?] >=dev-cpp/pangomm-2.14.0[multilib_amd64?] >=dev-libs/atk-1.9.1[multilib_amd64?] sys-apps/abi-wrapper
+>=dev-cpp/glibmm-2.19[amd64] >=x11-libs/gtk+-2.15.5[amd64] >=dev-cpp/cairomm-1.2.2[amd64] >=dev-cpp/pangomm-2.14.0[amd64] >=dev-libs/atk-1.9.1[amd64] dev-util/pkgconfig[amd64] >=sys-apps/sed-4 sys-apps/abi-wrapper
+>=dev-cpp/glibmm-2.19[amd64] >=x11-libs/gtk+-2.15.5[amd64] >=dev-cpp/cairomm-1.2.2[amd64] >=dev-cpp/pangomm-2.14.0[amd64] >=dev-libs/atk-1.9.1[amd64] sys-apps/abi-wrapper
 2.4
 mirror://gnome/sources/gtkmm/2.16/gtkmm-2.16.0.tar.bz2
 
@@ -8,7 +8,7 @@ LGPL-2.1
 C++ interface for GTK+2
 ~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd
 base eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib multilib-native portability toolchain-funcs
-doc examples test debug multilib_amd64
+doc examples test debug multilib_x86 multilib_amd64
 
 
 
