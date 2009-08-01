@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/virtual/glu/glu-7.0.ebuild,v 1.9 2006/08/23 21:15:41 swegener Exp $
 
+inherit multilib
+
 DESCRIPTION="Virtual for OpenGL utility library"
 HOMEPAGE="http://www.gentoo.org/proj/en/desktop/x/x11/"
 SRC_URI=""
