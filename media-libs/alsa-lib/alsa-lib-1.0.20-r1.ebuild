@@ -63,6 +63,9 @@ multilib-native_src_configure_internal() {
 		--enable-static \
 		--enable-shared \
 		--disable-resmgr \
+		--enable-rawmidi \
+		--enable-seq \
+		--enable-aload \
 		$(use_with debug) \
 		$(use_enable alisp) \
 		$(use_enable python) \

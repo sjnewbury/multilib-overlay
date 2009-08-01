@@ -16,7 +16,7 @@ SRC_URI="mirror://alsaproject/lib/${MY_P}.tar.bz2"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86"
-IUSE="doc debug alisp midi python"
+IUSE="doc debug alisp python"
 
 RDEPEND="python? ( dev-lang/python )"
 DEPEND="${RDEPEND}
@@ -63,12 +63,12 @@ multilib-native_src_configure_internal() {
 		--enable-static \
 		--enable-shared \
 		--disable-resmgr \
+		--enable-rawmidi \
+		--enable-seq \
+		--enable-aload \
 		$(use_with debug) \
 		$(use_enable alisp) \
 		$(use_enable python) \
-		$(use_enable midi rawmidi) \
-		$(use_enable midi seq) \
-		$(use_enable midi aload) \
 		--with-pcm-plugins="${ALSA_PCM_PLUGINS}" \
 		--disable-dependency-tracking \
 		${myconf} \
