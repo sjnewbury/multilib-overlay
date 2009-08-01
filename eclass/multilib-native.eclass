@@ -501,8 +501,13 @@ multilib-native_check_inherited_funcs() {
 		fi
 	fi
 	
-	[[ "${1/_*}" != "pkg" ]] && einfo "Using ${declared_func} for ABI ${ABI} ..."
-	${declared_func}
+	if (!([[ "${1/_*}" == "pkg" ]] && \
+			[[ "${ABI}" != "${DEFAULT_ABI}" ]])) || \
+					[[ "${1/*_}" == "setup" ]]; then
+		einfo "Using ${declared_func} for ABI ${ABI} ..."
+		${declared_func}
+	else einfo "Skipping ${1} for ABI ${ABI} ..."
+	fi
 }
 
 # @FUNCTION: ml-native_src_prepare
