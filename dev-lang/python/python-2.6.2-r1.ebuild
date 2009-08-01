@@ -9,7 +9,7 @@
 
 EAPI="2"
 
-inherit autotools eutils flag-o-matic libtool multilib python toolchain-funcs versionator multilib-native
+inherit autotools eutils flag-o-matic libtool multilib pax-utils python toolchain-funcs versionator multilib-native
 MULTILIB_IN_SOURCE_BUILD="yes"
 
 # We need this so that we don't depends on python.eclass
@@ -27,7 +27,7 @@ SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
 
 LICENSE="PSF-2.2"
 SLOT="2.6"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~m68k ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
 IUSE="berkdb build doc elibc_uclibc examples gdbm ipv6 ncurses readline sqlite ssl +threads tk ucs2 wininst +xml"
 
 # NOTE: dev-python/{elementtree,celementtree,pysqlite,ctypes,cjkcodecs}
@@ -182,15 +182,22 @@ multilib-native_src_test_internal() {
 
 	# test_pow fails on alpha.
 	# http://bugs.python.org/issue756093
-	[[ ${ARCH} == "alpha" ]] && skip_tests="${skip_tests} pow"
+	[[ ${ARCH} == "alpha" ]] && skip_tests+=" pow"
+
+	# test_ctypes fails with PAX kernel (bug #234498).
+	host-is-pax && skip_tests+=" ctypes"
 
 	for test in ${skip_tests}; do
 		mv "${S}"/Lib/test/test_${test}.py "${T}"
 	done
 
-	# Redirect stdin from /dev/tty as a workaround for bug #248081.
+	# Fix OtherFileTests.testStdin() not to assume
+	# that stdin is a tty for bug #248081.
+	sed -e "s:'osf1V5':'osf1V5' and sys.stdin.isatty():" \
+		-i "${S}"/Lib/test/test_file.py || die "sed failed"
+
 	# Rerun failed tests in verbose mode (regrtest -w).
-	EXTRATESTOPTS="-w" make test < /dev/tty || die "make test failed"
+	EXTRATESTOPTS="-w" make test || die "make test failed"
 
 	for test in ${skip_tests}; do
 		mv "${T}"/test_${test}.py "${S}"/Lib/test/test_${test}.py

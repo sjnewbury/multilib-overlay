@@ -11,7 +11,7 @@ HOMEPAGE="http://www.pygtk.org/"
 
 LICENSE="LGPL-2.1"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
 IUSE="doc examples"
 
 RDEPEND=">=dev-libs/glib-2.8.0[lib32?]
@@ -26,9 +26,8 @@ RDEPEND=">=dev-libs/glib-2.8.0[lib32?]
 
 DEPEND="${RDEPEND}
 	doc? (
-			dev-libs/libxslt
-			>=app-text/docbook-xsl-stylesheets-1.70.1
-		 )
+		dev-libs/libxslt
+		>=app-text/docbook-xsl-stylesheets-1.70.1 )
 	>=dev-util/pkgconfig-0.9[lib32?]"
 
 multilib-native_src_prepare_internal() {
@@ -42,7 +41,7 @@ multilib-native_src_prepare_internal() {
 	# Switch to numpy, bug #185692
 	epatch "${FILESDIR}/${P}-numpy.patch"
 	epatch "${FILESDIR}/${P}-fix-numpy-warning.patch"
-	
+
 	# Fix bug with GtkToggleButton and gtk+-2.16, bug #275449
 	epatch "${FILESDIR}/${P}-gtktoggle.patch"
 

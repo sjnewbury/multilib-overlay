@@ -11,7 +11,7 @@ HOMEPAGE="http://www.pygtk.org/"
 
 LICENSE="LGPL-2.1"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
 IUSE="doc examples libffi test"
 
 RDEPEND=">=dev-lang/python-2.4.4-r5[lib32?]
@@ -20,18 +20,16 @@ RDEPEND=">=dev-lang/python-2.4.4-r5[lib32?]
 	libffi? ( virtual/libffi )"
 DEPEND="${RDEPEND}
 	doc? ( dev-libs/libxslt >=app-text/docbook-xsl-stylesheets-1.70.1 )
+	test? ( media-fonts/font-cursor-misc media-fonts/font-misc-misc )
 	>=dev-util/pkgconfig-0.12.0[lib32?]"
 
-DOCS="AUTHORS ChangeLog ChangeLog.pre-$(get_version_component_range 1-2)
-	NEWS README"
+DOCS="AUTHORS ChangeLog* NEWS README"
 
 pkg_setup() {
 	G2CONF="${G2CONF}
-			--disable-dependency-tracking
-			--enable-libtool-lock
-			$(use_enable doc docs)
-			$(use_enable test glibtest)
-			$(use_with libffi ffi)"
+		--disable-dependency-tracking
+		$(use_enable doc docs)
+		$(use_with libffi ffi)"
 }
 
 multilib-native_src_prepare_internal() {
@@ -40,14 +38,16 @@ multilib-native_src_prepare_internal() {
 	# Fix FHS compliance, see upstream bug #535524
 	epatch "${FILESDIR}/${PN}-2.15.4-fix-codegen-location.patch"
 
+	epatch "${FILESDIR}"/${P}-make_check.patch
+
 	# needed to build on a libtool-1 system, bug #255542
 	rm m4/lt* m4/libtool.m4 ltmain.sh
-
-	eautoreconf
 
 	# disable pyc compiling
 	mv py-compile py-compile.orig
 	ln -s $(type -P true) py-compile
+
+	eautoreconf
 }
 
 src_test() {
