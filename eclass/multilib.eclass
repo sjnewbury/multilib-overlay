@@ -738,7 +738,7 @@ get_ml_usedeps() {
 		fi
 	done
 
-	[[ "$(echo ${ordera})" == "multilib_${DEFAULT_ABI}" ]] || [[ -z $ordera ]] && ordera=${x}
+	[[ "$(echo ${ordera})" == "multilib_${DEFAULT_ABI}" ]] || [[ -z $ordera ]] && ordera=${DEFAULT_ABI}
 	order=${ordera}
 
 	echo ${order}
