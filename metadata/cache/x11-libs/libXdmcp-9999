@@ -8,7 +8,7 @@ libXdmcp
 X.Org Xdmcp library
 
 autotools base eutils flag-o-matic git libtool multilib multilib-native portability toolchain-funcs x-modular
-debug multilib_amd64
+debug multilib_x86 multilib_amd64
 
 
 

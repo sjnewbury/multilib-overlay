@@ -1,5 +1,5 @@
 
-media-libs/mesa[]
+media-libs/mesa[amd64]
 0
 
 
@@ -7,8 +7,8 @@ http://www.gentoo.org/proj/en/desktop/x/x11/
 GPL-2
 Virtual for OpenGL utility library
 alpha amd64 arm hppa ia64 mips ppc ppc64 sh sparc x86 ~x86-fbsd
-
-
+multilib toolchain-funcs
+multilib_x86 multilib_amd64
 
 
 

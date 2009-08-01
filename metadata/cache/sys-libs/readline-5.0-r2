@@ -1,5 +1,5 @@
->=sys-libs/ncurses-5.2-r2[multilib_amd64?] >=app-shells/bash-2.05b-r2 sys-apps/abi-wrapper
->=sys-libs/ncurses-5.2-r2[multilib_amd64?] sys-apps/abi-wrapper
+>=sys-libs/ncurses-5.2-r2[amd64] >=app-shells/bash-2.05b-r2 sys-apps/abi-wrapper
+>=sys-libs/ncurses-5.2-r2[amd64] sys-apps/abi-wrapper
 0
 mirror://gnu/readline/readline-5.0.tar.gz mirror://gnu/readline/readline-5.0-patches/readline50-001 mirror://gnu/readline/readline-5.0-patches/readline50-002 mirror://gnu/readline/readline-5.0-patches/readline50-003 mirror://gnu/readline/readline-5.0-patches/readline50-004 mirror://gnu/readline/readline-5.0-patches/readline50-005
 
@@ -8,7 +8,7 @@ GPL-2
 Another cute console display library
 alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86
 base eutils multilib multilib-native portability toolchain-funcs
-multilib_amd64
+multilib_x86 multilib_amd64
 
 
 

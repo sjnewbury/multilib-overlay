@@ -1,5 +1,5 @@
-=sys-libs/libsepol-2.0*[multilib_amd64?] dev-lang/swig ruby? ( dev-lang/ruby ) sys-apps/abi-wrapper
-=sys-libs/libsepol-2.0*[multilib_amd64?] ruby? ( dev-lang/ruby ) sys-apps/abi-wrapper
+=sys-libs/libsepol-2.0*[amd64] dev-lang/swig ruby? ( dev-lang/ruby ) sys-apps/abi-wrapper
+=sys-libs/libsepol-2.0*[amd64] ruby? ( dev-lang/ruby ) sys-apps/abi-wrapper
 0
 http://userspace.selinuxproject.org/releases/current/devel/libselinux-2.0.71.tar.gz
 
@@ -8,7 +8,7 @@ public-domain
 SELinux userland library
 ~alpha ~amd64 ~mips ~ppc ~sparc ~x86
 alternatives base eutils multilib multilib-native portability python ruby toolchain-funcs
-ruby multilib_amd64
+ruby multilib_x86 multilib_amd64
 
 
 

@@ -1,5 +1,5 @@
->=dev-libs/glib-2.8[multilib_amd64?] >=x11-libs/gtk+-2.6[multilib_amd64?] gnome-base/gconf[multilib_amd64?] >=sys-apps/dbus-1.0[multilib_amd64?] hal? ( >=sys-apps/hal-0.5.7[multilib_amd64?] ) pam? ( virtual/pam ) >=dev-libs/libgcrypt-1.2.2[multilib_amd64?] >=dev-libs/libtasn1-0.3.4[multilib_amd64?] sys-devel/gettext >=dev-util/intltool-0.35 >=dev-util/pkgconfig-0.9[multilib_amd64?] dev-util/gtk-doc-am doc? ( dev-util/gtk-doc ) >=sys-apps/sed-4 =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
->=dev-libs/glib-2.8[multilib_amd64?] >=x11-libs/gtk+-2.6[multilib_amd64?] gnome-base/gconf[multilib_amd64?] >=sys-apps/dbus-1.0[multilib_amd64?] hal? ( >=sys-apps/hal-0.5.7[multilib_amd64?] ) pam? ( virtual/pam ) >=dev-libs/libgcrypt-1.2.2[multilib_amd64?] >=dev-libs/libtasn1-0.3.4[multilib_amd64?] sys-apps/abi-wrapper
+>=dev-libs/glib-2.8[amd64] >=x11-libs/gtk+-2.6[amd64] gnome-base/gconf[amd64] >=sys-apps/dbus-1.0[amd64] hal? ( >=sys-apps/hal-0.5.7[amd64] ) pam? ( virtual/pam ) >=dev-libs/libgcrypt-1.2.2[amd64] >=dev-libs/libtasn1-0.3.4[amd64] sys-devel/gettext >=dev-util/intltool-0.35 >=dev-util/pkgconfig-0.9[amd64] dev-util/gtk-doc-am doc? ( dev-util/gtk-doc ) >=sys-apps/sed-4 =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+>=dev-libs/glib-2.8[amd64] >=x11-libs/gtk+-2.6[amd64] gnome-base/gconf[amd64] >=sys-apps/dbus-1.0[amd64] hal? ( >=sys-apps/hal-0.5.7[amd64] ) pam? ( virtual/pam ) >=dev-libs/libgcrypt-1.2.2[amd64] >=dev-libs/libtasn1-0.3.4[amd64] sys-apps/abi-wrapper
 0
 mirror://gnome/sources/gnome-keyring/2.22/gnome-keyring-2.22.3.tar.bz2
 
@@ -8,7 +8,7 @@ GPL-2 LGPL-2
 Password and keyring managing daemon
 alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd
 autotools base eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib multilib-native pam portability toolchain-funcs
-debug doc hal pam test debug multilib_amd64
+debug doc hal pam test debug multilib_x86 multilib_amd64
 
 
 

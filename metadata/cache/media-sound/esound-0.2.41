@@ -1,5 +1,5 @@
->=media-libs/audiofile-0.2.3[multilib_amd64?] alsa? ( >=media-libs/alsa-lib-0.5.10b[multilib_amd64?] ) doc? ( app-text/docbook-sgml-utils ) tcpd? ( >=sys-apps/tcp-wrappers-7.6-r2[multilib_amd64?] ) dev-util/pkgconfig[multilib_amd64?] sys-apps/abi-wrapper
->=media-libs/audiofile-0.2.3[multilib_amd64?] alsa? ( >=media-libs/alsa-lib-0.5.10b[multilib_amd64?] ) doc? ( app-text/docbook-sgml-utils ) tcpd? ( >=sys-apps/tcp-wrappers-7.6-r2[multilib_amd64?] ) app-admin/eselect-esd sys-apps/abi-wrapper
+>=media-libs/audiofile-0.2.3[amd64] alsa? ( >=media-libs/alsa-lib-0.5.10b[amd64] ) doc? ( app-text/docbook-sgml-utils ) tcpd? ( >=sys-apps/tcp-wrappers-7.6-r2[amd64] ) dev-util/pkgconfig[amd64] sys-apps/abi-wrapper
+>=media-libs/audiofile-0.2.3[amd64] alsa? ( >=media-libs/alsa-lib-0.5.10b[amd64] ) doc? ( app-text/docbook-sgml-utils ) tcpd? ( >=sys-apps/tcp-wrappers-7.6-r2[amd64] ) app-admin/eselect-esd sys-apps/abi-wrapper
 0
 mirror://gnome/sources/esound/0.2/esound-0.2.41.tar.bz2
 
@@ -8,7 +8,7 @@ LGPL-2
 The Enlightened Sound Daemon
 alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd
 base eutils flag-o-matic gnome.org libtool multilib multilib-native portability toolchain-funcs
-alsa debug doc ipv6 tcpd multilib_amd64
+alsa debug doc ipv6 tcpd multilib_x86 multilib_amd64
 
 
 

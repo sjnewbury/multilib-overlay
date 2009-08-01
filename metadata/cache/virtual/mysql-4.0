@@ -1,5 +1,5 @@
 
-|| ( =dev-db/mysql-4.0*[multilib_amd64?] )
+|| ( =dev-db/mysql-4.0*[amd64] )
 0
 
 
@@ -8,7 +8,7 @@ GPL-2
 Virtual for MySQL client or database
 amd64 arm hppa ia64 mips ppc ppc64 s390 sh sparc x86
 multilib toolchain-funcs
-multilib_amd64
+multilib_x86 multilib_amd64
 
 
 

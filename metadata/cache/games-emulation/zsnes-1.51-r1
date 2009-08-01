@@ -8,7 +8,7 @@ GPL-2
 SNES (Super Nintendo) emulator that uses x86 assembly
 -* amd64 x86 ~x86-fbsd
 autotools base eutils flag-o-matic games libtool multilib multilib-native portability toolchain-funcs
-ao custom-cflags opengl png multilib_x86 multilib_amd64
+ao custom-cflags opengl png multilib_x86 multilib_x86 multilib_amd64
 
 
 

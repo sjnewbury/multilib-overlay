@@ -8,7 +8,7 @@ as-is
 Numerical multidimensional array language facility for Python.
 ~arm ~mips ~sh ~s390
 alternatives base distutils eutils multilib multilib-native portability python toolchain-funcs
-doc multilib_amd64
+doc multilib_x86 multilib_amd64
 
 
 

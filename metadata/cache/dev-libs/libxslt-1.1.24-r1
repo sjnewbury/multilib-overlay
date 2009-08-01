@@ -1,5 +1,5 @@
->=dev-libs/libxml2-2.6.27[multilib_amd64?] crypt? ( >=dev-libs/libgcrypt-1.1.92[multilib_amd64?] ) python? ( dev-lang/python[multilib_amd64?] ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
->=dev-libs/libxml2-2.6.27[multilib_amd64?] crypt? ( >=dev-libs/libgcrypt-1.1.92[multilib_amd64?] ) python? ( dev-lang/python[multilib_amd64?] ) sys-apps/abi-wrapper
+>=dev-libs/libxml2-2.6.27[amd64] crypt? ( >=dev-libs/libgcrypt-1.1.92[amd64] ) python? ( dev-lang/python[amd64] ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+>=dev-libs/libxml2-2.6.27[amd64] crypt? ( >=dev-libs/libgcrypt-1.1.92[amd64] ) python? ( dev-lang/python[amd64] ) sys-apps/abi-wrapper
 0
 ftp://xmlsoft.org/libxslt/libxslt-1.1.24.tar.gz
 
@@ -8,7 +8,7 @@ MIT
 XSLT libraries and tools
 alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd
 alternatives autotools base eutils libtool multilib multilib-native portability python toolchain-funcs
-crypt debug examples python multilib_amd64
+crypt debug examples python multilib_x86 multilib_amd64
 
 
 

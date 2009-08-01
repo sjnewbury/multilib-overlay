@@ -1,5 +1,5 @@
 
-dev-libs/libusb:1[multilib_amd64?]
+dev-libs/libusb:1[amd64]
 1
 
 
@@ -8,7 +8,7 @@ LGPL-2
 Virtual for libusb
 ~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd
 multilib toolchain-funcs
-multilib_amd64
+multilib_x86 multilib_amd64
 
 
 

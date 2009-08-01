@@ -1,5 +1,5 @@
->=media-libs/freetype-2.0.9[multilib_amd64?] virtual/opengl[multilib_amd64?] virtual/glu[multilib_amd64?] virtual/glut[multilib_amd64?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
->=media-libs/freetype-2.0.9[multilib_amd64?] virtual/opengl[multilib_amd64?] virtual/glu[multilib_amd64?] virtual/glut[multilib_amd64?] sys-apps/abi-wrapper
+>=media-libs/freetype-2.0.9[amd64] virtual/opengl[amd64] virtual/glu[amd64] virtual/glut[amd64] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+>=media-libs/freetype-2.0.9[amd64] virtual/opengl[amd64] virtual/glu[amd64] virtual/glut[amd64] sys-apps/abi-wrapper
 0
 mirror://sourceforge/ftgl/ftgl-2.1.3-rc5.tar.bz2
 
@@ -8,7 +8,7 @@ MIT
 library to use arbitrary fonts in OpenGL applications
 ~alpha amd64 ~hppa ~mips ~ppc ~ppc64 ~sparc x86 ~x86-fbsd
 autotools base eutils flag-o-matic libtool multilib multilib-native portability toolchain-funcs
-multilib_amd64
+multilib_x86 multilib_amd64
 
 
 

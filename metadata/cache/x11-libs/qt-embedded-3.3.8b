@@ -1,5 +1,5 @@
-media-libs/libpng[multilib_amd64?] media-libs/jpeg[multilib_amd64?] media-libs/libmng[multilib_amd64?] media-libs/lcms[multilib_amd64?] sys-libs/zlib[multilib_amd64?] cups? ( net-print/cups[multilib_amd64?] ) firebird? ( dev-db/firebird[multilib_amd64?] ) mysql? ( virtual/mysql[multilib_amd64?] ) opengl? ( virtual/opengl[multilib_amd64?] virtual/glu[multilib_amd64?] ) postgres? ( virtual/postgresql-server[multilib_amd64?] ) sys-apps/abi-wrapper
-media-libs/libpng[multilib_amd64?] media-libs/jpeg[multilib_amd64?] media-libs/libmng[multilib_amd64?] media-libs/lcms[multilib_amd64?] sys-libs/zlib[multilib_amd64?] cups? ( net-print/cups[multilib_amd64?] ) firebird? ( dev-db/firebird[multilib_amd64?] ) mysql? ( virtual/mysql[multilib_amd64?] ) opengl? ( virtual/opengl[multilib_amd64?] virtual/glu[multilib_amd64?] ) postgres? ( virtual/postgresql-server[multilib_amd64?] ) sys-apps/abi-wrapper
+media-libs/libpng[amd64] media-libs/jpeg[amd64] media-libs/libmng[amd64] media-libs/lcms[amd64] sys-libs/zlib[amd64] cups? ( net-print/cups[amd64] ) firebird? ( dev-db/firebird[amd64] ) mysql? ( virtual/mysql[amd64] ) opengl? ( virtual/opengl[amd64] virtual/glu[amd64] ) postgres? ( virtual/postgresql-server[amd64] ) sys-apps/abi-wrapper
+media-libs/libpng[amd64] media-libs/jpeg[amd64] media-libs/libmng[amd64] media-libs/lcms[amd64] sys-libs/zlib[amd64] cups? ( net-print/cups[amd64] ) firebird? ( dev-db/firebird[amd64] ) mysql? ( virtual/mysql[amd64] ) opengl? ( virtual/opengl[amd64] virtual/glu[amd64] ) postgres? ( virtual/postgresql-server[amd64] ) sys-apps/abi-wrapper
 3
 ftp://ftp.qtsoftware.com/qt/source/qt-embedded-free-3.3.8b.tar.gz
 
@@ -8,9 +8,9 @@ http://www.qtsoftware.com/products/platform/qt-for-embedded-linux
 Embedded Linux port of Qt
 ~amd64 ~ppc ~x86
 base eutils multilib multilib-native portability toolchain-funcs
-cups debug doc firebird gif ipv6 mysql nis odbc opengl postgres sqlite multilib_amd64
+cups debug doc firebird gif ipv6 mysql nis odbc opengl postgres sqlite multilib_x86 multilib_amd64
 
-odbc? ( ~dev-db/qt-unixODBC-3.3.8[multilib_amd64?] )
+odbc? ( ~dev-db/qt-unixODBC-3.3.8[amd64] )
 
 2
 

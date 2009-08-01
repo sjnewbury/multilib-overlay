@@ -8,7 +8,7 @@ GPL-2
 Device mapper ioctl library for use with LVM2 utilities
 ~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86
 base eutils multilib multilib-native portability toolchain-funcs
-selinux multilib_amd64
+selinux multilib_x86 multilib_amd64
 
 
 

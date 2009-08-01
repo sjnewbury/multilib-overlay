@@ -1,5 +1,5 @@
-!<dev-libs/libnl-1.1 sys-devel/flex dev-util/pkgconfig[multilib_amd64?] doc? ( dev-util/gtk-doc ) alsa? ( media-libs/alsa-lib[multilib_amd64?] ) gstreamer? ( >=media-libs/gstreamer-0.10[multilib_amd64?] >=media-libs/gst-plugins-base-0.10[multilib_amd64?] ) usb? ( dev-libs/libusb[multilib_amd64?] ) cups? ( net-print/cups[multilib_amd64?] ) sys-fs/udev[multilib_amd64?] dev-libs/glib[multilib_amd64?] sys-apps/dbus[multilib_amd64?] !net-wireless/bluez-libs !net-wireless/bluez-utils =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
-alsa? ( media-libs/alsa-lib[multilib_amd64?] ) gstreamer? ( >=media-libs/gstreamer-0.10[multilib_amd64?] >=media-libs/gst-plugins-base-0.10[multilib_amd64?] ) usb? ( dev-libs/libusb[multilib_amd64?] ) cups? ( net-print/cups[multilib_amd64?] ) sys-fs/udev[multilib_amd64?] dev-libs/glib[multilib_amd64?] sys-apps/dbus[multilib_amd64?] !net-wireless/bluez-libs !net-wireless/bluez-utils sys-apps/abi-wrapper
+!<dev-libs/libnl-1.1 sys-devel/flex dev-util/pkgconfig[amd64] doc? ( dev-util/gtk-doc ) alsa? ( media-libs/alsa-lib[amd64] ) gstreamer? ( >=media-libs/gstreamer-0.10[amd64] >=media-libs/gst-plugins-base-0.10[amd64] ) usb? ( dev-libs/libusb[amd64] ) cups? ( net-print/cups[amd64] ) sys-fs/udev[amd64] dev-libs/glib[amd64] sys-apps/dbus[amd64] !net-wireless/bluez-libs !net-wireless/bluez-utils =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+alsa? ( media-libs/alsa-lib[amd64] ) gstreamer? ( >=media-libs/gstreamer-0.10[amd64] >=media-libs/gst-plugins-base-0.10[amd64] ) usb? ( dev-libs/libusb[amd64] ) cups? ( net-print/cups[amd64] ) sys-fs/udev[amd64] dev-libs/glib[amd64] sys-apps/dbus[amd64] !net-wireless/bluez-libs !net-wireless/bluez-utils sys-apps/abi-wrapper
 0
 mirror://kernel/linux/bluetooth/bluez-4.28.tar.gz
 
@@ -8,7 +8,7 @@ GPL-2 LGPL-2.1
 Bluetooth Tools and System Daemons for Linux
 ~amd64 ~arm ~hppa ~ppc ~ppc64 ~sh ~sparc ~x86
 autotools base eutils libtool multilib multilib-native portability toolchain-funcs
-alsa cups debug doc gstreamer old-daemons test-programs usb multilib_amd64
+alsa cups debug doc gstreamer old-daemons test-programs usb multilib_x86 multilib_amd64
 
 
 

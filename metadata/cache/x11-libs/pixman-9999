@@ -8,7 +8,7 @@ pixman
 Low-level pixel manipulation routines
 
 autotools base eutils flag-o-matic git libtool multilib multilib-native portability toolchain-funcs versionator x-modular
-altivec mmx sse sse2 debug multilib_amd64
+altivec mmx sse sse2 debug multilib_x86 multilib_amd64
 
 
 

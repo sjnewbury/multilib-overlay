@@ -8,7 +8,7 @@ GPL-2
 A free library for encoding X264/AVC streams
 ~alpha ~amd64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd
 base eutils multilib multilib-native portability toolchain-funcs versionator
-debug +threads multilib_amd64
+debug +threads multilib_x86 multilib_amd64
 
 
 

@@ -1,5 +1,5 @@
-x11-libs/libXt[multilib_amd64?] x11-libs/libXau[multilib_amd64?] x11-libs/libXaw[multilib_amd64?] x11-libs/libX11[multilib_amd64?] x11-libs/libXres[multilib_amd64?] x11-libs/libXTrap[multilib_amd64?] x11-libs/libXp[multilib_amd64?] x11-misc/gccmakedep x11-misc/imake app-text/rman x11-proto/xproto sys-apps/abi-wrapper
-x11-libs/libXt[multilib_amd64?] x11-libs/libXau[multilib_amd64?] x11-libs/libXaw[multilib_amd64?] x11-libs/libX11[multilib_amd64?] x11-libs/libXres[multilib_amd64?] x11-libs/libXTrap[multilib_amd64?] x11-libs/libXp[multilib_amd64?] sys-apps/abi-wrapper
+x11-libs/libXt[amd64] x11-libs/libXau[amd64] x11-libs/libXaw[amd64] x11-libs/libX11[amd64] x11-libs/libXres[amd64] x11-libs/libXTrap[amd64] x11-libs/libXp[amd64] x11-misc/gccmakedep x11-misc/imake app-text/rman x11-proto/xproto sys-apps/abi-wrapper
+x11-libs/libXt[amd64] x11-libs/libXau[amd64] x11-libs/libXaw[amd64] x11-libs/libX11[amd64] x11-libs/libXres[amd64] x11-libs/libXTrap[amd64] x11-libs/libXp[amd64] sys-apps/abi-wrapper
 0
 http://radscan.com/nas/nas-1.8b.src.tar.gz
 
@@ -8,7 +8,7 @@ X11
 Network Audio System
 alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd
 base eutils multilib multilib-native portability toolchain-funcs
-doc multilib_amd64
+doc multilib_x86 multilib_amd64
 
 
 

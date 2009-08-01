@@ -8,7 +8,7 @@ X11
 X.Org DRI2 protocol headers
 
 autotools base eutils flag-o-matic git libtool multilib multilib-native portability toolchain-funcs x-modular
-multilib_amd64
+multilib_x86 multilib_amd64
 
 
 

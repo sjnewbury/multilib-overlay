@@ -1,5 +1,5 @@
-=sys-libs/libsepol-1.16*[multilib_amd64?] dev-lang/swig sys-apps/abi-wrapper
-=sys-libs/libsepol-1.16*[multilib_amd64?] sys-apps/abi-wrapper
+=sys-libs/libsepol-1.16*[amd64] dev-lang/swig sys-apps/abi-wrapper
+=sys-libs/libsepol-1.16*[amd64] sys-apps/abi-wrapper
 0
 http://www.nsa.gov/selinux/archives/libselinux-1.34.14.tgz
 
@@ -8,7 +8,7 @@ public-domain
 SELinux userland library
 alpha amd64 mips ppc sparc x86
 alternatives base eutils multilib multilib-native portability python toolchain-funcs
-multilib_amd64
+multilib_x86 multilib_amd64
 
 
 

@@ -1,5 +1,5 @@
-X? ( x11-libs/libX11[multilib_amd64?] ) slang? ( >=sys-libs/slang-1.4.2 ) >=sys-libs/ncurses-5.1[multilib_amd64?] X? ( x11-proto/xproto ) gpm? ( sys-libs/gpm[multilib_amd64?] ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
-X? ( x11-libs/libX11[multilib_amd64?] ) slang? ( >=sys-libs/slang-1.4.2 ) sys-apps/abi-wrapper
+X? ( x11-libs/libX11[amd64] ) slang? ( >=sys-libs/slang-1.4.2 ) >=sys-libs/ncurses-5.1[amd64] X? ( x11-proto/xproto ) gpm? ( sys-libs/gpm[amd64] ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+X? ( x11-libs/libX11[amd64] ) slang? ( >=sys-libs/slang-1.4.2 ) sys-apps/abi-wrapper
 0
 mirror://sourceforge/aa-project/aalib-1.4rc5.tar.gz
 
@@ -8,7 +8,7 @@ GPL-2
 A ASCII-Graphics Library
 alpha amd64 arm hppa ia64 mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd
 autotools base eutils libtool multilib multilib-native portability toolchain-funcs
-X slang gpm multilib_amd64
+X slang gpm multilib_x86 multilib_amd64
 
 
 

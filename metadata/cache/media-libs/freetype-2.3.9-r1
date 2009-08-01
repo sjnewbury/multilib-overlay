@@ -1,5 +1,5 @@
-X? ( x11-libs/libX11[multilib_amd64?] x11-libs/libXau[multilib_amd64?] x11-libs/libXdmcp[multilib_amd64?] ) sys-apps/abi-wrapper
-X? ( x11-libs/libX11[multilib_amd64?] x11-libs/libXau[multilib_amd64?] x11-libs/libXdmcp[multilib_amd64?] ) !<media-libs/fontconfig-2.3.2-r2 sys-apps/abi-wrapper
+X? ( x11-libs/libX11[amd64] x11-libs/libXau[amd64] x11-libs/libXdmcp[amd64] ) sys-apps/abi-wrapper
+X? ( x11-libs/libX11[amd64] x11-libs/libXau[amd64] x11-libs/libXdmcp[amd64] ) !<media-libs/fontconfig-2.3.2-r2 sys-apps/abi-wrapper
 2
 mirror://sourceforge/freetype/freetype-2.3.9.tar.bz2 utils? ( mirror://sourceforge/freetype/ft2demos-2.3.9.tar.bz2 ) doc? ( mirror://sourceforge/freetype/freetype-doc-2.3.9.tar.bz2 )
 
@@ -8,7 +8,7 @@ FTL GPL-2
 A high-quality and portable font engine
 alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd
 base eutils flag-o-matic libtool multilib multilib-native portability toolchain-funcs
-X bindist debug doc utils fontforge multilib_amd64
+X bindist debug doc utils fontforge multilib_x86 multilib_amd64
 
 
 

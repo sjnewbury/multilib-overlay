@@ -1,4 +1,4 @@
-x11-libs/qt-core:4[multilib_amd64?] >=dev-util/cmake-2.6.2-r1 userland_GNU? ( >=sys-apps/findutils-4.4.0 ) sys-apps/abi-wrapper
+x11-libs/qt-core:4[amd64] >=dev-util/cmake-2.6.2-r1 userland_GNU? ( >=sys-apps/findutils-4.4.0 ) sys-apps/abi-wrapper
 sys-apps/abi-wrapper
 0
 mirror://kde/unstable/automoc4/0.9.84/automoc4-0.9.84.tar.bz2
@@ -8,7 +8,7 @@ as-is
 KDE Meta Object Compiler
 ~amd64 ~ppc ~ppc64 ~x86
 base cmake-utils eutils flag-o-matic multilib multilib-native portability toolchain-funcs
-multilib_amd64
+multilib_x86 multilib_amd64
 
 
 

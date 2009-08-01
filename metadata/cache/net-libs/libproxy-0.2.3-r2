@@ -1,5 +1,5 @@
-gnome? ( x11-libs/libX11[multilib_amd64?] x11-libs/libXmu[multilib_amd64?] gnome-base/gconf[multilib_amd64?] ) kde? ( x11-libs/libX11[multilib_amd64?] x11-libs/libXmu[multilib_amd64?] ) networkmanager? ( net-misc/networkmanager[multilib_amd64?] ) python? ( >=dev-lang/python-2.5[multilib_amd64?] ) webkit? ( net-libs/webkit-gtk[multilib_amd64?] ) xulrunner? ( >=net-libs/xulrunner-1.9.0.11-r1:1.9[multilib_amd64?] ) !xulrunner? ( seamonkey? ( www-client/seamonkey[multilib_amd64?] ) ) >=dev-util/pkgconfig-0.19[multilib_amd64?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
-gnome? ( x11-libs/libX11[multilib_amd64?] x11-libs/libXmu[multilib_amd64?] gnome-base/gconf[multilib_amd64?] ) kde? ( x11-libs/libX11[multilib_amd64?] x11-libs/libXmu[multilib_amd64?] ) networkmanager? ( net-misc/networkmanager[multilib_amd64?] ) python? ( >=dev-lang/python-2.5[multilib_amd64?] ) webkit? ( net-libs/webkit-gtk[multilib_amd64?] ) xulrunner? ( >=net-libs/xulrunner-1.9.0.11-r1:1.9[multilib_amd64?] ) !xulrunner? ( seamonkey? ( www-client/seamonkey[multilib_amd64?] ) ) sys-apps/abi-wrapper
+gnome? ( x11-libs/libX11[amd64] x11-libs/libXmu[amd64] gnome-base/gconf[amd64] ) kde? ( x11-libs/libX11[amd64] x11-libs/libXmu[amd64] ) networkmanager? ( net-misc/networkmanager[amd64] ) python? ( >=dev-lang/python-2.5[amd64] ) webkit? ( net-libs/webkit-gtk[amd64] ) xulrunner? ( >=net-libs/xulrunner-1.9.0.11-r1:1.9[amd64] ) !xulrunner? ( seamonkey? ( www-client/seamonkey[amd64] ) ) >=dev-util/pkgconfig-0.19[amd64] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+gnome? ( x11-libs/libX11[amd64] x11-libs/libXmu[amd64] gnome-base/gconf[amd64] ) kde? ( x11-libs/libX11[amd64] x11-libs/libXmu[amd64] ) networkmanager? ( net-misc/networkmanager[amd64] ) python? ( >=dev-lang/python-2.5[amd64] ) webkit? ( net-libs/webkit-gtk[amd64] ) xulrunner? ( >=net-libs/xulrunner-1.9.0.11-r1:1.9[amd64] ) !xulrunner? ( seamonkey? ( www-client/seamonkey[amd64] ) ) sys-apps/abi-wrapper
 0
 http://libproxy.googlecode.com/files/libproxy-0.2.3.tar.gz
 
@@ -8,7 +8,7 @@ LGPL-2.1
 Library for automatic proxy configuration management
 alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd
 alternatives autotools base eutils libtool multilib multilib-native portability python toolchain-funcs
-gnome kde networkmanager python seamonkey webkit xulrunner multilib_amd64
+gnome kde networkmanager python seamonkey webkit xulrunner multilib_x86 multilib_amd64
 
 
 
