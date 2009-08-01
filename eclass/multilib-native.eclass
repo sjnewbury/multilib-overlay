@@ -161,11 +161,11 @@ multilib-native_src_generic() {
 						ewarn "ABI: ${_ABI} available in profile but USE=multilib_${_ABI} not set, disabling ..."
 					fi
 				done
-				if [[ ${EMULTILIB_ABILIST} == "${DEFAULT_ABI}" ]] || \
-						[[ $(echo ${EMULTILIB_ABILIST}) == "" ]]; then
+				if [[ "$(echo ${EMULTILIB_ABILIST})" == "${DEFAULT_ABI}" ]] || \
+						[[ ${EMULTILIB_ABILIST} == "" ]]; then
 					unset EMULTILIB_PKG
 					EMULTILIB_ABILIST=default
-					einfo "No multilib USE flags set; emerging for default ABI"
+					einfo "No non-default multilib USE flags set; emerging for default ABI"
 				else
 					EMULTILIB_PKG=true
 				
@@ -180,10 +180,6 @@ multilib-native_src_generic() {
 		if [[ -n ${EMULTILIB_PKG} ]] ; then
 			OABI=${ABI}
 			for ABI in ${EMULTILIB_ABILIST} ; do
-				if ! use multilib_${ABI}; then
-					ewarn "ABI ${ABI} is not in USE, skipping ..."
-					continue
-				fi
 				export ABI
 				multilib-native_src_generic ${1}
 			done
