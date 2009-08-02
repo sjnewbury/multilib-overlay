@@ -1,0 +1,64 @@
+#!/bin/bash
+
+die() {
+	local line
+	for line in "${@:2}"
+	do
+		printf >&2 '%s\n' "$0: $line"
+	done
+	exit "$1"
+}
+
+echo >&2 "$0: warning: if you have items in /etc/portage/package.keywords"
+echo >&2 "$0: warning: then this script will probably not notice changes to those"
+echo >&2 ""
+
+if [[ "$( < profiles/repo_name )" != multilib ]]
+then
+	die 2 "Please cd to the multilib overlay base directory" \
+		"before running this script"
+fi
+
+if ! [[ "$1" ]]
+then
+	die 1 "You must provide keywords to check" \
+		"e.g.: bin/check_keywords amd64 ppc64"
+fi
+
+if ! portdir="$( portageq envvar PORTDIR )"
+then
+	die 3 "Error: portageq envvar PORTDIR"
+fi
+
+ebuilds=( metadata/cache/*/* )
+
+for ebuild in "${ebuilds[@]}"
+do
+	if ! [[ -f "$portdir/$ebuild" ]]
+	then
+		[[ "$DEBUG" ]] && echo >&2 "$0: warning: '$portdir/$ebuild' doesn't exist"
+	else
+		# these contain the full, generated ebuild KEYWORD string contents
+		overlay_keywords="$( sed 9p "$ebuild" )"
+		portage_keywords="$( sed 9p "$portdir/$ebuild" )"
+
+		for keyword in "$@"
+		do
+			port_keyw_lvl="-$keyword"
+			over_keyw_lvl="-$keyword"
+
+			[[ " $portage_keywords " = *" ~$keyword "* ]] && port_keyw_lvl="~$keyword"
+			[[ " $overlay_keywords " = *" ~$keyword "* ]] && over_keyw_lvl="~$keyword"
+			[[ " $overlay_keywords " = *" $keyword "* ]] && over_keyw_lvl="$keyword"
+			[[ " $portage_keywords " = *" $keyword "* ]] && port_keyw_lvl="$keyword"
+
+			if [[ "$port_keyw_lvl" != "$over_keyw_lvl" ]]
+			then
+				printf '%-40s has %7s in portage but %7s in multilib overlay\n' \
+					"${ebuild##metadata/cache/}" \
+					"$port_keyw_lvl" \
+					"$over_keyw_lvl"
+			fi
+		done
+	fi
+done
