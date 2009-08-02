@@ -277,10 +277,10 @@ multilib-native_src_generic_sub() {
 	fi
 
 # Most phases require a build tree, if it has already been unpacked but there
-# exists no build directory set one up. (Exclude unpack, post*, and pre*)
-	if (! ([[ ! "${1/unpack}" == "${1}" ]] || \
+# exists no build directory set one up. (Exclude *unpack*, *post*, and *pre*, but not *prepare*)
+	if ( [[ ! "${1/prepare}" == "${1}" ]] || (! ([[ ! "${1/unpack}" == "${1}" ]] || \
 			[[ ! "${1/post}" == "${1}" ]] || \
-			[[ ! "${1/pre}" == "${1}" ]])) && \
+			[[ ! "${1/pre}" == "${1}" ]]))) && \
 			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
 			[[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]]; then
 # We're already unpacked, so prepare build dir
