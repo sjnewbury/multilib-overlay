@@ -10,8 +10,7 @@ EAPI="2"
 inherit x-modular toolchain-funcs flag-o-matic multilib-native
 
 DESCRIPTION="X.Org X11 library"
-
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="ipv6 +xcb"
 
 RDEPEND=">=x11-libs/xtrans-1.2.3

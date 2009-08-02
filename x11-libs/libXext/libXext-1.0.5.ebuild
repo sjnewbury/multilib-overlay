@@ -11,9 +11,11 @@ inherit x-modular multilib-native
 
 DESCRIPTION="X.Org Xext library"
 
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+IUSE=""
 
 RDEPEND=">=x11-libs/libX11-1.2[lib32?]
+	>=x11-libs/libxcb-1.2[lib32?]
 	>=x11-proto/xextproto-7.0.5"
 DEPEND="${RDEPEND}
 	>=x11-proto/xproto-7.0.15"

@@ -94,10 +94,6 @@ S="${WORKDIR}/${MY_P}"
 # Think about: ggi, svga, fbcon, no-X configs
 
 pkg_setup() {
-	if use debug; then
-		append-flags -g
-	fi
-
 	# gcc 4.2 has buggy ivopts
 	if [[ $(gcc-version) = "4.2" ]]; then
 		append-flags -fno-ivopts
@@ -181,9 +177,7 @@ multilib-native_src_configure_internal() {
 	fi
 
 	# Deactivate assembly code for pic build
-	# Sparc assembly code is not working
 	myconf="${myconf} $(use_enable !pic asm)"
-	myconf="${myconf} $(use_enable !sparc asm)"
 
 	# --with-driver=dri|xlib|osmesa ; might get changed later to something
 	# else than dri
@@ -235,13 +229,11 @@ multilib-native_src_install_internal() {
 	# Should this use the -L/usr/lib instead of -L/usr/$(get_libdir)?
 	# Please confirm and update this comment or the file.
 	doins "${FILESDIR}"/lib/libGLU.la || die "doins libGLU.la failed"
-	sed -i -e "s:/lib:/$(get_libdir):g" \
-		"${D}"/usr/$(get_libdir)/libGLU.la
 	sed \
 		-e "s:\${libdir}:$(get_libdir):g" \
 		"${FILESDIR}"/lib/libGL.la \
 		> "${D}"/usr/$(get_libdir)/opengl/xorg-x11/lib/libGL.la
-	
+
 	# On *BSD libcs dlopen() and similar functions are present directly in
 	# libc.so and does not require linking to libdl. portability eclass takes
 	# care of finding the needed library (if needed) witht the dlopen_lib
