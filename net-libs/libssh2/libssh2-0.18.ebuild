@@ -20,11 +20,11 @@ DEPEND="!gcrypt? ( dev-libs/openssl[$(get_ml_usedeps)] )
 	sys-libs/zlib[$(get_ml_usedeps)]"
 RDEPEND=${DEPEND}
 
-ml-native_src_configure() {
+ml-native_ml-native_src_configure() {
 	econf $(use_enable libgcrypt) || die "econf failed"
 }
 
-ml-native_src_install() {
+ml-native_ml-native_src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc README
 }
