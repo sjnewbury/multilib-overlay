@@ -13,13 +13,8 @@ SLOT="0"
 KEYWORDS="amd64"
 IUSE=""
 
-DEPEND=""
-RDEPEND=""
-
-src_install()
-{
-	exeinto /usr/bin
-	doexe ${FILESDIR}/abi-wrapper
+src_install() {
+	dobin ${FILESDIR}/abi-wrapper || die "could not install abi-wrapper"
 }
 
 pkg_postinst() {
