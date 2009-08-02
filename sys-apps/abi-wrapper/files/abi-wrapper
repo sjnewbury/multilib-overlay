@@ -16,9 +16,14 @@ else
 	done
 fi
 
-if [[ -f ${0}-${abi} ]] ; then
-	exec ${0}-${abi} ${@}
+if [[ -f ${0}-${abi} ]]; then
+	exec ${0}-${abi} "${@}"
 else
-	echo "${0}: abi-wrapper-config couldn't find script for current abi" >&2
-	exit 1
+	if [[ -L ${0} ]]; then
+		LINK_TARGET="$(readlink ${0})"
+		exec ${LINK_TARGET} "${@}"
+	else
+		echo "${0}: abi-wrapper-config couldn't find script for current abi" >&2
+		exit 1
+	fi
 fi
