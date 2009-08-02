@@ -151,10 +151,7 @@ multilib-native_src_generic() {
 		local abilist=""
 		if has_multilib_profile ; then
 			abilist=$(get_install_abis)
-			if [[ "${1/_*}" != "pkg" ]] || \
-					[[ "${1/*_}" = "setup" ]]; then
-				einfo "${1/src_/} multilib ${PN} for ABIs: ${abilist}"
-			fi
+			einfo "${1/src_/} multilib ${PN} for ABIs: ${abilist}"
 		elif is_crosscompile || tc-is-cross-compiler ; then
 			abilist=${DEFAULT_ABI}
 		fi
@@ -255,8 +252,10 @@ multilib-native_src_generic_sub() {
 	fi
 
 # Most phases require a build tree, if it has already been unpacked but there
-# exists no build directory set one up.
-	if [[ "${1/*_}" != "unpack" ]] && \
+# exists no build directory set one up. (Exclude *unpack*, *post*, and *pre*, but not *prepare*)
+	if ( [[ ! "${1/prepare}" == "${1}" ]] || (! ([[ ! "${1/unpack}" == "${1}" ]] || \
+			[[ ! "${1/post}" == "${1}" ]] || \
+			[[ ! "${1/pre}" == "${1}" ]]))) && \
 			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
 			[[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]]; then
 # We're already unpacked, so prepare build dir
@@ -468,7 +467,8 @@ multilib-native_check_inherited_funcs() {
 	done
 
 # Now if $declared_func is still empty, none of the inherited eclasses provides
-# it, so default on base.eclass. Do nothing for pkg_post*
+# it, so default on base.eclass. Do nothing for non-default ABI pkg_* except
+# pkg_setup.
 	if [[ -z "${declared_func}" ]]; then
 		if [[ "${1/_*}" != "src" ]]; then
 			declared_func="return"
@@ -477,8 +477,13 @@ multilib-native_check_inherited_funcs() {
 		fi
 	fi
 	
-	[[ "${1/_*}" != "pkg" ]] && einfo "Using ${declared_func} for ABI ${ABI} ..."
-	${declared_func}
+	if (!([[ "${1/_*}" == "pkg" ]] && \
+			[[ "${ABI}" != "${DEFAULT_ABI}" ]])) || \
+					[[ "${1/*_}" == "setup" ]]; then
+		einfo "Using ${declared_func} for ABI ${ABI} ..."
+		${declared_func}
+	else einfo "Skipping ${1} for ABI ${ABI} ..."
+	fi
 }
 
 # @FUNCTION: multilib-native_src_prepare_internal
