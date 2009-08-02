@@ -3,6 +3,9 @@
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/qt/qt-4.5.1.ebuild,v 1.11 2009/06/06 08:43:39 maekke Exp $
 
 EAPI=2
+
+inherit multilib
+
 DESCRIPTION="The Qt toolkit is a comprehensive C++ application development framework"
 HOMEPAGE="http://www.qtsoftware.com/"
 
