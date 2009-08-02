@@ -17,7 +17,7 @@ S="${WORKDIR}/${MY_P}"
 LICENSE="LGPL-2 GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
-IUSE="alsa avahi caps jack lirc oss tcpd X hal dbus libsamplerate gnome bluetooth policykit asyncns +glib test doc"
+IUSE="alsa avahi caps jack lirc oss tcpd X hal dbus libsamplerate gnome bluetooth policykit asyncns +glib test doc udev"
 
 RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib32?] x11-libs/libXtst[lib32?] )
 	caps? ( sys-libs/libcap[lib32?] )
@@ -43,6 +43,7 @@ RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib
 	)
 	policykit? ( sys-auth/policykit[lib32?] )
 	asyncns? ( net-libs/libasyncns[lib32?] )
+	udev? ( >=sys-fs/udev-143[lib32?] )
 	>=media-libs/audiofile-0.2.6-r1[lib32?]
 	>=media-libs/speex-1.2_beta[lib32?]
 	>=media-libs/libsndfile-1.0.10[lib32?]
@@ -73,10 +74,16 @@ pkg_setup() {
 	enewgroup pulse-access
 	enewgroup pulse
 	enewuser pulse -1 -1 /var/run/pulse pulse,audio
+
+	if use udev && use hal; then
+		elog "Please note that enabling both udev and hal will build both"
+		elog "discover modules, but only udev will be ued automatically."
+		elog "If you wish to use hal you have to enable it explicitly"
+		elog "or you might just disable the hal USE flag entirely."
+	fi
 }
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}/${PN}-0.9.16-CVE-2009-1894.patch"
 	elibtoolize
 }
 
@@ -111,7 +118,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable X x11) \
 		$(use_enable test default-build-tests) \
 		$(use_with caps) \
-		--disable-udev \
+		$(use_enable udev) \
 		--localstatedir=/var \
 		--disable-per-user-esound-socket \
 		--with-database=gdbm \
@@ -139,6 +146,7 @@ multilib-native_src_install_internal() {
 		$(use_define avahi) \
 		$(use_define alsa) \
 		$(use_define bluetooth) \
+		$(use_define udev) \
 		"${FILESDIR}/pulseaudio.init.d-4" \
 		> "${T}/pulseaudio"
 
@@ -146,9 +154,7 @@ multilib-native_src_install_internal() {
 
 	use avahi && sed -i -e '/module-zeroconf-publish/s:^#::' "${D}/etc/pulse/default.pa"
 
-	# the “true” condition should be replaced by “use udev” once
-	# that's enabled.
-	if use hal && true; then
+	if use hal && !use udev; then
 		sed -i -e 's:-udev:-hal:' "${D}/etc/pulse/default.pa" || die
 	fi
 
