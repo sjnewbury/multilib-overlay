@@ -477,13 +477,8 @@ multilib-native_check_inherited_funcs() {
 		fi
 	fi
 	
-	if (!([[ "${1/_*}" == "pkg" ]] && \
-			[[ "${ABI}" != "${DEFAULT_ABI}" ]])) || \
-					[[ "${1/*_}" == "setup" ]]; then
-		einfo "Using ${declared_func} for ABI ${ABI} ..."
-		${declared_func}
-	else einfo "Skipping ${1} for ABI ${ABI} ..."
-	fi
+	einfo "Using ${declared_func} for ABI ${ABI} ..."
+	${declared_func}
 }
 
 # @FUNCTION: multilib-native_src_prepare_internal
