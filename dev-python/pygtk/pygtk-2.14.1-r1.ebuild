@@ -22,7 +22,7 @@ RDEPEND=">=dev-libs/glib-2.8.0[lib32?]
 	>=dev-lang/python-2.4.4-r5[lib32?]
 	>=dev-python/pycairo-1.0.2[lib32?]
 	>=dev-python/pygobject-2.15.3[lib32?]
-	dev-python/numpy"
+	dev-python/numpy[lib32?]"
 
 DEPEND="${RDEPEND}
 	doc? (
