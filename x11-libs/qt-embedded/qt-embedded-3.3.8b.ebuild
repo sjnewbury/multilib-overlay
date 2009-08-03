@@ -2,10 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-embedded/qt-embedded-3.3.8b.ebuild,v 1.3 2009/05/05 08:23:14 ssuominen Exp $
 
-EAPI="2"
-
-inherit multilib-native
-
 DESCRIPTION="Embedded Linux port of Qt"
 HOMEPAGE="http://www.qtsoftware.com/products/platform/qt-for-embedded-linux"
 SRC_URI="ftp://ftp.qtsoftware.com/qt/source/qt-embedded-free-${PV}.tar.gz"
@@ -15,18 +11,18 @@ SLOT="3"
 KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="cups debug doc firebird gif ipv6 mysql nis odbc opengl postgres sqlite"
 
-DEPEND="media-libs/libpng[lib32?]
-	media-libs/jpeg[lib32?]
-	media-libs/libmng[lib32?]
-	media-libs/lcms[lib32?]
-	sys-libs/zlib[lib32?]
-	cups? ( net-print/cups[lib32?] )
-	firebird? ( dev-db/firebird[lib32?] )
-	mysql? ( virtual/mysql[lib32?] )
-	opengl? ( virtual/opengl[lib32?] virtual/glu[lib32?] )
-	postgres? ( virtual/postgresql-server[lib32?] )"
+DEPEND="media-libs/libpng
+	media-libs/jpeg
+	media-libs/libmng
+	media-libs/lcms
+	sys-libs/zlib
+	cups? ( net-print/cups )
+	firebird? ( dev-db/firebird )
+	mysql? ( virtual/mysql )
+	opengl? ( virtual/opengl virtual/glu )
+	postgres? ( virtual/postgresql-server )"
 RDEPEND="${DEPEND}"
-PDEPEND="odbc? ( ~dev-db/qt-unixODBC-3.3.8[lib32?] )"
+PDEPEND="odbc? ( ~dev-db/qt-unixODBC-3.3.8 )"
 
 S=${WORKDIR}/qt-embedded-free-${PV}
 
@@ -56,8 +52,9 @@ pkg_setup() {
 	fi
 }
 
-multilib-native_src_prepare_internal() {
-	cd ${S}
+src_unpack() {
+	unpack ${A}
+	cd "${S}"
 
 	sed -i -e 's:read acceptance:acceptance=yes:' configure
 
@@ -68,7 +65,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-3.3.8-castfix.patch
 }
 
-multilib-native_src_configure_internal() {
+src_compile() {
 	addwrite "${QTBASE}/etc/settings"
 
 	use gif && myconf="${myconf} -qt-gif" || myconf="${myconf} -no-gif"
@@ -86,9 +83,6 @@ multilib-native_src_configure_internal() {
 		-freetype -qvfb -plugin-imgfmt-{jpeg,mng,png} -system-lib{jpeg,mng,png} \
 		-prefix ${QTBASE} -platform ${PLATFORM} -xplatform ${XPLATFORM} \
 		-embedded -no-sql-odbc || die
-}
-
-multilib-native_src_compile_internal() {
 
 	export LD_LIBRARY_PATH="${S}/lib:${LD_LIBRARY_PATH}"
 
@@ -104,7 +98,7 @@ multilib-native_src_compile_internal() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+src_install() {
 	INSTALL_ROOT="${D}" emake install
 
 	# fix .prl files
