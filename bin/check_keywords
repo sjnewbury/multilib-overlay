@@ -1,0 +1,86 @@
+#!/bin/bash
+
+# The purpose of this script is to search through all the ebuilds (in actual
+# fact, metadata) in the multilib overlay and see if any of them have
+# different KEYWORDS to the same ebuilds in the portage tree
+
+die() {
+	local line
+	for line in "${@:2}"
+	do
+		printf >&2 '%s\n' "$0: $line"
+	done
+	exit "$1"
+}
+
+if [[ "$( cat profiles/repo_name 2>/dev/null )" = multilib ]]
+then
+	multdir="."
+	echo >&2 "$0: Using CWD as a detected multilib repo"
+else
+	multdir="$( portageq get_repo_path / multilib )"
+
+	if [[ "$multdir" = "None" || "$multdir" = "" ]]
+	then
+		die 2 "Please add multilib as an overlay to portage or cd to the" \
+			"multilib overlay base directory before running this script"
+	fi
+fi
+
+portdir="$( portageq portdir )"
+
+if [[ "$portdir" = "" ]]
+then
+	die 3 "portageq portdir: couldn't find portage dir"
+fi
+
+if ! [[ -d "$portdir/metadata/cache" ]]
+then
+	die 4 "couldn't find necessary directory '$portdir/metadata/cache'"
+fi
+
+if ! [[ -d "$multdir/metadata/cache" ]]
+then
+	die 5 "couldn't find necessary directory '$multdir/metadata/cache'"
+fi
+
+if ! [[ "$1" ]]
+then
+	die 1 "You must provide keywords to check" \
+		"e.g.: bin/check_keywords amd64 ppc64"
+fi
+
+cd "$multdir" || die 6 "couldn't cd '$multdir'"
+
+ebuilds=( metadata/cache/*/* )
+
+for ebuild in "${ebuilds[@]}"
+do
+	if ! [[ -f "$portdir/$ebuild" ]]
+	then
+		[[ "$DEBUG" ]] && echo >&2 "$0: warning: '$portdir/$ebuild' doesn't exist"
+	else
+		# these contain the full, generated ebuild KEYWORD string contents
+		overlay_keywords="$( sed 9p "$ebuild" )"
+		portage_keywords="$( sed 9p "$portdir/$ebuild" )"
+
+		for keyword in "$@"
+		do
+			port_keyw_lvl="-$keyword"
+			over_keyw_lvl="-$keyword"
+
+			[[ " $portage_keywords " = *" ~$keyword "* ]] && port_keyw_lvl="~$keyword"
+			[[ " $overlay_keywords " = *" ~$keyword "* ]] && over_keyw_lvl="~$keyword"
+			[[ " $overlay_keywords " = *" $keyword "* ]] && over_keyw_lvl="$keyword"
+			[[ " $portage_keywords " = *" $keyword "* ]] && port_keyw_lvl="$keyword"
+
+			if [[ "$port_keyw_lvl" != "$over_keyw_lvl" ]]
+			then
+				printf '%-40s has %7s in portage but %7s in multilib overlay\n' \
+					"${ebuild##metadata/cache/}" \
+					"$port_keyw_lvl" \
+					"$over_keyw_lvl"
+			fi
+		done
+	fi
+done

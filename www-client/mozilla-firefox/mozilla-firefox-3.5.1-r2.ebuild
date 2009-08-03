@@ -12,7 +12,7 @@ ka kk kn ko ku lt lv mk ml mn mr nb-NO nl nn-NO oc or pa-IN pl pt-BR pt-PT rm ro
 ru si sk sl sq sr sv-SE ta-LK ta te th tr uk vi zh-CN zh-TW"
 NOSHORTLANGS="en-GB es-AR es-CL es-MX pt-BR zh-CN zh-TW"
 
-XUL_PV="1.9.1"
+XUL_PV="1.9.1.1"
 MAJ_PV="${PV/_*/}" # Without the _rc and _beta stuff
 DESKTOP_PV="3.5"
 MY_PV="${PV/_beta/b}" # Handle betas for SRC_URI
@@ -71,7 +71,7 @@ DEPEND="${RDEPEND}
 
 PDEPEND="restrict-javascript? ( >=www-plugins/noscript-1.8.7 )"
 
-S="${WORKDIR}/mozilla-${XUL_PV}"
+S="${WORKDIR}/mozilla-1.9.1"
 
 # Needed by multilib-native_src_compile_internal() and src_install().
 # Would do in pkg_setup but that loses the export attribute, they
@@ -249,18 +249,6 @@ multilib-native_src_install_internal() {
 		[[ ${X} != "en" ]] && xpi_install "${WORKDIR}/${P}-${X}"
 	done
 
-	cp "${FILESDIR}"/gentoo-default-prefs.js \
-		"${D}${MOZILLA_FIVE_HOME}/defaults/preferences/all-gentoo.js"
-
-	local LANG=${linguas%% *}
-	if [[ -n ${LANG} && ${LANG} != "en" ]]; then
-		elog "Setting default locale to ${LANG}"
-		dosed -e "s:general.useragent.locale\", \"en-US\":general.useragent.locale\", \"${LANG}\":" \
-			${MOZILLA_FIVE_HOME}/defaults/preferences/firefox.js \
-			${MOZILLA_FIVE_HOME}/defaults/preferences/firefox-l10n.js || \
-			die "sed failed to change locale"
-	fi
-
 	# Install icon and .desktop for menu entry
 	if use iceweasel; then
 		newicon "${S}"/browser/base/branding/icon48.png iceweasel-icon.png
@@ -284,6 +272,10 @@ multilib-native_src_install_internal() {
 	fi
 
 	prep_ml_binaries "/usr/bin/firefox"
+
+	#Enable very specific settings not inherited from xulrunner
+	cp "${FILESDIR}"/firefox-default-prefs.js \
+		"${D}/${MOZILLA_FIVE_HOME}/defaults/preferences/all-gentoo.js" || die "failed to cp xulrunner-default-prefs.js"
 
 	# Plugins dir
 	ln -s "${D}"/usr/$(get_libdir)/{nsbrowser,mozilla-firefox}/plugins

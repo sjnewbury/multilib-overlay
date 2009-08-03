@@ -1,0 +1,144 @@
+#!/bin/bash
+
+# The purpose of this script is to rebuild every package you have installed
+# from the multilib overlay
+
+# It's a bit like emerge -e world, except just for multilib stuff
+
+
+# USAGE:
+#	bin/rebuild_all_installed [options] -- [emerge options]
+
+
+# Currently the options are:
+
+  # --lib32 [ on | off | both ]
+  #	Only build items that have the lib32 flag on, off; or build both sets
+  #	both is the default
+
+  # --atom [ full | name | slot ]
+  #	Atom to use for emerging, e.g.:
+  #
+  #	full: =virtual/jre-1.6.0-r1
+  #	name: virtual/jre
+  #	slot: virtual/jre:1.6.0
+  #
+  #	slot is the default
+
+  # -- [emerge options]
+  #	All following options are passed to emerge
+  #	--ask --verbose --oneshot are the defaults
+
+
+die() {
+	local line
+	for line in "${@:2}"
+	do
+		printf >&2 '%s\n' "$0: $line"
+	done
+	exit "$1"
+}
+
+emerge_opts_now=
+emerge_opts=()
+option_atom="slot"
+option_lib32="both"
+
+while (( $# ))
+do
+	arg="$1"
+	shift
+
+	if [[ "$emerge_opts_now" = "yes" ]]
+	then	
+		emerge_opts+=( "$arg" )
+
+	elif [[ "$arg" = "--" ]]
+	then
+		emerge_opts_now="yes"
+
+	elif [[ "$arg" = "--atom" ]]
+	then
+		case "$1" in
+		full|name|slot)
+			option_atom="$1"
+			shift;;
+		*)
+			die 2 "unknown option to --atom: '$1'";;
+		esac
+
+	elif [[ "$arg" = "--lib32" ]]
+	then
+		case "$1" in
+		on|off|both)
+			option_lib32="$1"
+			shift;;
+		*)
+			die 3 "unknown option to --lib32: '$1'";;
+		esac
+
+	else
+		echo >&2 "$0: Ignoring option '$arg' (precede with -- to pass it to emerge)"
+		echo >&2 "$0: Read the top of the script to see the meager range of options"
+	fi
+done
+
+if [[ "${#emerge_opts[@]}" = 0 ]]
+then
+	emerge_opts=( --ask --verbose --oneshot )
+fi
+
+vdb_path="$( portageq vdb_path )"
+
+if [[ "$vdb_path" = "" ]]
+then
+	die 1 "portageq vdb_path: no VDB (installed packages) path found"
+fi
+
+cd "$vdb_path" || die 5 "cd '$vdb_path' failed"
+
+torebuild=()
+
+for installed in */*
+do
+	if [[ "$( cat "$installed/repository" )" = "multilib" ]]
+	then
+		if [[ "$option_lib32" = "on" ]]
+		then
+			use="$( cat "$installed/USE" )" || die 6 "couldn't cat '$installed/USE'"
+			# has lib32 OR go to next loop iteration
+			[[ " $use " = *" lib32 "* ]] || continue
+
+		elif [[ "$option_lib32" = "off" ]]
+		then
+			use="$( cat "$installed/USE" )" || die 6 "couldn't cat '$installed/USE'"
+			# has lib32 AND go to next loop iteration
+			[[ " $use " = *" lib32 "* ]] && continue
+
+		fi
+
+		category="${installed%%/*}"
+		pf="${installed#*/}"
+		pn="${pf%%-[0-9]*}"
+
+		if [[ "$option_atom" = "name" ]]
+		then
+			torebuild+=( "$category/$pn" )
+
+		elif [[ "$option_atom" = "full" ]]
+		then
+			torebuild+=( "=$category/$pf" )
+
+		else
+			slot="$( cat "$installed/SLOT" )"
+			[[ "$slot" = "" ]] && die 4 "baffled by empty slot for '$installed'"
+			torebuild+=( "$category/$pn:$slot" )
+
+		fi
+	fi
+done
+
+echo
+echo emerge "${emerge_opts[@]}" "${torebuild[@]}"
+echo
+emerge "${emerge_opts[@]}" "${torebuild[@]}"
