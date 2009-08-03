@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# The purpose of this script is to search through all the ebuilds (in actual
+# fact, metadata) in the multilib overlay and see if any of them have
+# different KEYWORDS to the same ebuilds in the portage tree
+
 die() {
 	local line
 	for line in "${@:2}"
@@ -9,14 +13,35 @@ die() {
 	exit "$1"
 }
 
-echo >&2 "$0: warning: if you have items in /etc/portage/package.keywords"
-echo >&2 "$0: warning: then this script will probably not notice changes to those"
-echo >&2 ""
-
-if [[ "$( < profiles/repo_name )" != multilib ]]
+if [[ "$( cat profiles/repo_name 2>/dev/null )" = multilib ]]
 then
-	die 2 "Please cd to the multilib overlay base directory" \
-		"before running this script"
+	multdir="."
+	echo >&2 "$0: Using CWD as a detected multilib repo"
+else
+	multdir="$( portageq get_repo_path / multilib )"
+
+	if [[ "$multdir" = "None" || "$multdir" = "" ]]
+	then
+		die 2 "Please add multilib as an overlay to portage or cd to the" \
+			"multilib overlay base directory before running this script"
+	fi
+fi
+
+portdir="$( portageq portdir )"
+
+if [[ "$portdir" = "" ]]
+then
+	die 3 "portageq portdir: couldn't find portage dir"
+fi
+
+if ! [[ -d "$portdir/metadata/cache" ]]
+then
+	die 4 "couldn't find necessary directory '$portdir/metadata/cache'"
+fi
+
+if ! [[ -d "$multdir/metadata/cache" ]]
+then
+	die 5 "couldn't find necessary directory '$multdir/metadata/cache'"
 fi
 
 if ! [[ "$1" ]]
@@ -25,10 +50,7 @@ then
 		"e.g.: bin/check_keywords amd64 ppc64"
 fi
 
-if ! portdir="$( portageq envvar PORTDIR )"
-then
-	die 3 "Error: portageq envvar PORTDIR"
-fi
+cd "$multdir" || die 6 "couldn't cd '$multdir'"
 
 ebuilds=( metadata/cache/*/* )
 
