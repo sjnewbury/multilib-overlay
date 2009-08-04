@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-text/enchant/enchant-1.2.5.ebuild,v 1.18 2007/09/14 11:43:38 uberlord Exp $
 
+EAPI="2"
+
 inherit libtool multilib-native
 
 DESCRIPTION="Spellchecker wrapping library"

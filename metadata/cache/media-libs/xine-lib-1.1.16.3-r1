@@ -12,9 +12,9 @@ autotools base eutils flag-o-matic libtool multilib multilib-native portability 
 
 
 
-1
+2
 
-compile install postinst postrm preinst setup unpack
+compile configure install postinst postrm preinst prepare setup unpack
 
 
 

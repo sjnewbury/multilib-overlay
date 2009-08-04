@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-auth/policykit/policykit-0.9-r1.ebuild,v 1.1 2009/04/25 02:42:16 dang Exp $
 
+EAPI="2"
+
 inherit autotools bash-completion eutils multilib pam multilib-native
 
 MY_PN="PolicyKit"

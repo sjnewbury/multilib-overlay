@@ -26,6 +26,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-1.0.3-no-test.patch
 	epatch "${FILESDIR}"/${PN}-1.0.4-POSIX-shell.patch #193365
 	sed -i -e 's:\$(PREFIX)/man:\$(PREFIX)/share/man:g' Makefile || die "sed manpath"
+
 	# - Generate symlinks instead of hardlinks
 	# - pass custom variables to control libdir
 	sed -i \

@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/virtual/mysql/mysql-5.1.ebuild,v 1.3 2006/11/23 15:57:58 chtekk Exp $
 
+EAPI="2"
+
 DESCRIPTION="Virtual for MySQL client or database"
 HOMEPAGE="http://dev.mysql.com"
 SRC_URI=""

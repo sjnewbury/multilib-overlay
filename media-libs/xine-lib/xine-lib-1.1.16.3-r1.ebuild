@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/xine-lib/xine-lib-1.1.16.3-r1.ebuild,v 1.2 2009/07/26 19:12:41 ssuominen Exp $
 
-EAPI=1
+EAPI=2
 
 MULTILIB_EXT_SOURCE_BUILD=1
 

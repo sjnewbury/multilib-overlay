@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/xine-lib/xine-lib-1.1.16.3.ebuild,v 1.7 2009/04/10 13:22:04 armin76 Exp $
 
-EAPI=1
+EAPI=2
 
 inherit eutils flag-o-matic toolchain-funcs libtool multilib multilib-native
 
