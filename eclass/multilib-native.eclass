@@ -279,6 +279,22 @@ multilib-native_src_generic_sub() {
 		fi
 	fi
 
+
+# If we've got an external build dir, let's use it
+	if (!([[ "${1/*_}" == "unpack" ]] || [[ "${1/*_}" == "prepare" ]] || [[ "${1/*_}" == "setup" ]])) && \
+				!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
+				([[ -z "${CMAKE_BUILD_TYPE}" ]] && \
+				[[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
+		if [[ -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
+			einfo "External build for ABI ${ABI} in ${WORKDIR}/${PN}_build_${ABI}"
+			if [[ -n "${CMAKE_BUILD_TYPE}" ]];then
+				S="${CMAKE_BUILD_DIR}"
+			else
+				S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+			fi
+		fi
+	fi
+
 # After the unpack phase, some eclasses change into the unpacked source tree
 # (gnome2.eclass for example), we need to change back to the WORKDIR otherwise
 # the next ABI tree will get unpacked into a subdir of previous tree.
