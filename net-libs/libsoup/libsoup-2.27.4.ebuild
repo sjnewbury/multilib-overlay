@@ -32,7 +32,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS NEWS README"
 
-pkg_setup() {
+ml-native_pkg_setup() {
 	G2CONF="${G2CONF}
 		--disable-static
 		$(use_with gnome)

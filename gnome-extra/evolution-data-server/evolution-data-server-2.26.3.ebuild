@@ -46,7 +46,7 @@ DEPEND="${RDEPEND}
 
 DOCS="ChangeLog MAINTAINERS NEWS TODO"
 
-pkg_setup() {
+ml-native_pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_with ldap openldap)
 		$(use_with krb4 krb4 /usr)
