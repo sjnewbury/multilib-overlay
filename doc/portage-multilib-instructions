@@ -1,3 +1,16 @@
+First, if you want to install and use it via layman:
+
+layman -a multilib
+cd $PORTDIR_OVERLAY/layman/multilib ($PORTDIR_OVERLAY is for most probably /usr/local/portage)
+git checkout origin/portage-multilib
+git checkout -b portage-multilib
+
+After that, every layman sync should update the branch as normal, switching is done with
+
+git checkout <branch>
+
+with the main branches are master and portage-multilib
+
 A basic way to use this branch:
 
 First, install the modified portage version:
