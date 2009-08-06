@@ -1,6 +1,6 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/distutils.eclass,v 1.55 2009/02/18 14:43:31 pva Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/distutils.eclass,v 1.58 2009/08/05 18:34:56 arfrever Exp $
 
 # @ECLASS: distutils.eclass
 # @MAINTAINER:
@@ -33,18 +33,24 @@ esac
 if [[ $(number_abis) -gt 1 ]] ; then
 	if [ "${PYTHON_SLOT_VERSION}" = "2.1" ] ; then
 		DEPEND="=dev-lang/python-2.1*[lib32?]"
+		python="python2.1"
 	elif [ "${PYTHON_SLOT_VERSION}" = "2.3" ] ; then
 		DEPEND="=dev-lang/python-2.3*[lib32?]"
+		python="python2.3"
 	else
 		DEPEND="virtual/python[lib32?]"
+		python="python"
 	fi
 else
 	if [ "${PYTHON_SLOT_VERSION}" = "2.1" ] ; then
 		DEPEND="=dev-lang/python-2.1*"
+		python="python2.1"
 	elif [ "${PYTHON_SLOT_VERSION}" = "2.3" ] ; then
 		DEPEND="=dev-lang/python-2.3*"
+		python="python2.3"
 	else
 		DEPEND="virtual/python"
+		python="python"
 	fi
 fi
 
@@ -59,7 +65,7 @@ distutils_src_unpack() {
 	unpack ${A}
 	cd "${S}"
 
-	has ${EAPI:-0} 0 1 && distutils_src_prepare
+	has "${EAPI:-0}" 0 1 && distutils_src_prepare
 }
 
 # @FUNCTION: distutils_src_prepare
@@ -93,7 +99,15 @@ distutils_src_compile() {
 		fi	
 	fi
 	einfo Using ${python}
-	${python} setup.py build "$@" || die "compilation failed"
+	if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
+		build_modules() {
+			echo "$(PYTHON)" setup.py build -b "build-${PYTHON_ABI}" "$@"
+			"$(PYTHON)" setup.py build -b "build-${PYTHON_ABI}" "$@"
+		}
+		python_execute_function build_modules "$@"
+	else
+		${python} setup.py build "$@" || die "compilation failed"
+	fi
 }
 
 # @FUNCTION: distutils_src_install
@@ -118,84 +132,100 @@ distutils_src_install() {
 		fi	
 	fi
 	einfo Using ${python}
+	local pylibdir
 
 	# Mark the package to be rebuilt after a python upgrade.
 	python_need_rebuild
 
-	# need this for python-2.5 + setuptools in cases where
-	# a package uses distutils but does not install anything
-	# in site-packages. (eg. dev-java/java-config-2.x)
-	# - liquidx (14/08/2006)
-	pylibdir="$(${python} -c 'from distutils.sysconfig import get_python_lib; print get_python_lib()')"
-	[ -n "${pylibdir}" ] && dodir "${pylibdir}"
+	if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
+		install_modules() {
+			# need this for python-2.5 + setuptools in cases where
+			# a package uses distutils but does not install anything
+			# in site-packages. (eg. dev-java/java-config-2.x)
+			# - liquidx (14/08/2006)
+			pylibdir="$("$(PYTHON)" -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')"
+			[[ -n "${pylibdir}" ]] && dodir "${pylibdir}"
 
-	if has_version ">=dev-lang/python-2.3"; then
-		${python} setup.py install --root="${D}" --no-compile "$@" ||\
-			die "python setup.py install failed"
+			echo "$(PYTHON)" setup.py build -b "build-${PYTHON_ABI}" install --root="${D}" --no-compile "$@"
+			"$(PYTHON)" setup.py build -b "build-${PYTHON_ABI}" install --root="${D}" --no-compile "$@"
+		}
+		python_execute_function install_modules "$@"
 	else
-		${python} setup.py install --root="${D}" "$@" ||\
-			die "python setup.py install failed"
+		# need this for python-2.5 + setuptools in cases where
+		# a package uses distutils but does not install anything
+		# in site-packages. (eg. dev-java/java-config-2.x)
+		# - liquidx (14/08/2006)
+		pylibdir="$(${python} -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')"
+		[[ -n "${pylibdir}" ]] && dodir "${pylibdir}"
+
+		${python} setup.py install --root="${D}" --no-compile "$@" || die "python setup.py install failed"
 	fi
 
 	DDOCS="CHANGELOG KNOWN_BUGS MAINTAINERS PKG-INFO CONTRIBUTORS TODO NEWS"
 	DDOCS="${DDOCS} Change* MANIFEST* README* AUTHORS"
 
+	local doc
 	for doc in ${DDOCS}; do
-		[ -s "$doc" ] && dodoc $doc
+		[[ -s "$doc" ]] && dodoc $doc
 	done
 
-	[ -n "${DOCS}" ] && dodoc ${DOCS}
+	[[ -n "${DOCS}" ]] && dodoc ${DOCS}
 }
 
 # @FUNCTION: distutils_pkg_postrm
 # @DESCRIPTION:
 # Generic pyc/pyo cleanup script. This function is exported.
 distutils_pkg_postrm() {
-	local moddir pylibdir pymod
+	local pylibdir pymod
 	if [[ -z "${PYTHON_MODNAME}" ]]; then
 		for pylibdir in "${ROOT}"/usr/$(get_libdir)/python*; do
-			if [[ -d "${pylibdir}"/site-packages/${PN} ]]; then
-				PYTHON_MODNAME=${PN}
+			if [[ -d "${pylibdir}/site-packages/${PN}" ]]; then
+				PYTHON_MODNAME="${PN}"
 			fi
 		done
 	fi
 
-	if has_version ">=dev-lang/python-2.3"; then
-		ebegin "Performing Python Module Cleanup .."
-		if [[ -n "${PYTHON_MODNAME}" ]]; then
-			for pymod in ${PYTHON_MODNAME}; do
-				for pylibdir in "${ROOT}"/usr/$(get_libdir)/python*; do
-					if [[ -d "${pylibdir}"/site-packages/${pymod} ]]; then
-						python_mod_cleanup "${pylibdir#${ROOT}}"/site-packages/${pymod}
+	ebegin "Performing cleanup of Python modules..."
+	if [[ -n "${PYTHON_MODNAME}" ]]; then
+		for pymod in ${PYTHON_MODNAME}; do
+			for pylibdir in "${ROOT}"/usr/$(get_libdir)/python*; do
+				if [[ -d "${pylibdir}/site-packages/${pymod}" ]]; then
+					if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
+						python_mod_cleanup "${pymod}"
+					else
+						python_mod_cleanup "${pylibdir#${ROOT}}/site-packages/${pymod}"
 					fi
-				done
+				fi
 			done
-		else
-			python_mod_cleanup
-		fi
-		eend 0
+		done
+	else
+		python_mod_cleanup
 	fi
+	eend 0
 }
 
 # @FUNCTION: distutils_pkg_postinst
 # @DESCRIPTION:
 # This is a generic optimization, you should override it if your package
-# installs things in another directory. This function is exported
+# installs modules in another directory. This function is exported.
 distutils_pkg_postinst() {
 	local pylibdir pymod
 	if [[ -z "${PYTHON_MODNAME}" ]]; then
 		for pylibdir in "${ROOT}"/usr/$(get_libdir)/python*; do
-			if [[ -d "${pylibdir}"/site-packages/${PN} ]]; then
-				PYTHON_MODNAME=${PN}
+			if [[ -d "${pylibdir}/site-packages/${PN}" ]]; then
+				PYTHON_MODNAME="${PN}"
 			fi
 		done
 	fi
 
-	if has_version ">=dev-lang/python-2.3"; then
+	if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
+		for pymod in ${PYTHON_MODNAME}; do
+			python_mod_optimize "${pymod}"
+		done
+	else
 		python_version
 		for pymod in ${PYTHON_MODNAME}; do
-			python_mod_optimize \
-				/usr/$(get_libdir)/python${PYVER}/site-packages/${pymod}
+			python_mod_optimize "/usr/$(get_libdir)/python${PYVER}/site-packages/${pymod}"
 		done
 	fi
 }
@@ -214,4 +244,3 @@ distutils_python_version() {
 distutils_python_tkinter() {
 	python_tkinter_exists
 }
-

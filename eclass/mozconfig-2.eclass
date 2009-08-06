@@ -1,6 +1,6 @@
 # Copyright 1999-2007 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/mozconfig-2.eclass,v 1.19 2008/07/29 20:50:24 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/mozconfig-2.eclass,v 1.20 2009/04/29 09:34:09 armin76 Exp $
 #
 # mozconfig.eclass: the new mozilla.eclass
 
