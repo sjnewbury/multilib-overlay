@@ -1,28 +1,27 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-crypt/mit-krb5/mit-krb5-1.6.3-r5.ebuild,v 1.6 2009/03/27 21:41:44 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-crypt/mit-krb5/mit-krb5-1.7-r1.ebuild,v 1.1 2009/07/29 08:27:48 ssuominen Exp $
 
-EAPI="2"
+EAPI=2
 
-inherit eutils flag-o-matic versionator autotools multilib-native
+inherit eutils flag-o-matic versionator multilib-native
 
-PATCHV="0.5"
+PATCHV="0.6"
 MY_P=${P/mit-}
 P_DIR=$(get_version_component_range 1-2)
 DESCRIPTION="MIT Kerberos V"
 HOMEPAGE="http://web.mit.edu/kerberos/www/"
 SRC_URI="http://web.mit.edu/kerberos/dist/krb5/${P_DIR}/${MY_P}-signed.tar
-	mirror://gentoo/${P}-patches-${PATCHV}.tar.bz2"
+http://dev.gentoo.org/~mueli/kerberos/${P}-patches-${PATCHV}.tar.bz2"
+#	mirror://gentoo/${P}-patches-${PATCHV}.tar.bz2"
 
 LICENSE="as-is"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
-IUSE="krb4 doc"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
+IUSE="doc"
 
 RDEPEND="!virtual/krb5
-	>=sys-libs/e2fsprogs-libs-1.41.0[lib32?]
-	dev-libs/openssl[lib32?]"
-
+	>=sys-libs/e2fsprogs-libs-1.41.0"
 DEPEND="${RDEPEND}
 	doc? ( virtual/latex-base )"
 
@@ -33,25 +32,19 @@ PROVIDE="virtual/krb5"
 src_unpack() {
 	unpack ${A}
 	unpack ./${MY_P}.tar.gz
-	cd "${S}"
-	EPATCH_SUFFIX="patch" epatch "${PATCHDIR}"
+}
+
+multilib-native_src_prepare_internal() {
+	EPATCH_EXCLUDE="0001_all_lazyldflags.patch" EPATCH_SUFFIX="patch" \
+		epatch "${PATCHDIR}"
 	einfo "Regenerating configure scripts (be patient)"
-	local subdir
-	for subdir in $(find . -name configure.in \
-		| xargs grep -l 'AC_CONFIG_SUBDIRS' \
-		| sed 's@/configure\.in$@@'); do
-		ebegin "Regenerating configure script in ${subdir}"
-		cd "${S}"/${subdir}
-		eautoconf --force -I "${S}"
-		eend $?
-	done
+	./util/reconf --force
 }
 
 multilib-native_src_configure_internal() {
-	# needed to work with sys-libs/e2fsprogs-libs <- should be removed!!
 	append-flags "-I/usr/include/et"
 	econf \
-		$(use_with krb4) \
+		--without-krb4 \
 		--enable-shared \
 		--with-system-et --with-system-ss \
 		--enable-dns-for-realm \
@@ -70,7 +63,7 @@ multilib-native_src_compile_internal() {
 }
 
 src_test() {
-	einfo "Tests do not run in sandbox, have a lot of dependencies and are therefore completely disabled."
+	einfo "Tests do not run in sandbox, they need mit-krb5 to be already installed to test it."
 }
 
 multilib-native_src_install_internal() {
@@ -107,8 +100,4 @@ multilib-native_src_install_internal() {
 	newins "${D}/usr/share/doc/${PF}/examples/kdc.conf" kdc.conf.example
 
 	prep_ml_binaries /usr/bin/krb5-config 
-}
-
-pkg_postinst() {
-	elog "See /usr/share/doc/${PF}/html/krb5-admin.html for documentation."
 }

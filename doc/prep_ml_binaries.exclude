@@ -2,3 +2,5 @@
 glib-2*
 
 gtk+-2* #gkt+-2* too
+
+libtasn1-2.*

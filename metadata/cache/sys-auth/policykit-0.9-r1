@@ -12,9 +12,9 @@ bash-completion doc pam selinux zsh-completion bash-completion lib32
 
 
 
+2
 
-
-compile install postinst postrm preinst setup unpack
+compile configure install postinst postrm preinst prepare setup unpack
 
 
 

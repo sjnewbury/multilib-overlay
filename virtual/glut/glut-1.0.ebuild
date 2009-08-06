@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/virtual/glut/glut-1.0.ebuild,v 1.6 2008/01/25 19:40:00 grobian Exp $
 
+EAPI="2"
 DESCRIPTION="Virtual for OpenGL utility toolkit"
 HOMEPAGE="http://www.gentoo.org/proj/en/desktop/x/x11/"
 SRC_URI=""
