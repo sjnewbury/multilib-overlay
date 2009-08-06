@@ -298,7 +298,7 @@ multilib-native_setup_build_directory() {
 			ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 		fi
 	else
-		if [[ -d ${EMULTILIB_SOURCE_TOP_DIRNAME}} ]]; then
+		if [[ -d ${EMULTILIB_SOURCE_TOP_DIRNAME} ]]; then
 			einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
 			cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
 		fi
