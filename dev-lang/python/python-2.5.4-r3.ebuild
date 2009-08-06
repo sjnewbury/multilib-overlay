@@ -219,9 +219,7 @@ multilib-native_src_install_internal() {
 	mv "${D}"/usr/bin/python${PYVER}-config "${D}"/usr/bin/python-config-${PYVER}
 
 	# prep_ml_binaries /usr/bin/python${PYVER} is a bad idea in here
-	if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
-		mv "${D}"/usr/bin/python${PYVER} "${D}"/usr/bin/python${PYVER}-${ABI}
-	fi
+	cp -a "${D}"/usr/bin/python${PYVER} "${D}"/usr/bin/python${PYVER}-${ABI}
 
 	# Fix slotted collisions.
 	mv "${D}"/usr/bin/pydoc "${D}"/usr/bin/pydoc${PYVER}
