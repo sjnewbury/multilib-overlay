@@ -1,6 +1,7 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.1.1-r1.ebuild,v 1.1 2009/08/01 00:38:20 darkside Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.1.2.ebuild,v 1.1 2009/08/05 14:49:09 tommy Exp $
+
 
 EAPI="2"
 WANT_AUTOCONF="2.1"
@@ -9,9 +10,9 @@ inherit flag-o-matic toolchain-funcs eutils mozconfig-3 makeedit multilib java-p
 
 MY_PV="${PV/_beta/b}" # Handle betas
 MY_PV="${PV/_/}" # Handle rc1, rc2 etc
-MY_PV="${MY_PV/1.9.1.1/3.5.1}"
+MY_PV="${MY_PV/1.9.1.2/3.5.2}"
 MAJ_PV="${PV/_*/}"
-PATCH="${PN}-${MAJ_PV}-patches-0.2"
+PATCH="${PN}-${MAJ_PV}-patches-0.1"
 
 DESCRIPTION="Mozilla runtime package that can be used to bootstrap XUL+XPCOM applications"
 HOMEPAGE="http://developer.mozilla.org/en/docs/XULRunner"
@@ -29,7 +30,7 @@ IUSE="debug python +alsa" # qt-experimental
 
 # nspr-4.8 due to BMO #499144
 RDEPEND="java? ( >=virtual/jre-1.4 )
-	python? ( >=dev-lang/python-2.3[threads] )
+	>=dev-lang/python-2.3[threads]
 	>=sys-devel/binutils-2.16.1
 	>=dev-libs/nss-3.12.3[lib32?]
 	>=dev-libs/nspr-4.8[lib32?]
