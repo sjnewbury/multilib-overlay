@@ -55,6 +55,8 @@ ml-native_pkg_setup() {
 		$(use_enable ssl smime)
 		$(use_with ssl nss-libs /usr/$(get_libdir)/nss)
 		$(use_with ssl nspr-libs /usr/$(get_libdir)/nspr)
+		$(use_with kerberos krb5-libs /usr/$(get_libdir) )
+		$(use_with krb4 krb4-libs /usr/$(get_libdir) )
 		$(use_with ssl nss-includes /usr/include/nss)
 		$(use_with ssl nspr-includes /usr/include/nspr)
 		$(use_enable ipv6)

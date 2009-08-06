@@ -55,6 +55,8 @@ ml-native_pkg_setup() {
 		$(use_enable ssl smime)
 		$(use_with ssl nss-libs /usr/$(get_libdir)/nss)
 		$(use_with ssl nspr-libs /usr/$(get_libdir)/nspr)
+		$(use_with kerberos krb5-libs /usr/$(get_libdir) )
+		$(use_with krb4 krb4-libs /usr/$(get_libdir) )
 		$(use_with ssl nss-includes /usr/include/nss)
 		$(use_with ssl nspr-includes /usr/include/nspr)
 		$(use_enable ipv6)
@@ -79,8 +81,6 @@ ml-native_src_prepare() {
 	# and configure failing to detect kerberos5-libs with as-needed
 	epatch "${FILESDIR}"/${PN}-2.27.5-as-needed.patch
 
-	epatch "${FILESDIR}"/${PN}-2.27.5-disable-dolt.patch
-
 	if use doc; then
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
 			-i gtk-doc.make || die "sed 1 failed"
@@ -88,8 +88,6 @@ ml-native_src_prepare() {
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=$(type -P true)" \
 			-i gtk-doc.make || die "sed 2 failed"
 	fi
-
-	export dolt_supported=no
 
 	# gtk-doc-am and gnome-common needed for this
 	intltoolize --force --copy --automake || die "intltoolize failed"
