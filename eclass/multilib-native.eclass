@@ -297,6 +297,7 @@ multilib-native_src_generic_sub() {
 			[[ -d "${S}" ]] && cd "${S}"
 		;;
 	esac
+	einfo "Using ${1} with S=${S}"
 
 # Call the "real" phase function
 	ml-native_${1}
@@ -502,7 +503,6 @@ multilib-native_check_inherited_funcs() {
 		fi
 	fi
 
-	einfo "Using ${declared_func} for ABI ${ABI} ..."
 	${declared_func}
 }
 
