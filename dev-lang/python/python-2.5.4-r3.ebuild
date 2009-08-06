@@ -168,7 +168,7 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_compile_internal() {
-	src_configure
+	multilib-native_src_configure_internal
 	emake || die "emake failed"
 }
 
@@ -217,9 +217,8 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" altinstall maninstall || die "emake altinstall maninstall failed"
 
 	mv "${D}"/usr/bin/python${PYVER}-config "${D}"/usr/bin/python-config-${PYVER}
-	if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
-		mv "${D}"/usr/bin/python${PYVER} "${D}"/usr/bin/python${PYVER}-${ABI}
-	fi
+
+	prep_ml_binaries /usr/bin/python${PYVER}
 
 	# Fix slotted collisions.
 	mv "${D}"/usr/bin/pydoc "${D}"/usr/bin/pydoc${PYVER}
