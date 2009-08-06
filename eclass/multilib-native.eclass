@@ -259,11 +259,12 @@ multilib-native_src_generic_sub() {
 			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
 			[[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]]; then
 # We're already unpacked, so prepare build dir
-		if [[ -n "${CMAKE_BUILD_TYPE}" ]];then
-			S="${CMAKE_BUILD_DIR}"
-		else
-			S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
-		fi
+			if ([[ -n "${CMAKE_BUILD_TYPE}" ]] && \
+					[[ -n "${CMAKE_IN_SOURCE_BUILD}" ]]) || \
+					[[ -z "${CMAKE_BUILD_TYPE}" ]];then
+				S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+			fi
+
 # If KDE_S is defined then the kde.eclass is in use
 		[[ -n ${KDE_S} ]] && KDE_S="${S}"
 
@@ -287,9 +288,9 @@ multilib-native_src_generic_sub() {
 				[[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
 		if [[ -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
 			einfo "External build for ABI ${ABI} in ${WORKDIR}/${PN}_build_${ABI}"
-			if [[ -n "${CMAKE_BUILD_TYPE}" ]];then
-				S="${CMAKE_BUILD_DIR}"
-			else
+			if ([[ -n "${CMAKE_BUILD_TYPE}" ]] && \
+					[[ -n "${CMAKE_IN_SOURCE_BUILD}" ]]) || \
+					[[ -z "${CMAKE_BUILD_TYPE}" ]];then
 				S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 			fi
 		fi
