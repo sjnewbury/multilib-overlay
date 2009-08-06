@@ -65,8 +65,8 @@ do
 		[[ "$DEBUG" ]] && echo >&2 "$0: warning: '$portdir/$ebuild' doesn't exist"
 	else
 		# these contain the full, generated ebuild KEYWORD string contents
-		overlay_keywords="$( sed 9p "$ebuild" )"
-		portage_keywords="$( sed 9p "$portdir/$ebuild" )"
+		overlay_keywords="$( sed -n 9p "$ebuild" )"
+		portage_keywords="$( sed -n 9p "$portdir/$ebuild" )"
 
 		for keyword in "$@"
 		do
