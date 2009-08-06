@@ -233,87 +233,53 @@ multilib-native_src_generic_sub() {
 
 # If this is the unpack or prepare phase we only need to run for the
 # DEFAULT_ABI when we are building out of the source tree since it is shared
-# between each ABI.  When that's the case also define the BUILD/SOURCE
-# path variables, and create the build directory.
-	if ([[ "${1/*_}" == "unpack" ]] || [[ "${1/*_}" == "prepare" ]]) && \
-				!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
-				([[ -z "${CMAKE_BUILD_TYPE}" ]] && \
-				[[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
-		[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] \
-			&& multilib-native_EBD
-		if [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
-			einfo "Skipping ${1} for ${ABI}"
-			return
-		else
-			einfo "Running ${1} for default ABI"
-			multilib-native_${1}_internal
-			return
-		fi
-	fi
-
-# Most phases require a build tree, if it has already been unpacked but there
-# exists no build directory set one up. (Exclude *unpack*, *post*, and *pre*, but not *prepare*)
-	if ( [[ ! "${1/prepare}" == "${1}" ]] || (! ([[ ! "${1/unpack}" == "${1}" ]] || \
-			[[ ! "${1/post}" == "${1}" ]] || \
-			[[ ! "${1/pre}" == "${1}" ]]))) && \
-			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && \
-			[[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]]; then
-# We're already unpacked, so prepare build dir
-			if ([[ -n "${CMAKE_BUILD_TYPE}" ]] && \
-					[[ -n "${CMAKE_IN_SOURCE_BUILD}" ]]) || \
-					[[ -z "${CMAKE_BUILD_TYPE}" ]];then
-				S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
-			fi
-
-# If KDE_S is defined then the kde.eclass is in use
-		[[ -n ${KDE_S} ]] && KDE_S="${S}"
-
-
-# If we're using a separate build directory, set it up, otherwise the build
-# directory is a copy of the source directory.
-		if !([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
-			([[ -z "${CMAKE_BUILD_TYPE}" ]] && [[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
-			multilib-native_EBD
-		else
-			einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
-			cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
-		fi
-	fi
-
-
-# If we've got an external build dir, let's use it
-	if (!([[ "${1/*_}" == "unpack" ]] || [[ "${1/*_}" == "prepare" ]] || [[ "${1/*_}" == "setup" ]])) && \
-				!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
-				([[ -z "${CMAKE_BUILD_TYPE}" ]] && \
-				[[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]])); then
-		if [[ -d "${WORKDIR}/${PN}_build_${ABI}" ]]; then
-			einfo "External build for ABI ${ABI} in ${WORKDIR}/${PN}_build_${ABI}"
-			if ([[ -n "${CMAKE_BUILD_TYPE}" ]] && \
-					[[ -n "${CMAKE_IN_SOURCE_BUILD}" ]]) || \
-					[[ -z "${CMAKE_BUILD_TYPE}" ]];then
-				S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
-			fi
-		fi
-	fi
-
+# between each ABI.
+#
 # After the unpack phase, some eclasses change into the unpacked source tree
 # (gnome2.eclass for example), we need to change back to the WORKDIR otherwise
 # the next ABI tree will get unpacked into a subdir of previous tree.
-	if [[ "${1/*_}" != "unpack" ]]; then
-		[[ -d "${S}" ]] && cd "${S}"
-	else
-		[[ -d "${WORKDIR}" ]] && cd "${WORKDIR}"
-	fi
+
+
+	case ${1/*_} in
+		setup)
+		;;
+		unpack)
+			[[ -d "${WORKDIR}" ]] && cd "${WORKDIR}"
+			if multilib-native_is_EBD && \
+					[[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
+				einfo "Skipping ${1} for ${ABI}"
+				return
+			fi
+		;;
+		prepare)
+
+			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && multilib-native_setup_build_directory
+			[[ -d "${S}" ]] && cd "${S}"
+			if multilib-native_is_EBD && [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
+					einfo "Skipping ${1} for ${ABI}"
+					return
+			fi
+		;;
+		compile)
+			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && multilib-native_setup_build_directory
+			[[ -d "${S}" ]] && cd "${S}"
+		;;
+		install)
+			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && multilib-native_setup_build_directory
+			[[ -d "${S}" ]] && cd "${S}"
+		;;
+		*)
+			[[ -d "${S}" ]] && cd "${S}"
+		;;
+	esac
 
 # Call the "real" phase function
 	multilib-native_${1}_internal
 
-# If we've just unpacked the source, move it into place.  We don't have to
-# worry about handling any other case since the build directory would already
-# exist by this point.
-	if [[ "${1/*_}" = "unpack" ]] && \
+# If we've just unpacked the source, move it into place.
+	if [[ ! "${1/unpack}" == "${1}" ]] && \
 			([[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]] && \
-			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]); then
+			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]) && !(multilib-native_is_EBD); then
 		einfo "Moving source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
 		mv "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
 		S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
@@ -321,19 +287,37 @@ multilib-native_src_generic_sub() {
 	fi
 }
 
-# Internal function
-# @FUNCTION: multilib-native_EBD
-# @USAGE:
-# @DESCRIPTION: This function configures an "External Build Directory"
-multilib-native_EBD() {
-	einfo "Configuring external build directory for ABI: ${ABI} ..."
-	einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
-	mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
-	if [[ -n "${CMAKE_BUILD_TYPE}" ]];then
-		CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"	
+multilib-native_setup_build_directory() {
+	if multilib-native_is_EBD; then
+		einfo "Preparing external build directory for ABI: ${ABI} ..."
+		einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
+		mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
+		if [[ -n "${CMAKE_BUILD_TYPE}" ]];then
+			CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"	
+		else
+			ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+		fi
 	else
-		ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+		if [[ -d ${EMULTILIB_SOURCE_TOP_DIRNAME}} ]]; then
+			einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
+			cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
+		fi
 	fi
+	if ([[ -n "${CMAKE_BUILD_TYPE}" ]] && \
+			[[ -n "${CMAKE_IN_SOURCE_BUILD}" ]]) || \
+			[[ -z "${CMAKE_BUILD_TYPE}" ]];then
+		S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+	fi
+}
+
+# Internal function
+# @FUNCTION: multilib-native_is_EBD
+# @USAGE:
+# @DESCRIPTION: Returns true if we're building with an "External Build Directory"
+multilib-native_is_EBD() {
+!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
+				([[ -z "${CMAKE_BUILD_TYPE}" ]] && \
+				[[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]]))
 }
 
 # Internal function
