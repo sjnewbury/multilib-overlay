@@ -285,11 +285,7 @@ multilib-native_src_generic_sub() {
 					return
 			fi
 		;;
-		compile)
-			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && multilib-native_setup_build_directory
-			[[ -d "${S}" ]] && cd "${S}"
-		;;
-		install)
+		compile|configure|install)
 			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && multilib-native_setup_build_directory
 			[[ -d "${S}" ]] && cd "${S}"
 		;;
