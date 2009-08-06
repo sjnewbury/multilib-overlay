@@ -31,7 +31,7 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_compile_internal() {
-	tc-export BUILD_CC CC AR RANLIB
+	[[ -z ${EMULTILIB_PKG} ]] && tc-export BUILD_CC CC AR RANLIB
 	emake lib=$(get_libdir) || die
 }
 
