@@ -53,6 +53,8 @@ ml-native_pkg_setup() {
 		$(use_with kerberos krb5 /usr)
 		$(use_enable ssl nss)
 		$(use_enable ssl smime)
+		$(use_with ssl nss-libs /usr/$(get_libdir))
+		$(use_with ssl nspr-libs /usr/$(get_libdir))
 		$(use_enable ipv6)
 		$(use_enable gnome-keyring)
 		--with-weather
