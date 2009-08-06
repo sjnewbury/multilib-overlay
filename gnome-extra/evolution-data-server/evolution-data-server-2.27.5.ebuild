@@ -46,7 +46,7 @@ DEPEND="${RDEPEND}
 
 DOCS="ChangeLog MAINTAINERS NEWS TODO"
 
-multilib_native-pkg_setup_internal() {
+ml-native_pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_with ldap openldap)
 		$(use_with krb4 krb4 /usr)
@@ -63,24 +63,23 @@ multilib_native-pkg_setup_internal() {
 		--with-libdb=/usr/$(get_libdir)"
 }
 
-multilib-native_src_prepare_internal() {
+ml-native_src_prepare() {
 	gnome2_src_prepare
 
 	# Adjust to gentoo's /etc/service
-	epatch "${FILESDIR}"/${PN}-1.2.0-gentoo_etc_services.patch
+	epatch "${FILESDIR}"/${PN}-2.27.5-gentoo_etc_services.patch
 
 	# Fix broken libdb build
-	epatch "${FILESDIR}"/${PN}-2.25.90-no-libdb.patch
+	epatch "${FILESDIR}"/${PN}-2.27.5-no-libdb.patch
 
 	# Rewind in camel-disco-diary to fix a crash
 	epatch "${FILESDIR}"/${PN}-1.8.0-camel-rewind.patch
 
 	# Fix building evo-exchange with --as-needed, upstream bug #342830
 	# and configure failing to detect kerberos5-libs with as-needed
-	epatch "${FILESDIR}"/${PN}-2.25.5-as-needed.patch
+	epatch "${FILESDIR}"/${PN}-2.27.5-as-needed.patch
 
-	# Fix hang while updating search folders, bug #277864, upstream bug #583507
-	epatch "${FILESDIR}/${PN}-2.26.3-camel-vee-folder.patch"
+	epatch "${FILESDIR}"/${PN}-2.27.5-disable-dolt.patch
 
 	if use doc; then
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
@@ -89,6 +88,8 @@ multilib-native_src_prepare_internal() {
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=$(type -P true)" \
 			-i gtk-doc.make || die "sed 2 failed"
 	fi
+
+	export dolt_supported=no
 
 	# gtk-doc-am and gnome-common needed for this
 	intltoolize --force --copy --automake || die "intltoolize failed"
@@ -109,7 +110,7 @@ multilib-native_src_prepare_internal() {
 	append-cppflags "-I$(db_includedir)"
 }
 
-multilib-native_src_install_internal() {
+ml-native_src_install() {
 	gnome2_src_install
 
 	if use ldap; then
