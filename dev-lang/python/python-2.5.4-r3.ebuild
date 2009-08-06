@@ -168,7 +168,7 @@ ml-native_src_configure() {
 }
 
 ml-native_src_compile() {
-	src_configure
+	ml-native_src_configure
 	emake || die "emake failed"
 }
 
@@ -217,9 +217,8 @@ ml-native_src_install() {
 	emake DESTDIR="${D}" altinstall maninstall || die "emake altinstall maninstall failed"
 
 	mv "${D}"/usr/bin/python${PYVER}-config "${D}"/usr/bin/python-config-${PYVER}
-	if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
-		mv "${D}"/usr/bin/python${PYVER} "${D}"/usr/bin/python${PYVER}-${ABI}
-	fi
+
+	prep_ml_binaries /usr/bin/python${PYVER}
 
 	# Fix slotted collisions.
 	mv "${D}"/usr/bin/pydoc "${D}"/usr/bin/pydoc${PYVER}
