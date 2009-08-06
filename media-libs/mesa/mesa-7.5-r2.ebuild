@@ -229,6 +229,8 @@ multilib-native_src_install_internal() {
 	# Should this use the -L/usr/lib instead of -L/usr/$(get_libdir)?
 	# Please confirm and update this comment or the file.
 	doins "${FILESDIR}"/lib/libGLU.la || die "doins libGLU.la failed"
+	sed -i -e "s:/lib:/$(get_libdir):g" \
+		"${D}"/usr/$(get_libdir)/libGLU.la
 	sed \
 		-e "s:\${libdir}:$(get_libdir):g" \
 		"${FILESDIR}"/lib/libGL.la \

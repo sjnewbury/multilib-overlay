@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.5-r1.ebuild,v 1.1 2009/07/21 11:09:36 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.5-r1.ebuild,v 1.3 2009/07/22 08:19:26 scarabeus Exp $
 
 EAPI="2"
 
@@ -94,10 +94,6 @@ S="${WORKDIR}/${MY_P}"
 # Think about: ggi, svga, fbcon, no-X configs
 
 pkg_setup() {
-	if use debug; then
-		append-flags -g
-	fi
-
 	# gcc 4.2 has buggy ivopts
 	if [[ $(gcc-version) = "4.2" ]]; then
 		append-flags -fno-ivopts
@@ -178,9 +174,7 @@ multilib-native_src_configure_internal() {
 	fi
 
 	# Deactivate assembly code for pic build
-	# Sparc assembly code is not working
 	myconf="${myconf} $(use_enable !pic asm)"
-	myconf="${myconf} $(use_enable !sparc asm)"
 
 	# --with-driver=dri|xlib|osmesa ; might get changed later to something
 	# else than dri
@@ -238,7 +232,7 @@ multilib-native_src_install_internal() {
 		-e "s:\${libdir}:$(get_libdir):g" \
 		"${FILESDIR}"/lib/libGL.la \
 		> "${D}"/usr/$(get_libdir)/opengl/xorg-x11/lib/libGL.la
-	
+
 	# On *BSD libcs dlopen() and similar functions are present directly in
 	# libc.so and does not require linking to libdl. portability eclass takes
 	# care of finding the needed library (if needed) witht the dlopen_lib
