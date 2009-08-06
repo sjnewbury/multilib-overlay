@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/libsepol/libsepol-2.0.32.ebuild,v 1.2 2009/07/22 13:26:16 pebenito Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/libsepol/libsepol-2.0.37.ebuild,v 1.1 2009/08/02 01:12:10 pebenito Exp $
 
 EAPI="2"
 
@@ -8,14 +8,14 @@ IUSE=""
 
 inherit multilib eutils multilib-native
 
-BUGFIX_PATCH="${FILESDIR}/libsepol-2.0.32-expand_rule.diff"
+#BUGFIX_PATCH="${FILESDIR}/libsepol-2.0.32-expand_rule.diff"
 
 DESCRIPTION="SELinux binary policy representation library"
 HOMEPAGE="http://userspace.selinuxproject.org"
 SRC_URI="http://userspace.selinuxproject.org/releases/current/devel/${P}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~x86"
 
 DEPEND="virtual/libc"
 

@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libmikmod/libmikmod-3.1.11-r5.ebuild,v 1.3 2009/01/17 00:26:39 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libmikmod/libmikmod-3.1.11-r5.ebuild,v 1.6 2009/08/01 17:02:47 jer Exp $
 
 EAPI="2"
 
@@ -13,12 +13,13 @@ SRC_URI="http://mikmod.raphnet.net/files/${P}.tar.gz
 
 LICENSE="|| ( LGPL-2.1 LGPL-2 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
 IUSE="oss esd alsa"
 
-DEPEND=">=media-libs/audiofile-0.2.3
-	alsa? ( >=media-libs/alsa-lib-0.5.9 )
-	esd? ( >=media-sound/esound-0.2.19 )"
+RDEPEND=">=media-libs/audiofile-0.2.3[lib32?]
+	alsa? ( >=media-libs/alsa-lib-0.5.9[lib32?] )
+	esd? ( >=media-sound/esound-0.2.19[lib32?] )"
+DEPEND="${RDEPEND}"
 
 src_unpack() {
 	unpack ${A}
@@ -33,8 +34,6 @@ src_unpack() {
 	epatch "${FILESDIR}"/${P}-doubleRegister.patch
 	AT_M4DIR="${S}/m4" eautoreconf
 }
-
-src_configure() { :; }
 
 multilib-native_src_compile_internal() {
 	econf --enable-af \

@@ -1,6 +1,6 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/libselinux/libselinux-2.0.71.ebuild,v 1.1 2008/10/03 03:23:41 pebenito Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/libselinux/libselinux-2.0.71.ebuild,v 1.3 2009/08/02 01:50:32 pebenito Exp $
 
 EAPI="2"
 
@@ -18,7 +18,7 @@ HOMEPAGE="http://userspace.selinuxproject.org"
 SRC_URI="http://userspace.selinuxproject.org/releases/current/devel/${P}.tar.gz"
 LICENSE="public-domain"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~mips ~ppc ~sparc ~x86"
+KEYWORDS="amd64 x86"
 
 DEPEND="=sys-libs/libsepol-${SEPOL_VER}*[lib32?]
 	dev-lang/swig
@@ -40,6 +40,10 @@ multilib-native_src_prepare_internal() {
 		|| die "Fix for multilib LIBDIR failed."
 	sed -i -e "/^SHLIBDIR/s/lib/$(get_libdir)/" src/Makefile \
 		|| die "Fix for multilib SHLIBDIR failed."
+
+	# environmental variable clash with multilib-native.eclass
+	sed -i -e "s/LIBDIR/LIB__DIR/g" "${S}"/src/Makefile \
+		|| die "Fix for multilib LIBDIR => LIB__DIR failed."
 }
 
 multilib-native_src_compile_internal() {
@@ -57,6 +61,7 @@ multilib-native_src_compile_internal() {
 
 multilib-native_src_install_internal() {
 	python_version
+	python_need_rebuild
 	make DESTDIR="${D}" PYLIBVER="python${PYVER}" install install-pywrap || die
 
 	if use ruby; then

@@ -1,8 +1,8 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libcaca/libcaca-0.99_beta14.ebuild,v 1.9 2008/12/07 11:53:50 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libcaca/libcaca-0.99_beta14.ebuild,v 1.10 2009/05/30 09:22:16 ulm Exp $
 
-EAPI="1"
+EAPI="2"
 
 inherit eutils autotools libtool mono multilib-native
 
@@ -20,18 +20,15 @@ IUSE="doc imlib mono ncurses nocxx opengl ruby slang X"
 RDEPEND="ncurses? ( >=sys-libs/ncurses-5.3[lib32?] )
 	slang? ( >=sys-libs/slang-1.4[lib32?] )
 	imlib? ( media-libs/imlib2[lib32?] )
-	X? ( x11-libs/libX11 x11-libs/libXt[lib32?] )
-	opengl? ( virtual/opengl[lib32?]
-		  media-libs/freeglut[lib32?]
-		  media-libs/ftgl[lib32?] )
+	X? ( x11-libs/libX11[lib32?] x11-libs/libXt[lib32?] )
+	opengl? ( virtual/opengl[lib32?] media-libs/freeglut[lib32?] )
 	mono? ( dev-lang/mono )
-	ruby? ( virtual/ruby )
-	x11-libs/pango[lib32?]"
+	ruby? ( virtual/ruby )"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	doc? ( app-doc/doxygen
 		virtual/latex-base
-		|| ( dev-texlive/texlive-fontsrecommended app-text/tetex app-text/ptex ) )"
+		|| ( dev-texlive/texlive-fontsrecommended app-text/ptex ) )"
 
 S="${WORKDIR}/${MY_P}"
 
