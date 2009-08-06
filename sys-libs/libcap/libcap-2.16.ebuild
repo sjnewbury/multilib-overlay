@@ -31,7 +31,7 @@ ml-native_src_prepare() {
 }
 
 ml-native_src_compile() {
-	tc-export BUILD_CC CC AR RANLIB
+	[[ -z ${EMULTILIB_PKG} ]] && tc-export BUILD_CC CC AR RANLIB
 	emake lib=$(get_libdir) || die
 }
 
