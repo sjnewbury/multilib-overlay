@@ -35,7 +35,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# so we can get backtraces from apps
 	append-flags -rdynamic
 
@@ -64,8 +64,6 @@ multilib-native_src_compile_internal() {
 	# after the compile, it uses a selinuxfs interface to
 	# check if the SELinux policy has the right support
 	use selinux && addwrite /selinux/access
-
-	emake || die "make failed"
 }
 
 src_test() {

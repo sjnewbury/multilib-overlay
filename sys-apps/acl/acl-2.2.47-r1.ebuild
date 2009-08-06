@@ -35,7 +35,7 @@ multilib-native_src_prepare_internal() {
 		epatch acl-2.2.42-CITI_NFS4_ALL-2.dif
 	fi
 	epatch \
-		"${FILESDIR}"/0001-Introduce-new-WALK_TREE_DEREFERENCE_TOPLEVEL-flag.patch 
+		"${FILESDIR}"/0001-Introduce-new-WALK_TREE_DEREFERENCE_TOPLEVEL-flag.patch \
 		"${FILESDIR}"/0001-Make-sure-that-getfacl-R-only-calls-stat-2-on-symlin.patch #265425
 	epatch "${FILESDIR}"/${PN}-2.2.45-libtool.patch #158068
 	epatch "${FILESDIR}"/${PN}-2.2.45-linguas.patch #205948
