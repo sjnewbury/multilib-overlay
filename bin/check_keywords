@@ -13,10 +13,14 @@ die() {
 	exit "$1"
 }
 
+echo >&2 "$0: Please make sure to first run egencache --repo=multilib --update"
+echo >&2
+
 if [[ "$( cat profiles/repo_name 2>/dev/null )" = multilib ]]
 then
 	multdir="."
 	echo >&2 "$0: Using CWD as a detected multilib repo"
+	echo >&2
 else
 	multdir="$( portageq get_repo_path / multilib )"
 
