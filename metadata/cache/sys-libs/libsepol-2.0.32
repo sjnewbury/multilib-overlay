@@ -6,7 +6,7 @@ test
 http://userspace.selinuxproject.org
 GPL-2
 SELinux binary policy representation library
-~alpha ~amd64 ~mips ~ppc ~sparc ~x86
+amd64 x86
 base eutils multilib multilib-native portability toolchain-funcs
 lib32
 

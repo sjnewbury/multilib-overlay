@@ -1,28 +1,31 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/libselinux/libselinux-1.34.14.ebuild,v 1.4 2008/05/29 18:08:46 hawking Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/libselinux/libselinux-2.0.85.ebuild,v 1.2 2009/08/02 01:50:32 pebenito Exp $
 
 EAPI="2"
 
-IUSE=""
+IUSE="ruby"
+RUBY_OPTIONAL="yes"
 
-inherit eutils multilib python multilib-native
+inherit eutils multilib python ruby multilib-native
 
 #BUGFIX_PATCH="${FILESDIR}/libselinux-1.30.3.diff"
 
-SEPOL_VER="1.16"
+SEPOL_VER="2.0"
 
 DESCRIPTION="SELinux userland library"
-HOMEPAGE="http://www.nsa.gov/selinux"
-SRC_URI="http://www.nsa.gov/selinux/archives/${P}.tgz"
+HOMEPAGE="http://userspace.selinuxproject.org"
+SRC_URI="http://userspace.selinuxproject.org/releases/current/devel/${P}.tar.gz"
 LICENSE="public-domain"
 SLOT="0"
-KEYWORDS="alpha amd64 mips ppc sparc x86"
+KEYWORDS="~amd64 ~x86"
 
 DEPEND="=sys-libs/libsepol-${SEPOL_VER}*[lib32?]
-	dev-lang/swig"
+	dev-lang/swig
+	ruby? ( dev-lang/ruby )"
 
-RDEPEND="=sys-libs/libsepol-${SEPOL_VER}*[lib32?]"
+RDEPEND="=sys-libs/libsepol-${SEPOL_VER}*[lib32?]
+	ruby? ( dev-lang/ruby )"
 
 src_unpack() {
 	unpack ${A}
@@ -37,6 +40,10 @@ multilib-native_src_prepare_internal() {
 		|| die "Fix for multilib LIBDIR failed."
 	sed -i -e "/^SHLIBDIR/s/lib/$(get_libdir)/" src/Makefile \
 		|| die "Fix for multilib SHLIBDIR failed."
+
+	# environmental variable clash with multilib-native.eclass
+	sed -i -e "s/LIBDIR/LIB__DIR/g" "${S}"/src/Makefile \
+		|| die "Fix for multilib LIBDIR => LIB__DIR failed."
 }
 
 multilib-native_src_compile_internal() {
@@ -44,13 +51,22 @@ multilib-native_src_compile_internal() {
 	emake LDFLAGS="-fPIC ${LDFLAGS}" all || die
 	emake PYLIBVER="python${PYVER}" LDFLAGS="-fPIC ${LDFLAGS}" pywrap || die
 
+	if use ruby; then
+		emake rubywrap || die
+	fi
+
 	# add compatability aliases to swig wrapper
 	cat "${FILESDIR}/compat.py" >> "${S}/src/selinux.py" || die
 }
 
 multilib-native_src_install_internal() {
 	python_version
+	python_need_rebuild
 	make DESTDIR="${D}" PYLIBVER="python${PYVER}" install install-pywrap || die
+
+	if use ruby; then
+		emake DESTDIR="${D}" install-rubywrap || die
+	fi
 }
 
 pkg_postinst() {
@@ -59,5 +75,6 @@ pkg_postinst() {
 }
 
 pkg_postrm() {
-	python_mod_cleanup
+	python_version
+	python_mod_cleanup /usr/$(get_libdir)/python${PYVER}/site-packages
 }
