@@ -50,15 +50,10 @@ multilib_native-pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		$(use_with ldap openldap)
 		$(use_with krb4 krb4 /usr)
-		$(use_with kerberos krb5 /usr)
+		$(use_enable kerberos krb5)
 		$(use_enable ssl nss)
 		$(use_enable ssl smime)
-		$(use_with ssl nss-libs /usr/$(get_libdir)/nss)
-		$(use_with ssl nspr-libs /usr/$(get_libdir)/nspr)
-		$(use_with kerberos krb5-libs /usr/$(get_libdir) )
 		$(use_with krb4 krb4-libs /usr/$(get_libdir) )
-		$(use_with ssl nss-includes /usr/include/nss)
-		$(use_with ssl nspr-includes /usr/include/nspr)
 		$(use_enable ipv6)
 		$(use_enable gnome-keyring)
 		--with-weather
@@ -83,6 +78,9 @@ multilib-native_src_prepare_internal() {
 
 	# Fix hang while updating search folders, bug #277864, upstream bug #583507
 	epatch "${FILESDIR}/${PN}-2.26.3-camel-vee-folder.patch"
+
+	# Use krb5-config to autolocate kerberos5-libs
+	epatch "${FILESDIR}"/${PN}-2.26.3-kerberos5-test.patch
 
 	if use doc; then
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
