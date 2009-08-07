@@ -12,7 +12,7 @@ inherit x-modular multilib-native
 DESCRIPTION="X C-language Bindings library"
 HOMEPAGE="http://xcb.freedesktop.org/"
 EGIT_REPO_URI="git://anongit.freedesktop.org/git/xcb/libxcb"
-PATCHES="${FILESDIR}/xcb-*.patch"
+PATCHES="${FILESDIR}"
 
 LICENSE="X11"
 KEYWORDS=""
