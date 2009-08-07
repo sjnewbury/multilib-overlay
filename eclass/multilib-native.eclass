@@ -255,9 +255,13 @@ multilib-native_src_generic_sub() {
 
 			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && multilib-native_setup_build_directory
 			[[ -d "${S}" ]] && cd "${S}"
-			if multilib-native_is_EBD && [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
+			if multilib-native_is_EBD; then
+				if [[ "${ABI}" == "${DEFAULT_ABI}" ]]; then
+					[[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]] && cd "${EMULTILIB_SOURCE_TOPDIR}"
+				else
 					einfo "Skipping ${1} for ${ABI}"
 					return
+				fi
 			fi
 		;;
 		compile|configure|install)
