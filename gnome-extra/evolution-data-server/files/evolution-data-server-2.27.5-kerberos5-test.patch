@@ -6,7 +6,7 @@
  
 +# -*- tab-width: 4; -*-
 +# Configure paths for KRB5
-+# by Steven Newbury <steve@snewbury.org.uk> 2009-07-06
++# by Steven Newbury <steve@snewbury.org.uk> 2009-07-06 (Public Domain)
 +# Based upon nspr.m4 by Chris Seawood <cls@seawood.org> 2001-04-05
 +# Based upon gtk.m4 (also PD) by Owen Taylor
 +
@@ -96,6 +96,15 @@
  AC_ARG_WITH(krb5,
    AC_HELP_STRING( [--with-krb5=DIR],
  		  [Location of Kerberos 5 install dir]),
+@@ -1198,7 +1202,7 @@
+   with_krb4_includes="$withval", with_krb4_includes="")
+ 
+ msg_krb5="no"
+-if test "x${with_krb5}" != "xno"; then
++if test "x${with_krb5}" != "xno" && test "x${enable_krb5}" != "xno"; then
+ 	LIBS_save="$LIBS"
+ 	
+ 	mitlibs="-lkrb5 -lk5crypto -lcom_err -lgssapi_krb5"
 @@ -1254,8 +1258,15 @@
  		AC_MSG_RESULT([no])
  		AC_MSG_ERROR([You specified with krb5, but it was not found.])
@@ -106,10 +115,10 @@
 +		with_krb5="$KRB5_PREFIX"
 +		KRB5_LDFLAGS="$KRB5_CFLAGS",
 +		with_krb5="no"
-+		AC_MSG_RESULT(	AC_MSG_WARN([krb5 support disabled])))
++		AC_MSG_WARN([krb5 support disabled]))
  else
 -	AC_MSG_WARN([krb5 support disabled])
-+		AC_MSG_RESULT(	AC_MSG_WARN([krb5 support disabled]))
++		AC_MSG_WARN([krb5 support disabled])
  fi
  
  AM_CONDITIONAL(ENABLE_KRB5, test x$with_krb5 != xno)
