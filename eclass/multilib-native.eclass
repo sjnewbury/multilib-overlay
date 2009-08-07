@@ -252,12 +252,14 @@ multilib-native_src_generic_sub() {
 			fi
 		;;
 		prepare)
-
-			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && multilib-native_setup_build_directory
-			[[ -d "${S}" ]] && cd "${S}"
-			if multilib-native_is_EBD && [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
+			if multilib-native_is_EBD; then
+				if [[ ! "${ABI}" == "${DEFAULT_ABI}" ]]; then
 					einfo "Skipping ${1} for ${ABI}"
 					return
+				fi
+			else
+				[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && multilib-native_setup_build_directory
+				[[ -d "${S}" ]] && cd "${S}"
 			fi
 		;;
 		compile|configure|install)
