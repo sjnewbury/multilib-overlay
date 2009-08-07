@@ -179,13 +179,12 @@ multilib-native_src_install_internal() {
 	dynamic_libgl_install
 
 	# Install libtool archives
-	insinto /usr/$(get_libdir)
-	# (#67729) Needs to be lib, not $(get_libdir)
-	doins "${FILESDIR}"/lib/libGLU.la
-	sed -i -e "s:/lib:/$(get_libdir):g" \
-	"${D}"/usr/$(get_libdir)/libGLU.la
+	sed -e 's:\${libdir}:'"$(get_libdir)"':g' \
+		"${FILESDIR}"/lib/libGLU.la \
+		> "${D}"/usr/$(get_libdir)/libGLU.la
 
-	sed -e "s:\${libdir}:$(get_libdir):g" "${FILESDIR}"/lib/libGL.la \
+	sed -e 's:\${libdir}:'"$(get_libdir)"':g' \
+		"${FILESDIR}"/lib/libGL.la \
 		> "${D}"/usr/$(get_libdir)/opengl/xorg-x11/lib/libGL.la
 
 	# On *BSD libcs dlopen() and similar functions are present directly in

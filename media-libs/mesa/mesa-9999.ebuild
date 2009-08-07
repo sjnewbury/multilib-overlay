@@ -229,14 +229,11 @@ multilib-native_src_install_internal() {
 	eend $?
 
 	# Install libtool archives
-	insinto /usr/$(get_libdir)
-	# Should this use the -L/usr/lib instead of -L/usr/$(get_libdir)?
-	# Please confirm and update this comment or the file.
-	doins "${FILESDIR}"/lib/libGLU.la || die "doins libGLU.la failed"
-	sed -i -e "s:/lib:/$(get_libdir):g" \
-		"${D}"/usr/$(get_libdir)/libGLU.la
-	sed \
-		-e "s:\${libdir}:$(get_libdir):g" \
+	sed -e 's:\${libdir}:'"$(get_libdir)"':g' \
+		"${FILESDIR}"/lib/libGLU.la \
+		> "${D}"/usr/$(get_libdir)/libGLU.la
+
+	sed -e 's:\${libdir}:'"$(get_libdir)"':g' \
 		"${FILESDIR}"/lib/libGL.la \
 		> "${D}"/usr/$(get_libdir)/opengl/xorg-x11/lib/libGL.la
 
