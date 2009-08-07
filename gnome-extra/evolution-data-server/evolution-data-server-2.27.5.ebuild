@@ -50,15 +50,10 @@ ml-native_pkg_setup() {
 	G2CONF="${G2CONF}
 		$(use_with ldap openldap)
 		$(use_with krb4 krb4 /usr)
-		$(use_with kerberos krb5 /usr)
+		$(use_enable kerberos krb5)
 		$(use_enable ssl nss)
 		$(use_enable ssl smime)
-		$(use_with ssl nss-libs /usr/$(get_libdir)/nss)
-		$(use_with ssl nspr-libs /usr/$(get_libdir)/nspr)
-		$(use_with kerberos krb5-libs /usr/$(get_libdir) )
 		$(use_with krb4 krb4-libs /usr/$(get_libdir) )
-		$(use_with ssl nss-includes /usr/include/nss)
-		$(use_with ssl nspr-includes /usr/include/nspr)
 		$(use_enable ipv6)
 		$(use_enable gnome-keyring)
 		--with-weather
@@ -80,6 +75,9 @@ ml-native_src_prepare() {
 	# Fix building evo-exchange with --as-needed, upstream bug #342830
 	# and configure failing to detect kerberos5-libs with as-needed
 	epatch "${FILESDIR}"/${PN}-2.27.5-as-needed.patch
+
+	# Use krb5-config to autolocate kerberos5-libs
+	epatch "${FILESDIR}"/${PN}-2.27.5-kerberos5-test.patch
 
 	if use doc; then
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
