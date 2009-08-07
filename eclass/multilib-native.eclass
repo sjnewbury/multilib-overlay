@@ -321,8 +321,13 @@ multilib-native_setup_build_directory() {
 		fi
 	else
 		if [[ -d ${EMULTILIB_SOURCE_TOPDIR} ]]; then
-			einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
-			cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
+			if ! is_final_abi; then
+				einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
+				cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
+			else
+				einfo "Moving source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
+				mv "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
+			fi
 		fi
 	fi
 	if ([[ -n "${CMAKE_BUILD_TYPE}" ]] && \
