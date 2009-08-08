@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-db/unixODBC/unixODBC-2.2.12.ebuild,v 1.15 2008/06/15 17:33:57 hoffie Exp $
 
-EAPI="1"
+EAPI="2"
 
 WANT_AUTOCONF="latest"
 WANT_AUTOMAKE="latest"
@@ -69,8 +69,6 @@ multilib-native_src_compile_internal() {
 		--enable-ltdllib \
 		${myconf} || die "econf failed"
 
-	emake -j1 || die "emake failed"
-
 	if use gnome; then
 		# Symlink for configure
 		ln -s "${S}"/odbcinst/.libs ./lib
@@ -85,6 +83,16 @@ multilib-native_src_compile_internal() {
 			--sysconfdir=/etc/${PN} || die "econf gODBCConfig failed"
 		ln -s ../depcomp .
 		ln -s ../libtool .
+
+		cd ..
+	fi
+}
+
+multilib-native_src_compile_internal() {
+	emake -j1 || die "emake failed"
+
+	if use gnome; then
+		cd gODBCConfig
 
 		emake || die "emake gODBCConfig failed"
 
