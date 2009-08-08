@@ -20,12 +20,12 @@ DEPEND=">=x11-libs/gtk+-2.6[lib32?]"
 
 S="${WORKDIR}/${MY_P}"
 
-ml-native_src_compile() {
+multilib-native_src_compile_internal() {
 	econf --enable-animation || die "econf failed"
 	emake || die "emake failed"
 }
 
-ml-native_src_install() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
 	dodir /usr/share/themes

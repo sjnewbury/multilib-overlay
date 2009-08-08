@@ -25,7 +25,7 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
-multilib-native_src_unpack_internal() {
+src_unpack() {
 	unpack ${A}
 	cd "$S"
 

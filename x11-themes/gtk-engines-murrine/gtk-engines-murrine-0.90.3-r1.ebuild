@@ -24,13 +24,13 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_PN}-${PV}"
 
-ml-native_src_configure() {
+multilib-native_src_configure_internal() {
 	econf --enable-animation \
 		--enable-rgba \
 		$(use_enable animation-rtl animationrtl)
 }
 
-ml-native_src_install() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
 	dodoc AUTHORS ChangeLog TODO
