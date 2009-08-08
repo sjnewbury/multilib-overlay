@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/DirectFB/DirectFB-1.2.7.ebuild,v 1.7 2009/04/30 12:28:31 jer Exp $
 
+EAPI="2"
+
 inherit eutils toolchain-funcs multilib-native
 
 IUSE_VIDEO_CARDS="ati128 cle266 cyber5k i810 i830 mach64 matrox neomagic none nsc nvidia radeon savage sis315 tdfx unichrome"
@@ -65,7 +67,7 @@ src_unpack() {
 		configure
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local vidcards card input inputdrivers
 	if [[ ${VIDEO_CARDS+set} == "set" ]] ; then
 		for card in ${VIDEO_CARDS} ; do
@@ -122,7 +124,6 @@ multilib-native_src_compile_internal() {
 		--with-inputdrivers="${inputdrivers}" \
 		--disable-vnc \
 		|| die
-	emake || die
 }
 
 multilib-native_src_install_internal() {
