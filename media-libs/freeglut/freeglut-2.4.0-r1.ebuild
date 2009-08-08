@@ -18,7 +18,17 @@ IUSE=""
 RDEPEND="virtual/opengl[lib32?]
 	virtual/glu[lib32?]
 	!media-libs/glut"
-DEPEND="${RDEPEND}"
+
+# The imake dependency is because of the AC_PATH_XTRA function in
+# /usr/share/autoconf/autoconf/libs.m4 , which uses xmkmf (an imake wrapper) to
+# produce a makefile which prints system library locations.  If imake is built
+# without lib32 in USE, it will get lib64 library locations, which freeglut will
+# put in its .la files, slowing poisoning other .la files as time goes by.
+
+DEPEND="${RDEPEND}
+	x11-misc/imake[lib32?]"
+# Doesn't remove imake until post-build, bug in portage I think?
+#	lib32? ( !x11-misc/imake[-lib32] )"
 
 pkg_setup() {
 	# bug #134586
