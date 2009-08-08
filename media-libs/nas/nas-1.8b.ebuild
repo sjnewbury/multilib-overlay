@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/nas/nas-1.8b.ebuild,v 1.9 2007/06/24 21:59:53 vapier Exp $
 
+EAPI="2"
+
 inherit eutils toolchain-funcs multilib-native
 
 DESCRIPTION="Network Audio System"

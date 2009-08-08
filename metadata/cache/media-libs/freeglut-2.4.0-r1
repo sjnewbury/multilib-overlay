@@ -1,4 +1,4 @@
-virtual/opengl[lib32?] virtual/glu[lib32?] !media-libs/glut sys-apps/abi-wrapper
+virtual/opengl[lib32?] virtual/glu[lib32?] !media-libs/glut x11-misc/imake[lib32?] sys-apps/abi-wrapper
 virtual/opengl[lib32?] virtual/glu[lib32?] !media-libs/glut sys-apps/abi-wrapper
 0
 mirror://sourceforge/freeglut/freeglut-2.4.0.tar.gz

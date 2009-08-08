@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-db/unixODBC/unixODBC-2.2.11-r1.ebuild,v 1.19 2008/03/13 21:42:01 ricmm Exp $
 
-EAPI="1"
+EAPI="2"
 
 WANT_AUTOCONF="latest"
 WANT_AUTOMAKE="latest"
@@ -37,7 +37,7 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local myconf
 
 	if use qt3 && ! use mips ; then
@@ -50,7 +50,9 @@ multilib-native_src_compile_internal() {
 		--sysconfdir=/etc/${PN} \
 		--libdir=/usr/$(get_libdir) \
 		${myconf} || die "econf failed"
+}
 
+multilib-native_src_compile_internal() {
 	emake -j1 || die "emake failed"
 }
 
