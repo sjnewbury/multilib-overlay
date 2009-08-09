@@ -32,7 +32,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS NEWS README"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		--disable-static
 		$(use_with gnome)
