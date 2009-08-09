@@ -289,7 +289,7 @@ multilib-native_setup_build_directory() {
 	if multilib-native_is_EBD; then
 		einfo "Preparing external build directory for ABI: ${ABI} ..."
 		einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
-		mkdir -p "${WORKDIR}/${PN}_build_${ABI}"
+		mkdir -p "${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
 		if [[ -n "${CMAKE_BUILD_TYPE}" ]];then
 			CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"	
 		else
