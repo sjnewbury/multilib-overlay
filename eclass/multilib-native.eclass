@@ -52,7 +52,9 @@ EMULTILIB_SOURCE_TOP_DIRNAME=""
 # @VARIABLE: EMULTILIB_SOURCE_TOPDIR
 # @DESCRIPTION:
 # This may be used in multilib-ised ebuilds choosing to make use of
-# external build directories for installing files from the source tree
+# external build directories for installing files from the top of the source
+# tree although for autotools based packages it's sometimes more appropriate
+# to use ${ECONF_SOURCE}.
 # EMULTILIB_SOURCE_TOPDIR=""
 EMULTILIB_SOURCE_TOPDIR=""
 
