@@ -19,8 +19,7 @@ python_dep=">=dev-lang/python-2.5"
 DEPEND="${python_dep}
 	!build? ( >=sys-apps/sed-4.0.5 )
 	doc? ( app-text/xmlto ~app-text/docbook-xml-dtd-4.4 )
-	epydoc? ( >=dev-python/epydoc-2.0 )
-	!>=app-admin/eselect-python-20090801"
+	epydoc? ( >=dev-python/epydoc-2.0 )"
 RDEPEND="${python_dep}
 	!build? ( >=sys-apps/sed-4.0.5
 		>=app-shells/bash-3.2_p17
@@ -30,8 +29,7 @@ RDEPEND="${python_dep}
 	elibc_uclibc? ( >=sys-apps/sandbox-1.6 )
 	>=app-misc/pax-utils-0.1.17
 	selinux? ( >=dev-python/python-selinux-2.16 )
-	sys-apps/abi-wrapper
-	!>=app-admin/eselect-python-20090801"
+	sys-apps/abi-wrapper"
 PDEPEND="
 	!build? (
 		>=net-misc/rsync-2.6.4
