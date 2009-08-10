@@ -26,7 +26,7 @@ multilib-native_src_unpack_internal() {
 	elibtoolize
 }
 
-src_install () {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "install failed"
 	dodoc AUTHORS ChangeLog NEWS README
 }
