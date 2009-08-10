@@ -24,7 +24,7 @@ DEPEND=">=media-libs/babl-0.0.20[lib32?]
 	cairo? ( x11-libs/cairo[lib32?] )
 	doc? ( app-text/asciidoc
 		dev-lang/ruby
-		>=dev-lang/lua-5.1.0
+		>=dev-lang/lua-5.1.0[lib32?]
 		app-text/enscript
 		media-gfx/graphviz[lib32?]
 		media-gfx/imagemagick[lib32?] )
