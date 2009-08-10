@@ -1,5 +1,5 @@
-jpeg? ( >=media-libs/jpeg-6b-r2 ) tiff? ( media-libs/tiff ) qt3? ( x11-libs/qt:3 ) qt3? ( nsplugin? ( x11-libs/libXt ) ) sys-apps/abi-wrapper
-jpeg? ( >=media-libs/jpeg-6b-r2 ) tiff? ( media-libs/tiff ) qt3? ( x11-libs/qt:3 ) sys-apps/abi-wrapper
+jpeg? ( >=media-libs/jpeg-6b-r2[lib32?] ) tiff? ( media-libs/tiff[lib32?] ) qt3? ( x11-libs/qt:3[lib32?] ) qt3? ( nsplugin? ( x11-libs/libXt[lib32?] ) ) sys-apps/abi-wrapper
+jpeg? ( >=media-libs/jpeg-6b-r2[lib32?] ) tiff? ( media-libs/tiff[lib32?] ) qt3? ( x11-libs/qt:3[lib32?] ) sys-apps/abi-wrapper
 0
 mirror://sourceforge/djvu/djvulibre-3.5.21.tar.gz
 
@@ -12,9 +12,9 @@ xml qt3 jpeg tiff debug threads nls nsplugin kde doc linguas_cs linguas_de lingu
 
 
 
-1
+2
 
-compile install postinst postrm preinst setup unpack
+compile configure install postinst postrm preinst prepare setup unpack
 
 
 

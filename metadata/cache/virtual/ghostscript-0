@@ -1,0 +1,22 @@
+
+|| ( app-text/ghostscript-gpl[lib32?] app-text/ghostscript-gnul[lib32?] )
+0
+
+
+http://www.ghostscript.com
+as-is
+Virtual for Ghostscript
+alpha amd64 arm hppa ia64 m68k mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd
+
+lib32
+
+
+
+2
+
+-
+
+
+
+
+

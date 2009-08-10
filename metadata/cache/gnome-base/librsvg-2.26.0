@@ -1,5 +1,5 @@
->=media-libs/fontconfig-1.0.1 >=media-libs/freetype-2 >=x11-libs/gtk+-2.6 >=dev-libs/glib-2.15.4 >=x11-libs/cairo-1.2 >=x11-libs/pango-1.10 >=dev-libs/libxml2-2.4.7 >=dev-libs/libcroco-0.6.1 zlib? ( >=gnome-extra/libgsf-1.6 ) >=dev-util/pkgconfig-0.12 doc? ( >=dev-util/gtk-doc-1 ) >=sys-apps/sed-4 sys-apps/abi-wrapper
->=media-libs/fontconfig-1.0.1 >=media-libs/freetype-2 >=x11-libs/gtk+-2.6 >=dev-libs/glib-2.15.4 >=x11-libs/cairo-1.2 >=x11-libs/pango-1.10 >=dev-libs/libxml2-2.4.7 >=dev-libs/libcroco-0.6.1 zlib? ( >=gnome-extra/libgsf-1.6 ) sys-apps/abi-wrapper
+>=media-libs/fontconfig-1.0.1[lib32?] >=media-libs/freetype-2[lib32?] >=x11-libs/gtk+-2.6[lib32?] >=dev-libs/glib-2.15.4[lib32?] >=x11-libs/cairo-1.2[lib32?] >=x11-libs/pango-1.10[lib32?] >=dev-libs/libxml2-2.4.7[lib32?] >=dev-libs/libcroco-0.6.1[lib32?] zlib? ( >=gnome-extra/libgsf-1.6[lib32?] ) >=dev-util/pkgconfig-0.12[lib32?] doc? ( >=dev-util/gtk-doc-1 ) >=sys-apps/sed-4 sys-apps/abi-wrapper
+>=media-libs/fontconfig-1.0.1[lib32?] >=media-libs/freetype-2[lib32?] >=x11-libs/gtk+-2.6[lib32?] >=dev-libs/glib-2.15.4[lib32?] >=x11-libs/cairo-1.2[lib32?] >=x11-libs/pango-1.10[lib32?] >=dev-libs/libxml2-2.4.7[lib32?] >=dev-libs/libcroco-0.6.1[lib32?] zlib? ( >=gnome-extra/libgsf-1.6[lib32?] ) sys-apps/abi-wrapper
 2
 mirror://gnome/sources/librsvg/2.26/librsvg-2.26.0.tar.bz2
 
@@ -12,9 +12,9 @@ doc zlib debug lib32
 
 
 
+2
 
-
-compile install postinst postrm preinst setup unpack
+compile configure install postinst postrm preinst prepare setup unpack
 
 
 

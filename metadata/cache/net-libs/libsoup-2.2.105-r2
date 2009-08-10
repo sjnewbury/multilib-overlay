@@ -1,5 +1,5 @@
->=dev-libs/glib-2.12 >=dev-libs/libxml2-2 ssl? ( >=net-libs/gnutls-1 ) >=dev-util/pkgconfig-0.9 doc? ( >=dev-util/gtk-doc-1 ) >=sys-apps/sed-4 sys-apps/abi-wrapper
->=dev-libs/glib-2.12 >=dev-libs/libxml2-2 ssl? ( >=net-libs/gnutls-1 ) sys-apps/abi-wrapper
+>=dev-libs/glib-2.12[lib32?] >=dev-libs/libxml2-2[lib32?] ssl? ( >=net-libs/gnutls-1[lib32?] ) >=dev-util/pkgconfig-0.9[lib32?] doc? ( >=dev-util/gtk-doc-1 ) >=sys-apps/sed-4 sys-apps/abi-wrapper
+>=dev-libs/glib-2.12[lib32?] >=dev-libs/libxml2-2[lib32?] ssl? ( >=net-libs/gnutls-1[lib32?] ) sys-apps/abi-wrapper
 2.2
 mirror://gnome/sources/libsoup/2.2/libsoup-2.2.105.tar.bz2
 
@@ -12,9 +12,9 @@ doc ssl debug lib32
 
 
 
+2
 
-
-compile install postinst postrm preinst setup unpack
+compile configure install postinst postrm preinst prepare setup unpack
 
 
 

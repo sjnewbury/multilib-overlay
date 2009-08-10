@@ -1,5 +1,5 @@
-!dev-libs/libarchive kernel_linux? ( acl? ( sys-apps/acl ) xattr? ( sys-apps/attr ) ) !static? ( lzma? ( app-arch/lzma-utils ) bzip2? ( app-arch/bzip2 ) zlib? ( sys-libs/zlib ) ) lzma? ( app-arch/lzma-utils ) bzip2? ( app-arch/bzip2 ) zlib? ( sys-libs/zlib ) kernel_linux? ( sys-fs/e2fsprogs virtual/os-headers ) sys-apps/abi-wrapper
-!dev-libs/libarchive kernel_linux? ( acl? ( sys-apps/acl ) xattr? ( sys-apps/attr ) ) !static? ( lzma? ( app-arch/lzma-utils ) bzip2? ( app-arch/bzip2 ) zlib? ( sys-libs/zlib ) ) sys-apps/abi-wrapper
+!dev-libs/libarchive kernel_linux? ( acl? ( sys-apps/acl[lib32?] ) xattr? ( sys-apps/attr[lib32?] ) ) !static? ( lzma? ( app-arch/lzma-utils[lib32?] ) bzip2? ( app-arch/bzip2[lib32?] ) zlib? ( sys-libs/zlib[lib32?] ) ) lzma? ( app-arch/lzma-utils[lib32?] ) bzip2? ( app-arch/bzip2[lib32?] ) zlib? ( sys-libs/zlib[lib32?] ) kernel_linux? ( sys-fs/e2fsprogs[lib32?] virtual/os-headers ) sys-apps/abi-wrapper
+!dev-libs/libarchive kernel_linux? ( acl? ( sys-apps/acl[lib32?] ) xattr? ( sys-apps/attr[lib32?] ) ) !static? ( lzma? ( app-arch/lzma-utils[lib32?] ) bzip2? ( app-arch/bzip2[lib32?] ) zlib? ( sys-libs/zlib[lib32?] ) ) sys-apps/abi-wrapper
 0
 http://libarchive.googlecode.com/files/libarchive-2.6.2.tar.gz http://people.freebsd.org/~kientzle/libarchive/src/libarchive-2.6.2.tar.gz
 
@@ -12,9 +12,9 @@ static acl xattr kernel_linux +bzip2 +lzma +zlib lib32
 
 
 
-1
+2
 
-compile install postinst postrm preinst setup unpack
+compile configure install postinst postrm preinst prepare setup unpack
 
 
 
