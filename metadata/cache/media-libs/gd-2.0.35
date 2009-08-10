@@ -1,5 +1,5 @@
-fontconfig? ( media-libs/fontconfig ) jpeg? ( >=media-libs/jpeg-6b ) png? ( >=media-libs/libpng-1.2.5 sys-libs/zlib ) truetype? ( >=media-libs/freetype-2.1.5 ) xpm? ( x11-libs/libXpm x11-libs/libXt ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
-fontconfig? ( media-libs/fontconfig ) jpeg? ( >=media-libs/jpeg-6b ) png? ( >=media-libs/libpng-1.2.5 sys-libs/zlib ) truetype? ( >=media-libs/freetype-2.1.5 ) xpm? ( x11-libs/libXpm x11-libs/libXt ) sys-apps/abi-wrapper
+fontconfig? ( media-libs/fontconfig[lib32?] ) jpeg? ( >=media-libs/jpeg-6b[lib32?] ) png? ( >=media-libs/libpng-1.2.5 sys-libs/zlib[lib32?] ) truetype? ( >=media-libs/freetype-2.1.5[lib32?] ) xpm? ( x11-libs/libXpm x11-libs/libXt[lib32?] ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+fontconfig? ( media-libs/fontconfig[lib32?] ) jpeg? ( >=media-libs/jpeg-6b[lib32?] ) png? ( >=media-libs/libpng-1.2.5 sys-libs/zlib[lib32?] ) truetype? ( >=media-libs/freetype-2.1.5[lib32?] ) xpm? ( x11-libs/libXpm x11-libs/libXt[lib32?] ) sys-apps/abi-wrapper
 2
 http://libgd.org/releases/gd-2.0.35.tar.bz2
 
@@ -12,9 +12,9 @@ fontconfig jpeg png truetype xpm lib32
 
 
 
+2
 
-
-compile install postinst postrm preinst setup unpack
+compile configure install postinst postrm preinst prepare setup unpack
 
 
 

@@ -1,5 +1,5 @@
->=dev-libs/libcdio-0.71 !minimal? ( dev-libs/popt ) xml? ( >=dev-libs/libxml2-2.5.11 ) dev-util/pkgconfig sys-apps/abi-wrapper
->=dev-libs/libcdio-0.71 !minimal? ( dev-libs/popt ) xml? ( >=dev-libs/libxml2-2.5.11 ) sys-apps/abi-wrapper
+>=dev-libs/libcdio-0.71[lib32?] !minimal? ( dev-libs/popt[lib32?] ) xml? ( >=dev-libs/libxml2-2.5.11[lib32?] ) dev-util/pkgconfig[lib32?] sys-apps/abi-wrapper
+>=dev-libs/libcdio-0.71[lib32?] !minimal? ( dev-libs/popt[lib32?] ) xml? ( >=dev-libs/libxml2-2.5.11[lib32?] ) sys-apps/abi-wrapper
 0
 http://www.vcdimager.org/pub/vcdimager/vcdimager-0.7/vcdimager-0.7.23.tar.gz
 test
@@ -12,9 +12,9 @@ xml minimal lib32
 
 
 
+2
 
-
-compile install postinst postrm preinst setup unpack
+compile configure install postinst postrm preinst prepare setup unpack
 
 
 

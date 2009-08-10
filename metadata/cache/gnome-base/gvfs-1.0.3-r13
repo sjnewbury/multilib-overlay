@@ -1,5 +1,5 @@
->=dev-libs/glib-2.17.6 >=sys-apps/dbus-1.0 >=net-libs/libsoup-2.23.91 dev-libs/libxml2 net-misc/openssh archive? ( app-arch/libarchive ) avahi? ( >=net-dns/avahi-0.6 ) cdda? ( >=sys-apps/hal-0.5.10 >=dev-libs/libcdio-0.78.2 ) fuse? ( sys-fs/fuse ) gnome? ( >=gnome-base/gconf-2.0 ) hal? ( >=sys-apps/hal-0.5.10 ) bluetooth? ( dev-libs/dbus-glib net-wireless/bluez dev-libs/expat ) gphoto2? ( >=media-libs/libgphoto2-2.4 ) gnome-keyring? ( >=gnome-base/gnome-keyring-1.0 ) samba? ( >=net-fs/samba-3 ) >=dev-util/intltool-0.40 >=dev-util/pkgconfig-0.19 doc? ( >=dev-util/gtk-doc-1 ) dev-util/gtk-doc-am =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool >=sys-apps/sed-4 sys-apps/abi-wrapper
->=dev-libs/glib-2.17.6 >=sys-apps/dbus-1.0 >=net-libs/libsoup-2.23.91 dev-libs/libxml2 net-misc/openssh archive? ( app-arch/libarchive ) avahi? ( >=net-dns/avahi-0.6 ) cdda? ( >=sys-apps/hal-0.5.10 >=dev-libs/libcdio-0.78.2 ) fuse? ( sys-fs/fuse ) gnome? ( >=gnome-base/gconf-2.0 ) hal? ( >=sys-apps/hal-0.5.10 ) bluetooth? ( dev-libs/dbus-glib net-wireless/bluez dev-libs/expat ) gphoto2? ( >=media-libs/libgphoto2-2.4 ) gnome-keyring? ( >=gnome-base/gnome-keyring-1.0 ) samba? ( >=net-fs/samba-3 ) bash-completion? ( app-admin/eselect ) sys-apps/abi-wrapper
+>=dev-libs/glib-2.17.6[lib32?] >=sys-apps/dbus-1.0[lib32?] >=net-libs/libsoup-2.23.91[lib32?] dev-libs/libxml2[lib32?] net-misc/openssh archive? ( app-arch/libarchive[lib32?] ) avahi? ( >=net-dns/avahi-0.6[lib32?] ) cdda? ( >=sys-apps/hal-0.5.10[lib32?] >=dev-libs/libcdio-0.78.2[lib32?] ) fuse? ( sys-fs/fuse[lib32?] ) gnome? ( >=gnome-base/gconf-2.0[lib32?] ) hal? ( >=sys-apps/hal-0.5.10[lib32?] ) bluetooth? ( dev-libs/dbus-glib[lib32?] net-wireless/bluez[lib32?] dev-libs/expat[lib32?] ) gphoto2? ( >=media-libs/libgphoto2-2.4[lib32?] ) gnome-keyring? ( >=gnome-base/gnome-keyring-1.0[lib32?] ) samba? ( >=net-fs/samba-3[lib32?] ) >=dev-util/intltool-0.40 >=dev-util/pkgconfig-0.19[lib32?] doc? ( >=dev-util/gtk-doc-1 ) dev-util/gtk-doc-am =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool >=sys-apps/sed-4 sys-apps/abi-wrapper
+>=dev-libs/glib-2.17.6[lib32?] >=sys-apps/dbus-1.0[lib32?] >=net-libs/libsoup-2.23.91[lib32?] dev-libs/libxml2[lib32?] net-misc/openssh archive? ( app-arch/libarchive[lib32?] ) avahi? ( >=net-dns/avahi-0.6[lib32?] ) cdda? ( >=sys-apps/hal-0.5.10[lib32?] >=dev-libs/libcdio-0.78.2[lib32?] ) fuse? ( sys-fs/fuse[lib32?] ) gnome? ( >=gnome-base/gconf-2.0[lib32?] ) hal? ( >=sys-apps/hal-0.5.10[lib32?] ) bluetooth? ( dev-libs/dbus-glib[lib32?] net-wireless/bluez[lib32?] dev-libs/expat[lib32?] ) gphoto2? ( >=media-libs/libgphoto2-2.4[lib32?] ) gnome-keyring? ( >=gnome-base/gnome-keyring-1.0[lib32?] ) samba? ( >=net-fs/samba-3[lib32?] ) bash-completion? ( app-admin/eselect ) sys-apps/abi-wrapper
 0
 mirror://gnome/sources/gvfs/1.0/gvfs-1.0.3.tar.bz2
 
@@ -12,9 +12,9 @@ archive avahi bluetooth cdda doc fuse gnome gphoto2 hal gnome-keyring samba bash
 
 
 
+2
 
-
-compile install postinst postrm preinst setup unpack
+compile configure install postinst postrm preinst prepare setup unpack
 
 
 

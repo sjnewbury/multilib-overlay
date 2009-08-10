@@ -1,5 +1,5 @@
->=dev-libs/glib-2 >=dev-libs/libxml2-2.4.23 dev-util/pkgconfig doc? ( >=dev-util/gtk-doc-1 ) >=sys-apps/sed-4 sys-apps/abi-wrapper
->=dev-libs/glib-2 >=dev-libs/libxml2-2.4.23 sys-apps/abi-wrapper
+>=dev-libs/glib-2[lib32?] >=dev-libs/libxml2-2.4.23[lib32?] dev-util/pkgconfig[lib32?] doc? ( >=dev-util/gtk-doc-1 ) >=sys-apps/sed-4 sys-apps/abi-wrapper
+>=dev-libs/glib-2[lib32?] >=dev-libs/libxml2-2.4.23[lib32?] sys-apps/abi-wrapper
 0.6
 mirror://gnome/sources/libcroco/0.6/libcroco-0.6.2.tar.bz2
 
@@ -12,9 +12,9 @@ doc debug lib32
 
 
 
+2
 
-
-compile install postinst postrm preinst setup unpack
+compile configure install postinst postrm preinst prepare setup unpack
 
 
 

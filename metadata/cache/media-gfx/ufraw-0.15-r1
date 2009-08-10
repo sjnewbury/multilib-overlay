@@ -1,5 +1,5 @@
-media-libs/jpeg >=media-libs/lcms-1.13 media-libs/tiff >=x11-libs/gtk+-2.4.0 exif? ( >=media-libs/libexif-0.6.13 media-gfx/exiv2 ) gimp? ( >=media-gfx/gimp-2.0 ) gnome? ( gnome-base/gconf ) dev-util/pkgconfig >=sys-apps/sed-4 =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
-media-libs/jpeg >=media-libs/lcms-1.13 media-libs/tiff >=x11-libs/gtk+-2.4.0 exif? ( >=media-libs/libexif-0.6.13 media-gfx/exiv2 ) gimp? ( >=media-gfx/gimp-2.0 ) gnome? ( gnome-base/gconf ) sys-apps/abi-wrapper
+media-libs/jpeg[lib32?] >=media-libs/lcms-1.13[lib32?] media-libs/tiff[lib32?] >=x11-libs/gtk+-2.4.0[lib32?] exif? ( >=media-libs/libexif-0.6.13[lib32?] media-gfx/exiv2[lib32?] ) gimp? ( >=media-gfx/gimp-2.0[lib32?] ) gnome? ( gnome-base/gconf[lib32?] ) dev-util/pkgconfig[lib32?] >=sys-apps/sed-4 =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+media-libs/jpeg[lib32?] >=media-libs/lcms-1.13[lib32?] media-libs/tiff[lib32?] >=x11-libs/gtk+-2.4.0[lib32?] exif? ( >=media-libs/libexif-0.6.13[lib32?] media-gfx/exiv2[lib32?] ) gimp? ( >=media-gfx/gimp-2.0[lib32?] ) gnome? ( gnome-base/gconf[lib32?] ) sys-apps/abi-wrapper
 0
 mirror://sourceforge/ufraw/ufraw-0.15.tar.gz
 

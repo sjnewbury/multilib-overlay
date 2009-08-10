@@ -1,5 +1,5 @@
-virtual/ghostscript xml? ( !expat? ( dev-libs/libxml2 ) ) expat? ( dev-libs/expat ) >=media-libs/freetype-2.0.1 sys-libs/zlib media-libs/libpng media-libs/jpeg X? ( x11-libs/libICE x11-libs/libSM x11-libs/libX11 ) gtk? ( >=x11-libs/gtk+-2.1.2 ) dev-util/pkgconfig X? ( x11-libs/libXt x11-libs/libXpm ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
-virtual/ghostscript xml? ( !expat? ( dev-libs/libxml2 ) ) expat? ( dev-libs/expat ) >=media-libs/freetype-2.0.1 sys-libs/zlib media-libs/libpng media-libs/jpeg X? ( x11-libs/libICE x11-libs/libSM x11-libs/libX11 ) gtk? ( >=x11-libs/gtk+-2.1.2 ) sys-apps/abi-wrapper
+virtual/ghostscript xml? ( !expat? ( dev-libs/libxml2[lib32?] ) ) expat? ( dev-libs/expat[lib32?] ) >=media-libs/freetype-2.0.1[lib32?] sys-libs/zlib[lib32?] media-libs/libpng[lib32?] media-libs/jpeg[lib32?] X? ( x11-libs/libICE[lib32?] x11-libs/libSM[lib32?] x11-libs/libX11[lib32?] ) gtk? ( >=x11-libs/gtk+-2.1.2[lib32?] ) dev-util/pkgconfig[lib32?] X? ( x11-libs/libXt[lib32?] x11-libs/libXpm[lib32?] ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+virtual/ghostscript xml? ( !expat? ( dev-libs/libxml2[lib32?] ) ) expat? ( dev-libs/expat[lib32?] ) >=media-libs/freetype-2.0.1[lib32?] sys-libs/zlib[lib32?] media-libs/libpng[lib32?] media-libs/jpeg[lib32?] X? ( x11-libs/libICE[lib32?] x11-libs/libSM[lib32?] x11-libs/libX11[lib32?] ) gtk? ( >=x11-libs/gtk+-2.1.2[lib32?] ) sys-apps/abi-wrapper
 0
 mirror://sourceforge/wvware/libwmf-0.2.8.4.tar.gz
 
@@ -12,9 +12,9 @@ X expat xml debug doc gtk lib32
 
 
 
+2
 
-
-compile install postinst postrm preinst setup unpack
+compile configure install postinst postrm preinst prepare setup unpack
 
 
 

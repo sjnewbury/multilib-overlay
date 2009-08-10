@@ -1,5 +1,5 @@
->=dev-libs/glib-2.16 >=dev-libs/libxml2-2.4.16 gnome? ( >=gnome-base/gconf-2 >=gnome-base/libbonobo-2 >=gnome-base/gnome-vfs-2.2 ) sys-libs/zlib bzip2? ( app-arch/bzip2 ) python? ( dev-lang/python >=dev-python/pygobject-2.10 >=dev-python/pygtk-2.10 ) dev-util/pkgconfig >=dev-util/intltool-0.35.0 doc? ( >=dev-util/gtk-doc-1 ) >=sys-apps/sed-4 sys-apps/abi-wrapper
->=dev-libs/glib-2.16 >=dev-libs/libxml2-2.4.16 gnome? ( >=gnome-base/gconf-2 >=gnome-base/libbonobo-2 >=gnome-base/gnome-vfs-2.2 ) sys-libs/zlib bzip2? ( app-arch/bzip2 ) python? ( dev-lang/python >=dev-python/pygobject-2.10 >=dev-python/pygtk-2.10 ) sys-apps/abi-wrapper
+>=dev-libs/glib-2.16[lib32?] >=dev-libs/libxml2-2.4.16[lib32?] gnome? ( >=gnome-base/gconf-2[lib32?] >=gnome-base/libbonobo-2[lib32?] >=gnome-base/gnome-vfs-2.2[lib32?] ) sys-libs/zlib[lib32?] bzip2? ( app-arch/bzip2[lib32?] ) python? ( dev-lang/python[lib32?] >=dev-python/pygobject-2.10[lib32?] >=dev-python/pygtk-2.10[lib32?] ) dev-util/pkgconfig[lib32?] >=dev-util/intltool-0.35.0 doc? ( >=dev-util/gtk-doc-1 ) >=sys-apps/sed-4 sys-apps/abi-wrapper
+>=dev-libs/glib-2.16[lib32?] >=dev-libs/libxml2-2.4.16[lib32?] gnome? ( >=gnome-base/gconf-2[lib32?] >=gnome-base/libbonobo-2[lib32?] >=gnome-base/gnome-vfs-2.2[lib32?] ) sys-libs/zlib[lib32?] bzip2? ( app-arch/bzip2[lib32?] ) python? ( dev-lang/python[lib32?] >=dev-python/pygobject-2.10[lib32?] >=dev-python/pygtk-2.10[lib32?] ) sys-apps/abi-wrapper
 0
 mirror://gnome/sources/libgsf/1.14/libgsf-1.14.15.tar.bz2
 
@@ -10,11 +10,11 @@ The GNOME Structured File Library
 alternatives base eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib multilib-native portability python toolchain-funcs
 bzip2 doc gnome python debug lib32
 
-gnome? ( media-gfx/imagemagick )
+gnome? ( media-gfx/imagemagick[lib32?] )
 
+2
 
-
-compile install postinst postrm preinst setup unpack
+compile configure install postinst postrm preinst prepare setup unpack
 
 
 
