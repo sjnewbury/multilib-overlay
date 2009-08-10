@@ -1,0 +1,22 @@
+virtual/libc >=media-libs/jpeg-6b >=media-libs/libpng-1.2.5 >=sys-libs/zlib-1.1.4 >=media-libs/tiff-3.7 X? ( x11-libs/libXt x11-libs/libXext ) gtk? ( >=x11-libs/gtk+-2.0 ) cups? ( >=net-print/cups-1.1.20 ) !app-text/ghostscript-gpl gtk? ( dev-util/pkgconfig ) =sys-devel/automake-1.9* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+virtual/libc >=media-libs/jpeg-6b >=media-libs/libpng-1.2.5 >=sys-libs/zlib-1.1.4 >=media-libs/tiff-3.7 X? ( x11-libs/libXt x11-libs/libXext ) gtk? ( >=x11-libs/gtk+-2.0 ) cups? ( >=net-print/cups-1.1.20 ) !app-text/ghostscript-gpl cjk? ( media-fonts/arphicfonts media-fonts/kochi-substitute media-fonts/baekmuk-fonts ) media-fonts/gnu-gs-fonts-std sys-apps/abi-wrapper
+0
+cjk? ( ftp://ftp.gyve.org/pub/gs-cjk/adobe-cmaps-200406.tar.gz ftp://ftp.gyve.org/pub/gs-cjk/acro5-cmaps-2001.tar.gz ) mirror://gnu/ghostscript/gnu-ghostscript-8.60.0.tar.bz2
+
+http://www.gnu.org/software/ghostscript/
+GPL-2
+GNU Ghostscript - patched GPL Ghostscript
+~alpha ~amd64 ~ppc ppc64 ~sparc ~x86 ~x86-fbsd
+autotools base eutils flag-o-matic libtool multilib multilib-native portability toolchain-funcs versionator
+X cups cjk gtk jpeg2k lib32
+
+
+
+
+
+compile install postinst postrm preinst setup unpack
+
+
+
+
+

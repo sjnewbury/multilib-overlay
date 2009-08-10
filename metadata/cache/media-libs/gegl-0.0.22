@@ -1,0 +1,22 @@
+>=media-libs/babl-0.0.20 >=dev-libs/glib-2.18.0 media-libs/libpng >=x11-libs/gtk+-2.14.0 x11-libs/pango cairo? ( x11-libs/cairo ) doc? ( app-text/asciidoc dev-lang/ruby >=dev-lang/lua-5.1.0 app-text/enscript media-gfx/graphviz media-gfx/imagemagick ) ffmpeg? ( >=media-video/ffmpeg-0.4.9_p20080326 ) jpeg? ( media-libs/jpeg ) openexr? ( media-libs/openexr ) raw? ( >=media-libs/libopenraw-0.0.5 ) sdl? ( media-libs/libsdl ) svg? ( >=gnome-base/librsvg-2.14.0 ) sys-apps/abi-wrapper
+>=media-libs/babl-0.0.20 >=dev-libs/glib-2.18.0 media-libs/libpng >=x11-libs/gtk+-2.14.0 x11-libs/pango cairo? ( x11-libs/cairo ) doc? ( app-text/asciidoc dev-lang/ruby >=dev-lang/lua-5.1.0 app-text/enscript media-gfx/graphviz media-gfx/imagemagick ) ffmpeg? ( >=media-video/ffmpeg-0.4.9_p20080326 ) jpeg? ( media-libs/jpeg ) openexr? ( media-libs/openexr ) raw? ( >=media-libs/libopenraw-0.0.5 ) sdl? ( media-libs/libsdl ) svg? ( >=gnome-base/librsvg-2.14.0 ) sys-apps/abi-wrapper
+0
+ftp://ftp.gimp.org/pub/gegl/0.0/gegl-0.0.22.tar.bz2
+
+http://www.gegl.org/
+|| ( GPL-3 LGPL-3 )
+A graph based image processing framework
+alpha amd64 hppa ia64 ppc ~ppc64 sparc x86
+base eutils multilib multilib-native portability toolchain-funcs
+cairo debug doc ffmpeg jpeg mmx openexr png raw sdl sse svg v4l lib32
+
+
+
+
+
+compile install postinst postrm preinst setup unpack
+
+
+
+
+

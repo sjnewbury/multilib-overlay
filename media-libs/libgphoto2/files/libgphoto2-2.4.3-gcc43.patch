@@ -1,0 +1,14 @@
+#
+# Gentoo: https://bugs.gentoo.org/show_bug.cgi?id=249677
+#
+diff -Naur libgphoto2-2.4.3-orig/camlibs/smal/ultrapocket.c libgphoto2-2.4.3/camlibs/smal/ultrapocket.c
+--- libgphoto2-2.4.3-orig/camlibs/smal/ultrapocket.c	2008-10-18 11:55:46.000000000 -0600
++++ libgphoto2-2.4.3/camlibs/smal/ultrapocket.c	2008-12-02 20:41:07.000000000 -0600
+@@ -21,6 +21,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <locale.h>
+ 
+ #include <gphoto2/gphoto2-port-log.h>
+ #include <gphoto2/gphoto2-library.h>
