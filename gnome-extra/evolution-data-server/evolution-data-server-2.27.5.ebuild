@@ -46,7 +46,7 @@ DEPEND="${RDEPEND}
 
 DOCS="ChangeLog MAINTAINERS NEWS TODO"
 
-ml-native_pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		$(use_with ldap openldap)
 		$(use_with krb4 krb4 /usr)
@@ -60,7 +60,7 @@ ml-native_pkg_setup() {
 		--with-libdb=/usr/$(get_libdir)"
 }
 
-ml-native_src_prepare() {
+multilib-native_src_prepare_internal() {
 	gnome2_src_prepare
 
 	# Adjust to gentoo's /etc/service
@@ -106,7 +106,7 @@ ml-native_src_prepare() {
 	append-cppflags "-I$(db_includedir)"
 }
 
-ml-native_src_install() {
+multilib-native_src_install_internal() {
 	gnome2_src_install
 
 	if use ldap; then

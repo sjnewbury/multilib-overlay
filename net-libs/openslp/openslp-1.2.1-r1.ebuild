@@ -22,7 +22,7 @@ RESTRICT="test"
 DEPEND="dev-libs/openssl[lib32?]"
 RDEPEND="${DEPEND}"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-fbsd.patch
 	eautomake
 

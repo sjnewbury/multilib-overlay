@@ -1,0 +1,19 @@
+--- oless/Makefile.in
++++ oless/Makefile.in
+@@ -54,7 +54,7 @@
+ am_libOless_la_OBJECTS = ascii.lo cdocfile.lo chinst.lo dffuncs.lo \
+ 	dfiter.lo dfstream.lo difat.lo dir.lo dirp.lo docfile.lo \
+ 	entry.lo expdf.lo expiter.lo expst.lo fat.lo funcs.lo \
+-	header.lo header.lo iter.lo mem.lo msf.lo msfiter.lo \
++	header.lo iter.lo mem.lo msf.lo msfiter.lo \
+ 	mstream.lo page.lo refilb.lo rexpdf.lo sstream.lo storage.lo \
+ 	time.lo vect.lo wchar.lo
+ libOless_la_OBJECTS = $(am_libOless_la_OBJECTS)
+@@ -76,7 +76,6 @@
+ 	h/vect.hxx \
+ 	h/vectfunc.hxx \
+ 	header.cxx \
+-	header.cxx \
+ 	iter.cxx \
+ 	iter.hxx \
+ 	logfile.hxx \

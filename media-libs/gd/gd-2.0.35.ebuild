@@ -21,7 +21,7 @@ DEPEND="fontconfig? ( media-libs/fontconfig[lib32?] )
 	truetype? ( >=media-libs/freetype-2.1.5[lib32?] )
 	xpm? ( x11-libs/libXpm x11-libs/libXt[lib32?] )"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	eautoconf
 	find . -type f -print0 | xargs -0 touch -r configure
 }

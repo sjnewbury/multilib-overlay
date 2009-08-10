@@ -19,7 +19,7 @@ RESTRICT="test"
 DEPEND="dev-libs/openssl[lib32?]"
 RDEPEND="${DEPEND}"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/openslp-compile_fix.patch
 	epatch "${FILESDIR}"/openslp-no_install_doc.patch
 	epatch "${FILESDIR}"/openslp-opt.patch

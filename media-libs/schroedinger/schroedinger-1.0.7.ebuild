@@ -23,7 +23,7 @@ RDEPEND=">=dev-libs/liboil-0.3.16[lib32?]
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	elibtoolize # dont drop, sane .so versionning on bsd
 }
 

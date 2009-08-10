@@ -26,7 +26,7 @@ DEPEND="doc? ( app-doc/doxygen
 		)"
 RDEPEND=""
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${PN}-0.5.2-doc.patch"
 
 	AT_M4DIR="m4" eautoreconf
