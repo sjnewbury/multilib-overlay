@@ -1,0 +1,16 @@
+#!/sbin/runscript
+# Copyright 1999-2004 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: /var/cvsroot/gentoo-x86/app-misc/lirc/files/lircd,v 1.6 2004/09/26 21:27:07 lanius Exp $
+
+start() {
+	ebegin "Starting lircd"
+	start-stop-daemon --start --quiet --exec /usr/sbin/lircd -- ${LIRCD_OPTS}
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping lircd"
+	start-stop-daemon --stop --quiet --exec /usr/sbin/lircd
+	eend $?
+}

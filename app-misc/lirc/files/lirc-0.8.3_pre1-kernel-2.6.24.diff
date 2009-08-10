@@ -1,0 +1,110 @@
+#bug 200508
+
+--- a/lirc-0.8.3pre1/drivers/lirc_dev/lirc_dev.c	2007-09-27 15:47:20.000000000 -0400
++++ b/lirc-0.8.3pre1/drivers/lirc_dev/lirc_dev.c	2007-11-27 11:06:41.000000000 -0500
+@@ -41,6 +41,7 @@
+ #include <linux/fs.h>
+ #include <linux/poll.h>
+ #include <linux/smp_lock.h>
++#include <linux/completion.h>
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 18)
+ #include <linux/uaccess.h>
+ #include <linux/errno.h>
+@@ -86,8 +87,8 @@
+ 	struct lirc_buffer *buf;
+ 
+ 	int tpid;
+-	struct semaphore *t_notify;
+-	struct semaphore *t_notify2;
++	struct completion *t_notify;
++	struct completion *t_notify2;
+ 	int shutdown;
+ 	long jiffies_to_wait;
+ 
+@@ -193,7 +194,7 @@
+ 	daemonize("lirc_dev");
+ 
+ 	if (ir->t_notify != NULL)
+-		up(ir->t_notify);
++		complete(ir->t_notify);
+ 
+ 	dprintk(LOGHEAD "poll thread started\n", ir->p.name, ir->p.minor);
+ 
+@@ -218,11 +219,11 @@
+ 	} while (!ir->shutdown);
+ 
+ 	if (ir->t_notify2 != NULL)
+-		down(ir->t_notify2);
++		wait_for_completion(ir->t_notify2);
+ 
+ 	ir->tpid = -1;
+ 	if (ir->t_notify != NULL)
+-		up(ir->t_notify);
++		complete(ir->t_notify);
+ 
+ 	dprintk(LOGHEAD "poll thread ended\n", ir->p.name, ir->p.minor);
+ 
+@@ -238,7 +239,7 @@
+ #ifdef LIRC_HAVE_DEVFS_24
+ 	char name[16];
+ #endif
+-	DECLARE_MUTEX_LOCKED(tn);
++	DECLARE_COMPLETION(tn);
+ 
+ 	if (!p) {
+ 		printk(KERN_ERR "lirc_dev: lirc_register_plugin: "
+@@ -389,7 +390,7 @@
+ 			err = -ECHILD;
+ 			goto out_sysfs;
+ 		}
+-		down(&tn);
++		wait_for_completion(&tn);
+ 		ir->t_notify = NULL;
+ 	}
+ 	ir->attached = 1;
+@@ -425,8 +426,8 @@
+ int lirc_unregister_plugin(int minor)
+ {
+ 	struct irctl *ir;
+-	DECLARE_MUTEX_LOCKED(tn);
+-	DECLARE_MUTEX_LOCKED(tn2);
++	DECLARE_COMPLETION(tn);
++	DECLARE_COMPLETION(tn2);
+ 
+ 	if (minor < 0 || minor >= MAX_IRCTL_DEVICES) {
+ 		printk(KERN_ERR "lirc_dev: lirc_unregister_plugin: "
+@@ -462,8 +463,8 @@
+ 		/* 2.2.x does not export wake_up_process() */
+ 		wake_up_interruptible(ir->p.get_queue(ir->p.data));
+ #endif
+-		up(&tn2);
+-		down(&tn);
++		complete(&tn2);
++		wait_for_completion(&tn);
+ 		ir->t_notify = NULL;
+ 		ir->t_notify2 = NULL;
+ 	}
+diff -Naur lirc-0.8.3pre1.orig/drivers/lirc_serial/lirc_serial.c lirc-0.8.3pre1/drivers/lirc_serial/lirc_serial.c
+--- lirc-0.8.3pre1.orig/drivers/lirc_serial/lirc_serial.c	2007-12-27 01:27:36.143803257 +0100
++++ lirc-0.8.3pre1/drivers/lirc_serial/lirc_serial.c	2007-12-27 01:29:38.149303268 +0100
+@@ -961,7 +961,7 @@
+ 	do_gettimeofday(&lasttv);
+ 
+ 	result = request_irq(irq, irq_handler,
+-			   SA_INTERRUPT | (share_irq ? SA_SHIRQ:0),
++			   IRQF_DISABLED | (share_irq ? IRQF_SHARED:0),
+ 			   LIRC_DRIVER_NAME, (void *)&hardware);
+ 
+ 	switch (result) {
+diff -Naur lirc-0.8.3pre1.orig/drivers/lirc_sir/lirc_sir.c lirc-0.8.3pre1/drivers/lirc_sir/lirc_sir.c
+--- lirc-0.8.3pre1.orig/drivers/lirc_sir/lirc_sir.c	2007-12-28 15:11:48.142285437 +0100
++++ lirc-0.8.3pre1/drivers/lirc_sir/lirc_sir.c	2007-12-28 15:13:05.561290741 +0100
+@@ -1025,7 +1025,7 @@
+ 		return -EBUSY;
+ 	}
+ #endif
+-	retval = request_irq(irq, sir_interrupt, SA_INTERRUPT,
++	retval = request_irq(irq, sir_interrupt, IRQF_DISABLED,
+ 			     LIRC_DRIVER_NAME, NULL);
+ 	if (retval < 0) {
+ #               ifndef LIRC_ON_SA1100

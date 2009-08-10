@@ -1,0 +1,68 @@
+--- daemons/hw_audio.c.orig	2008-06-13 22:24:40.000000000 +0200
++++ daemons/hw_audio.c	2008-06-13 22:17:31.000000000 +0200
+@@ -66,7 +66,7 @@
+ }
+ paTestData;
+ 
+-PortAudioStream *stream;
++PaStream *stream;
+ 
+ 
+ extern struct ir_remote *repeat_remote;
+@@ -90,7 +90,9 @@
+ 
+ static int recordCallback( void *inputBuffer, void *outputBuffer,
+                            unsigned long framesPerBuffer,
+-                           PaTimestamp outTime, void *userData )
++                           PaStreamCallbackTimeInfo outTime,
++                           PaStreamCallbackFlags status,
++                           void *userData )
+ {
+ 	paTestData *data = (paTestData*)userData;
+ 	SAMPLE *rptr = (SAMPLE*)inputBuffer;
+@@ -215,6 +217,7 @@
+ int audio_init()
+ {
+ 
++	PaStreamParameters inputParameters;
+ 	PaError    err;
+ 	int 		flags;
+ 	struct termios	t;
+@@ -237,22 +240,27 @@
+ 	err = Pa_Initialize();
+ 	if( err != paNoError ) goto error;
+ 
++	inputParameters.device = Pa_GetDefaultInputDevice(); /* default input device */
++	if (inputParameters.device == paNoDevice) {
++		logprintf(LOG_ERR, "No default input device");
++		goto error;
++	}
++	inputParameters.channelCount = NUM_CHANNELS;	/* stereo input */
++	inputParameters.sampleFormat = PA_SAMPLE_TYPE;
++	inputParameters.suggestedLatency =
++		Pa_GetDeviceInfo( inputParameters.device )->defaultLowInputLatency;
++	inputParameters.hostApiSpecificStreamInfo = NULL;
++
++
+ 	// Record some audio. --------------------------------------------
+ 	err = Pa_OpenStream
+ 		(
+ 		 &stream,
+-		 Pa_GetDefaultInputDeviceID(),
+-		 NUM_CHANNELS,               // stereo input
+-		 PA_SAMPLE_TYPE,
+-		 NULL,
+-		 paNoDevice,
+-		 0,
+-		 PA_SAMPLE_TYPE,
+-		 NULL,
++		 &inputParameters,
++		 NULL,		  // output parameters
+ 		 SAMPLE_RATE,
+ 		 512,             // frames per buffer 
+-		 0,               // number of buffers, if zero then use default minimum 
+-		 0, 			   // flags 
++		 0, 		  // flags 
+ 		 recordCallback,
+ 		 &data );
+ 

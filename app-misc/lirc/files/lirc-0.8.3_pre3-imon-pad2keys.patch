@@ -1,0 +1,291 @@
+diff -ruN lirc-0.8.3pre3-orig/drivers/lirc_imon/lirc_imon.c lirc-0.8.3pre3/drivers/lirc_imon/lirc_imon.c
+--- lirc-0.8.3pre3-orig/drivers/lirc_imon/lirc_imon.c	2008-04-28 22:15:54.281654857 +0200
++++ lirc-0.8.3pre3/drivers/lirc_imon/lirc_imon.c	2008-04-28 22:16:51.381649620 +0200
+@@ -73,9 +73,9 @@
+ 
+ 
+ #define MOD_AUTHOR	"Venky Raju <dev@venky.ws>"
+-#define MOD_DESC	"Driver for Soundgraph iMON MultiMedia IR/VFD"
++#define MOD_DESC	"Driver for Soundgraph iMON MultiMedia IR/VFD w/imon pad2keys patch"
+ #define MOD_NAME	"lirc_imon"
+-#define MOD_VERSION	"0.3"
++#define MOD_VERSION	"0.3p2k"
+ 
+ #define VFD_MINOR_BASE	144	/* Same as LCD */
+ #define DEVFS_MODE	(S_IFCHR | S_IRUSR | S_IWUSR | \
+@@ -91,6 +91,7 @@
+ #define	TRUE		1
+ #define FALSE		0
+ 
++#define CURSOR_LIMIT    16
+ 
+ /* ------------------------------------------------------------
+  *		     P R O T O T Y P E S
+@@ -177,6 +178,10 @@
+ 		atomic_t busy;			/* write in progress */
+ 		int status;			/* status of tx completion */
+ 	} tx;
++        
++        int key_x;
++        int key_y;
++        int last_count;                      /* number of times pressed   */
+ };
+ 
+ #define LOCK_CONTEXT	down(&context->sem)
+@@ -248,6 +253,9 @@
+ static int is_lcd; /* If LIRC_IMON_LCD not defined, default to non-LCD */
+ #endif
+ 
++/* pad2keys module parameter. pad2keys patch active? */
++static int pad2keys_active = 0;
++
+ #if !defined(KERNEL_2_5)
+ 
+ #define MAX_DEVICES	4	/* In case there's more than one iMON device */
+@@ -271,6 +279,7 @@
+ 
+ MODULE_AUTHOR(MOD_AUTHOR);
+ MODULE_DESCRIPTION(MOD_DESC);
++MODULE_VERSION(MOD_VERSION);    /* MBr: was missing */
+ MODULE_LICENSE("GPL");
+ MODULE_DEVICE_TABLE(usb, imon_usb_id_table);
+ 
+@@ -287,6 +296,9 @@
+ 		 "1=yes (default:no)");
+ #endif
+ 
++module_param (pad2keys_active, int, 0);
++MODULE_PARM_DESC (pad2keys_active, "pad2keys patch active: 0=no, 1=yes (default: no)");
++ 
+ static inline void delete_context(struct imon_context *context)
+ {
+ 	if (context->vfd_supported)
+@@ -766,6 +778,11 @@
+ 	context->rx.initial_space = 1;
+ 	context->rx.prev_bit = 0;
+ 
++        /* init pad context for pad2keys */
++        context ->key_x = 0;
++        context ->key_y = 0;
++        context ->last_count = 0;
++ 
+ 	usb_fill_int_urb(context->rx_urb, context->dev,
+ 		usb_rcvintpipe(context->dev,
+ 				context->rx_endpoint->bEndpointAddress),
+@@ -915,6 +932,94 @@
+ 
+ 	if (context->ir_onboard_decode) {
+ 		/* The signals have been decoded onboard the iMON controller */
++                
++                if (pad2keys_active)
++                {
++                   /* imon pad2keys patch
++                    *
++                    * make PAD and mouse buttons available for use with VDR,
++                    * based on pad-mouse-emu patch from venky's forum
++                    *
++                    * last change: M.Brakemeier 2007-10-14
++                    *
++                    * generated PAD key codes:
++                    * Mouse_N                  0x690281B7
++                    * Mouse_S                  0x688291B7
++                    * Mouse_W                  0x6A8281B7
++                    * Mouse_E                  0x688A81B7
++                    *
++                    * mouse buttons (non-synthetic):
++                    * MouseRightClick          0x688481B7
++                    * MouseLeftClick           0x688301B7
++                    */
++                    if((buf[0] & 0x40) &&
++                        !(buf[1] & 0x01 || buf[1] >> 2 & 0x01))
++                    {
++                        int rel_x = (buf[1] & 0x08) | (buf[1] & 0x10) >> 2 | (buf[1] & 0x20) >> 4 | (buf[1] & 0x40) >> 6;
++                        int rel_y = (buf[2] & 0x08) | (buf[2] & 0x10) >> 2 | (buf[2] & 0x20) >> 4 | (buf[2] & 0x40) >> 6;
++        
++                        if(buf[0] & 0x02)
++                            rel_x |= ~0x10+1;
++                        if(buf[0] & 0x01)
++                            rel_y |= ~0x10+1;
++        
++                        /* keyboard direction key emulation */
++                        if( context->last_count > 32 )
++                        {  /* Hopefully eliminate drift*/
++                            context->last_count=0;
++                            context->key_y=0;
++                            context->key_x=0;
++                        }
++                        context->last_count++;
++        
++                        /* limit decoded events */
++                        if(abs(context->key_x) > CURSOR_LIMIT || abs(context->key_y) > CURSOR_LIMIT )
++                        {
++                            if(abs(context->key_y ) > abs(context->key_x))
++                            { /* mouse s/n */
++                                if(context->key_y > 0 && rel_y > 0)
++                                { /* mouse s */
++                                    buf[0] = 0x68;
++                                    buf[1] = 0x82;
++                                    buf[2] = 0x91;
++                                }
++                                else if(context->key_y < 0 && rel_y < 0)
++                                { /* mouse n */
++                                    buf[0] = 0x69;
++                                    buf[1] = 0x02;
++                                    buf[2] = 0x81;
++                                }
++                            }
++                            else
++                            { /* mouse e/w*/
++                                if(context->key_x > 0 && rel_x > 0 )
++                                { /* mouse e */
++                                    buf[0] = 0x68;
++                                    buf[1] = 0x8A;
++                                    buf[2] = 0x81;
++                                }
++                                else if(context->key_x < 0 && rel_x < 0  )
++                                { /* mouse w */
++                                    buf[0] = 0x6A;
++                                    buf[1] = 0x82;
++                                    buf[2] = 0x81;
++                                }
++                            }
++                        }
++                        else
++                        {
++                            context->key_x += rel_x;
++                            context->key_y += rel_y;
++        
++                            return; /* discard those key codes */
++                        }
++                    }
++                    /* a key was pressed, reset count */
++                    context->key_x = 0;
++                    context->key_y = 0;
++                    context->last_count = 0;
++                }
++                
+ 		lirc_buffer_write_1(context->plugin->rbuf, buf);
+ 		wake_up(&context->plugin->rbuf->wait_poll);
+ 		return;
+diff -ruN lirc-0.8.3pre3-orig/drivers/lirc_imon/lirc_imon.c.rej lirc-0.8.3pre3/drivers/lirc_imon/lirc_imon.c.rej
+--- lirc-0.8.3pre3-orig/drivers/lirc_imon/lirc_imon.c.rej	1970-01-01 01:00:00.000000000 +0100
++++ lirc-0.8.3pre3/drivers/lirc_imon/lirc_imon.c.rej	2008-04-28 22:16:02.941653915 +0200
+@@ -0,0 +1,26 @@
++***************
++*** 271,280 ****
++  
++  MODULE_AUTHOR(MOD_AUTHOR);
++  MODULE_DESCRIPTION(MOD_DESC);
++  MODULE_LICENSE("GPL");
++  MODULE_DEVICE_TABLE(usb, imon_usb_id_table);
++  module_param(debug, int, 0);
++  MODULE_PARM_DESC(debug, "Debug messages: 0=no, 1=yes(default: no)");
++  
++  static inline void delete_context(struct imon_context *context)
++  {
++--- 279,291 ----
++  
++  MODULE_AUTHOR(MOD_AUTHOR);
++  MODULE_DESCRIPTION(MOD_DESC);
+++ MODULE_VERSION(MOD_VERSION);    /* MBr: was missing */
++  MODULE_LICENSE("GPL");
++  MODULE_DEVICE_TABLE(usb, imon_usb_id_table);
++  module_param(debug, int, 0);
++  MODULE_PARM_DESC(debug, "Debug messages: 0=no, 1=yes(default: no)");
+++ module_param (pad2keys_active, int, 0);
+++ MODULE_PARM_DESC (pad2keys_active, "pad2keys patch active: 0=no, 1=yes (default: no)");
++  
++  static inline void delete_context(struct imon_context *context)
++  {
+diff -ruN lirc-0.8.3pre3-orig/remotes/imon/lircd.conf.imon-pad2keys lirc-0.8.3pre3/remotes/imon/lircd.conf.imon-pad2keys
+--- lirc-0.8.3pre3-orig/remotes/imon/lircd.conf.imon-pad2keys	1970-01-01 01:00:00.000000000 +0100
++++ lirc-0.8.3pre3/remotes/imon/lircd.conf.imon-pad2keys	2008-04-28 22:16:02.941653915 +0200
+@@ -0,0 +1,88 @@
++# Please make this file available to others
++# by sending it to <lirc@bartelmus.de>
++#
++# this config file was generated
++# using lirc-0.8.3pre1 (imon w/pad2keys patch)
++#
++# contributed by M.Brakemeier
++#
++# brand:                       SoundGraph
++# model no. of remote control: iMON-PAD
++# devices being controlled by this remote:
++#
++
++begin remote
++
++  name     iMON-PAD
++  bits           32
++  eps            30
++  aeps          100
++
++  one             0     0
++  zero            0     0
++  gap          235965
++  min_repeat      1
++  toggle_bit      0
++
++    begin codes
++        AppExit                  0x288195B7
++        Power                    0x289115B7
++        Record                   0x298115B7
++        Play                     0x2A8115B7
++        Open                     0x29B1D5B7
++        Rewind                   0x2A8195B7
++        Pause                    0x2A9115B7
++        FastForward              0x2B8115B7
++        PrevChapter              0x2B9115B7
++        Stop                     0x2B9715B7
++        NextChapter              0x298195B7
++        Esc                      0x2BB715B7
++        Eject                    0x299395B7
++        AppLauncher              0x29B715B7
++        MultiMon                 0x2AB195B7
++        TaskSwitcher             0x2A9395B7
++        Mute                     0x2B9595B7
++        Vol+                     0x28A395B7
++        Vol-                     0x28A595B7
++        Ch+                      0x289395B7
++        Ch-                      0x288795B7
++        Timer                    0x2B8395B7
++        1                        0x28B595B7
++        2                        0x2BB195B7
++        3                        0x28B195B7
++        4                        0x2A8595B7
++        5                        0x299595B7
++        6                        0x2AA595B7
++        7                        0x2B9395B7
++        8                        0x2A8515B7
++        9                        0x2AA115B7
++        0                        0x2BA595B7
++        ShiftTab                 0x28B515B7
++        Tab                      0x29A115B7
++        Red                      0x2B8515B7 # MyMovie
++        Green                    0x299195B7 # MyMusic
++        Blue                     0x2BA115B7 # MyPhoto
++        Yellow                   0x28A515B7 # MyTV
++        Bookmark                 0x288515B7
++        Thumbnail                0x2AB715B7
++        AspectRatio              0x29A595B7
++        FullScreen               0x2AA395B7
++        Purple                   0x29A295B7 # MyDVD
++        Menu                     0x2BA385B7
++        Caption                  0x298595B7
++        Language                 0x2B8595B7
++        MouseKeyboard            0x299115B7
++        SelectSpace              0x2A9315B7
++        MouseMenu                0x28B715B7
++        MouseRightClick          0x688481B7
++        Enter                    0x28A195B7
++        MouseLeftClick           0x688301B7
++        WindowsKey               0x2B8195B7
++        Backspace                0x28A115B7
++        Mouse_N                  0x690281B7
++        Mouse_S                  0x688291B7
++        Mouse_W                  0x6A8281B7
++        Mouse_E                  0x688A81B7
++    end codes
++
++end remote 
