@@ -165,4 +165,8 @@ multilib-native_src_install_internal() {
 
 	# Fix perllocal.pod file collision
 	use perl && fixlocalpod
+
+	prep_ml_binaries /usr/bin/Magick++-config /usr/bin/Magick-config \
+			/usr/bin/MagickCore-config /usr/bin/MagickWand-config \
+			/usr/bin/Wand-config
 }

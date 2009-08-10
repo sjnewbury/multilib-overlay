@@ -83,6 +83,7 @@ multilib-native_src_configure_internal() {
 multilib-native_src_install_internal() {
 	make install DESTDIR="${D}" || die
 	dodoc README AUTHORS CREDITS ChangeLog NEWS TODO
+	prep_ml_binaries /usr/bin/libwmf-config
 }
 
 set_gtk_confdir() {
