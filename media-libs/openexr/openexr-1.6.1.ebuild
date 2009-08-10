@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/openexr/openexr-1.6.1.ebuild,v 1.12 2009/02/28 16:59:42 armin76 Exp $
 
+EAPI="2"
+
 inherit libtool eutils multilib-native
 
 DESCRIPTION="ILM's OpenEXR high dynamic-range image file format libraries"
@@ -13,14 +15,11 @@ SLOT="0"
 KEYWORDS="alpha amd64 -arm hppa ia64 ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="doc examples"
 
-RDEPEND="media-libs/ilmbase"
+RDEPEND="media-libs/ilmbase[lib32?]"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
-multilib-native_src_unpack_internal() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	# Replace the temporary directory used for tests.
 	sed -i -e 's:"/var/tmp/":"'${T}'":' "IlmImfTest/tmpDir.h"
 
@@ -30,12 +29,11 @@ multilib-native_src_unpack_internal() {
 	elibtoolize
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	econf $(use_enable examples imfexamples)
-	emake || die "emake failed"
 }
 
-src_install () {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" examplesdir="/usr/share/doc/${PF}/examples" install || \
 		die "install failed"
 	dodoc AUTHORS ChangeLog NEWS README
