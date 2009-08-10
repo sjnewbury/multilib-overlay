@@ -26,7 +26,7 @@ src_prepare() {
 	find . -type f -print0 | xargs -0 touch -r configure
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	econf \
 		$(use_with fontconfig) \
 		$(use_with png) \
@@ -34,7 +34,6 @@ multilib-native_src_compile_internal() {
 		$(use_with jpeg) \
 		$(use_with xpm) \
 		|| die
-	emake || die
 }
 
 multilib-native_src_install_internal() {
