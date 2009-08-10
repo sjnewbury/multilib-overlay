@@ -1,0 +1,22 @@
+>=dev-libs/libcdio-0.71[-minimal] !minimal? ( dev-libs/popt ) xml? ( >=dev-libs/libxml2-2.5.11 ) dev-util/pkgconfig
+>=dev-libs/libcdio-0.71[-minimal] !minimal? ( dev-libs/popt ) xml? ( >=dev-libs/libxml2-2.5.11 )
+0
+http://www.vcdimager.org/pub/vcdimager/vcdimager-0.7/vcdimager-0.7.23.tar.gz
+test
+http://www.vcdimager.org/
+GPL-2
+GNU VCDimager
+~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd
+
+xml minimal
+
+
+
+2
+
+-
+
+
+
+
+
