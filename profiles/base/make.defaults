@@ -1,4 +1,4 @@
-NO-AUTO-FLAG=" \
+NO_AUTO_FLAG=" \
         dev-lang/yasm \
         kde-base/automoc \
 	media-sound/alsa-headers \
