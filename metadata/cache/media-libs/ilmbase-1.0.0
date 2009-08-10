@@ -1,0 +1,22 @@
+!<media-libs/openexr-1.5.0 sys-apps/abi-wrapper
+!<media-libs/openexr-1.5.0 sys-apps/abi-wrapper
+0
+http://download.savannah.nongnu.org/releases/openexr/ilmbase-1.0.0.tar.gz
+
+http://openexr.com/
+BSD
+OpenEXR ILM Base libraries
+~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd
+base eutils libtool multilib multilib-native portability toolchain-funcs
+lib32
+
+
+
+
+
+compile install postinst postrm preinst setup unpack
+
+
+
+
+
