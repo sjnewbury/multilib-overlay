@@ -23,13 +23,8 @@ then add the new useflag to the database or compile everything with a new usefla
 run bin/add_lib32 or emerge -aDN world
 
 3.
-to save some compile time, there is a list of packages, which are usually not needed for 32bit libs
-either use the profile in /etc:
-	-check the target of /etc/make.profile, rm /etc/make.profile, mkdir /etc/make.profile,
-	echo /path/to/current/profile >> /etc/make.profile/parent, echo /path/to/multilib-overlay/profiles/base >> /etc/make.profile/parent
-OR
-	add the NO-AUTO-FLAG var to the portage environment (e.g. to /etc/make.conf):
-	-cat profiles/base/make.defaults >> /etc/make.conf
+-check the target of /etc/make.profile, rm /etc/make.profile, mkdir /etc/make.profile,
+-echo /path/to/current/profile >> /etc/make.profile/parent, echo /path/to/multilib-overlay/profiles/base >> /etc/make.profile/parent
 
 4.
 let the multilib overlay eclasses override the main tree ones: add the following to /etc/portage/repos.conf or create it with the following content:

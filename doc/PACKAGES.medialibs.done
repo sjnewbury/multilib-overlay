@@ -1,6 +1,0 @@
-dev-libs/fribidi[lib32]
-media-libs/libdv[lib32]
-media-libs/libmad[lib32]
-media-libs/libtheora[lib32]
-media-libs/xvid[lib32]
-media-sound/lame[lib32]
