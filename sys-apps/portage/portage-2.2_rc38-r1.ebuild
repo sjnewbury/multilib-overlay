@@ -5,7 +5,7 @@
 inherit eutils git multilib python
 
 EGIT_REPO_URI="git://github.com/TommyD/gentoo-portage-multilib.git"
-EGIT_TREE="65dca00c0d483e80eaebb5b99f1157796d36511b"
+EGIT_TREE="adb6f14ff4963ef57237fab05485bafe39b79432"
 DESCRIPTION="Portage is the package management and distribution system for Gentoo"
 HOMEPAGE="http://www.gentoo.org/proj/en/portage/index.xml"
 LICENSE="GPL-2"
