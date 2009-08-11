@@ -1,5 +1,5 @@
-readline? ( sys-libs/readline ) sys-apps/abi-wrapper
-readline? ( sys-libs/readline ) sys-apps/abi-wrapper
+readline? ( sys-libs/readline[lib32?] ) sys-apps/abi-wrapper
+readline? ( sys-libs/readline[lib32?] ) sys-apps/abi-wrapper
 0
 http://www.lua.org/ftp/lua-5.1.4.tar.gz
 
@@ -12,9 +12,9 @@ base eutils multilib multilib-native portability toolchain-funcs versionator
 
 
 
-1
+2
 
-compile install postinst postrm preinst setup test unpack
+compile configure install postinst postrm preinst prepare setup test unpack
 
 
 
