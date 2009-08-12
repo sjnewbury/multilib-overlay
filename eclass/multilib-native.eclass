@@ -557,6 +557,17 @@ multilib-native_pkg_postrm_internal() {
 # @FUNCTION: _check_build_dir
 # @USAGE:
 # @DESCRIPTION:
+# True if we are cross-compiling.
+is_crosscompile() {
+This is identical to the version in
+# toolchain.eclass, but inheriting that eclass from here breaks many packages
+# so just define locally.
+	[[ ${CHOST} != ${CTARGET} ]]
+}
+
+# @FUNCTION: _check_build_dir
+# @USAGE:
+# @DESCRIPTION:
 # This function overrides the function of the same name
 # in cmake-utils.eclass.  We handle the build dir ourselves. 
 # Determine using IN or OUT source build
