@@ -24,7 +24,7 @@ RDEPEND="x11-libs/libXt[lib32?]
 	x11-libs/libXp[lib32?]"
 DEPEND="${RDEPEND}
 	x11-misc/gccmakedep
-	x11-misc/imake
+	x11-misc/imake[lib32?]
 	app-text/rman
 	x11-proto/xproto"
 
@@ -32,7 +32,8 @@ multilib-native_src_compile_internal() {
 	xmkmf || die "xmkmf failed."
 	touch doc/man/lib/tmp.{_man,man}
 	emake \
-		MAKE="${MAKE:-gmake}" CDEBUGFLAGS="${CFLAGS}" CXXDEBUFLAGS="${CXXFLAGS}" \
+		LIBDIR="/usr/$(get_libdir)/X11" MAKE="${MAKE:-gmake}" \
+		CDEBUGFLAGS="${CFLAGS}" CXXDEBUFLAGS="${CXXFLAGS}" \
 		CC="$(tc-getCC)" CXX="$(tc-getCXX)" AS="$(tc-getAS)" LD="$(tc-getLD)" \
 		RANLIB="$(tc-getRANLIB)" World || die "emake failed."
 }
