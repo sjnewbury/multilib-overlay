@@ -16,7 +16,7 @@ if use lib32; then
 	EMULTILIB_PKG="true"
 fi
 
-inherit base multilib
+inherit base multilib toolchain
 
 case "${EAPI:-0}" in
 	2)
