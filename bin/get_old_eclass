@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# this script is provided to get an outdated version of a portage eclass,
+# which can be handy for comparison
+
+if [ ! "${1}" ] && [ ! "${2}" ]; then
+	echo "the name of the ebuild and a revision must be provided" >&2
+	echo "e.g. ${0} qt4-build.eclass 1.41" >&2
+	exit 1
+fi
+
+URI="http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/eclass/"
+
+wget "${URI}${1}?rev=${2}"

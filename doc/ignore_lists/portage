@@ -53,3 +53,4 @@
 ./media-libs/fontconfig/fontconfig-9999.ebuild
 ./media-libs/glitz/glitz-9999.ebuild
 ./media-libs/mesa/mesa-9999.ebuild
+./sys-apps/abi-wrapper/abi-wrapper-1.0-r1.ebuild
