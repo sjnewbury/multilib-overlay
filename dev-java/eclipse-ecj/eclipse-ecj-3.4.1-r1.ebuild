@@ -15,7 +15,7 @@ SRC_URI="http://download.eclipse.org/eclipse/downloads/drops/${DMF}/${MY_PN}src-
 IUSE="gcj java6"
 
 LICENSE="EPL-1.0"
-KEYWORDS="~amd64 ~ia64 ~ppc ~ppc64 ~x86 ~x86-fbsd"
+KEYWORDS=""
 SLOT="3.4"
 
 CDEPEND=">=app-admin/eselect-ecj-0.3

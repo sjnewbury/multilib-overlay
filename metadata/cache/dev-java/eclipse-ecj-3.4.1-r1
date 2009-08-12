@@ -6,7 +6,7 @@ http://download.eclipse.org/eclipse/downloads/drops/R-3.4.1-200809111700/ecjsrc-
 http://www.eclipse.org/
 EPL-1.0
 Eclipse Compiler for Java
-~amd64 ~ia64 ~ppc ~ppc64 ~x86 ~x86-fbsd
+
 check-reqs eutils flag-o-matic java-pkg-2 java-utils-2 multilib portability toolchain-funcs versionator
 gcj java6 elibc_FreeBSD gcj multislot
 

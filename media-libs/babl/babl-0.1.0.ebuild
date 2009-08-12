@@ -10,7 +10,7 @@ SRC_URI="ftp://ftp.gtk.org/pub/${PN}/0.1/${P}.tar.bz2"
 
 LICENSE="LGPL-3"
 SLOT="0"
-KEYWORDS="alpha amd64 hppa ia64 ppc ~ppc64 sparc x86"
+KEYWORDS=""
 IUSE="sse mmx"
 
 DEPEND="virtual/libc"

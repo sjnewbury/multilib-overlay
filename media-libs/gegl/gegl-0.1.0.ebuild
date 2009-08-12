@@ -12,7 +12,7 @@ SRC_URI="ftp://ftp.gimp.org/pub/${PN}/0.1/${P}.tar.bz2"
 
 LICENSE="|| ( GPL-3 LGPL-3 )"
 SLOT="0"
-KEYWORDS="alpha amd64 hppa ia64 ppc ~ppc64 sparc x86"
+KEYWORDS=""
 
 IUSE="cairo debug doc ffmpeg jpeg mmx openexr png raw sdl sse svg v4l"
 
