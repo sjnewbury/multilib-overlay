@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gentoo.org/"
 SRC_URI=""
 
 LICENSE="GPL-2"
-KEYWORDS="~amd64 ~ppc ~ppc64 ~x86 ~arm"
+KEYWORDS=""
 IUSE="nsplugin multislot"
 
 # SLOT logic from toolchain.eclass

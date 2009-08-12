@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gnome.org/projects/evolution/"
 
 LICENSE="LGPL-2 Sleepycat"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS=""
 IUSE="doc ipv6 kerberos gnome-keyring krb4 ldap ssl"
 
 RDEPEND=">=dev-libs/glib-2.16.1[lib32?]

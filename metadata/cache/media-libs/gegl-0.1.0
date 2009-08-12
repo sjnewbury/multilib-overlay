@@ -6,7 +6,7 @@ ftp://ftp.gimp.org/pub/gegl/0.1/gegl-0.1.0.tar.bz2
 http://www.gegl.org/
 || ( GPL-3 LGPL-3 )
 A graph based image processing framework
-alpha amd64 hppa ia64 ppc ~ppc64 sparc x86
+
 autotools base eutils libtool multilib multilib-native portability toolchain-funcs
 cairo debug doc ffmpeg jpeg mmx openexr png raw sdl sse svg v4l lib32
 
