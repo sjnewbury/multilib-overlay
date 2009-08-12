@@ -1,6 +1,6 @@
 # Copyright 2007-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.43 2009/07/31 22:18:31 tommy Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.44 2009/08/11 14:44:16 hwoarang Exp $
 
 # @ECLASS: qt4-build.eclass
 # @MAINTAINER:
@@ -57,8 +57,8 @@ esac
 MY_P=qt-x11-${SRCTYPE}-${MY_PV}
 S=${WORKDIR}/${MY_P}
 
-HOMEPAGE="http://www.qtsoftware.com/"
-SRC_URI="http://get.qtsoftware.com/qt/source/${MY_P}.tar.bz2"
+HOMEPAGE="http://qt.nokia.com/"
+SRC_URI="http://download.qt.nokia.com/qt/source/${MY_P}.tar.bz2"
 
 case "${PV}" in
 	4.4.?) SRC_URI="${SRC_URI} mirror://gentoo/${MY_P}-headers.tar.bz2" ;;
