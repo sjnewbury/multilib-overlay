@@ -81,6 +81,7 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
+	gnome2_src_prepare
 	epatch "${FILESDIR}/gimp-2.6.6-gegl_babl_versions_check-1.patch"
 }
 
