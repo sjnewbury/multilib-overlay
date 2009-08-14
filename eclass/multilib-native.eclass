@@ -427,7 +427,7 @@ multilib-native_restore_abi_env() {
 	local _var _array
 	for _var in ${EMULTILIB_SAVE_VARS}; do
 		_array="EMULTILIB_${_var}[$(multilib-native_abi_to_index_key ${1})]"
-		if !(declare -p EMULTILIB_${_var} &>/dev/null) || \
+		if ! (declare -p EMULTILIB_${_var} &>/dev/null) || \
 						[[ -z ${!_array} ]]; then
 			if (declare -p ${_var} &>/dev/null); then
 				[[ -n ${MULTILIB_DEBUG} ]] && \
