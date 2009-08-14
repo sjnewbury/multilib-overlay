@@ -108,6 +108,6 @@ multilib-native_src_install_internal() {
 	dodoc docs/FEATURES docs/INTERNALS
 	dodoc docs/MANUAL docs/FAQ docs/BUGS docs/CONTRIBUTE
 
-	prep_ml_binaries /usr/bin/curl-config 
+	prep_ml_binaries /usr/bin/curl-config
 	prep_ml_includes /usr/include/curl
 }

@@ -175,5 +175,5 @@ multilib-native_src_install_internal() {
 
 	dodoc ChangeLog
 
-	prep_ml_binaries /usr/bin/xine-config 
+	prep_ml_binaries /usr/bin/xine-config
 }

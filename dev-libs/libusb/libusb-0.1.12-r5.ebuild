@@ -55,5 +55,5 @@ multilib-native_src_install_internal() {
 	gen_usr_ldscript -a usb
 	use nocxx && rm -f "${D}"/usr/include/usbpp.h
 
-	prep_ml_binaries /usr/bin/libusb-config 
+	prep_ml_binaries /usr/bin/libusb-config
 }

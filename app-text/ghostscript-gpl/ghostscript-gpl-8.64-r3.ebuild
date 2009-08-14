@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-text/ghostscript-gpl/ghostscript-gpl-8.64-r3.ebuild,v 1.7 2009/05/26 06:05:25 pva Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit autotools eutils versionator flag-o-matic multilib-native
 
@@ -125,7 +125,7 @@ multilib-native_src_unpack_internal() {
 
 }
 
-multilib-native_src_unpack_internal() {
+multilib-native_src_prepare_internal() {
 	cd "${S}"
 	eautoreconf
 

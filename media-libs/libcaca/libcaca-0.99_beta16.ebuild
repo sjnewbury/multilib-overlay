@@ -65,5 +65,5 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS ChangeLog NEWS NOTES README
 
-	prep_ml_binaries /usr/bin/caca-config 
+	prep_ml_binaries /usr/bin/caca-config
 }

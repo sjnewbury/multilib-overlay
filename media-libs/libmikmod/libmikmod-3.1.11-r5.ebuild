@@ -48,5 +48,5 @@ multilib-native_src_install_internal() {
 	dodoc AUTHORS NEWS README TODO
 	dohtml docs/*.html
 
-	prep_ml_binaries /usr/bin/libmikmod-config 
+	prep_ml_binaries /usr/bin/libmikmod-config
 }

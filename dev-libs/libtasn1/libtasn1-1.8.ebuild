@@ -24,5 +24,5 @@ multilib-native_src_install_internal() {
 	dodoc AUTHORS ChangeLog NEWS README THANKS
 	use doc && dodoc doc/asn1.ps
 
-	prep_ml_binaries /usr/bin/libtasn1-config 
+	prep_ml_binaries /usr/bin/libtasn1-config
 }

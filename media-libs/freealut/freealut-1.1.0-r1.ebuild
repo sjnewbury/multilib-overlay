@@ -33,5 +33,5 @@ multilib-native_src_install_internal() {
 	dodoc AUTHORS ChangeLog NEWS README
 	dohtml doc/*
 
-	prep_ml_binaries /usr/bin/freealut-config 
+	prep_ml_binaries /usr/bin/freealut-config
 }

@@ -155,7 +155,7 @@ multilib-native_src_install_internal() {
 			s|instpath|${MOZILLA_FIVE_HOME}|" \
 		"${D}"/etc/gre.d/${PV}-${ABI}.conf
 
-	prep_ml_binaries /usr/bin/xulrunner-config 
+	prep_ml_binaries /usr/bin/xulrunner-config
 }
 
 pkg_postinst() {
