@@ -36,5 +36,5 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS ChangeLog NEWS README* THANKS TODO
 
-	prep_ml_binaries /usr/bin/libgcrypt-config 
+	prep_ml_binaries /usr/bin/libgcrypt-config
 }

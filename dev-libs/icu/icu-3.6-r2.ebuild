@@ -33,5 +33,5 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dohtml ../readme.html ../license.html
 
-	prep_ml_binaries /usr/bin/icu-config 
+	prep_ml_binaries /usr/bin/icu-config
 }

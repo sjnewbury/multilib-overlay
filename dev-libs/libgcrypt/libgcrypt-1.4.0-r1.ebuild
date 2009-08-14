@@ -53,7 +53,7 @@ multilib-native_src_install_internal() {
 	make DESTDIR="${D}" install || die
 	dodoc AUTHORS BUGS ChangeLog NEWS README* THANKS TODO VERSION
 
-	prep_ml_binaries /usr/bin/libgcrypt-config 
+	prep_ml_binaries /usr/bin/libgcrypt-config
 }
 
 pkg_postinst() {

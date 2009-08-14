@@ -1,42 +1,42 @@
 #config scripts
-app-crypt/mit-krb5 prep_ml_binaries /usr/bin/krb5-config 
-dev-libs/fribidi prep_ml_binaries /usr/bin/fribidi-config 
-dev-libs/glib prep_ml_binaries /usr/bin/glib-config 
-dev-libs/icu prep_ml_binaries /usr/bin/icu-config 
-dev-libs/libgcrypt prep_ml_binaries /usr/bin/libgcrypt-config 
-dev-libs/libgpg-error prep_ml_binaries /usr/bin/gpg-error-config 
-dev-libs/libpcre prep_ml_binaries /usr/bin/pcre-config 
-dev-libs/libtasn1 prep_ml_binaries /usr/bin/libtasn1-config 
-dev-libs/libusb prep_ml_binaries /usr/bin/libusb-config 
-dev-libs/libxml2 prep_ml_binaries /usr/bin/xml2-config 
-dev-libs/libxslt prep_ml_binaries /usr/bin/xslt-config 
-dev-libs/nspr prep_ml_binaries /usr/bin/nspr-config 
-dev-libs/nss prep_ml_binaries /usr/bin/nss-config 
-gnome-base/orbit prep_ml_binaries /usr/bin/orbit2-config 
-media-gfx/imagemagick prep_ml_binaries /usr/bin/orbit2-config 
-media-libs/aalib prep_ml_binaries /usr/bin/aalib-config 
-media-libs/audiofile prep_ml_binaries /usr/bin/audiofile-config 
-media-libs/freealut prep_ml_binaries /usr/bin/freealut-config 
-media-libs/freetype prep_ml_binaries /usr/bin/freetype-config 
-media-libs/imlib2 prep_ml_binaries /usr/bin/imlib2-config 
-media-libs/libart_lgpl prep_ml_binaries /usr/bin/libart2-config 
-media-libs/libcaca prep_ml_binaries /usr/bin/caca-config 
-media-libs/libmikmod prep_ml_binaries /usr/bin/libmikmod-config 
-media-libs/libpng prep_ml_binaries /usr/bin/libpng-config /usr/bin/libpng12-config 
-media-libs/libsdl prep_ml_binaries /usr/bin/sdl-config 
-media-libs/smpeg prep_ml_binaries /usr/bin/smpeg-config 
-media-libs/xine-lib prep_ml_binaries /usr/bin/xine-config 
-media-sound/esound prep_ml_binaries /usr/bin/esd-config 
-net-libs/gnutls prep_ml_binaries /usr/bin/libgnutls-config /usr/bin/libgnutls-extra-config 
-net-libs/xulrunner prep_ml_binaries /usr/bin/xulrunner-config 
-net-misc/curl prep_ml_binaries /usr/bin/curl-config 
-net-print/cups prep_ml_binaries /usr/bin/cups-config 
-sys-libs/ncurses prep_ml_binaries /usr/bin/ncurses5-config /usr/bin/ncursesw5-config 
-x11-libs/gtk+ prep_ml_binaries /usr/bin/gtk-config 
-x11-libs/libXft prep_ml_binaries /usr/bin/xft-config 
+app-crypt/mit-krb5 prep_ml_binaries /usr/bin/krb5-config
+dev-libs/fribidi prep_ml_binaries /usr/bin/fribidi-config
+dev-libs/glib prep_ml_binaries /usr/bin/glib-config
+dev-libs/icu prep_ml_binaries /usr/bin/icu-config
+dev-libs/libIDL prep_ml_binaries /usr/bin/libIDL-config-2
+dev-libs/libgcrypt prep_ml_binaries /usr/bin/libgcrypt-config
+dev-libs/libgpg-error prep_ml_binaries /usr/bin/gpg-error-config
+dev-libs/libpcre prep_ml_binaries /usr/bin/pcre-config
+dev-libs/libtasn1 prep_ml_binaries /usr/bin/libtasn1-config
+dev-libs/libusb prep_ml_binaries /usr/bin/libusb-config
+dev-libs/libxml2 prep_ml_binaries /usr/bin/xml2-config
+dev-libs/libxslt prep_ml_binaries /usr/bin/xslt-config
+dev-libs/nspr prep_ml_binaries /usr/bin/nspr-config
+dev-libs/nss prep_ml_binaries /usr/bin/nss-config
+dev-util/pkgconfig prep_ml_binaries /usr/bin/pkg-config
+gnome-base/orbit prep_ml_binaries /usr/bin/orbit2-config
+media-gfx/imagemagick prep_ml_binaries /usr/bin/Magick++-config /usr/bin/Magick-config /usr/bin/MagickCore-config /usr/bin/MagickWand-config /usr/bin/Wand-config
+media-libs/aalib prep_ml_binaries /usr/bin/aalib-config
+media-libs/audiofile prep_ml_binaries /usr/bin/audiofile-config
+media-libs/freealut prep_ml_binaries /usr/bin/freealut-config
+media-libs/freetype prep_ml_binaries /usr/bin/freetype-config
+media-libs/imlib2 prep_ml_binaries /usr/bin/imlib2-config
+media-libs/libart_lgpl prep_ml_binaries /usr/bin/libart2-config
+media-libs/libcaca prep_ml_binaries /usr/bin/caca-config
+media-libs/libmikmod prep_ml_binaries /usr/bin/libmikmod-config
+media-libs/libpng prep_ml_binaries /usr/bin/libpng-config /usr/bin/libpng12-config
+media-libs/libsdl prep_ml_binaries /usr/bin/sdl-config
+media-libs/smpeg prep_ml_binaries /usr/bin/smpeg-config
+media-libs/xine-lib prep_ml_binaries /usr/bin/xine-config
+media-sound/esound prep_ml_binaries /usr/bin/esd-config
+net-libs/gnutls prep_ml_binaries /usr/bin/libgnutls-config /usr/bin/libgnutls-extra-config
+net-libs/xulrunner prep_ml_binaries /usr/bin/xulrunner-config
+net-misc/curl prep_ml_binaries /usr/bin/curl-config
+net-print/cups prep_ml_binaries /usr/bin/cups-config
+sys-libs/ncurses prep_ml_binaries /usr/bin/ncurses5-config /usr/bin/ncursesw5-config
+x11-libs/gtk+ prep_ml_binaries /usr/bin/gtk-config
+x11-libs/libXft prep_ml_binaries /usr/bin/xft-config
 x11-libs/pango prep_ml_binaries /usr/bin/pango-querymodules
 x11-libs/qt-core prep_ml_binaries /usr/bin/qmake /usr/bin/moc /usr/bin/rcc /usr/bin/uic
-dev-util/pkgconfig prep_ml_binaries /usr/bin/pkg-config
-dev-libs/libIDL prep_ml_binaries /usr/bin/libIDL-config-2
 www-client/mozilla-firefox prep_ml_binaries /usr/bin/firefox
 x11-misc/imake prep_ml_binaries /usr/bin/xmkmf /usr/bin/imake

@@ -69,5 +69,5 @@ multilib-native_src_install_internal() {
 		dohtml doc/html/*.html || die "dohtml failed"
 	fi
 
-	prep_ml_binaries /usr/bin/libusb-config 
+	prep_ml_binaries /usr/bin/libusb-config
 }

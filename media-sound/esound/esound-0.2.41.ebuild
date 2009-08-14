@@ -66,7 +66,7 @@ multilib-native_src_install_internal() {
 	sed -e "s/@extradepend@/$extradepend/" "${FILESDIR}/esound.init.d.2" >"${T}/esound"
 	doinitd "${T}/esound"
 
-	prep_ml_binaries /usr/bin/esd-config 
+	prep_ml_binaries /usr/bin/esd-config
 }
 
 pkg_postinst() {

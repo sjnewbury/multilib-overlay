@@ -166,7 +166,7 @@ multilib-native_src_install_internal() {
 	dodoc ANNOUNCE MANIFEST NEWS README* TO-DO doc/*.doc
 	use doc && dohtml -r doc/html/
 
-	prep_ml_binaries /usr/bin/ncurses5-config /usr/bin/ncursesw5-config 
+	prep_ml_binaries /usr/bin/ncurses5-config /usr/bin/ncursesw5-config
 }
 
 pkg_preinst() {

@@ -81,5 +81,5 @@ multilib-native_src_install_internal() {
 		doins -r "${WORKDIR}"/apidocs/*
 	fi
 
-	prep_ml_binaries /usr/bin/icu-config 
+	prep_ml_binaries /usr/bin/icu-config
 }
