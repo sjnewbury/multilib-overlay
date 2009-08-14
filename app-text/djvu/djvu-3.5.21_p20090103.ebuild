@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/app-text/djvu/djvu-3.5.21_p20090103.ebuild,v 1.8 2009/04/15 16:53:46 ranger Exp $
 
 EAPI=2
+
 inherit fdo-mime nsplugins flag-o-matic eutils multilib toolchain-funcs confutils multilib-native
 
 MY_P="${PN}libre-${PV#*_p}"
@@ -76,25 +77,27 @@ multilib-native_src_configure_internal() {
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" plugindir=/usr/$(get_libdir)/${PLUGINS_DIR} install
 
-	dodoc README TODO NEWS
+	if is_final_abi; then
+		dodoc README TODO NEWS
 
-	use doc && cp -r doc/ "${D}"/usr/share/doc/${PF}
+		use doc && cp -r doc/ "${D}"/usr/share/doc/${PF}
 
-	# Install desktop files.
-	cd desktopfiles
-	insinto /usr/share/icons/hicolor/22x22/mimetypes && newins hi22-djvu.png image-vnd.djvu.png || die
-	insinto	/usr/share/icons/hicolor/32x32/mimetypes && newins hi32-djvu.png image-vnd.djvu.png || die
-	insinto	/usr/share/icons/hicolor/48x48/mimetypes && newins hi48-djvu.png image-vnd.djvu.png || die
-	insinto	/usr/share/mime/packages && doins djvulibre-mime.xml || die
-	if use kde ; then
-		insinto /usr/share/mimelnk/image && doins vnd.djvu.desktop || die
-		cp "${D}"/usr/share/mimelnk/image/{vnd.djvu.desktop,x-djvu.desktop}
-		sed -i -e 's:image/vnd.djvu:image/x-djvu:' "${D}"/usr/share/mimelnk/image/x-djvu.desktop
-	fi
+		# Install desktop files.
+		cd desktopfiles
+		insinto /usr/share/icons/hicolor/22x22/mimetypes && newins hi22-djvu.png image-vnd.djvu.png || die
+		insinto	/usr/share/icons/hicolor/32x32/mimetypes && newins hi32-djvu.png image-vnd.djvu.png || die
+		insinto	/usr/share/icons/hicolor/48x48/mimetypes && newins hi48-djvu.png image-vnd.djvu.png || die
+		insinto	/usr/share/mime/packages && doins djvulibre-mime.xml || die
+		if use kde ; then
+			insinto /usr/share/mimelnk/image && doins vnd.djvu.desktop || die
+			cp "${D}"/usr/share/mimelnk/image/{vnd.djvu.desktop,x-djvu.desktop}
+			sed -i -e 's:image/vnd.djvu:image/x-djvu:' "${D}"/usr/share/mimelnk/image/x-djvu.desktop
+		fi
 
-	if use qt3 ; then
-		insinto /usr/share/icons/hicolor/32x32/apps && newins hi32-djview3.png djvulibre-djview3.png || die
-		insinto /usr/share/applications/ && doins djvulibre-djview3.desktop || die
+		if use qt3 ; then
+			insinto /usr/share/icons/hicolor/32x32/apps && newins hi32-djview3.png djvulibre-djview3.png || die
+			insinto /usr/share/applications/ && doins djvulibre-djview3.desktop || die
+		fi
 	fi
 }
 
