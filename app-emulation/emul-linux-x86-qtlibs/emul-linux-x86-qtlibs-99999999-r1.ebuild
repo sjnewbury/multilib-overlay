@@ -10,7 +10,7 @@ LICENSE="GPL-2"
 
 KEYWORDS="-* amd64"
 SLOT="0"
-IUSE="opengl -nodep"
+IUSE="opengl -nodep qt3 +qt4 +dbus kde +qt3support"
 
 DEPEND="
 !nodep? ( 
@@ -22,7 +22,8 @@ RDEPEND="
 	>=app-emulation/emul-linux-x86-baselibs-20081109
 		>=app-emulation/emul-linux-x86-soundlibs-20081109
 		>=app-emulation/emul-linux-x86-xlibs-20081109
-	=x11-libs/qt-3*[lib32?]
+	qt3? ( =x11-libs/qt-3*[lib32?] )
+	qt4? ( =x11-libs/qt-4*[lib32?,dbus?,kde?,opengl?,qt3support?] )
 )"
 
 pkg_postinst() {
