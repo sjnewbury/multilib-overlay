@@ -2,8 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit multilib-native
-
 DESCRIPTION="Wraps binarys that behave abi dependand"
 HOMEPAGE="www.gentoo.org"
 SRC_URI=""
