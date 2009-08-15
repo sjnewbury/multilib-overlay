@@ -39,7 +39,7 @@ RDEPEND="
 		>=x11-libs/cairo-1.1.10[lib32?]
 	)
 	lasi?	( media-libs/lasi[lib32?] )
-	ruby?	( dev-lang/ruby )
+	ruby?	( dev-lang/ruby[lib32?] )
 	tcl?	( >=dev-lang/tcl-8.3[lib32?] )"
 
 DEPEND="${RDEPEND}

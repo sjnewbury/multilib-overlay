@@ -32,7 +32,7 @@ RDEPEND="
 		>=x11-libs/pango-1.12[lib32?]
 		>=x11-libs/cairo-1.1.10[svg,lib32?]
 	)
-	ruby?	( dev-lang/ruby )
+	ruby?	( dev-lang/ruby[lib32?] )
 	tcl?	( >=dev-lang/tcl-8.3[lib32?] )
 	gtk?	(
 		>=x11-libs/gtk+-2[lib32?]

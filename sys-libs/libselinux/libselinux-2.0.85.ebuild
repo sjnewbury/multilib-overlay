@@ -22,10 +22,10 @@ KEYWORDS="~amd64 ~x86"
 
 DEPEND="=sys-libs/libsepol-${SEPOL_VER}*[lib32?]
 	dev-lang/swig
-	ruby? ( dev-lang/ruby )"
+	ruby? ( dev-lang/ruby[lib32?] )"
 
 RDEPEND="=sys-libs/libsepol-${SEPOL_VER}*[lib32?]
-	ruby? ( dev-lang/ruby )"
+	ruby? ( dev-lang/ruby[lib32?] )"
 
 src_unpack() {
 	unpack ${A}
