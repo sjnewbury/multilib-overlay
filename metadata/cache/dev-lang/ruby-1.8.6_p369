@@ -1,0 +1,22 @@
+berkdb? ( sys-libs/db[lib32?] ) gdbm? ( sys-libs/gdbm[lib32?] ) ssl? ( dev-libs/openssl[lib32?] ) socks5? ( >=net-proxy/dante-1.1.13[lib32?] ) tk? ( dev-lang/tk[lib32?] ) app-admin/eselect-ruby !=dev-lang/ruby-cvs-1.8* !<dev-ruby/rdoc-2 !dev-ruby/rexml =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+berkdb? ( sys-libs/db[lib32?] ) gdbm? ( sys-libs/gdbm[lib32?] ) ssl? ( dev-libs/openssl[lib32?] ) socks5? ( >=net-proxy/dante-1.1.13[lib32?] ) tk? ( dev-lang/tk[lib32?] ) app-admin/eselect-ruby !=dev-lang/ruby-cvs-1.8* !<dev-ruby/rdoc-2 !dev-ruby/rexml sys-apps/abi-wrapper
+1.8
+mirror://ruby/1.8/ruby-1.8.6-p369.tar.bz2
+
+http://www.ruby-lang.org/
+|| ( Ruby GPL-2 )
+An object-oriented scripting language
+alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd
+autotools base eutils flag-o-matic libtool multilib multilib-native portability toolchain-funcs versionator
++berkdb debug doc emacs examples +gdbm ipv6 rubytests socks5 ssl threads tk xemacs lib32
+
+emacs? ( app-emacs/ruby-mode ) xemacs? ( app-xemacs/ruby-modes )
+virtual/ruby
+2
+
+compile configure install postinst postrm preinst prepare setup test unpack
+
+
+
+
+
