@@ -23,6 +23,8 @@ if [[ ${PV} = 9999* ]]; then
 	SRC_URI=""
 fi
 
+MULTILIB_EXT_SOURCE_BUILD=yes
+
 # If we're a font package, but not the font.alias one
 FONT_ECLASS=""
 if [[ "${PN/#font-}" != "${PN}" ]] \
@@ -450,12 +452,12 @@ x-modular_src_install() {
 
 	if [[ -n ${GIT_ECLASS} ]]; then
 		pushd "${EGIT_STORE_DIR}/${EGIT_CLONE_DIR}"
-		git log ${GIT_TREE} > "${S}"/ChangeLog
+		git log ${GIT_TREE} > "${ECONF_SOURCE}"/ChangeLog
 		popd
 	fi
 
-	if [[ -e ${S}/ChangeLog ]]; then
-		dodoc "${S}"/ChangeLog
+	if [[ -e ${ECONF_SOURCE}/ChangeLog ]]; then
+		dodoc "${ECONF_SOURCE}"/ChangeLog
 	fi
 # @VARIABLE: DOCS
 # @DESCRIPTION:
