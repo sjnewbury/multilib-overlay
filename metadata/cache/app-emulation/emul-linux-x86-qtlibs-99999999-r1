@@ -1,0 +1,22 @@
+!nodep? ( opengl? ( app-admin/eselect-opengl ) )
+!nodep? ( >=app-emulation/emul-linux-x86-baselibs-20081109 >=app-emulation/emul-linux-x86-soundlibs-20081109 >=app-emulation/emul-linux-x86-xlibs-20081109 qt3? ( =x11-libs/qt-3*[lib32?] ) qt4? ( =x11-libs/qt-4*[lib32?,dbus?,kde?,opengl?,qt3support?] ) )
+0
+
+
+http://www.gentoo.org/
+GPL-2
+Metapackage to provide 32bit libraries via multilib
+-* amd64
+
+opengl -nodep qt3 +qt4 +dbus kde +qt3support
+
+
+
+2
+
+postinst
+
+
+
+
+
