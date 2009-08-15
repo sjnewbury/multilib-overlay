@@ -182,7 +182,7 @@ multilib-native_src_install_internal() {
 		docdir="/usr/share/doc/${PF}" htmldir="/usr/share/doc/${PF}/html" \
 		install || die "emake install failed."
 
-	cd "${EMULTILIB_SOURCE_TOPDIR}"
+	cd "${EMULTILIB_SOURCE}"
 	dodoc ChangeLog
 
 	prep_ml_binaries /usr/bin/xine-config

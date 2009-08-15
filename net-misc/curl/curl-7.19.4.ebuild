@@ -100,7 +100,7 @@ multilib-native_src_install_internal() {
 	rm -rf "${D}"/etc/
 
 	# https://sourceforge.net/tracker/index.php?func=detail&aid=1705197&group_id=976&atid=350976
-	cd "${EMULTILIB_SOURCE_TOPDIR}"
+	cd "${EMULTILIB_SOURCE}"
 	insinto /usr/share/aclocal
 	doins docs/libcurl/libcurl.m4
 
