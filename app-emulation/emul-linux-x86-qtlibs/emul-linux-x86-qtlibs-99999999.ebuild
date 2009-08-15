@@ -1,4 +1,4 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -24,16 +24,16 @@ RDEPEND="!nodep? ( =app-emulation/emul-linux-x86-baselibs-${PV}
 			x11-libs/qt-sql:4[lib32]
 			x11-libs/qt-script:4[lib32]
 			x11-libs/qt-xmlpatterns:4[lib32]
-			dbus? ( x-libs/qt-dbus:4[lib32] )
-			opengl? ( x-libs/qt-opengl:4[lib32] )
-			!kde? ( || ( ~x11-libs/qt-phonon:4[lib32] media-sound/phonon[lib32] ) )
+			dbus? ( x11-libs/qt-dbus:4[lib32] )
+			opengl? ( x11-libs/qt-opengl:4[lib32] )
+			!kde? ( || ( x11-libs/qt-phonon:4[lib32] media-sound/phonon[lib32] ) )
 			kde? ( media-sound/phonon[lib32] )
-			qt3? ( x-libs/qt-qt3support:4[lib32] )
+			qt3? ( x11-libs/qt-qt3support:4[lib32] )
 			x11-libs/qt-webkit:4[lib32]
 			x11-libs/qt-test:4[lib32]
-			x11-libs/qt-assistant:4[lib32] )"
+			x11-libs/qt-assistant:4[lib32] ) )"
 
 pkg_postinst() {
-        #update GL symlinks
-        use opengl && eselect opengl set --use-old
+	#update GL symlinks
+	use opengl && eselect opengl set --use-old
 }
