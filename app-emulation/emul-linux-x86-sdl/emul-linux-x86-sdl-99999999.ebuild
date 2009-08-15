@@ -13,11 +13,7 @@ SLOT="0"
 IUSE="-nodep"
 
 
-RDEPEND="
-!nodep? (
-	>=app-emulation/emul-linux-x86-baselibs-20081109
-	>=app-emulation/emul-linux-x86-soundlibs-20081109
-	>=app-emulation/emul-linux-x86-xlibs-20081109
-	media-libs/speex[lib32]
-)
-"
+RDEPEND="!nodep? ( =app-emulation/emul-linux-x86-baselibs-${PV}
+		=app-emulation/emul-linux-x86-soundlibs-${PV}
+		=app-emulation/emul-linux-x86-xlibs-${PV}
+		media-libs/speex[lib32] )"
