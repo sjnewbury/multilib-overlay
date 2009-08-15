@@ -11,7 +11,7 @@ autotools base eutils flag-o-matic libtool multilib multilib-native pam portabil
 cracklib nls elibc_FreeBSD selinux vim-syntax audit test elibc_glibc debug lib32
 
 sys-auth/pambase vim-syntax? ( app-vim/pam-syntax )
-virtual/pam
+virtual/pam[lib32?]
 2
 
 compile configure install postinst postrm preinst prepare setup unpack
