@@ -1,16 +1,9 @@
 NO_AUTO_FLAG=" \
         dev-lang/yasm \
-        kde-base/automoc \
-	media-sound/alsa-headers \
-	sys-apps/abi-wrapper \
 	sys-boot/grub \
-	sys-devel/gcc \
-	sys-libs/glibc \
-	sys-kernel/linux-headers \
-	virtual/libc \
-	virtual/os-headers \
 "
 
 MULTILIB_BINARIES=" \
 	qt-core \
+	qt-gui \
 "
