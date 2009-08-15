@@ -4,6 +4,8 @@
 
 EAPI=2
 
+EMULTILIB_SAVE_VARS="MY_OPTS ECONF_PARAMS MODULE_NAMES"
+
 inherit eutils linux-mod flag-o-matic autotools multilib-native
 
 DESCRIPTION="decode and send infra-red signals of many commonly used remote controls"
@@ -210,7 +212,7 @@ multilib-native_pkg_setup_internal() {
 	fi
 
 	# Setup parameter for linux-mod.eclass
-	MODULE_NAMES="lirc(misc:${S})"
+	MODULE_NAMES="lirc(misc:${CMAKE_BUILD_DIR})"
 	BUILD_TARGETS="all"
 
 	ECONF_PARAMS="	--localstatedir=/var
@@ -218,6 +220,7 @@ multilib-native_pkg_setup_internal() {
 			        --enable-sandboxed
 	    		    --with-kerneldir=${KV_DIR}
 			        --with-moduledir=/lib/modules/${KV_FULL}/misc
+			    --libdir=/usr/$(get_libdir)
 	    		    $(use_enable debug)
 					$(use_with X x)
 					${MY_OPTS}"

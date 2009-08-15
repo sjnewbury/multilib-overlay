@@ -34,34 +34,42 @@ esac
 # EMULTILIB_SAVE_VARS="${EMULTILIB_SAVE_VARS}
 #		AS CC CXX FC LD ASFLAGS CFLAGS CXXFLAGS FCFLAGS FFLAGS LDFLAGS
 #		CHOST CBUILD CDEFINE LIBDIR S CCACHE_DIR myconf PYTHON PERLBIN
-#		QMAKE QMAKESPEC QTBINDIR  QTBASEDIR QTLIBDIR QTPCDIR MY_OPTS
+#		QMAKE QMAKESPEC QTBINDIR  QTBASEDIR QTLIBDIR QTPCDIR
 #		QTPLUGINDIR CMAKE_BUILD_DIR mycmakeargs KDE_S POPPLER_MODULE_S
 #		ECONF_SOURCE MY_LIBDIR MOZLIBDIR SDKDIR G2CONF PKG_CONFIG_PATH"
 EMULTILIB_SAVE_VARS="${EMULTILIB_SAVE_VARS}
 		AS CC CXX FC LD ASFLAGS CFLAGS CXXFLAGS FCFLAGS FFLAGS LDFLAGS
 		CHOST CBUILD CDEFINE LIBDIR S CCACHE_DIR myconf PYTHON PERLBIN
-		QMAKE QMAKESPEC QTBINDIR  QTBASEDIR QTLIBDIR QTPCDIR MY_OPTS
+		QMAKE QMAKESPEC QTBINDIR  QTBASEDIR QTLIBDIR QTPCDIR
 		QTPLUGINDIR CMAKE_BUILD_DIR mycmakeargs KDE_S POPPLER_MODULE_S
 		ECONF_SOURCE MY_LIBDIR MOZLIBDIR SDKDIR G2CONF PKG_CONFIG_PATH"
 
-# @VARIABLE: EMULTILIB_SOURCE_TOP_DIRNAME
-# @DESCRIPTION: Holds the name of the top-level source directory
-# EMULTILIB_SOURCE_TOP_DIRNAME=""
-EMULTILIB_SOURCE_TOP_DIRNAME=""
+# @VARIABLE: EMULTILIB_SOURCE_DIRNAME
+# @DESCRIPTION: Holds the name of the source directory
+# EMULTILIB_SOURCE_DIRNAME=""
+EMULTILIB_SOURCE_DIRNAME=""
 
-# @VARIABLE: EMULTILIB_SOURCE_TOPDIR
+# @VARIABLE: EMULTILIB_SOURCE
 # @DESCRIPTION:
-# This may be used in multilib-ised ebuilds choosing to make use of
-# external build directories for installing files from the top of the source
-# tree although for autotools based packages it's sometimes more appropriate
-# to use ${ECONF_SOURCE}.
-# EMULTILIB_SOURCE_TOPDIR=""
-EMULTILIB_SOURCE_TOPDIR=""
+# PATH to the top-level source directory.  This may be used in multilib-ised
+# ebuilds choosing to make use of external build directories for installing
+# files from the top of the source tree although for autotools based packages
+# it's sometimes more appropriate to use ${ECONF_SOURCE}.
+# EMULTILIB_SOURCE=""
+EMULTILIB_SOURCE=""
 
 # @VARIABLE: EMULTILIB_RELATIVE_BUILD_DIR
 # @DESCRIPTION:
 # EMULTILIB_RELATIVE_BUILD_DIR=""
 EMULTILIB_RELATIVE_BUILD_DIR=""
+
+# @VARIABLE: CMAKE_BUILD_DIR
+# @DESCRIPTION:
+# Despite the name, this is used for all build systems within this eclass.  
+# Usually this is the same as ${S}, except when using an external build
+# directory. (This is per ABI and so is saved/restored for each phase.)
+# CMAKE_BUILD_DIR=""
+CMAKE_BUILD_DIR=""
 
 # @VARIABLE: EMULTILIB_INHERITED
 # @DESCRIPTION:
@@ -181,12 +189,14 @@ multilib-native_src_generic() {
 
 	if [[ -z ${EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]} ]]; then
 		[[ -n ${MULTILIB_DEBUG} ]] && \
-			einfo "MULTILIB_DEBUG: Determining EMULTILIB_SOURCE_TOPDIR from S and WORKDIR"
+			einfo "MULTILIB_DEBUG: Determining EMULTILIB_SOURCE from S and WORKDIR"
 		EMULTILIB_RELATIVE_BUILD_DIR="${S#*${WORKDIR}\/}"
-		EMULTILIB_SOURCE_TOP_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
-		EMULTILIB_SOURCE_TOPDIR="${WORKDIR}/${EMULTILIB_SOURCE_TOP_DIRNAME}"
+		EMULTILIB_SOURCE_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
+		EMULTILIB_SOURCE="${WORKDIR}/${EMULTILIB_SOURCE_DIRNAME}"
+		CMAKE_BUILD_DIR="${S}"
+		ECONF_SOURCE="${S}"
 		[[ -n ${MULTILIB_DEBUG} ]] && \
-			einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_TOPDIR=\"${EMULTILIB_SOURCE_TOPDIR}\""
+			einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE=\"${EMULTILIB_SOURCE}\""
 		multilib-native_save_abi_env "INIT"
 		EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key "INIT")]=1
 	fi
@@ -219,7 +229,7 @@ multilib-native_src_generic_sub() {
 # We support two kinds of build: By default we copy/move the source dir for
 # each ABI. Where supported with the underlying package, we can just create an
 # external build dir.  This requires a modified ebuild which makes use of the
-# EMULTILIB_SOURCE_TOPDIR variable (which points the the top of the original
+# EMULTILIB_SOURCE variable (which points the the top of the original
 # source dir) to install doc files etc.  This latter behaviour is enabled with
 # MULTILIB_EXT_SOURCE_BUILD.  For CMake based packages default is reversed and
 # the CMAKE_IN_SOURCE_BUILD environment variable is used to specify the former
@@ -278,11 +288,11 @@ multilib-native_src_generic_sub() {
 
 # If we've just unpacked the source, move it into place.
 	if [[ ! "${1/unpack}" == "${1}" ]] && \
-			([[ -d "${EMULTILIB_SOURCE_TOPDIR}" ]] && \
+			([[ -d "${EMULTILIB_SOURCE}" ]] && \
 			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]) && !(multilib-native_is_EBD); then
-		einfo "Moving source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
-		mv "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
-		S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+		einfo "Moving source tree from ${EMULTILIB_SOURCE} to ${WORKDIR}/${PN}_build_${ABI}"
+		mv "${EMULTILIB_SOURCE}" "${WORKDIR}/${PN}_build_${ABI}"
+		S="${CMAKE_BUILD_DIR}"; ECONF_SOURCE="${S}"
 		[[ -n ${KDE_S} ]] && KDE_S="${S}"
 		[[ -n ${POPPLER_MODULE_S} ]] && \
 				POPPLER_MODULE_S=${S}/${POPPLER_MODULE}
@@ -293,28 +303,25 @@ multilib-native_setup_build_directory() {
 	if multilib-native_is_EBD; then
 		einfo "Preparing external build directory for ABI: ${ABI} ..."
 		einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
-		mkdir -p "${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
-		if [[ -n "${CMAKE_BUILD_TYPE}" ]];then
-			CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"	
-		else
-			ECONF_SOURCE="${EMULTILIB_SOURCE_TOPDIR}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
-		fi
+		mkdir -p "${CMAKE_BUILD_DIR}"
 	else
-		if [[ -d ${EMULTILIB_SOURCE_TOPDIR} ]]; then
+		if [[ -d ${EMULTILIB_SOURCE} ]]; then
 			if ! is_final_abi; then
-				einfo "Copying source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
-				cp -al "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
+				einfo "Copying source tree from ${EMULTILIB_SOURCE} to ${WORKDIR}/${PN}_build_${ABI}"
+				cp -al "${EMULTILIB_SOURCE}" "${WORKDIR}/${PN}_build_${ABI}"
 			else
-				einfo "Moving source tree from ${EMULTILIB_SOURCE_TOPDIR} to ${WORKDIR}/${PN}_build_${ABI}"
-				mv "${EMULTILIB_SOURCE_TOPDIR}" "${WORKDIR}/${PN}_build_${ABI}"
+				einfo "Moving source tree from ${EMULTILIB_SOURCE} to ${WORKDIR}/${PN}_build_${ABI}"
+				mv "${EMULTILIB_SOURCE}" "${WORKDIR}/${PN}_build_${ABI}"
 			fi
+			ECONF_SOURCE="${CMAKE_BUILD_DIR}"
 		fi
 	fi
 	if ([[ -n "${CMAKE_BUILD_TYPE}" ]] && \
 			[[ -n "${CMAKE_IN_SOURCE_BUILD}" ]]) || \
-			[[ -z "${CMAKE_BUILD_TYPE}" ]];then
-		S="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_TOP_DIRNAME}}"
+			[[ -z "${CMAKE_BUILD_TYPE}" ]]; then
+				S="${CMAKE_BUILD_DIR}"
 	fi
+
 }
 
 # Internal function
@@ -377,6 +384,8 @@ multilib-native_setup_abi_env() {
 	else
 		CCACHE_DIR="${CCACHE_DIR}-${1}"
 	fi
+
+	CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_DIRNAME}}"
 
 	export PYTHON PERLBIN QMAKESPEC
 	EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${1})]=1
