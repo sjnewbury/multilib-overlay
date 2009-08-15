@@ -10,20 +10,28 @@ LICENSE="GPL-2"
 
 KEYWORDS="-* amd64"
 SLOT="0"
-IUSE="opengl -nodep"
+IUSE="dbus kde -nodep opengl +qt3 qt4"
 
-DEPEND="
-!nodep? ( 
-	opengl? ( app-admin/eselect-opengl ) 
-)"
+DEPEND="!nodep? ( opengl? ( app-admin/eselect-opengl ) )"
 
-RDEPEND="
-!nodep? (
-	>=app-emulation/emul-linux-x86-baselibs-20081109
-		>=app-emulation/emul-linux-x86-soundlibs-20081109
-		>=app-emulation/emul-linux-x86-xlibs-20081109
-	=x11-libs/qt-3*[lib32?]
-)"
+RDEPEND="!nodep? ( =app-emulation/emul-linux-x86-baselibs-${PV}
+		=app-emulation/emul-linux-x86-soundlibs-${PV}
+		=app-emulation/emul-linux-x86-xlibs-${PV}
+		qt3? ( !qt4? ( x11-libs/qt:3[lib32] ) )
+		qt4? ( x11-libs/qt-core:4[lib32]
+			x11-libs/qt-gui:4[lib32]
+			x11-libs/qt-svg:4[lib32]
+			x11-libs/qt-sql:4[lib32]
+			x11-libs/qt-script:4[lib32]
+			x11-libs/qt-xmlpatterns:4[lib32]
+			dbus? ( x-libs/qt-dbus:4[lib32] )
+			opengl? ( x-libs/qt-opengl:4[lib32] )
+			!kde? ( || ( ~x11-libs/qt-phonon:4[lib32] media-sound/phonon[lib32] ) )
+			kde? ( media-sound/phonon[lib32] )
+			qt3? ( x-libs/qt-qt3support:4[lib32] )
+			x11-libs/qt-webkit:4[lib32]
+			x11-libs/qt-test:4[lib32]
+			x11-libs/qt-assistant:4[lib32] )"
 
 pkg_postinst() {
         #update GL symlinks
