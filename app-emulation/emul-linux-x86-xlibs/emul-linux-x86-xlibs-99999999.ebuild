@@ -1,4 +1,4 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -49,6 +49,6 @@ RDEPEND="!nodep? ( =app-emulation/emul-linux-x86-baselibs-${PV}
 		x11-libs/pixman[lib32] )"
 
 pkg_postinst() {
-        #update GL symlinks
-        use opengl && eselect opengl set --use-old
+	#update GL symlinks
+	use opengl && eselect opengl set --use-old
 }
