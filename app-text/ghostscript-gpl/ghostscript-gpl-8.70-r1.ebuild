@@ -119,7 +119,10 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 
 	cd "${S}/ijs"
-	eautoreconf
+	# eautoreconf seems to be unreliable here.  I'm uncertain why. It works
+	# on one machine, but not another!?
+	#eautoreconf
+	./autogen.sh
 }
 
 multilib-native_src_configure_internal() {
