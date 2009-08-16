@@ -29,7 +29,7 @@ RDEPEND=">=sys-libs/readline-4.1[lib32?]
 DEPEND="${RDEPEND}
 	gnome? ( dev-util/cvs )" # see Bug 173256
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch "${WORKDIR}"/${PATCH_P}/*
 	epatch \
 		"${FILESDIR}/350-${P}-gODBCConfig-as-needed.patch" \
