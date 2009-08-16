@@ -52,8 +52,10 @@ multilib-native_src_configure_internal() {
 	local myconf
 
 	if use qt3 && ! use mips ; then
-		myconf="--enable-gui=yes --x-libraries=/usr/$(get_libdir)"
-		myconf="${myconf} --with-qt-includes=/usr/qt/3/include/gentoo-multilib/${ABI}"
+		myconf="--enable-gui=yes --x-libraries=/usr/$(get_libdir)
+			--with-qt-libraries=/usr/qt/3/$(get_libdir)"
+		[[ -d "/usr/qt/3/include/gentoo-multilib" ]] && \
+			myconf="${myconf} --with-qt-includes=/usr/qt/3/include/gentoo-multilib/${ABI}"
 	else
 		myconf="--enable-gui=no"
 	fi
