@@ -29,10 +29,7 @@ RDEPEND=">=sys-libs/readline-4.1[lib32?]
 DEPEND="${RDEPEND}
 	gnome? ( dev-util/cvs )" # see Bug 173256
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
+src_prepare() {
 	epatch "${WORKDIR}"/${PATCH_P}/*
 	epatch \
 		"${FILESDIR}/350-${P}-gODBCConfig-as-needed.patch" \
@@ -51,11 +48,12 @@ src_unpack() {
 	fi
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local myconf
 
 	if use qt3 && ! use mips ; then
 		myconf="--enable-gui=yes --x-libraries=/usr/$(get_libdir)"
+		myconf="${myconf} --with-qt-includes=/usr/qt/3/include/gentoo-multilib/${ABI}"
 	else
 		myconf="--enable-gui=no"
 	fi

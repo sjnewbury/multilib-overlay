@@ -24,10 +24,7 @@ DEPEND=">=sys-libs/readline-4.1[lib32?]
 RDEPEND="${DEPEND}"
 
 # the configure.in patch is required for 'use qt3'
-src_unpack() {
-	unpack ${P}.tar.gz
-	cd "${S}"
-
+src_prepare() {
 	# solve bug #110167
 	epatch "${FILESDIR}/${P}-flex.patch"
 	# braindead check in configure fails - hackish approach
