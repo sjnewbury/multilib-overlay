@@ -12,5 +12,5 @@ KEYWORDS="amd64"
 IUSE=""
 
 src_install() {
-	dobin ${FILESDIR}/abi-wrapper || die
+	dobin "${FILESDIR}"/abi-wrapper || die
 }
