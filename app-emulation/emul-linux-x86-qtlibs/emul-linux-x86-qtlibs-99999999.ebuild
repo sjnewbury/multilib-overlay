@@ -10,7 +10,7 @@ LICENSE="GPL-2"
 
 KEYWORDS="-* ~amd64"
 SLOT="0"
-IUSE="dbus kde -nodep opengl +qt3 qt4"
+IUSE="+dbus kde -nodep opengl +qt3 +qt4 +svg +sql +webkit"
 
 DEPEND="!nodep? ( opengl? ( app-admin/eselect-opengl ) )"
 
@@ -20,8 +20,8 @@ RDEPEND="!nodep? ( =app-emulation/emul-linux-x86-baselibs-${PV}
 		qt3? ( !qt4? ( x11-libs/qt:3[lib32] ) )
 		qt4? ( x11-libs/qt-core:4[lib32]
 			x11-libs/qt-gui:4[lib32]
-			x11-libs/qt-svg:4[lib32]
-			x11-libs/qt-sql:4[lib32]
+			svg? ( x11-libs/qt-svg:4[lib32] )
+			sql? ( x11-libs/qt-sql:4[lib32] )
 			x11-libs/qt-script:4[lib32]
 			x11-libs/qt-xmlpatterns:4[lib32]
 			dbus? ( x11-libs/qt-dbus:4[lib32] )
@@ -29,7 +29,7 @@ RDEPEND="!nodep? ( =app-emulation/emul-linux-x86-baselibs-${PV}
 			!kde? ( || ( x11-libs/qt-phonon:4[lib32] media-sound/phonon[lib32] ) )
 			kde? ( media-sound/phonon[lib32] )
 			qt3? ( x11-libs/qt-qt3support:4[lib32] )
-			x11-libs/qt-webkit:4[lib32]
+			webkit? ( x11-libs/qt-webkit:4[lib32] )
 			x11-libs/qt-test:4[lib32]
 			x11-libs/qt-assistant:4[lib32] ) )"
 
