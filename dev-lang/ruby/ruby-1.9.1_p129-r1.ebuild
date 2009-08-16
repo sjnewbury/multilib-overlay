@@ -181,6 +181,8 @@ multilib-native_src_install_internal() {
 
 	insinto /usr/$(get_libdir)/ruby${MY_SUFFIX}/site_ruby/
 	newins "${FILESDIR}/auto_gem.rb" auto_gem.rb
+
+	prep_ml_binaries /usr/bin/ruby${MY_SUFFIX}
 }
 
 pkg_postinst() {

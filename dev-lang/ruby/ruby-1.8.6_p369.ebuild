@@ -162,6 +162,8 @@ multilib-native_src_install_internal() {
 		dodir /usr/share/${PN}-${SLOT}
 		cp -pPR test "${D}/usr/share/${PN}-${SLOT}"
 	fi
+
+	prep_ml_binaries /usr/bin/ruby${MY_SUFFIX}
 }
 
 pkg_postinst() {
