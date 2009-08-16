@@ -72,6 +72,8 @@ multilib-native_src_install_internal() {
 
 	# used for realtime priority, but off by default as it is a security hazard
 	use artswrappersuid && chmod u+s "${D}/${PREFIX}/bin/artswrapper"
+
+	prep_ml_binaries "/usr/kde/3.5/bin/artsc-config"
 }
 
 pkg_postinst() {
