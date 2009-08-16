@@ -53,8 +53,8 @@ EMULTILIB_SOURCE_DIRNAME=""
 # @DESCRIPTION:
 # PATH to the top-level source directory.  This may be used in multilib-ised
 # ebuilds choosing to make use of external build directories for installing
-# files from the top of the source tree although for autotools based packages
-# it's sometimes more appropriate to use ${ECONF_SOURCE}.
+# files from the top of the source tree although for builds with external 
+# build directories it's sometimes more appropriate to use ${ECONF_SOURCE}.
 # EMULTILIB_SOURCE=""
 EMULTILIB_SOURCE=""
 
@@ -194,7 +194,6 @@ multilib-native_src_generic() {
 		EMULTILIB_SOURCE_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
 		EMULTILIB_SOURCE="${WORKDIR}/${EMULTILIB_SOURCE_DIRNAME}"
 		CMAKE_BUILD_DIR="${S}"
-		ECONF_SOURCE="${S}"
 		[[ -n ${MULTILIB_DEBUG} ]] && \
 			einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE=\"${EMULTILIB_SOURCE}\""
 		multilib-native_save_abi_env "INIT"
@@ -292,7 +291,7 @@ multilib-native_src_generic_sub() {
 			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]) && !(multilib-native_is_EBD); then
 		einfo "Moving source tree from ${EMULTILIB_SOURCE} to ${WORKDIR}/${PN}_build_${ABI}"
 		mv "${EMULTILIB_SOURCE}" "${WORKDIR}/${PN}_build_${ABI}"
-		S="${CMAKE_BUILD_DIR}"; ECONF_SOURCE="${S}"
+		S="${CMAKE_BUILD_DIR}"
 		[[ -n ${KDE_S} ]] && KDE_S="${S}"
 		[[ -n ${POPPLER_MODULE_S} ]] && \
 				POPPLER_MODULE_S=${S}/${POPPLER_MODULE}
@@ -304,6 +303,7 @@ multilib-native_setup_build_directory() {
 		einfo "Preparing external build directory for ABI: ${ABI} ..."
 		einfo "Creating build directory: ${WORKDIR}/${PN}_build_${ABI}"
 		mkdir -p "${CMAKE_BUILD_DIR}"
+		ECONF_SOURCE="${S}"
 	else
 		if [[ -d ${EMULTILIB_SOURCE} ]]; then
 			if ! is_final_abi; then
@@ -313,7 +313,6 @@ multilib-native_setup_build_directory() {
 				einfo "Moving source tree from ${EMULTILIB_SOURCE} to ${WORKDIR}/${PN}_build_${ABI}"
 				mv "${EMULTILIB_SOURCE}" "${WORKDIR}/${PN}_build_${ABI}"
 			fi
-			ECONF_SOURCE="${CMAKE_BUILD_DIR}"
 		fi
 	fi
 	if ([[ -n "${CMAKE_BUILD_TYPE}" ]] && \
