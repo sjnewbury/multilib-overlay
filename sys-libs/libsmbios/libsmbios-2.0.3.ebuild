@@ -17,7 +17,7 @@ IUSE="test"
 
 DEPEND="dev-libs/libxml2[lib32?]
 	sys-libs/zlib[lib32?]
-	test? ( dev-util/cppunit )"
+	test? ( dev-util/cppunit[lib32?] )"
 RDEPEND=${DEPEND}
 
 RESTRICT=test

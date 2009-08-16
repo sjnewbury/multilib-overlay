@@ -18,6 +18,7 @@ KEYWORDS="alpha amd64 hppa ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE=""
 
 DEPEND=">=media-libs/freetype-2.0.9[lib32?]
+	dev-libs/cppunit[lib32?]
 	virtual/opengl[lib32?]
 	virtual/glut[lib32?]"
 RDEPEND="${DEPEND}"
