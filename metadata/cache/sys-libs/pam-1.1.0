@@ -1,4 +1,4 @@
-nls? ( virtual/libintl ) cracklib? ( >=sys-libs/cracklib-2.8.3[lib32?] ) audit? ( sys-process/audit ) selinux? ( >=sys-libs/libselinux-1.28[lib32?] ) elibc_glibc? ( >=sys-libs/glibc-2.7 ) sys-devel/flex nls? ( sys-devel/gettext[lib32?] ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+nls? ( virtual/libintl ) cracklib? ( >=sys-libs/cracklib-2.8.3[lib32?] ) audit? ( sys-process/audit ) selinux? ( >=sys-libs/libselinux-1.28[lib32?] ) elibc_glibc? ( >=sys-libs/glibc-2.7 ) sys-devel/flex[lib32?] nls? ( sys-devel/gettext[lib32?] ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
 nls? ( virtual/libintl ) cracklib? ( >=sys-libs/cracklib-2.8.3[lib32?] ) audit? ( sys-process/audit ) selinux? ( >=sys-libs/libselinux-1.28[lib32?] ) elibc_glibc? ( >=sys-libs/glibc-2.7 ) sys-apps/abi-wrapper
 0
 mirror://kernel/linux/libs/pam/library/Linux-PAM-1.1.0.tar.bz2

@@ -25,7 +25,7 @@ RDEPEND="nls? ( virtual/libintl )
 	selinux? ( >=sys-libs/libselinux-1.28[lib32?] )
 	elibc_glibc? ( >=sys-libs/glibc-2.7 )"
 DEPEND="${RDEPEND}
-	sys-devel/flex
+	sys-devel/flex[lib32?]
 	nls? ( sys-devel/gettext[lib32?] )"
 PDEPEND="sys-auth/pambase
 	vim-syntax? ( app-vim/pam-syntax )"
