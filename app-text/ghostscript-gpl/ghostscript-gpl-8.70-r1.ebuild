@@ -52,10 +52,16 @@ for X in ${LANGS} ; do
 	IUSE="${IUSE} linguas_${X}"
 done
 
-multilib-native_src_unpack_internal() {
+src_unpack() {
 	unpack ${A}
 	cd "${S}"
 
+	if ! use bindist && use djvu ; then
+		unpack gsdjvu-${GSDJVU_PV}.tar.gz
+	fi
+}
+
+multilib-native_src_prepare_internal() {
 	# remove internal copies of expat, jasper, jpeg, libpng and zlib
 	rm -rf "${S}/expat"
 	rm -rf "${S}/jasper"
@@ -86,7 +92,6 @@ multilib-native_src_unpack_internal() {
 	fi
 
 	if ! use bindist && use djvu ; then
-		unpack gsdjvu-${GSDJVU_PV}.tar.gz
 		cp gsdjvu-${GSDJVU_PV}/gsdjvu "${S}"
 		cp gsdjvu-${GSDJVU_PV}/gdevdjvu.c "${S}/base"
 		epatch "${WORKDIR}/patches/${PN}-8.64-gsdjvu-1.3.patch"
@@ -112,17 +117,12 @@ multilib-native_src_unpack_internal() {
 		-e "s:docdir=.*:docdir=/usr/share/doc/${PF}/html:" \
 		-e "s:GS_DOCDIR=.*:GS_DOCDIR=/usr/share/doc/${PF}/html:" \
 		base/Makefile.in base/*.mak || die "sed failed"
-}
 
-multilib-native_src_prepare_internal() {
 	cd "${S}"
 	eautoreconf
 
 	cd "${S}/ijs"
-	# eautoreconf seems to be unreliable here.  I'm uncertain why. It works
-	# on one machine, but not another!?
-	#eautoreconf
-	./autogen.sh
+	eautoreconf
 }
 
 multilib-native_src_configure_internal() {
@@ -143,13 +143,15 @@ multilib-native_src_configure_internal() {
 	if ! use bindist && use djvu ; then
 		sed -i -e 's!$(DD)bbox.dev!& $(DD)djvumask.dev $(DD)djvusep.dev!g' Makefile
 	fi
+
+	cd "${S}/ijs"
+	econf || die "ijs econf failed"
 }
 
 multilib-native_src_compile_internal() {
 	emake -j1 so all || die "emake failed"
 
 	cd "${S}/ijs"
-	econf || die "ijs econf failed"
 	emake || die "ijs emake failed"
 }
 
