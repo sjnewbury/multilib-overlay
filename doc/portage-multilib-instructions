@@ -9,7 +9,7 @@ After that, every layman sync should update the branch as normal, switching is d
 
 git checkout <branch>
 
-with the main branches are master and portage-multilib
+the main branches are master and portage-multilib
 
 A basic way to use this branch:
 
@@ -17,10 +17,14 @@ First, install the modified portage version:
 
 1.
 emerge -av1 portage
-then add the new useflag to the database or compile everything with a new useflag:
+
+then recompile world:
 
 2.
-run bin/add_lib32 or emerge -aDN world
+emerge -e world
+
+(you can also use /bin/add_lib32 to add the useflag to the database, but this branch does also remove all .la files, so you might have to run revdep-rebuild or lafilefixer every time you built a 
+package with multilib-portage)
 
 3.
 -check the target of /etc/make.profile, rm /etc/make.profile, mkdir /etc/make.profile,
