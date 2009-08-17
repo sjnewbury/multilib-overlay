@@ -7,7 +7,7 @@ http://www.gimp.org/
 GPL-2
 GNU Image Manipulation Program
 
-alternatives base eutils fdo-mime flag-o-matic multilib multilib-native portability python subversion toolchain-funcs
+base eutils fdo-mime flag-o-matic multilib multilib-native portability python subversion toolchain-funcs
 alsa aalib altivec curl dbus debug doc gtkhtml gnome jpeg lcms mmx mng pdf png python smp sse svg tiff wmf lib32
 
 

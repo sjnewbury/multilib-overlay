@@ -7,7 +7,7 @@ http://numeric.scipy.org/
 as-is
 Numerical multidimensional array language facility for Python.
 ~arm ~mips ~sh ~s390
-alternatives base distutils eutils multilib multilib-native portability python toolchain-funcs
+base distutils eutils multilib multilib-native portability python toolchain-funcs
 doc lib32
 
 

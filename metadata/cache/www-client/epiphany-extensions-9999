@@ -7,7 +7,7 @@ http://www.gnome.org/projects/epiphany/extensions.html
 GPL-2
 Extensions for the Epiphany web browser
 
-alternatives autotools base eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib multilib-native portability python subversion toolchain-funcs versionator
+autotools base eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib multilib-native portability python subversion toolchain-funcs versionator
 dbus examples pcre python debug lib32
 
 

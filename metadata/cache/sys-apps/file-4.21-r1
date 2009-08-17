@@ -7,7 +7,7 @@ ftp://ftp.astron.com/pub/file/
 as-is
 identify a file's format by scanning binary data for patterns
 alpha amd64 arm hppa ia64 m68k mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd
-alternatives base distutils eutils flag-o-matic libtool multilib multilib-native portability python toolchain-funcs
+base distutils eutils flag-o-matic libtool multilib multilib-native portability python toolchain-funcs
 python lib32
 
 

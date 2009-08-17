@@ -7,7 +7,7 @@ http://www.gnome.org/
 GPL-2 LGPL-2.1
 The GNOME Structured File Library
 alpha amd64 ~arm ~hppa ia64 ~mips ppc ppc64 ~sh sparc x86 ~x86-fbsd
-alternatives base eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib multilib-native portability python toolchain-funcs
+base eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib multilib-native portability python toolchain-funcs
 bzip2 doc gnome python debug lib32
 
 gnome? ( media-gfx/imagemagick[lib32?] )
