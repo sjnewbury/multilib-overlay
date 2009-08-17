@@ -1,0 +1,22 @@
+autotrace? ( >=media-gfx/autotrace-0.31.1 ) bzip2? ( app-arch/bzip2[lib32?] ) djvu? ( app-text/djvu ) fftw? ( sci-libs/fftw ) fontconfig? ( media-libs/fontconfig[lib32?] ) fpx? ( media-libs/libfpx[lib32?] ) graphviz? ( >=media-gfx/graphviz-2.6[lib32?] ) gs? ( virtual/ghostscript[lib32?] ) jbig? ( media-libs/jbigkit[lib32?] ) jpeg? ( >=media-libs/jpeg-6b[lib32?] ) jpeg2k? ( media-libs/jasper[lib32?] ) lcms? ( >=media-libs/lcms-1.06[lib32?] ) lqr? ( >=media-libs/liblqr-0.1.0 ) openexr? ( media-libs/openexr[lib32?] ) perl? ( >=dev-lang/perl-5.8.6-r6 !=dev-lang/perl-5.8.7 ) png? ( media-libs/libpng[lib32?] ) raw? ( media-gfx/ufraw[lib32?] ) tiff? ( >=media-libs/tiff-3.5.5[lib32?] ) truetype? ( =media-libs/freetype-2*[lib32?] corefonts? ( media-fonts/corefonts ) ) wmf? ( >=media-libs/libwmf-0.2.8[lib32?] ) xml? ( >=dev-libs/libxml2-2.4.10[lib32?] ) zlib? ( sys-libs/zlib[lib32?] ) X? ( x11-libs/libXext[lib32?] x11-libs/libXt[lib32?] x11-libs/libICE[lib32?] x11-libs/libSM[lib32?] svg? ( >=gnome-base/librsvg-2.9.0[lib32?] ) ) !dev-perl/perlmagick !sys-apps/compare >=sys-devel/libtool-1.5.2-r6[lib32?] >=sys-apps/sed-4 X? ( x11-proto/xextproto ) dev-lang/perl[-build] sys-apps/abi-wrapper
+autotrace? ( >=media-gfx/autotrace-0.31.1 ) bzip2? ( app-arch/bzip2[lib32?] ) djvu? ( app-text/djvu ) fftw? ( sci-libs/fftw ) fontconfig? ( media-libs/fontconfig[lib32?] ) fpx? ( media-libs/libfpx[lib32?] ) graphviz? ( >=media-gfx/graphviz-2.6[lib32?] ) gs? ( virtual/ghostscript[lib32?] ) jbig? ( media-libs/jbigkit[lib32?] ) jpeg? ( >=media-libs/jpeg-6b[lib32?] ) jpeg2k? ( media-libs/jasper[lib32?] ) lcms? ( >=media-libs/lcms-1.06[lib32?] ) lqr? ( >=media-libs/liblqr-0.1.0 ) openexr? ( media-libs/openexr[lib32?] ) perl? ( >=dev-lang/perl-5.8.6-r6 !=dev-lang/perl-5.8.7 ) png? ( media-libs/libpng[lib32?] ) raw? ( media-gfx/ufraw[lib32?] ) tiff? ( >=media-libs/tiff-3.5.5[lib32?] ) truetype? ( =media-libs/freetype-2*[lib32?] corefonts? ( media-fonts/corefonts ) ) wmf? ( >=media-libs/libwmf-0.2.8[lib32?] ) xml? ( >=dev-libs/libxml2-2.4.10[lib32?] ) zlib? ( sys-libs/zlib[lib32?] ) X? ( x11-libs/libXext[lib32?] x11-libs/libXt[lib32?] x11-libs/libICE[lib32?] x11-libs/libSM[lib32?] svg? ( >=gnome-base/librsvg-2.9.0[lib32?] ) ) !dev-perl/perlmagick !sys-apps/compare >=sys-devel/libtool-1.5.2-r6[lib32?] dev-lang/perl[-build] sys-apps/abi-wrapper
+0
+mirror://imagemagick/ImageMagick-6.5.4-10.tar.bz2 mirror://imagemagick/legacy/ImageMagick-6.5.4-10.tar.bz2
+perl? ( userpriv )
+http://www.imagemagick.org/
+imagemagick
+A collection of tools and libraries for many image formats
+~amd64 ~x86
+base eutils multilib multilib-native perl-app perl-module portability toolchain-funcs versionator
+autotrace bzip2 +corefonts djvu doc fftw fontconfig fpx graphviz gs hdri jbig jpeg jpeg2k lcms lqr nocxx openexr openmp perl png q8 q32 raw svg tiff truetype X wmf xml zlib lib32
+
+
+
+2
+
+compile configure install postinst postrm preinst prepare setup test unpack
+
+
+
+
+
