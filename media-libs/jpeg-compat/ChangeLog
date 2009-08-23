@@ -1,0 +1,11 @@
+# ChangeLog for media-libs/jpeg-compat
+# Copyright 1999-2009 Gentoo Foundation; Distributed under the GPL v2
+# $Header: /var/cvsroot/gentoo-x86/media-libs/jpeg-compat/ChangeLog,v 1.1 2009/08/22 12:54:01 ssuominen Exp $
+
+*jpeg-compat-6b (22 Aug 2009)
+
+  22 Aug 2009; Samuli Suominen <ssuominen@gentoo.org>
+  +jpeg-compat-6b.ebuild:
+  Initial commit of libjpeg.so.62 and libjpeg.so.62.0.0 for use with binary
+  only applications.
+
