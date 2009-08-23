@@ -287,8 +287,8 @@ multilib-native_src_generic_sub() {
 
 # If we've just unpacked the source, move it into place.
 	if [[ ! "${1/unpack}" == "${1}" ]] && \
-			([[ -d "${EMULTILIB_SOURCE}" ]] && \
-			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]]) && !(multilib-native_is_EBD); then
+			( [[ -d "${EMULTILIB_SOURCE}" ]] && \
+			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] ) && ! (multilib-native_is_EBD); then
 		einfo "Moving source tree from ${EMULTILIB_SOURCE} to ${WORKDIR}/${PN}_build_${ABI}"
 		mv "${EMULTILIB_SOURCE}" "${WORKDIR}/${PN}_build_${ABI}"
 		S="${CMAKE_BUILD_DIR}"
@@ -328,9 +328,9 @@ multilib-native_setup_build_directory() {
 # @USAGE:
 # @DESCRIPTION: Returns true if we're building with an "External Build Directory"
 multilib-native_is_EBD() {
-!([[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
-				([[ -z "${CMAKE_BUILD_TYPE}" ]] && \
-				[[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]]))
+! ( [[ -n "${CMAKE_IN_SOURCE_BUILD}" ]] || \
+				( [[ -z "${CMAKE_BUILD_TYPE}" ]] && \
+				[[ -z "${MULTILIB_EXT_SOURCE_BUILD}" ]] ) )
 }
 
 # Internal function
