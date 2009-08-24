@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/fontconfig/fontconfig-2.7.0.ebuild,v 1.1 2009/07/12 04:13:12 dirtyepic Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/fontconfig/fontconfig-2.7.1.ebuild,v 1.1 2009/08/16 21:38:44 dirtyepic Exp $
 
 EAPI="2"
 
@@ -34,7 +34,7 @@ PDEPEND="app-admin/eselect-fontconfig"
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-latin-reorder.patch   #130466
-	epunt_cxx #74077
+	epunt_cxx	#74077
 
 	# Needed to get a sane .so versioning on fbsd, please dont drop
 	# If you have to run eautoreconf, you can also leave the elibtoolize call as
@@ -90,6 +90,10 @@ multilib-native_src_install_internal() {
 	# <azarah@gentoo.org> (11 Dec 2002)
 	echo 'CONFIG_PROTECT_MASK="/etc/fonts/fonts.conf"' > "${T}"/37fontconfig
 	doenvd "${T}"/37fontconfig
+
+	# As of fontconfig 2.7, everything sticks their noses in here.
+	dodir /etc/sandbox.d
+	echo 'SANDBOX_PREDICT="/var/cache/fontconfig"' > "${D}"/etc/sandbox.d/37fontconfig
 }
 
 pkg_preinst() {
@@ -118,7 +122,7 @@ multilib-native_pkg_postinst_internal() {
 	find -L "${ROOT}"etc/fonts/conf.d/ -type l -delete
 
 	echo
-	ewarn "Please make fontconfig configuration changes using \`eselect	fontconfig\`"
+	ewarn "Please make fontconfig configuration changes using \`eselect fontconfig\`"
 	ewarn "Any changes made to /etc/fonts/fonts.conf will be overwritten."
 	ewarn
 	ewarn "If you need to reset your configuration to upstream defaults, delete"
