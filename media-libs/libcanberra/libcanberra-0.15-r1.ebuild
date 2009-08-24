@@ -29,8 +29,6 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.9 )"
 
 multilib-native_src_prepare_internal() {
-	cd "${S}"
-
 	# Fix bug 277739, replace LT_PREREQ and LT_INIT by AC_LIBTOOL*
 	# macros (equivalent for earlier version), preserve backward
 	# compatibility with libtool-1
