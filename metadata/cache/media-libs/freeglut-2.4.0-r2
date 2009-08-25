@@ -1,0 +1,22 @@
+virtual/opengl[lib32?] virtual/glu[lib32?] !media-libs/glut x11-misc/imake[lib32?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+virtual/opengl[lib32?] virtual/glu[lib32?] !media-libs/glut sys-apps/abi-wrapper
+0
+mirror://sourceforge/freeglut/freeglut-2.4.0.tar.gz
+
+http://freeglut.sourceforge.net/
+X11
+A completely OpenSourced alternative to the OpenGL Utility Toolkit (GLUT) library
+~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd
+autotools base eutils flag-o-matic libtool multilib multilib-native portability toolchain-funcs
+lib32
+
+
+
+2
+
+compile configure install postinst postrm preinst prepare setup unpack
+
+
+
+
+
