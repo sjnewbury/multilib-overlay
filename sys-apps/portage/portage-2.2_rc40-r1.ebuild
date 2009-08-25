@@ -14,7 +14,7 @@ PROVIDE="virtual/portage"
 SLOT="0"
 IUSE="build doc epydoc selinux linguas_pl"
 
-python_dep=">=dev-lang/python-2.5"
+python_dep=">=dev-lang/python-2.5 <dev-lang/python-3.0"
 
 DEPEND="${python_dep}
 	!build? ( >=sys-apps/sed-4.0.5 )
@@ -23,12 +23,12 @@ DEPEND="${python_dep}
 RDEPEND="${python_dep}
 	!build? ( >=sys-apps/sed-4.0.5
 		>=app-shells/bash-3.2_p17
-		>=app-admin/eselect-news-20071201 )
+		|| ( >=app-admin/eselect-1.1 >=app-admin/eselect-news-20071201 ) )
 	elibc_FreeBSD? ( sys-freebsd/freebsd-bin )
 	elibc_glibc? ( >=sys-apps/sandbox-1.6 )
 	elibc_uclibc? ( >=sys-apps/sandbox-1.6 )
 	>=app-misc/pax-utils-0.1.17
-	selinux? ( >=dev-python/python-selinux-2.16 )
+	selinux? ( sys-libs/libselinux )
 	sys-apps/abi-wrapper"
 PDEPEND="
 	!build? (
@@ -47,11 +47,10 @@ src_unpack() {
 }
 
 src_compile() {
+
 	if use doc; then
 		cd "${S}"/doc
 		touch fragment/date
-		# Workaround for bug #272063, remove in next portage release.
-		sed 's:^XMLTO_FLAGS =:XMLTO_FLAGS = --skip-validation:' -i Makefile
 		make xhtml xhtml-nochunks || die "failed to make docs"
 	fi
 
@@ -107,48 +106,34 @@ src_install() {
 	insinto /etc/logrotate.d
 	doins "${S}"/cnf/logrotate.d/elog-save-summary || die
 
-	exeinto ${portage_base}/bin
-
 	# BSD and OSX need a sed wrapper so that find/xargs work properly
 	if use userland_GNU; then
 		rm "${S}"/bin/ebuild-helpers/sed || die "Failed to remove sed wrapper"
 	fi
 
-	cd "${S}"/bin || die "cd failed"
-	doexe $(find . -maxdepth 1 -type f) || die "doexe failed"
-
-	local symlinks
-	exeinto ${portage_base}/bin/ebuild-helpers || die "exeinto failed"
-	cd "${S}"/bin/ebuild-helpers || die "cd failed"
-	doexe $(find . -type f ! -type l) || die "doexe failed"
-	symlinks=$(find . -maxdepth 1 -type l)
-	if [ -n "$symlinks" ] ; then
-		cp -P $symlinks "${D}${portage_base}/bin/ebuild-helpers/" || \
-			die "cp failed"
-	fi
-	exeinto ${portage_base}/bin/ebuild-helpers/3 || die "exeinto failed"
-	doexe 3/dodoc || die
-
-	# These symlinks will be included in the next tarball.
-	# Until then, create them manually.
-	dosym ../portageq ${portage_base}/bin/ebuild-helpers/portageq || \
-		die "dosym failed"
-	local x
-	for x in eerror einfo ewarn eqawarn ; do
-		dosym elog ${portage_base}/bin/ebuild-helpers/$x || die "dosym failed"
-	done
-	for x in dohard dosed ; do
-		dosym ../../banned-helper ${portage_base}/bin/ebuild-helpers/3/$x \
-			|| die "dosym failed"
-	done
-
-	for mydir in $(find "${S}"/pym -type d | sed -e "s:^${S}/::") ; do
-		dodir ${portage_base}/${mydir}
-		insinto ${portage_base}/${mydir}
-		cd "${S}"/${mydir}
-		doins *.py || die
+	local x symlinks
+	for x in $(find "$S"/bin -type d) ; do
+		x=${x#$S/}
+		dodir $portage_base/$x || die "dodir failed"
+		exeinto $portage_base/$x || die "exeinto failed"
+		cd "$S"/$x || die "cd failed"
+		doexe $(find . -mindepth 1 -maxdepth 1 -type f ! -type l) || \
+			die "doexe failed"
 		symlinks=$(find . -mindepth 1 -maxdepth 1 -type l)
-		[ -n "${symlinks}" ] && cp -P ${symlinks} "${D}${portage_base}/${mydir}"
+		if [ -n "$symlinks" ] ; then
+			cp -P $symlinks "$D$portage_base/$x" || die "cp failed"
+		fi
+	done
+
+	for x in $(find "$S"/pym -type d) ; do
+		x=${x#$S/}
+		insinto $portage_base/$x || die "insinto failed"
+		cd "$S"/$x || die "cd failed"
+		doins *.py || die "doins failed"
+		symlinks=$(find . -mindepth 1 -maxdepth 1 -type l)
+		if [ -n "$symlinks" ] ; then
+			cp -P $symlinks "$D$portage_base/$x" || die "cp failed"
+		fi
 	done
 
 	# Symlinks to directories cause up/downgrade issues and the use of these
@@ -167,12 +152,12 @@ src_install() {
 		doman -i18n=pl_PL.UTF-8 "${S_PL}"/man/pl_PL.UTF-8/*.[0-9] || die
 	fi
 
-	dodoc "${S}"/{NEWS,RELEASE-NOTES}
+	dodoc "${S}"/{ChangeLog,NEWS,RELEASE-NOTES}
 	use doc && dohtml -r "${S}"/doc/*
 	use epydoc && dohtml -r "${WORKDIR}"/api
 
 	dodir /usr/bin
-	for x in ebuild egencache emerge portageq repoman xpak; do
+	for x in ebuild egencache emerge portageq repoman ; do
 		dosym ../${libdir}/portage/bin/${x} /usr/bin/${x}
 	done
 
@@ -212,7 +197,7 @@ pkg_preinst() {
 		rm "${ROOT}/etc/make.globals"
 	fi
 
-	has_version ">=${CATEGORY}/${PN}-2.2_alpha"
+	has_version "<${CATEGORY}/${PN}-2.2_alpha"
 	MINOR_UPGRADE=$?
 
 	has_version "<=${CATEGORY}/${PN}-2.2_pre5"
@@ -301,7 +286,7 @@ pkg_postinst() {
 		elog
 	fi
 
-	if [ -z "${PV/*_pre*}" ]; then
+	if [ -z "${PV/*_rc*}" ]; then
 		elog "If you always want to use the latest development version of portage"
 		elog "please read http://www.gentoo.org/proj/en/portage/doc/testing.xml"
 		elog
