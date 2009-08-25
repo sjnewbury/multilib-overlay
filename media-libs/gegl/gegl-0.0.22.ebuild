@@ -78,7 +78,7 @@ multilib-native_src_install_internal() {
 
 	# don't know why einstall omits this?!
 	insinto "/usr/include/${PN}-0.0/${PN}/buffer/"
-	doins "${WORKDIR}/${P}/${PN}"/buffer/*.h || die "doins buffer failed"
+	doins "${WORKDIR}/${PN}_build_${ABI}/${PN}"/buffer/*.h || die "doins buffer failed"
 	insinto "/usr/include/${PN}-0.0/${PN}/module/"
-	doins "${WORKDIR}/${P}/${PN}"/module/*.h || die "doins module failed"
+	doins "${WORKDIR}/${PN}_build_${ABI}/${PN}"/module/*.h || die "doins module failed"
 }
