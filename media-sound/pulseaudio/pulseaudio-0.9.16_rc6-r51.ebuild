@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.16_rc4-r51.ebuild,v 1.2 2009/08/07 23:41:49 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.16_rc6-r51.ebuild,v 1.1 2009/08/25 00:46:43 flameeyes Exp $
 
 EAPI=2
 
@@ -88,20 +88,10 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
-	# Not extremely nice but allows to avoid a bit of work in the case
-	# users don't request tests.
-	if use test; then
-		sed -i -e 's:\<mix-test::' src/Makefile.am || die
-
-		eautomake
-	fi
 	elibtoolize
 }
 
 multilib-native_src_configure_internal() {
-	# To properly fix CVE-2008-0008
-	append-flags -UNDEBUG
-
 	# It's a binutils bug, once I can find time to fix that I'll add a
 	# proper dependency and fix this up. — flameeyes
 	append-ldflags -Wl,--no-as-needed
@@ -111,7 +101,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable glib glib2) \
 		--disable-solaris \
 		$(use_enable asyncns) \
-		$(use_enable oss) \
+		$(use_enable oss oss-output) \
 		$(use_enable alsa) \
 		$(use_enable lirc) \
 		$(use_enable tcpd tcpwrap) \
@@ -142,7 +132,7 @@ multilib-native_src_configure_internal() {
 src_test() {
 	# We avoid running the toplevel check target because that will run
 	# po/'s tests too, and they are broken. Officially, it should work
-	# with intltool 0.40.6, but that doesn't seem to be the case.
+	# with intltool 0.41, but that doesn't look like a stable release.
 	emake -C src check || die
 }
 
