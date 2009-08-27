@@ -1,11 +1,11 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/mozilla-firefox/mozilla-firefox-3.0.12.ebuild,v 1.1 2009/07/22 17:48:15 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/mozilla-firefox/mozilla-firefox-3.0.13.ebuild,v 1.6 2009/08/26 16:11:21 armin76 Exp $
 EAPI="2"
 WANT_AUTOCONF="2.1"
 
 inherit flag-o-matic toolchain-funcs eutils mozconfig-3 makeedit multilib fdo-mime autotools mozextension multilib-native
-PATCH="${P}-patches-0.1"
+PATCH="${PN}-3.0.12-patches-0.1"
 
 LANGS="af ar be bg bn-IN ca cs cy da de el en-GB en-US eo es-AR es-ES et eu fi fr fy-NL ga-IE gl gu-IN he hi-IN hu id is it ja ka kn ko ku lt lv mk mn mr nb-NO nl nn-NO oc pa-IN pl pt-BR pt-PT ro ru si sk sl sq sr sv-SE te th tr uk zh-CN zh-TW"
 NOSHORTLANGS="en-GB es-AR pt-BR zh-CN"
@@ -15,7 +15,7 @@ MY_PV=${PV/3/}
 DESCRIPTION="Firefox Web Browser"
 HOMEPAGE="http://www.mozilla.com/firefox"
 
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="alpha ~amd64 arm hppa ia64 ppc ~ppc64 sparc x86"
 SLOT="0"
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 IUSE="java mozdevelop bindist restrict-javascript iceweasel +xulrunner"
@@ -46,13 +46,13 @@ done
 
 RDEPEND="java? ( virtual/jre )
 	>=sys-devel/binutils-2.16.1
-	>=dev-libs/nss-3.12.2[lib32?]
+	>=dev-libs/nss-3.12.3-r1[lib32?]
 	>=dev-libs/nspr-4.7.4[lib32?]
 	>=app-text/hunspell-1.1.9[lib32?]
 	>=media-libs/lcms-1.17[lib32?]
 	x11-libs/cairo[X,lib32?]
 	x11-libs/pango[X,lib32?]
-	xulrunner? ( >=net-libs/xulrunner-1.9${MY_PV}[lib32?] )"
+	xulrunner? ( >=net-libs/xulrunner-1.9.0.*[lib32?] )"
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
@@ -124,11 +124,7 @@ src_unpack() {
 
 multilib-native_src_prepare_internal() {
 	# Remove the patches we don't need
-	if use xulrunner; then
-		rm "${WORKDIR}"/patch/*noxul*
-	else
-		rm "${WORKDIR}"/patch/*xulonly*
-	fi
+	use xulrunner && rm "${WORKDIR}"/patch/*noxul* || rm "${WORKDIR}"/patch/*xulonly*
 
 	# Apply our patches
 	cd "${S}" || die "cd failed"
