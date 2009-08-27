@@ -1,6 +1,6 @@
 # Copyright 1999-2005 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/x-modular.eclass,v 1.110 2009/07/24 13:32:44 pva Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/x-modular.eclass,v 1.112 2009/08/27 15:16:09 scarabeus Exp $
 #
 # @ECLASS: x-modular.eclass
 # @MAINTAINER:
@@ -149,8 +149,10 @@ if [[ -n "${FONT}" ]]; then
 	FONT_DIR=${FONT_DIR/type1/Type1}
 	FONT_DIR=${FONT_DIR/speedo/Speedo}
 
-	# Set up configure option
-	FONT_OPTIONS="--with-fontdir=\"/usr/share/fonts/${FONT_DIR}\""
+	# Set up configure options, wrapped so ebuilds can override if need be
+	if [[ -z ${FONT_OPTIONS} ]]; then
+		FONT_OPTIONS="--with-fontdir=\"/usr/share/fonts/${FONT_DIR}\""
+	fi
 
 	if [[ -n "${FONT}" ]]; then
 		if [[ ${PN##*-} = misc ]] || [[ ${PN##*-} = 75dpi ]] || [[ ${PN##*-} = 100dpi ]] || [[ ${PN##*-} = cyrillic ]]; then
@@ -348,7 +350,7 @@ x-modular_font_configure() {
 	if [[ -n "${FONT}" ]]; then
 		# Might be worth adding an option to configure your desired font
 		# and exclude all others. Also, should this USE be nls or minimal?
-		if ! use nls; then
+		if has nls ${IUSE//+} && ! use nls; then
 			FONT_OPTIONS="${FONT_OPTIONS}
 				--disable-iso8859-2
 				--disable-iso8859-3
@@ -563,7 +565,6 @@ setup_fonts() {
 
 	create_fonts_scale
 	create_fonts_dir
-	fix_font_permissions
 	create_font_cache
 }
 
@@ -652,19 +653,6 @@ create_fonts_dir() {
 					-e "${ROOT}"/usr/share/fonts/encodings/large \
 					-- ${x}
 			fi
-		done
-	eend 0
-}
-
-# @FUNCTION: fix_font_permissions
-# @USAGE:
-# @DESCRIPTION:
-# Font files should have 644 permissions. Ensure this is the case.
-fix_font_permissions() {
-	ebegin "Fixing permissions"
-		for DIR in ${FONT_DIR}; do
-			find "${ROOT}"/usr/share/fonts/${DIR} -type f -name 'font.*' \
-				-exec chmod 0644 {} \;
 		done
 	eend 0
 }

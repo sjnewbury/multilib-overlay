@@ -1,6 +1,6 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.403 2009/07/26 20:09:59 halcy0n Exp $
+# $Header: /var/www/viewcvs.gentoo.org/raw_cvs/gentoo-x86/eclass/toolchain.eclass,v 1.406 2009/08/26 21:47:56 vapier Exp $
 #
 # Maintainer: Toolchain Ninjas <toolchain@gentoo.org>
 
@@ -391,7 +391,7 @@ hardened_gcc_works() {
 
 		want_pie || return 1
 		hardened_gcc_is_stable pie && return 0
-		if has ~$(tc-arch) ${ACCEPT_KEYWORDS} ; then
+		if has "~$(tc-arch)" ${ACCEPT_KEYWORDS} ; then
 			hardened_gcc_check_unsupported pie && return 1
 			ewarn "Allowing pie-by-default for an unstable arch ($(tc-arch))"
 			return 0
@@ -400,7 +400,7 @@ hardened_gcc_works() {
 	elif [[ $1 == "ssp" ]] ; then
 		[[ -z ${PP_VER} ]] && return 1
 		hardened_gcc_is_stable ssp && return 0
-		if has ~$(tc-arch) ${ACCEPT_KEYWORDS} ; then
+		if has "~$(tc-arch)" ${ACCEPT_KEYWORDS} ; then
 			hardened_gcc_check_unsupported ssp && return 1
 			ewarn "Allowing ssp-by-default for an unstable arch ($(tc-arch))"
 			return 0
@@ -1086,7 +1086,7 @@ gcc_src_unpack() {
 	do_gcc_HTB_patches
 	do_gcc_SSP_patches
 	do_gcc_PIE_patches
-	do_gcc_USER_patches
+	epatch_user
 
 	${ETYPE}_src_unpack || die "failed to ${ETYPE}_src_unpack"
 
@@ -1208,6 +1208,12 @@ gcc-compiler-configure() {
 			if ! has ${ARCH} ${KEYWORDS} ; then
 				confgcc="${confgcc} --enable-cld"
 			fi
+		fi
+
+		# Stick the python scripts in their own slotted directory
+		# bug #279252
+		if tc_version_is_at_least "4.4" ; then
+			confgcc="${confgcc} --with-python-dir=${DATAPATH/$PREFIX/}/python"
 		fi
 	fi
 
@@ -2125,22 +2131,6 @@ do_gcc_stub() {
 			EPATCH_SINGLE_MSG="Applying stub patch for $1 ..." \
 			epatch "${stub_patch}"
 			return 0
-		fi
-	done
-}
-
-do_gcc_USER_patches() {
-	local check base=${PORTAGE_CONFIGROOT}/etc/portage/patches
-	for check in {${CATEGORY}/${PF},${CATEGORY}/${P},${CATEGORY}/${PN}}; do
-		EPATCH_SOURCE=${base}/${CTARGET}/${check}
-		[[ -r ${EPATCH_SOURCE} ]] || EPATCH_SOURCE=${base}/${CHOST}/${check}
-		[[ -r ${EPATCH_SOURCE} ]] || EPATCH_SOURCE=${base}/${check}
-		if [[ -d ${EPATCH_SOURCE} ]] ; then
-			EPATCH_SUFFIX="patch"
-			EPATCH_FORCE="yes" \
-			EPATCH_MULTI_MSG="Applying user patches from ${EPATCH_SOURCE} ..." \
-			epatch
-			break
 		fi
 	done
 }
