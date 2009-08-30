@@ -1,4 +1,4 @@
->=dev-lang/python-2.4.4-r5[lib32?] >=dev-python/pyrex-0.9.3-r2[lib32?] >=dev-libs/dbus-glib-0.71[lib32?] >=sys-apps/dbus-1.0.0[lib32?] test? ( dev-python/pygobject ) dev-util/pkgconfig[lib32?] sys-apps/abi-wrapper
+>=dev-lang/python-2.4.4-r5[lib32?] >=dev-python/pyrex-0.9.3-r2[lib32?] >=dev-libs/dbus-glib-0.71[lib32?] >=sys-apps/dbus-1.0.0[lib32?] test? ( dev-python/pygobject ) dev-util/pkgconfig[lib32?] >=app-shells/bash-3.2 sys-apps/abi-wrapper
 >=dev-lang/python-2.4.4-r5[lib32?] >=dev-python/pyrex-0.9.3-r2[lib32?] >=dev-libs/dbus-glib-0.71[lib32?] >=sys-apps/dbus-1.0.0[lib32?] sys-apps/abi-wrapper
 0
 http://dbus.freedesktop.org/releases/dbus-python/dbus-python-0.83.0.tar.gz

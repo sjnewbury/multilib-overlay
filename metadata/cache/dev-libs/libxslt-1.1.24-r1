@@ -1,4 +1,4 @@
->=dev-libs/libxml2-2.6.27[lib32?] crypt? ( >=dev-libs/libgcrypt-1.1.92[lib32?] ) python? ( dev-lang/python[lib32?] ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+>=dev-libs/libxml2-2.6.27[lib32?] crypt? ( >=dev-libs/libgcrypt-1.1.92[lib32?] ) python? ( dev-lang/python[lib32?] ) >=app-shells/bash-3.2 =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
 >=dev-libs/libxml2-2.6.27[lib32?] crypt? ( >=dev-libs/libgcrypt-1.1.92[lib32?] ) python? ( dev-lang/python[lib32?] ) sys-apps/abi-wrapper
 0
 ftp://xmlsoft.org/libxslt/libxslt-1.1.24.tar.gz

@@ -1,4 +1,4 @@
-python? ( dev-lang/python[lib32?] ) !app-admin/fam !<app-admin/gamin-0.1.10 dev-util/pkgconfig[lib32?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+python? ( dev-lang/python[lib32?] ) !app-admin/fam !<app-admin/gamin-0.1.10 dev-util/pkgconfig[lib32?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool >=app-shells/bash-3.2 sys-apps/abi-wrapper
 python? ( dev-lang/python[lib32?] ) !app-admin/fam !<app-admin/gamin-0.1.10 sys-apps/abi-wrapper
 0
 http://www.gnome.org/~veillard/gamin/sources/gamin-0.1.10.tar.gz
