@@ -1,10 +1,10 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/mozilla-firefox/mozilla-firefox-3.5.2.ebuild,v 1.1 2009/08/05 14:50:37 tommy Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/mozilla-firefox/mozilla-firefox-3.5.2-r2.ebuild,v 1.1 2009/08/30 14:59:52 anarchy Exp $
 EAPI="2"
 WANT_AUTOCONF="2.1"
 
-inherit flag-o-matic toolchain-funcs eutils mozconfig-3 makeedit multilib fdo-mime autotools mozextension multilib-native
+inherit flag-o-matic toolchain-funcs eutils mozconfig-3 makeedit multilib pax-utils fdo-mime autotools mozextension multilib-native
 
 LANGS="af ar as be bg bn-BD bn-IN ca cs cy da de el en en-GB en-US eo es-AR
 es-CL es-ES es-MX et eu fa fi fr fy-NL ga-IE gl gu-IN he hi-IN hr hu id is it ja
@@ -17,12 +17,12 @@ MAJ_PV="${PV/_*/}" # Without the _rc and _beta stuff
 DESKTOP_PV="3.5"
 MY_PV="${PV/_beta/b}" # Handle betas for SRC_URI
 MY_PV="${PV/_/}" # Handle rcs for SRC_URI
-PATCH="${PN}-3.5-patches-0.1"
+PATCH="${P}-patches-0.1"
 
 DESCRIPTION="Firefox Web Browser"
 HOMEPAGE="http://www.mozilla.com/firefox"
 
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 -sparc ~x86"
 SLOT="0"
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 IUSE="+alsa bindist iceweasel java mozdevelop restrict-javascript" # qt-experimental
@@ -30,7 +30,7 @@ IUSE="+alsa bindist iceweasel java mozdevelop restrict-javascript" # qt-experime
 REL_URI="http://releases.mozilla.org/pub/mozilla.org/firefox/releases"
 SRC_URI="${REL_URI}/${MY_PV}/source/firefox-${MY_PV}-source.tar.bz2
 	iceweasel? ( mirror://gentoo/iceweasel-icons-3.0.tar.bz2 )
-	mirror://gentoo/${PATCH}.tar.bz2"
+	http://dev.gentoo.org/~anarchy/dist/${PATCH}.tar.bz2"
 
 for X in ${LANGS} ; do
 	if [ "${X}" != "en" ] && [ "${X}" != "en-US" ]; then
@@ -58,7 +58,6 @@ RDEPEND="
 	>=sys-devel/binutils-2.16.1
 	>=dev-libs/nss-3.12.2[lib32?]
 	>=dev-libs/nspr-4.7.3[lib32?]
-	>=dev-db/sqlite-3.6.7[lib32?]
 	>=app-text/hunspell-1.2[lib32?]
 	alsa? ( media-libs/alsa-lib[lib32?] )
 	>=net-libs/xulrunner-${XUL_PV}[java=,lib32?]
@@ -100,8 +99,8 @@ linguas() {
 	done
 }
 
-pkg_setup(){
-	if ! use bindist && ! use iceweasel; then
+pkg_setup() {
+	if ! use bindist && ! use iceweasel ; then
 		elog "You are enabling official branding. You may not redistribute this build"
 		elog "to any users on your network or the internet. Doing so puts yourself into"
 		elog "a legal problem with Mozilla Foundation"
@@ -112,7 +111,7 @@ pkg_setup(){
 src_unpack() {
 	unpack ${A}
 
-	if use iceweasel; then
+	if use iceweasel ; then
 		unpack iceweasel-icons-3.0.tar.bz2
 
 		cp -r iceweaselicons/browser "${WORKDIR}"
@@ -134,9 +133,9 @@ multilib-native_src_prepare_internal() {
 	EPATCH_FORCE="yes" \
 	epatch "${WORKDIR}"
 
-	if use iceweasel; then
-		sed -i -e "s|Minefield|Iceweasel|" browser/locales/en-US/chrome/branding/brand.* \
-			browser/branding/nightly/configure.sh
+	if use iceweasel ; then
+		sed -i -e "s:Minefield:Iceweasel:" browser/locales/en-US/chrome/branding/brand.* \
+			browser/branding/nightly/configure.sh || die "iceweasel sed failed!"
 	fi
 
 	eautoreconf
@@ -185,7 +184,7 @@ multilib-native_src_configure_internal() {
 	# Use system libraries
 	mozconfig_annotate '' --enable-system-cairo
 	mozconfig_annotate '' --enable-system-hunspell
-	mozconfig_annotate '' --enable-system-sqlite
+	# mozconfig_annotate '' --enable-system-sqlite
 	mozconfig_annotate '' --with-system-nspr
 	mozconfig_annotate '' --with-system-nss
 	mozconfig_annotate '' --enable-system-lcms
@@ -199,7 +198,7 @@ multilib-native_src_configure_internal() {
 	#mozconfig_use_extension mozdevelop venkman
 
 	# IUSE qt-experimental
-#	if use qt-experimental; then
+#	if use qt-experimental ; then
 #		ewarn "You are enabling the EXPERIMENTAL qt toolkit"
 #		ewarn "Usage is at your own risk"
 #		ewarn "Known to be broken. DO NOT file bugs."
@@ -216,7 +215,7 @@ multilib-native_src_configure_internal() {
 	mozconfig_use_enable alsa ogg
 	mozconfig_use_enable alsa wave
 
-	if ! use bindist && ! use iceweasel; then
+	if ! use bindist && ! use iceweasel ; then
 		mozconfig_annotate '' --enable-official-branding
 	fi
 
@@ -233,8 +232,7 @@ multilib-native_src_configure_internal() {
 	#
 	####################################
 
-	CC="$(tc-getCC)" CXX="$(tc-getCXX)" LD="$(tc-getLD)" \
-	econf || die
+	CC="$(tc-getCC)" CXX="$(tc-getCXX)" LD="$(tc-getLD)" econf
 }
 
 multilib-native_src_compile_internal() {
@@ -254,11 +252,11 @@ multilib-native_src_install_internal() {
 	done
 
 	# Install icon and .desktop for menu entry
-	if use iceweasel; then
+	if use iceweasel ; then
 		newicon "${S}"/browser/base/branding/icon48.png iceweasel-icon.png
 		newmenu "${FILESDIR}"/icon/iceweasel.desktop \
 			${PN}-${DESKTOP_PV}.desktop
-	elif ! use bindist; then
+	elif ! use bindist ; then
 		newicon "${S}"/other-licenses/branding/firefox/content/icon48.png firefox-icon.png
 		newmenu "${FILESDIR}"/icon/mozilla-firefox-1.5.desktop \
 			${PN}-${DESKTOP_PV}.desktop
@@ -266,23 +264,25 @@ multilib-native_src_install_internal() {
 		newicon "${S}"/browser/base/branding/icon48.png firefox-icon-unbranded.png
 		newmenu "${FILESDIR}"/icon/mozilla-firefox-1.5-unbranded.desktop \
 			${PN}-${DESKTOP_PV}.desktop
-		sed -e "s/Bon Echo/Minefield/" \
-			-i "${D}"/usr/share/applications/${PN}-${DESKTOP_PV}.desktop
+		sed -i -e "s:Bon Echo:Minefield:" \
+			"${D}"/usr/share/applications/${PN}-${DESKTOP_PV}.desktop || die "sed failed!"
 	fi
 
 	# Add StartupNotify=true bug 237317
-	if use startup-notification; then
+	if use startup-notification ; then
 		echo "StartupNotify=true" >> "${D}"/usr/share/applications/${PN}-${DESKTOP_PV}.desktop
 	fi
 
 	prep_ml_binaries "/usr/bin/firefox"
+	pax-mark m "${D}"/${MOZILLA_FIVE_HOME}/firefox
 
-	#Enable very specific settings not inherited from xulrunner
+	# Enable very specific settings not inherited from xulrunner
 	cp "${FILESDIR}"/firefox-default-prefs.js \
-		"${D}/${MOZILLA_FIVE_HOME}/defaults/preferences/all-gentoo.js" || die "failed to cp xulrunner-default-prefs.js"
+		"${D}/${MOZILLA_FIVE_HOME}/defaults/preferences/all-gentoo.js" || \
+		die "failed to cp xulrunner-default-prefs.js"
 
 	# Plugins dir
-	ln -s "${D}"/usr/$(get_libdir)/{nsbrowser,mozilla-firefox}/plugins
+	dosym ../nsbrowser/plugins "${MOZILLA_FIVE_HOME}"/plugins || die
 }
 
 pkg_postinst() {
