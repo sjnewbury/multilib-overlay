@@ -46,4 +46,6 @@ RDEPEND="!nodep? ( kerberos? ( app-crypt/mit-krb5[lib32] )
 		sys-libs/gdbm[lib32]
 		sys-libs/gpm[lib32]
 		sys-libs/ncurses[lib32]
-		sys-libs/pam[lib32] )"
+		sys-libs/pam[lib32]
+		sys-libs/readline[lib32]
+		sys-libs/zlib[lib32]  )"
