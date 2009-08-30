@@ -17,7 +17,7 @@ RDEPEND="
 !nodep? (
     kerberos? ( app-crypt/mit-krb5[lib32] )
 	ldap? ( net-nds/openldap[lib32] )
-	app-arch/bzip2[lib32]
+    app-arch/bzip2[lib32]
     app-text/libpaper[lib32]
     dev-libs/dbus-glib[lib32]
     dev-libs/expat[lib32]
@@ -50,6 +50,7 @@ RDEPEND="
     sys-libs/gpm[lib32]
     sys-libs/ncurses[lib32]
     sys-libs/pam[lib32]
+    sys-libs/readline[lib32]
 
 )
 "
