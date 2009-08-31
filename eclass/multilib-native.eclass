@@ -597,10 +597,12 @@ _check_build_dir() {
 prep_ml_binaries() {
 	if [[ -n $EMULTILIB_PKG ]] ; then
 		for binary in "$@"; do
-			mv ${D}/${binary} ${D}/${binary}-${ABI}
+			mv ${D}/${binary} ${D}/${binary}-${ABI} || \
+				die "${D}/${binary} not found!"
 			echo mv ${D}/${binary} ${D}/${binary}-${ABI}
 			if is_final_abi; then
-				ln -s /usr/bin/abi-wrapper ${D}/${binary}
+				ln -s /usr/bin/abi-wrapper ${D}/${binary} || \
+					die "could link abi-wrapper to ${D}/${binary}!"
 				echo ln -s /usr/bin/abi-wrapper ${D}/${binary}
 			fi
 		done
