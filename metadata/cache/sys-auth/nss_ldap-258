@@ -1,0 +1,22 @@
+>=net-nds/openldap-2.1.30-r5[lib32?] sasl? ( dev-libs/cyrus-sasl[lib32?] ) kerberos? ( virtual/krb5 ) >=sys-apps/sed-4 =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+>=net-nds/openldap-2.1.30-r5[lib32?] sasl? ( dev-libs/cyrus-sasl[lib32?] ) kerberos? ( virtual/krb5 ) !<net-fs/autofs-4.1.3 sys-apps/abi-wrapper
+0
+http://www.padl.com/download/nss_ldap-258.tar.gz
+
+http://www.padl.com/OSS/nss_ldap.html
+LGPL-2
+NSS LDAP Module
+alpha amd64 hppa ~ia64 ~mips ppc ppc64 sparc x86
+autotools base eutils fixheadtails libtool multilib multilib-native portability toolchain-funcs
+debug sasl kerberos lib32
+
+
+
+2
+
+compile configure install postinst postrm preinst prepare setup unpack
+
+
+
+
+
