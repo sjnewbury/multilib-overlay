@@ -6,7 +6,7 @@ http://opengl.geek.nz/ftgl/ftgl-2.1.2.tar.gz
 http://homepages.paradise.net.nz/henryj/code/#FTGL
 LGPL-2
 library to use arbitrary fonts in OpenGL applications
-~alpha ~amd64 ~hppa ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd
+alpha amd64 hppa ~mips ppc ppc64 sparc x86 ~x86-fbsd
 autotools base eutils flag-o-matic libtool multilib multilib-native portability toolchain-funcs
 lib32
 

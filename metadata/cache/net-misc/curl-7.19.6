@@ -1,12 +1,12 @@
-gnutls? ( net-libs/gnutls[lib32?] app-misc/ca-certificates ) nss? ( !gnutls? ( dev-libs/nss app-misc/ca-certificates ) ) ssl? ( !gnutls? ( !nss? ( dev-libs/openssl[lib32?] app-misc/ca-certificates ) ) ) ldap? ( net-nds/openldap[lib32?] ) idn? ( net-dns/libidn[lib32?] ) ares? ( >=net-dns/c-ares-1.4.0[lib32?] ) kerberos? ( virtual/krb5 ) libssh2? ( >=net-libs/libssh2-0.16[lib32?] ) test? ( sys-apps/diffutils dev-lang/perl ) sys-apps/abi-wrapper
-gnutls? ( net-libs/gnutls[lib32?] app-misc/ca-certificates ) nss? ( !gnutls? ( dev-libs/nss app-misc/ca-certificates ) ) ssl? ( !gnutls? ( !nss? ( dev-libs/openssl[lib32?] app-misc/ca-certificates ) ) ) ldap? ( net-nds/openldap[lib32?] ) idn? ( net-dns/libidn[lib32?] ) ares? ( >=net-dns/c-ares-1.4.0[lib32?] ) kerberos? ( virtual/krb5 ) libssh2? ( >=net-libs/libssh2-0.16[lib32?] ) sys-apps/abi-wrapper
+gnutls? ( net-libs/gnutls[lib32?] app-misc/ca-certificates ) nss? ( !gnutls? ( dev-libs/nss[lib32?] app-misc/ca-certificates ) ) ssl? ( !gnutls? ( !nss? ( dev-libs/openssl[lib32?] app-misc/ca-certificates ) ) ) ldap? ( net-nds/openldap[lib32?] ) idn? ( net-dns/libidn[lib32?] ) ares? ( >=net-dns/c-ares-1.4.0[lib32?] ) kerberos? ( virtual/krb5 ) libssh2? ( >=net-libs/libssh2-0.16[lib32?] ) test? ( sys-apps/diffutils dev-lang/perl ) sys-apps/abi-wrapper
+gnutls? ( net-libs/gnutls[lib32?] app-misc/ca-certificates ) nss? ( !gnutls? ( dev-libs/nss[lib32?] app-misc/ca-certificates ) ) ssl? ( !gnutls? ( !nss? ( dev-libs/openssl[lib32?] app-misc/ca-certificates ) ) ) ldap? ( net-nds/openldap[lib32?] ) idn? ( net-dns/libidn[lib32?] ) ares? ( >=net-dns/c-ares-1.4.0[lib32?] ) kerberos? ( virtual/krb5 ) libssh2? ( >=net-libs/libssh2-0.16[lib32?] ) sys-apps/abi-wrapper
 0
 http://curl.haxx.se/download/curl-7.19.6.tar.bz2
 
 http://curl.haxx.se/ http://curl.planetmirror.com
 MIT X11
 A Client that groks URLs
-~alpha ~amd64 ~arm hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd
+alpha amd64 arm hppa ia64 ~mips ppc ~ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd
 base eutils multilib multilib-native portability toolchain-funcs
 ssl ipv6 ldap ares gnutls libssh2 nss idn kerberos test lib32
 
