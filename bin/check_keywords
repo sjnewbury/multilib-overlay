@@ -19,8 +19,6 @@ echo >&2
 if [[ "$( cat profiles/repo_name 2>/dev/null )" = multilib ]]
 then
 	multdir="."
-	echo >&2 "$0: Using CWD as a detected multilib repo"
-	echo >&2
 else
 	multdir="$( portageq get_repo_path / multilib )"
 
@@ -35,17 +33,17 @@ portdir="$( portageq portdir )"
 
 if [[ "$portdir" = "" ]]
 then
-	die 3 "portageq portdir: couldn't find portage dir"
+	die 2 "portageq portdir: couldn't find portage dir"
 fi
 
 if ! [[ -d "$portdir/metadata/cache" ]]
 then
-	die 4 "couldn't find necessary directory '$portdir/metadata/cache'"
+	die 2 "couldn't find necessary directory '$portdir/metadata/cache'"
 fi
 
 if ! [[ -d "$multdir/metadata/cache" ]]
 then
-	die 5 "couldn't find necessary directory '$multdir/metadata/cache'"
+	die 2 "couldn't find necessary directory '$multdir/metadata/cache'"
 fi
 
 if ! [[ "$1" ]]
@@ -54,7 +52,7 @@ then
 		"e.g.: bin/check_keywords amd64 ppc64"
 fi
 
-cd "$multdir" || die 6 "couldn't cd '$multdir'"
+cd "$multdir" || die 3 "couldn't cd '$multdir'"
 
 ebuilds=( metadata/cache/*/* )
 
@@ -80,8 +78,12 @@ do
 
 			if [[ "$port_keyw_lvl" != "$over_keyw_lvl" ]]
 			then
-				printf '%-40s has %7s in portage but %7s in multilib overlay\n' \
-					"${ebuild##metadata/cache/}" \
+				re='([^/]*)/(.*)-([0-9].*)'
+				[[ "${ebuild##metadata/cache/}" =~ $re ]] || \
+					die 3 "couldn't split '$ebuild' into category/package-version"
+
+				printf '%-60s has %7s in portage but %7s in multilib overlay\n' \
+					"${BASH_REMATCH[1]}/${BASH_REMATCH[2]}/${BASH_REMATCH[2]}-${BASH_REMATCH[3]}.ebuild" \
 					"$port_keyw_lvl" \
 					"$over_keyw_lvl"
 			fi
