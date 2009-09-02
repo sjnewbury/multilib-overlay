@@ -99,6 +99,7 @@ distutils_src_compile() {
 distutils_src_install() {
 	if [[ "${EBUILD_PHASE}" != "install" ]]; then
 		die "${FUNCNAME}() can be used only in src_install() phase"
+	fi
 	if [[ ${ABI} != ${DEFAULT_ABI} ]]; then
 		python="setarch $(get_abi_var SETARCH_ARCH ${ABI})"
 	else
@@ -106,12 +107,6 @@ distutils_src_install() {
 	fi
 
 	local pylibdir
-	if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
-		python="${python} python${PYTHON_SLOT_VERSION}"
-	else
-		python="${python} python"
-	fi
-	einfo Using ${python}
 
 	# Mark the package to be rebuilt after a python upgrade.
 	python_need_rebuild
