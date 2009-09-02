@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/distutils.eclass,v 1.57 2009/08/02 00:30:29 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/distutils.eclass,v 1.59 2009/08/12 02:24:34 arfrever Exp $
 
 # @ECLASS: distutils.eclass
 # @MAINTAINER:
@@ -12,10 +12,8 @@
 # The distutils eclass is designed to allow easier installation of
 # distutils-based python modules and their incorporation into
 # the Gentoo Linux system.
-#
-# It inherits python, multilib, and eutils
 
-inherit python multilib eutils
+inherit eutils multilib python
 
 case "${EAPI:-0}" in
 	0|1)
@@ -49,6 +47,10 @@ fi
 # @DESCRIPTION:
 # The distutils src_unpack function, this function is exported
 distutils_src_unpack() {
+	if [[ "${EBUILD_PHASE}" != "unpack" ]]; then
+		die "${FUNCNAME}() can be used only in src_unpack() phase"
+	fi
+
 	unpack ${A}
 	cd "${S}"
 
@@ -59,6 +61,10 @@ distutils_src_unpack() {
 # @DESCRIPTION:
 # The distutils src_prepare function, this function is exported
 distutils_src_prepare() {
+	if ! has "${EAPI:-0}" 0 1 && [[ "${EBUILD_PHASE}" != "prepare" ]]; then
+		die "${FUNCNAME}() can be used only in src_prepare() phase"
+	fi
+
 	# remove ez_setup stuff to prevent packages
 	# from installing setuptools on their own
 	rm -rf ez_setup*
@@ -69,14 +75,19 @@ distutils_src_prepare() {
 # @DESCRIPTION:
 # The distutils src_compile function, this function is exported
 distutils_src_compile() {
+	if [[ "${EBUILD_PHASE}" != "compile" ]]; then
+		die "${FUNCNAME}() can be used only in src_compile() phase"
+	fi
+
 	if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
-		build_modules() {
-			echo "$(get_python)" setup.py build -b "build-${PYTHON_ABI}" "$@"
-			"$(get_python)" setup.py build -b "build-${PYTHON_ABI}" "$@"
+		building() {
+			echo "$(PYTHON)" setup.py build -b "build-${PYTHON_ABI}" "$@"
+			"$(PYTHON)" setup.py build -b "build-${PYTHON_ABI}" "$@"
 		}
-		python_execute_function build_modules "$@"
+		python_execute_function building "$@"
 	else
-		${python} setup.py build "$@" || die "compilation failed"
+		echo ${python} setup.py build "$@"
+		${python} setup.py build "$@" || die "Building failed"
 	fi
 }
 
@@ -86,11 +97,15 @@ distutils_src_compile() {
 # It also installs the "standard docs" (CHANGELOG, Change*, KNOWN_BUGS, MAINTAINERS,
 # PKG-INFO, CONTRIBUTORS, TODO, NEWS, MANIFEST*, README*, and AUTHORS)
 distutils_src_install() {
+	if [[ "${EBUILD_PHASE}" != "install" ]]; then
+		die "${FUNCNAME}() can be used only in src_install() phase"
 	if [[ ${ABI} != ${DEFAULT_ABI} ]]; then
 		python="setarch $(get_abi_var SETARCH_ARCH ${ABI})"
 	else
 		python=""
 	fi
+
+	local pylibdir
 	if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
 		python="${python} python${PYTHON_SLOT_VERSION}"
 	elif [[ -n "${PYTHON}" ]]; then
@@ -104,18 +119,18 @@ distutils_src_install() {
 	python_need_rebuild
 
 	if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
-		install_modules() {
+		installation() {
 			# need this for python-2.5 + setuptools in cases where
 			# a package uses distutils but does not install anything
 			# in site-packages. (eg. dev-java/java-config-2.x)
 			# - liquidx (14/08/2006)
-			pylibdir="$("$(get_python)" -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')"
+			pylibdir="$("$(PYTHON)" -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')"
 			[[ -n "${pylibdir}" ]] && dodir "${pylibdir}"
 
-			echo "$(get_python)" setup.py build -b "build-${PYTHON_ABI}" install --root="${D}" --no-compile "$@"
-			"$(get_python)" setup.py build -b "build-${PYTHON_ABI}" install --root="${D}" --no-compile "$@"
+			echo "$(PYTHON)" setup.py build -b "build-${PYTHON_ABI}" install --root="${D}" --no-compile "$@"
+			"$(PYTHON)" setup.py build -b "build-${PYTHON_ABI}" install --root="${D}" --no-compile "$@"
 		}
-		python_execute_function install_modules "$@"
+		python_execute_function installation "$@"
 	else
 		# need this for python-2.5 + setuptools in cases where
 		# a package uses distutils but does not install anything
@@ -124,7 +139,8 @@ distutils_src_install() {
 		pylibdir="$(${python} -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')"
 		[[ -n "${pylibdir}" ]] && dodir "${pylibdir}"
 
-		${python} setup.py install --root="${D}" --no-compile "$@" || die "python setup.py install failed"
+		echo ${python} setup.py install --root="${D}" --no-compile "$@"
+		${python} setup.py install --root="${D}" --no-compile "$@" || die "Installation failed"
 	fi
 
 	DDOCS="CHANGELOG KNOWN_BUGS MAINTAINERS PKG-INFO CONTRIBUTORS TODO NEWS"
@@ -142,6 +158,10 @@ distutils_src_install() {
 # @DESCRIPTION:
 # Generic pyc/pyo cleanup script. This function is exported.
 distutils_pkg_postrm() {
+	if [[ "${EBUILD_PHASE}" != "postrm" ]]; then
+		die "${FUNCNAME}() can be used only in pkg_postrm() phase"
+	fi
+
 	local pylibdir pymod
 	if [[ -z "${PYTHON_MODNAME}" ]]; then
 		for pylibdir in "${ROOT}"/usr/$(get_libdir)/python*; do
@@ -151,7 +171,6 @@ distutils_pkg_postrm() {
 		done
 	fi
 
-	ebegin "Performing cleanup of Python modules..."
 	if [[ -n "${PYTHON_MODNAME}" ]]; then
 		for pymod in ${PYTHON_MODNAME}; do
 			for pylibdir in "${ROOT}"/usr/$(get_libdir)/python*; do
@@ -167,7 +186,6 @@ distutils_pkg_postrm() {
 	else
 		python_mod_cleanup
 	fi
-	eend 0
 }
 
 # @FUNCTION: distutils_pkg_postinst
@@ -175,6 +193,10 @@ distutils_pkg_postrm() {
 # This is a generic optimization, you should override it if your package
 # installs modules in another directory. This function is exported.
 distutils_pkg_postinst() {
+	if [[ "${EBUILD_PHASE}" != "postinst" ]]; then
+		die "${FUNCNAME}() can be used only in pkg_postinst() phase"
+	fi
+
 	local pylibdir pymod
 	if [[ -z "${PYTHON_MODNAME}" ]]; then
 		for pylibdir in "${ROOT}"/usr/$(get_libdir)/python*; do
