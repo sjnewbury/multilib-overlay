@@ -47,20 +47,18 @@ then
 		"script as bin/show_changes [files]"
 fi
 
-shopt -s extglob
-
 if [[ "$1" = "--check" ]]
 then
 	check_mode="true"
 	shift
 fi
 
-if (( $# != 1 )) || [[ "$1" != !(*[/.]*)/!(*[/.]*)/!(*/*).ebuild ]] && \
-	[[ "$1" != eclass/!(*/*).eclass ]]
-then
-	die 1 "You must specify exactly one relative path to an ebuild or " \
-		"eclass" 
-fi
+case "$1" in
+	*/*/*.ebuild|eclass/*.eclass)
+		;;
+	*)
+		die 1 "Please give the relative path to an ebuild or eclass";;
+esac
 
 file="$1"
 
