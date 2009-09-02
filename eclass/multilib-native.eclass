@@ -191,7 +191,11 @@ multilib-native_src_generic() {
 		[[ -n ${MULTILIB_DEBUG} ]] && \
 			einfo "MULTILIB_DEBUG: Determining EMULTILIB_SOURCE from S and WORKDIR"
 		EMULTILIB_RELATIVE_BUILD_DIR="${S#*${WORKDIR}\/}"
+		[[ -n ${MULTILIB_DEBUG} ]] && \
+			einfo "MULTILIB_DEBUG: EMULTILIB_RELATIVE_BUILD_DIR=\"${EMULTILIB_RELATIVE_BUILD_DIR}\""
 		EMULTILIB_SOURCE_DIRNAME="${EMULTILIB_RELATIVE_BUILD_DIR%%/*}"
+		[[ -n ${MULTILIB_DEBUG} ]] && \
+			einfo "MULTILIB_DEBUG: EMULTILIB_SOURCE_DIRNAME=\"${EMULTILIB_SOURCE_DIRNAME}\""
 		EMULTILIB_SOURCE="${WORKDIR}/${EMULTILIB_SOURCE_DIRNAME}"
 		CMAKE_BUILD_DIR="${S}"
 		[[ -n ${MULTILIB_DEBUG} ]] && \
@@ -385,6 +389,9 @@ multilib-native_setup_abi_env() {
 	fi
 
 	CMAKE_BUILD_DIR="${WORKDIR}/${PN}_build_${ABI}/${EMULTILIB_RELATIVE_BUILD_DIR/${EMULTILIB_SOURCE_DIRNAME}}"
+
+	# Strip any trailing slash (fixes build failure with python.eclass)
+	CMAKE_BUILD_DIR="${CMAKE_BUILD_DIR%/}"
 
 	export PYTHON PERLBIN QMAKESPEC
 	EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${1})]=1
