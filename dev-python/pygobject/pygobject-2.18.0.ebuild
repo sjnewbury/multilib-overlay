@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools gnome2 python virtualx versionator multilib-native
+inherit alternatives autotools gnome2 python virtualx multilib-native
 
 DESCRIPTION="GLib's GObject library bindings for Python"
 HOMEPAGE="http://www.pygtk.org/"
