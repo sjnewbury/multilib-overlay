@@ -5,7 +5,7 @@
 EAPI="2"
 SUPPORT_PYTHON_ABIS="1"
 
-inherit autotools eutils flag-o-matic gnome.org python virtualx multilib-native
+inherit alternatives autotools eutils flag-o-matic gnome.org python virtualx multilib-native
 
 DESCRIPTION="GTK+2 bindings for Python"
 HOMEPAGE="http://www.pygtk.org/"
