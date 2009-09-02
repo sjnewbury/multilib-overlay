@@ -108,8 +108,6 @@ distutils_src_install() {
 	local pylibdir
 	if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
 		python="${python} python${PYTHON_SLOT_VERSION}"
-	elif [[ -n "${PYTHON}" ]]; then
-		python="${python} ${PYTHON}"
 	else
 		python="${python} python"
 	fi
