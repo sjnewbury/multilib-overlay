@@ -96,7 +96,7 @@ multilib-native_pkg_postrm_internal() {
 
 	create_symlinks() {
 		alternatives_auto_makesym $(python_get_sitedir)/pygtk.py pygtk.py-[0-9].[0-9]
-		alternatives_auto_makesym $(python_get_sitedir)/pygtk.pthpygtk.pth-[0-9].[0-9]
+		alternatives_auto_makesym $(python_get_sitedir)/pygtk.pth pygtk.pth-[0-9].[0-9]
 	}
 	python_execute_function create_symlinks
 }
