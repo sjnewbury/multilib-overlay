@@ -47,20 +47,18 @@ then
 		"script as bin/show_changes [files]"
 fi
 
-shopt -s extglob
-
 if [[ "$1" = "--check" ]]
 then
 	check_mode="true"
 	shift
 fi
 
-if (( $# != 1 )) || [[ "$1" != !(*[/.]*)/!(*[/.]*)/!(*/*).ebuild ]] && \
-	[[ "$1" != eclass/!(*/*).eclass ]]
-then
-	die 1 "You must specify exactly one relative path to an ebuild or " \
-		"eclass" 
-fi
+case "$1" in
+	*/*/*.ebuild|eclass/*.eclass)
+		;;
+	*)
+		die 1 "Please give the relative path to an ebuild or eclass";;
+esac
 
 file="$1"
 
@@ -73,8 +71,22 @@ then
 		*) die 2 "diff failed with exit code $?" ;;
 	esac
 else
-	overlay_revision="$(awk '/# \$Header: / { print $4; exit }' "$file")" || \
-		die 3 "failed to pull revision from cvs header in overlay file"
+	overlay_revision="$(awk -v file="$file" '
+
+		/# \$Header: / {
+			if ( $3 == "/var/cvsroot/gentoo-x86/" file ",v" ) {
+				print $4
+			}
+			exit;
+		}
+	
+		' "$file")" || die 3 "couldn't get CVS revision of '$file'"
+
+	if ! [[ "$overlay_revision" ]]
+	then
+		overlay_revision="1.1"
+		echo "'$file' in overlay has broken CVS header, please fix it"
+	fi
 
 	pushd >/dev/null "$EMULTILIB_CVS_TREE" || \
 		die 2 "pushd '$EMULTILIB_CVS_TREE' failed"

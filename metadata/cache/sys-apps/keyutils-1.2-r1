@@ -1,0 +1,22 @@
+>=sys-kernel/linux-headers-2.6.11 sys-apps/abi-wrapper
+>=sys-kernel/linux-headers-2.6.11 sys-apps/abi-wrapper
+0
+http://people.redhat.com/~dhowells/keyutils/keyutils-1.2.tar.bz2
+
+http://www.kernel.org/
+GPL-2 LGPL-2.1
+Linux Key Management Utilities
+~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86
+base eutils multilib multilib-native portability toolchain-funcs
+lib32
+
+
+
+
+
+compile install postinst postrm preinst setup unpack
+
+
+
+
+

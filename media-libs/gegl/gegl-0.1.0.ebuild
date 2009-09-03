@@ -1,18 +1,18 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/gegl/gegl-0.0.22.ebuild,v 1.12 2009/07/07 00:20:26 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/gegl/gegl-0.1.0.ebuild,v 1.1 2009/09/01 08:52:21 patrick Exp $
 
-EAPI=2
+EAPI="2"
 
-inherit eutils autotools multilib-native
+inherit autotools eutils multilib-native
 
 DESCRIPTION="A graph based image processing framework"
 HOMEPAGE="http://www.gegl.org/"
-SRC_URI="ftp://ftp.gimp.org/pub/${PN}/0.1/${P}.tar.bz2"
+SRC_URI="ftp://ftp.gimp.org/pub/${PN}/${PV:0:3}/${P}.tar.bz2"
 
 LICENSE="|| ( GPL-3 LGPL-3 )"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 
 IUSE="cairo debug doc ffmpeg jpeg mmx openexr png raw sdl sse svg v4l"
 
@@ -27,7 +27,7 @@ DEPEND=">=media-libs/babl-0.1.0[lib32?]
 		>=dev-lang/lua-5.1.0[lib32?]
 		app-text/enscript
 		media-gfx/graphviz[lib32?]
-		media-gfx/imagemagick[lib32?] )
+		media-gfx/imagemagick[png,lib32?] )
 	ffmpeg? ( >=media-video/ffmpeg-0.4.9_p20080326[lib32?] )
 	jpeg? ( media-libs/jpeg[lib32?] )
 	openexr? ( media-libs/openexr[lib32?] )
@@ -35,13 +35,6 @@ DEPEND=">=media-libs/babl-0.1.0[lib32?]
 	sdl? ( media-libs/libsdl[lib32?] )
 	svg? ( >=gnome-base/librsvg-2.14.0[lib32?] )"
 RDEPEND="${DEPEND}"
-
-multilib-native_pkg_setup_internal() {
-	if use doc && ! built_with_use 'media-gfx/imagemagick' 'png'; then
-		eerror "You must build imagemagick with png support"
-		die "media-gfx/imagemagick built without png"
-	fi
-}
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${P}-cflags.patch"
@@ -66,20 +59,11 @@ multilib-native_src_configure_internal() {
 		$(use_with raw libopenraw) \
 		$(use_with sdl) \
 		$(use_with svg librsvg) \
-		$(use_enable sse) \
-		|| die "econf failed"
+		$(use_enable sse)
 }
 
 multilib-native_src_install_internal() {
-	# emake install doesn't install anything
-	einstall || die "einstall failed"
+	emake DESTDIR="${D}" install || die "emake install failed"
 	find "${D}" -name '*.la' -delete
-
 	dodoc ChangeLog INSTALL README NEWS || die "dodoc failed"
-
-	# don't know why einstall omits this?!
-	insinto "/usr/include/${PN}-0.0/${PN}/buffer/"
-	doins "${PN}"/buffer/*.h || die "doins buffer failed"
-	insinto "/usr/include/${PN}-0.0/${PN}/module/"
-	doins "${PN}"/module/*.h || die "doins module failed"
 }

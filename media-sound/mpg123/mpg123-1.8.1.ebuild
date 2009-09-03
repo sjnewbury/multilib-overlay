@@ -14,18 +14,17 @@ SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~mips ppc ~ppc64 ~sparc x86 ~x86-fbsd"
-IUSE="3dnow 3dnowext +alsa altivec ipv6 jack +mmx nas +network oss portaudio pulseaudio
-sdl +sse"
+IUSE="3dnow 3dnowext +alsa altivec ipv6 jack +mmx nas +network oss portaudio pulseaudio sdl +sse"
 
-RDEPEND="alsa? ( media-libs/alsa-lib )
-	jack? ( media-sound/jack-audio-connection-kit )
-	nas? ( media-libs/nas )
-	portaudio? ( media-libs/portaudio )
-	pulseaudio? ( media-sound/pulseaudio )
-	sdl? ( media-libs/libsdl )
+RDEPEND="alsa? ( media-libs/alsa-lib[lib32?] )
+	jack? ( media-sound/jack-audio-connection-kit[lib32?] )
+	nas? ( media-libs/nas[lib32?] )
+	portaudio? ( media-libs/portaudio[lib32?] )
+	pulseaudio? ( media-sound/pulseaudio[lib32?] )
+	sdl? ( media-libs/libsdl[lib32?] )
 	!media-sound/mpg321[symlink]"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 multilib-native_pkg_setup_internal() {
 	# Make sure there is no mpg123 symlink left
@@ -64,14 +63,14 @@ multilib-native_src_configure_internal() {
 
 	use altivec && mcpu=altivec
 
-	if use amd64; then
+	if use amd64 && [ ${ABI} = "amd64" ]; then
 		use mmx && mcpu=x86-64
 		use 3dnow && mcpu=x86-64
 		use sse && mcpu=x86-64${dither} int=yes
 		use 3dnowext && mcpu=x86-64${dither} int=yes
 	fi
 
-	if use x86; then
+	if use x86 && [ ${ABI} = "x86" ]; then
 		mcpu=i586${dither}
 
 		use mmx && mcpu=mmx

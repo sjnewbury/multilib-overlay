@@ -1,12 +1,12 @@
->=media-libs/babl-0.1.0[lib32?] >=dev-libs/glib-2.18.0[lib32?] media-libs/libpng[lib32?] >=x11-libs/gtk+-2.14.0[lib32?] x11-libs/pango[lib32?] cairo? ( x11-libs/cairo[lib32?] ) doc? ( app-text/asciidoc dev-lang/ruby >=dev-lang/lua-5.1.0[lib32?] app-text/enscript media-gfx/graphviz[lib32?] media-gfx/imagemagick[lib32?] ) ffmpeg? ( >=media-video/ffmpeg-0.4.9_p20080326[lib32?] ) jpeg? ( media-libs/jpeg[lib32?] ) openexr? ( media-libs/openexr[lib32?] ) raw? ( >=media-libs/libopenraw-0.0.5[lib32?] ) sdl? ( media-libs/libsdl[lib32?] ) svg? ( >=gnome-base/librsvg-2.14.0[lib32?] ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
->=media-libs/babl-0.1.0[lib32?] >=dev-libs/glib-2.18.0[lib32?] media-libs/libpng[lib32?] >=x11-libs/gtk+-2.14.0[lib32?] x11-libs/pango[lib32?] cairo? ( x11-libs/cairo[lib32?] ) doc? ( app-text/asciidoc dev-lang/ruby >=dev-lang/lua-5.1.0[lib32?] app-text/enscript media-gfx/graphviz[lib32?] media-gfx/imagemagick[lib32?] ) ffmpeg? ( >=media-video/ffmpeg-0.4.9_p20080326[lib32?] ) jpeg? ( media-libs/jpeg[lib32?] ) openexr? ( media-libs/openexr[lib32?] ) raw? ( >=media-libs/libopenraw-0.0.5[lib32?] ) sdl? ( media-libs/libsdl[lib32?] ) svg? ( >=gnome-base/librsvg-2.14.0[lib32?] ) sys-apps/abi-wrapper
+>=media-libs/babl-0.1.0[lib32?] >=dev-libs/glib-2.18.0[lib32?] media-libs/libpng[lib32?] >=x11-libs/gtk+-2.14.0[lib32?] x11-libs/pango[lib32?] cairo? ( x11-libs/cairo[lib32?] ) doc? ( app-text/asciidoc dev-lang/ruby >=dev-lang/lua-5.1.0[lib32?] app-text/enscript media-gfx/graphviz[lib32?] media-gfx/imagemagick[png,lib32?] ) ffmpeg? ( >=media-video/ffmpeg-0.4.9_p20080326[lib32?] ) jpeg? ( media-libs/jpeg[lib32?] ) openexr? ( media-libs/openexr[lib32?] ) raw? ( >=media-libs/libopenraw-0.0.5[lib32?] ) sdl? ( media-libs/libsdl[lib32?] ) svg? ( >=gnome-base/librsvg-2.14.0[lib32?] ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+>=media-libs/babl-0.1.0[lib32?] >=dev-libs/glib-2.18.0[lib32?] media-libs/libpng[lib32?] >=x11-libs/gtk+-2.14.0[lib32?] x11-libs/pango[lib32?] cairo? ( x11-libs/cairo[lib32?] ) doc? ( app-text/asciidoc dev-lang/ruby >=dev-lang/lua-5.1.0[lib32?] app-text/enscript media-gfx/graphviz[lib32?] media-gfx/imagemagick[png,lib32?] ) ffmpeg? ( >=media-video/ffmpeg-0.4.9_p20080326[lib32?] ) jpeg? ( media-libs/jpeg[lib32?] ) openexr? ( media-libs/openexr[lib32?] ) raw? ( >=media-libs/libopenraw-0.0.5[lib32?] ) sdl? ( media-libs/libsdl[lib32?] ) svg? ( >=gnome-base/librsvg-2.14.0[lib32?] ) sys-apps/abi-wrapper
 0
 ftp://ftp.gimp.org/pub/gegl/0.1/gegl-0.1.0.tar.bz2
 
 http://www.gegl.org/
 || ( GPL-3 LGPL-3 )
 A graph based image processing framework
-
+~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86
 autotools base eutils libtool multilib multilib-native portability toolchain-funcs
 cairo debug doc ffmpeg jpeg mmx openexr png raw sdl sse svg v4l lib32
 
