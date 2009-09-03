@@ -36,7 +36,7 @@ DEPEND=">=media-libs/babl-0.1.0[lib32?]
 	svg? ( >=gnome-base/librsvg-2.14.0[lib32?] )"
 RDEPEND="${DEPEND}"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${P}-cflags.patch"
 	eautoreconf
 }

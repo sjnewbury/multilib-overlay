@@ -17,7 +17,7 @@ IUSE="sse mmx"
 
 DEPEND="virtual/libc"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${P}-build-fixes.patch"
 	eautoreconf
 }
