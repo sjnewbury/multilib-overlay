@@ -8,25 +8,43 @@ inherit multilib flag-o-matic mozcoreconf
 
 IUSE="debug gnome ipv6 xinerama"
 
-RDEPEND="x11-libs/libXrender[lib32?]
-	x11-libs/libXt[lib32?]
-	x11-libs/libXmu[lib32?]
-	>=media-libs/jpeg-6b[lib32?]
-	>=media-libs/libpng-1.2.1[lib32?]
-	dev-libs/expat[lib32?]
-	app-arch/zip
-	app-arch/unzip
-	>=x11-libs/gtk+-2.8.6[lib32?]
-	>=dev-libs/glib-2.8.2[lib32?]
-	>=x11-libs/pango-1.10.1[lib32?]
-	>=dev-libs/libIDL-0.8.0[lib32?]
-	gnome? ( >=gnome-base/gnome-vfs-2.3.5[lib32?]
-		>=gnome-base/libgnomeui-2.2.0[lib32?] )
-	!<x11-base/xorg-x11-6.7.0-r2
-	>=x11-libs/cairo-1.0.0[lib32?]"
-	#According to bugs #18573, #204520, and couple of others in Mozilla's
-	#bugzilla. libmng and mng support has been removed in 2003.
-
+if [[ "${EAPI}" -gt "2" ]];then
+	RDEPEND="x11-libs/libXrender[lib32?]
+		x11-libs/libXt[lib32?]
+		x11-libs/libXmu[lib32?]
+		>=media-libs/jpeg-6b[lib32?]
+		>=media-libs/libpng-1.2.1[lib32?]
+		dev-libs/expat[lib32?]
+		app-arch/zip
+		app-arch/unzip
+		>=x11-libs/gtk+-2.8.6[lib32?]
+		>=dev-libs/glib-2.8.2[lib32?]
+		>=x11-libs/pango-1.10.1[lib32?]
+		>=dev-libs/libIDL-0.8.0[lib32?]
+		gnome? ( >=gnome-base/gnome-vfs-2.3.5[lib32?]
+			>=gnome-base/libgnomeui-2.2.0[lib32?] )
+		!<x11-base/xorg-x11-6.7.0-r2
+		>=x11-libs/cairo-1.0.0[lib32?]"
+else
+	RDEPEND="x11-libs/libXrender
+		x11-libs/libXt
+		x11-libs/libXmu
+		>=media-libs/jpeg-6b
+		>=media-libs/libpng-1.2.1
+		dev-libs/expat
+		app-arch/zip
+		app-arch/unzip
+		>=x11-libs/gtk+-2.8.6
+		>=dev-libs/glib-2.8.2
+		>=x11-libs/pango-1.10.1
+		>=dev-libs/libIDL-0.8.0
+		gnome? ( >=gnome-base/gnome-vfs-2.3.5
+			>=gnome-base/libgnomeui-2.2.0 )
+		!<x11-base/xorg-x11-6.7.0-r2
+		>=x11-libs/cairo-1.0.0"
+		#According to bugs #18573, #204520, and couple of others in Mozilla's
+		#bugzilla. libmng and mng support has been removed in 2003.
+fi
 
 DEPEND="${RDEPEND}
 	xinerama? ( x11-proto/xineramaproto )"
