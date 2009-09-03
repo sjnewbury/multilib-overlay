@@ -6,15 +6,15 @@ ftp://ftp.gtk.org/pub/babl/0.1/babl-0.1.0.tar.bz2
 http://www.gegl.org/babl/
 LGPL-3
 A dynamic, any to any, pixel format conversion library
-
+~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86
 autotools base eutils libtool multilib multilib-native portability toolchain-funcs
 sse mmx lib32
 
 
 
+2
 
-
-compile install postinst postrm preinst setup unpack
+compile configure install postinst postrm preinst prepare setup unpack
 
 
 
