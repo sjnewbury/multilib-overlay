@@ -111,8 +111,8 @@ distutils_src_compile() {
 	einfo Using ${python}
 	if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
 		building() {
-			echo "$(PYTHON)" setup.py build -b "build-${PYTHON_ABI}" "$@"
-			"$(PYTHON)" setup.py build -b "build-${PYTHON_ABI}" "$@"
+			echo "${python}" setup.py build -b "build-${PYTHON_ABI}" "$@"
+			${python} setup.py build -b "build-${PYTHON_ABI}" "$@"
 		}
 		python_execute_function building "$@"
 	else
@@ -158,11 +158,11 @@ distutils_src_install() {
 			# a package uses distutils but does not install anything
 			# in site-packages. (eg. dev-java/java-config-2.x)
 			# - liquidx (14/08/2006)
-			pylibdir="$("$(PYTHON)" -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')"
+			pylibdir="$(${python} -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')"
 			[[ -n "${pylibdir}" ]] && dodir "${pylibdir}"
 
-			echo "$(PYTHON)" setup.py build -b "build-${PYTHON_ABI}" install --root="${D}" --no-compile "$@"
-			"$(PYTHON)" setup.py build -b "build-${PYTHON_ABI}" install --root="${D}" --no-compile "$@"
+			echo "${python}" setup.py build -b "build-${PYTHON_ABI}" install --root="${D}" --no-compile "$@"
+			${python} setup.py build -b "build-${PYTHON_ABI}" install --root="${D}" --no-compile "$@"
 		}
 		python_execute_function installation "$@"
 	else
