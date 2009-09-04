@@ -13,6 +13,7 @@ dev-libs/libxml2 prep_ml_binaries /usr/bin/xml2-config
 dev-libs/libxslt prep_ml_binaries /usr/bin/xslt-config
 dev-libs/nspr prep_ml_binaries /usr/bin/nspr-config
 dev-libs/nss prep_ml_binaries /usr/bin/nss-config
+dev-libs/oniguruma prep_ml_binaries /usr/bin/onig-config
 dev-util/pkgconfig prep_ml_binaries /usr/bin/pkg-config
 gnome-base/orbit prep_ml_binaries /usr/bin/orbit2-config
 media-gfx/imagemagick prep_ml_binaries /usr/bin/Magick++-config /usr/bin/Magick-config /usr/bin/MagickCore-config /usr/bin/MagickWand-config /usr/bin/Wand-config
@@ -38,5 +39,5 @@ x11-libs/gtk+ prep_ml_binaries /usr/bin/gtk-config
 x11-libs/libXft prep_ml_binaries /usr/bin/xft-config
 x11-libs/pango prep_ml_binaries /usr/bin/pango-querymodules
 x11-libs/qt-core prep_ml_binaries /usr/bin/qmake /usr/bin/moc /usr/bin/rcc /usr/bin/uic
-www-client/mozilla-firefox prep_ml_binaries /usr/bin/firefox
 x11-misc/imake prep_ml_binaries /usr/bin/xmkmf /usr/bin/imake
+www-client/mozilla-firefox prep_ml_binaries /usr/bin/firefox
