@@ -132,6 +132,8 @@ multilib-native_src_install_internal() {
 		emake DESTDIR="${D}" installpammodules || die "emake installpammodules failed"
 	fi
 
+	rm -rf "${D}/usr/share/doc"
+
 	# Remove empty installation directories
 	rmdir \
 		"${D}/usr/$(get_libdir)/samba" \
