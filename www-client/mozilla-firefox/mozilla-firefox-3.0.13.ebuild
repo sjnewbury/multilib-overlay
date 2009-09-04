@@ -101,7 +101,7 @@ pkg_setup(){
 	fi
 }
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	! use xulrunner && unpack xulrunner-1.9${MY_PV}.tar.bz2
 	unpack ${P}.tar.bz2 ${PATCH}.tar.bz2
 
@@ -280,7 +280,7 @@ EOF
 
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	declare MOZILLA_FIVE_HOME="/usr/$(get_libdir)/${PN}"
 
 	ewarn "All the packages built against ${PN} won't compile,"

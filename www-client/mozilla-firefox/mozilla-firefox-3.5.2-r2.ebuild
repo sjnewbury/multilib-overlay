@@ -108,7 +108,7 @@ pkg_setup() {
 	fi
 }
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 
 	if use iceweasel ; then

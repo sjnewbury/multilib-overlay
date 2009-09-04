@@ -41,7 +41,7 @@ export MOZ_CO_PROJECT=xulrunner
 export BUILD_OFFICIAL=1
 export MOZILLA_OFFICIAL=1
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	java-pkg-opt-2_pkg_setup
 }
 

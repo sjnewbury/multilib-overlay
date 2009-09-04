@@ -225,7 +225,7 @@ multilib-native_src_install_internal() {
 	done
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 
 	MOZLIBDIR="/usr/$(get_libdir)/${PN}-${MAJ_PV}"
 
@@ -234,17 +234,19 @@ pkg_postinst() {
 		python_mod_optimize "${MOZLIBDIR}/python"
 	fi
 
-	ewarn "If firefox fails to start with \"failed to load xpcom\", run revdep-rebuild"
-	ewarn "If that does not fix the problem, rebuild dev-libs/nss"
-	ewarn "Try dev-util/lafilefixer if you get build failures related to .la files"
+	if is_final_abi ; then
+		ewarn "If firefox fails to start with \"failed to load xpcom\", run revdep-rebuild"
+		ewarn "If that does not fix the problem, rebuild dev-libs/nss"
+		ewarn "Try dev-util/lafilefixer if you get build failures related to .la files"
 
-	einfo
-	einfo "All prefs can be overridden by the user. The preferences are to make"
-	einfo "use of xulrunner out of the box on an average system without the user"
-	einfo "having to go through and enable the basics."
+		einfo
+		einfo "All prefs can be overridden by the user. The preferences are to make"
+		einfo "use of xulrunner out of the box on an average system without the user"
+		einfo "having to go through and enable the basics."
+	fi
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 
 	MOZLIBDIR="/usr/$(get_libdir)/${PN}-${MAJ_PV}"
 

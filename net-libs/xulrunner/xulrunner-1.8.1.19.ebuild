@@ -38,7 +38,7 @@ export MOZ_CO_PROJECT=xulrunner
 export BUILD_OFFICIAL=1
 export MOZILLA_OFFICIAL=1
 
-pkg_setup(){
+multilib-native_pkg_setup_internal() {
 	if ! built_with_use x11-libs/cairo X; then
 		eerror "Cairo is not built with X useflag."
 		eerror "Please add 'X' to your USE flags, and re-emerge cairo."
@@ -53,7 +53,7 @@ pkg_setup(){
 	java-pkg-opt-2_pkg_setup
 }
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${P}-source.tar.bz2  ${PATCH}.tar.bz2
 }
 
