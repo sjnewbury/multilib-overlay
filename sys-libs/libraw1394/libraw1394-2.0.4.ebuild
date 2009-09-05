@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/libraw1394/libraw1394-2.0.2.ebuild,v 1.1 2009/06/28 21:20:06 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/libraw1394/libraw1394-2.0.4.ebuild,v 1.1 2009/06/30 20:08:57 patrick Exp $
 
 inherit multilib-native
 

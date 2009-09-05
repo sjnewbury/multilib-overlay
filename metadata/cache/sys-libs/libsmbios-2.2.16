@@ -1,0 +1,22 @@
+dev-libs/libxml2[lib32?] sys-libs/zlib[lib32?] nls? ( virtual/libintl ) python? ( >=dev-lang/python-2.3[lib32?] ) dev-util/pkgconfig[lib32?] doc? ( app-doc/doxygen ) graphviz? ( media-gfx/graphviz[lib32?] ) nls? ( sys-devel/gettext[lib32?] ) test? ( >=dev-util/cppunit-1.9.6[lib32?] ) >=app-shells/bash-3.2 sys-apps/abi-wrapper
+dev-libs/libxml2[lib32?] sys-libs/zlib[lib32?] nls? ( virtual/libintl ) python? ( >=dev-lang/python-2.3[lib32?] ) sys-apps/abi-wrapper
+0
+http://linux.dell.com/libsmbios/download/libsmbios/libsmbios-2.2.16/libsmbios-2.2.16.tar.bz2
+
+http://linux.dell.com/libsmbios/main/index.html
+GPL-2 OSL-2.0
+Provide access to (SM)BIOS information
+~amd64 ~ia64 ~x86
+base eutils multilib multilib-native portability python toolchain-funcs
+doc graphviz nls python test lib32
+
+
+
+2
+
+compile configure install postinst postrm preinst prepare setup unpack
+
+
+
+
+
