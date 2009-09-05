@@ -147,6 +147,8 @@ multilib-native_src_install_internal() {
 	    rm -f "${D}"${MOZILLA_FIVE_HOME}/javaxpcom.jar
 	fi
 
+	prep_ml_binaries /usr/bin/xulrunner-config
+
 	# xulrunner registration, the gentoo way
 	insinto /etc/gre.d
 	newins "${FILESDIR}"/${PN}.conf ${PV}-${ABI}.conf
