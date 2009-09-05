@@ -13,8 +13,10 @@ die() {
 	exit "$1"
 }
 
-echo >&2 "$0: Please make sure to first run egencache --repo=multilib --update"
-echo >&2
+if ! type qatom >/dev/null
+then
+	die 2 "Please install app-portage/portage-utils"
+fi
 
 if [[ "$( cat profiles/repo_name 2>/dev/null )" = multilib ]]
 then
@@ -54,6 +56,9 @@ fi
 
 cd "$multdir" || die 3 "couldn't cd '$multdir'"
 
+echo >&2 "$0: Please make sure to first run egencache --repo=multilib --update"
+echo >&2
+
 ebuilds=( metadata/cache/*/* )
 
 for ebuild in "${ebuilds[@]}"
@@ -61,32 +66,32 @@ do
 	if ! [[ -f "$portdir/$ebuild" ]]
 	then
 		[[ "$DEBUG" ]] && echo >&2 "$0: warning: '$portdir/$ebuild' doesn't exist"
-	else
-		# these contain the full, generated ebuild KEYWORD string contents
-		overlay_keywords="$( sed -n 9p "$ebuild" )"
-		portage_keywords="$( sed -n 9p "$portdir/$ebuild" )"
-
-		for keyword in "$@"
-		do
-			port_keyw_lvl="-$keyword"
-			over_keyw_lvl="-$keyword"
-
-			[[ " $portage_keywords " = *" ~$keyword "* ]] && port_keyw_lvl="~$keyword"
-			[[ " $overlay_keywords " = *" ~$keyword "* ]] && over_keyw_lvl="~$keyword"
-			[[ " $overlay_keywords " = *" $keyword "* ]] && over_keyw_lvl="$keyword"
-			[[ " $portage_keywords " = *" $keyword "* ]] && port_keyw_lvl="$keyword"
-
-			if [[ "$port_keyw_lvl" != "$over_keyw_lvl" ]]
-			then
-				re='([^/]*)/(.*)-([0-9].*)'
-				[[ "${ebuild##metadata/cache/}" =~ $re ]] || \
-					die 3 "couldn't split '$ebuild' into category/package-version"
-
-				printf '%-60s has %7s in portage but %7s in multilib overlay\n' \
-					"${BASH_REMATCH[1]}/${BASH_REMATCH[2]}/${BASH_REMATCH[2]}-${BASH_REMATCH[3]}.ebuild" \
-					"$port_keyw_lvl" \
-					"$over_keyw_lvl"
-			fi
-		done
+		continue
 	fi
+
+
+	# these contain the full, generated ebuild KEYWORD string contents
+	overlay_keywords="$( sed -n 9p "$ebuild" )"
+	portage_keywords="$( sed -n 9p "$portdir/$ebuild" )"
+
+	for keyword in "$@"
+	do
+		port_keyw_lvl="-$keyword"
+		over_keyw_lvl="-$keyword"
+
+		[[ " $portage_keywords " = *" ~$keyword "* ]] && port_keyw_lvl="~$keyword"
+		[[ " $overlay_keywords " = *" ~$keyword "* ]] && over_keyw_lvl="~$keyword"
+		[[ " $overlay_keywords " = *" $keyword "* ]] && over_keyw_lvl="$keyword"
+		[[ " $portage_keywords " = *" $keyword "* ]] && port_keyw_lvl="$keyword"
+
+		[[ "$port_keyw_lvl" = "$over_keyw_lvl" ]] && continue
+
+		read category package version revision \
+			< <(qatom "${ebuild##metadata/cache/}")
+
+		printf '%-60s has %7s in portage but %7s in multilib overlay\n' \
+			"$category/$package/$package-$version${revision:+-"$revision"}.ebuild" \
+			"$port_keyw_lvl" \
+			"$over_keyw_lvl"
+		done
 done
