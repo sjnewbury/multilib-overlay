@@ -12,9 +12,9 @@ authdaemond berkdb crypt gdbm kerberos ldap mysql ntlm_unsupported_patch pam pos
 
 
 
+2
 
-
-compile install postinst postrm preinst setup unpack
+compile configure install postinst postrm preinst prepare setup unpack
 
 
 
