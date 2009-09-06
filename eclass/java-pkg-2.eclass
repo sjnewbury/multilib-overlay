@@ -104,27 +104,6 @@ java-pkg-2_src_compile() {
 	fi
 }
 
-
-java-pkg-2_pkg_preinst() {
-	if is-java-strict; then
-		if has_version dev-java/java-dep-check; then
-			[[ -e "${JAVA_PKG_ENV}" ]] || return
-			local output=$(GENTOO_VM= java-dep-check --image "${D}" "${JAVA_PKG_ENV}")
-			if [[ ${output} && has_version <=dev-java/java-dep-check-0.2 ]]; then
-				ewarn "Possibly unneeded dependencies found in package.env:"
-				for dep in ${output}; do
-					ewarn "\t${dep}"
-				done
-			fi
-			if [[ ${output} && has_version >dev-java/java-dep-check-0.2 ]]; then
-				ewarn "${output}"
-			fi
-		else
-			eerror "Install dev-java/java-dep-check for dependency checking"
-		fi
-	fi
-}
-
 # @eclass-pkg_preinst
 #
 # wrapper for java-utils-2_pkg_preinst
