@@ -12,7 +12,7 @@ SRC_URI="http://www.jackaudio.org/downloads/${P}.tar.gz"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc x86"
 IUSE="3dnow altivec alsa coreaudio doc debug examples mmx oss sse cpudetection"
 
 RDEPEND=">=media-libs/libsndfile-1.0.0[lib32?]
