@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-145-r1.ebuild,v 1.1 2009/09/05 13:54:10 zzam Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-145-r1.ebuild,v 1.5 2009/09/06 12:41:53 zzam Exp $
 
 EAPI="2"
 
@@ -29,14 +29,16 @@ COMMON_DEPEND="selinux? ( sys-libs/libselinux[lib32?] )
 		sys-apps/pciutils[lib32?]
 		dev-libs/glib:2[lib32?]
 	)
-	>=sys-apps/util-linux-2.16[lib32?]"
+	>=sys-apps/util-linux-2.16[lib32?]
+	>=sys-libs/glibc-2.7"
 
 DEPEND="${COMMON_DEPEND}
 	extras? ( dev-util/gperf )"
 
 RDEPEND="${COMMON_DEPEND}
 	!sys-apps/coldplug
-	!<sys-fs/device-mapper-1.02.19-r1
+	!<sys-fs/lvm2-2.02.45
+	!sys-fs/device-mapper
 	>=sys-apps/baselayout-1.12.5"
 
 if [[ ${PV} == "9999" ]]; then
@@ -49,7 +51,7 @@ if [[ ${PV} == "9999" ]]; then
 fi
 
 # required kernel options
-CONFIG_CHECK="INOTIFY INOTIFY_USER SIGNALFD !SYSFS_DEPRECATED !SYSFS_DEPRECATED_V2"
+CONFIG_CHECK="~INOTIFY_USER ~SIGNALFD ~!SYSFS_DEPRECATED ~!SYSFS_DEPRECATED_V2"
 
 # We need the lib/rcscripts/addon support
 PROVIDE="virtual/dev-manager"
@@ -85,7 +87,9 @@ pkg_setup() {
 	fi
 
 	echo
-	udev_check_KV
+	# We don't care about the secondary revision of the kernel.
+	# 2.6.30.4 -> 2.6.30 is all we check
+	KV_PATCH="${KV_PATCH%.*}" udev_check_KV
 	case "$?" in
 		2)	einfo "Your kernel version (${KV_FULL}) is new enough to run ${P} reliable." ;;
 		1)	ewarn "Your kernel version (${KV_FULL}) is new enough to run ${P},"
@@ -98,7 +102,7 @@ pkg_setup() {
 
 	KV_FULL_SRC=${KV_FULL}
 	get_running_version
-	udev_check_KV
+	KV_PATCH="${KV_PATCH%.*}" udev_check_KV
 	if [[ "$?" = "0" ]]; then
 		eerror
 		eerror "udev cannot be restarted after emerging,"
@@ -183,13 +187,19 @@ multilib-native_src_install_internal() {
 
 	into /
 	emake DESTDIR="${D}" install || die "make install failed"
+	# without this code, multilib-strict is angry
 	if [[ "$(get_libdir)" != "lib" ]]; then
-		# we can not just rename /lib to /lib64, because
-		# make install creates /lib64 and /lib
-		# without this code, multilib-strict is angry
-		mkdir -p "${D}/$(get_libdir)"
-		mv "${D}"/lib/* "${D}/$(get_libdir)/"
-		rmdir "${D}"/lib
+		# check if this code is needed, bug #281338
+		if [[ -d "${D}/lib" ]]; then
+			# we can not just rename /lib to /lib64, because
+			# make install creates /lib64 and /lib
+			einfo "Moving lib to $(get_libdir)"
+			mkdir -p "${D}/$(get_libdir)"
+			mv "${D}"/lib/* "${D}/$(get_libdir)/"
+			rmdir "${D}"/lib
+		else
+			einfo "There is no ${D}/lib, move code can be deleted."
+		fi
 	fi
 
 	exeinto "${udev_libexec_dir}"
@@ -271,6 +281,12 @@ multilib-native_src_install_internal() {
 
 	# documentation
 	dodoc ChangeLog README TODO || die "failed installing docs"
+
+	# keep doc in just one directory, Bug #281137
+	rm -rf "${D}/usr/share/doc/${PN}"
+	if use extras; then
+		dodoc extras/keymap/README.keymap.txt || die "failed installing docs"
+	fi
 
 	cd docs/writing_udev_rules
 	mv index.html writing_udev_rules.html

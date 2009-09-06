@@ -6,7 +6,7 @@ ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_12_3_RTM/src/n
 http://www.mozilla.org/projects/security/pki/nss/
 || ( MPL-1.1 GPL-2 LGPL-2.1 )
 Mozilla's Network Security Services library that implements PKI support
-~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd
+alpha amd64 arm hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd
 base eutils flag-o-matic multilib multilib-native portability toolchain-funcs
 utils lib32
 

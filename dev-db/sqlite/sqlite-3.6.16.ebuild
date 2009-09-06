@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.16.ebuild,v 1.1 2009/06/27 21:31:00 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.16.ebuild,v 1.8 2009/09/05 23:20:00 maekke Exp $
 
 EAPI="2"
 
@@ -15,30 +15,19 @@ SRC_URI="http://www.sqlite.org/${P}.tar.gz
 
 LICENSE="as-is"
 SLOT="3"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 ~arm hppa ~ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="debug doc soundex tcl +threadsafe"
 RESTRICT="!tcl? ( test )"
 
-RDEPEND="tcl? ( dev-lang/tcl )"
+RDEPEND="tcl? ( dev-lang/tcl[lib32?] )"
 DEPEND="${RDEPEND}
 	doc? ( app-arch/unzip )"
-
-pkg_setup() {
-	if has test ${FEATURES}; then
-		if ! has userpriv ${FEATURES}; then
-			ewarn "The userpriv feature must be enabled to run tests."
-			eerror "Testsuite will not be run."
-		fi
-		if ! use tcl; then
-			ewarn "You must enable the tcl use flag if you want to run the testsuite."
-			eerror "Testsuite will not be run."
-		fi
-	fi
-}
 
 multilib-native_src_prepare_internal() {
 	# note: this sandbox fix is no longer needed with sandbox-1.3+
 	epatch "${FILESDIR}"/sandbox-fix2.patch
+
+	epatch "${FILESDIR}"/${P}-tkt3922.test.patch
 
 	epunt_cxx
 }
@@ -62,10 +51,18 @@ multilib-native_src_compile_internal() {
 }
 
 src_test() {
-	if has userpriv ${FEATURES}; then
+	if [[ "${EUID}" -ne "0" ]]; then
 		local test=test
 		use debug && test=fulltest
 		emake ${test} || die "some test(s) failed"
+	else
+		ewarn "The userpriv feature must be enabled to run tests."
+		eerror "Testsuite will not be run."
+	fi
+
+	if ! use tcl; then
+		ewarn "You must enable the tcl USE flag if you want to run the testsuite."
+		eerror "Testsuite will not be run."
 	fi
 }
 

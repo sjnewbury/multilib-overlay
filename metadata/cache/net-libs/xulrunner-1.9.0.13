@@ -6,7 +6,7 @@ mirror://gentoo/xulrunner-1.9.0.13.tar.bz2 http://dev.gentoo.org/~armin76/dist/x
 http://developer.mozilla.org/en/docs/XULRunner
 || ( MPL-1.1 GPL-2 LGPL-2.1 )
 Mozilla runtime package that can be used to bootstrap XUL+XPCOM applications
-alpha ~amd64 arm hppa ia64 ppc ~ppc64 sparc x86
+alpha amd64 arm hppa ia64 ppc ppc64 sparc x86
 autotools base check-reqs eutils flag-o-matic java-pkg-opt-2 java-utils-2 libtool makeedit mozconfig-3 mozcoreconf-2 multilib multilib-native portability python toolchain-funcs versionator
 custom-optimization gnome dbus startup-notification elibc_FreeBSD java gcj multislot lib32
 

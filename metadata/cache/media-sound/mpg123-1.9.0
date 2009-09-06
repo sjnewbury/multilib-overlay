@@ -1,5 +1,5 @@
-alsa? ( media-libs/alsa-lib[lib32?] ) jack? ( media-sound/jack-audio-connection-kit[lib32?] ) nas? ( media-libs/nas[lib32?] ) portaudio? ( media-libs/portaudio[lib32?] ) pulseaudio? ( media-sound/pulseaudio[lib32?] ) sdl? ( media-libs/libsdl[lib32?] ) !media-sound/mpg321[symlink] dev-util/pkgconfig[lib32?] sys-apps/abi-wrapper
-alsa? ( media-libs/alsa-lib[lib32?] ) jack? ( media-sound/jack-audio-connection-kit[lib32?] ) nas? ( media-libs/nas[lib32?] ) portaudio? ( media-libs/portaudio[lib32?] ) pulseaudio? ( media-sound/pulseaudio[lib32?] ) sdl? ( media-libs/libsdl[lib32?] ) !media-sound/mpg321[symlink] sys-apps/abi-wrapper
+alsa? ( media-libs/alsa-lib[lib32?] ) jack? ( media-sound/jack-audio-connection-kit[lib32?] ) nas? ( media-libs/nas[lib32?] ) portaudio? ( media-libs/portaudio[lib32?] ) pulseaudio? ( media-sound/pulseaudio[lib32?] ) sdl? ( media-libs/libsdl[lib32?] ) dev-util/pkgconfig[lib32?] sys-apps/abi-wrapper
+alsa? ( media-libs/alsa-lib[lib32?] ) jack? ( media-sound/jack-audio-connection-kit[lib32?] ) nas? ( media-libs/nas[lib32?] ) portaudio? ( media-libs/portaudio[lib32?] ) pulseaudio? ( media-sound/pulseaudio[lib32?] ) sdl? ( media-libs/libsdl[lib32?] ) sys-apps/abi-wrapper
 0
 mirror://sourceforge/mpg123/mpg123-1.9.0.tar.bz2 http://www.mpg123.org/download/mpg123-1.9.0.tar.bz2
 

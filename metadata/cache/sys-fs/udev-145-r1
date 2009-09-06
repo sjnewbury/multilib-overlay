@@ -1,5 +1,5 @@
-selinux? ( sys-libs/libselinux[lib32?] ) extras? ( sys-apps/acl[lib32?] >=sys-apps/usbutils-0.82 dev-libs/libusb[lib32?] sys-apps/pciutils[lib32?] dev-libs/glib:2[lib32?] ) >=sys-apps/util-linux-2.16[lib32?] extras? ( dev-util/gperf ) kernel_linux? ( virtual/linux-sources ) sys-apps/abi-wrapper
-selinux? ( sys-libs/libselinux[lib32?] ) extras? ( sys-apps/acl[lib32?] >=sys-apps/usbutils-0.82 dev-libs/libusb[lib32?] sys-apps/pciutils[lib32?] dev-libs/glib:2[lib32?] ) >=sys-apps/util-linux-2.16[lib32?] !sys-apps/coldplug !<sys-fs/device-mapper-1.02.19-r1 >=sys-apps/baselayout-1.12.5 sys-apps/abi-wrapper
+selinux? ( sys-libs/libselinux[lib32?] ) extras? ( sys-apps/acl[lib32?] >=sys-apps/usbutils-0.82 dev-libs/libusb[lib32?] sys-apps/pciutils[lib32?] dev-libs/glib:2[lib32?] ) >=sys-apps/util-linux-2.16[lib32?] >=sys-libs/glibc-2.7 extras? ( dev-util/gperf ) kernel_linux? ( virtual/linux-sources ) sys-apps/abi-wrapper
+selinux? ( sys-libs/libselinux[lib32?] ) extras? ( sys-apps/acl[lib32?] >=sys-apps/usbutils-0.82 dev-libs/libusb[lib32?] sys-apps/pciutils[lib32?] dev-libs/glib:2[lib32?] ) >=sys-apps/util-linux-2.16[lib32?] >=sys-libs/glibc-2.7 !sys-apps/coldplug !<sys-fs/lvm2-2.02.45 !sys-fs/device-mapper >=sys-apps/baselayout-1.12.5 sys-apps/abi-wrapper
 0
 mirror://kernel/linux/utils/kernel/hotplug/udev-145.tar.bz2
 
