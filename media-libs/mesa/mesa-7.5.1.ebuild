@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.4.2.ebuild,v 1.2 2009/06/23 19:24:39 klausman Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.5.1.ebuild,v 1.1 2009/09/04 15:26:34 remi Exp $
 
 EAPI="2"
 
@@ -28,18 +28,18 @@ HOMEPAGE="http://mesa3d.sourceforge.net/"
 
 #SRC_PATCHES="mirror://gentoo/${P}-gentoo-patches-01.tar.bz2"
 if [[ $PV = *_rc* ]]; then
-	SRC_URI="http://www.mesa3d.org/beta/${MY_SRC_P}.tar.gz
+	SRC_URI="ftp://ftp.freedesktop.org/pub/mesa/beta/${MY_SRC_P}.tar.gz
 		${SRC_PATCHES}"
 elif [[ $PV = 9999* ]]; then
 	SRC_URI="${SRC_PATCHES}"
 else
-	SRC_URI="mirror://sourceforge/mesa3d/${MY_SRC_P}.tar.bz2
+	SRC_URI="ftp://ftp.freedesktop.org/pub/mesa/${PV}/${MY_SRC_P}.tar.bz2
 		${SRC_PATCHES}"
 fi
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 
 IUSE_VIDEO_CARDS="${IUSE_VIDEO_CARDS_UNSTABLE}
 	video_cards_intel
@@ -65,7 +65,7 @@ RDEPEND="!<=x11-base/xorg-x11-6.9
 	!<=x11-proto/xf86driproto-2.0.3
 	app-admin/eselect-opengl
 	dev-libs/expat[lib32?]
-	>=x11-libs/libdrm-2.4.6[lib32?]
+	>=x11-libs/libdrm-2.4.9[lib32?]
 	x11-libs/libICE[lib32?]
 	x11-libs/libX11[xcb?,lib32?]
 	x11-libs/libXdamage[lib32?]
@@ -83,8 +83,8 @@ DEPEND="${RDEPEND}
 	>=x11-proto/glproto-1.4.8
 	x11-proto/inputproto
 	x11-proto/xextproto
-	x11-proto/xf86vidmodeproto
 	x11-proto/xf86driproto
+	x11-proto/xf86vidmodeproto
 "
 # glew depend on mesa and it is needed in runtime
 PDEPEND=">=media-libs/glew-1.5.1[lib32?]"
@@ -94,10 +94,6 @@ S="${WORKDIR}/${MY_P}"
 # Think about: ggi, svga, fbcon, no-X configs
 
 pkg_setup() {
-	if use debug; then
-		append-flags -g
-	fi
-
 	# gcc 4.2 has buggy ivopts
 	if [[ $(gcc-version) = "4.2" ]]; then
 		append-flags -fno-ivopts
@@ -175,12 +171,13 @@ multilib-native_src_configure_internal() {
 				#$(use_enable video_cards_radeon gallium-radeon)
 				#$(use_enable video_cards_radeonhd gallium-radeon)"
 		fi
+	else
+		# we need to disable the gallium since they enable by default...
+		myconf="${myconf} --disable-gallium"
 	fi
 
 	# Deactivate assembly code for pic build
-	# Sparc assembly code is not working
 	myconf="${myconf} $(use_enable !pic asm)"
-	myconf="${myconf} $(use_enable !sparc asm)"
 
 	# --with-driver=dri|xlib|osmesa ; might get changed later to something
 	# else than dri
@@ -204,7 +201,7 @@ multilib-native_src_install_internal() {
 	# Remove redundant headers
 	# GLUT thing
 	rm -f "${D}"/usr/include/GL/glut*.h || die "Removing glut include failed."
-	# Glew headers
+	# Glew includes
 	rm -f "${D}"/usr/include/GL/{glew,glxew,wglew}.h \
 		|| die "Removing glew includes failed."
 
@@ -243,7 +240,7 @@ multilib-native_src_install_internal() {
 	sed -i \
 		-e 's:-ldl:'$(dlopen_lib)':g' \
 		"${D}"/usr/$(get_libdir)/{libGLU.la,opengl/xorg-x11/lib/libGL.la} \
-		|| die "sed dlopen failed"
+			|| die "sed dlopen failed"
 }
 
 pkg_postinst() {

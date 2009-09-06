@@ -8,3 +8,9 @@ libtasn1-2.*
 #removed since gnutls 2.8
 gnutls-2.8.*
 gnutls-2.9.*
+
+#gone since 1.0
+libusb-1*
+
+#removed for 1.9
+xulrunner-1.9*
