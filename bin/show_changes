@@ -4,7 +4,7 @@
 #	# cd path/to/multilib/overlay
 #	# bin/show_changes path/to/file.ebuild
 # <read output, use vim to edit the ebuild>
-#	# bin/show_changes --check
+#	# bin/show_changes path/to/file.ebuild --check
 # <check you changed it correctly>
 #	# ebuild path/to/file.ebuild digest	# or repoman manifest
 #	# egencache --repo=multilib --update
@@ -30,7 +30,7 @@
 # which you'll need to update before running this script.  You can set the
 # following env var to where yours is.
 
-: ${EMULTILIB_CVS_TREE:=~/src/gentoo-x86}
+: ${EMULTILIB_CVS_TREE:=/usr/portage}
 
 die() {
 	local line
@@ -47,11 +47,8 @@ then
 		"script as bin/show_changes [files]"
 fi
 
-if [[ "$1" = "--check" ]]
-then
-	check_mode="true"
-	shift
-fi
+[[ "$1" = "--check" ]] && { check_mode="true"; shift; }
+[[ "$2" = "--check" ]] && check_mode="true"
 
 case "$1" in
 	*/*/*.ebuild|eclass/*.eclass)
