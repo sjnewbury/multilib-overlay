@@ -1,107 +1,144 @@
 #!/bin/bash
 
-# Usage:
-#	# cd path/to/multilib/overlay
-#	# bin/show_changes path/to/file.ebuild
-# <read output, use vim to edit the ebuild>
-#	# bin/show_changes path/to/file.ebuild --check
-# <check you changed it correctly>
-#	# ebuild path/to/file.ebuild digest	# or repoman manifest
-#	# egencache --repo=multilib --update
-
-# The purpose of this script is to display updates to ebuilds in the portage
-# tree that need to be ported over to the ebuilds in the overlay, so that you
-# can bring them up to date.
-
-# It does this by comparing the CVS revision in the overlay ebuild with the
-# current one in your portage tree CVS checkout.
-
-# Possible future directions for this script could involve generating a diff of
-# the old revision and the overlay file and trying to apply it to the new
-# revision.  At the moment it is manual.
-
-# Another obvious possibility would be scanning for changes in the portage tree
-# for everything in the overlay.  This has some large problems: it is difficult
-# to know when a particular file was taken out of portage, and so determine how
-# far back to check for changes.  This is easy for ebuilds and eclasses, with
-# their CVS headers, but for other files this is hugely problematic.
-
 # IMPORTANT NOTE: You will need an actual CVS checkout of the portage tree,
 # which you'll need to update before running this script.  You can set the
-# following env var to where yours is.
+# following environmental variable to wherever yours is.
 
-: ${EMULTILIB_CVS_TREE:=/usr/portage}
+: ${EMULTILIB_CVS_TREE:="$(portageq portdir)"}
+: ${EMULTILIB_CVS_TREE:="/usr/portage"}
 
-die() {
-	local line
-	for line in "${@:2}"
-	do
-		printf >&2 '%s\n' "$0: $line"
-	done
-	exit "$1"
+usage() {
+    printf >&2 '%s\n' "" \
+    "Usage:" \
+    "bin/show_changes [ --overlay | -o ] path/to/file.ebuild" \
+    "bin/show_changes [ --overlay | -o ] eclass/file.eclass" \
+    "  show changes in portage since ebuild in overlay was last updated" \
+    "" \
+    "--overlay | -o" \
+    "  instead show difference between equivalent revisions of portage" \
+    "  ebuild with overlay ebuild"
+    exit "$1"
 }
 
-if ! [[ "$( cat profiles/repo_name 2>/dev/null )" = multilib ]]
+
+# Typical workflow using this script:
+# -----------------------------------
+#    # cd path/to/multilib/overlay
+#    # bin/show_changes path/to/file.ebuild
+#
+# <read output, edit the ebuild in another terminal, save it, then>
+#
+#    # bin/show_changes path/to/file.ebuild -o
+#
+# <check you changed it correctly, didn't make any typos>
+#
+#    # ebuild path/to/file.ebuild digest    # or repoman manifest
+#    # egencache --repo=multilib --update
+# -----------------------------------
+
+# Or possibly:
+# -----------------------------------
+#    # cd path/to/multilib/overlay
+#    # bin/show_changes path/to/file.ebuild
+#
+# <it's too many changes, so you decide to copy the ebuild and make the>
+# <treat it like a new ebuild to the tree>
+#
+#    # bin/show_changes path/to/file.ebuild -o
+#
+# <this shows the diff between the (outdated) overlay ebuild and the SAME>
+# <(outdated) revision in the portage tree>
+# <in another terminal:>
+#
+#    # cp {/usr/portage/,}path/to/file.ebuild
+#    # $EDITOR path/to/file.ebuild
+#
+# <etc. as above>
+# -----------------------------------
+
+die() {
+    local line
+    for line in "${@:2}"
+    do
+        printf >&2 '%s\n' "$0: $line"
+    done
+    exit "$1"
+}
+
+[[ "$( cat ./profiles/repo_name 2>/dev/null )" = multilib ]] || \
+    die 1 "Please cd to your multilib overlay directory first"
+
+for arg
+do
+    case "$arg" in
+        --overlay|-o)
+            check_mode="true" ;;
+        --help|-h)
+            usage 0 ;;
+        -*)
+	    echo >&2 "Unknown option '$arg'"
+            usage 1 ;;
+        *)
+            if [[ $file ]]
+            then
+                echo >&2 "Provide one filename only"
+                usage 1
+            else
+                file="$arg"
+            fi ;;
+    esac
+done
+
+if ! [[ $file ]]
 then
-	die 1 "Please cd to your multilib overlay directory and run this" \
-		"script as bin/show_changes [files]"
+        echo >&2 "You must provide a filename"
+	usage 1
 fi
 
-[[ "$1" = "--check" ]] && { check_mode="true"; shift; }
-[[ "$2" = "--check" ]] && check_mode="true"
+overlay_revision="$(awk -v file="$file" '
 
-case "$1" in
-	*/*/*.ebuild|eclass/*.eclass)
-		;;
-	*)
-		die 1 "Please give the relative path to an ebuild or eclass";;
-esac
+    /# \$Header: / {
+        if ( $3 == "/var/cvsroot/gentoo-x86/" file ",v" ) {
+            print $4
+        }
+        exit;
+    }
 
-file="$1"
+    ' "$file")" || die 3 "couldn't get CVS revision of '$file'"
+
+if ! [[ "$overlay_revision" ]]
+then
+    overlay_revision="1.1"
+    echo "'$file' in overlay has broken CVS header, please fix it"
+fi
+
+pushd >/dev/null "$EMULTILIB_CVS_TREE" || \
+    die 2 "pushd '$EMULTILIB_CVS_TREE' failed"
 
 if [[ "$check_mode" = "true" ]]
 then
-	diff -u "$EMULTILIB_CVS_TREE/$file" "$file"
-	case $? in
-		0) die 3 "No difference between portage and overlay ebuild.  That's bad." ;;
-		1) : ;;
-		*) die 2 "diff failed with exit code $?" ;;
-	esac
+    diff -u <(cvs update -f -p -r "$overlay_revision" "$file") "$OLDPWD/$file"
+    case $? in
+        0) die 3 "No differences between portage and overlay ebuild." \
+            "Why is it even in the overlay?" ;;
+        1) : ;;
+        *) die 2 "diff failed with exit code $?" ;;
+    esac
 else
-	overlay_revision="$(awk -v file="$file" '
-
-		/# \$Header: / {
-			if ( $3 == "/var/cvsroot/gentoo-x86/" file ",v" ) {
-				print $4
-			}
-			exit;
-		}
-	
-		' "$file")" || die 3 "couldn't get CVS revision of '$file'"
-
-	if ! [[ "$overlay_revision" ]]
-	then
-		overlay_revision="1.1"
-		echo "'$file' in overlay has broken CVS header, please fix it"
-	fi
-
-	pushd >/dev/null "$EMULTILIB_CVS_TREE" || \
-		die 2 "pushd '$EMULTILIB_CVS_TREE' failed"
-
-	cvs diff -s -d -u -r "$overlay_revision" "$file"
-	(( $? == 0 )) && echo "'$file' has not been changed in portage tree"
-
-	popd >/dev/null || die 2 "popd failed"
+    cvs diff -s -d -u -r "$overlay_revision" "$file" \
+        && echo "'$file' seems up-to-date compared with the portage tree"
 fi
+
+popd >/dev/null || die 2 "popd failed"
 
 if [[ -d "$EMULTILIB_CVS_TREE/${file%/*}/files/" ]]
 then
-	echo "==================================================================="
-	diff -ur -x CVS "$EMULTILIB_CVS_TREE/${file%/*}/files/" \
-		"${file%/*}/files/"
-	case $? in
-		0) echo "No differences in '${file%/*}/files/'" ;;
-		1) : ;;
-		*) die 2 "diff failed with exit code $?" ;;
-	esac
+    echo "==================================================================="
+    diff -ur -x CVS "$EMULTILIB_CVS_TREE/${file%/*}/files/" \
+        "${file%/*}/files/"
+    case $? in
+        0) echo "No differences in '${file%/*}/files/'" ;;
+        1) : ;;
+        *) die 2 "diff failed with exit code $?" ;;
+    esac
 fi
