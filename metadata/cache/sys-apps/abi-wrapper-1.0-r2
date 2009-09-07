@@ -1,0 +1,22 @@
+app-portage/portage-utils
+
+0
+
+
+www.gentoo.org
+GPL-2
+Wraps binarys that behave abi dependand
+
+multilib toolchain-funcs
+
+
+
+
+
+
+install postinst
+
+
+
+
+
