@@ -131,6 +131,17 @@ multilib-native_src_unpack_internal() {
 			| xargs sed -i -e '/html_DATA/d' -e '/pdf_DATA/d' || die
 	fi
 
+	local pf="$(get_libdir)"
+	pf="${pf#lib}"
+
+	sed -i -e \
+		's:LIBPOSTFIX=.*:LIBPOSTFIX='"${pf}"':' \
+		configure.ac || die "sed fix EXPAT_LIBS failed"
+
+	sed -i -e \
+		's:AC_CHECK_PROG(PERL,perl,perl):AC_CHECK_PROG(PERL,perl-'"$ABI"',perl-'"$ABI"'):' \
+		configure.ac || die "sed fix perl config failed"
+
 	# This is an old version of libtool
 	rm -rf libltdl
 	sed -i -e '/libltdl/d' configure.ac || die

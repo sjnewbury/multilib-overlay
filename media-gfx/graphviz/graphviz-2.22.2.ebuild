@@ -108,6 +108,17 @@ multilib-native_src_prepare_internal() {
 	rm -rf libltdl
 	sed -i -e '/libltdl/d' configure.ac || die
 
+	local pf="$(get_libdir)"
+	pf="${pf#lib}"
+
+	sed -i -e \
+		's:LIBPOSTFIX=.*:LIBPOSTFIX='"${pf}"':' \
+		configure.ac || die "sed fix EXPAT_LIBS failed"
+
+	sed -i -e \
+		's:AC_CHECK_PROG(PERL,perl,perl):AC_CHECK_PROG(PERL,perl-'"$ABI"',perl-'"$ABI"'):' \
+		configure.ac || die "sed fix perl config failed"
+
 	# Update this file from our local libtool which is much newer than the
 	# bundled one. This allows MAKEOPTS=-j2 to work on FreeBSD.
 	if has_version ">=sys-devel/libtool-2" ; then
