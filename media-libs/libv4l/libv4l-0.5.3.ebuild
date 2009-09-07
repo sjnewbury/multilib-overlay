@@ -15,7 +15,6 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="alpha amd64 ppc ~ppc64 x86"
 IUSE=""
-DEPEND="dev-util/pkg-config[lib32?]"
 
 multilib-native_src_compile_internal() {
 	tc-export CC

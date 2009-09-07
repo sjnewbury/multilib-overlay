@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-145-r1.ebuild,v 1.5 2009/09/06 12:41:53 zzam Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-145-r1.ebuild,v 1.6 2009/09/06 23:38:00 robbat2 Exp $
 
 EAPI="2"
 
@@ -60,9 +60,9 @@ udev_check_KV() {
 	local ok=0
 	if [[ ${KV_MAJOR} == 2 && ${KV_MINOR} == 6 ]]
 	then
-		if [[ ${KV_PATCH} -ge ${KV_PATCH_reliable} ]]; then
+		if kernel_is -ge 2 6 ${KV_PATCH_reliable} ; then
 			ok=2
-		elif [[ ${KV_PATCH} -ge ${KV_PATCH_min} ]]; then
+		elif kernel_is -ge 2 6 ${KV_PATCH_min} ; then
 			ok=1
 		fi
 	fi
@@ -89,7 +89,7 @@ pkg_setup() {
 	echo
 	# We don't care about the secondary revision of the kernel.
 	# 2.6.30.4 -> 2.6.30 is all we check
-	KV_PATCH="${KV_PATCH%.*}" udev_check_KV
+	udev_check_KV
 	case "$?" in
 		2)	einfo "Your kernel version (${KV_FULL}) is new enough to run ${P} reliable." ;;
 		1)	ewarn "Your kernel version (${KV_FULL}) is new enough to run ${P},"
@@ -102,7 +102,7 @@ pkg_setup() {
 
 	KV_FULL_SRC=${KV_FULL}
 	get_running_version
-	KV_PATCH="${KV_PATCH%.*}" udev_check_KV
+	udev_check_KV
 	if [[ "$?" = "0" ]]; then
 		eerror
 		eerror "udev cannot be restarted after emerging,"
