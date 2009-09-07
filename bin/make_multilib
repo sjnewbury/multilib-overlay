@@ -1,8 +1,8 @@
 #!/bin/bash
 
 make_multilib() {
-	sed -i "s/\(src_\(unpack\|prepare\|compile\|configure\|install\)\)\((\)/multilib-native_\1_internal\3/" $1
-	sed -i "s/\(pkg_\(setup\)\)\((\)/multilib-native_\1_internal\3/" $1
+	sed -i "s/\(src_\(unpack\|prepare\|compile\|configure\|install\)\) \{0,1\}\((\)/multilib-native_\1_internal\3/" $1
+	sed -i "s/\(pkg_\(setup\)\) \{0,1\}\((\)/multilib-native_\1_internal\3/" $1
 	sed -i "/^inherit / { /multilib-native/ b; s/$/ multilib-native/ }" $1
 }
 
