@@ -43,7 +43,6 @@ multilib-native_src_prepare_internal() {
 		autopoint --force
 		eautoreconf
 	else
-		epatch "${FILESDIR}"/0001-libblkid-fix-ext2-detection-on-systems-with-ext4-onl.patch #279054
 		use loop-aes && epatch "${WORKDIR}"/util-linux-ng-*.diff
 	fi
 	use uclibc && sed -i -e s/versionsort/alphasort/g -e s/strverscmp.h/dirent.h/g mount/lomount.c
