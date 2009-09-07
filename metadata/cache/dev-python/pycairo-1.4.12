@@ -1,5 +1,5 @@
 >=x11-libs/cairo-1.4.12[lib32?] dev-util/pkgconfig[lib32?] >=dev-lang/python-2.4 >=app-shells/bash-3.2 virtual/python sys-apps/abi-wrapper
->=x11-libs/cairo-1.4.12[lib32?] >=dev-lang/python-2.4 sys-apps/abi-wrapper
+>=x11-libs/cairo-1.4.12[lib32?] >=dev-lang/python-2.4 virtual/python sys-apps/abi-wrapper
 0
 http://cairographics.org/releases/pycairo-1.4.12.tar.gz
 

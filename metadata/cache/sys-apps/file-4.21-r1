@@ -1,5 +1,5 @@
 python? ( dev-lang/python[lib32?] ) >=app-shells/bash-3.2 virtual/python sys-apps/abi-wrapper
-python? ( dev-lang/python[lib32?] ) sys-apps/abi-wrapper
+python? ( dev-lang/python[lib32?] ) virtual/python sys-apps/abi-wrapper
 0
 ftp://ftp.astron.com/pub/file/file-4.21.tar.gz ftp://ftp.gw.com/mirrors/pub/unix/file/file-4.21.tar.gz
 
