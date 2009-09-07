@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit multilib
+inherit eutils multilib
 
 DESCRIPTION="Wraps binarys that behave abi dependand"
 HOMEPAGE="www.gentoo.org"
@@ -12,8 +12,6 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
 IUSE=""
-DEPEND="app-portage/portage-utils"
-RDEPEND=""
 
 src_install() {
 	dobin ${FILESDIR}/abi-wrapper || die "could not install abi-wrapper"
@@ -21,32 +19,41 @@ src_install() {
 
 pkg_postinst() {
 	einfo "Checking if any packages will need rebuilding..."
-	
-	local pkg file files badfiles torebuild abi
+
+	local pkg files pkgver file badpkgs torebuild abi
 
 	while read pkg _ files
 	do
-		[[ $pkg = \#* ]] && continue
-		for file in $files ; do
-			[[ -f $file ]] || continue
+		[[ $files ]] || continue
 
-			if [[ $(readlink "$file") != *abi-wrapper ]] ; then
-				badfiles+=" $file"
-				continue
+		while read -r pkgver ; do
+			printf .
+
+			if built_with_use --missing false "=$pkgver" "lib32" ; then
+				for file in $files ; do
+
+					[[ -f $file ]] || continue
+
+					if [[ $(readlink "$file") != *abi-wrapper ]] ; then
+						badpkgs+="  =$pkgver\n"
+						continue
+					fi
+
+					for abi in $(get_all_abis) ; do
+						if ! [[ -f $file-$abi ]] ; then
+							badpkgs+="  =$pkgver\n"
+							continue
+						fi
+					done
+				done
 			fi
+		done < <( portageq match "${ROOT:-/}" "$pkg" )
+	done < <( sed -e 's/#.*//' "${PORTDIR_OVERLAY}/doc/prep_ml_binaries" )
 
-			for abi in $(get_all_abis) ; do
-				if ! [[ -f $file-$abi ]] ; then
-					badfiles+=" $file"
-					continue
-				fi
-			done
-		done
-	done <"${PORTDIR_OVERLAY}/doc/prep_ml_binaries"
+	echo; echo
 
-	[[ $badfiles ]] && torebuild="$(qfile -e -q $badfiles | sort -u)"
-	if [[ $torebuild ]] ; then
-		ewarn "You have to rebuild the following ebuilds:\n${torebuild}"
+	if [[ $badpkgs ]] ; then
+		ewarn "You have to rebuild the following packages:\n\n${badpkgs}"
 	else
 		einfo "Nothing to rebuild"
 	fi
