@@ -6,7 +6,7 @@ http://www.cs.tu-berlin.de/~jutta/gsm/gsm-1.0.13.tar.gz
 http://kbs.cs.tu-berlin.de/~jutta/toast.html
 gsm
 Lossy speech compression library and tool.
-~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd
+alpha amd64 arm hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd
 base eutils flag-o-matic multilib multilib-native portability toolchain-funcs versionator
 lib32
 

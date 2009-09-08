@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/gsm/gsm-1.0.13.ebuild,v 1.1 2009/08/28 14:25:29 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/gsm/gsm-1.0.13.ebuild,v 1.3 2009/09/08 12:00:56 ssuominen Exp $
 
 EAPI=2
 inherit eutils flag-o-matic multilib toolchain-funcs versionator multilib-native
@@ -11,13 +11,13 @@ SRC_URI="http://www.cs.tu-berlin.de/~jutta/${PN}/${P}.tar.gz"
 
 LICENSE="gsm"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE=""
 
 S=${WORKDIR}/${PN}-"$(replace_version_separator 2 '-pl' )"
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}"/${PN}-1.0.12-shared.patch \
+	epatch "${FILESDIR}"/${P}-shared.patch \
 		"${FILESDIR}"/${PN}-1.0.12-memcpy.patch \
 		"${FILESDIR}"/${PN}-1.0.12-64bit.patch
 }
