@@ -1,6 +1,6 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.406 2009/08/26 21:47:56 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.407 2009/09/08 02:48:46 vapier Exp $
 #
 # Maintainer: Toolchain Ninjas <toolchain@gentoo.org>
 
@@ -1937,24 +1937,24 @@ gcc_slot_java() {
 		mv -f "${D}"${PREFIX}/lib/libgcj.spec "${D}"${LIBPATH}/libgcj.spec
 
 	# SLOT up libgcj.pc (and let gcc-config worry about links)
-	local libgcj=$(find "${D}"${PREFIX}/lib/pkgconfig/ -name 'libgcj*.pc')
-	if [[ -n ${libgcj} ]] ; then
-		sed -i "/^libdir=/s:=.*:=${LIBPATH}:" "${libgcj}"
-		if ! is_crosscompile; then
-			mv "${libgcj}" "${D}"/${PREFIX}/lib/pkgconfig/libgcj-${GCC_PV}.pc || die
-		else
-			dodir /${PREFIX}/${CTARGET}/${PREFIX}/lib/pkgconfig
-			mv "${libgcj}" "${D}"/${PREFIX}/${CTARGET}/${PREFIX}/lib/pkgconfig/libgcj-${GCC_PV}.pc || die
+	local libgcj
+	for libgcj in "${D}${PREFIX}"/lib/pkgconfig/libgcj*.pc ; do
+		if [[ -f ${libgcj} ]] ; then
+			sed -i "/^libdir=/s:=.*:=${LIBPATH}:" "${libgcj}"
+			if ! is_crosscompile; then
+				mv "${libgcj}" "${D}"/${PREFIX}/lib/pkgconfig/libgcj-${GCC_PV}.pc || die
+			else
+				dodir /${PREFIX}/${CTARGET}/${PREFIX}/lib/pkgconfig
+				mv "${libgcj}" "${D}"/${PREFIX}/${CTARGET}/${PREFIX}/lib/pkgconfig/libgcj-${GCC_PV}.pc || die
+			fi
 		fi
-	fi
+	done
 
 	# Move JNI native (CTARGET) java libraries  
 	if is_crosscompile; then
-		local gcjnativetools=$(find "${D}"/${PREFIX}/lib -name 'gcj-*' -type d)
-		if [[ -n ${gcjnativetools} ]] ; then
-			dodir /${PREFIX}/${CTARGET}/${PREFIX}/lib
-			mv "${gcjnativetools}" "${D}"/${PREFIX}/${CTARGET}/${PREFIX}/lib/
-		fi
+		dodir /${PREFIX}/${CTARGET}/${PREFIX}/lib
+		find "${D}"/${PREFIX}/lib -name 'gcj-*' -type d -exec \
+			mv {} "${D}"/${PREFIX}/${CTARGET}/${PREFIX}/lib/ \;
 	fi
 
 	# Rename jar because it could clash with Kaffe's jar if this gcc is
@@ -1998,6 +1998,7 @@ gcc_movelibs() {
 				fi
 			fi
 		done
+		fix_libtool_libdir_paths "${LIBPATH}/${MULTIDIR}"
 	done
 
 	# We remove directories separately to avoid this case:
@@ -2008,8 +2009,6 @@ gcc_movelibs() {
 		rmdir "${D}"${FROMDIR} >& /dev/null
 	done
 	find "${D}" -type d | xargs rmdir >& /dev/null
-
-	fix_libtool_libdir_paths
 }
 
 #----<< src_* >>----
@@ -2515,9 +2514,11 @@ disable_multilib_libjava() {
 fix_libtool_libdir_paths() {
 	pushd "${D}" >/dev/null
 
-	local dir=${LIBPATH}
-	local allarchives=$(cd ./${dir}; echo *.la)
+	pushd "${1}" >/dev/null
+	local dir="${PWD#${D}}"
+	local allarchives=$(echo *.la)
 	allarchives="\(${allarchives// /\\|}\)"
+	popd >/dev/null
 
 	sed -i \
 		-e "/^libdir=/s:=.*:='${dir}':" \
