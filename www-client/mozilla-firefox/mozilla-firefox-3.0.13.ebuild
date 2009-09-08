@@ -52,7 +52,7 @@ RDEPEND="java? ( virtual/jre )
 	>=media-libs/lcms-1.17[lib32?]
 	x11-libs/cairo[X,lib32?]
 	x11-libs/pango[X,lib32?]
-	xulrunner? ( >=net-libs/xulrunner-1.9.0.*[lib32?] )"
+	xulrunner? ( =net-libs/xulrunner-1.9.0*[lib32?] )"
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
