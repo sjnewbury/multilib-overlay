@@ -53,7 +53,7 @@ RDEPEND="vhook? ( >=media-libs/imlib2-1.4.0[lib32?] >=media-libs/freetype-2[lib3
 	X? ( x11-libs/libX11[lib32?] x11-libs/libXext[lib32?] )
 	amr? ( media-libs/amrnb[lib32?] media-libs/amrwb[lib32?] )
 	video_cards_nvidia? (
-		vdpau? ( >=x11-drivers/nvidia-drivers-180.29[lib32?] )
+		vdpau? ( >=x11-drivers/nvidia-drivers-180.29 )
 	)"
 
 DEPEND="${RDEPEND}
