@@ -39,7 +39,8 @@ RDEPEND="vhook? ( >=media-libs/imlib2-1.4.0[lib32?] >=media-libs/freetype-2[lib3
 		vorbis? ( media-libs/libvorbis[lib32?] media-libs/libogg[lib32?] )
 		theora? ( media-libs/libtheora[lib32?] media-libs/libogg[lib32?] )
 		x264? ( >=media-libs/x264-0.0.20081006[lib32?] )
-		xvid? ( >=media-libs/xvid-1.1.0[lib32?] ) )
+		xvid? ( >=media-libs/xvid-1.1.0[lib32?] )
+	)
 	faad? ( >=media-libs/faad2-2.6.1[lib32?] )
 	zlib? ( sys-libs/zlib[lib32?] )
 	ieee1394? ( media-libs/libdc1394[lib32?]
@@ -49,7 +50,7 @@ RDEPEND="vhook? ( >=media-libs/imlib2-1.4.0[lib32?] >=media-libs/freetype-2[lib3
 	jpeg2k? ( >=media-libs/openjpeg-1.3-r2[lib32?] )
 	schroedinger? ( media-libs/schroedinger[lib32?] )
 	speex? ( >=media-libs/speex-1.2_beta3[lib32?] )
-	X? ( x11-libs/libX11 x11-libs/libXext[lib32?] )
+	X? ( x11-libs/libX11[lib32?] x11-libs/libXext[lib32?] )
 	amr? ( media-libs/amrnb[lib32?] media-libs/amrwb[lib32?] )
 	video_cards_nvidia? (
 		vdpau? ( >=x11-drivers/nvidia-drivers-180.29[lib32?] )
