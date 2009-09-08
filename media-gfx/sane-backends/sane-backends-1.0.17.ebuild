@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-gfx/sane-backends/sane-backends-1.0.17.ebuild,v 1.18 2009/06/18 20:07:03 phosphan Exp $
 
-EAPI="1"
+EAPI="2"
 
 inherit eutils flag-o-matic multilib-native
 
@@ -92,7 +92,7 @@ multilib-native_src_unpack_internal() {
 
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	append-flags -fno-strict-aliasing
 
 	SANEI_JPEG="sanei_jpeg.o" SANEI_JPEG_LO="sanei_jpeg.lo" \
@@ -102,7 +102,9 @@ multilib-native_src_compile_internal() {
 		$(use_with gphoto2) \
 		$(use_enable ipv6) \
 		${myconf} || die "econf failed"
+}
 
+multilib-native_src_compile_internal() {
 	emake VARTEXFONTS="${T}/fonts" || die
 
 	if use usb; then

@@ -12,9 +12,9 @@ usb gphoto2 ipv6 v4l lib32
 
 
 
-1
+2
 
-compile install postinst postrm preinst setup unpack
+compile configure install postinst postrm preinst prepare setup unpack
 
 
 

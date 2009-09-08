@@ -12,9 +12,9 @@ avahi usb gphoto2 ipv6 v4l doc +sane_backends_abaton +sane_backends_agfafocus +s
 
 
 
-1
+2
 
-compile install postinst postrm preinst setup unpack
+compile configure install postinst postrm preinst prepare setup unpack
 
 
 
