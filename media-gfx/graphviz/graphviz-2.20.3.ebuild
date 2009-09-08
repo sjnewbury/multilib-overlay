@@ -5,6 +5,8 @@
 WANT_AUTOCONF=latest
 WANT_AUTOMAKE=latest
 
+EAPI="2"
+
 inherit eutils autotools multilib python multilib-native
 
 DESCRIPTION="Open Source Graph Visualization Software"
@@ -166,7 +168,7 @@ multilib-native_src_unpack_internal() {
 	eautoreconf
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local myconf
 
 	# Core functionality:
@@ -218,8 +220,6 @@ multilib-native_src_compile_internal() {
 		--enable-ltdl \
 		${myconf} \
 		|| die "econf failed"
-
-	emake || die "emake failed"
 }
 
 multilib-native_src_install_internal() {

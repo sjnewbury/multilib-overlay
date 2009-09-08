@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-gfx/sane-backends/sane-backends-1.0.20.ebuild,v 1.4 2009/07/19 10:47:47 phosphan Exp $
 
-EAPI="1"
+EAPI="2"
 
 inherit eutils flag-o-matic multilib-native
 
@@ -178,7 +178,7 @@ multilib-native_src_unpack_internal() {
 	EOF
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	append-flags -fno-strict-aliasing
 
 	if use usb && has_version "=dev-libs/libusb-1*"; then
@@ -198,7 +198,9 @@ multilib-native_src_compile_internal() {
 		$(use_enable ipv6) \
 		$(use_enable avahi) \
 		${myconf} || die "econf failed"
+}
 
+multilib-native_src_compile_internal() {
 	emake VARTEXFONTS="${T}/fonts" || die
 
 	if use usb; then
