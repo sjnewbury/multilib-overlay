@@ -1,0 +1,22 @@
+sys-devel/flex >=dev-util/pkgconfig-0.20[lib32?] doc? ( dev-util/gtk-doc ) alsa? ( media-libs/alsa-lib[lib32?] ) gstreamer? ( >=media-libs/gstreamer-0.10[lib32?] >=media-libs/gst-plugins-base-0.10[lib32?] ) usb? ( dev-libs/libusb[lib32?] ) cups? ( net-print/cups[lib32?] ) sys-fs/udev[lib32?] dev-libs/glib[lib32?] sys-apps/dbus[lib32?] media-libs/libsndfile[lib32?] >=dev-libs/libnl-1.1[lib32?] !net-wireless/bluez-libs !net-wireless/bluez-utils =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+alsa? ( media-libs/alsa-lib[lib32?] ) gstreamer? ( >=media-libs/gstreamer-0.10[lib32?] >=media-libs/gst-plugins-base-0.10[lib32?] ) usb? ( dev-libs/libusb[lib32?] ) cups? ( net-print/cups[lib32?] ) sys-fs/udev[lib32?] dev-libs/glib[lib32?] sys-apps/dbus[lib32?] media-libs/libsndfile[lib32?] >=dev-libs/libnl-1.1[lib32?] !net-wireless/bluez-libs !net-wireless/bluez-utils sys-auth/pambase[consolekit] sys-apps/abi-wrapper
+0
+mirror://kernel/linux/bluetooth/bluez-4.39.tar.gz
+
+http://bluez.sourceforge.net/
+GPL-2 LGPL-2.1
+Bluetooth Tools and System Daemons for Linux
+~amd64 ~arm ~hppa ~ppc ~ppc64 ~sh ~sparc ~x86
+autotools base eutils libtool multilib multilib-native portability toolchain-funcs
+alsa cups debug doc gstreamer old-daemons test-programs usb lib32
+
+
+
+2
+
+compile configure install postinst postrm preinst prepare setup unpack
+
+
+
+
+
