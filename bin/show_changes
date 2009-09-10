@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # IMPORTANT NOTE: You will need an actual CVS checkout of the portage tree,
-# which you'll need to update before running this script.  You can set the
-# following environmental variable to wherever yours is.
+# which you'll probably want to update before running this script.  You can
+# export the following variable in your shell's environment to wherever yours
+# is.
 
 : ${EMULTILIB_CVS_TREE:="$(portageq portdir)"}
 : ${EMULTILIB_CVS_TREE:="/usr/portage"}
@@ -10,51 +11,81 @@
 usage() {
     printf >&2 '%s\n' "" \
     "Usage:" \
-    "bin/show_changes [ --overlay | -o ] path/to/file.ebuild" \
+    "bin/show_changes [ --overlay | -o ] cat/pkg/pkg.ebuild" \
     "bin/show_changes [ --overlay | -o ] eclass/file.eclass" \
-    "  show changes in portage since ebuild in overlay was last updated" \
+    "bin/show_changes cat/pkg/pkg-1.ebuild cat/pkg/pkg-2.ebuild" \
+    "  Show changes in portage since ebuild in overlay was last updated." \
+    "  With two filenames, show changes in portage between them." \
     "" \
     "--overlay | -o" \
-    "  instead show difference between equivalent revisions of portage" \
-    "  ebuild with overlay ebuild"
+    "  Instead, show the difference between equivalent revisions of portage" \
+    "  ebuild with overlay ebuild."
     exit "$1"
 }
 
 
-# Typical workflow using this script:
-# -----------------------------------
+# ----------------------------------------------
+# BUMPS -- NEW VERSIONS IN PORTAGE
+# ----------------------------------------------
+#
 #    # cd path/to/multilib/overlay
-#    # bin/show_changes path/to/file.ebuild
+#    # bin/show_changes cat/pkg/pkg-{1,2}.ebuild
 #
-# <read output, edit the ebuild in another terminal, save it, then>
+# <Take note of the REVISION of the 2nd file in the diff output's CVS header>
 #
-#    # bin/show_changes path/to/file.ebuild -o
+# <in another terminal:>
+#    # cp cat/pkg/pkg-{1,2}.ebuild
+#    # $EDITOR cat/pkg/pkg-2.ebuild
 #
-# <check you changed it correctly, didn't make any typos>
+# <make the appropriate changes from above>
 #
-#    # ebuild path/to/file.ebuild digest    # or repoman manifest
-#    # egencache --repo=multilib --update
-# -----------------------------------
-
-# Or possibly:
-# -----------------------------------
+# <also, you MUST fix the header's filename and change the revision to the>
+# <one noted above, which will usually but not always be 1.1>
+#
+# ----------------------------------------------
+# UPDATES TO EBUILDS/ECLASSES ALREADY IN OVERLAY
+# ----------------------------------------------
+#
 #    # cd path/to/multilib/overlay
-#    # bin/show_changes path/to/file.ebuild
+#    # bin/show_changes cat/pkg/pkg.ebuild
 #
-# <it's too many changes, so you decide to copy the ebuild and make the>
-# <treat it like a new ebuild to the tree>
+# <read output, edit the ebuild in another terminal, save it>
 #
-#    # bin/show_changes path/to/file.ebuild -o
+# ----------------------------------------------
+# IF EITHER OF THE ABOVE HAS TOO MANY CHANGES
+# ----------------------------------------------
+#
+# <you decide to copy the ebuild from portage and apply the overlay changes>
+# <essentially from scratch>
+#
+#    $ bin/show_changes cat/pkg/pkg.ebuild -o
+#
+# <this is with the older ebuild, if this is a bump scenario>
 #
 # <this shows the diff between the (outdated) overlay ebuild and the SAME>
-# <(outdated) revision in the portage tree>
+# <revision in the portage tree>
+#
 # <in another terminal:>
 #
-#    # cp {/usr/portage/,}path/to/file.ebuild
-#    # $EDITOR path/to/file.ebuild
+#    # cp {/usr/portage/,}cat/pkg/pkg.ebuild
+#    # bin/make_multilib cat/pkg/pkg.ebuild
+#    # $EDITOR cat/pkg/pkg.ebuild
 #
-# <etc. as above>
-# -----------------------------------
+# ----------------------------------------------
+
+# ----------------------------------------------
+# AFTER ANY OF THESE
+# ----------------------------------------------
+#
+#    # bin/show_changes cat/pkg/pkg.ebuild -o
+#
+# <check your changes, no typos, correct header>
+#
+#    # eix -e pkg    # check to see if some versions need to be rm'ed
+#    # ebuild cat/pkg/pkg.ebuild digest    # or repoman manifest
+#    # egencache --repo=multilib --update
+#
+# ----------------------------------------------
 
 die() {
     local line
@@ -65,7 +96,7 @@ die() {
     exit "$1"
 }
 
-[[ "$( cat ./profiles/repo_name 2>/dev/null )" = multilib ]] || \
+[[ "$( cat ./profiles/repo_name 2>/dev/null )" = "multilib" ]] || \
     die 1 "Please cd to your multilib overlay directory first"
 
 for arg
@@ -76,23 +107,32 @@ do
         --help|-h)
             usage 0 ;;
         -*)
-	    echo >&2 "Unknown option '$arg'"
+            echo >&2 "Unknown option '$arg'"
             usage 1 ;;
         *)
-            if [[ $file ]]
+            if [[ "$file2" ]]
             then
                 echo >&2 "Provide one filename only"
                 usage 1
+            elif [[ "$file" ]]
+            then
+                file2="$arg"
             else
                 file="$arg"
             fi ;;
     esac
 done
 
-if ! [[ $file ]]
+if [[ "$file2" ]] && [[ "$check_mode" ]]
+then
+    echo >&2 "Doesn't make sense to give two filenames and --overlay"
+    usage 1
+fi
+
+if ! [[ "$file" ]]
 then
         echo >&2 "You must provide a filename"
-	usage 1
+        usage 1
 fi
 
 overlay_revision="$(awk -v file="$file" '
@@ -109,24 +149,89 @@ overlay_revision="$(awk -v file="$file" '
 if ! [[ "$overlay_revision" ]]
 then
     overlay_revision="1.1"
-    echo "'$file' in overlay has broken CVS header, please fix it"
+    echo "'$file' in overlay has broken CVS header, PLEASE fix it asap"
 fi
 
 pushd >/dev/null "$EMULTILIB_CVS_TREE" || \
     die 2 "pushd '$EMULTILIB_CVS_TREE' failed"
 
-if [[ "$check_mode" = "true" ]]
+# cvs diff doesn't work all that nicely with Attic files, so screw it
+# let's use diff with cvs update -p instead!
+
+if [[ "$file2" ]]
 then
-    diff -u <(cvs update -f -p -r "$overlay_revision" "$file") "$OLDPWD/$file"
+
+    # this is a bumping scenario, so it makes more sense to use the revision
+    # number from the overlay than the latest one for the first file: otherwise
+    # you'd need to update the old ebuild to latest and then maybe delete it
+    # after!
+
+    # If we're bumping, file2 had better exist
+
+    [[ -f $file2 ]] || die 2 "$file2 doesn't exist in portage tree!"
+
+    echo "Comparing:"
+    echo "--- $file from portage, revision $overlay_revision"
+    echo "+++ $file2 from portage, revision latest"
+    echo ""
+
+    diff -u <(cvs update -p -r "$overlay_revision" "$file") "$file2"
+    case $? in
+        0) echo "No difference between them!  Awesome!" ;;
+        1) : ;;
+        *) die 2 "diff failed with exit code $?" ;;
+    esac
+
+elif [[ "$check_mode" = "true" ]]
+then
+
+    echo "Comparing:"
+    echo "--- $file from portage, revision $overlay_revision"
+    echo "+++ $file from overlay, revision $overlay_revision"
+    echo ""
+
+    diff -u <(cvs update -p -r "$overlay_revision" "$file") "$OLDPWD/$file"
     case $? in
         0) die 3 "No differences between portage and overlay ebuild." \
             "Why is it even in the overlay?" ;;
         1) : ;;
         *) die 2 "diff failed with exit code $?" ;;
     esac
+
 else
-    cvs diff -s -d -u -r "$overlay_revision" "$file" \
-        && echo "'$file' seems up-to-date compared with the portage tree"
+
+    if ! [[ -f "$file" ]]
+    then
+        echo "NOTE: File has been removed from portage."
+        # try to get the last revision before the delete
+        last_r="$(cvs status "$file" | awk -F '([ \t]+|[.])' \
+            '/Repository revision:/ { print $4 "." $5 - 1; exit }' )"
+
+        if [[ "$last_r" = *[!0-9.]* ]] || [[ "$last_r" = *.*.* ]]
+        then
+            echo "Invalid last revision '$last_r' detected"
+            last_r=""
+        fi
+    fi
+
+    echo "Comparing:"
+    echo "--- $file from portage, revision $overlay_revision"
+    echo "+++ $file from portage, revision ${last_r:-latest}"
+    echo ""
+
+    if [[ "$overlay_revision" != "$last_r" ]]
+    then
+        diff -u <(cvs update -p -r "$overlay_revision" "$file") \
+            <(cvs update -p ${last_r:+-r "$last_r"} "$file")
+    fi
+
+    case $? in
+        0) echo "No updates taken place in portage since overlay ebuild was" \
+            "last updated." ;;
+        1) : ;;
+        *) die 2 "diff failed with exit code $?" ;;
+    esac
+
 fi
 
 popd >/dev/null || die 2 "popd failed"
