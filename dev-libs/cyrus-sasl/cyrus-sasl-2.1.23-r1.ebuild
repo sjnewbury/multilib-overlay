@@ -65,6 +65,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-2.1.22-db4.patch #192753
 	epatch "${FILESDIR}/${PN}-2.1.22-gcc44.patch" #248738
 	epatch "${FILESDIR}"/${P}-authd-fix.patch
+	epatch "${FILESDIR}"/${P}-mysql-includes.patch
 
 	# Upstream doesn't even honor their own configure options... grumble
 	sed -i '/^sasldir =/s:=.*:= $(plugindir):' \
@@ -138,9 +139,9 @@ multilib-native_src_configure_internal() {
 		$(use_enable kerberos gssapi) \
 		$(use_enable java) \
 		$(use_with java javahome ${JAVA_HOME}) \
-		$(use_with mysql) \
+		$(use_with mysql mysql /usr/$(get_libdir)) \
 		$(use_with postgres pgsql $(pg_config --libdir)) \
-		$(use_with sqlite) \
+		$(use_with sqlite sqlite /usr/$(get_libdir)) \
 		$(use_enable srp) \
 		${myconf} || die "econf failed"
 }

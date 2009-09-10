@@ -1,0 +1,11 @@
+--- ./configure.in~	2009-09-09 16:37:31.000000000 +0100
++++ ./configure.in	2009-09-09 17:44:07.821646695 +0100
+@@ -714,6 +714,8 @@
+          CPPFLAGS="${CPPFLAGS} -I${with_mysql}/mysql/include"
+      elif test -d ${with_mysql}/include; then
+          CPPFLAGS="${CPPFLAGS} -I${with_mysql}/include"
++     elif test -d ${prefix}/include/mysql; then
++         CPPFLAGS="${CPPFLAGS} -I${prefix}/include/mysql"
+      else
+          CPPFLAGS="${CPPFLAGS} -I${with_mysql}"
+      fi
