@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libpng/libpng-1.2.37.ebuild,v 1.6 2009/06/10 19:05:54 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libpng/libpng-1.2.37.ebuild,v 1.9 2009/09/10 16:02:59 ssuominen Exp $
 
 EAPI="2"
 
@@ -17,7 +17,7 @@ IUSE=""
 
 RDEPEND="sys-libs/zlib[lib32?]"
 DEPEND="${RDEPEND}
-	app-arch/lzma-utils"
+	|| ( app-arch/xz-utils app-arch/lzma-utils )"
 
 multilib-native_src_prepare_internal() {
 	# So we get sane .so versioning on FreeBSD
