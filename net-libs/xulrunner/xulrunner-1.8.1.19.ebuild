@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.8.1.19.ebuild,v 1.8 2009/01/25 21:16:55 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.8.1.19.ebuild,v 1.10 2009/08/24 20:41:18 anarchy Exp $
 
 EAPI="2"
 
@@ -63,6 +63,10 @@ multilib-native_src_prepare_internal() {
 	EPATCH_SUFFIX="patch" \
 	EPATCH_FORCE="yes" \
 	epatch "${WORKDIR}"/patch
+
+	# gcc-4.4 #elif -> #else, bug 270093
+	epatch "${FILESDIR}/xulrunner-1.8-gcc-4.4.patch"
+	epatch "${FILESDIR}/${P}-glibc-2.10-support.patch"
 
 	eautoreconf || die "failed  running eautoreconf"
 }

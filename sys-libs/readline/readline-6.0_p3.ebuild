@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/readline/readline-6.0_p3.ebuild,v 1.1 2009/05/17 21:06:48 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/readline/readline-6.0_p3.ebuild,v 1.6 2009/09/09 20:30:49 maekke Exp $
 
 EAPI="2"
 
@@ -33,7 +33,7 @@ SRC_URI="mirror://gnu/${PN}/${MY_P}.tar.gz $(patches)"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 ~arm hppa ~ia64 ~m68k ~mips ~ppc ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE=""
 
 # We must be certain that we have a bash that is linked
@@ -55,6 +55,10 @@ src_unpack() {
 
 	# force ncurses linking #71420
 	sed -i -e 's:^SHLIB_LIBS=:SHLIB_LIBS=-lncurses:' support/shobj-conf || die "sed"
+
+	# fix building under Gentoo/FreeBSD; upstream FreeBSD deprecated
+	# objformat for years, so we don't want to rely on that.
+	sed -i -e '/objformat/s:if .*; then:if true; then:' support/shobj-conf || die
 
 	# the bundled rlfe had its configure.in updated, but no one actually
 	# ran autoconf to have the configure file updated
