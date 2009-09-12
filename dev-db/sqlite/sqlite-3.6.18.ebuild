@@ -11,7 +11,8 @@ HOMEPAGE="http://www.sqlite.org/"
 DOC_BASE="$(get_version_component_range 1-3)"
 DOC_PV="$(replace_all_version_separators _ ${DOC_BASE})"
 SRC_URI="http://www.sqlite.org/${P}.tar.gz
-	doc? ( http://www.sqlite.org/${PN}_docs_${DOC_PV}.zip )"
+	doc? ( http://www.sqlite.org/${PN}_docs_${DOC_PV}.zip )
+	!tcl? ( mirror://gentoo/sqlite3.h-${PV}.bz2 )"
 
 LICENSE="as-is"
 SLOT="3"
@@ -19,9 +20,9 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~spa
 IUSE="debug doc icu +readline soundex tcl +threadsafe"
 RESTRICT="!tcl? ( test )"
 
-RDEPEND="icu? ( dev-libs/icu )
-	readline? ( sys-libs/readline )
-	tcl? ( dev-lang/tcl )"
+RDEPEND="icu? ( dev-libs/icu[lib32?] )
+	readline? ( sys-libs/readline[lib32?] )
+	tcl? ( dev-lang/tcl[lib32?] )"
 DEPEND="${RDEPEND}
 	doc? ( app-arch/unzip )"
 
@@ -35,10 +36,17 @@ pkg_setup() {
 
 		ebeep 1
 	fi
+
+	if has test ${FEATURES}; then
+		if ! has userpriv ${FEATURES} || ! use tcl; then
+			ewarn "Both the userpriv feature and tcl use flag must be enabled to run tests."
+			eerror "Testsuite will not be run."
+		fi
+	fi
 }
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}"/${PN}-3.6.16-tkt3922.test.patch
+	epatch "${FILESDIR}/${PN}-3.6.16-tkt3922.test.patch"
 
 	# http://www.sqlite.org/src/tktview/65bbb65a47ce115ecb0ea9e1c64c65fb8628f327
 	fperms +x configure
@@ -66,12 +74,14 @@ multilib-native_src_configure_internal() {
 
 	econf \
 		$(use_enable debug) \
+		$(use_enable readline) \
 		$(use_enable threadsafe) \
 		$(use_enable threadsafe cross-thread-connections) \
 		$(use_enable tcl)
 }
 
 multilib-native_src_compile_internal() {
+	use tcl || cp "${WORKDIR}/sqlite3.h-${PV}" sqlite3.h
 	emake TCLLIBDIR="/usr/$(get_libdir)/${P}" || die "emake failed"
 }
 
@@ -80,6 +90,14 @@ src_test() {
 		local test=test
 		use debug && test=fulltest
 		emake ${test} || die "some test(s) failed"
+	else
+		ewarn "The userpriv feature must be enabled to run tests."
+		eerror "Testsuite will not be run."
+	fi
+
+	if ! use tcl; then
+		ewarn "You must enable the tcl USE flag if you want to run the testsuite."
+		eerror "Testsuite will not be run."
 	fi
 }
 

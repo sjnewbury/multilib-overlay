@@ -1,7 +1,7 @@
-icu? ( dev-libs/icu ) readline? ( sys-libs/readline ) tcl? ( dev-lang/tcl ) doc? ( app-arch/unzip ) sys-apps/abi-wrapper
-icu? ( dev-libs/icu ) readline? ( sys-libs/readline ) tcl? ( dev-lang/tcl ) sys-apps/abi-wrapper
+icu? ( dev-libs/icu[lib32?] ) readline? ( sys-libs/readline[lib32?] ) tcl? ( dev-lang/tcl[lib32?] ) doc? ( app-arch/unzip ) sys-apps/abi-wrapper
+icu? ( dev-libs/icu[lib32?] ) readline? ( sys-libs/readline[lib32?] ) tcl? ( dev-lang/tcl[lib32?] ) sys-apps/abi-wrapper
 3
-http://www.sqlite.org/sqlite-3.6.18.tar.gz doc? ( http://www.sqlite.org/sqlite_docs_3_6_18.zip )
+http://www.sqlite.org/sqlite-3.6.18.tar.gz doc? ( http://www.sqlite.org/sqlite_docs_3_6_18.zip ) !tcl? ( mirror://gentoo/sqlite3.h-3.6.18.bz2 )
 !tcl? ( test )
 http://www.sqlite.org/
 as-is

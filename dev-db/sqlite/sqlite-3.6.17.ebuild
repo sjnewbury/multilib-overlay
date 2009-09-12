@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.17.ebuild,v 1.1 2009/08/10 18:26:10 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.17.ebuild,v 1.4 2009/09/07 22:08:35 arfrever Exp $
 
 EAPI="2"
 
@@ -11,15 +11,17 @@ HOMEPAGE="http://www.sqlite.org/"
 DOC_BASE="$(get_version_component_range 1-3)"
 DOC_PV="$(replace_all_version_separators _ ${DOC_BASE})"
 SRC_URI="http://www.sqlite.org/${P}.tar.gz
-	doc? ( http://www.sqlite.org/${PN}_docs_${DOC_PV}.zip )"
+	doc? ( http://www.sqlite.org/${PN}_docs_${DOC_PV}.zip )
+	!tcl? ( mirror://gentoo/sqlite3.h-${PV}.bz2 )"
 
 LICENSE="as-is"
 SLOT="3"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
-IUSE="debug doc soundex tcl +threadsafe"
+IUSE="debug doc +readline soundex tcl +threadsafe"
 RESTRICT="!tcl? ( test )"
 
-RDEPEND="tcl? ( dev-lang/tcl )"
+RDEPEND="readline? ( sys-libs/readline[lib32?] )
+	tcl? ( dev-lang/tcl[lib32?] )"
 DEPEND="${RDEPEND}
 	doc? ( app-arch/unzip )"
 
@@ -38,9 +40,10 @@ pkg_setup() {
 
 multilib-native_src_prepare_internal() {
 	# note: this sandbox fix is no longer needed with sandbox-1.3+
-	epatch "${FILESDIR}"/sandbox-fix2.patch
+	epatch "${FILESDIR}/sandbox-fix2.patch"
 
-	epatch "${FILESDIR}"/${PN}-3.6.16-tkt3922.test.patch
+	epatch "${FILESDIR}/${PN}-3.6.16-tkt3922.test.patch"
+	epatch "${FILESDIR}/${P}-fix_installation.patch"
 
 	epunt_cxx
 }
@@ -54,12 +57,14 @@ multilib-native_src_configure_internal() {
 
 	econf \
 		$(use_enable debug) \
+		$(use_enable readline) \
 		$(use_enable threadsafe) \
 		$(use_enable threadsafe cross-thread-connections) \
 		$(use_enable tcl)
 }
 
 multilib-native_src_compile_internal() {
+	use tcl || cp "${WORKDIR}/sqlite3.h-${PV}" sqlite3.h
 	emake TCLLIBDIR="/usr/$(get_libdir)/${P}" || die "emake failed"
 }
 
