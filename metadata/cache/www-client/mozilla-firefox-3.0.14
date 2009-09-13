@@ -6,7 +6,7 @@ mirror://gentoo/mozilla-firefox-3.0.14.tar.bz2 http://dev.gentoo.org/~armin76/di
 http://www.mozilla.com/firefox
 || ( MPL-1.1 GPL-2 LGPL-2.1 )
 Firefox Web Browser
-alpha ~amd64 arm ~hppa ia64 ~ppc ~ppc64 sparc x86
+alpha amd64 arm hppa ia64 ~ppc ppc64 sparc x86
 autotools base eutils fdo-mime flag-o-matic libtool makeedit mozconfig-3 mozcoreconf-2 mozextension multilib multilib-native portability toolchain-funcs
 java mozdevelop bindist restrict-javascript iceweasel +xulrunner linguas_af linguas_ar linguas_be linguas_bg linguas_bn_IN linguas_bn linguas_ca linguas_cs linguas_cy linguas_da linguas_de linguas_el linguas_en_GB linguas_en_US linguas_en linguas_eo linguas_es_AR linguas_es_ES linguas_es linguas_et linguas_eu linguas_fi linguas_fr linguas_fy_NL linguas_fy linguas_ga_IE linguas_ga linguas_gl linguas_gu_IN linguas_gu linguas_he linguas_hi_IN linguas_hi linguas_hu linguas_id linguas_is linguas_it linguas_ja linguas_ka linguas_kn linguas_ko linguas_ku linguas_lt linguas_lv linguas_mk linguas_mn linguas_mr linguas_nb_NO linguas_nb linguas_nl linguas_nn_NO linguas_nn linguas_oc linguas_pa_IN linguas_pa linguas_pl linguas_pt_BR linguas_pt_PT linguas_pt linguas_ro linguas_ru linguas_si linguas_sk linguas_sl linguas_sq linguas_sr linguas_sv_SE linguas_sv linguas_te linguas_th linguas_tr linguas_uk linguas_zh_CN linguas_zh_TW linguas_zh custom-optimization gnome dbus startup-notification lib32
 
