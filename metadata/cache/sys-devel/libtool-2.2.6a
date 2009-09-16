@@ -1,4 +1,4 @@
-sys-devel/gnuconfig >=sys-devel/autoconf-2.60 >=sys-devel/automake-1.10.1 app-arch/lzma-utils sys-apps/help2man =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-apps/abi-wrapper
+sys-devel/gnuconfig >=sys-devel/autoconf-2.60 >=sys-devel/automake-1.10.1 || ( app-arch/xz-utils app-arch/lzma-utils ) sys-apps/help2man =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-apps/abi-wrapper
 sys-devel/gnuconfig >=sys-devel/autoconf-2.60 >=sys-devel/automake-1.10.1 sys-apps/abi-wrapper
 1.5
 mirror://gnu/libtool/libtool-2.2.6a.tar.lzma

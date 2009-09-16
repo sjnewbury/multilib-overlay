@@ -109,6 +109,9 @@ do
         -*)
             echo >&2 "Unknown option '$arg'"
             usage 1 ;;
+        *./*)
+            echo >&2 "filenames must not start with ./ or contain .."
+	    usage 1 ;;
         *)
             if [[ "$file2" ]]
             then

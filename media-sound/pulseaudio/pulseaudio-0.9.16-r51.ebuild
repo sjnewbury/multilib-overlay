@@ -1,12 +1,10 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.16_rc6-r51.ebuild,v 1.1 2009/08/25 00:46:43 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.16-r51.ebuild,v 1.1 2009/09/10 18:45:36 flameeyes Exp $
 
 EAPI=2
 
-WANT_AUTOMAKE=1.11
-
-inherit eutils libtool flag-o-matic autotools multilib-native
+inherit eutils libtool flag-o-matic multilib-native
 
 DESCRIPTION="A networked sound server with an advanced plugin system"
 HOMEPAGE="http://www.pulseaudio.org/"
@@ -21,7 +19,7 @@ S="${WORKDIR}/${P/_rc/-test}"
 LICENSE="LGPL-2 GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
-IUSE="+alsa avahi +caps jack lirc oss tcpd X hal dbus libsamplerate gnome bluetooth policykit +asyncns +glib test doc +udev"
+IUSE="+alsa avahi +caps jack lirc oss tcpd X hal dbus libsamplerate gnome bluetooth policykit +asyncns +glib test doc +udev ipv6"
 
 RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib32?] x11-libs/libXtst[lib32?] )
 	caps? ( sys-libs/libcap[lib32?] )
@@ -115,8 +113,9 @@ multilib-native_src_configure_internal() {
 		$(use_enable bluetooth bluez) \
 		$(use_enable X x11) \
 		$(use_enable test default-build-tests) \
-		$(use_with caps) \
 		$(use_enable udev) \
+		$(use_enable ipv6) \
+		$(use_with caps) \
 		--localstatedir=/var \
 		--disable-per-user-esound-socket \
 		--with-database=gdbm \

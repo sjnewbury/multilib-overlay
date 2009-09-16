@@ -1,6 +1,6 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-devel/libtool/libtool-2.2.6a.ebuild,v 1.3 2008/11/28 22:41:19 ulm Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-devel/libtool/libtool-2.2.6a.ebuild,v 1.5 2009/09/08 17:51:21 vapier Exp $
 
 EAPI="2"
 
@@ -20,7 +20,7 @@ RDEPEND="sys-devel/gnuconfig
 	>=sys-devel/autoconf-2.60
 	>=sys-devel/automake-1.10.1"
 DEPEND="${RDEPEND}
-	app-arch/lzma-utils
+	|| ( app-arch/xz-utils app-arch/lzma-utils )
 	sys-apps/help2man"
 
 S=${WORKDIR}/${P%a}
@@ -39,6 +39,12 @@ src_unpack() {
 		cd ..
 		eautoreconf
 	fi
+
+	# the libtool script uses bash code in it and at configure time, tries
+	# to find a bash shell.  if /bin/sh is bash, it uses that.  this can
+	# cause problems for people who switch /bin/sh on the fly to other
+	# shells, so just force libtool to use /bin/bash all the time.
+	export CONFIG_SHELL=/bin/bash
 }
 
 multilib-native_src_install_internal() {

@@ -1,0 +1,22 @@
+icu? ( dev-libs/icu[lib32?] ) readline? ( sys-libs/readline[lib32?] ) tcl? ( dev-lang/tcl[lib32?] ) doc? ( app-arch/unzip ) sys-apps/abi-wrapper
+icu? ( dev-libs/icu[lib32?] ) readline? ( sys-libs/readline[lib32?] ) tcl? ( dev-lang/tcl[lib32?] ) sys-apps/abi-wrapper
+3
+http://www.sqlite.org/sqlite-3.6.18.tar.gz doc? ( http://www.sqlite.org/sqlite_docs_3_6_18.zip ) !tcl? ( mirror://gentoo/sqlite3.h-3.6.18.bz2 )
+!tcl? ( test )
+http://www.sqlite.org/
+as-is
+an SQL Database Engine in a C Library
+~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd
+base eutils flag-o-matic multilib multilib-native portability toolchain-funcs versionator
+debug doc icu +readline soundex tcl +threadsafe lib32
+
+
+
+2
+
+compile configure install postinst postrm preinst prepare setup test unpack
+
+
+
+
+
