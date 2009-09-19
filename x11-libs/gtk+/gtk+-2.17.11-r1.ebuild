@@ -3,8 +3,9 @@
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.16.5.ebuild,v 1.1 2009/07/19 23:25:17 eva Exp $
 
 EAPI="2"
+WANT_AUTOMAKE=1.9
 
-inherit gnome.org flag-o-matic eutils libtool virtualx multilib-native
+inherit gnome.org flag-o-matic eutils autotools virtualx multilib-native
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="http://www.gtk.org/"
@@ -72,6 +73,9 @@ multilib-native_src_prepare_internal() {
 	# bug #588740, gentoo bug #282744.                                                                         
 	epatch "${FILESDIR}/${PN}-2.16.5-jpeg-backward-compatibility.patch"
 
+	# From Fedora
+	epatch "${FILESDIR}/${PN}-2.17.11-fix-install.patch"
+
 	# -O3 and company cause random crashes in applications. Bug #133469
 	replace-flags -O3 -O2
 	strip-flags
@@ -83,7 +87,7 @@ multilib-native_src_prepare_internal() {
 		-i gtk/tests/testing.c || die "sed 1 failed"
 	sed '\%/recent-manager/add%,/recent_manager_purge/ d' \
 		-i gtk/tests/recentmanager.c || die "sed 2 failed"
-	elibtoolize
+	eautoreconf
 }
 
 multilib-native_src_configure_internal() {
