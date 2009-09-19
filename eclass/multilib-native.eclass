@@ -492,7 +492,7 @@ multilib-native_check_inherited_funcs() {
 # it, so default on base.eclass. Do nothing for non-default ABI pkg_* except
 # pkg_setup.
 	if [[ -z "${declared_func}" ]]; then
-		if [[ "${1/_*}" != "src" ]]; then
+		if [[ "${1/_*}" != "src" ]] && [[ "$1" != "pkg_setup" ]]; then
 			declared_func="return"
 		else
 			declared_func="base_${1}"
