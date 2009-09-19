@@ -1,4 +1,4 @@
-~dev-libs/poppler-0.12.0[lib32?] >=dev-libs/glib-2.16[lib32?] cairo? ( >=x11-libs/cairo-1.8.4[lib32?] >=x11-libs/gtk+-2.14.0:2[lib32?] ) dev-util/pkgconfig[lib32?] dev-util/pkgconfig sys-apps/abi-wrapper
+~dev-libs/poppler-0.12.0[lib32?] >=dev-libs/glib-2.16[lib32?] cairo? ( >=x11-libs/cairo-1.8.4[lib32?] >=x11-libs/gtk+-2.14.0:2[lib32?] ) dev-util/pkgconfig[lib32?] dev-util/pkgconfig userland_GNU? ( >=sys-apps/findutils-4.4.0 ) sys-apps/abi-wrapper
 ~dev-libs/poppler-0.12.0[lib32?] >=dev-libs/glib-2.16[lib32?] cairo? ( >=x11-libs/cairo-1.8.4[lib32?] >=x11-libs/gtk+-2.14.0:2[lib32?] ) !app-text/poppler !app-text/poppler-bindings sys-apps/abi-wrapper
 0
 http://poppler.freedesktop.org/poppler-0.12.0.tar.gz
