@@ -46,7 +46,7 @@ DEPEND="${RDEPEND}
 
 DOCS="ChangeLog MAINTAINERS NEWS TODO"
 
-multilib_native-pkg_setup_internal() {
+multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		$(use_with ldap openldap)
 		$(use_with krb4 krb4 /usr)
