@@ -5,6 +5,12 @@ cd $PORTDIR_OVERLAY/layman/multilib ($PORTDIR_OVERLAY is for most probably /usr/
 git checkout origin/portage-multilib
 git checkout -b portage-multilib
 
+then open .git/config with your favorite editor and add the following lines:
+
+[branch "portage-multilib"]
+        remote = origin
+        merge = refs/heads/portage-multilib
+
 After that, every layman sync should update the branch as normal, switching is done with
 
 git checkout <branch>
