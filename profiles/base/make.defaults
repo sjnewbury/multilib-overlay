@@ -4,3 +4,4 @@ NO_AUTO_FLAG="dev-perl/XML-Parser dev-perl/TermReadKey dev-perl/DBI dev-perl/DBD
         x11-misc/shared-mime-info dev-perl/Locale-gettext"
 
 MULTILIB_BINARIES="qt-core qt-gui"
+USE="${USE} multilib"
