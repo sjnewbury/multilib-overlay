@@ -1,0 +1,22 @@
+ssl? ( dev-libs/openssl[lib32?] ) berkdb? ( sys-libs/db[lib32?] ) !berkdb? ( sys-libs/gdbm[lib32?] ) >=dev-db/sqlite-3.5.7[lib32?] sys-libs/e2fsprogs-libs[lib32?] || ( >=sys-apps/util-linux-2.16[lib32?] <sys-libs/e2fsprogs-libs-1.41.8[lib32?] ) afs? ( net-fs/openafs[lib32?] ) hdb-ldap? ( >=net-nds/openldap-2.3.0[lib32?] ) !virtual/krb5 dev-util/pkgconfig[lib32?] >=sys-devel/autoconf-2.62 =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool X? ( x11-base/xorg-server x11-apps/xhost ) sys-apps/abi-wrapper
+ssl? ( dev-libs/openssl[lib32?] ) berkdb? ( sys-libs/db[lib32?] ) !berkdb? ( sys-libs/gdbm[lib32?] ) >=dev-db/sqlite-3.5.7[lib32?] sys-libs/e2fsprogs-libs[lib32?] || ( >=sys-apps/util-linux-2.16[lib32?] <sys-libs/e2fsprogs-libs-1.41.8[lib32?] ) afs? ( net-fs/openafs[lib32?] ) hdb-ldap? ( >=net-nds/openldap-2.3.0[lib32?] ) !virtual/krb5 sys-apps/abi-wrapper
+0
+http://www.h5l.org/dist/src/heimdal-1.2.1.tar.gz mirror://gentoo/heimdal-gentoo-patches-0.2.tar.bz2
+test
+http://www.h5l.org/
+BSD
+Kerberos 5 implementation from KTH
+~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~m68k
+autotools base eutils flag-o-matic libtool multilib multilib-native portability toolchain-funcs virtualx
+afs +berkdb hdb-ldap ipv6 otp pkinit ssl threads X X lib32
+
+
+virtual/krb5
+2
+
+compile configure install postinst postrm preinst prepare setup test unpack
+
+
+
+
+
