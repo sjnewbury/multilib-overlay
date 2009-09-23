@@ -27,7 +27,7 @@ DEPEND="${RDEPEND}
 
 S=${WORKDIR}/${MY_P}/src
 
-PROVIDE="virtual/krb5"
+PROVIDE="virtual/krb5[lib32?]"
 
 src_unpack() {
 	unpack ${A}
