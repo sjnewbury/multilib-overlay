@@ -1,22 +1,14 @@
-=sys-libs/libsepol-2.0*[lib32?] dev-lang/swig ruby? ( dev-lang/ruby[lib32?] ) >=app-shells/bash-3.2 sys-apps/abi-wrapper
-=sys-libs/libsepol-2.0*[lib32?] ruby? ( dev-lang/ruby[lib32?] ) sys-apps/abi-wrapper
-0
-http://userspace.selinuxproject.org/releases/current/devel/libselinux-2.0.71.tar.gz
-
-http://userspace.selinuxproject.org
-public-domain
-SELinux userland library
-amd64 x86
-base eutils multilib multilib-native portability python ruby toolchain-funcs
-ruby lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	python	/var/paludis/repositories/gentoo/eclass	1253297276	ruby	/var/paludis/repositories/gentoo/eclass	1249387677	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND==sys-libs/libsepol-2.0*[lib32?] dev-lang/swig ruby? ( dev-lang/ruby[lib32?] ) >=app-shells/bash-3.2 sys-apps/abi-wrapper
+RDEPEND==sys-libs/libsepol-2.0*[lib32?] ruby? ( dev-lang/ruby[lib32?] ) sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=http://userspace.selinuxproject.org/releases/current/devel/libselinux-2.0.71.tar.gz
+HOMEPAGE=http://userspace.selinuxproject.org
+LICENSE=public-domain
+DESCRIPTION=SELinux userland library
+KEYWORDS=amd64 x86
+IUSE=lib32 ruby
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

@@ -1,22 +1,14 @@
-jpeg? ( >=media-libs/jpeg-6b-r2[lib32?] ) tiff? ( media-libs/tiff[lib32?] ) qt3? ( x11-libs/qt:3[lib32?] ) qt3? ( nsplugin? ( x11-libs/libXt[lib32?] ) ) sys-apps/abi-wrapper
-jpeg? ( >=media-libs/jpeg-6b-r2[lib32?] ) tiff? ( media-libs/tiff[lib32?] ) qt3? ( x11-libs/qt:3[lib32?] ) sys-apps/abi-wrapper
-0
-mirror://sourceforge/djvu/djvulibre-3.5.21.tar.gz
-
-http://djvu.sourceforge.net
-GPL-2
-DjVu viewers, encoders and utilities.
-alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd
-base confutils eutils fdo-mime flag-o-matic multilib multilib-native nsplugins portability toolchain-funcs
-xml qt3 jpeg tiff debug threads nls nsplugin kde doc linguas_cs linguas_de linguas_en linguas_fr linguas_ja linguas_zh lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692042
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	confutils	/var/paludis/repositories/gentoo/eclass	1204106758	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	fdo-mime	/var/paludis/repositories/gentoo/eclass	1229996133	flag-o-matic	/var/paludis/repositories/gentoo/eclass	1250382957	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	nsplugins	/var/paludis/repositories/gentoo/eclass	1241219162	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=jpeg? ( >=media-libs/jpeg-6b-r2[lib32?] ) tiff? ( media-libs/tiff[lib32?] ) qt3? ( x11-libs/qt:3[lib32?] ) qt3? ( nsplugin? ( x11-libs/libXt[lib32?] ) ) sys-apps/abi-wrapper
+RDEPEND=jpeg? ( >=media-libs/jpeg-6b-r2[lib32?] ) tiff? ( media-libs/tiff[lib32?] ) qt3? ( x11-libs/qt:3[lib32?] ) sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=mirror://sourceforge/djvu/djvulibre-3.5.21.tar.gz
+HOMEPAGE=http://djvu.sourceforge.net
+LICENSE=GPL-2
+DESCRIPTION=DjVu viewers, encoders and utilities.
+KEYWORDS=alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd
+IUSE=debug doc jpeg kde lib32 linguas_cs linguas_de linguas_en linguas_fr linguas_ja linguas_zh nls nsplugin qt3 threads tiff xml
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

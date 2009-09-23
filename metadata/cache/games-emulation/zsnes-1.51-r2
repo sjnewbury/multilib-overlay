@@ -1,22 +1,14 @@
-media-libs/libsdl[lib32?] >=sys-libs/zlib-1.2.3-r1[lib32?] ao? ( media-libs/libao[lib32?] ) opengl? ( virtual/opengl[lib32?] ) png? ( media-libs/libpng[lib32?] ) dev-lang/nasm amd64? ( >=sys-apps/portage-2.1 ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
-media-libs/libsdl[lib32?] >=sys-libs/zlib-1.2.3-r1[lib32?] ao? ( media-libs/libao[lib32?] ) opengl? ( virtual/opengl[lib32?] ) png? ( media-libs/libpng[lib32?] )
-0
-mirror://sourceforge/zsnes/zsnes151src.tar.bz2
-
-http://www.zsnes.com/ http://ipherswipsite.com/zsnes/
-GPL-2
-SNES (Super Nintendo) emulator that uses x86 assembly
--* amd64 x86 ~x86-fbsd
-autotools base eutils flag-o-matic games libtool multilib portability toolchain-funcs
-ao custom-cflags opengl png lib32
-
-
-
-2
-
-compile configure install postinst preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692044
+_guessed_eapi_=0
+_eclasses_=autotools	/var/paludis/repositories/gentoo/eclass	1242646624	base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	flag-o-matic	/var/paludis/repositories/gentoo/eclass	1250382957	games	/var/paludis/repositories/gentoo/eclass	1248606363	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=media-libs/libsdl[lib32?] >=sys-libs/zlib-1.2.3-r1[lib32?] ao? ( media-libs/libao[lib32?] ) opengl? ( virtual/opengl[lib32?] ) png? ( media-libs/libpng[lib32?] ) dev-lang/nasm amd64? ( >=sys-apps/portage-2.1 ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool
+RDEPEND=media-libs/libsdl[lib32?] >=sys-libs/zlib-1.2.3-r1[lib32?] ao? ( media-libs/libao[lib32?] ) opengl? ( virtual/opengl[lib32?] ) png? ( media-libs/libpng[lib32?] )
+SLOT=0
+SRC_URI=mirror://sourceforge/zsnes/zsnes151src.tar.bz2
+HOMEPAGE=http://www.zsnes.com/ http://ipherswipsite.com/zsnes/
+LICENSE=GPL-2
+DESCRIPTION=SNES (Super Nintendo) emulator that uses x86 assembly
+KEYWORDS=-* amd64 x86 ~x86-fbsd
+IUSE=ao custom-cflags lib32 opengl png
+EAPI=2
+DEFINED_PHASES=compile configure install postinst preinst prepare setup unpack

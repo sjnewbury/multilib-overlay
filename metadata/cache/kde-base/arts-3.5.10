@@ -1,22 +1,15 @@
-x11-libs/qt:3[lib32?] >=dev-libs/glib-2[lib32?] alsa? ( media-libs/alsa-lib[lib32?] ) vorbis? ( media-libs/libogg[lib32?] media-libs/libvorbis[lib32?] ) esd? ( media-sound/esound[lib32?] ) jack? ( >=media-sound/jack-audio-connection-kit-0.90[lib32?] ) mp3? ( media-libs/libmad[lib32?] ) nas? ( media-libs/nas[lib32?] ) media-libs/audiofile[lib32?] dev-util/pkgconfig[lib32?] =sys-devel/automake-1.9* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-devel/make dev-util/pkgconfig dev-lang/perl sys-apps/abi-wrapper
-x11-libs/qt:3[lib32?] >=dev-libs/glib-2[lib32?] alsa? ( media-libs/alsa-lib[lib32?] ) vorbis? ( media-libs/libogg[lib32?] media-libs/libvorbis[lib32?] ) esd? ( media-sound/esound[lib32?] ) jack? ( >=media-sound/jack-audio-connection-kit-0.90[lib32?] ) mp3? ( media-libs/libmad[lib32?] ) nas? ( media-libs/nas[lib32?] ) media-libs/audiofile[lib32?] sys-apps/abi-wrapper
-3.5
-mirror://kde/stable/3.5.10/src/arts-1.5.10.tar.bz2
-test
-http://multimedia.kde.org/
-GPL-2 LGPL-2
-aRts, the KDE sound (and all-around multimedia) server/output manager
-~alpha amd64 ~hppa ~ia64 ppc ppc64 ~sparc x86 ~x86-fbsd
-autotools base eutils flag-o-matic kde kde-functions libtool multilib multilib-native portability qt3 toolchain-funcs versionator
-alsa esd artswrappersuid jack mp3 nas vorbis debug elibc_FreeBSD lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692044
+_guessed_eapi_=0
+_eclasses_=autotools	/var/paludis/repositories/gentoo/eclass	1242646624	base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	flag-o-matic	/var/paludis/repositories/gentoo/eclass	1250382957	kde	/var/paludis/repositories/gentoo/eclass	1242133554	kde-functions	/var/paludis/repositories/gentoo/eclass	1242248789	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	qt3	/var/paludis/repositories/gentoo/eclass	1242574566	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359	versionator	/var/paludis/repositories/gentoo/eclass	1213275960
+DEPEND=x11-libs/qt:3[lib32?] >=dev-libs/glib-2[lib32?] alsa? ( media-libs/alsa-lib[lib32?] ) vorbis? ( media-libs/libogg[lib32?] media-libs/libvorbis[lib32?] ) esd? ( media-sound/esound[lib32?] ) jack? ( >=media-sound/jack-audio-connection-kit-0.90[lib32?] ) mp3? ( media-libs/libmad[lib32?] ) nas? ( media-libs/nas[lib32?] ) media-libs/audiofile[lib32?] dev-util/pkgconfig[lib32?] =sys-devel/automake-1.9* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-devel/make dev-util/pkgconfig dev-lang/perl sys-apps/abi-wrapper
+RDEPEND=x11-libs/qt:3[lib32?] >=dev-libs/glib-2[lib32?] alsa? ( media-libs/alsa-lib[lib32?] ) vorbis? ( media-libs/libogg[lib32?] media-libs/libvorbis[lib32?] ) esd? ( media-sound/esound[lib32?] ) jack? ( >=media-sound/jack-audio-connection-kit-0.90[lib32?] ) mp3? ( media-libs/libmad[lib32?] ) nas? ( media-libs/nas[lib32?] ) media-libs/audiofile[lib32?] sys-apps/abi-wrapper
+SLOT=3.5
+SRC_URI=mirror://kde/stable/3.5.10/src/arts-1.5.10.tar.bz2
+RESTRICT=test
+HOMEPAGE=http://multimedia.kde.org/
+LICENSE=GPL-2 LGPL-2
+DESCRIPTION=aRts, the KDE sound (and all-around multimedia) server/output manager
+KEYWORDS=~alpha amd64 ~hppa ~ia64 ppc ppc64 ~sparc x86 ~x86-fbsd
+IUSE=alsa artswrappersuid debug elibc_FreeBSD esd jack lib32 mp3 nas vorbis
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

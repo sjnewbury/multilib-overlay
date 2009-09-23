@@ -1,22 +1,14 @@
-gnome? ( x11-libs/libX11[lib32?] x11-libs/libXmu[lib32?] gnome-base/gconf[lib32?] ) kde? ( x11-libs/libX11[lib32?] x11-libs/libXmu[lib32?] ) networkmanager? ( net-misc/networkmanager[lib32?] ) python? ( >=dev-lang/python-2.5[lib32?] ) webkit? ( net-libs/webkit-gtk[lib32?] ) xulrunner? ( >=net-libs/xulrunner-1.9.0.11-r1:1.9[lib32?] ) !xulrunner? ( seamonkey? ( www-client/seamonkey[lib32?] ) ) >=dev-util/pkgconfig-0.19[lib32?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool >=app-shells/bash-3.2 sys-apps/abi-wrapper
-gnome? ( x11-libs/libX11[lib32?] x11-libs/libXmu[lib32?] gnome-base/gconf[lib32?] ) kde? ( x11-libs/libX11[lib32?] x11-libs/libXmu[lib32?] ) networkmanager? ( net-misc/networkmanager[lib32?] ) python? ( >=dev-lang/python-2.5[lib32?] ) webkit? ( net-libs/webkit-gtk[lib32?] ) xulrunner? ( >=net-libs/xulrunner-1.9.0.11-r1:1.9[lib32?] ) !xulrunner? ( seamonkey? ( www-client/seamonkey[lib32?] ) ) sys-apps/abi-wrapper
-0
-http://libproxy.googlecode.com/files/libproxy-0.2.3.tar.gz
-
-http://code.google.com/p/libproxy/
-LGPL-2.1
-Library for automatic proxy configuration management
-alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd
-autotools base eutils libtool multilib multilib-native portability python toolchain-funcs
-gnome kde networkmanager python seamonkey webkit xulrunner lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=autotools	/var/paludis/repositories/gentoo/eclass	1242646624	base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	python	/var/paludis/repositories/gentoo/eclass	1253297276	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=gnome? ( x11-libs/libX11[lib32?] x11-libs/libXmu[lib32?] gnome-base/gconf[lib32?] ) kde? ( x11-libs/libX11[lib32?] x11-libs/libXmu[lib32?] ) networkmanager? ( net-misc/networkmanager[lib32?] ) python? ( >=dev-lang/python-2.5[lib32?] ) webkit? ( net-libs/webkit-gtk[lib32?] ) xulrunner? ( >=net-libs/xulrunner-1.9.0.11-r1:1.9[lib32?] ) !xulrunner? ( seamonkey? ( www-client/seamonkey[lib32?] ) ) >=dev-util/pkgconfig-0.19[lib32?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool >=app-shells/bash-3.2 sys-apps/abi-wrapper
+RDEPEND=gnome? ( x11-libs/libX11[lib32?] x11-libs/libXmu[lib32?] gnome-base/gconf[lib32?] ) kde? ( x11-libs/libX11[lib32?] x11-libs/libXmu[lib32?] ) networkmanager? ( net-misc/networkmanager[lib32?] ) python? ( >=dev-lang/python-2.5[lib32?] ) webkit? ( net-libs/webkit-gtk[lib32?] ) xulrunner? ( >=net-libs/xulrunner-1.9.0.11-r1:1.9[lib32?] ) !xulrunner? ( seamonkey? ( www-client/seamonkey[lib32?] ) ) sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=http://libproxy.googlecode.com/files/libproxy-0.2.3.tar.gz
+HOMEPAGE=http://code.google.com/p/libproxy/
+LICENSE=LGPL-2.1
+DESCRIPTION=Library for automatic proxy configuration management
+KEYWORDS=alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd
+IUSE=gnome kde lib32 networkmanager python seamonkey webkit xulrunner
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

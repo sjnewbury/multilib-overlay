@@ -1,22 +1,14 @@
->=x11-libs/gtk+-2.11.3[lib32?] >=dev-libs/glib-2.13.0[lib32?] x11-libs/libX11[lib32?] x11-libs/libXres[lib32?] x11-libs/libXext[lib32?] startup-notification? ( >=x11-libs/startup-notification-0.4[lib32?] ) sys-devel/gettext[lib32?] >=dev-util/pkgconfig-0.9[lib32?] >=dev-util/intltool-0.40 dev-util/gtk-doc-am gnome-base/gnome-common doc? ( >=dev-util/gtk-doc-1.9 ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool >=sys-apps/sed-4 sys-apps/abi-wrapper
->=x11-libs/gtk+-2.11.3[lib32?] >=dev-libs/glib-2.13.0[lib32?] x11-libs/libX11[lib32?] x11-libs/libXres[lib32?] x11-libs/libXext[lib32?] startup-notification? ( >=x11-libs/startup-notification-0.4[lib32?] ) sys-apps/abi-wrapper
-0
-mirror://gnome/sources/libwnck/2.26/libwnck-2.26.2.tar.bz2
-
-http://www.gnome.org/
-LGPL-2
-A window navigation construction kit
-~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd
-autotools base eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib multilib-native portability toolchain-funcs
-doc startup-notification lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692046
+_guessed_eapi_=0
+_eclasses_=autotools	/var/paludis/repositories/gentoo/eclass	1242646624	base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	fdo-mime	/var/paludis/repositories/gentoo/eclass	1229996133	gnome.org	/var/paludis/repositories/gentoo/eclass	1121096137	gnome2	/var/paludis/repositories/gentoo/eclass	1234887017	gnome2-utils	/var/paludis/repositories/gentoo/eclass	1224709573	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=>=x11-libs/gtk+-2.11.3[lib32?] >=dev-libs/glib-2.13.0[lib32?] x11-libs/libX11[lib32?] x11-libs/libXres[lib32?] x11-libs/libXext[lib32?] startup-notification? ( >=x11-libs/startup-notification-0.4[lib32?] ) sys-devel/gettext[lib32?] >=dev-util/pkgconfig-0.9[lib32?] >=dev-util/intltool-0.40 dev-util/gtk-doc-am gnome-base/gnome-common doc? ( >=dev-util/gtk-doc-1.9 ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool >=sys-apps/sed-4 sys-apps/abi-wrapper
+RDEPEND=>=x11-libs/gtk+-2.11.3[lib32?] >=dev-libs/glib-2.13.0[lib32?] x11-libs/libX11[lib32?] x11-libs/libXres[lib32?] x11-libs/libXext[lib32?] startup-notification? ( >=x11-libs/startup-notification-0.4[lib32?] ) sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=mirror://gnome/sources/libwnck/2.26/libwnck-2.26.2.tar.bz2
+HOMEPAGE=http://www.gnome.org/
+LICENSE=LGPL-2
+DESCRIPTION=A window navigation construction kit
+KEYWORDS=~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd
+IUSE=doc lib32 startup-notification
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

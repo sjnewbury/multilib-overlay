@@ -1,22 +1,15 @@
-kernel_linux? ( virtual/linux-sources ) kernel_linux? ( virtual/modutils ) sys-apps/sed sys-apps/abi-wrapper
-kernel_linux? ( virtual/modutils ) sys-apps/abi-wrapper
-0
-mirror://sourceforge/fuse/fuse-2.7.0.tar.gz
-
-http://fuse.sourceforge.net
-GPL-2
-An interface for filesystems implemented in userspace.
-alpha amd64 ~hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd
-base eutils libtool linux-info linux-mod multilib multilib-native portability toolchain-funcs versionator
-kernel_linux kernel_FreeBSD kernel_linux lib32
-
-kernel_FreeBSD? ( sys-fs/fuse4bsd )
-
-
-
-compile install postinst postrm preinst setup unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	linux-info	/var/paludis/repositories/gentoo/eclass	1252876068	linux-mod	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359	versionator	/var/paludis/repositories/gentoo/eclass	1213275960
+DEPEND=kernel_linux? ( virtual/linux-sources ) kernel_linux? ( virtual/modutils ) sys-apps/sed sys-apps/abi-wrapper
+RDEPEND=kernel_linux? ( virtual/modutils ) sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=mirror://sourceforge/fuse/fuse-2.7.0.tar.gz
+HOMEPAGE=http://fuse.sourceforge.net
+LICENSE=GPL-2
+DESCRIPTION=An interface for filesystems implemented in userspace.
+KEYWORDS=alpha amd64 ~hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd
+IUSE=kernel_FreeBSD kernel_linux lib32
+PDEPEND=kernel_FreeBSD? ( sys-fs/fuse4bsd )
+EAPI=0
+DEFINED_PHASES=compile install postinst postrm preinst setup unpack

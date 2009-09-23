@@ -1,22 +1,14 @@
-x11-libs/qt-core:4[lib32?] >=dev-util/cmake-2.6.2-r1 userland_GNU? ( >=sys-apps/findutils-4.4.0 ) sys-apps/abi-wrapper
-sys-apps/abi-wrapper
-0
-mirror://kde/stable/automoc4/0.9.88/automoc4-0.9.88.tar.bz2
-
-http://www.kde.org
-as-is
-KDE Meta Object Compiler
-alpha amd64 hppa ia64 ppc ppc64 x86 ~x86-fbsd
-base cmake-utils eutils flag-o-matic multilib multilib-native portability toolchain-funcs
-lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup test unpack
-
-
-
-
-
+_mtime_=1253692044
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	cmake-utils	/var/paludis/repositories/gentoo/eclass	1249763836	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	flag-o-matic	/var/paludis/repositories/gentoo/eclass	1250382957	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=x11-libs/qt-core:4[lib32?] >=dev-util/cmake-2.6.2-r1 userland_GNU? ( >=sys-apps/findutils-4.4.0 ) sys-apps/abi-wrapper
+RDEPEND=sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=mirror://kde/stable/automoc4/0.9.88/automoc4-0.9.88.tar.bz2
+HOMEPAGE=http://www.kde.org
+LICENSE=as-is
+DESCRIPTION=KDE Meta Object Compiler
+KEYWORDS=alpha amd64 hppa ia64 ppc ppc64 x86 ~x86-fbsd
+IUSE=lib32
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup test unpack

@@ -1,22 +1,14 @@
-x11-libs/pango[lib32?] media-libs/freetype:2[lib32?] dev-util/pkgconfig[lib32?] doc? ( app-doc/doxygen ) >=dev-util/cmake-2.6.2-r1 userland_GNU? ( >=sys-apps/findutils-4.4.0 ) sys-apps/abi-wrapper
-x11-libs/pango[lib32?] media-libs/freetype:2[lib32?] sys-apps/abi-wrapper
-0
-mirror://sourceforge/lasi/libLASi-1.1.0.tar.gz
-
-http://www.unifont.org/lasi/
-GPL-2
-C++ library for postscript stream output
-~alpha ~amd64 ~hppa ~ppc ~ppc64 ~sparc ~x86
-base cmake-utils eutils flag-o-matic multilib multilib-native portability toolchain-funcs
-doc examples lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup test unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	cmake-utils	/var/paludis/repositories/gentoo/eclass	1249763836	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	flag-o-matic	/var/paludis/repositories/gentoo/eclass	1250382957	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=x11-libs/pango[lib32?] media-libs/freetype:2[lib32?] dev-util/pkgconfig[lib32?] doc? ( app-doc/doxygen ) >=dev-util/cmake-2.6.2-r1 userland_GNU? ( >=sys-apps/findutils-4.4.0 ) sys-apps/abi-wrapper
+RDEPEND=x11-libs/pango[lib32?] media-libs/freetype:2[lib32?] sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=mirror://sourceforge/lasi/libLASi-1.1.0.tar.gz
+HOMEPAGE=http://www.unifont.org/lasi/
+LICENSE=GPL-2
+DESCRIPTION=C++ library for postscript stream output
+KEYWORDS=~alpha ~amd64 ~hppa ~ppc ~ppc64 ~sparc ~x86
+IUSE=doc examples lib32
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup test unpack

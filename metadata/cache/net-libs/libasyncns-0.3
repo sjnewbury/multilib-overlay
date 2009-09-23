@@ -1,22 +1,14 @@
-doc? ( app-doc/doxygen ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
-sys-apps/abi-wrapper
-0
-http://0pointer.de/lennart/projects/libasyncns/libasyncns-0.3.tar.gz
-
-http://0pointer.de/lennart/projects/libasyncns/
-GPL-2
-C library for executing name service queries asynchronously.
-alpha amd64 hppa ia64 ppc ppc64 sparc x86
-autotools base eutils libtool multilib multilib-native portability toolchain-funcs
-doc debug lib32
-
-
-
-
-
-compile install postinst postrm preinst setup unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=autotools	/var/paludis/repositories/gentoo/eclass	1242646624	base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=doc? ( app-doc/doxygen ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+RDEPEND=sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=http://0pointer.de/lennart/projects/libasyncns/libasyncns-0.3.tar.gz
+HOMEPAGE=http://0pointer.de/lennart/projects/libasyncns/
+LICENSE=GPL-2
+DESCRIPTION=C library for executing name service queries asynchronously.
+KEYWORDS=alpha amd64 hppa ia64 ppc ppc64 sparc x86
+IUSE=debug doc lib32
+EAPI=0
+DEFINED_PHASES=compile install postinst postrm preinst setup unpack

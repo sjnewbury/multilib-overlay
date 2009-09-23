@@ -1,22 +1,14 @@
-cddb? ( >=media-libs/libcddb-1.0.1[lib32?] ) virtual/libintl sys-devel/gettext dev-util/pkgconfig[lib32?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
-cddb? ( >=media-libs/libcddb-1.0.1[lib32?] ) virtual/libintl sys-apps/abi-wrapper
-0
-mirror://gnu/libcdio/libcdio-0.80.tar.gz
-
-http://www.gnu.org/software/libcdio/
-GPL-2
-A library to encapsulate CD-ROM reading and control
-alpha amd64 arm hppa ia64 ppc ppc64 sh sparc ~sparc-fbsd x86 ~x86-fbsd
-autotools base eutils libtool multilib multilib-native portability toolchain-funcs
-cddb minimal +cxx lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692044
+_guessed_eapi_=0
+_eclasses_=autotools	/var/paludis/repositories/gentoo/eclass	1242646624	base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=cddb? ( >=media-libs/libcddb-1.0.1[lib32?] ) virtual/libintl sys-devel/gettext dev-util/pkgconfig[lib32?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+RDEPEND=cddb? ( >=media-libs/libcddb-1.0.1[lib32?] ) virtual/libintl sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=mirror://gnu/libcdio/libcdio-0.80.tar.gz
+HOMEPAGE=http://www.gnu.org/software/libcdio/
+LICENSE=GPL-2
+DESCRIPTION=A library to encapsulate CD-ROM reading and control
+KEYWORDS=alpha amd64 arm hppa ia64 ppc ppc64 sh sparc ~sparc-fbsd x86 ~x86-fbsd
+IUSE=+cxx cddb lib32 minimal
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

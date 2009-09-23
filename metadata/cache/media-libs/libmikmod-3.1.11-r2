@@ -1,22 +1,14 @@
->=media-libs/audiofile-0.2.3[lib32?] alsa? ( >=media-libs/alsa-lib-0.5.9[lib32?] ) esd? ( >=media-sound/esound-0.2.19[lib32?] ) =sys-devel/automake-1.5* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
->=media-libs/audiofile-0.2.3[lib32?] alsa? ( >=media-libs/alsa-lib-0.5.9[lib32?] ) esd? ( >=media-sound/esound-0.2.19[lib32?] ) sys-apps/abi-wrapper
-0
-http://mikmod.raphnet.net/files/libmikmod-3.1.11.tar.gz mirror://gentoo/libmikmod-3.1.11-esdm4.patch.bz2
-
-http://mikmod.raphnet.net/
-|| ( LGPL-2.1 LGPL-2 )
-A library to play a wide range of module formats
-hppa
-autotools base eutils flag-o-matic libtool multilib multilib-native portability toolchain-funcs
-oss esd alsa lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=autotools	/var/paludis/repositories/gentoo/eclass	1242646624	base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	flag-o-matic	/var/paludis/repositories/gentoo/eclass	1250382957	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=>=media-libs/audiofile-0.2.3[lib32?] alsa? ( >=media-libs/alsa-lib-0.5.9[lib32?] ) esd? ( >=media-sound/esound-0.2.19[lib32?] ) =sys-devel/automake-1.5* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+RDEPEND=>=media-libs/audiofile-0.2.3[lib32?] alsa? ( >=media-libs/alsa-lib-0.5.9[lib32?] ) esd? ( >=media-sound/esound-0.2.19[lib32?] ) sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=http://mikmod.raphnet.net/files/libmikmod-3.1.11.tar.gz mirror://gentoo/libmikmod-3.1.11-esdm4.patch.bz2
+HOMEPAGE=http://mikmod.raphnet.net/
+LICENSE=|| ( LGPL-2.1 LGPL-2 )
+DESCRIPTION=A library to play a wide range of module formats
+KEYWORDS=hppa
+IUSE=alsa esd lib32 oss
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

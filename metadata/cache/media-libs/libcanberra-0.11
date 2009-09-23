@@ -1,22 +1,14 @@
-media-libs/libvorbis[lib32?] sys-devel/libtool[lib32?] alsa? ( media-libs/alsa-lib[lib32?] ) gstreamer? ( >=media-libs/gstreamer-0.10.15 ) pulse? ( media-sound/pulseaudio[lib32?] ) gtk? ( dev-libs/glib:2[lib32?] >=x11-libs/gtk+-2.13.4:2[lib32?] >=gnome-base/gconf-2[lib32?] ) >=dev-util/pkgconfig-0.17[lib32?] doc? ( >=dev-util/gtk-doc-1.9 ) >=sys-apps/sed-4 sys-apps/abi-wrapper
-media-libs/libvorbis[lib32?] sys-devel/libtool[lib32?] alsa? ( media-libs/alsa-lib[lib32?] ) gstreamer? ( >=media-libs/gstreamer-0.10.15 ) pulse? ( media-sound/pulseaudio[lib32?] ) gtk? ( dev-libs/glib:2[lib32?] >=x11-libs/gtk+-2.13.4:2[lib32?] >=gnome-base/gconf-2[lib32?] ) sys-apps/abi-wrapper
-0
-http://0pointer.de/lennart/projects/libcanberra/libcanberra-0.11.tar.gz
-
-http://0pointer.de/lennart/projects/libcanberra/
-LGPL-2.1
-Portable Sound Event Library
-alpha amd64 ~arm ~hppa ia64 ppc ppc64 ~sh sparc x86 ~x86-fbsd
-base eutils gnome2-utils multilib multilib-native portability toolchain-funcs
-alsa doc gstreamer +gtk oss lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	gnome2-utils	/var/paludis/repositories/gentoo/eclass	1224709573	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=media-libs/libvorbis[lib32?] sys-devel/libtool[lib32?] alsa? ( media-libs/alsa-lib[lib32?] ) gstreamer? ( >=media-libs/gstreamer-0.10.15 ) pulse? ( media-sound/pulseaudio[lib32?] ) gtk? ( dev-libs/glib:2[lib32?] >=x11-libs/gtk+-2.13.4:2[lib32?] >=gnome-base/gconf-2[lib32?] ) >=dev-util/pkgconfig-0.17[lib32?] doc? ( >=dev-util/gtk-doc-1.9 ) >=sys-apps/sed-4 sys-apps/abi-wrapper
+RDEPEND=media-libs/libvorbis[lib32?] sys-devel/libtool[lib32?] alsa? ( media-libs/alsa-lib[lib32?] ) gstreamer? ( >=media-libs/gstreamer-0.10.15 ) pulse? ( media-sound/pulseaudio[lib32?] ) gtk? ( dev-libs/glib:2[lib32?] >=x11-libs/gtk+-2.13.4:2[lib32?] >=gnome-base/gconf-2[lib32?] ) sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=http://0pointer.de/lennart/projects/libcanberra/libcanberra-0.11.tar.gz
+HOMEPAGE=http://0pointer.de/lennart/projects/libcanberra/
+LICENSE=LGPL-2.1
+DESCRIPTION=Portable Sound Event Library
+KEYWORDS=alpha amd64 ~arm ~hppa ia64 ppc ppc64 ~sh sparc x86 ~x86-fbsd
+IUSE=+gtk alsa doc gstreamer lib32 oss
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

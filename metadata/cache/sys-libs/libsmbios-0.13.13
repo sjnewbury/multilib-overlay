@@ -1,22 +1,14 @@
-dev-libs/libxml2[lib32?] sys-libs/zlib[lib32?] test? ( dev-util/cppunit[lib32?] ) sys-apps/abi-wrapper
-dev-libs/libxml2[lib32?] sys-libs/zlib[lib32?] test? ( dev-util/cppunit[lib32?] ) sys-apps/abi-wrapper
-0
-http://linux.dell.com/libsmbios/download/libsmbios/libsmbios-0.13.13/libsmbios-0.13.13.tar.gz
-
-http://linux.dell.com/libsmbios/main/index.html
-GPL-2 OSL-2.0
-Provide access to (SM)BIOS information
-amd64 ia64 x86
-base eutils multilib multilib-native portability toolchain-funcs
-test lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup test unpack
-
-
-
-
-
+_mtime_=1253692046
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=dev-libs/libxml2[lib32?] sys-libs/zlib[lib32?] test? ( dev-util/cppunit[lib32?] ) sys-apps/abi-wrapper
+RDEPEND=dev-libs/libxml2[lib32?] sys-libs/zlib[lib32?] test? ( dev-util/cppunit[lib32?] ) sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=http://linux.dell.com/libsmbios/download/libsmbios/libsmbios-0.13.13/libsmbios-0.13.13.tar.gz
+HOMEPAGE=http://linux.dell.com/libsmbios/main/index.html
+LICENSE=GPL-2 OSL-2.0
+DESCRIPTION=Provide access to (SM)BIOS information
+KEYWORDS=amd64 ia64 x86
+IUSE=lib32 test
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup test unpack

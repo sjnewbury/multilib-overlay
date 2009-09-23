@@ -1,22 +1,14 @@
-!gcrypt? ( dev-libs/openssl[lib32?] ) gcrypt? ( dev-libs/libgcrypt[lib32?] ) zlib? ( sys-libs/zlib[lib32?] ) sys-apps/abi-wrapper
-!gcrypt? ( dev-libs/openssl[lib32?] ) gcrypt? ( dev-libs/libgcrypt[lib32?] ) zlib? ( sys-libs/zlib[lib32?] ) sys-apps/abi-wrapper
-0
-mirror://sourceforge/libssh2/libssh2-1.1.tar.gz
-
-http://www.libssh2.org/
-BSD
-Library implementing the SSH2 protocol
-~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd
-base eutils multilib multilib-native portability toolchain-funcs
-gcrypt zlib lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=!gcrypt? ( dev-libs/openssl[lib32?] ) gcrypt? ( dev-libs/libgcrypt[lib32?] ) zlib? ( sys-libs/zlib[lib32?] ) sys-apps/abi-wrapper
+RDEPEND=!gcrypt? ( dev-libs/openssl[lib32?] ) gcrypt? ( dev-libs/libgcrypt[lib32?] ) zlib? ( sys-libs/zlib[lib32?] ) sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=mirror://sourceforge/libssh2/libssh2-1.1.tar.gz
+HOMEPAGE=http://www.libssh2.org/
+LICENSE=BSD
+DESCRIPTION=Library implementing the SSH2 protocol
+KEYWORDS=~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd
+IUSE=gcrypt lib32 zlib
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

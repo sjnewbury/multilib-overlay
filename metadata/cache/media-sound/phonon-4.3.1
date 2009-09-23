@@ -1,22 +1,14 @@
-!kde-base/phonon-xine !x11-libs/qt-phonon:4 >=x11-libs/qt-test-4.4.0:4[lib32?] >=x11-libs/qt-dbus-4.4.0:4[lib32?] >=x11-libs/qt-gui-4.4.0:4[lib32?] >=x11-libs/qt-opengl-4.4.0:4[lib32?] gstreamer? ( media-libs/gstreamer[lib32?] media-libs/gst-plugins-base[lib32?] ) xine? ( >=media-libs/xine-lib-1.1.15-r1[xcb?,lib32?] xcb? ( x11-libs/libxcb[lib32?] ) ) >=kde-base/automoc-0.9.87 >=dev-util/cmake-2.6.2-r1 userland_GNU? ( >=sys-apps/findutils-4.4.0 ) sys-apps/abi-wrapper
-!kde-base/phonon-xine !x11-libs/qt-phonon:4 >=x11-libs/qt-test-4.4.0:4[lib32?] >=x11-libs/qt-dbus-4.4.0:4[lib32?] >=x11-libs/qt-gui-4.4.0:4[lib32?] >=x11-libs/qt-opengl-4.4.0:4[lib32?] gstreamer? ( media-libs/gstreamer[lib32?] media-libs/gst-plugins-base[lib32?] ) xine? ( >=media-libs/xine-lib-1.1.15-r1[xcb?,lib32?] xcb? ( x11-libs/libxcb[lib32?] ) ) sys-apps/abi-wrapper
-0
-mirror://kde/stable/4.2.1/src/phonon-4.3.1.tar.bz2
-
-http://phonon.kde.org
-LGPL-2.1
-KDE multimedia API
-alpha amd64 hppa ia64 ppc ppc64 x86
-base cmake-utils eutils flag-o-matic multilib multilib-native portability toolchain-funcs
-debug gstreamer +xcb +xine lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup test unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	cmake-utils	/var/paludis/repositories/gentoo/eclass	1249763836	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	flag-o-matic	/var/paludis/repositories/gentoo/eclass	1250382957	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=!kde-base/phonon-xine !x11-libs/qt-phonon:4 >=x11-libs/qt-test-4.4.0:4[lib32?] >=x11-libs/qt-dbus-4.4.0:4[lib32?] >=x11-libs/qt-gui-4.4.0:4[lib32?] >=x11-libs/qt-opengl-4.4.0:4[lib32?] gstreamer? ( media-libs/gstreamer[lib32?] media-libs/gst-plugins-base[lib32?] ) xine? ( >=media-libs/xine-lib-1.1.15-r1[xcb?,lib32?] xcb? ( x11-libs/libxcb[lib32?] ) ) >=kde-base/automoc-0.9.87 >=dev-util/cmake-2.6.2-r1 userland_GNU? ( >=sys-apps/findutils-4.4.0 ) sys-apps/abi-wrapper
+RDEPEND=!kde-base/phonon-xine !x11-libs/qt-phonon:4 >=x11-libs/qt-test-4.4.0:4[lib32?] >=x11-libs/qt-dbus-4.4.0:4[lib32?] >=x11-libs/qt-gui-4.4.0:4[lib32?] >=x11-libs/qt-opengl-4.4.0:4[lib32?] gstreamer? ( media-libs/gstreamer[lib32?] media-libs/gst-plugins-base[lib32?] ) xine? ( >=media-libs/xine-lib-1.1.15-r1[xcb?,lib32?] xcb? ( x11-libs/libxcb[lib32?] ) ) sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=mirror://kde/stable/4.2.1/src/phonon-4.3.1.tar.bz2
+HOMEPAGE=http://phonon.kde.org
+LICENSE=LGPL-2.1
+DESCRIPTION=KDE multimedia API
+KEYWORDS=alpha amd64 hppa ia64 ppc ppc64 x86
+IUSE=+xcb +xine debug gstreamer lib32
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup test unpack

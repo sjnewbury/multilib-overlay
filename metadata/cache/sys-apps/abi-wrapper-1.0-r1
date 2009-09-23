@@ -1,22 +1,10 @@
-
-
-0
-
-
-www.gentoo.org
-GPL-2
-Wraps binarys that behave abi dependand
-amd64
-multilib toolchain-funcs
-
-
-
-
-
-
-install postinst
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=multilib	/var/paludis/repositories/gentoo/eclass	1244981298	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+SLOT=0
+HOMEPAGE=www.gentoo.org
+LICENSE=GPL-2
+DESCRIPTION=Wraps binarys that behave abi dependand
+KEYWORDS=amd64
+EAPI=0
+DEFINED_PHASES=install postinst

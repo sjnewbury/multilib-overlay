@@ -1,22 +1,13 @@
->=media-libs/freetype-2.2.1 >=dev-libs/expat-1.95.3 dev-util/pkgconfig[lib32?] doc? ( app-text/docbook-sgml-utils[jadetex] =app-text/docbook-sgml-dtd-3.1* ) =sys-devel/automake-1.9* >=sys-devel/autoconf-2.61 sys-devel/libtool >=dev-util/git-1.6 sys-apps/abi-wrapper
->=media-libs/freetype-2.2.1 >=dev-libs/expat-1.95.3 sys-apps/abi-wrapper
-1.0
-
-
-http://fontconfig.org/
-fontconfig
-A library for configuring and customizing font access
-
-autotools base eutils flag-o-matic git libtool multilib multilib-native portability toolchain-funcs
-doc lib32
-
-app-admin/eselect-fontconfig
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=autotools	/var/paludis/repositories/gentoo/eclass	1242646624	base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	flag-o-matic	/var/paludis/repositories/gentoo/eclass	1250382957	git	/var/paludis/repositories/gentoo/eclass	1252051603	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=>=media-libs/freetype-2.2.1 >=dev-libs/expat-1.95.3 dev-util/pkgconfig[lib32?] doc? ( app-text/docbook-sgml-utils[jadetex] =app-text/docbook-sgml-dtd-3.1* ) =sys-devel/automake-1.9* >=sys-devel/autoconf-2.61 sys-devel/libtool >=dev-util/git-1.6 sys-apps/abi-wrapper
+RDEPEND=>=media-libs/freetype-2.2.1 >=dev-libs/expat-1.95.3 sys-apps/abi-wrapper
+SLOT=1.0
+HOMEPAGE=http://fontconfig.org/
+LICENSE=fontconfig
+DESCRIPTION=A library for configuring and customizing font access
+IUSE=doc lib32
+PDEPEND=app-admin/eselect-fontconfig
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

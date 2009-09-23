@@ -1,22 +1,14 @@
-kernel_linux? ( virtual/linux-sources ) sys-apps/abi-wrapper
-sys-apps/abi-wrapper
-0
-http://people.suug.ch/~tgr/libnl/files/libnl-1.1.tar.gz
-
-http://people.suug.ch/~tgr/libnl/
-LGPL-2.1
-A library for applications dealing with netlink socket
-~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~x86
-base eutils linux-info multilib multilib-native portability toolchain-funcs versionator
-lib32
-
-
-
-
-
-compile install postinst postrm preinst setup unpack
-
-
-
-
-
+_mtime_=1253692044
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	linux-info	/var/paludis/repositories/gentoo/eclass	1252876068	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359	versionator	/var/paludis/repositories/gentoo/eclass	1213275960
+DEPEND=kernel_linux? ( virtual/linux-sources ) sys-apps/abi-wrapper
+RDEPEND=sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=http://people.suug.ch/~tgr/libnl/files/libnl-1.1.tar.gz
+HOMEPAGE=http://people.suug.ch/~tgr/libnl/
+LICENSE=LGPL-2.1
+DESCRIPTION=A library for applications dealing with netlink socket
+KEYWORDS=~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~x86
+IUSE=lib32
+EAPI=0
+DEFINED_PHASES=compile install postinst postrm preinst setup unpack

@@ -1,22 +1,14 @@
->=net-nds/openldap-2.1.30-r5[lib32?] sasl? ( dev-libs/cyrus-sasl[lib32?] ) kerberos? ( virtual/krb5 ) ssl? ( dev-libs/openssl[lib32?] ) >=sys-apps/sed-4 =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
->=net-nds/openldap-2.1.30-r5[lib32?] sasl? ( dev-libs/cyrus-sasl[lib32?] ) kerberos? ( virtual/krb5 ) ssl? ( dev-libs/openssl[lib32?] ) !<net-fs/autofs-4.1.3 sys-apps/abi-wrapper
-0
-http://www.padl.com/download/nss_ldap-264.tar.gz
-
-http://www.padl.com/OSS/nss_ldap.html
-LGPL-2
-NSS LDAP Module
-~alpha ~amd64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86
-autotools base eutils fixheadtails libtool multilib multilib-native portability toolchain-funcs
-debug ssl sasl kerberos lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=autotools	/var/paludis/repositories/gentoo/eclass	1242646624	base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	fixheadtails	/var/paludis/repositories/gentoo/eclass	1203399358	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=>=net-nds/openldap-2.1.30-r5[lib32?] sasl? ( dev-libs/cyrus-sasl[lib32?] ) kerberos? ( virtual/krb5 ) ssl? ( dev-libs/openssl[lib32?] ) >=sys-apps/sed-4 =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+RDEPEND=>=net-nds/openldap-2.1.30-r5[lib32?] sasl? ( dev-libs/cyrus-sasl[lib32?] ) kerberos? ( virtual/krb5 ) ssl? ( dev-libs/openssl[lib32?] ) !<net-fs/autofs-4.1.3 sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=http://www.padl.com/download/nss_ldap-264.tar.gz
+HOMEPAGE=http://www.padl.com/OSS/nss_ldap.html
+LICENSE=LGPL-2
+DESCRIPTION=NSS LDAP Module
+KEYWORDS=~alpha ~amd64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86
+IUSE=debug kerberos lib32 sasl ssl
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

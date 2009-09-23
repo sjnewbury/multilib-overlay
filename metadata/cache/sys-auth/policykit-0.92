@@ -1,22 +1,14 @@
->=dev-libs/glib-2.14[lib32?] >=dev-libs/eggdbus-0.4[lib32?] expat? ( dev-libs/expat[lib32?] ) pam? ( virtual/pam ) dev-libs/libxslt app-text/docbook-xsl-stylesheets >=dev-util/pkgconfig-0.18[lib32?] >=dev-util/intltool-0.36 >=dev-util/gtk-doc-am-1.10-r1 doc? ( >=dev-util/gtk-doc-1.10 ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
->=dev-libs/glib-2.14[lib32?] >=dev-libs/eggdbus-0.4[lib32?] expat? ( dev-libs/expat[lib32?] ) pam? ( virtual/pam ) sys-apps/abi-wrapper
-0
-http://hal.freedesktop.org/releases/polkit-0.92.tar.gz
-
-http://hal.freedesktop.org/docs/PolicyKit
-GPL-2
-Policy framework for controlling privileges for system-wide services
-~amd64 ~ppc ~x86
-autotools base eutils libtool multilib multilib-native pam portability toolchain-funcs
-debug doc expat pam zsh-completion nls lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=autotools	/var/paludis/repositories/gentoo/eclass	1242646624	base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	pam	/var/paludis/repositories/gentoo/eclass	1214683556	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=>=dev-libs/glib-2.14[lib32?] >=dev-libs/eggdbus-0.4[lib32?] expat? ( dev-libs/expat[lib32?] ) pam? ( virtual/pam ) dev-libs/libxslt app-text/docbook-xsl-stylesheets >=dev-util/pkgconfig-0.18[lib32?] >=dev-util/intltool-0.36 >=dev-util/gtk-doc-am-1.10-r1 doc? ( >=dev-util/gtk-doc-1.10 ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+RDEPEND=>=dev-libs/glib-2.14[lib32?] >=dev-libs/eggdbus-0.4[lib32?] expat? ( dev-libs/expat[lib32?] ) pam? ( virtual/pam ) sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=http://hal.freedesktop.org/releases/polkit-0.92.tar.gz
+HOMEPAGE=http://hal.freedesktop.org/docs/PolicyKit
+LICENSE=GPL-2
+DESCRIPTION=Policy framework for controlling privileges for system-wide services
+KEYWORDS=~amd64 ~ppc ~x86
+IUSE=debug doc expat lib32 nls pam zsh-completion
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

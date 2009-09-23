@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 !virtual/krb5 >=sys-libs/e2fsprogs-libs-1.41.0 doc? ( virtual/latex-base ) sys-apps/abi-wrapper
 !virtual/krb5 >=sys-libs/e2fsprogs-libs-1.41.0 sys-apps/abi-wrapper
 0
@@ -20,3 +21,19 @@ compile configure install postinst postrm preinst prepare setup test unpack
 
 
 
+=======
+_mtime_=1253695508
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	flag-o-matic	/var/paludis/repositories/gentoo/eclass	1250382957	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359	versionator	/var/paludis/repositories/gentoo/eclass	1213275960
+DEPEND=!virtual/krb5 >=sys-libs/e2fsprogs-libs-1.41.0 doc? ( virtual/latex-base ) sys-apps/abi-wrapper
+RDEPEND=!virtual/krb5 >=sys-libs/e2fsprogs-libs-1.41.0 sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=http://web.mit.edu/kerberos/dist/krb5/1.7/krb5-1.7-signed.tar http://dev.gentoo.org/~mueli/kerberos/mit-krb5-1.7-patches-0.6.tar.bz2
+HOMEPAGE=http://web.mit.edu/kerberos/www/
+LICENSE=as-is
+DESCRIPTION=MIT Kerberos V
+KEYWORDS=~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86
+IUSE=doc lib32
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup test unpack
+>>>>>>> regenerated manifest and cache

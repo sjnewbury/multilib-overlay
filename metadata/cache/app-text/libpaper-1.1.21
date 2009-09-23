@@ -1,22 +1,14 @@
-sys-apps/abi-wrapper
-sys-apps/abi-wrapper
-0
-mirror://debian/pool/main/libp/libpaper/libpaper_1.1.21.tar.gz
-
-http://packages.debian.org/unstable/source/libpaper
-GPL-2
-Library for handling paper characteristics
-alpha amd64 arm hppa ia64 m68k mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd
-base eutils libtool multilib multilib-native portability toolchain-funcs
-lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692042
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=sys-apps/abi-wrapper
+RDEPEND=sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=mirror://debian/pool/main/libp/libpaper/libpaper_1.1.21.tar.gz
+HOMEPAGE=http://packages.debian.org/unstable/source/libpaper
+LICENSE=GPL-2
+DESCRIPTION=Library for handling paper characteristics
+KEYWORDS=alpha amd64 arm hppa ia64 m68k mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd
+IUSE=lib32
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

@@ -1,22 +1,11 @@
-
-|| ( app-text/ghostscript-gpl[lib32?] app-text/ghostscript-gnul[lib32?] )
-0
-
-
-http://www.ghostscript.com
-as-is
-Virtual for Ghostscript
-alpha amd64 arm hppa ia64 m68k mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd
-
-lib32
-
-
-
-2
-
--
-
-
-
-
-
+_mtime_=1253692046
+_guessed_eapi_=0
+RDEPEND=|| ( app-text/ghostscript-gpl[lib32?] app-text/ghostscript-gnul[lib32?] )
+SLOT=0
+HOMEPAGE=http://www.ghostscript.com
+LICENSE=as-is
+DESCRIPTION=Virtual for Ghostscript
+KEYWORDS=alpha amd64 arm hppa ia64 m68k mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd
+IUSE=lib32
+EAPI=2
+DEFINED_PHASES=-

@@ -1,22 +1,15 @@
-dev-libs/popt virtual/libiconv acl? ( kernel_linux? ( sys-apps/acl ) ) cups? ( net-print/cups[lib32?] ) ipv6? ( sys-apps/xinetd ) ads? ( virtual/krb5 ) ldap? ( net-nds/openldap[lib32?] ) pam? ( virtual/pam ) python? ( dev-lang/python[lib32?] ) readline? ( sys-libs/readline[lib32?] ) selinux? ( sec-policy/selinux-samba ) swat? ( sys-apps/xinetd ) syslog? ( virtual/logger ) fam? ( virtual/fam ) caps? ( sys-libs/libcap[lib32?] ) lib32? ( fam? ( dev-libs/libgamin[lib32] ) ) lib32? ( pam? ( sys-libs/pam[lib32] ) ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool >=app-shells/bash-3.2 sys-apps/abi-wrapper
-dev-libs/popt virtual/libiconv acl? ( kernel_linux? ( sys-apps/acl ) ) cups? ( net-print/cups[lib32?] ) ipv6? ( sys-apps/xinetd ) ads? ( virtual/krb5 ) ldap? ( net-nds/openldap[lib32?] ) pam? ( virtual/pam ) python? ( dev-lang/python[lib32?] ) readline? ( sys-libs/readline[lib32?] ) selinux? ( sec-policy/selinux-samba ) swat? ( sys-apps/xinetd ) syslog? ( virtual/logger ) fam? ( virtual/fam ) caps? ( sys-libs/libcap[lib32?] ) lib32? ( fam? ( dev-libs/libgamin[lib32] ) ) lib32? ( pam? ( sys-libs/pam[lib32] ) ) sys-apps/abi-wrapper
-0
-mirror://samba/samba-3.0.34.tar.gz mirror://samba/old-versions/samba-3.0.34.tar.gz oav? ( http://www.openantivirus.org/download/samba-vscan-0.3.6c-beta5.tar.gz )
-test
-http://www.samba.org/
-GPL-3 oav? ( GPL-2 LGPL-2.1 )
-A suite of SMB and CIFS client/server programs for UNIX
-~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd
-autotools base confutils eutils flag-o-matic libtool multilib multilib-native pam portability python toolchain-funcs versionator
-acl ads async automount caps cups debug doc examples ipv6 kernel_linux ldap fam pam python quotas readline selinux swat syslog winbind oav lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup test unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=autotools	/var/paludis/repositories/gentoo/eclass	1242646624	base	/var/paludis/repositories/gentoo/eclass	1242552981	confutils	/var/paludis/repositories/gentoo/eclass	1204106758	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	flag-o-matic	/var/paludis/repositories/gentoo/eclass	1250382957	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	pam	/var/paludis/repositories/gentoo/eclass	1214683556	portability	/var/paludis/repositories/gentoo/eclass	1238141163	python	/var/paludis/repositories/gentoo/eclass	1253297276	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359	versionator	/var/paludis/repositories/gentoo/eclass	1213275960
+DEPEND=dev-libs/popt virtual/libiconv acl? ( kernel_linux? ( sys-apps/acl ) ) cups? ( net-print/cups[lib32?] ) ipv6? ( sys-apps/xinetd ) ads? ( virtual/krb5 ) ldap? ( net-nds/openldap[lib32?] ) pam? ( virtual/pam ) python? ( dev-lang/python[lib32?] ) readline? ( sys-libs/readline[lib32?] ) selinux? ( sec-policy/selinux-samba ) swat? ( sys-apps/xinetd ) syslog? ( virtual/logger ) fam? ( virtual/fam ) caps? ( sys-libs/libcap[lib32?] ) lib32? ( fam? ( dev-libs/libgamin[lib32] ) ) lib32? ( pam? ( sys-libs/pam[lib32] ) ) =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool >=app-shells/bash-3.2 sys-apps/abi-wrapper
+RDEPEND=dev-libs/popt virtual/libiconv acl? ( kernel_linux? ( sys-apps/acl ) ) cups? ( net-print/cups[lib32?] ) ipv6? ( sys-apps/xinetd ) ads? ( virtual/krb5 ) ldap? ( net-nds/openldap[lib32?] ) pam? ( virtual/pam ) python? ( dev-lang/python[lib32?] ) readline? ( sys-libs/readline[lib32?] ) selinux? ( sec-policy/selinux-samba ) swat? ( sys-apps/xinetd ) syslog? ( virtual/logger ) fam? ( virtual/fam ) caps? ( sys-libs/libcap[lib32?] ) lib32? ( fam? ( dev-libs/libgamin[lib32] ) ) lib32? ( pam? ( sys-libs/pam[lib32] ) ) sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=mirror://samba/samba-3.0.34.tar.gz mirror://samba/old-versions/samba-3.0.34.tar.gz oav? ( http://www.openantivirus.org/download/samba-vscan-0.3.6c-beta5.tar.gz )
+RESTRICT=test
+HOMEPAGE=http://www.samba.org/
+LICENSE=GPL-3 oav? ( GPL-2 LGPL-2.1 )
+DESCRIPTION=A suite of SMB and CIFS client/server programs for UNIX
+KEYWORDS=~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd
+IUSE=acl ads async automount caps cups debug doc examples fam ipv6 kernel_linux ldap lib32 oav pam python quotas readline selinux swat syslog winbind
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup test unpack

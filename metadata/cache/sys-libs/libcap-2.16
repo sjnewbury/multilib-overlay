@@ -1,22 +1,14 @@
-sys-apps/attr[lib32?] pam? ( virtual/pam ) sys-kernel/linux-headers sys-apps/abi-wrapper
-sys-apps/attr[lib32?] pam? ( virtual/pam ) sys-apps/abi-wrapper
-0
-mirror://kernel/linux/libs/security/linux-privs/libcap2/libcap-2.16.tar.bz2
-
-http://www.friedhoff.org/posixfilecaps.html
-GPL-2 BSD
-POSIX 1003.1e capabilities
-alpha amd64 arm hppa ia64 m68k ~mips ~ppc ppc64 s390 sh sparc x86
-base eutils multilib multilib-native pam portability toolchain-funcs
-pam lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	pam	/var/paludis/repositories/gentoo/eclass	1214683556	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=sys-apps/attr[lib32?] pam? ( virtual/pam ) sys-kernel/linux-headers sys-apps/abi-wrapper
+RDEPEND=sys-apps/attr[lib32?] pam? ( virtual/pam ) sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=mirror://kernel/linux/libs/security/linux-privs/libcap2/libcap-2.16.tar.bz2
+HOMEPAGE=http://www.friedhoff.org/posixfilecaps.html
+LICENSE=GPL-2 BSD
+DESCRIPTION=POSIX 1003.1e capabilities
+KEYWORDS=alpha amd64 arm hppa ia64 m68k ~mips ~ppc ppc64 s390 sh sparc x86
+IUSE=lib32 pam
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

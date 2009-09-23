@@ -1,22 +1,14 @@
-X? ( x11-libs/libX11[lib32?] x11-libs/libXau[lib32?] x11-libs/libXdmcp[lib32?] ) sys-apps/abi-wrapper
-X? ( x11-libs/libX11[lib32?] x11-libs/libXau[lib32?] x11-libs/libXdmcp[lib32?] ) !<media-libs/fontconfig-2.3.2-r2 sys-apps/abi-wrapper
-2
-mirror://sourceforge/freetype/freetype-2.3.9.tar.bz2 utils? ( mirror://sourceforge/freetype/ft2demos-2.3.9.tar.bz2 ) doc? ( mirror://sourceforge/freetype/freetype-doc-2.3.9.tar.bz2 )
-
-http://www.freetype.org/
-FTL GPL-2
-A high-quality and portable font engine
-alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd
-base eutils flag-o-matic libtool multilib multilib-native portability toolchain-funcs
-X bindist debug doc utils fontforge lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	flag-o-matic	/var/paludis/repositories/gentoo/eclass	1250382957	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=X? ( x11-libs/libX11[lib32?] x11-libs/libXau[lib32?] x11-libs/libXdmcp[lib32?] ) sys-apps/abi-wrapper
+RDEPEND=X? ( x11-libs/libX11[lib32?] x11-libs/libXau[lib32?] x11-libs/libXdmcp[lib32?] ) !<media-libs/fontconfig-2.3.2-r2 sys-apps/abi-wrapper
+SLOT=2
+SRC_URI=mirror://sourceforge/freetype/freetype-2.3.9.tar.bz2 utils? ( mirror://sourceforge/freetype/ft2demos-2.3.9.tar.bz2 ) doc? ( mirror://sourceforge/freetype/freetype-doc-2.3.9.tar.bz2 )
+HOMEPAGE=http://www.freetype.org/
+LICENSE=FTL GPL-2
+DESCRIPTION=A high-quality and portable font engine
+KEYWORDS=alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd
+IUSE=X bindist debug doc fontforge lib32 utils
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

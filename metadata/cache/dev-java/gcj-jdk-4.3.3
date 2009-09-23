@@ -1,22 +1,14 @@
-~sys-devel/gcc-4.3.3[gcj,nsplugin?] >=dev-java/eclipse-ecj-3.2.1 >=dev-java/java-config-2 nsplugin? ( || ( www-client/mozilla-firefox net-libs/xulrunner www-client/seamonkey ) ) =dev-java/java-config-2* sys-apps/abi-wrapper
-~sys-devel/gcc-4.3.3[gcj,nsplugin?] >=dev-java/eclipse-ecj-3.2.1 >=dev-java/java-config-2 nsplugin? ( || ( www-client/mozilla-firefox net-libs/xulrunner www-client/seamonkey ) ) =dev-java/java-config-2* sys-apps/abi-wrapper
-4.3
-
-
-http://www.gentoo.org/
-GPL-2
-Java wrappers around GCJ
-~amd64 ~ppc ~ppc64 ~x86 ~arm
-base eutils fdo-mime java-vm-2 multilib multilib-native portability toolchain-funcs versionator
-nsplugin multislot lib32
-
-dev-java/gjdoc
-
-2
-
-compile configure install postinst postrm preinst prepare prerm setup unpack
-
-
-
-
-
+_mtime_=1253692043
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	fdo-mime	/var/paludis/repositories/gentoo/eclass	1229996133	java-vm-2	/var/paludis/repositories/gentoo/eclass	1251410743	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359	versionator	/var/paludis/repositories/gentoo/eclass	1213275960
+DEPEND=~sys-devel/gcc-4.3.3[gcj,nsplugin?] >=dev-java/eclipse-ecj-3.2.1 >=dev-java/java-config-2 nsplugin? ( || ( www-client/mozilla-firefox net-libs/xulrunner www-client/seamonkey ) ) =dev-java/java-config-2* sys-apps/abi-wrapper
+RDEPEND=~sys-devel/gcc-4.3.3[gcj,nsplugin?] >=dev-java/eclipse-ecj-3.2.1 >=dev-java/java-config-2 nsplugin? ( || ( www-client/mozilla-firefox net-libs/xulrunner www-client/seamonkey ) ) =dev-java/java-config-2* sys-apps/abi-wrapper
+SLOT=4.3
+HOMEPAGE=http://www.gentoo.org/
+LICENSE=GPL-2
+DESCRIPTION=Java wrappers around GCJ
+KEYWORDS=~amd64 ~arm ~ppc ~ppc64 ~x86
+IUSE=lib32 multislot nsplugin
+PDEPEND=dev-java/gjdoc
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare prerm setup unpack

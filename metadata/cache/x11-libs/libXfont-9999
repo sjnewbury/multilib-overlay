@@ -1,22 +1,12 @@
-x11-libs/xtrans[lib32?] x11-libs/libfontenc[lib32?] x11-proto/xproto x11-proto/fontsproto >=media-libs/freetype-2[lib32?] x11-proto/fontcacheproto =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool >=dev-util/git-1.6 >=sys-devel/libtool-1.5 >=sys-devel/m4-1.4 >=dev-util/pkgconfig-0.18 >=x11-misc/util-macros-0.99.2 >=sys-devel/binutils-2.16.1-r3
-x11-libs/xtrans[lib32?] x11-libs/libfontenc[lib32?] x11-proto/xproto x11-proto/fontsproto >=media-libs/freetype-2[lib32?] !<=x11-base/xorg-x11-6.9
-0
-
-
-http://xorg.freedesktop.org/
-libXfont
-X.Org Xfont library
-
-autotools eutils flag-o-matic git libtool multilib portability toolchain-funcs x-modular
-ipv6 debug
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare unpack
-
-
-
-
-
+_mtime_=1253692046
+_guessed_eapi_=0
+_eclasses_=autotools	/var/paludis/repositories/gentoo/eclass	1242646624	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	flag-o-matic	/var/paludis/repositories/gentoo/eclass	1250382957	git	/var/paludis/repositories/gentoo/eclass	1252051603	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359	x-modular	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044
+DEPEND=x11-libs/xtrans[lib32?] x11-libs/libfontenc[lib32?] x11-proto/xproto x11-proto/fontsproto >=media-libs/freetype-2[lib32?] x11-proto/fontcacheproto =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool >=dev-util/git-1.6 >=sys-devel/libtool-1.5 >=sys-devel/m4-1.4 >=dev-util/pkgconfig-0.18 >=x11-misc/util-macros-0.99.2 >=sys-devel/binutils-2.16.1-r3
+RDEPEND=x11-libs/xtrans[lib32?] x11-libs/libfontenc[lib32?] x11-proto/xproto x11-proto/fontsproto >=media-libs/freetype-2[lib32?] !<=x11-base/xorg-x11-6.9
+SLOT=0
+HOMEPAGE=http://xorg.freedesktop.org/
+LICENSE=libXfont
+DESCRIPTION=X.Org Xfont library
+IUSE=debug ipv6
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare unpack

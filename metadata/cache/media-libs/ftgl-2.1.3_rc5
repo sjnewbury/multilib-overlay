@@ -1,22 +1,14 @@
->=media-libs/freetype-2.0.9[lib32?] dev-util/cppunit[lib32?] virtual/opengl[lib32?] virtual/glu[lib32?] virtual/glut[lib32?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
->=media-libs/freetype-2.0.9[lib32?] dev-util/cppunit[lib32?] virtual/opengl[lib32?] virtual/glu[lib32?] virtual/glut[lib32?] sys-apps/abi-wrapper
-0
-mirror://sourceforge/ftgl/ftgl-2.1.3-rc5.tar.bz2
-
-http://ftgl.wiki.sourceforge.net/
-MIT
-library to use arbitrary fonts in OpenGL applications
-~alpha amd64 ~hppa ~mips ~ppc ~ppc64 ~sparc x86 ~x86-fbsd
-autotools base eutils flag-o-matic libtool multilib multilib-native portability toolchain-funcs
-lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=autotools	/var/paludis/repositories/gentoo/eclass	1242646624	base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	flag-o-matic	/var/paludis/repositories/gentoo/eclass	1250382957	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=>=media-libs/freetype-2.0.9[lib32?] dev-util/cppunit[lib32?] virtual/opengl[lib32?] virtual/glu[lib32?] virtual/glut[lib32?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+RDEPEND=>=media-libs/freetype-2.0.9[lib32?] dev-util/cppunit[lib32?] virtual/opengl[lib32?] virtual/glu[lib32?] virtual/glut[lib32?] sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=mirror://sourceforge/ftgl/ftgl-2.1.3-rc5.tar.bz2
+HOMEPAGE=http://ftgl.wiki.sourceforge.net/
+LICENSE=MIT
+DESCRIPTION=library to use arbitrary fonts in OpenGL applications
+KEYWORDS=~alpha amd64 ~hppa ~mips ~ppc ~ppc64 ~sparc x86 ~x86-fbsd
+IUSE=lib32
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

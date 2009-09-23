@@ -1,22 +1,14 @@
->=x11-libs/gtk+-2.8 themes? ( x11-themes/murrine-themes ) dev-util/pkgconfig sys-apps/abi-wrapper
->=x11-libs/gtk+-2.8 themes? ( x11-themes/murrine-themes ) sys-apps/abi-wrapper
-0
-mirror://gnome/sources/murrine/0.90/murrine-0.90.3.tar.bz2
-
-http://www.cimitan.com/murrine/
-GPL-2
-Murrine GTK+2 Cairo Engine
-~amd64 ~ppc ~x86 ~x86-fbsd
-base eutils gnome.org multilib multilib-native portability toolchain-funcs
-+themes lib32
-
-
-
-1
-
-compile install postinst postrm preinst setup unpack
-
-
-
-
-
+_mtime_=1253692046
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	gnome.org	/var/paludis/repositories/gentoo/eclass	1121096137	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=>=x11-libs/gtk+-2.8 themes? ( x11-themes/murrine-themes ) dev-util/pkgconfig sys-apps/abi-wrapper
+RDEPEND=>=x11-libs/gtk+-2.8 themes? ( x11-themes/murrine-themes ) sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=mirror://gnome/sources/murrine/0.90/murrine-0.90.3.tar.bz2
+HOMEPAGE=http://www.cimitan.com/murrine/
+LICENSE=GPL-2
+DESCRIPTION=Murrine GTK+2 Cairo Engine
+KEYWORDS=~amd64 ~ppc ~x86 ~x86-fbsd
+IUSE=+themes lib32
+EAPI=1
+DEFINED_PHASES=compile install postinst postrm preinst setup unpack

@@ -1,22 +1,14 @@
-readline? ( sys-libs/readline[lib32?] ) ncurses? ( sys-libs/ncurses[lib32?] ) sys-devel/gettext[lib32?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
-readline? ( sys-libs/readline[lib32?] ) ncurses? ( sys-libs/ncurses[lib32?] ) sys-devel/gettext[lib32?] sys-apps/abi-wrapper
-0
-mirror://sourceforge/hunspell/hunspell-1.2.6.tar.gz
-
-http://hunspell.sourceforge.net/
-MPL-1.1 GPL-2 LGPL-2.1
-Hunspell spell checker - an improved replacement for myspell in OOo.
-alpha amd64 hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd
-autotools base eutils libtool multilib multilib-native portability toolchain-funcs
-ncurses nls readline lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692042
+_guessed_eapi_=0
+_eclasses_=autotools	/var/paludis/repositories/gentoo/eclass	1242646624	base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=readline? ( sys-libs/readline[lib32?] ) ncurses? ( sys-libs/ncurses[lib32?] ) sys-devel/gettext[lib32?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+RDEPEND=readline? ( sys-libs/readline[lib32?] ) ncurses? ( sys-libs/ncurses[lib32?] ) sys-devel/gettext[lib32?] sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=mirror://sourceforge/hunspell/hunspell-1.2.6.tar.gz
+HOMEPAGE=http://hunspell.sourceforge.net/
+LICENSE=MPL-1.1 GPL-2 LGPL-2.1
+DESCRIPTION=Hunspell spell checker - an improved replacement for myspell in OOo.
+KEYWORDS=alpha amd64 hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd
+IUSE=lib32 ncurses nls readline
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

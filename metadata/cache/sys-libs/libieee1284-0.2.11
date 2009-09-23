@@ -1,22 +1,14 @@
-doc? ( app-text/docbook-sgml-utils >=app-text/docbook-sgml-dtd-4.1 app-text/docbook-dsssl-stylesheets dev-perl/XML-RegExp ) sys-apps/abi-wrapper
-sys-apps/abi-wrapper
-0
-mirror://sourceforge/libieee1284/libieee1284-0.2.11.tar.bz2
-
-http://cyberelk.net/tim/libieee1284/index.html
-GPL-2
-Library to query devices using IEEE1284
-amd64 ppc x86 ~x86-fbsd
-base eutils multilib multilib-native portability toolchain-funcs
-doc lib32
-
-
-
-
-
-compile install postinst postrm preinst setup unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=doc? ( app-text/docbook-sgml-utils >=app-text/docbook-sgml-dtd-4.1 app-text/docbook-dsssl-stylesheets dev-perl/XML-RegExp ) sys-apps/abi-wrapper
+RDEPEND=sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=mirror://sourceforge/libieee1284/libieee1284-0.2.11.tar.bz2
+HOMEPAGE=http://cyberelk.net/tim/libieee1284/index.html
+LICENSE=GPL-2
+DESCRIPTION=Library to query devices using IEEE1284
+KEYWORDS=amd64 ppc x86 ~x86-fbsd
+IUSE=doc lib32
+EAPI=0
+DEFINED_PHASES=compile install postinst postrm preinst setup unpack

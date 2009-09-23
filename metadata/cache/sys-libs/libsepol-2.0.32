@@ -1,22 +1,15 @@
-virtual/libc sys-apps/abi-wrapper
-virtual/libc sys-apps/abi-wrapper
-0
-http://userspace.selinuxproject.org/releases/current/devel/libsepol-2.0.32.tar.gz
-test
-http://userspace.selinuxproject.org
-GPL-2
-SELinux binary policy representation library
-amd64 x86
-base eutils multilib multilib-native portability toolchain-funcs
-lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=virtual/libc sys-apps/abi-wrapper
+RDEPEND=virtual/libc sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=http://userspace.selinuxproject.org/releases/current/devel/libsepol-2.0.32.tar.gz
+RESTRICT=test
+HOMEPAGE=http://userspace.selinuxproject.org
+LICENSE=GPL-2
+DESCRIPTION=SELinux binary policy representation library
+KEYWORDS=amd64 x86
+IUSE=lib32
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

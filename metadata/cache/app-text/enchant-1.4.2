@@ -1,22 +1,14 @@
->=dev-libs/glib-2 aspell? ( virtual/aspell-dict ) hunspell? ( >=app-text/hunspell-1.2.1 ) zemberek? ( dev-libs/dbus-glib ) dev-util/pkgconfig[lib32?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
->=dev-libs/glib-2 aspell? ( virtual/aspell-dict ) hunspell? ( >=app-text/hunspell-1.2.1 ) zemberek? ( dev-libs/dbus-glib ) zemberek? ( app-text/zemberek-server ) sys-apps/abi-wrapper
-0
-http://www.abisource.com/downloads/enchant/1.4.2/enchant-1.4.2.tar.gz
-
-http://www.abisource.com/enchant/
-LGPL-2.1
-Spellchecker wrapping library
-alpha amd64 ~arm ~hppa ia64 ppc ppc64 ~sh sparc x86 ~x86-fbsd
-autotools base confutils eutils libtool multilib multilib-native portability toolchain-funcs
-aspell +hunspell zemberek lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692042
+_guessed_eapi_=0
+_eclasses_=autotools	/var/paludis/repositories/gentoo/eclass	1242646624	base	/var/paludis/repositories/gentoo/eclass	1242552981	confutils	/var/paludis/repositories/gentoo/eclass	1204106758	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=>=dev-libs/glib-2 aspell? ( virtual/aspell-dict ) hunspell? ( >=app-text/hunspell-1.2.1 ) zemberek? ( dev-libs/dbus-glib ) dev-util/pkgconfig[lib32?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+RDEPEND=>=dev-libs/glib-2 aspell? ( virtual/aspell-dict ) hunspell? ( >=app-text/hunspell-1.2.1 ) zemberek? ( dev-libs/dbus-glib ) zemberek? ( app-text/zemberek-server ) sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=http://www.abisource.com/downloads/enchant/1.4.2/enchant-1.4.2.tar.gz
+HOMEPAGE=http://www.abisource.com/enchant/
+LICENSE=LGPL-2.1
+DESCRIPTION=Spellchecker wrapping library
+KEYWORDS=alpha amd64 ~arm ~hppa ia64 ppc ppc64 ~sh sparc x86 ~x86-fbsd
+IUSE=+hunspell aspell lib32 zemberek
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

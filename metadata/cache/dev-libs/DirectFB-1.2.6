@@ -1,22 +1,14 @@
-sdl? ( media-libs/libsdl[lib32?] ) gif? ( media-libs/giflib[lib32?] ) png? ( media-libs/libpng[lib32?] ) jpeg? ( media-libs/jpeg[lib32?] ) sysfs? ( sys-fs/sysfsutils[lib32?] ) zlib? ( sys-libs/zlib[lib32?] ) truetype? ( >=media-libs/freetype-2.0.1[lib32?] ) X? ( x11-libs/libXext x11-libs/libX11 ) X? ( x11-proto/xextproto x11-proto/xproto ) sys-apps/abi-wrapper
-sdl? ( media-libs/libsdl[lib32?] ) gif? ( media-libs/giflib[lib32?] ) png? ( media-libs/libpng[lib32?] ) jpeg? ( media-libs/jpeg[lib32?] ) sysfs? ( sys-fs/sysfsutils[lib32?] ) zlib? ( sys-libs/zlib[lib32?] ) truetype? ( >=media-libs/freetype-2.0.1[lib32?] ) X? ( x11-libs/libXext x11-libs/libX11 ) sys-apps/abi-wrapper
-0
-http://directfb.org/downloads/Core/DirectFB-1.2.6.tar.gz http://directfb.org/downloads/Old/DirectFB-1.2.6.tar.gz
-
-http://www.directfb.org/
-LGPL-2.1
-Thin library on top of the Linux framebuffer devices
-alpha amd64 arm hppa ia64 -mips ppc ppc64 sh -sparc x86
-base eutils multilib multilib-native portability toolchain-funcs
-debug fbcon fusion gif jpeg mmx png sdl sse sysfs truetype v4l v4l2 X zlib lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692044
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=sdl? ( media-libs/libsdl[lib32?] ) gif? ( media-libs/giflib[lib32?] ) png? ( media-libs/libpng[lib32?] ) jpeg? ( media-libs/jpeg[lib32?] ) sysfs? ( sys-fs/sysfsutils[lib32?] ) zlib? ( sys-libs/zlib[lib32?] ) truetype? ( >=media-libs/freetype-2.0.1[lib32?] ) X? ( x11-libs/libXext x11-libs/libX11 ) X? ( x11-proto/xextproto x11-proto/xproto ) sys-apps/abi-wrapper
+RDEPEND=sdl? ( media-libs/libsdl[lib32?] ) gif? ( media-libs/giflib[lib32?] ) png? ( media-libs/libpng[lib32?] ) jpeg? ( media-libs/jpeg[lib32?] ) sysfs? ( sys-fs/sysfsutils[lib32?] ) zlib? ( sys-libs/zlib[lib32?] ) truetype? ( >=media-libs/freetype-2.0.1[lib32?] ) X? ( x11-libs/libXext x11-libs/libX11 ) sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=http://directfb.org/downloads/Core/DirectFB-1.2.6.tar.gz http://directfb.org/downloads/Old/DirectFB-1.2.6.tar.gz
+HOMEPAGE=http://www.directfb.org/
+LICENSE=LGPL-2.1
+DESCRIPTION=Thin library on top of the Linux framebuffer devices
+KEYWORDS=alpha amd64 arm hppa ia64 -mips ppc ppc64 sh -sparc x86
+IUSE=X debug fbcon fusion gif jpeg lib32 mmx png sdl sse sysfs truetype v4l v4l2 zlib
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

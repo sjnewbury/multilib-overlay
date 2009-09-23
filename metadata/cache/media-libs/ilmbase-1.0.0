@@ -1,22 +1,14 @@
-!<media-libs/openexr-1.5.0 sys-apps/abi-wrapper
-!<media-libs/openexr-1.5.0 sys-apps/abi-wrapper
-0
-http://download.savannah.nongnu.org/releases/openexr/ilmbase-1.0.0.tar.gz
-
-http://openexr.com/
-BSD
-OpenEXR ILM Base libraries
-~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd
-base eutils libtool multilib multilib-native portability toolchain-funcs
-lib32
-
-
-
-
-
-compile install postinst postrm preinst setup unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=!<media-libs/openexr-1.5.0 sys-apps/abi-wrapper
+RDEPEND=!<media-libs/openexr-1.5.0 sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=http://download.savannah.nongnu.org/releases/openexr/ilmbase-1.0.0.tar.gz
+HOMEPAGE=http://openexr.com/
+LICENSE=BSD
+DESCRIPTION=OpenEXR ILM Base libraries
+KEYWORDS=~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd
+IUSE=lib32
+EAPI=0
+DEFINED_PHASES=compile install postinst postrm preinst setup unpack

@@ -1,22 +1,14 @@
->=media-libs/jpeg-6b[lib32?] amd64? ( sys-libs/libieee1284[lib32?] ) x86? ( sys-libs/libieee1284[lib32?] ) usb? ( dev-libs/libusb:0[lib32?] ) gphoto2? ( media-libs/libgphoto2[lib32?] ) v4l? ( sys-kernel/linux-headers ) doc? ( virtual/latex-base || ( dev-texlive/texlive-latexextra app-text/ptex ) ) >=sys-apps/sed-4 sys-apps/abi-wrapper
->=media-libs/jpeg-6b[lib32?] amd64? ( sys-libs/libieee1284[lib32?] ) x86? ( sys-libs/libieee1284[lib32?] ) usb? ( dev-libs/libusb:0[lib32?] ) gphoto2? ( media-libs/libgphoto2[lib32?] ) v4l? ( sys-kernel/linux-headers ) !<sys-fs/udev-114 sys-apps/abi-wrapper
-0
-http://alioth.debian.org/frs/download.php/2318/sane-backends-1.0.19.tar.gz ftp://ftp.sane-project.org/pub/sane/sane-backends-1.0.19/sane-backends-1.0.19.tar.gz ftp://ftp.sane-project.org/pub/sane/old-versions/sane-backends-1.0.19/sane-backends-1.0.19.tar.gz usb? ( mirror://gentoo/sane-1.0.19-brother-driver.diff.bz2 http://dev.gentoo.org/~phosphan/sane-1.0.19-brother-driver.diff.bz2 )
-
-http://www.sane-project.org/
-GPL-2 public-domain
-Scanner Access Now Easy - Backends
-alpha amd64 arm hppa ia64 ppc ppc64 sparc x86
-base eutils flag-o-matic multilib multilib-native portability toolchain-funcs
-usb gphoto2 ipv6 v4l doc lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692044
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	flag-o-matic	/var/paludis/repositories/gentoo/eclass	1250382957	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=>=media-libs/jpeg-6b[lib32?] amd64? ( sys-libs/libieee1284[lib32?] ) x86? ( sys-libs/libieee1284[lib32?] ) usb? ( dev-libs/libusb:0[lib32?] ) gphoto2? ( media-libs/libgphoto2[lib32?] ) v4l? ( sys-kernel/linux-headers ) doc? ( virtual/latex-base || ( dev-texlive/texlive-latexextra app-text/ptex ) ) >=sys-apps/sed-4 sys-apps/abi-wrapper
+RDEPEND=>=media-libs/jpeg-6b[lib32?] amd64? ( sys-libs/libieee1284[lib32?] ) x86? ( sys-libs/libieee1284[lib32?] ) usb? ( dev-libs/libusb:0[lib32?] ) gphoto2? ( media-libs/libgphoto2[lib32?] ) v4l? ( sys-kernel/linux-headers ) !<sys-fs/udev-114 sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=http://alioth.debian.org/frs/download.php/2318/sane-backends-1.0.19.tar.gz ftp://ftp.sane-project.org/pub/sane/sane-backends-1.0.19/sane-backends-1.0.19.tar.gz ftp://ftp.sane-project.org/pub/sane/old-versions/sane-backends-1.0.19/sane-backends-1.0.19.tar.gz usb? ( mirror://gentoo/sane-1.0.19-brother-driver.diff.bz2 http://dev.gentoo.org/~phosphan/sane-1.0.19-brother-driver.diff.bz2 )
+HOMEPAGE=http://www.sane-project.org/
+LICENSE=GPL-2 public-domain
+DESCRIPTION=Scanner Access Now Easy - Backends
+KEYWORDS=alpha amd64 arm hppa ia64 ppc ppc64 sparc x86
+IUSE=doc gphoto2 ipv6 lib32 usb v4l
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

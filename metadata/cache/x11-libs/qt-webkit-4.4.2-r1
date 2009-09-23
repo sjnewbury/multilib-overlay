@@ -1,22 +1,14 @@
-~x11-libs/qt-gui-4.4.2[lib32?] !<=x11-libs/qt-4.4.0_alpha:4 sys-apps/abi-wrapper
-~x11-libs/qt-gui-4.4.2[lib32?] !<=x11-libs/qt-4.4.0_alpha:4 !<x11-libs/qt-assistant-4.4.2 !>x11-libs/qt-assistant-4.4.2-r9999 !<x11-libs/qt-core-4.4.2 !>x11-libs/qt-core-4.4.2-r9999 !<x11-libs/qt-dbus-4.4.2 !>x11-libs/qt-dbus-4.4.2-r9999 !<x11-libs/qt-demo-4.4.2 !>x11-libs/qt-demo-4.4.2-r9999 !<x11-libs/qt-gui-4.4.2 !>x11-libs/qt-gui-4.4.2-r9999 !<x11-libs/qt-opengl-4.4.2 !>x11-libs/qt-opengl-4.4.2-r9999 !<x11-libs/qt-phonon-4.4.2 !>x11-libs/qt-phonon-4.4.2-r9999 !<x11-libs/qt-qt3support-4.4.2 !>x11-libs/qt-qt3support-4.4.2-r9999 !<x11-libs/qt-script-4.4.2 !>x11-libs/qt-script-4.4.2-r9999 !<x11-libs/qt-sql-4.4.2 !>x11-libs/qt-sql-4.4.2-r9999 !<x11-libs/qt-svg-4.4.2 !>x11-libs/qt-svg-4.4.2-r9999 !<x11-libs/qt-test-4.4.2 !>x11-libs/qt-test-4.4.2-r9999 !<x11-libs/qt-webkit-4.4.2 !>x11-libs/qt-webkit-4.4.2-r9999 !<x11-libs/qt-xmlpatterns-4.4.2 !>x11-libs/qt-xmlpatterns-4.4.2-r9999 sys-apps/abi-wrapper
-4
-http://download.qt.nokia.com/qt/source/qt-x11-opensource-src-4.4.2.tar.bz2 mirror://gentoo/qt-x11-opensource-src-4.4.2-headers.tar.bz2
-
-http://www.trolltech.com/
-|| ( GPL-3 GPL-2 )
-The Webkit module for the Qt toolkit.
-alpha amd64 hppa ia64 ~mips ppc ppc64 -sparc x86
-base eutils flag-o-matic multilib multilib-native portability qt4-build toolchain-funcs versionator
-debug pch lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692046
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	flag-o-matic	/var/paludis/repositories/gentoo/eclass	1250382957	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	qt4-build	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359	versionator	/var/paludis/repositories/gentoo/eclass	1213275960
+DEPEND=~x11-libs/qt-gui-4.4.2[lib32?] !<=x11-libs/qt-4.4.0_alpha:4 sys-apps/abi-wrapper
+RDEPEND=~x11-libs/qt-gui-4.4.2[lib32?] !<=x11-libs/qt-4.4.0_alpha:4 !<x11-libs/qt-assistant-4.4.2 !>x11-libs/qt-assistant-4.4.2-r9999 !<x11-libs/qt-core-4.4.2 !>x11-libs/qt-core-4.4.2-r9999 !<x11-libs/qt-dbus-4.4.2 !>x11-libs/qt-dbus-4.4.2-r9999 !<x11-libs/qt-demo-4.4.2 !>x11-libs/qt-demo-4.4.2-r9999 !<x11-libs/qt-gui-4.4.2 !>x11-libs/qt-gui-4.4.2-r9999 !<x11-libs/qt-opengl-4.4.2 !>x11-libs/qt-opengl-4.4.2-r9999 !<x11-libs/qt-phonon-4.4.2 !>x11-libs/qt-phonon-4.4.2-r9999 !<x11-libs/qt-qt3support-4.4.2 !>x11-libs/qt-qt3support-4.4.2-r9999 !<x11-libs/qt-script-4.4.2 !>x11-libs/qt-script-4.4.2-r9999 !<x11-libs/qt-sql-4.4.2 !>x11-libs/qt-sql-4.4.2-r9999 !<x11-libs/qt-svg-4.4.2 !>x11-libs/qt-svg-4.4.2-r9999 !<x11-libs/qt-test-4.4.2 !>x11-libs/qt-test-4.4.2-r9999 !<x11-libs/qt-webkit-4.4.2 !>x11-libs/qt-webkit-4.4.2-r9999 !<x11-libs/qt-xmlpatterns-4.4.2 !>x11-libs/qt-xmlpatterns-4.4.2-r9999 sys-apps/abi-wrapper
+SLOT=4
+SRC_URI=http://download.qt.nokia.com/qt/source/qt-x11-opensource-src-4.4.2.tar.bz2 mirror://gentoo/qt-x11-opensource-src-4.4.2-headers.tar.bz2
+HOMEPAGE=http://www.trolltech.com/
+LICENSE=|| ( GPL-3 GPL-2 )
+DESCRIPTION=The Webkit module for the Qt toolkit.
+KEYWORDS=alpha amd64 hppa ia64 ~mips ppc ppc64 -sparc x86
+IUSE=debug lib32 pch
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

@@ -1,22 +1,15 @@
-dev-libs/popt[lib32?] virtual/libiconv ads? ( virtual/krb5[lib32?] sys-fs/e2fsprogs[lib32?] ) caps? ( sys-libs/libcap[lib32?] ) cluster? ( dev-db/ctdb ) cups? ( net-print/cups[lib32?] ) ldap? ( net-nds/openldap[lib32?] ) pam? ( virtual/pam[lib32?] winbind? ( dev-libs/iniparser[lib32?] ) ) syslog? ( virtual/logger ) !<net-fs/samba-3.3 sys-apps/abi-wrapper
-dev-libs/popt[lib32?] virtual/libiconv ads? ( virtual/krb5[lib32?] sys-fs/e2fsprogs[lib32?] ) caps? ( sys-libs/libcap[lib32?] ) cluster? ( dev-db/ctdb ) cups? ( net-print/cups[lib32?] ) ldap? ( net-nds/openldap[lib32?] ) pam? ( virtual/pam[lib32?] winbind? ( dev-libs/iniparser[lib32?] ) ) syslog? ( virtual/logger ) !<net-fs/samba-3.3 sys-apps/abi-wrapper
-0
-mirror://samba/samba-3.3.7.tar.gz
-test
-http://www.samba.org/
-GPL-3
-Libraries from Samba
-~amd64 ~x86
-base confutils eutils multilib multilib-native pam portability toolchain-funcs versionator
-ads aio caps cluster cups debug examples ldap pam syslog winbind lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692045
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	confutils	/var/paludis/repositories/gentoo/eclass	1204106758	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	pam	/var/paludis/repositories/gentoo/eclass	1214683556	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359	versionator	/var/paludis/repositories/gentoo/eclass	1213275960
+DEPEND=dev-libs/popt[lib32?] virtual/libiconv ads? ( virtual/krb5[lib32?] sys-fs/e2fsprogs[lib32?] ) caps? ( sys-libs/libcap[lib32?] ) cluster? ( dev-db/ctdb ) cups? ( net-print/cups[lib32?] ) ldap? ( net-nds/openldap[lib32?] ) pam? ( virtual/pam[lib32?] winbind? ( dev-libs/iniparser[lib32?] ) ) syslog? ( virtual/logger ) !<net-fs/samba-3.3 sys-apps/abi-wrapper
+RDEPEND=dev-libs/popt[lib32?] virtual/libiconv ads? ( virtual/krb5[lib32?] sys-fs/e2fsprogs[lib32?] ) caps? ( sys-libs/libcap[lib32?] ) cluster? ( dev-db/ctdb ) cups? ( net-print/cups[lib32?] ) ldap? ( net-nds/openldap[lib32?] ) pam? ( virtual/pam[lib32?] winbind? ( dev-libs/iniparser[lib32?] ) ) syslog? ( virtual/logger ) !<net-fs/samba-3.3 sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=mirror://samba/samba-3.3.7.tar.gz
+RESTRICT=test
+HOMEPAGE=http://www.samba.org/
+LICENSE=GPL-3
+DESCRIPTION=Libraries from Samba
+KEYWORDS=~amd64 ~x86
+IUSE=ads aio caps cluster cups debug examples ldap lib32 pam syslog winbind
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

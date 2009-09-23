@@ -1,22 +1,14 @@
->=dev-libs/glib-2.6[lib32?] >=x11-libs/gtk+-2.6[lib32?] dev-libs/libxml2[lib32?] >=x11-libs/pango-1.4.0[lib32?] >=app-text/iso-codes-0.49 >=dev-lang/perl-5 >=dev-util/pkgconfig-0.19[lib32?] doc? ( >=dev-util/gtk-doc-1.4 ) >=sys-apps/sed-4 sys-apps/abi-wrapper
->=dev-libs/glib-2.6[lib32?] >=x11-libs/gtk+-2.6[lib32?] dev-libs/libxml2[lib32?] >=x11-libs/pango-1.4.0[lib32?] >=app-text/iso-codes-0.49 sys-apps/abi-wrapper
-0
-http://releases.chipx86.com/libsexy/libsexy/libsexy-0.1.11.tar.bz2
-
-http://www.chipx86.com/wiki/Libsexy
-LGPL-2
-Sexy GTK+ Widgets
-~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd
-base eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib multilib-native portability toolchain-funcs
-doc debug lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692046
+_guessed_eapi_=0
+_eclasses_=base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	fdo-mime	/var/paludis/repositories/gentoo/eclass	1229996133	gnome.org	/var/paludis/repositories/gentoo/eclass	1121096137	gnome2	/var/paludis/repositories/gentoo/eclass	1234887017	gnome2-utils	/var/paludis/repositories/gentoo/eclass	1224709573	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359
+DEPEND=>=dev-libs/glib-2.6[lib32?] >=x11-libs/gtk+-2.6[lib32?] dev-libs/libxml2[lib32?] >=x11-libs/pango-1.4.0[lib32?] >=app-text/iso-codes-0.49 >=dev-lang/perl-5 >=dev-util/pkgconfig-0.19[lib32?] doc? ( >=dev-util/gtk-doc-1.4 ) >=sys-apps/sed-4 sys-apps/abi-wrapper
+RDEPEND=>=dev-libs/glib-2.6[lib32?] >=x11-libs/gtk+-2.6[lib32?] dev-libs/libxml2[lib32?] >=x11-libs/pango-1.4.0[lib32?] >=app-text/iso-codes-0.49 sys-apps/abi-wrapper
+SLOT=0
+SRC_URI=http://releases.chipx86.com/libsexy/libsexy/libsexy-0.1.11.tar.bz2
+HOMEPAGE=http://www.chipx86.com/wiki/Libsexy
+LICENSE=LGPL-2
+DESCRIPTION=Sexy GTK+ Widgets
+KEYWORDS=~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd
+IUSE=debug doc lib32
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack

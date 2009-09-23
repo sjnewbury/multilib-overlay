@@ -1,22 +1,12 @@
->=www-client/epiphany-2.27[lib32?] app-text/opensp[lib32?] >=dev-libs/glib-2.15.5[lib32?] >=gnome-base/gconf-2.0[lib32?] >=dev-libs/libxml2-2.6[lib32?] >=x11-libs/gtk+-2.11.6[lib32?] >=gnome-base/libglade-2[lib32?] dbus? ( >=dev-libs/dbus-glib-0.34[lib32?] ) pcre? ( >=dev-libs/libpcre-3.9-r2[lib32?] ) python? ( >=dev-python/pygtk-2.11 ) gnome-base/gnome-common >=dev-util/intltool-0.40 >=dev-util/pkgconfig-0.20[lib32?] >=app-text/gnome-doc-utils-0.3.2 =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool >=sys-apps/sed-4 >=app-shells/bash-3.2 dev-util/subversion net-misc/rsync sys-apps/abi-wrapper
->=www-client/epiphany-2.27[lib32?] app-text/opensp[lib32?] >=dev-libs/glib-2.15.5[lib32?] >=gnome-base/gconf-2.0[lib32?] >=dev-libs/libxml2-2.6[lib32?] >=x11-libs/gtk+-2.11.6[lib32?] >=gnome-base/libglade-2[lib32?] dbus? ( >=dev-libs/dbus-glib-0.34[lib32?] ) pcre? ( >=dev-libs/libpcre-3.9-r2[lib32?] ) python? ( >=dev-python/pygtk-2.11 ) sys-apps/abi-wrapper
-0
-
-
-http://www.gnome.org/projects/epiphany/extensions.html
-GPL-2
-Extensions for the Epiphany web browser
-
-autotools base eutils fdo-mime gnome.org gnome2 gnome2-utils libtool multilib multilib-native portability python subversion toolchain-funcs versionator
-dbus examples pcre python debug lib32
-
-
-
-2
-
-compile configure install postinst postrm preinst prepare setup unpack
-
-
-
-
-
+_mtime_=1253692046
+_guessed_eapi_=0
+_eclasses_=autotools	/var/paludis/repositories/gentoo/eclass	1242646624	base	/var/paludis/repositories/gentoo/eclass	1242552981	eutils	/var/paludis/repositories/gentoo/eclass	1252768301	fdo-mime	/var/paludis/repositories/gentoo/eclass	1229996133	gnome.org	/var/paludis/repositories/gentoo/eclass	1121096137	gnome2	/var/paludis/repositories/gentoo/eclass	1234887017	gnome2-utils	/var/paludis/repositories/gentoo/eclass	1224709573	libtool	/var/paludis/repositories/gentoo/eclass	1241381276	multilib	/var/paludis/repositories/gentoo/eclass	1244981298	multilib-native	/home/tbe/devel/git/multilib-fork/multilib-overlay/eclass	1253692044	portability	/var/paludis/repositories/gentoo/eclass	1238141163	python	/var/paludis/repositories/gentoo/eclass	1253297276	subversion	/var/paludis/repositories/gentoo/eclass	1241987766	toolchain-funcs	/var/paludis/repositories/gentoo/eclass	1251922359	versionator	/var/paludis/repositories/gentoo/eclass	1213275960
+DEPEND=>=www-client/epiphany-2.27[lib32?] app-text/opensp[lib32?] >=dev-libs/glib-2.15.5[lib32?] >=gnome-base/gconf-2.0[lib32?] >=dev-libs/libxml2-2.6[lib32?] >=x11-libs/gtk+-2.11.6[lib32?] >=gnome-base/libglade-2[lib32?] dbus? ( >=dev-libs/dbus-glib-0.34[lib32?] ) pcre? ( >=dev-libs/libpcre-3.9-r2[lib32?] ) python? ( >=dev-python/pygtk-2.11 ) gnome-base/gnome-common >=dev-util/intltool-0.40 >=dev-util/pkgconfig-0.20[lib32?] >=app-text/gnome-doc-utils-0.3.2 =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool >=sys-apps/sed-4 >=app-shells/bash-3.2 dev-util/subversion net-misc/rsync sys-apps/abi-wrapper
+RDEPEND=>=www-client/epiphany-2.27[lib32?] app-text/opensp[lib32?] >=dev-libs/glib-2.15.5[lib32?] >=gnome-base/gconf-2.0[lib32?] >=dev-libs/libxml2-2.6[lib32?] >=x11-libs/gtk+-2.11.6[lib32?] >=gnome-base/libglade-2[lib32?] dbus? ( >=dev-libs/dbus-glib-0.34[lib32?] ) pcre? ( >=dev-libs/libpcre-3.9-r2[lib32?] ) python? ( >=dev-python/pygtk-2.11 ) sys-apps/abi-wrapper
+SLOT=0
+HOMEPAGE=http://www.gnome.org/projects/epiphany/extensions.html
+LICENSE=GPL-2
+DESCRIPTION=Extensions for the Epiphany web browser
+IUSE=dbus debug examples lib32 pcre python
+EAPI=2
+DEFINED_PHASES=compile configure install postinst postrm preinst prepare setup unpack
