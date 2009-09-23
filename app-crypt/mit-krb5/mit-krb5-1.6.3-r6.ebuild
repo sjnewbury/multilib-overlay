@@ -28,10 +28,13 @@ DEPEND="${RDEPEND}
 S=${WORKDIR}/${MY_P}/src
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 PROVIDE="virtual/krb5[lib32?]"
 
 =======
 >>>>>>> New ebuilds for virtual/krb5 and virtual/pam
+=======
+>>>>>>> d96cb3dc670cbf02b089a756f8373a23f0b5c634
 src_unpack() {
 	unpack ${A}
 	unpack ./${MY_P}.tar.gz
