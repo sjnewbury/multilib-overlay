@@ -15,7 +15,7 @@ IUSE="-nodep ldap kerberos"
 
 RDEPEND="
 !nodep? (
-    kerberos? ( app-crypt/mit-krb5[lib32] )
+    kerberos? ( virtual/krb5[lib32] )
     ldap? (
 		net-nds/openldap[lib32]
 		sys-auth/nss_ldap[lib32]
