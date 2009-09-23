@@ -66,6 +66,7 @@ multilib-native_pkg_setup_internal() {
 multilib-native_src_prepare_internal() {
 	# create a missing symlink to allow https printing via IPP, bug #217293
 	epatch "${FILESDIR}/${PN}-1.4.0-backend-https.patch"
+	epatch "${FILESDIR}/${PN}-1.4.1-usb-function-decl.patch"
 }
 
 multilib-native_src_configure_internal() {
