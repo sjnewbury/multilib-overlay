@@ -1,0 +1,12 @@
+_mtime_=1253692044
+_guessed_eapi_=0
+DEPEND=doc? ( app-doc/doxygen )
+SLOT=0
+SRC_URI=http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.10.tar.gz
+HOMEPAGE=http://0pointer.de/lennart/projects/libdaemon/
+LICENSE=LGPL-2.1
+DESCRIPTION=Simple library for creating daemon processes in C
+KEYWORDS=arm s390 sh
+IUSE=doc
+EAPI=0
+DEFINED_PHASES=-
