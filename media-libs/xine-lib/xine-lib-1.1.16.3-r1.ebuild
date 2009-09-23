@@ -87,15 +87,13 @@ DEPEND="${RDEPEND}
 	sys-devel/libtool[lib32?]
 	nls? ( sys-devel/gettext[lib32?] )"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	rm -f ltmain.sh m4/{libtool,lt*}.m4 || die "libtool patch failed"
 	epatch "${FILESDIR}"/${P}-libmpcdecsv7.patch
 	eautoreconf
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	#prevent quicktime crashing
 	append-flags -frename-registers -ffunction-sections
 
@@ -173,8 +171,6 @@ multilib-native_src_compile_internal() {
 		--with-real-codecs-path=/usr/$(get_libdir)/codecs \
 		--enable-fast-install \
 		--disable-dependency-tracking
-
-	emake || die "emake failed."
 }
 
 multilib-native_src_install_internal() {
