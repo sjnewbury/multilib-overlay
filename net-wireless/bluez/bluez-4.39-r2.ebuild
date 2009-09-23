@@ -33,7 +33,7 @@ DEPEND="sys-devel/flex[lib32?]
 	doc? ( dev-util/gtk-doc )
 	${CDEPEND}"
 RDEPEND="${CDEPEND}
-	consolekit? ( sys-auth/pambase[consolekit,lib32?] )"
+	consolekit? ( sys-auth/pambase[consolekit] )"
 
 multilib-native_src_prepare_internal() {
 	epatch \
