@@ -1,0 +1,22 @@
+
+app-crypt/heimdal[lib32?]
+0
+
+
+
+GPL-2
+Virtual for fucked up virtual kerberos
+alpha amd64 arm hppa ia64 mips ppc ppc64 sh sparc x86
+
+lib32
+
+
+
+2
+
+-
+
+
+
+
+
