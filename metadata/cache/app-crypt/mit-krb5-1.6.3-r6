@@ -11,7 +11,7 @@ autotools base eutils flag-o-matic libtool multilib multilib-native portability 
 krb4 doc lib32
 
 
-virtual/krb5
+virtual/krb5[lib32?]
 2
 
 compile configure install postinst postrm preinst prepare setup test unpack
