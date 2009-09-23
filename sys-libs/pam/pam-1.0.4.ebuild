@@ -35,6 +35,8 @@ PDEPEND="sys-auth/pambase
 
 S="${WORKDIR}/${MY_P}"
 
+PROVIDE="virtual/pam"
+
 check_old_modules() {
 	local retval="0"
 

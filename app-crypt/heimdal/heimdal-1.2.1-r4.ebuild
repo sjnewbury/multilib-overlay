@@ -35,6 +35,8 @@ DEPEND="${RDEPEND}
 	>=sys-devel/autoconf-2.62"
 #	>=sys-devel/libtool-2.2"
 
+PROVIDE="virtual/krb5"
+
 GENTOODIR=${WORKDIR}/gentoo
 
 S=${WORKDIR}/${P}

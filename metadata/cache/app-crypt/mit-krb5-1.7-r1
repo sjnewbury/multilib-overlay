@@ -11,7 +11,7 @@ base eutils flag-o-matic multilib multilib-native portability toolchain-funcs ve
 doc lib32 lib32
 
 
-
+virtual/krb5
 2
 
 compile configure install postinst postrm preinst prepare setup test unpack
