@@ -1,0 +1,22 @@
+
+|| ( sys-libs/pam )
+0
+
+
+http://www.kernel.org/pub/linux/libs/pam/
+as-is
+Virtual for PAM
+amd64 ia64 ppc ppc64 x86
+
+lib32
+
+
+
+
+
+-
+
+
+
+
+

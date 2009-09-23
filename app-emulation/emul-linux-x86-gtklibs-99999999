@@ -1,0 +1,11 @@
+_mtime_=1253692042
+_guessed_eapi_=0
+RDEPEND=!nodep? ( dev-libs/atk[lib32] x11-libs/cairo[lib32] x11-libs/gtk+[lib32] x11-libs/pango[lib32] x11-themes/gtk-engines[lib32] xfce? ( x11-themes/gtk-engines-xfce[lib32] ) )
+SLOT=0
+HOMEPAGE=http://www.gentoo.org/
+LICENSE=GPL-2
+DESCRIPTION=Metapackage to provide 32bit libraries via multilib
+KEYWORDS=-* amd64
+IUSE=-nodep kerberos xfce
+EAPI=2
+DEFINED_PHASES=-

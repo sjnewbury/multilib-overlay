@@ -1,0 +1,11 @@
+_mtime_=1253692042
+_guessed_eapi_=0
+RDEPEND=!nodep? ( >=app-emulation/emul-linux-x86-baselibs-20081109 >=app-emulation/emul-linux-x86-medialibs-20081109 >=app-emulation/emul-linux-x86-xlibs-20081109 )
+SLOT=0
+HOMEPAGE=http://www.gentoo.org/
+LICENSE=GPL-2
+DESCRIPTION=Metapackage to provide 32bit libraries via multilib
+KEYWORDS=-* amd64
+IUSE=-nodep
+EAPI=2
+DEFINED_PHASES=-

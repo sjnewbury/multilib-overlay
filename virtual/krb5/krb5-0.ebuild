@@ -1,13 +1,18 @@
-# Copyright 1999-2005 Gentoo Foundation
+# Copyright 1999-2006 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
+# $Header: /var/cvsroot/gentoo-x86/virtual/jre/jre-1.4.2.ebuild,v 1.4 2006/11/27 00:17:10 vapier Exp $
 
-EAPI=2
-
-DESCRIPTION="Virtual for fucked up virtual kerberos"
+DESCRIPTION="Virtual for Kerberos5"
+HOMEPAGE="http://www.google.com"
 SRC_URI=""
-LICENSE="GPL-2"
-SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 mips ppc ppc64 sh sparc x86"
+SLOT=0
+
+LICENSE="as-is"
+KEYWORDS="amd64 ia64 ppc ppc64 x86"
 IUSE="lib32"
+
+RDEPEND="|| (
+		app-crypt/heimdal
+		app-crypt/mit-krb5
+	)"
 DEPEND=""
-RDEPEND="app-crypt/heimdal[lib32?]"
