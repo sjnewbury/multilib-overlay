@@ -17,7 +17,7 @@ SRC_URI="http://web.mit.edu/kerberos/dist/krb5/${P_DIR}/${MY_P}-signed.tar
 LICENSE="as-is"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
-IUSE="krb4 doc"
+IUSE="krb4 doc lib32"
 
 RDEPEND="!virtual/krb5
 	>=sys-libs/e2fsprogs-libs-1.41.0[lib32?]"

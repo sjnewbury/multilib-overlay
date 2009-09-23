@@ -18,7 +18,7 @@ http://dev.gentoo.org/~mueli/kerberos/${P}-patches-${PATCHV}.tar.bz2"
 LICENSE="as-is"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
-IUSE="doc"
+IUSE="doc lib32"
 
 RDEPEND="!virtual/krb5
 	>=sys-libs/e2fsprogs-libs-1.41.0"
