@@ -27,8 +27,6 @@ DEPEND="${RDEPEND}
 
 S=${WORKDIR}/${MY_P}/src
 
-PROVIDE="virtual/krb5"
-
 src_unpack() {
 	unpack ${A}
 	unpack ./${MY_P}.tar.gz
