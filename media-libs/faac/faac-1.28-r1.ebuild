@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ~ia64 ~mips ppc ppc64 ~sh ~sparc x86 ~x86-fbsd"
 IUSE=""
 
-RDEPEND=">=media-libs/libmp4v2-1.9.0"
+RDEPEND=">=media-libs/libmp4v2-1.9.0[lib32?]"
 DEPEND="${RDEPEND}"
 
 multilib-native_src_prepare_internal() {

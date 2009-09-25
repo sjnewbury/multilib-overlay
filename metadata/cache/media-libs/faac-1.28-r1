@@ -1,5 +1,5 @@
->=media-libs/libmp4v2-1.9.0 =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
->=media-libs/libmp4v2-1.9.0 sys-apps/abi-wrapper
+>=media-libs/libmp4v2-1.9.0[lib32?] =sys-devel/automake-1.10* >=sys-devel/autoconf-2.61 sys-devel/libtool sys-apps/abi-wrapper
+>=media-libs/libmp4v2-1.9.0[lib32?] sys-apps/abi-wrapper
 0
 mirror://sourceforge/faac/faac-1.28.tar.gz
 
