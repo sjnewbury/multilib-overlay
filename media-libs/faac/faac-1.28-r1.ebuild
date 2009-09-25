@@ -17,7 +17,7 @@ IUSE=""
 RDEPEND=">=media-libs/libmp4v2-1.9.0"
 DEPEND="${RDEPEND}"
 
-multilib-nateive_src_prepare_internal() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-external-libmp4v2.patch
 	eautoreconf
 	epunt_cxx
