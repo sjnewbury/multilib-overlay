@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.18.4-r1.ebuild,v 1.9 2009/04/27 13:07:11 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.18.4-r1.ebuild,v 1.10 2009/09/23 17:19:54 patrick Exp $
 
 EAPI="2"
 
@@ -14,18 +14,17 @@ SLOT="2"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="debug doc fam hardened selinux xattr"
 
-RDEPEND="virtual/libc
-		 virtual/libiconv
-		 xattr? ( sys-apps/attr )
-		 fam? ( virtual/fam )"
+RDEPEND="virtual/libiconv
+	xattr? ( sys-apps/attr )
+	fam? ( virtual/fam )"
 DEPEND="${RDEPEND}
-		>=dev-util/pkgconfig-0.16[lib32?]
-		>=sys-devel/gettext-0.11
-		doc?	(
-					>=dev-libs/libxslt-1.0
-					>=dev-util/gtk-doc-1.8
-					~app-text/docbook-xml-dtd-4.1.2
-				)"
+	>=dev-util/pkgconfig-0.16[lib32?]
+	>=sys-devel/gettext-0.11
+	doc?	(
+		>=dev-libs/libxslt-1.0
+		>=dev-util/gtk-doc-1.8
+		~app-text/docbook-xml-dtd-4.1.2
+		)"
 
 src_unpack() {
 	unpack ${A}
