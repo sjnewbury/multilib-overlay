@@ -16,7 +16,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~spar
 IUSE="pam"
 
 RDEPEND="sys-apps/attr[lib32?]
-	pam? ( virtual/pam )"
+	pam? ( virtual/pam[lib32?] )"
 DEPEND="${RDEPEND}
 	sys-kernel/linux-headers"
 
