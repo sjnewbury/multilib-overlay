@@ -283,6 +283,10 @@ multilib-native_src_install_internal() {
 	cp include/*\.h "${D}"/${QTBASE}/include/
 	cp include/private/*\.h "${D}"/${QTBASE}/include/private/
 
+	# pkg-config file
+	insinto ${QTBASE}/$(get_libdir)/pkgconfig
+	doins "${S}"/lib/*.pc
+
 	prep_ml_includes ${QTBASE}/include
 
 	# Past this point just needs to be done once
@@ -292,10 +296,6 @@ multilib-native_src_install_internal() {
 	sed -i -e "s:${S}:${QTBASE}:g" "${S}"/lib/*.prl
 	insinto ${QTBASE}/$(get_libdir)
 	doins "${S}"/lib/*.prl
-
-	# pkg-config file
-	insinto ${QTBASE}/$(get_libdir)/pkgconfig
-	doins "${S}"/lib/*.pc
 
 	# List all the multilib libdirs
 	local libdirs
