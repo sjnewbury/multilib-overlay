@@ -83,7 +83,7 @@ distutils_src_compile() {
 			python=python
 		fi
 	else
-		[[ -z $(get_abi_var SETARCH_ARCH ${ABI}) ]] && die "SETARCH_ARCH_${ABI} is missing in your portage profile"
+		[[ -z $(get_abi_var SETARCH_ARCH ${ABI}) ]] && die "SETARCH_ARCH_${ABI} is missing in your portage profile take a look at http://wiki.github.com/sjnewbury/multilib-overlay to get further information"
 		if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
 			python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) python${PYTHON_SLOT_VERSION}-${ABI}"
 		elif [[ -n "${PYTHON}" ]]; then
@@ -122,7 +122,7 @@ distutils_src_install() {
 			python=python
 		fi
 	else
-		[[ -z $(get_abi_var SETARCH_ARCH ${ABI}) ]] && die "SETARCH_ARCH_${ABI} is missing in your portage profile"
+		[[ -z $(get_abi_var SETARCH_ARCH ${ABI}) ]] && die "SETARCH_ARCH_${ABI} is missing in your portage profile take a look at http://wiki.github.com/sjnewbury/multilib-overlay to get further information"
 		if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
 			python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) python${PYTHON_SLOT_VERSION}-${ABI}"
 		elif [[ -n "${PYTHON}" ]]; then
