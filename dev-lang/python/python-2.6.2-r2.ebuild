@@ -1,11 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.2-r1.ebuild,v 1.18 2009/09/27 14:30:35 nixnut Exp $
-
-# NOTE about python-portage interactions :
-# - Do not add a pkg_setup() check for a certain version of portage
-#   in dev-lang/python. It _WILL_ stop people installing from
-#   Gentoo 1.4 images.
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.2-r2.ebuild,v 1.8 2009/09/29 20:02:56 arfrever Exp $
 
 EAPI="2"
 
@@ -20,7 +15,7 @@ PYVER="${PYVER_MAJOR}.${PYVER_MINOR}"
 MY_P="Python-${PV}"
 S="${WORKDIR}/${MY_P}"
 
-PATCHSET_REVISION="4"
+PATCHSET_REVISION="5"
 
 DESCRIPTION="Python is an interpreted, interactive, object-oriented programming language."
 HOMEPAGE="http://www.python.org/"
@@ -29,13 +24,13 @@ SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
 
 LICENSE="PSF-2.2"
 SLOT="2.6"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ppc ppc64 ~s390 ~sh sparc x86 ~sparc-fbsd ~x86-fbsd"
-IUSE="-berkdb build doc elibc_uclibc examples gdbm ipv6 ncurses readline sqlite ssl +threads tk ucs2 wininst +xml"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+IUSE="-berkdb build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite ssl +threads tk ucs2 wininst +xml"
 
 # NOTE: dev-python/{elementtree,celementtree,pysqlite,ctypes}
 #       do not conflict with the ones in python proper. - liquidx
 
-DEPEND=">=app-admin/eselect-python-20080925
+RDEPEND=">=app-admin/eselect-python-20090606
 		>=sys-libs/zlib-1.1.3[lib32?]
 		!build? (
 			berkdb? ( || (
@@ -54,8 +49,11 @@ DEPEND=">=app-admin/eselect-python-20080925
 			ssl? ( dev-libs/openssl[lib32?] )
 			tk? ( >=dev-lang/tk-8.0[lib32?] )
 			xml? ( >=dev-libs/expat-2[lib32?] )
-		)"
-RDEPEND="${DEPEND}"
+		)
+		!m68k? ( !mips? ( !sparc-fbsd? ( virtual/libffi[lib32?] ) ) )"
+DEPEND="${RDEPEND}
+		!m68k? ( !mips? ( !sparc-fbsd? ( dev-util/pkgconfig[lib32?] ) ) )"
+RDEPEND+=" !build? ( app-misc/mime-types )"
 PDEPEND="${DEPEND} app-admin/python-updater"
 
 PROVIDE="virtual/python"
@@ -70,6 +68,9 @@ multilib-native_pkg-setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
+	# Ensure that internal copy of libffi isn't used.
+	rm -fr Modules/_ctypes/libffi*
+
 	if tc-is-cross-compiler; then
 		epatch "${FILESDIR}/python-2.5-cross-printf.patch"
 		epatch "${FILESDIR}/python-2.6-chflags-cross.patch"
@@ -111,14 +112,14 @@ multilib-native_src_prepare_internal() {
 multilib-native_src_configure_internal() {
 	# Disable extraneous modules with extra dependencies.
 	if use build; then
-		export PYTHON_DISABLE_MODULES="dbm bsddb gdbm _curses _curses_panel readline _sqlite3 _tkinter _elementtree pyexpat"
+		export PYTHON_DISABLE_MODULES="dbm _bsddb gdbm _curses _curses_panel readline _sqlite3 _tkinter _elementtree pyexpat"
 		export PYTHON_DISABLE_SSL="1"
 	else
 		# dbm module can be linked against berkdb or gdbm.
 		# Defaults to gdbm when both are enabled, #204343.
 		local disable
 		use berkdb   || use gdbm || disable+=" dbm"
-		use berkdb   || disable+=" bsddb"
+		use berkdb   || disable+=" _bsddb"
 		use gdbm     || disable+=" gdbm"
 		use ncurses  || disable+=" _curses _curses_panel"
 		use readline || disable+=" readline"
@@ -147,8 +148,8 @@ multilib-native_src_configure_internal() {
 	# doing. Enabling UCS2 support will break your existing python
 	# modules
 	use ucs2 \
-		&& myconf="${myconf} --enable-unicode=ucs2" \
-		|| myconf="${myconf} --enable-unicode=ucs4"
+		&& myconf+=" --enable-unicode=ucs2" \
+		|| myconf+=" --enable-unicode=ucs4"
 
 	filter-flags -malign-double
 
@@ -180,6 +181,10 @@ multilib-native_src_configure_internal() {
 	# Needed on FreeBSD unless Python 2.6 is already installed.
 	# Please query BSD team before removing this!
 	append-ldflags "-L."
+
+	if ! use m68k && ! use mips && ! use sparc-fbsd; then
+		myconf+=" --with-system-ffi"
+	fi
 
 	econf \
 		--with-fpectl \
@@ -251,7 +256,7 @@ multilib-native_src_install_internal() {
 	sed -e "s:^OPT=.*:OPT=-DNDEBUG:" -i "${D}usr/$(get_libdir)/python${PYVER}/config/Makefile"
 
 	if use build; then
-		rm -fr "${D}usr/$(get_libdir)/python${PYVER}/"{bsddb,email,encodings,lib-tk,sqlite3,test}
+		rm -fr "${D}usr/$(get_libdir)/python${PYVER}/"{bsddb,email,lib-tk,sqlite3,test}
 	else
 		use elibc_uclibc && rm -fr "${D}usr/$(get_libdir)/python${PYVER}/"{bsddb/test,test}
 		use berkdb || rm -fr "${D}usr/$(get_libdir)/python${PYVER}/"{bsddb,test/test_bsddb*}
@@ -281,8 +286,18 @@ multilib-native_pkg_preinst_internal() {
 	fi
 }
 
+eselect_python_update() {
+	local ignored_python_slots
+	[[ "$(eselect python show)" == "python2."* ]] && ignored_python_slots="--ignore 3.0 --ignore 3.1 --ignore 3.2"
+
+	# Create python2 symlink.
+	eselect python update --ignore 3.0 --ignore 3.1 --ignore 3.2 > /dev/null
+
+	eselect python update ${ignored_python_slots}
+}
+
 multilib-native_pkg_postinst_internal() {
-	eselect python update --ignore 3.0 --ignore 3.1 --ignore 3.2
+	eselect_python_update
 
 	python_mod_optimize -x "(site-packages|test)" /usr/lib/python${PYVER}
 	[[ "$(get_libdir)" != "lib" ]] && python_mod_optimize -x "(site-packages|test)" /usr/$(get_libdir)/python${PYVER}
@@ -292,7 +307,7 @@ multilib-native_pkg_postinst_internal() {
 		ewarn "\e[1;31m************************************************************************\e[0m"
 		ewarn
 		ewarn "You have just upgraded from an older version of Python."
-		ewarn "You should run 'python-updater' to rebuild Python modules."
+		ewarn "You should run 'python-updater \${options}' to rebuild Python modules."
 		ewarn
 		ewarn "\e[1;31m************************************************************************\e[0m"
 		ewarn
@@ -301,7 +316,7 @@ multilib-native_pkg_postinst_internal() {
 }
 
 multilib-native_pkg_postrm_internal() {
-	eselect python update --ignore 3.0 --ignore 3.1 --ignore 3.2
+	eselect_python_update
 
 	python_mod_cleanup /usr/lib/python${PYVER}
 	[[ "$(get_libdir)" != "lib" ]] && python_mod_cleanup /usr/$(get_libdir)/python${PYVER}
