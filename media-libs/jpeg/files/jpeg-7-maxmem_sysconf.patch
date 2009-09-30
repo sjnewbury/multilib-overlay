@@ -1,9 +1,8 @@
 # Make a reasonable guess about memory limits using sysconf().                                                      
 # includes 5% slop factor as suggested in documentation.
 
-diff -ur jpeg-7.orig/jmemansi.c jpeg-7/jmemansi.c
---- jpeg-7.orig/jmemansi.c	1996-01-06 19:29:46.000000000 +0200
-+++ jpeg-7/jmemansi.c	2009-08-22 14:47:35.000000000 +0300
+--- jpeg-7/jmemansi.c
++++ jpeg-7/jmemansi.c
 @@ -12,6 +12,15 @@
   * is shoved onto the user.
   */
