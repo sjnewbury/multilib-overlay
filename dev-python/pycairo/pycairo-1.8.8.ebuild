@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pycairo/pycairo-1.8.8.ebuild,v 1.1 2009/08/29 01:13:12 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pycairo/pycairo-1.8.8.ebuild,v 1.9 2009/09/27 19:07:15 nixnut Exp $
 
 EAPI="2"
 
@@ -15,13 +15,13 @@ SRC_URI="http://cairographics.org/releases/${P}.tar.gz"
 
 LICENSE="|| ( LGPL-2.1 MPL-1.1 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="doc examples"
+KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~mips ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
+IUSE="doc examples svg"
 
-RDEPEND=">=x11-libs/cairo-1.8.8[lib32?]"
+RDEPEND=">=x11-libs/cairo-1.8.8[svg?,lib32?]"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
-	doc? ( dev-python/sphinx )"
+	doc? ( >=dev-python/sphinx-0.6 )"
 
 RESTRICT_PYTHON_ABIS="2.4 2.5 3*"
 
@@ -33,11 +33,18 @@ multilib-native_src_prepare_internal() {
 	sed -i \
 		-e '/if test -n "$$dlist"; then/,/else :; fi/d' \
 		src/Makefile.in || die "sed in src/Makefile.in failed"
+
+	epatch "${FILESDIR}/${P}-pkgconfig_dir.patch"
+	epatch "${FILESDIR}/${P}-svg_check.patch"
 }
 
 multilib-native_src_configure_internal() {
 	if use doc; then
 		econf
+	fi
+
+	if ! use svg; then
+		export PYCAIRO_DISABLE_SVG="1"
 	fi
 }
 
@@ -52,20 +59,23 @@ multilib-native_src_compile_internal() {
 src_test() {
 	testing() {
 		pushd test > /dev/null
-		PYTHONPATH="$(ls -d ../build-${PYTHON_ABI}/lib.*)" "$(PYTHON)" test.py || return 1
+		PYTHONPATH="$(ls -d ../build-${PYTHON_ABI}/lib.*)" "$(PYTHON)" -c "import examples_test; examples_test.test_examples(); examples_test.test_snippets_png()" || return 1
 		popd > /dev/null
 	}
 	python_execute_function testing
 }
 
 multilib-native_src_install_internal() {
-	distutils_src_install
+	PKGCONFIG_DIR="/usr/$(get_libdir)/pkgconfig" distutils_src_install
 
 	if use doc; then
 		dohtml -r doc/.build/html/ || die "dohtml -r doc/.build/html/ failed"
 	fi
 
 	if use examples; then
+		# Delete files created by tests.
+		find examples{,/cairo_snippets/snippets} -maxdepth 1 -name "*.png" | xargs rm -f
+
 		insinto /usr/share/doc/${PF}/examples
 		doins -r examples/*
 		rm "${D}"/usr/share/doc/${PF}/examples/Makefile*
