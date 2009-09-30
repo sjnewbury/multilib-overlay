@@ -1,12 +1,12 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-3.1.ebuild,v 1.2 2009/08/04 05:46:03 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-3.1.1-r1.ebuild,v 1.7 2009/09/29 20:02:56 arfrever Exp $
 
 EAPI="2"
 
 inherit autotools eutils flag-o-matic multilib pax-utils python toolchain-funcs versionator multilib-native
 
-# We need this so that we don't depends on python.eclass
+# We need this so that we don't depend on python.eclass.
 PYVER_MAJOR=$(get_major_version)
 PYVER_MINOR=$(get_version_component_range 2)
 PYVER="${PYVER_MAJOR}.${PYVER_MINOR}"
@@ -14,34 +14,45 @@ PYVER="${PYVER_MAJOR}.${PYVER_MINOR}"
 MY_P="Python-${PV}"
 S="${WORKDIR}/${MY_P}"
 
+PATCHSET_REVISION="2"
+
 DESCRIPTION="Python is an interpreted, interactive, object-oriented programming language."
 HOMEPAGE="http://www.python.org/"
 SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
-	mirror://gentoo/python-gentoo-patches-${PV}.tar.bz2"
+	mirror://gentoo/python-gentoo-patches-${PV}$([[ "${PATCHSET_REVISION}" != "0" ]] && echo "-r${PATCHSET_REVISION}").tar.bz2"
 
 LICENSE="PSF-2.2"
 SLOT="3.1"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
-IUSE="build doc elibc_uclibc examples gdbm ipv6 ncurses readline sqlite ssl +threads tk ucs2 wininst +xml"
+IUSE="build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite ssl +threads tk ucs2 wininst +xml"
 
-DEPEND=">=app-admin/eselect-python-20080925
+RDEPEND=">=app-admin/eselect-python-20090606
 		>=sys-libs/zlib-1.1.3[lib32?]
 		!build? (
-			sqlite? ( >=dev-db/sqlite-3[lib32?] )
-			tk? ( >=dev-lang/tk-8.0[lib32?] )
-			ncurses? ( >=sys-libs/ncurses-5.2[lib32?]
-						readline? ( >=sys-libs/readline-4.1[lib32?] ) )
-			gdbm? ( sys-libs/gdbm[lib32?] )
-			ssl? ( dev-libs/openssl[lib32?] )
 			doc? ( dev-python/python-docs:${SLOT} )
-			xml? ( dev-libs/expat[lib32?] )
-	)"
-RDEPEND="${DEPEND}"
-PDEPEND="${DEPEND} app-admin/python-updater"
+			gdbm? ( sys-libs/gdbm[lib32?] )
+			ncurses? (
+				>=sys-libs/ncurses-5.2[lib32?]
+				readline? ( >=sys-libs/readline-4.1[lib32?] )
+			)
+			sqlite? ( >=dev-db/sqlite-3[lib32?] )
+			ssl? ( dev-libs/openssl[lib32?] )
+			tk? ( >=dev-lang/tk-8.0[lib32?] )
+			xml? ( >=dev-libs/expat-2[lib32?] )
+		)
+		!m68k? ( !mips? ( !sparc-fbsd? ( virtual/libffi[lib32?] ) ) )"
+DEPEND="${RDEPEND}
+		!m68k? ( !mips? ( !sparc-fbsd? ( dev-util/pkgconfig[lib32?] ) ) )"
+RDEPEND+=" !build? ( app-misc/mime-types )"
+PDEPEND="app-admin/python-updater
+		=dev-lang/python-2*"
 
 PROVIDE="virtual/python"
 
 multilib-native_src_prepare_internal() {
+	# Ensure that internal copy of libffi isn't used.
+	rm -fr Modules/_ctypes/libffi*
+
 	if ! tc-is-cross-compiler; then
 		rm "${WORKDIR}/${PV}"/*_all_crosscompile.patch
 	fi
@@ -73,38 +84,39 @@ multilib-native_src_prepare_internal() {
 	# that stdin is a tty for bug #248081.
 	sed -e "s:'osf1V5':'osf1V5' and sys.stdin.isatty():" -i Lib/test/test_file.py || die "sed failed"
 
-	# Ignore non-UTF-8 characters (bug #280001)
-	sed -e "s/f = open(f)\.read()/f = open(f, errors='replace').read()/" -i setup.py || die "sed failed"
-
 	eautoreconf
 }
 
 multilib-native_src_configure_internal() {
 	# Disable extraneous modules with extra dependencies.
 	if use build; then
-		export PYTHON_DISABLE_MODULES="readline pyexpat gdbm _curses _curses_panel _tkinter _sqlite3"
-		export PYTHON_DISABLE_SSL=1
+		export PYTHON_DISABLE_MODULES="gdbm _curses _curses_panel readline _sqlite3 _tkinter _elementtree pyexpat"
+		export PYTHON_DISABLE_SSL="1"
 	else
 		local disable
-		use xml      || disable="${disable} pyexpat"
-		use gdbm     || disable="${disable} gdbm"
-		use ncurses  || disable="${disable} _curses _curses_panel"
-		use readline || disable="${disable} readline"
-		use sqlite   || disable="${disable} sqlite3"
-		use ssl      || export PYTHON_DISABLE_SSL=1
-		use tk       || disable="${disable} _tkinter"
+		use gdbm     || disable+=" gdbm"
+		use ncurses  || disable+=" _curses _curses_panel"
+		use readline || disable+=" readline"
+		use sqlite   || disable+=" _sqlite3"
+		use ssl      || export PYTHON_DISABLE_SSL="1"
+		use tk       || disable+=" _tkinter"
+		use xml      || disable+=" _elementtree pyexpat" # _elementtree uses pyexpat.
 		export PYTHON_DISABLE_MODULES="${disable}"
+
+		if ! use xml; then
+			ewarn "You have configured Python without XML support."
+			ewarn "This is NOT a recommended configuration as you"
+			ewarn "may face problems parsing any XML documents."
+		fi
 	fi
 
-	if ! use xml; then
-		ewarn "You have configured Python without XML support."
-		ewarn "This is NOT a recommended configuration as you"
-		ewarn "may face problems parsing any XML documents."
+	if [[ -n "${PYTHON_DISABLE_MODULES}" ]]; then
+		einfo "Disabled modules: ${PYTHON_DISABLE_MODULES}"
 	fi
-
-	einfo "Disabled modules: $PYTHON_DISABLE_MODULES"
 
 	export OPT="${CFLAGS}"
+
+	local myconf
 
 	filter-flags -malign-double
 
@@ -112,8 +124,8 @@ multilib-native_src_configure_internal() {
 
 	# https://bugs.gentoo.org/show_bug.cgi?id=50309
 	if is-flag -O3; then
-	   is-flag -fstack-protector-all && replace-flags -O3 -O2
-	   use hardened && replace-flags -O3 -O2
+		is-flag -fstack-protector-all && replace-flags -O3 -O2
+		use hardened && replace-flags -O3 -O2
 	fi
 
 	if tc-is-cross-compiler; then
@@ -143,6 +155,10 @@ multilib-native_src_configure_internal() {
 	fi
 	dbmliborder="${dbmliborder#:}"
 
+	if ! use m68k && ! use mips && ! use sparc-fbsd; then
+		myconf+=" --with-system-ffi"
+	fi
+
 	econf \
 		--with-fpectl \
 		--enable-shared \
@@ -152,7 +168,8 @@ multilib-native_src_configure_internal() {
 		--infodir='${prefix}'/share/info \
 		--mandir='${prefix}'/share/man \
 		--with-libc='' \
-		--with-dbmliborder=${dbmliborder}
+		--with-dbmliborder=${dbmliborder} \
+		${myconf}
 }
 
 multilib-native_src_test_internal() {
@@ -170,9 +187,10 @@ multilib-native_src_test_internal() {
 	# (See bug #67970)
 	local skip_tests="distutils"
 
-	# test_pow fails on alpha.
-	# http://bugs.python.org/issue756093
-	[[ ${ARCH} == "alpha" ]] && skip_tests+=" pow"
+	# test_debuglevel from test_telnetlib.py fails sometimes with
+	# socket.error: [Errno 104] Connection reset by peer
+	# http://bugs.python.org/issue6748
+	skip_tests+=" telnetlib"
 
 	# test_ctypes fails with PAX kernel (bug #234498).
 	host-is-pax && skip_tests+=" ctypes"
@@ -188,7 +206,7 @@ multilib-native_src_test_internal() {
 		mv "${T}"/test_${test}.py "${S}"/Lib/test/test_${test}.py
 	done
 
-	elog "Portage skipped the following tests which aren't able to run from emerge:"
+	elog "The following tests have been skipped:"
 	for test in ${skip_tests}; do
 		elog "test_${test}.py"
 	done
@@ -199,32 +217,32 @@ multilib-native_src_test_internal() {
 }
 
 multilib-native_src_install_internal() {
-	# ahuemer, 20090529:
-	# -j1 was removed from python-2.6.2-r1.ebuild in portage
-	# we seem to still need it, because otherwise building fails!
-	emake -j1 DESTDIR="${D}" altinstall || die "emake altinstall failed"
+	emake DESTDIR="${D}" altinstall || die "emake altinstall failed"
 
-	mv "${D}"/usr/bin/python${PYVER}-config "${D}"/usr/bin/python-config-${PYVER}
+	mv "${D}usr/bin/python${PYVER}-config" "${D}usr/bin/python-config-${PYVER}"
 	if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
-		mv "${D}"/usr/bin/python${PYVER} "${D}"/usr/bin/python${PYVER}-${ABI}
+		mv "${D}usr/bin/python${PYVER}" "${D}usr/bin/python${PYVER}-${ABI}"
 	fi
 
-	# Fix slotted collisions.
-	mv "${D}"/usr/bin/2to3 "${D}"/usr/bin/2to3-${PYVER}
-	mv "${D}"/usr/bin/pydoc3 "${D}"/usr/bin/pydoc${PYVER}
-	mv "${D}"/usr/bin/idle3 "${D}"/usr/bin/idle${PYVER}
-	rm -f "${D}"/usr/bin/smtpd.py
+	# Fix collisions between different slots of Python.
+	mv "${D}usr/bin/2to3" "${D}usr/bin/2to3-${PYVER}"
+	mv "${D}usr/bin/pydoc3" "${D}usr/bin/pydoc${PYVER}"
+	mv "${D}usr/bin/idle3" "${D}usr/bin/idle${PYVER}"
+	rm -f "${D}usr/bin/smtpd.py"
 
 	# Fix the OPT variable so that it doesn't have any flags listed in it.
 	# Prevents the problem with compiling things with conflicting flags later.
 	sed -e "s:^OPT=.*:OPT=-DNDEBUG:" -i "${D}usr/$(get_libdir)/python${PYVER}/config/Makefile"
 
 	if use build; then
-		rm -fr "${D}"/usr/$(get_libdir)/python${PYVER}/{test,encodings,email,lib-tk}
+		rm -fr "${D}usr/$(get_libdir)/python${PYVER}/"{email,sqlite3,test,tkinter}
 	else
-		use elibc_uclibc && rm -fr "${D}"/usr/$(get_libdir)/python${PYVER}/test
-		use tk || rm -fr "${D}"/usr/$(get_libdir)/python${PYVER}/lib-tk
+		use elibc_uclibc && rm -fr "${D}usr/$(get_libdir)/python${PYVER}/test"
+		use sqlite || rm -fr "${D}usr/$(get_libdir)/python${PYVER}/"{sqlite3,test/test_sqlite*}
+		use tk || rm -fr "${D}usr/$(get_libdir)/python${PYVER}/"{tkinter,test/test_tk*}
 	fi
+
+	use threads || rm -fr "${D}usr/$(get_libdir)/python${PYVER}/multiprocessing"
 
 	prep_ml_includes usr/include/python${PYVER}
 
@@ -237,28 +255,57 @@ multilib-native_src_install_internal() {
 	newconfd "${FILESDIR}/pydoc.conf" pydoc-${SLOT}
 }
 
-multilib-native_pkg_postrm_internal() {
-	eselect python update --ignore 3.0 --ignore 3.1
+multilib-native_pkg_preinst_internal() {
+	if has_version "<${CATEGORY}/${PN}-${SLOT}" && ! has_version ">=${CATEGORY}/${PN}-${SLOT}_alpha"; then
+		# Delete this check after global switching to Python 3.
+		if [[ "$(eselect python show)" == "python3."* ]]; then
+			python_updater_warning="1"
+		fi
+	fi
+}
 
-	python_mod_cleanup /usr/lib/python${PYVER}
-	[[ "$(get_libdir)" != "lib" ]] && python_mod_cleanup /usr/$(get_libdir)/python${PYVER}
+eselect_python_update() {
+	local ignored_python_slots
+	[[ "$(eselect python show)" == "python2."* ]] && ignored_python_slots="--ignore 3.0 --ignore 3.1 --ignore 3.2"
+
+	# Create python3 symlink.
+	eselect python update > /dev/null
+
+	eselect python update ${ignored_python_slots}
 }
 
 multilib-native_pkg_postinst_internal() {
-	# Update symlink temporarily for byte-compiling.
-	eselect python update
+	eselect_python_update
 
 	python_mod_optimize -x "(site-packages|test)" /usr/lib/python${PYVER}
 	[[ "$(get_libdir)" != "lib" ]] && python_mod_optimize -x "(site-packages|test)" /usr/$(get_libdir)/python${PYVER}
 
-	# Update symlink back to old version.
-	# Remove this after testing is done.
-	eselect python update --ignore 3.0 --ignore 3.1
+	if [[ "$(eselect python show)" == "python2."* ]]; then
+		ewarn
+		ewarn "WARNING!"
+		ewarn "Many Python modules haven't been ported yet to Python 3.*."
+		ewarn "Python 3 hasn't been activated and Python wrapper is still configured to use Python 2."
+		ewarn "You can manually activate Python ${SLOT} using \`eselect python set python${SLOT}\`."
+		ewarn
+		ebeep 6
+	fi
 
-	ewarn
-	ewarn "WARNING!"
-	ewarn "Many Python modules haven't been ported yet to Python 3.*."
-	ewarn "/usr/bin/python hasn't been updated and still references your old Python installation."
-	ewarn
-	ebeep
+	if [[ "${python_updater_warning}" == "1" ]]; then
+		ewarn
+		ewarn "\e[1;31m************************************************************************\e[0m"
+		ewarn
+		ewarn "You have just upgraded from an older version of Python."
+		ewarn "You should run 'python-updater \${options}' to rebuild Python modules."
+		ewarn
+		ewarn "\e[1;31m************************************************************************\e[0m"
+		ewarn
+		ebeep 12
+	fi
+}
+
+pkg_postrm() {
+	eselect_python_update
+
+	python_mod_cleanup /usr/lib/python${PYVER}
+	[[ "$(get_libdir)" != "lib" ]] && python_mod_cleanup /usr/$(get_libdir)/python${PYVER}
 }
