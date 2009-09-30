@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-devel/libtool/libtool-2.2.6a.ebuild,v 1.5 2009/09/08 17:51:21 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-devel/libtool/libtool-2.2.6a.ebuild,v 1.17 2009/09/29 17:12:42 klausman Exp $
 
 EAPI="2"
 
@@ -13,8 +13,8 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.lzma"
 
 LICENSE="GPL-2"
 SLOT="1.5"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
-IUSE="vanilla"
+KEYWORDS="alpha amd64 arm hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+IUSE="vanilla test"
 
 RDEPEND="sys-devel/gnuconfig
 	>=sys-devel/autoconf-2.60
@@ -25,19 +25,30 @@ DEPEND="${RDEPEND}
 
 S=${WORKDIR}/${P%a}
 
+pkg_setup() {
+	if use test && ! has_version '>sys-devel/binutils-2.19.51'; then
+		einfo "Disabling --as-needed, since you got older binutils and you asked"
+		einfo "to run tests. With the stricter (older) --as-needed behaviour"
+		einfo "you'd be seeing a test failure in test #63; this has been fixed"
+		einfo "in the newer version of binutils."
+		append-ldflags -Wl,--no-as-needed
+	fi
+}
+
 src_unpack() {
 	unpack ${A}
 	cd "${S}"
 	epatch "${FILESDIR}"/${PV}/${P}-gnuinfo.patch #249168
+	epatch "${FILESDIR}"/${PV}/${P}-tests-locale.patch #249168
 
 	if ! use vanilla ; then
 		epunt_cxx
 		cd libltdl/m4
 		epatch "${FILESDIR}"/1.5.20/${PN}-1.5.20-use-linux-version-in-fbsd.patch #109105
 		cd ..
-		eautoreconf
+		AT_NOELIBTOOLIZE=yes eautoreconf
 		cd ..
-		eautoreconf
+		AT_NOELIBTOOLIZE=yes eautoreconf
 	fi
 
 	# the libtool script uses bash code in it and at configure time, tries
@@ -60,4 +71,12 @@ multilib-native_src_install_internal() {
 	for x in $(find "${D}" -name config.guess -o -name config.sub) ; do
 		rm -f "${x}" ; ln -sf /usr/share/gnuconfig/${x##*/} "${x}"
 	done
+}
+
+pkg_preinst() {
+	preserve_old_lib /usr/$(get_libdir)/libltdl.so.3
+}
+
+pkg_postinst() {
+	preserve_old_lib_notify /usr/$(get_libdir)/libltdl.so.3
 }
