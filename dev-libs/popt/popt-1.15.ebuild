@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/popt/popt-1.15.ebuild,v 1.1 2009/09/24 11:09:11 ssuominen Exp $
 
-EAPI="2"
+EAPI=2
 inherit eutils multilib-native
 
 DESCRIPTION="Parse Options - Command line parser"
@@ -30,6 +30,4 @@ multilib-native_src_configure_internal() {
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
 	dodoc CHANGES README
-
-	find "${D}" -name '*.la' -delete
 }
