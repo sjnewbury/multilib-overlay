@@ -162,10 +162,11 @@ distutils_src_install() {
 			python_execute_function installation "$@"
 		fi
 	else
+		python_version
 		if [[ ${ABI} != ${DEFAULT_ABI} ]]; then
-			python="$(PYTHON)-${ABI}"
+			python=python${PYVER}-${ABI}
 		else
-			python="$(PYTHON)"
+			python=python${PYVER}
 		fi
 		einfo Using ${python}
 		# need this for python-2.5 + setuptools in cases where
