@@ -1,10 +1,10 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.2-r2.ebuild,v 1.8 2009/09/29 20:02:56 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.2-r2.ebuild,v 1.11 2009/10/03 17:09:20 grobian Exp $
 
 EAPI="2"
 
-inherit autotools eutils flag-o-matic libtool multilib pax-utils python toolchain-funcs versionator multilib-native
+inherit autotools eutils flag-o-matic multilib pax-utils python toolchain-funcs versionator multilib-native
 MULTILIB_IN_SOURCE_BUILD="yes"
 
 # We need this so that we don't depend on python.eclass
@@ -24,7 +24,7 @@ SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
 
 LICENSE="PSF-2.2"
 SLOT="2.6"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="-berkdb build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite ssl +threads tk ucs2 wininst +xml"
 
 # NOTE: dev-python/{elementtree,celementtree,pysqlite,ctypes}
@@ -32,6 +32,8 @@ IUSE="-berkdb build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlit
 
 RDEPEND=">=app-admin/eselect-python-20090606
 		>=sys-libs/zlib-1.1.3[lib32?]
+		virtual/libintl
+		virtual/libffi[lib32?]
 		!build? (
 			berkdb? ( || (
 				sys-libs/db:4.7[lib32?]
@@ -49,10 +51,9 @@ RDEPEND=">=app-admin/eselect-python-20090606
 			ssl? ( dev-libs/openssl[lib32?] )
 			tk? ( >=dev-lang/tk-8.0[lib32?] )
 			xml? ( >=dev-libs/expat-2[lib32?] )
-		)
-		!m68k? ( !mips? ( !sparc-fbsd? ( virtual/libffi[lib32?] ) ) )"
+		)"
 DEPEND="${RDEPEND}
-		!m68k? ( !mips? ( !sparc-fbsd? ( dev-util/pkgconfig[lib32?] ) ) )"
+		dev-util/pkgconfig[lib32?]"
 RDEPEND+=" !build? ( app-misc/mime-types )"
 PDEPEND="${DEPEND} app-admin/python-updater"
 
@@ -142,15 +143,6 @@ multilib-native_src_configure_internal() {
 
 	export OPT="${CFLAGS}"
 
-	local myconf
-
-	# Super-secret switch. Don't use this unless you know what you're
-	# doing. Enabling UCS2 support will break your existing python
-	# modules
-	use ucs2 \
-		&& myconf+=" --enable-unicode=ucs2" \
-		|| myconf+=" --enable-unicode=ucs4"
-
 	filter-flags -malign-double
 
 	[[ "${ARCH}" == "alpha" ]] && append-flags -fPIC
@@ -182,19 +174,16 @@ multilib-native_src_configure_internal() {
 	# Please query BSD team before removing this!
 	append-ldflags "-L."
 
-	if ! use m68k && ! use mips && ! use sparc-fbsd; then
-		myconf+=" --with-system-ffi"
-	fi
-
 	econf \
 		--with-fpectl \
 		--enable-shared \
 		$(use_enable ipv6) \
 		$(use_with threads) \
+		$(use ucs2 && echo "--enable-unicode=ucs2" || echo "--enable-unicode=ucs4") \
 		--infodir='${prefix}'/share/info \
 		--mandir='${prefix}'/share/man \
 		--with-libc='' \
-		${myconf}
+		--with-system-ffi
 }
 
 multilib-native_src_test_internal() {
