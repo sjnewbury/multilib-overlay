@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.7.4.ebuild,v 1.7 2009/05/01 14:03:12 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.8.ebuild,v 1.8 2009/09/23 17:06:18 armin76 Exp $
 
 EAPI="2"
 
@@ -14,7 +14,7 @@ SRC_URI="ftp://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v${PV}/src/${P}.tar
 
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ~ppc64 sparc x86 ~x86-fbsd"
 IUSE="ipv6 debug"
 
 DEPEND=">=dev-db/sqlite-3.5[lib32?]"
@@ -44,15 +44,12 @@ multilib-native_src_configure_internal() {
 		*) die "Failed to detect whether your arch is 64bits or 32bits, disable distcc if you're using it, please";;
 	esac
 
-	if use ipv6; then
-		myconf="${myconf} --enable-ipv6"
-	fi
-
 	myconf="${myconf} --libdir=/usr/$(get_libdir)/nspr \
-		--enable-system-sqlite"
+		--enable-system-sqlite  --with-mozilla --with-pthreads"
 
 	ECONF_SOURCE="../mozilla/nsprpub" econf \
 		$(use_enable debug) \
+		$(use_enable ipv6) \
 		${myconf} || die "econf failed"
 }
 
@@ -62,7 +59,7 @@ multilib-native_src_compile_internal() {
 }
 
 multilib-native_src_install_internal() {
-	# Their build system is royally fucked, as usual
+	# Their build system is royally confusing, as usual
 	MINOR_VERSION=${MIN_PV} # Used for .so version
 	cd "${S}"/build
 	emake DESTDIR="${D}" install || die "emake install failed"
@@ -90,9 +87,8 @@ multilib-native_src_install_internal() {
 }
 
 multilib-native_pkg_postinst_internal() {
-	preserve_old_lib_notify /usr/$(get_libdir)/nspr/lib{nspr,plc,plds}4.so.6
-	elog
-	elog "Please make sure you run revdep-rebuild after upgrade, This is extremely important"
-	elog "to ensure your system nspr works proplery."
-	elog
+	ewarn
+	ewarn "Please make sure you run revdep-rebuild after upgrade."
+	ewarn "This is *extremely* important to ensure your system nspr works properly."
+	ewarn
 }
