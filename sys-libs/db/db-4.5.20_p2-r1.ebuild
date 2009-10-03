@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/db/db-4.5.20_p2-r1.ebuild,v 1.11 2009/03/14 12:54:49 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/db/db-4.5.20_p2-r1.ebuild,v 1.14 2009/09/20 19:52:44 robbat2 Exp $
 
 EAPI="2"
 
@@ -18,7 +18,7 @@ else
 	MY_P=${PN}-${MY_PV}
 fi
 
-S="${WORKDIR}/${MY_P}"
+S="${WORKDIR}/${MY_P}/build_unix"
 DESCRIPTION="Oracle Berkeley DB"
 HOMEPAGE="http://www.oracle.com/technology/software/products/berkeley-db/index.html"
 SRC_URI="http://download.oracle.com/berkeley-db/${MY_P}.tar.gz"
@@ -37,9 +37,8 @@ DEPEND="tcl? ( >=dev-lang/tcl-8.4[lib32?] )
 RDEPEND="tcl? ( dev-lang/tcl[lib32?] )
 	java? ( >=virtual/jre-1.4 )"
 
-src_unpack() {
-	unpack "${MY_P}".tar.gz
-	cd "${S}"
+multilib-native_src_prepare_internal() {
+	cd "${S}"/..
 	for (( i=1 ; i<=${PATCHNO} ; i++ ))
 	do
 		epatch "${DISTDIR}"/patch."${MY_PV}"."${i}"
@@ -50,20 +49,22 @@ src_unpack() {
 	epatch "${FILESDIR}"/"${PN}"-4.3-jni-check-prefix-first.patch
 	epatch "${FILESDIR}"/"${PN}"-4.3-listen-to-java-options.patch
 
+	sed -e "/^DB_RELEASE_DATE=/s/%B %e, %Y/%Y-%m-%d/" -i dist/RELEASE
+
 	# Include the SLOT for Java JAR files
 	# This supersedes the unused jarlocation patches.
 	sed -r -i \
 		-e '/jarfile=.*\.jar$/s,(.jar$),-$(LIBVERSION)\1,g' \
-		"${S}"/dist/Makefile.in
+		"${S}"/../dist/Makefile.in
 
 	# START of 4.5+earlier specific
 	# Upstream sucks, they normally concat these
-	cd "${S}"/dist/aclocal
+	cd "${S}"/../dist/aclocal
 	for i in *; do ln -s $i ${i%.ac}.m4 ; done ;
-	cd "${S}"/dist/aclocal_java
+	cd "${S}"/../dist/aclocal_java
 	for i in *; do ln -s $i ${i%.ac}.m4 ; done ;
 	# END of 4.5+earlier specific
-	cd "${S}"/dist
+	cd "${S}"/../dist
 	rm -f aclocal/libtool.{m4,ac} aclocal.m4
 	sed -i \
 		-e '/AC_PROG_LIBTOOL$/aLT_OUTPUT' \
@@ -83,9 +84,7 @@ src_unpack() {
 		-e "s/__EDIT_DB_VERSION__/$DB_VERSION/g" configure
 }
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# compilation with -O0 fails on amd64, see bug #171231
 	if use amd64 && [ ${ABI} = "amd64" ]; then
 		replace-flags -O0 -O2
@@ -113,7 +112,7 @@ multilib-native_src_compile_internal() {
 	[[ -n ${CBUILD} ]] && myconf="${myconf} --build=${CBUILD}"
 
 	# the entire testsuite needs the TCL functionality
-	if use tcl && has test $FEATURES ; then
+	if use tcl && use test ; then
 		myconf="${myconf} --enable-test"
 	else
 		myconf="${myconf} --disable-test"
@@ -125,7 +124,7 @@ multilib-native_src_compile_internal() {
 		append-ldflags -Wl,--default-symver
 	fi
 
-	cd "${S}/build_unix" && ECONF_SOURCE="${S}"/dist econf \
+	cd "${S}" && ECONF_SOURCE="${S}"/../dist econf \
 		--prefix=/usr \
 		--mandir=/usr/share/man \
 		--infodir=/usr/share/info \
@@ -142,12 +141,10 @@ multilib-native_src_compile_internal() {
 
 	sed -e "s,\(^STRIP *=\).*,\1\"none\"," Makefile > Makefile.cpy \
 	    && mv Makefile.cpy Makefile
-
-	emake || die "make failed"
 }
 
 multilib-native_src_install_internal() {
-	cd build_unix && einstall libdir="${D}/usr/$(get_libdir)" STRIP="none" || die
+	einstall libdir="${D}/usr/$(get_libdir)" STRIP="none" || die
 
 	db_src_install_usrbinslot
 
@@ -158,6 +155,8 @@ multilib-native_src_install_internal() {
 	db_src_install_usrlibcleanup
 
 	dodir /usr/sbin
+	# This file is not always built, and no longer exists as of db-4.8
+	[[ -f "${D}"/usr/bin/berkeley_db_svc ]] && \
 	mv "${D}"/usr/bin/berkeley_db_svc "${D}"/usr/sbin/berkeley_db"${SLOT/./}"_svc
 
 	if use java; then
