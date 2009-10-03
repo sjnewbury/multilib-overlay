@@ -35,4 +35,3 @@ multilib-native_pkg_setup_internal() {
 }
 
 PATCHES=("${FILESDIR}/libX11-1.1.3-xcb-locking.patch")
-
