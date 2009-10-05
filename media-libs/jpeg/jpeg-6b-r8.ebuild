@@ -33,15 +33,16 @@ src_unpack() {
 	elibtoolize
 }
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	tc-export CC RANLIB AR
 	econf \
 		--enable-shared \
 		--enable-static \
 		--enable-maxmem=64 \
 		|| die "econf failed"
+}
+
+multilib-native_src_compile_internal() {
 	emake || die "make failed"
 	emake -C "${WORKDIR}"/extra || die "make extra failed"
 }
@@ -54,4 +55,3 @@ multilib-native_src_install_internal() {
 		libjpeg.doc example.c structure.doc filelist.doc \
 		coderules.doc
 }
-

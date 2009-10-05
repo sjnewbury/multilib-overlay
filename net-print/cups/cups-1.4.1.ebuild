@@ -157,6 +157,8 @@ multilib-native_src_install_internal() {
 
 	# create /etc/cups/client.conf, bug #196967 and #266678
 	echo "ServerName /var/run/cups/cups.sock" >> "${D}"/etc/cups/client.conf
+
+	prep_ml_binaries /usr/bin/cups-config
 }
 
 pkg_postinst() {

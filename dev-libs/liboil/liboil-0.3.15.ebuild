@@ -15,18 +15,19 @@ SLOT="0.3"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="doc"
 
-RDEPEND="=dev-libs/glib-2*"
+RDEPEND="=dev-libs/glib-2*[lib32?]"
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )"
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	strip-flags
 	filter-flags -O?
 	append-flags -O2
 	econf --disable-dependency-tracking \
 		$(use_enable doc gtk-doc) || die "econf failed."
+}
+
+multilib-native_src_compile_internal() {
 	emake -j1 || die "emake failed."
 }
 

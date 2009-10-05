@@ -39,12 +39,8 @@ DEPEND="tcl? ( >=dev-lang/tcl-8.4[lib32?] )
 RDEPEND="tcl? ( dev-lang/tcl[lib32?] )
 	java? ( >=virtual/jre-1.5 )"
 
-multilib-native_src_unpack_internal() {
-	unpack "${MY_P}".tar.gz
-}
-
 multilib-native_src_prepare_internal() {
-	cd "${S}/.."
+	cd "${S}"/..
 	for (( i=1 ; i<=${PATCHNO} ; i++ ))
 	do
 		epatch "${DISTDIR}"/patch."${MY_PV}"."${i}"

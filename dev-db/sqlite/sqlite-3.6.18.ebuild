@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.18.ebuild,v 1.1 2009/09/11 21:16:56 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.18.ebuild,v 1.2 2009/09/18 11:34:58 arfrever Exp $
 
 EAPI="2"
 
@@ -36,20 +36,10 @@ pkg_setup() {
 
 		ebeep 1
 	fi
-
-	if has test ${FEATURES}; then
-		if ! has userpriv ${FEATURES} || ! use tcl; then
-			ewarn "Both the userpriv feature and tcl use flag must be enabled to run tests."
-			eerror "Testsuite will not be run."
-		fi
-	fi
 }
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${PN}-3.6.16-tkt3922.test.patch"
-
-	# http://www.sqlite.org/src/tktview/65bbb65a47ce115ecb0ea9e1c64c65fb8628f327
-	fperms +x configure
 
 	epunt_cxx
 }
@@ -86,7 +76,7 @@ multilib-native_src_compile_internal() {
 }
 
 src_test() {
-	if has userpriv ${FEATURES}; then
+	if [[ "${EUID}" -ne "0" ]]; then
 		local test=test
 		use debug && test=fulltest
 		emake ${test} || die "some test(s) failed"

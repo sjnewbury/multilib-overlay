@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/db/db-4.6.21_p4.ebuild,v 1.6 2009/05/24 17:33:13 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/db/db-4.6.21_p4.ebuild,v 1.10 2009/09/20 19:52:44 robbat2 Exp $
 
 EAPI="2"
 
@@ -18,7 +18,7 @@ else
 	MY_P=${PN}-${MY_PV}
 fi
 
-S="${WORKDIR}/${MY_P}"
+S="${WORKDIR}/${MY_P}/build_unix"
 DESCRIPTION="Oracle Berkeley DB"
 HOMEPAGE="http://www.oracle.com/technology/software/products/berkeley-db/index.html"
 SRC_URI="http://download.oracle.com/berkeley-db/${MY_P}.tar.gz"
@@ -28,7 +28,7 @@ done
 
 LICENSE="OracleDB"
 SLOT="4.6"
-KEYWORDS="alpha amd64 ~arm hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="tcl java doc nocxx"
 
 DEPEND="tcl? ( >=dev-lang/tcl-8.4[lib32?] )
@@ -38,7 +38,7 @@ RDEPEND="tcl? ( dev-lang/tcl[lib32?] )
 	java? ( >=virtual/jre-1.4 )"
 
 multilib-native_src_prepare_internal() {
-	cd "${S}"
+	cd "${S}"/..
 	for (( i=1 ; i<=${PATCHNO} ; i++ ))
 	do
 		epatch "${DISTDIR}"/patch."${MY_PV}"."${i}"
@@ -49,13 +49,15 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/"${PN}"-"${SLOT}"-jni-check-prefix-first.patch
 	epatch "${FILESDIR}"/"${PN}"-4.3-listen-to-java-options.patch
 
+	sed -e "/^DB_RELEASE_DATE=/s/%B %e, %Y/%Y-%m-%d/" -i dist/RELEASE
+
 	# Include the SLOT for Java JAR files
 	# This supersedes the unused jarlocation patches.
 	sed -r -i \
 		-e '/jarfile=.*\.jar$/s,(.jar$),-$(LIBVERSION)\1,g' \
-		"${S}"/dist/Makefile.in
+		"${S}"/../dist/Makefile.in
 
-	cd "${S}"/dist
+	cd "${S}"/../dist
 	rm -f aclocal/libtool.m4
 	sed -i \
 		-e '/AC_PROG_LIBTOOL$/aLT_OUTPUT' \
@@ -103,7 +105,7 @@ multilib-native_src_configure_internal() {
 	[[ -n ${CBUILD} ]] && myconf="${myconf} --build=${CBUILD}"
 
 	# the entire testsuite needs the TCL functionality
-	if use tcl && has test $FEATURES ; then
+	if use tcl && use test ; then
 		myconf="${myconf} --enable-test"
 	else
 		myconf="${myconf} --disable-test"
@@ -115,7 +117,7 @@ multilib-native_src_configure_internal() {
 		append-ldflags -Wl,--default-symver
 	fi
 
-	cd "${S}/build_unix" && ECONF_SOURCE="${S}"/dist econf \
+	cd "${S}" && ECONF_SOURCE="${S}"/../dist econf \
 		--prefix=/usr \
 		--mandir=/usr/share/man \
 		--infodir=/usr/share/info \
@@ -135,7 +137,7 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_install_internal() {
-	cd build_unix && einstall libdir="${D}/usr/$(get_libdir)" STRIP="none" || die
+	einstall libdir="${D}/usr/$(get_libdir)" STRIP="none" || die
 
 	db_src_install_usrbinslot
 
@@ -146,6 +148,8 @@ multilib-native_src_install_internal() {
 	db_src_install_usrlibcleanup
 
 	dodir /usr/sbin
+	# This file is not always built, and no longer exists as of db-4.8
+	[[ -f "${D}"/usr/bin/berkeley_db_svc ]] && \
 	mv "${D}"/usr/bin/berkeley_db_svc "${D}"/usr/sbin/berkeley_db"${SLOT/./}"_svc
 
 	if use java; then

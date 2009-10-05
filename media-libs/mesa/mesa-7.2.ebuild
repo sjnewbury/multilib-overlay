@@ -1,6 +1,6 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.2.ebuild,v 1.2 2008/10/22 15:43:18 remi Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.2.ebuild,v 1.3 2009/09/21 10:41:36 scarabeus Exp $
 
 EAPI="2"
 
@@ -45,7 +45,6 @@ IUSE_VIDEO_CARDS="
 	video_cards_via"
 IUSE="${IUSE_VIDEO_CARDS}
 	debug
-	doc
 	pic
 	motif
 	nptl
@@ -63,7 +62,6 @@ RDEPEND=">=app-admin/eselect-opengl-1.0.6-r1
 	>=x11-libs/libdrm-2.3.1[lib32?]
 	>=x11-libs/libICE-1.0.4[lib32?]
 	motif? ( >=x11-libs/openmotif-2.3.1-r1 )
-	doc? ( >=app-doc/opengl-manpages-20001215 )
 	!<=x11-base/xorg-x11-6.9"
 DEPEND="${RDEPEND}
 	!<=x11-proto/xf86driproto-2.0.3

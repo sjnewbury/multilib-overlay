@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/db/db-4.7.25_p4.ebuild,v 1.1 2009/06/21 13:43:28 caleb Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/db/db-4.7.25_p4.ebuild,v 1.11 2009/10/01 20:27:01 klausman Exp $
 
 EAPI="2"
 
@@ -28,7 +28,7 @@ done
 
 LICENSE="OracleDB"
 SLOT="4.7"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 ~arm hppa ~ia64 ~m68k ppc ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="doc java nocxx tcl test"
 
 # the entire testsuite needs the TCL functionality
@@ -39,12 +39,8 @@ DEPEND="tcl? ( >=dev-lang/tcl-8.4[lib32?] )
 RDEPEND="tcl? ( dev-lang/tcl[lib32?] )
 	java? ( >=virtual/jre-1.5 )"
 
-src_unpack() {
-	unpack "${MY_P}".tar.gz
-}
-
 multilib-native_src_prepare_internal() {
-	cd "${S}/.."
+	cd "${S}"/..
 	for (( i=1 ; i<=${PATCHNO} ; i++ ))
 	do
 		epatch "${DISTDIR}"/patch."${MY_PV}"."${i}"
@@ -54,6 +50,8 @@ multilib-native_src_prepare_internal() {
 	# use the includes from the prefix
 	epatch "${FILESDIR}"/"${PN}"-4.6-jni-check-prefix-first.patch
 	epatch "${FILESDIR}"/"${PN}"-4.3-listen-to-java-options.patch
+
+	sed -e "/^DB_RELEASE_DATE=/s/%B %e, %Y/%Y-%m-%d/" -i dist/RELEASE
 
 	# Include the SLOT for Java JAR files
 	# This supersedes the unused jarlocation patches.
@@ -82,6 +80,7 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
+	local myconf=''
 	# compilation with -O0 fails on amd64, see bug #171231
 	if use amd64; then
 		replace-flags -O0 -O2
@@ -102,6 +101,14 @@ multilib-native_src_configure_internal() {
 		append-ldflags -Wl,--default-symver
 	fi
 
+	# Bug #270851: test needs TCL support
+	if use tcl || use test ; then
+		myconf="${myconf} --enable-tcl"
+		myconf="${myconf} --with-tcl=/usr/$(get_libdir)"
+	else
+		myconf="${myconf} --disable-tcl"
+	fi
+
 	cd "${S}"
 	ECONF_SOURCE="${S}"/../dist \
 	STRIP="true" \
@@ -110,11 +117,11 @@ multilib-native_src_configure_internal() {
 		--enable-o_direct \
 		--without-uniquename \
 		--enable-rpc \
+		$(use arm && echo --with-mutex=ARM/gcc-assembly) \
 		$(use amd64 && echo --with-mutex=x86/gcc-assembly) \
 		$(use_enable !nocxx cxx) \
 		$(use_enable java) \
-		$(use_enable tcl) \
-		$(use tcl && echo --with-tcl=/usr/$(get_libdir)) \
+		${myconf} \
 		$(use_enable test) \
 		"$@"
 }
@@ -131,6 +138,8 @@ multilib-native_src_install_internal() {
 	db_src_install_usrlibcleanup
 
 	dodir /usr/sbin
+	# This file is not always built, and no longer exists as of db-4.8
+	[[ -f "${D}"/usr/bin/berkeley_db_svc ]] && \
 	mv "${D}"/usr/bin/berkeley_db_svc "${D}"/usr/sbin/berkeley_db"${SLOT/./}"_svc
 
 	if use java; then

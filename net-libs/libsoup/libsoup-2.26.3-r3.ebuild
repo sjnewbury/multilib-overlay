@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup/libsoup-2.26.3-r3.ebuild,v 1.1 2009/09/13 10:31:06 mrpouet Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup/libsoup-2.26.3-r3.ebuild,v 1.4 2009/09/28 18:30:20 klausman Exp $
 
 EAPI="2"
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2"
 SLOT="2.4"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
 # Do NOT build with --disable-debug/--enable-debug=no - gnome2.eclass takes care of that
 IUSE="debug doc gnome ssl"
 
@@ -25,6 +25,7 @@ DEPEND="${RDEPEND}
 #		www-servers/apache
 #		dev-lang/php
 #		net-misc/curl )
+PDEPEND="gnome? ( ~net-libs/${PN}-gnome-${PV}[lib32?] )"
 
 DOCS="AUTHORS NEWS README"
 

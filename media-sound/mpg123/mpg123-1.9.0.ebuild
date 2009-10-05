@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/mpg123/mpg123-1.9.0.ebuild,v 1.2 2009/09/06 17:03:43 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/mpg123/mpg123-1.9.0.ebuild,v 1.5 2009/10/03 08:55:59 volkmar Exp $
 
 EAPI=2
 
@@ -13,7 +13,7 @@ SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="3dnow 3dnowext alsa altivec ipv6 jack mmx nas +network oss portaudio pulseaudio sdl sse"
 
 RDEPEND="alsa? ( media-libs/alsa-lib[lib32?] )
@@ -21,7 +21,8 @@ RDEPEND="alsa? ( media-libs/alsa-lib[lib32?] )
 	nas? ( media-libs/nas[lib32?] )
 	portaudio? ( media-libs/portaudio[lib32?] )
 	pulseaudio? ( media-sound/pulseaudio[lib32?] )
-	sdl? ( media-libs/libsdl[lib32?] )"
+	sdl? ( media-libs/libsdl[lib32?] )
+	sys-devel/libtool[lib32?]"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]"
 

@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.7.3.ebuild,v 1.9 2009/04/29 20:56:27 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.7.3.ebuild,v 1.10 2009/08/02 19:23:31 darkside Exp $
 
 EAPI="2"
 
@@ -60,7 +60,7 @@ multilib-native_src_compile_internal() {
 }
 
 multilib-native_src_install_internal() {
-	# Their build system is royally fucked, as usual
+	# Their build system is royally confusing, as usual
 	MINOR_VERSION=7
 	cd "${S}"/build
 	emake DESTDIR="${D}" install || die "emake install failed"
