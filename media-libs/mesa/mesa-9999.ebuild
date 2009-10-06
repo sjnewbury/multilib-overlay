@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.0.2.ebuild,v 1.6 2007/11/16 18:16:30 dberkholz Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.5.2.ebuild,v 1.1 2009/09/29 17:14:35 scarabeus Exp $
 
 EAPI="2"
 
@@ -11,6 +11,9 @@ if [[ ${PV} = 9999* ]]; then
 	EXPERIMENTAL="true"
 	IUSE_VIDEO_CARDS_UNSTABLE="video_cards_nouveau"
 	IUSE_UNSTABLE="gallium"
+	# User can also specify branch by simply adding MESA_LIVE_BRANCH="blesmrt"
+	# to the make.conf, where blesmrt is desired branch.
+	[[ -z ${MESA_LIVE_BRANCH} ]] || EGIT_BRANCH="${MESA_LIVE_BRANCH}"
 fi
 
 inherit autotools multilib flag-o-matic ${GIT_ECLASS} portability multilib-native
@@ -25,12 +28,12 @@ HOMEPAGE="http://mesa3d.sourceforge.net/"
 
 #SRC_PATCHES="mirror://gentoo/${P}-gentoo-patches-01.tar.bz2"
 if [[ $PV = *_rc* ]]; then
-	SRC_URI="http://www.mesa3d.org/beta/${MY_SRC_P}.tar.gz
+	SRC_URI="ftp://ftp.freedesktop.org/pub/mesa/beta/${MY_SRC_P}.tar.gz
 		${SRC_PATCHES}"
 elif [[ $PV = 9999* ]]; then
 	SRC_URI="${SRC_PATCHES}"
 else
-	SRC_URI="mirror://sourceforge/mesa3d/${MY_SRC_P}.tar.bz2
+	SRC_URI="ftp://ftp.freedesktop.org/pub/mesa/${PV}/${MY_SRC_P}.tar.bz2
 		${SRC_PATCHES}"
 fi
 
@@ -54,24 +57,23 @@ IUSE_VIDEO_CARDS="${IUSE_VIDEO_CARDS_UNSTABLE}
 	video_cards_trident
 	video_cards_via"
 IUSE="${IUSE_VIDEO_CARDS} ${IUSE_UNSTABLE}
-	debug doc motif nptl pic xcb kernel_FreeBSD"
+	debug motif nptl pic xcb kernel_FreeBSD"
 
 # keep correct libdrm and dri2proto dep
 # keep blocks in rdepend for binpkg
 RDEPEND="!<=x11-base/xorg-x11-6.9
 	!<=x11-proto/xf86driproto-2.0.3
 	app-admin/eselect-opengl
-	dev-libs/expat
-	>=x11-libs/libdrm-9999
-	x11-libs/libICE
-	x11-libs/libX11[xcb?]
-	x11-libs/libXdamage
-	x11-libs/libXext
-	x11-libs/libXi
-	x11-libs/libXmu
-	x11-libs/libXxf86vm
-	motif? ( x11-libs/openmotif )
-	doc? ( app-doc/opengl-manpages )
+	dev-libs/expat[lib32?]
+	>=x11-libs/libdrm-2.4.9[lib32?]
+	x11-libs/libICE[lib32?]
+	x11-libs/libX11[xcb?,lib32?]
+	x11-libs/libXdamage[lib32?]
+	x11-libs/libXext[lib32?]
+	x11-libs/libXi[lib32?]
+	x11-libs/libXmu[lib32?]
+	x11-libs/libXxf86vm[lib32?]
+	motif? ( x11-libs/openmotif[lib32?] )
 "
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
@@ -84,17 +86,13 @@ DEPEND="${RDEPEND}
 	x11-proto/xf86vidmodeproto
 "
 # glew depend on mesa and it is needed in runtime
-PDEPEND=">=media-libs/glew-1.5.1"
+PDEPEND=">=media-libs/glew-1.5.1[lib32?]"
 
 S="${WORKDIR}/${MY_P}"
 
 # Think about: ggi, svga, fbcon, no-X configs
 
 pkg_setup() {
-	if use debug; then
-		append-flags -g
-	fi
-
 	# gcc 4.2 has buggy ivopts
 	if [[ $(gcc-version) = "4.2" ]]; then
 		append-flags -fno-ivopts
@@ -124,7 +122,7 @@ src_prepare() {
 }
 
 multilib-native_src_configure_internal() {
-	local myconf r600
+	local myconf
 
 	# Configurable DRI drivers
 	driver_enable swrast
@@ -133,9 +131,8 @@ multilib-native_src_configure_internal() {
 	driver_enable video_cards_mga mga
 	driver_enable video_cards_r128 r128
 	# ATI has two implementations as video_cards
-	[[ -d "${S}"/src/mesa/drivers/dri/r600/ ]] && r600="r600"
-	driver_enable video_cards_radeon radeon r200 r300 ${r600}
-	driver_enable video_cards_radeonhd r300 ${r600}
+	driver_enable video_cards_radeon radeon r200 r300
+	driver_enable video_cards_radeonhd r300
 	driver_enable video_cards_s3virge s3v
 	driver_enable video_cards_savage savage
 	driver_enable video_cards_sis sis
@@ -164,24 +161,22 @@ multilib-native_src_configure_internal() {
 			elog
 			elog "Intel: works only i915."
 			elog "Nouveau: only available implementation, so no other choice"
-			elog "Radeon: implementation up to the r500."
+			elog "Radeon: not working, disabled."
 			echo
 			myconf="${myconf}
 				--with-state-trackers=glx,dri,egl
 				$(use_enable video_cards_nouveau gallium-nouveau)
 				$(use_enable video_cards_intel gallium-intel)"
-			if ! use video_cards_radeon && ! use video_cards_radeonhd; then
-				myconf="${myconf} --disable-gallium-radeon"
-			else
-				myconf="${myconf} --enable-gallium-radeon"
-			fi
+				#$(use_enable video_cards_radeon gallium-radeon)
+				#$(use_enable video_cards_radeonhd gallium-radeon)"
 		fi
+	else
+		# we need to disable the gallium since they enable by default...
+		myconf="${myconf} --disable-gallium"
 	fi
 
 	# Deactivate assembly code for pic build
-	# Sparc assembly code is not working
 	myconf="${myconf} $(use_enable !pic asm)"
-	myconf="${myconf} $(use_enable !sparc asm)"
 
 	# --with-driver=dri|xlib|osmesa ; might get changed later to something
 	# else than dri
@@ -244,7 +239,7 @@ multilib-native_src_install_internal() {
 	sed -i \
 		-e 's:-ldl:'$(dlopen_lib)':g' \
 		"${D}"/usr/$(get_libdir)/{libGLU.la,opengl/xorg-x11/lib/libGL.la} \
-		|| die "sed dlopen failed"
+			|| die "sed dlopen failed"
 }
 
 pkg_postinst() {
