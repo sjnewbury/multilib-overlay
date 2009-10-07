@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt/qt-3.3.8b-r1.ebuild,v 1.8 2009/08/02 21:54:28 tommy Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt/qt-3.3.8b-r2.ebuild,v 1.2 2009/08/02 21:54:28 tommy Exp $
 
 EAPI=2
 
@@ -20,7 +20,7 @@ SRC_URI="ftp://ftp.trolltech.com/qt/source/qt-x11-${SRCTYPE}-${PV}.tar.gz
 LICENSE="|| ( QPL-1.0 GPL-2 GPL-3 )"
 
 SLOT="3"
-KEYWORDS="alpha amd64 hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="cups debug doc examples firebird ipv6 mysql nas nis odbc opengl postgres sqlite xinerama immqt immqt-bc"
 
 RDEPEND="
@@ -284,7 +284,7 @@ multilib-native_src_install_internal() {
 	cp include/private/*\.h "${D}"/${QTBASE}/include/private/
 
 	# pkg-config file
-	insinto ${QTBASE}/$(get_libdir)/pkgconfig
+	insinto /usr/$(get_libdir)/pkgconfig
 	doins "${S}"/lib/*.pc
 
 	prep_ml_includes ${QTBASE}/include
@@ -310,7 +310,6 @@ ROOTPATH=${QTBASE}/bin
 LDPATH=${libdirs:1}
 QMAKESPEC=${PLATFORM}
 MANPATH=${QTBASE}/doc/man
-PKG_CONFIG_PATH=${QTBASE}/$(get_libdir)/pkgconfig
 EOF
 
 	cat <<EOF > "${T}"/50qtdir3
