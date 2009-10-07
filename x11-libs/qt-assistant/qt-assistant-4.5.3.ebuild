@@ -1,13 +1,13 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-assistant/qt-assistant-4.5.1.ebuild,v 1.8 2009/08/18 12:54:02 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-assistant/qt-assistant-4.5.3.ebuild,v 1.1 2009/10/04 10:22:29 wired Exp $
 
 EAPI="2"
 inherit qt4-build multilib-native
 
 DESCRIPTION="The assistant help module for the Qt toolkit"
 SLOT="4"
-KEYWORDS="~alpha amd64 arm hppa ~ia64 ppc ~ppc64 -sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 -sparc ~x86 ~x86-fbsd"
 IUSE=""
 
 DEPEND="~x11-libs/qt-gui-${PV}[debug=,lib32?]
