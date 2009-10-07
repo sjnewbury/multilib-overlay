@@ -48,7 +48,7 @@ multilib-native_pkg_setup_internal() {
 multilib-native_src_prepare_internal() {
 	qt4-build_src_prepare
 	sed -e '/pg_config --libs/d' -i "${S}"/configure \
-		|| die 'Sed to fix postgresql usage in ./configure failed'
+		|| die 'sed to fix postgresql usage in ./configure failed.'
 }
 
 multilib-native_src_configure_internal() {
