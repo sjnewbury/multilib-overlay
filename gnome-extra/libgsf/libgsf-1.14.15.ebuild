@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/libgsf/libgsf-1.14.15.ebuild,v 1.1 2009/06/29 22:55:54 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-extra/libgsf/libgsf-1.14.15.ebuild,v 1.3 2009/10/08 03:16:20 tester Exp $
 
 EAPI=2
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="bzip2 doc gnome python"
 
 RDEPEND="
@@ -57,8 +57,6 @@ multilib-native_pkg_preinst_internal() {
 	gnome2_pkg_preinst
 	preserve_old_lib /usr/$(get_libdir)/libgsf-1.so.1
 	preserve_old_lib /usr/$(get_libdir)/libgsf-gnome-1.so.1
-	preserve_old_lib /usr/$(get_libdir)/libgsf-1.so.113
-	preserve_old_lib /usr/$(get_libdir)/libgsf-gnome-1.so.113
 }
 
 multilib-native_pkg_postinst_internal() {
@@ -70,8 +68,6 @@ multilib-native_pkg_postinst_internal() {
 
 	preserve_old_lib_notify /usr/$(get_libdir)/libgsf-1.so.1
 	preserve_old_lib_notify /usr/$(get_libdir)/libgsf-gnome-1.so.1
-	preserve_old_lib_notify /usr/$(get_libdir)/libgsf-1.so.113
-	preserve_old_lib_notify /usr/$(get_libdir)/libgsf-gnome-1.so.113
 }
 
 multilib-native_pkg_postrm_internal() {
