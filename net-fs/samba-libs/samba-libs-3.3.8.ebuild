@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba-libs/samba-libs-3.3.8.ebuild,v 1.1 2009/10/02 13:55:05 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba-libs/samba-libs-3.3.8.ebuild,v 1.2 2009/10/09 17:21:09 patrick Exp $
 
 EAPI="2"
 
@@ -131,8 +131,6 @@ multilib-native_src_install_internal() {
 	if use pam ; then
 		emake DESTDIR="${D}" installpammodules || die "emake installpammodules failed"
 	fi
-
-	rm -rf "${D}/usr/share/doc"
 
 	# Remove empty installation directories
 	rmdir \
