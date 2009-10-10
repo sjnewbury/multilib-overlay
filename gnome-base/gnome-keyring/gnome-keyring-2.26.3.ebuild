@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.26.3.ebuild,v 1.1 2009/07/19 18:34:02 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.26.3.ebuild,v 1.4 2009/10/08 03:09:27 tester Exp $
 
 EAPI="2"
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="debug doc hal pam test"
 # USE=valgrind is probably not a good idea for the tree
 
@@ -29,9 +29,10 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext[lib32?]
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9[lib32?]
+	dev-util/gtk-doc-am
 	doc? ( >=dev-util/gtk-doc-1.9 )"
 
-DOCS="AUTHORS ChangeLog NEWS README TODO kewring-intro.txt"
+DOCS="AUTHORS ChangeLog NEWS README TODO keyring-intro.txt"
 
 multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
@@ -49,12 +50,19 @@ multilib-native_pkg_setup_internal() {
 multilib-native_src_prepare_internal() {
 	gnome2_src_prepare
 
+	# remove extra assert to let doc build and tests pass, bug #267957
+	# taken from upstream bug #553164.
+	epatch "${FILESDIR}/${P}-assert.patch"
+
 	# Remove silly CFLAGS
 	sed 's:CFLAGS="$CFLAGS -Werror:CFLAGS="$CFLAGS:' \
-		-i configure.in configure || die "sed failed"
+		-i configure.in || die "sed failed"
 
-	# Fix intltoolize broken file, see upstream #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
+	# Fix parallel make test failure, bug #272450
+	epatch "${FILESDIR}"/${P}-parallel-tests.patch
+
+	intltoolize --force --copy --automake || die "intltoolize failed"
+	eautoreconf
 }
 
 src_test() {
