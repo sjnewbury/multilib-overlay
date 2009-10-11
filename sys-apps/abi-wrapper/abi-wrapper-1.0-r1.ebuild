@@ -12,6 +12,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64"
 IUSE=""
+DEPEND="app-portage/portage-utils"
 
 src_install() {
 	dobin ${FILESDIR}/abi-wrapper || die "could not install abi-wrapper"
@@ -31,10 +32,11 @@ pkg_postinst() {
 			# pointing to the abi-wrapper and generate a list of binaries
 			MY_FILES="${MY_FILES}\
 			$(cat ${PORTDIR_OVERLAY}/doc/prep_ml_binaries\
+			| sed "s/#.*$//"\
 			| cut -d " " -f 3-\
 			| tr " " "\n"\
 			| tr -s "\n"\
-			| sed "s@.*@&-${MY_ABI}@"\
+			| sed "s@/.*@&-${MY_ABI}@"\
 			| xargs -r ls 2> /dev/null\
 			| sed "s@-${MY_ABI}@@"\
 			| xargs -r ls -l\

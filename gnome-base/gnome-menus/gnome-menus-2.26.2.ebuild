@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-menus/gnome-menus-2.26.2.ebuild,v 1.1 2009/07/26 21:46:51 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-menus/gnome-menus-2.26.2.ebuild,v 1.3 2009/10/08 02:57:25 tester Exp $
 
 EAPI="2"
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gnome.org"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="debug python"
 
 RDEPEND=">=dev-libs/glib-2.15.2[lib32?]
@@ -52,7 +52,7 @@ multilib-native_src_install_internal() {
 	# Prefix menu, bug #256614
 	mv "${D}"/etc/xdg/menus/applications.menu \
 		"${D}"/etc/xdg/menus/gnome-applications.menu || die "menu move failed"
-	
+
 	exeinto /etc/X11/xinit/xinitrc.d/
 	doexe "${FILESDIR}/10-xdg-menu-gnome" || die "doexe failed"
 }
@@ -65,9 +65,10 @@ multilib-native_pkg_postinst_internal() {
 		python_mod_optimize $(python_get_sitedir)/GMenuSimpleEditor
 	fi
 
-	ewarn "If you loose icons in applications menus, please re-select your session"
-	ewarn "in your login manager, or set DESKTOP_SESSION in your startup script."
-	ewarn "See bug #256614 for details about this change."
+	ewarn "Due to bug #256614, you might loose icons in applications menus."
+	ewarn "If you use a login manager, please re-select your session."
+	ewarn "If you use startx and have no .xinitrc, just export XSESSION=Gnome."
+	ewarn "If you use startx and have .xinitrc, export XDG_MENU_PREFIX=gnome-."
 }
 
 multilib-native_pkg_postrm_internal() {

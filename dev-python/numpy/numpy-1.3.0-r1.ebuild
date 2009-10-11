@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.3.0-r1.ebuild,v 1.2 2009/08/29 19:07:57 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.3.0-r1.ebuild,v 1.5 2009/10/10 18:27:17 grobian Exp $
 
 EAPI="2"
 
@@ -13,14 +13,15 @@ DESCRIPTION="Fast array and numerical python library"
 SRC_URI="mirror://sourceforge/numpy/${P}.tar.gz"
 HOMEPAGE="http://numpy.scipy.org/"
 
-RDEPEND="lapack? ( virtual/cblas virtual/lapack )"
+RDEPEND="dev-python/setuptools
+	lapack? ( virtual/cblas virtual/lapack )"
 DEPEND="${RDEPEND}
 	lapack? ( dev-util/pkgconfig )
 	test? ( >=dev-python/nose-0.10 )"
 
 IUSE="lapack test"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 arm ~hppa ~ia64 ppc ~ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x64-solaris ~x86-solaris"
 LICENSE="BSD"
 
 RESTRICT_PYTHON_ABIS="3*"
@@ -28,10 +29,14 @@ RESTRICT_PYTHON_ABIS="3*"
 multilib-native_pkg_setup_internal() {
 	# whatever LDFLAGS set will break linking
 	# see progress in http://projects.scipy.org/scipy/numpy/ticket/573
-	if [[ -n "${LDFLAGS}" ]]; then
-		append-ldflags -shared
-	else
-		LDFLAGS="-shared"
+	# with the subtle difference that we don't want to break Darwin where
+	# -shared is not a valid linker argument
+	if [[ ${CHOST} != *-darwin* ]] ; then
+		if [[ -n "${LDFLAGS}" ]]; then
+			append-ldflags -shared
+		else
+			LDFLAGS="-shared"
+		fi
 	fi
 
 	# only one fortran to link with:
@@ -50,6 +55,9 @@ multilib-native_src_prepare_internal() {
 
 	epatch "${FILESDIR}/${P}-parisc.patch" # bug 277438
 	epatch "${FILESDIR}/${P}-alpha.patch" # bug 277438
+	epatch "${FILESDIR}/${P}-arm-sh.patch"
+
+	epatch "${FILESDIR}"/${P}-fenv-freebsd.patch # bug 279487
 
 	# Gentoo patch for ATLAS library names
 	sed -i \
@@ -69,7 +77,7 @@ multilib-native_src_prepare_internal() {
 				cblas | sed -e 's/^-I//' -e 's/ -I/:/g')
 			library_dirs = $(pkg-config --libs-only-L \
 				cblas blas lapack | sed -e \
-				's/^-L//' -e 's/ -L/:/g' -e 's/ //g'):/usr/$(get_libdir)
+				's/^-L//' -e 's/ -L/:/g' -e 's/ //g'):"${EPREFIX}"/usr/$(get_libdir)
 			atlas_libs = $(pkg-config --libs-only-l \
 				cblas blas | sed -e 's/^-l//' -e 's/ -l/, /g' -e 's/,.pthread//g')
 			lapack_libs = $(pkg-config --libs-only-l \
@@ -79,13 +87,13 @@ multilib-native_src_prepare_internal() {
 				cblas | sed -e 's/^-I//' -e 's/ -I/:/g')
 			library_dirs = $(pkg-config --libs-only-L \
 				cblas blas | sed -e 's/^-L//' -e 's/ -L/:/g' \
-				-e 's/ //g'):/usr/$(get_libdir)
+				-e 's/ //g'):"${EPREFIX}"/usr/$(get_libdir)
 			libraries = $(pkg-config --libs-only-l \
 				cblas blas | sed -e 's/^-l//' -e 's/ -l/, /g' -e 's/,.pthread//g')
 			[lapack_opt]
 			library_dirs = $(pkg-config --libs-only-L \
 				lapack | sed -e 's/^-L//' -e 's/ -L/:/g' \
-				-e 's/ //g'):/usr/$(get_libdir)
+				-e 's/ //g'):"${EPREFIX}"/usr/$(get_libdir)
 			libraries = $(pkg-config --libs-only-l \
 				lapack | sed -e 's/^-l//' -e 's/ -l/, /g' -e 's/,.pthread//g')
 		EOF
@@ -114,7 +122,7 @@ src_test() {
 multilib-native_src_install_internal() {
 	distutils_src_install ${NUMPY_FCONFIG}
 	dodoc THANKS.txt DEV_README.txt COMPATIBILITY
-	rm -f "${D}"/usr/lib/python*/site-packages/numpy/*.txt || die
+	rm -f "${ED}"/usr/lib/python*/site-packages/numpy/*.txt || die
 	docinto f2py
 	dodoc numpy/f2py/docs/*.txt || die "dodoc f2py failed"
 	doman numpy/f2py/f2py.1 || die "doman failed"

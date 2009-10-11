@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt/qt-3.3.8b-r1.ebuild,v 1.7 2009/01/17 16:41:01 nixnut Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt/qt-3.3.8b-r1.ebuild,v 1.8 2009/08/02 21:54:28 tommy Exp $
 
 EAPI=2
 

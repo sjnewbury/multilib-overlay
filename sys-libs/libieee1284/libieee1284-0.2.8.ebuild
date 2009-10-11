@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-libs/libieee1284/libieee1284-0.2.8.ebuild,v 1.9 2007/09/18 13:30:16 vapier Exp $
 
+EAPI="2"
+
 inherit autotools eutils multilib-native
 
 DESCRIPTION="Library to query devices using IEEE1284"
@@ -16,6 +18,7 @@ IUSE="doc"
 
 RDEPEND=""
 DEPEND="${RDEPEND}
+	dev-lang/python[lib32?]
 	doc? (
 		app-text/docbook-sgml-utils
 		>=app-text/docbook-sgml-dtd-4.1

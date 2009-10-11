@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/www-plugins/adobe-flash/adobe-flash-10.0.32.18.ebuild,v 1.3 2009/08/03 20:12:28 maekke Exp $
 
-EAPI=1
+EAPI="2"
 inherit nsplugins rpm multilib toolchain-funcs
 
 MY_32B_URI="http://fpdownload.macromedia.com/get/flashplayer/current/flash-plugin-${PV}-release.i386.rpm"

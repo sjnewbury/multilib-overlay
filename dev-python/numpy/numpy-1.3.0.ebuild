@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.3.0.ebuild,v 1.8 2009/08/02 14:29:52 nixnut Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.3.0.ebuild,v 1.12 2009/08/29 19:07:57 arfrever Exp $
 
 NEED_PYTHON=2.4
 EAPI=2
@@ -10,14 +10,15 @@ DESCRIPTION="Fast array and numerical python library"
 SRC_URI="mirror://sourceforge/numpy/${P}.tar.gz"
 HOMEPAGE="http://numpy.scipy.org/"
 
-RDEPEND="lapack? ( virtual/cblas virtual/lapack )"
+RDEPEND="dev-python/setuptools
+	lapack? ( virtual/cblas virtual/lapack )"
 DEPEND="${RDEPEND}
 	lapack? ( dev-util/pkgconfig )
 	test? ( >=dev-python/nose-0.10 )"
 
 IUSE="lapack test"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ppc ~ppc64 ~s390 ~sh sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ppc ~ppc64 s390 sh sparc x86 ~x86-fbsd"
 LICENSE="BSD"
 
 # whatever LDFLAGS set will break linking
@@ -45,6 +46,7 @@ multilib-native_src_prepare_internal() {
 
 	epatch "${FILESDIR}/${P}-parisc.patch" # bug 277438
 	epatch "${FILESDIR}/${P}-alpha.patch" # bug 277438
+	epatch "${FILESDIR}/${P}-arm-sh.patch"
 
 	# Gentoo patch for ATLAS library names
 	sed -i \

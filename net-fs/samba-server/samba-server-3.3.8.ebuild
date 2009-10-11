@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba-server/samba-server-3.3.8.ebuild,v 1.1 2009/10/02 13:55:28 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba-server/samba-server-3.3.8.ebuild,v 1.3 2009/10/09 17:21:33 patrick Exp $
 
 EAPI="2"
 
@@ -69,6 +69,9 @@ multilib-native_src_prepare_internal() {
 	sed -i \
 		-e '/^LINK_LIBNETAPI/d' \
 		configure || die "sed failed"
+
+	#Fixing crash in dns_register_smbd_reply
+	epatch "${CONFDIR}/${PN}-3.3.7-dns-register.patch"
 }
 
 multilib-native_src_configure_internal() {
