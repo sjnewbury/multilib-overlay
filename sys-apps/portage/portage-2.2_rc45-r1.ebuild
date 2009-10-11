@@ -1,29 +1,34 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/portage/portage-2.2_rc33.ebuild,v 1.4 2009/06/07 07:54:03 zmedico Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/portage/portage-2.2_rc45.ebuild,v 1.1 2009/10/11 00:35:09 zmedico Exp $
 
+# Require EAPI 2 since we now require at least python-2.6 (for python 3
+# syntax support) which also requires EAPI 2.
+EAPI=2
 inherit eutils git multilib python
 
 EGIT_REPO_URI="git://github.com/TommyD/gentoo-portage-multilib.git"
-EGIT_TREE="372a6c5a66b0b0d6b01e5d36aaf736edbf8e12a6"
+EGIT_TREE="da6797b1c809f78ef9ebb2ed6945c279b5fa664c"
 DESCRIPTION="Portage is the package management and distribution system for Gentoo"
 HOMEPAGE="http://www.gentoo.org/proj/en/portage/index.xml"
 LICENSE="GPL-2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
 PROVIDE="virtual/portage"
 SLOT="0"
-IUSE="build doc epydoc selinux linguas_pl"
+IUSE="build doc epydoc linguas_pl python3 selinux"
 
-python_dep=">=dev-lang/python-2.5 <dev-lang/python-3.0"
+python_dep="python3? ( =dev-lang/python-3* )
+	!python3? ( || ( ( >=dev-lang/python-2.6 <dev-lang/python-3 ) >=dev-lang/python-3 ) )"
 
+# the pysqlite blocker is for bug #282760
 DEPEND="${python_dep}
 	!build? ( >=sys-apps/sed-4.0.5 )
 	doc? ( app-text/xmlto ~app-text/docbook-xml-dtd-4.4 )
-	epydoc? ( >=dev-python/epydoc-2.0 )"
+	epydoc? ( >=dev-python/epydoc-2.0 !<=dev-python/pysqlite-2.4.1 )"
 RDEPEND="${python_dep}
 	!build? ( >=sys-apps/sed-4.0.5
 		>=app-shells/bash-3.2_p17
-		|| ( >=app-admin/eselect-1.1 >=app-admin/eselect-news-20071201 ) )
+		>=app-admin/eselect-1.2 )
 	elibc_FreeBSD? ( sys-freebsd/freebsd-bin )
 	elibc_glibc? ( >=sys-apps/sandbox-1.6 )
 	elibc_uclibc? ( >=sys-apps/sandbox-1.6 )
@@ -38,16 +43,23 @@ PDEPEND="
 # coreutils-6.4 rdep is for date format in emerge-webrsync #164532
 # rsync-2.6.4 rdep is for the --filter option #167668
 
-src_unpack() {
-	git_src_unpack
-	cd "${S}"
+pkg_setup() {
+	if [[ $(python -c 'import sys ; sys.stdout.write(sys.hexversion >= 0x2060000 and "good" or "bad")') != good ]] ; then
+		die "This version of portage requires at least python-2.6 to be selected as the default python interpreter (see \`eselect python --help\`)."
+	fi
+}
+
+src_prepare() {
 	einfo "Setting portage.VERSION to ${PVR} ..."
 	sed -i "s/^VERSION=.*/VERSION=\"${PVR}\"/" pym/portage/__init__.py || \
 		die "Failed to patch portage.VERSION"
+
+	if use python3; then
+		sed -e '1s/\(^#!.*\)python\(.*$\)/\1python3\2/' -i $(find -perm /111 -type f) || die "Conversion of shebangs failed"
+	fi
 }
 
 src_compile() {
-
 	if use doc; then
 		cd "${S}"/doc
 		touch fragment/date
@@ -66,7 +78,8 @@ src_compile() {
 		my_modules="$(find "${S}/pym" -name "*.py" \
 			| sed -e 's:/__init__.py$::' -e 's:\.py$::' -e "s:^${S}/pym/::" \
 			 -e 's:/:.:g' | sort)" || die "error listing modules"
-		PYTHONPATH="${S}/pym:${PYTHONPATH}" epydoc -o "${WORKDIR}"/api \
+		PYTHONPATH=${S}/pym:${PYTHONPATH:+:}${PYTHONPATH} \
+			epydoc -o "${WORKDIR}"/api \
 			-qqqqq --no-frames --show-imports $epydoc_opts \
 			--name "${PN}" --url "${HOMEPAGE}" \
 			${my_modules} || die "epydoc failed"
@@ -74,8 +87,8 @@ src_compile() {
 }
 
 src_test() {
-	./pym/portage/tests/runTests || \
-		die "test(s) failed"
+	PYTHONPATH=${S}/pym:${PYTHONPATH:+:}${PYTHONPATH} \
+		./pym/portage/tests/runTests || die "test(s) failed"
 }
 
 src_install() {
@@ -114,7 +127,6 @@ src_install() {
 	local x symlinks
 	for x in $(find "$S"/bin -type d) ; do
 		x=${x#$S/}
-		dodir $portage_base/$x || die "dodir failed"
 		exeinto $portage_base/$x || die "exeinto failed"
 		cd "$S"/$x || die "cd failed"
 		doexe $(find . -mindepth 1 -maxdepth 1 -type f ! -type l) || \
@@ -184,14 +196,12 @@ src_install() {
 
 pkg_preinst() {
 	if ! use build && ! has_version dev-python/pycrypto && \
-		has_version '>=dev-lang/python-2.5' ; then
-		if ! built_with_use '>=dev-lang/python-2.5' ssl ; then
-			ewarn "If you are an ebuild developer and you plan to commit ebuilds"
-			ewarn "with this system then please install dev-python/pycrypto or"
-			ewarn "enable the ssl USE flag for >=dev-lang/python-2.5 in order"
-			ewarn "to enable RMD160 hash support."
-			ewarn "See bug #198398 for more information."
-		fi
+		! has_version '>=dev-lang/python-2.6[ssl]' ; then
+		ewarn "If you are an ebuild developer and you plan to commit ebuilds"
+		ewarn "with this system then please install dev-python/pycrypto or"
+		ewarn "enable the ssl USE flag for >=dev-lang/python-2.6 in order"
+		ewarn "to enable RMD160 hash support."
+		ewarn "See bug #198398 for more information."
 	fi
 	if [ -f "${ROOT}/etc/make.globals" ]; then
 		rm "${ROOT}/etc/make.globals"
