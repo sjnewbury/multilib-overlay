@@ -178,6 +178,7 @@ multilib-native_src_install_internal() {
 	insinto ${QTTRANSDIR}
 	doins translations/*.qm || die "doins translations failed"
 
+	setqtenv
 	fix_library_files
 
 	# List all the multilib libdirs
