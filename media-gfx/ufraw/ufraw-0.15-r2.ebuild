@@ -1,6 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/ufraw/ufraw-0.15-r2.ebuild,v 1.4 2009/07/04 12:29:57 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/ufraw/ufraw-0.15-r2.ebuild,v 1.6 2009/10/05 22:01:30 volkmar Exp $
+
+EAPI="2"
 
 inherit fdo-mime gnome2-utils autotools multilib-native
 
@@ -10,7 +12,7 @@ SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~ppc64 ~x86"
+KEYWORDS="~alpha ~amd64 ~arm ~ppc ~ppc64 ~x86"
 IUSE="contrast exif lensfun gimp gnome openmp timezone"
 
 RDEPEND="
