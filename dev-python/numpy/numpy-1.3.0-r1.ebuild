@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.3.0-r1.ebuild,v 1.5 2009/10/10 18:27:17 grobian Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.3.0-r1.ebuild,v 1.6 2009/10/11 13:11:34 grobian Exp $
 
 EAPI="2"
 
@@ -120,6 +120,7 @@ src_test() {
 }
 
 multilib-native_src_install_internal() {
+	[[ -z ${ED} ]] && local ED=${D}
 	distutils_src_install ${NUMPY_FCONFIG}
 	dodoc THANKS.txt DEV_README.txt COMPATIBILITY
 	rm -f "${ED}"/usr/lib/python*/site-packages/numpy/*.txt || die
