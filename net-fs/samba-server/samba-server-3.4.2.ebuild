@@ -26,7 +26,7 @@ DEPEND="!<net-fs/samba-3.3
 	zeroconf? ( !avahi? ( || ( net-dns/avahi[mdnsresponder-compat,lib32?] net-misc/mDNSResponder[lib32?] ) ) )
 	caps? ( sys-libs/libcap[lib32?] )
 	cups? ( net-print/cups[lib32?] )
-	debug? ( dev-libs/dmalloc )
+	debug? ( dev-libs/dmalloc[lib32?] )
 	ldap? ( net-nds/openldap[lib32?] )
 	syslog? ( virtual/logger )
 	virtual/tdb
