@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba-libs/samba-libs-3.4.2.ebuild,v 1.1 2009/10/09 17:21:09 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba-libs/samba-libs-3.4.2.ebuild,v 1.4 2009/10/11 17:27:59 lxnay dead $
 
 EAPI="2"
 
@@ -8,14 +8,14 @@ inherit pam confutils versionator multilib multilib-native
 
 MY_P="samba-${PV}"
 
-DESCRIPTION="samba-libs"
+DESCRIPTION="Library bits of the samba network filesystem"
 HOMEPAGE="http://www.samba.org/"
 SRC_URI="mirror://samba/${MY_P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~hppa ~ppc64 ~x86"
 IUSE="samba4 ads aio caps cluster cups debug examples ldap pam syslog winbind
-	+tdb +talloc +netapi smbclient smbsharemodes addns tools"
+	+tdb +talloc +netapi +smbclient smbsharemodes addns tools"
 
 DEPEND="dev-libs/popt[lib32?]
 	virtual/libiconv
@@ -23,6 +23,7 @@ DEPEND="dev-libs/popt[lib32?]
 	caps? ( sys-libs/libcap[lib32?] )
 	cluster? ( dev-db/ctdb )
 	cups? ( net-print/cups[lib32?] )
+	debug? ( dev-libs/dmalloc[lib32?] )
 	ldap? ( net-nds/openldap[lib32?] )
 	pam? ( virtual/pam[lib32?]
 		winbind? ( dev-libs/iniparser[lib32?] ) )
@@ -71,6 +72,7 @@ multilib-native_pkg_setup_internal() {
 	if use talloc && has_version sys-libs/talloc ; then
 		die "sys-libs/talloc already installed, please disable talloc use flag"
 	fi
+
 }
 
 multilib-native_src_prepare_internal() {
@@ -99,7 +101,6 @@ multilib-native_src_prepare_internal() {
 	./autogen.sh || die "autogen.sh failed"
 
 	# ensure that winbind has correct ldflags (QA notice)
-
 	sed -i \
 		-e 's|LDSHFLAGS="|LDSHFLAGS="\\${LDFLAGS} |g' \
 		configure || die "sed failed"
@@ -205,6 +206,7 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_compile_internal() {
+
 	# compile libs
 	if use tdb ; then
 		einfo "make tdb library"
@@ -278,21 +280,18 @@ multilib-native_src_install_internal() {
 	fi
 
 	# install modules
-
 	if use pam ; then
 		einfo "install pam modules"
 		emake installpammodules DESTDIR="${D}" || die "emake installpammodules failed"
 	fi
 
-	rm -rf "${D}/usr/share/doc"
-
 	# Remove empty installation directories
 	rmdir \
-	"${D}/usr/$(get_libdir)/samba" \
-	"${D}/usr"/{sbin,bin} \
-	"${D}/usr/share"/{man,locale,} \
-	"${D}/var"/{run,lib/samba/private,lib/samba,lib,cache/samba,cache,} \
-#	|| die "tried to remove non-empty dirs, this seems like a bug in the ebuild"
+		"${D}/usr/$(get_libdir)/samba" \
+		"${D}/usr"/{sbin,bin} \
+		"${D}/usr/share"/{man,locale,} \
+		"${D}/var"/{run,lib/samba/private,lib/samba,lib,cache/samba,cache,} \
+	#	|| die "tried to remove non-empty dirs, this seems like a bug in the ebuild"
 
 	# Nsswitch extensions. Make link for wins and winbind resolvers
 	if use winbind ; then
