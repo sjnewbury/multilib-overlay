@@ -1,17 +1,12 @@
 First, if you want to install and use it via layman:
 
 layman -a multilib
-cd $PORTDIR_OVERLAY/layman/multilib ($PORTDIR_OVERLAY is for most probably /usr/local/portage)
-git checkout origin/portage-multilib
-git checkout -b portage-multilib
+cd $PORTDIR_OVERLAY/layman/multilib ($PORTDIR_OVERLAY is for most 
+probably /usr/local/portage)
+git checkout -b portage-multilib origin/portage-multilib
 
-then open .git/config with your favorite editor and add the following lines:
-
-[branch "portage-multilib"]
-        remote = origin
-        merge = refs/heads/portage-multilib
-
-After that, every layman sync should update the branch as normal, switching is done with
+After that, every layman sync should update the branch as normal, 
+switching is done with
 
 git checkout <branch>
 
@@ -25,11 +20,16 @@ First, install the modified portage version:
 emerge -av1 portage
 
 2.
--check the target of /etc/make.profile, rm /etc/make.profile, mkdir /etc/make.profile,
--echo /path/to/current/profile >> /etc/make.profile/parent, echo /path/to/multilib-overlay/profiles/base >> /etc/make.profile/parent
+check the target of /etc/make.profile
+rm /etc/make.profile
+mkdir /etc/make.profile
+echo /path/to/current/profile >> /etc/make.profile/parent
+echo /path/to/multilib-overlay/profiles/base >> /etc/make.profile/parent
 
 3.
-let the multilib overlay eclasses override the main tree ones: add the following to /etc/portage/repos.conf or create it with the following content:
+let the multilib overlay eclasses override the main tree ones: add the 
+following to /etc/portage/repos.conf or create it with the following
+content:
 
 [DEFAULT]
 eclass-overrides = gentoo multilib
@@ -42,6 +42,7 @@ then recompile world:
 
 emerge -e world
 
-(you can also use /bin/add_lib32 to add the useflag to the database, but this branch does also remove all .la files, so you might have to run revdep-rebuild or lafilefixer every time you built a 
-package with multilib-portage)
-
+(you can also use /bin/add_lib32 to add the useflag to the database,
+but this branch does also remove all .la files, so you might have to
+run revdep-rebuild or lafilefixer every time you built a package with 
+multilib-portage)
