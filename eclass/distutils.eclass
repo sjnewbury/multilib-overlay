@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/distutils.eclass,v 1.64 2009/09/11 20:03:51 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/distutils.eclass,v 1.65 2009/10/11 13:38:12 arfrever Exp $
 
 # @ECLASS: distutils.eclass
 # @MAINTAINER:
@@ -109,14 +109,14 @@ distutils_src_compile() {
 	if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
 		if [[ -n "${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES}" ]]; then
 			building() {
-				echo "$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build "$@"
-				"$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build "$@"
+				echo ${python} setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build "$@"
+				${python} setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build "$@"
 			}
 			python_execute_function -s building "$@"
 		else
 			building() {
-				echo "$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build -b "build-${PYTHON_ABI}" "$@"
-				"$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build -b "build-${PYTHON_ABI}" "$@"
+				echo ${python} setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build -b "build-${PYTHON_ABI}" "$@"
+				${python} setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build -b "build-${PYTHON_ABI}" "$@"
 			}
 			python_execute_function building "$@"
 		fi
@@ -165,11 +165,11 @@ distutils_src_install() {
 				# a package uses distutils but does not install anything
 				# in site-packages. (eg. dev-java/java-config-2.x)
 				# - liquidx (14/08/2006)
-				pylibdir="$("$(PYTHON)" -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')"
+				pylibdir="$(${python} -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')"
 				[[ -n "${pylibdir}" ]] && dodir "${pylibdir}"
 
-				echo "$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" install --root="${D}" --no-compile "$@"
-				"$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" install --root="${D}" --no-compile "$@"
+				echo ${python} setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" install --root="${D}" --no-compile "$@"
+				${python} setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" install --root="${D}" --no-compile "$@"
 			}
 			python_execute_function -s installation "$@"
 		else
@@ -178,11 +178,11 @@ distutils_src_install() {
 				# a package uses distutils but does not install anything
 				# in site-packages. (eg. dev-java/java-config-2.x)
 				# - liquidx (14/08/2006)
-				pylibdir="$("$(PYTHON)" -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')"
+				pylibdir="$(${python} -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')"
 				[[ -n "${pylibdir}" ]] && dodir "${pylibdir}"
 
-				echo "$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build -b "build-${PYTHON_ABI}" install --root="${D}" --no-compile "$@"
-				"$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build -b "build-${PYTHON_ABI}" install --root="${D}" --no-compile "$@"
+				echo ${python} setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build -b "build-${PYTHON_ABI}" install --root="${D}" --no-compile "$@"
+				${python} setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build -b "build-${PYTHON_ABI}" install --root="${D}" --no-compile "$@"
 			}
 			python_execute_function installation "$@"
 		fi
@@ -234,9 +234,7 @@ distutils_pkg_postinst() {
 	fi
 
 	if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
-		for pymod in ${PYTHON_MODNAME}; do
-			python_mod_optimize "${pymod}"
-		done
+		python_mod_optimize ${PYTHON_MODNAME}
 	else
 		for pymod in ${PYTHON_MODNAME}; do
 			python_mod_optimize "$(python_get_sitedir)/${pymod}"
@@ -262,17 +260,17 @@ distutils_pkg_postrm() {
 	fi
 
 	if [[ -n "${PYTHON_MODNAME}" ]]; then
-		for pymod in ${PYTHON_MODNAME}; do
-			if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
-				python_mod_cleanup "${pymod}"
-			else
+		if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
+			python_mod_cleanup ${PYTHON_MODNAME}
+		else
+			for pymod in ${PYTHON_MODNAME}; do
 				for pylibdir in "${ROOT}"/usr/$(get_libdir)/python*; do
 					if [[ -d "${pylibdir}/site-packages/${pymod}" ]]; then
 						python_mod_cleanup "${pylibdir#${ROOT}}/site-packages/${pymod}"
 					fi
 				done
-			fi
-		done
+			done
+		fi
 	else
 		python_mod_cleanup
 	fi
