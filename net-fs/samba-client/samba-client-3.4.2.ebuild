@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba-client/samba-client-3.4.2.ebuild,v 1.1 2009/10/09 17:20:45 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba-client/samba-client-3.4.2.ebuild,v 1.2 2009/10/10 22:51:13 patrick Exp $
 
 EAPI="2"
 
@@ -8,7 +8,7 @@ inherit pam confutils versionator multilib eutils toolchain-funcs multilib-nativ
 
 MY_P="samba-${PV}"
 
-DESCRIPTION="samba-client"
+DESCRIPTION="Client bits of the samba network filesystem"
 HOMEPAGE="http://www.samba.org/"
 SRC_URI="mirror://samba/${MY_P}.tar.gz"
 LICENSE="GPL-3"
@@ -29,6 +29,7 @@ DEPEND="!<net-fs/samba-3.3
 		zeroconf? ( || ( net-dns/avahi[mdnsresponder-compat,lib32?] net-misc/mDNSResponder[lib32?] ) )
 		caps? ( sys-libs/libcap[lib32?] )
 		cups? ( net-print/cups[lib32?] )
+		debug? ( dev-libs/dmalloc[lib32?] )
 		ldap? ( net-nds/openldap[lib32?] )
 		syslog? ( virtual/logger )
 		virtual/tdb
@@ -58,35 +59,35 @@ multilib-native_src_prepare_internal() {
 	cd ".."
 
 	epatch \
-	"${FILESDIR}/samba-3.4.2-add-zlib-linking.patch" \
-	"${FILESDIR}/samba-3.4.2-missing_includes.patch" \
-	"${FILESDIR}/samba-3.4.2-fix-samba4-automake.patch" \
-	"${FILESDIR}/samba-3.4.2-insert-AC_LD_VERSIONSCRIPT.patch"
-#	"${FILESDIR}/samba-3.4.2-upgrade-tevent-version.patch" \
+		"${FILESDIR}/samba-3.4.2-add-zlib-linking.patch" \
+		"${FILESDIR}/samba-3.4.2-missing_includes.patch" \
+		"${FILESDIR}/samba-3.4.2-fix-samba4-automake.patch" \
+		"${FILESDIR}/samba-3.4.2-insert-AC_LD_VERSIONSCRIPT.patch"
+#		"${FILESDIR}/samba-3.4.2-upgrade-tevent-version.patch" \
 
 	cp "${FILESDIR}/samba-3.4.2-lib.tevent.python.mk" "lib/tevent/python.mk"
 
 	cd "source3"
 
 #	sed -i \  
-#	-e 's|@LIBTALLOC_SHARED@||g' \
-#	-e 's|@LIBTDB_SHARED@||g' \
-#	-e 's|@LIBWBCLIENT_SHARED@||g' \
-#	-e 's|@LIBNETAPI_SHARED@||g' \
-#	-e 's|$(REG_SMBCONF_OBJ) @LIBNETAPI_STATIC@ $(LIBNET_OBJ)|$(REG_SMBCONF_OBJ) @LIBNETAPI_LIBS@ $(LIBNET_OBJ)|' \
-#	Makefile.in || die "sed failed"
+#		-e 's|@LIBTALLOC_SHARED@||g' \
+#		-e 's|@LIBTDB_SHARED@||g' \
+#		-e 's|@LIBWBCLIENT_SHARED@||g' \
+#		-e 's|@LIBNETAPI_SHARED@||g' \
+#		-e 's|$(REG_SMBCONF_OBJ) @LIBNETAPI_STATIC@ $(LIBNET_OBJ)|$(REG_SMBCONF_OBJ) @LIBNETAPI_LIBS@ $(LIBNET_OBJ)|' \
+#		Makefile.in || die "sed failed"
 
 	./autogen.sh || die "autogen.sh failed"
 
-#	sed -i \  
-#	-e 's|"lib32" ||' \
-#	-e 's|if test -d "$i/$l" ;|if test -d "$i/$l" -o -L "$i/$l";|' \
-#	configure || die "sed failed"
+#	sed -i \
+#		-e 's|"lib32" ||' \
+#		-e 's|if test -d "$i/$l" ;|if test -d "$i/$l" -o -L "$i/$l";|' \
+#		configure || die "sed failed"
 
 	# Upstream doesn't want us to link certain things dynamically, but those binaries here seem to work
 #	sed -i \
-#	-e '/^LINK_LIBNETAPI/d' \
-#	configure || die "sed failed"
+#		-e '/^LINK_LIBNETAPI/d' \
+#		configure || die "sed failed"
 }
 
 multilib-native_src_configure_internal() {
@@ -104,7 +105,6 @@ multilib-native_src_configure_internal() {
 			die "No supported kerberos provider detected"
 		fi
 	fi
-
 
 	# Filter out -fPIE
 	[[ ${CHOST} == *-*bsd* ]] && myconf="${myconf} --disable-pie"
@@ -129,54 +129,54 @@ multilib-native_src_configure_internal() {
 		# - --without-dce-dfs and --without-nisplus-home can't be passed to configure but are disabled by default
 		# - current DNS/SD support in the client is via the mdnsresponder-compat api in avahi
 		econf ${myconf} \
-		--sysconfdir=/etc/samba \
-		--localstatedir=/var \
-		$(use_enable debug developer) \
-		--enable-largefile \
-		--enable-socket-wrapper \
-		--enable-nss-wrapper \
-		--disable-swat \
-		$(use_enable debug dmalloc) \
-		$(use minimal && echo "--disable-cups" || echo "$(use_enable cups)") \
-		--disable-iprint \
-		--disable-fam \
-		--enable-shared-libs \
-		$(use minimal && echo "--disable-dnssd" || echo "$(use_enable avahi dnssd)") \
-		--disable-avahi \
-		--with-fhs \
-		--with-privatedir=/var/lib/samba/private \
-		--with-rootsbindir=/var/cache/samba \
-		--with-lockdir=/var/cache/samba \
-		--with-swatdir=/usr/share/doc/${PF}/swat \
-		--with-configdir=/etc/samba \
-		--with-logfilebase=/var/log/samba \
-		--with-pammodulesdir=$(getpam_mod_dir) \
-		--without-afs \
-		--without-fake-kaserver \
-		--without-vfs-afsacl \
-		$(use minimal && echo "--without-ldap" || echo "$(use_with ldap)") \
-		$(use minimal && echo "--without-ads" || echo "$(use_with ads)") \
-		$(use minimal && echo "--without-krb5" || echo "$(use_with ads krb5 /usr)") \
-		$(use minimal && echo "--without-dnsupdate" || echo "$(use_with ads dnsupdate)") \
-		--without-automount \
-		--without-cifsmount \
-		--without-cifsupcall \
-		--without-pam \
-		--without-pam_smbpass \
-		$(use minimal && echo "--without-syslog" || echo "$(use_with syslog)") \
-		--without-quotas \
-		--without-sys-quotas \
-		--without-utmp \
-		--without-lib{talloc,tdb,netapi,smbclient,smbsharemodes} \
-		--without-libaddns \
-		$(use minimal && echo "--without-ctdb" || echo "$(use_with cluster ctdb /usr)") \
-		$(use minimal && echo "--without-cluster" || echo "$(use_with cluster cluster-support)") \
-		--without-acl-support \
-		$(use minimal && echo "--without-aio-support" || echo "$(use_with aio aio-support)") \
-		--with-sendfile-support \
-		$(use minimal && echo "--without-winbind" || echo "$(use_with winbind)") \
-		--without-included-popt \
-		--without-included-iniparser
+			--sysconfdir=/etc/samba \
+			--localstatedir=/var \
+			$(use_enable debug developer) \
+			--enable-largefile \
+			--enable-socket-wrapper \
+			--enable-nss-wrapper \
+			--disable-swat \
+			$(use_enable debug dmalloc) \
+			$(use minimal && echo "--disable-cups" || echo "$(use_enable cups)") \
+			--disable-iprint \
+			--disable-fam \
+			--enable-shared-libs \
+			$(use minimal && echo "--disable-dnssd" || echo "$(use_enable avahi dnssd)") \
+			--disable-avahi \
+			--with-fhs \
+			--with-privatedir=/var/lib/samba/private \
+			--with-rootsbindir=/var/cache/samba \
+			--with-lockdir=/var/cache/samba \
+			--with-swatdir=/usr/share/doc/${PF}/swat \
+			--with-configdir=/etc/samba \
+			--with-logfilebase=/var/log/samba \
+			--with-pammodulesdir=$(getpam_mod_dir) \
+			--without-afs \
+			--without-fake-kaserver \
+			--without-vfs-afsacl \
+			$(use minimal && echo "--without-ldap" || echo "$(use_with ldap)") \
+			$(use minimal && echo "--without-ads" || echo "$(use_with ads)") \
+			$(use minimal && echo "--without-krb5" || echo "$(use_with ads krb5 /usr)") \
+			$(use minimal && echo "--without-dnsupdate" || echo "$(use_with ads dnsupdate)") \
+			--without-automount \
+			--without-cifsmount \
+			--without-cifsupcall \
+			--without-pam \
+			--without-pam_smbpass \
+			$(use minimal && echo "--without-syslog" || echo "$(use_with syslog)") \
+			--without-quotas \
+			--without-sys-quotas \
+			--without-utmp \
+			--without-lib{talloc,tdb,netapi,smbclient,smbsharemodes} \
+			--without-libaddns \
+			$(use minimal && echo "--without-ctdb" || echo "$(use_with cluster ctdb /usr)") \
+			$(use minimal && echo "--without-cluster" || echo "$(use_with cluster cluster-support)") \
+			--without-acl-support \
+			$(use minimal && echo "--without-aio-support" || echo "$(use_with aio aio-support)") \
+			--with-sendfile-support \
+			$(use minimal && echo "--without-winbind" || echo "$(use_with winbind)") \
+			--without-included-popt \
+			--without-included-iniparser
 	fi
 }
 

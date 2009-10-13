@@ -9,6 +9,10 @@ if [ ! "${1}" ] && [ ! "${2}" ]; then
 	exit 1
 fi
 
-URI="http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/eclass/"
+URI="http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/"
 
-wget "${URI}${1}?rev=${2}"
+if [ "${2}" ]; then
+	wget "${URI}${1}?rev=${2}"
+else
+	wget "${URI}${1}"
+fi

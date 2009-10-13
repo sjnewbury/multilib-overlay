@@ -26,7 +26,7 @@ DEPEND="!<net-fs/samba-3.3
 	zeroconf? ( !avahi? ( || ( net-dns/avahi[mdnsresponder-compat,lib32?] net-misc/mDNSResponder[lib32?] ) ) )
 	caps? ( sys-libs/libcap[lib32?] )
 	cups? ( net-print/cups[lib32?] )
-	debug? ( dev-libs/dmalloc )
+	debug? ( dev-libs/dmalloc[lib32?] )
 	ldap? ( net-nds/openldap[lib32?] )
 	syslog? ( virtual/logger )
 	virtual/tdb
@@ -35,6 +35,7 @@ DEPEND="!<net-fs/samba-3.3
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${MY_P}/source3"
+
 RESTRICT="test"
 
 CONFDIR="${FILESDIR}/$(get_version_component_range 1-2)"
@@ -44,6 +45,7 @@ BINPROGS="bin/testparm bin/smbstatus bin/smbcontrol bin/pdbedit
 	bin/eventlogadm bin/ldbedit bin/ldbsearch bin/ldbadd bin/ldbdel bin/ldbmodify bin/ldbrename"
 
 multilib-native_pkg_setup_internal() {
+	confutils_use_depend_all samba4 ads
 	confutils_use_depend_all ads ldap
 }
 
@@ -52,23 +54,23 @@ multilib-native_src_prepare_internal() {
 	cd ".."
 
 	epatch \
-	"${FILESDIR}/samba-3.4.2-add-zlib-linking.patch" \
-	"${FILESDIR}/samba-3.4.2-missing_includes.patch" \
-	"${FILESDIR}/samba-3.4.2-fix-samba4-automake.patch" \
-	"${FILESDIR}/samba-3.4.2-insert-AC_LD_VERSIONSCRIPT.patch"
-#	"${FILESDIR}/samba-3.4.2-upgrade-tevent-version.patch" \
+		"${FILESDIR}/samba-3.4.2-add-zlib-linking.patch" \
+		"${FILESDIR}/samba-3.4.2-missing_includes.patch" \
+		"${FILESDIR}/samba-3.4.2-fix-samba4-automake.patch" \
+		"${FILESDIR}/samba-3.4.2-insert-AC_LD_VERSIONSCRIPT.patch"
+#		"${FILESDIR}/samba-3.4.2-upgrade-tevent-version.patch" \
 
 	cp "${FILESDIR}/samba-3.4.2-lib.tevent.python.mk" "lib/tevent/python.mk"
 
 	cd "source3"
 
 #	sed -i \
-#	-e 's|@LIBTALLOC_SHARED@||g' \
-#	-e 's|@LIBTDB_SHARED@||g' \
-#	-e 's|@LIBWBCLIENT_SHARED@||g' \
-#	-e 's|@LIBNETAPI_SHARED@||g' \
-#	-e 's|$(REG_SMBCONF_OBJ) @LIBNETAPI_STATIC@ $(LIBNET_OBJ)|$(REG_SMBCONF_OBJ) @LIBNETAPI_LIBS@ $(LIBNET_OBJ)|' \
-#	Makefile.in || die "sed failed"
+#		-e 's|@LIBTALLOC_SHARED@||g' \
+#		-e 's|@LIBTDB_SHARED@||g' \
+#		-e 's|@LIBWBCLIENT_SHARED@||g' \
+#		-e 's|@LIBNETAPI_SHARED@||g' \
+#		-e 's|$(REG_SMBCONF_OBJ) @LIBNETAPI_STATIC@ $(LIBNET_OBJ)|$(REG_SMBCONF_OBJ) @LIBNETAPI_LIBS@ $(LIBNET_OBJ)|' \
+#		Makefile.in || die "sed failed"
 
 	./autogen.sh || die "autogen.sh failed"
 
@@ -76,7 +78,6 @@ multilib-native_src_prepare_internal() {
 #		-e 's|"lib32" ||' \
 #		-e 's|if test -d "$i/$l" ;|if test -d "$i/$l" -o -L "$i/$l";|' \
 #		configure || die "sed failed"
-
 
 	# Upstream doesn't want us to link certain things dynamically, but those binaries here seem to work
 #	sed -i \
@@ -101,7 +102,6 @@ multilib-native_src_configure_internal() {
 		fi
 	fi
 
-
 	# Filter out -fPIE
 	[[ ${CHOST} == *-*bsd* ]] && myconf="${myconf} --disable-pie"
 	use hppa && myconf="${myconf} --disable-pie"
@@ -125,53 +125,53 @@ multilib-native_src_configure_internal() {
 	# - --without-dce-dfs and --without-nisplus-home can't be passed to configure but are disabled by default
 
 	econf ${myconf} \
-	--with-piddir=/var/run/samba \
-	--sysconfdir=/etc/samba \
-	--localstatedir=/var \
-	$(use_enable debug developer) \
-	--enable-largefile \
-	--enable-socket-wrapper \
-	--enable-nss-wrapper \
-	$(use_enable swat) \
-	$(use_enable debug dmalloc) \
-	$(use_enable cups) \
-	--disable-iprint \
-	$(use_enable fam) \
-	--enable-shared-libs \
-	${dnssd} \
-	$(use_enable avahi) \
-	--with-fhs \
-	--with-privatedir=/var/lib/samba/private \
-	--with-rootsbindir=/var/cache/samba \
-	--with-lockdir=/var/cache/samba \
-	--with-swatdir=/usr/share/doc/${PF}/swat \
-	--with-configdir=/etc/samba \
-	--with-logfilebase=/var/log/samba \
-	--with-pammodulesdir=$(getpam_mod_dir) \
-	--without-afs \
-	--without-fake-kaserver \
-	--without-vfs-afsacl \
-	$(use_with ldap) \
-	$(use_with ads) \
-	$(use_with ads krb5 /usr) \
-	$(use_with ads dnsupdate) \
-	--without-automount \
-	--without-cifsmount \
-	--without-cifsupcall \
-	--without-pam \
-	--without-pam_smbpass \
-	$(use_with syslog) \
-	$(use_with quota quotas) \
-	$(use_with quota sys-quotas) \
-	--without-utmp \
-	--without-lib{talloc,tdb,netapi,smbclient,smbsharemodes} \
-	--without-libaddns \
-	$(use_with cluster ctdb /usr) \
-	$(use_with cluster cluster-support) \
-	$(use_with acl acl-support) \
-	$(use_with aio aio-support) \
-	--with-sendfile-support \
-	$(use_with winbind)
+		--with-piddir=/var/run/samba \
+		--sysconfdir=/etc/samba \
+		--localstatedir=/var \
+		$(use_enable debug developer) \
+		--enable-largefile \
+		--enable-socket-wrapper \
+		--enable-nss-wrapper \
+		$(use_enable swat) \
+		$(use_enable debug dmalloc) \
+		$(use_enable cups) \
+		--disable-iprint \
+		$(use_enable fam) \
+		--enable-shared-libs \
+		${dnssd} \
+		$(use_enable avahi) \
+		--with-fhs \
+		--with-privatedir=/var/lib/samba/private \
+		--with-rootsbindir=/var/cache/samba \
+		--with-lockdir=/var/cache/samba \
+		--with-swatdir=/usr/share/doc/${PF}/swat \
+		--with-configdir=/etc/samba \
+		--with-logfilebase=/var/log/samba \
+		--with-pammodulesdir=$(getpam_mod_dir) \
+		--without-afs \
+		--without-fake-kaserver \
+		--without-vfs-afsacl \
+		$(use_with ldap) \
+		$(use_with ads) \
+		$(use_with ads krb5 /usr) \
+		$(use_with ads dnsupdate) \
+		--without-automount \
+		--without-cifsmount \
+		--without-cifsupcall \
+		--without-pam \
+		--without-pam_smbpass \
+		$(use_with syslog) \
+		$(use_with quota quotas) \
+		$(use_with quota sys-quotas) \
+		--without-utmp \
+		--without-lib{talloc,tdb,netapi,smbclient,smbsharemodes} \
+		--without-libaddns \
+		$(use_with cluster ctdb /usr) \
+		$(use_with cluster cluster-support) \
+		$(use_with acl acl-support) \
+		$(use_with aio aio-support) \
+		--with-sendfile-support \
+		$(use_with winbind)
 
 	use swat && SBINPROGS="${SBINPROGS} bin/swat"
 	use winbind && SBINPROGS="${SBINPROGS} bin/winbindd"
@@ -241,7 +241,7 @@ multilib-native_src_install_internal() {
 		cd ../examples
 		insinto /usr/share/doc/${PF}/examples
 		doins -r \
-		auth autofs dce-dfs LDAP logon misc pdb perfcounter \
-		printer-accounting printing scripts tridge validchars VFS
+			auth autofs dce-dfs LDAP logon misc pdb perfcounter \
+			printer-accounting printing scripts tridge validchars VFS
 	fi
 }
