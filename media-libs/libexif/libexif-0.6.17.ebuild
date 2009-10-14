@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libexif/libexif-0.6.17.ebuild,v 1.7 2009/02/06 20:10:42 jer Exp $
 
+EAPI=2
+
 inherit eutils libtool multilib-native
 
 DESCRIPTION="Library for parsing, editing, and saving EXIF data"
@@ -13,9 +15,9 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="doc nls"
 
-DEPEND="dev-util/pkgconfig
+DEPEND="dev-util/pkgconfig[lib32?]
 	doc? ( app-doc/doxygen )
-	nls? ( sys-devel/gettext )"
+	nls? ( sys-devel/gettext[lib32?] )"
 
 RDEPEND="nls? ( virtual/libintl )"
 
