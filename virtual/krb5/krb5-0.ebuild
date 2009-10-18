@@ -12,7 +12,7 @@ KEYWORDS="amd64 ia64 ppc ppc64 x86"
 IUSE="lib32"
 
 RDEPEND="|| (
-		app-crypt/heimdal
-		app-crypt/mit-krb5
+		app-crypt/heimdal[lib32?]
+		app-crypt/mit-krb5[lib32?]
 	)"
 DEPEND=""
