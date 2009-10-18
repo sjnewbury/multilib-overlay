@@ -1,0 +1,13 @@
+diff --git a/gconf/gconf-client.c b/gconf/gconf-client.c
+index 98f2051..ffcae8b 100644
+--- a/gconf/gconf-client.c
++++ b/gconf/gconf-client.c
+@@ -2024,7 +2024,7 @@ gconf_client_lookup (GConfClient *client,
+     {
+       g_free (dir);
+       trace ("Negative cache hit on %s", key);
+-      return TRUE;
++      return FALSE;
+     }
+ 
+     g_free (dir);
