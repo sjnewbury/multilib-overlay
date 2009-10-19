@@ -64,7 +64,9 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${D}" install || die "emake install failed"
+	# emake install doesn't install anything
+	einstall || die "einstall failed"
+
 	find "${D}" -name '*.la' -delete
 	dodoc ChangeLog INSTALL README NEWS || die "dodoc failed"
 }
