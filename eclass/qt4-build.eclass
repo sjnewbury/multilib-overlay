@@ -1,6 +1,6 @@
 # Copyright 2007-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.47 2009/10/03 19:29:04 ayoy Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.48 2009/10/16 15:02:15 wired Exp $
 
 # @ECLASS: qt4-build.eclass
 # @MAINTAINER:
@@ -46,22 +46,27 @@ RDEPEND="
 	!>x11-libs/qt-xmlpatterns-${PV}-r9999
 "
 case "${PV}" in
-	4.?.?_rc*)
+	4.?.?_rc* | 4.?.?_beta* )
 		SRCTYPE="${SRCTYPE:-opensource-src}"
-		MY_PV="${PV/_rc/-rc}"
+		MY_PV="${PV/_/-}"
 		;;
 	*)
 		SRCTYPE="${SRCTYPE:-opensource-src}"
 		MY_PV="${PV}"
 		;;
 esac
-MY_P=qt-x11-${SRCTYPE}-${MY_PV}
+if version_is_at_least 4.5.99999999 ${PV} ; then
+	MY_P="qt-everywhere-${SRCTYPE}-${MY_PV}"
+else
+	MY_P="qt-x11-${SRCTYPE}-${MY_PV}"
+fi
 S=${WORKDIR}/${MY_P}
 
 HOMEPAGE="http://qt.nokia.com/"
-SRC_URI="http://get.qt.nokia.com/qt/source/${MY_P}.tar.bz2"
 if version_is_at_least 4.5.3 ${PV} ; then
-	SRC_URI="${SRC_URI/bz2/gz}"
+	SRC_URI="http://get.qt.nokia.com/qt/source/${MY_P}.tar.gz"
+else
+	SRC_URI="http://get.qt.nokia.com/qt/source/${MY_P}.tar.bz2"
 fi
 
 case "${PV}" in
@@ -298,18 +303,31 @@ standard_configure_options() {
 		*) die "$(tc-arch) is unsupported by this eclass. Please file a bug." ;;
 	esac
 
+	# 4.6: build qt-core with exceptions or qt-xmlpatterns won't build
+	local exceptions=
+	case "${PV}" in
+		4.6.*)
+			if [[ ${PN} != "qt-core" ]] && [[ ${PN} != "qt-xmlpatterns" ]]; then
+				exceptions="-no-exceptions"
+			fi
+		;;
+		*)
+			[[ ${PN} == "qt-xmlpatterns" ]] || exceptions="-no-exceptions"
+		;;
+	esac
+
 	myconf="${myconf} -platform $(qt_mkspecs_dir) -stl -verbose -largefile -confirm-license -no-rpath
 		-prefix ${QTPREFIXDIR} -bindir ${QTBINDIR} -libdir ${QTLIBDIR}
 		-datadir ${QTDATADIR} -docdir ${QTDOCDIR} -headerdir ${QTHEADERDIR}
 		-plugindir ${QTPLUGINDIR} -sysconfdir ${QTSYSCONFDIR}
 		-translationdir ${QTTRANSDIR} -examplesdir ${QTEXAMPLESDIR}
 		-demosdir ${QTDEMOSDIR} -silent -fast
-		$([[ ${PN} == qt-xmlpatterns ]] || echo -no-exceptions)
+		${exceptions}
 		-reduce-relocations -nomake examples -nomake demos"
 
-	# Make eclass 4.5.x ready
+	# Make eclass >= 4.5.x ready
 	case "${MY_PV}" in
-		4.5.?)
+		4.5.* | 4.6.* )
 			myconf="${myconf} -opensource"
 			;;
 	esac
