@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="digitalradio"
 
-multilib-nateive_src_prepare_internal() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-libmp4ff-shared-lib.patch \
 		"${FILESDIR}"/${P}-man1_MANS.patch
 	sed -i -e 's:iquote :I:' libfaad/Makefile.am || die "sed failed"
