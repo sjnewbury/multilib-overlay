@@ -34,7 +34,7 @@ DEPEND="!<net-fs/samba-3.3
 		syslog? ( virtual/logger )
 		sys-libs/tdb[lib32?]
 		sys-libs/talloc[lib32?]
-		net-fs/samba-libs[caps?,cups?,ldap?,syslog?,winbind?,ads?,samba4?,netapi]
+		net-fs/samba-libs[caps?,cups?,ldap?,syslog?,winbind?,ads?,samba4?,netapi,lib32?]
 	)"
 RDEPEND="${DEPEND}"
 
