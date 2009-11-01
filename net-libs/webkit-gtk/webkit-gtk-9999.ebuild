@@ -16,7 +16,7 @@ ESVN_REPO_URI="http://svn.webkit.org/repository/webkit/trunk"
 
 LICENSE="LGPL-2 LGPL-2.1 BSD"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~sparc ~x86"
+KEYWORDS=""
 IUSE="coverage debug gstreamer pango soup sqlite svg xslt jit gnome"
 
 RDEPEND=">=x11-libs/gtk+-2.8[lib32?]
