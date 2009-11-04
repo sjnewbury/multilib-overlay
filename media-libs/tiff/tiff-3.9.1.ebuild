@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/tiff/tiff-3.9.1.ebuild,v 1.1 2009/09/19 04:10:34 nerdboy Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/tiff/tiff-3.9.1.ebuild,v 1.2 2009/11/04 16:03:58 maekke Exp $
 
 EAPI="2"
 
@@ -12,7 +12,7 @@ SRC_URI="ftp://ftp.remotesensing.org/pub/libtiff/${P}.tar.gz"
 
 LICENSE="as-is"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha amd64 arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="jpeg jbig nocxx zlib"
 
 RDEPEND="jpeg? ( >=media-libs/jpeg-6b[lib32?] )
@@ -41,10 +41,12 @@ multilib-native_src_install_internal() {
 }
 
 pkg_postinst() {
-	echo
-	elog "JBIG support is intended for Hylafax fax compression, so we"
-	elog "really need more feedback in other areas (most testing has"
-	elog "been done with fax).  Be sure to recompile anything linked"
-	elog "against tiff if you rebuild it with jbig support."
-	echo
+	if use jbig; then
+		echo
+		elog "JBIG support is intended for Hylafax fax compression, so we"
+		elog "really need more feedback in other areas (most testing has"
+		elog "been done with fax).  Be sure to recompile anything linked"
+		elog "against tiff if you rebuild it with jbig support."
+		echo
+	fi
 }
