@@ -65,7 +65,6 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-2.1.22-db4.patch #192753
 	epatch "${FILESDIR}/${PN}-2.1.22-gcc44.patch" #248738
 	epatch "${FILESDIR}"/${P}-authd-fix.patch
-	epatch "${FILESDIR}"/${P}-mysql-includes.patch
 
 	# Upstream doesn't even honor their own configure options... grumble
 	sed -i '/^sasldir =/s:=.*:= $(plugindir):' \
