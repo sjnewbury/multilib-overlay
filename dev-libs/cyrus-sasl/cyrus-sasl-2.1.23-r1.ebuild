@@ -28,7 +28,7 @@ RDEPEND="authdaemond? ( || ( >=net-mail/courier-imap-3.0.7 >=mail-mta/courier-0.
 	ntlm_unsupported_patch? ( >=net-fs/samba-3.0.9[lib32?] )
 	pam? ( virtual/pam[lib32?] )
 	postgres? ( >=virtual/postgresql-base-7.2[lib32?] )
-	sqlite? ( dev-db/sqlite[lib32?] )
+	sqlite? ( dev-db/sqlite:0[lib32?] )
 	ssl? ( >=dev-libs/openssl-0.9.6d[lib32?] )"
 DEPEND="${RDEPEND}
 	java? ( >=virtual/jdk-1.4 )"
