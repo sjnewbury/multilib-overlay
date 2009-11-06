@@ -1,5 +1,7 @@
---- openssl-0.9.8/engines/Makefile	2005-07-06 01:19:15.000000000 +0200
-+++ openssl-0.9.8.az/engines/Makefile	2005-07-06 01:20:04.000000000 +0200
+http://rt.openssl.org/Ticket/Display.html?id=2082
+
+--- openssl-0.9.8/engines/Makefile
++++ openssl-0.9.8.az/engines/Makefile
 @@ -88,6 +88,7 @@
  	@[ -n "$(INSTALLTOP)" ] # should be set by top Makefile...
  	@if [ -n "$(SHARED_LIBS)" ]; then \
