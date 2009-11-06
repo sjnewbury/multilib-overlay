@@ -1,9 +1,11 @@
 #!/bin/bash
 
-# IMPORTANT NOTE: You will need an actual CVS checkout of the portage tree,
-# which you'll probably want to update before running this script.  You can
-# export the following variable in your shell's environment to wherever yours
-# is.
+# IMPORTANT NOTE: You will need an actual CVS checkout of the portage tree!
+# It doesn't need to be kept up to date, or be the one you use for portage,
+# but it does need to exist!
+
+# You should export the following variable in your shell's environment to
+# wherever yours is.
 
 : ${EMULTILIB_CVS_TREE:="$(portageq portdir)"}
 : ${EMULTILIB_CVS_TREE:="/usr/portage"}
@@ -169,16 +171,12 @@ then
     # you'd need to update the old ebuild to latest and then maybe delete it
     # after!
 
-    # If we're bumping, file2 had better exist
-
-    [[ -f $file2 ]] || die 2 "$file2 doesn't exist in portage tree!"
-
     echo "Comparing:"
     echo "--- $file from portage, revision $overlay_revision"
     echo "+++ $file2 from portage, revision latest"
     echo ""
 
-    diff -u <(cvs update -p -r "$overlay_revision" "$file") "$file2"
+    diff -u <(cvs update -p -r "$overlay_revision" "$file") <(cvs update -p "$file2")
     case $? in
         0) echo "No difference between them!  Awesome!" ;;
         1) : ;;
@@ -203,7 +201,7 @@ then
 
 else
 
-    if ! [[ -f "$file" ]]
+    if cvs status "$file" | grep -q -F 'Status: Entry Invalid'
     then
         echo "NOTE: File has been removed from portage."
         # try to get the last revision before the delete
@@ -239,10 +237,10 @@ fi
 
 popd >/dev/null || die 2 "popd failed"
 
-if [[ -d "$EMULTILIB_CVS_TREE/${file%/*}/files/" ]]
+if [[ -d "/usr/portage/${file%/*}/files/" ]]
 then
     echo "==================================================================="
-    diff -ur -x CVS "$EMULTILIB_CVS_TREE/${file%/*}/files/" \
+    diff -ur -x CVS "/usr/portage/${file%/*}/files/" \
         "${file%/*}/files/"
     case $? in
         0) echo "No differences in '${file%/*}/files/'" ;;
