@@ -33,6 +33,7 @@ DEPEND="dev-libs/popt[lib32?]
 	!<net-fs/samba-3.3
 	!=net-fs/samba-server-3.4.3[tools]"
 # last blocker is only temporary for #288516
+
 RDEPEND="${DEPEND}"
 
 # Disable tests since we don't want to build that much here

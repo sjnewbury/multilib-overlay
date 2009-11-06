@@ -2,8 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/tiff/tiff-3.9.2.ebuild,v 1.1 2009/11/05 18:23:16 ssuominen Exp $
 
-EAPI="2"
-
+EAPI=2
 inherit eutils libtool multilib-native
 
 DESCRIPTION="Library for manipulation of TIFF (Tag Image File Format) images"
@@ -32,13 +31,13 @@ multilib-native_src_configure_internal() {
 		$(use_enable zlib) \
 		$(use_enable jpeg) \
 		$(use_enable jbig) \
-		--with-pic --without-x \
+		--without-x \
 		--with-docdir=/usr/share/doc/${PF}
 }
 
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
-	dodoc Changelog README TODO
+	dodoc ChangeLog README TODO
 }
 
 pkg_postinst() {
