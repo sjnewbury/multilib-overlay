@@ -31,6 +31,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-5.7-tic-cross-detection.patch #288881
 	epatch "${FILESDIR}"/${PN}-5.7-rxvt-unicode.patch #192083
 	epatch "${FILESDIR}"/${P}-hashdb-open.patch #245370
+	epatch "${FILESDIR}"/${P}-ldflags-multilib-overlay.patch # added by ferret
 }
 
 multilib-native_src_configure_internal() {

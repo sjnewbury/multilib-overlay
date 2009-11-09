@@ -1,0 +1,22 @@
+diff -urN ncurses-5.6/test/Makefile.in ncurses-5.6~/test/Makefile.in
+--- ncurses-5.6/test/Makefile.in	2006-10-21 23:56:03.000000000 +0100
++++ ncurses-5.6~/test/Makefile.in	2009-11-09 22:38:10.000000000 +0000
+@@ -89,15 +89,15 @@
+ 
+ # use these for linking with all of the libraries
+ LIBS_DEFAULT	= @TEST_ARGS@ @LIBS@ $(MATH_LIB)
+-LDFLAGS_DEFAULT	= $(LDFLAGS_@DFT_UPR_MODEL@) $(LIBS_DEFAULT)
++LDFLAGS_DEFAULT	= $(LIBS_DEFAULT) $(LDFLAGS_@DFT_UPR_MODEL@)
+ 
+ # use these for linking with the (n)curses library
+ LIBS_CURSES	= `echo "@TEST_ARGS@ @LIBS@" | sed -e 's/-lform.*-lpanel[^ ]*//'` $(MATH_LIB)
+-LDFLAGS_CURSES	= $(LDFLAGS_@DFT_UPR_MODEL@) $(LIBS_CURSES)
++LDFLAGS_CURSES	= $(LIBS_CURSES) $(LDFLAGS_@DFT_UPR_MODEL@)
+ 
+ # use these for linking with the tinfo library if we have it, or curses library if not
+ LIBS_TINFO	= @TINFO_ARGS@ @LIBS@ $(MATH_LIB)
+-LDFLAGS_TINFO	= $(LDFLAGS_@DFT_UPR_MODEL@) $(LIBS_TINFO)
++LDFLAGS_TINFO	= $(LIBS_TINFO) $(LDFLAGS_@DFT_UPR_MODEL@)
+ 
+ LINT		= @LINT@
+ LINT_OPTS	= @LINT_OPTS@
