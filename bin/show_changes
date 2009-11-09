@@ -240,6 +240,7 @@ popd >/dev/null || die 2 "popd failed"
 if [[ -d "/usr/portage/${file%/*}/files/" ]]
 then
     echo "==================================================================="
+    mkdir -p "${file%/*}/files/"
     diff -ur -x CVS "/usr/portage/${file%/*}/files/" \
         "${file%/*}/files/"
     case $? in
