@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+EAPI="2"
+
 inherit multilib
 
 DESCRIPTION="Wraps binarys that behave abi dependand"
@@ -15,8 +17,14 @@ IUSE=""
 DEPEND="app-portage/portage-utils"
 RDEPEND=""
 
+src_prepare() {
+	cp "${FILESDIR}"/abi-wrapper "${T}"/abi-wrapper
+	local abis="${DEFAULT_ABI} ${MULTILIB_ABIS/${DEFAULT_ABI}}"
+	sed -i "s/PLACEHOLDER_FOR_HARDCODED_ABIS/${abis}/" "${T}"/abi-wrapper
+}
+
 src_install() {
-	dobin ${FILESDIR}/abi-wrapper || die "could not install abi-wrapper"
+	dobin "${T}"/abi-wrapper || die
 }
 
 pkg_postinst() {
