@@ -1,13 +1,13 @@
 #!/bin/bash
 
-if [[ -n ${ABI} ]] ; then
+if [[ -n ${ABI} ]]; then
 	abi=${ABI}
-elif [[ -n ${DEFAULT_ABI} ]] ; then
+elif [[ -n ${DEFAULT_ABI} ]]; then
 	abi=${DEFAULT_ABI}
 else 
 	# we're called from outside portage, so use the hardcoded abi list
-	hardcoded_abis=="PLACEHOLDER_FOR_HARDCODED_ABIS"
-	for abi in ${hardcoded_abis} ; do
+	hardcoded_abis="PLACEHOLDER_FOR_HARDCODED_ABIS"
+	for abi in ${hardcoded_abis}; do
 		[[ -f ${0}-${abi} ]] && break
 		unset abi
 	done
