@@ -3,5 +3,5 @@ NO_AUTO_FLAG="dev-perl/XML-Parser dev-perl/TermReadKey dev-perl/DBI dev-perl/DBD
         dev-java/icedtea6 perl-core/Compress-Raw-Zlib net-p2p/freenet dev-util/intltool dev-python/pyxml x11-plugins/enigmail sys-apps/pciutils dev-python/PyQt4 x11-base/xorg-server \
         x11-misc/shared-mime-info dev-perl/Locale-gettext"
 
-MULTILIB_BINARIES="perl qt-core qt-gui"
+MULTILIB_BINARIES="perl python qt-core qt-gui"
 USE="${USE} multilib"
