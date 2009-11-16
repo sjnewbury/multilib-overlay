@@ -2,8 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
-
 DESCRIPTION="Wraps binarys that behave abi dependand"
 HOMEPAGE="www.gentoo.org"
 SRC_URI=""
@@ -13,13 +11,10 @@ SLOT="0"
 KEYWORDS="amd64"
 IUSE=""
 
-src_prepare() {
-	cp "${FILESDIR}"/abi-wrapper "${T}"/abi-wrapper
-	echo cp "${FILESDIR}"/abi-wrapper "${T}"/abi-wrapper
+src_unpack() {
 	local abis="${DEFAULT_ABI} ${MULTILIB_ABIS/${DEFAULT_ABI}}"
-	sed -i "s/PLACEHOLDER_FOR_HARDCODED_ABIS/${abis}/" "${T}"/abi-wrapper
+	sed "s/PLACEHOLDER_FOR_HARDCODED_ABIS/${abis}/" "${FILESDIR}"/abi-wrapper > "${WORKDIR}"/abi-wrapper
 }
-
 src_install() {
-	dobin "${T}"/abi-wrapper || die
+	dobin abi-wrapper || die
 }
