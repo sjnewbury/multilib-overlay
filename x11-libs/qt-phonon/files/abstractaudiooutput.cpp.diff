@@ -1,9 +1,0 @@
---- src/3rdparty/kdelibs/phonon/abstractaudiooutput.cpp.orig	2007-12-20 07:00:08.000000000 -0500
-+++ src/3rdparty/kdelibs/phonon/abstractaudiooutput.cpp	2007-12-20 07:00:18.000000000 -0500
-@@ -38,6 +38,4 @@
- 
- #undef PHONON_CLASSNAME
- 
--#include "moc_abstractaudiooutput.cpp"
--
- // vim: sw=4 ts=4 tw=80
