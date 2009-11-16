@@ -8,7 +8,7 @@ EAPI=2
 inherit eutils git multilib python
 
 EGIT_REPO_URI="git://github.com/TommyD/gentoo-portage-multilib.git"
-EGIT_TREE="bda25cf749e894982e9d84652cbdd83765dc5aa2"
+EGIT_TREE="08d658387991f84e6f0e04672580d6a0b1420234"
 DESCRIPTION="Portage is the package management and distribution system for Gentoo"
 HOMEPAGE="http://www.gentoo.org/proj/en/portage/index.xml"
 LICENSE="GPL-2"
@@ -24,7 +24,8 @@ python_dep="python3? ( =dev-lang/python-3* )
 DEPEND="${python_dep}
 	!build? ( >=sys-apps/sed-4.0.5 )
 	doc? ( app-text/xmlto ~app-text/docbook-xml-dtd-4.4 )
-	epydoc? ( >=dev-python/epydoc-2.0 !<=dev-python/pysqlite-2.4.1 )"
+	epydoc? ( >=dev-python/epydoc-2.0 !<=dev-python/pysqlite-2.4.1 )
+	>=sys-apps/abi-wrapper-1.0-r2"
 RDEPEND="${python_dep}
 	!build? ( >=sys-apps/sed-4.0.5
 		>=app-shells/bash-3.2_p17
@@ -34,7 +35,7 @@ RDEPEND="${python_dep}
 	elibc_uclibc? ( >=sys-apps/sandbox-1.6 )
 	>=app-misc/pax-utils-0.1.17
 	selinux? ( sys-libs/libselinux )
-	sys-apps/abi-wrapper"
+	>=sys-apps/abi-wrapper-1.0-r2"
 PDEPEND="
 	!build? (
 		>=net-misc/rsync-2.6.4
