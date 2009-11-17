@@ -286,6 +286,9 @@ multilib-native_src_generic_sub() {
 		;;
 	esac
 
+
+	# Ensure there is a source directory at ${EMULTILIB_SOURCE}
+	mkdir -p "${EMULTILIB_SOURCE}"
 # Call the "real" phase function
 	multilib-native_${1}_internal
 
