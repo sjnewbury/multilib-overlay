@@ -13,5 +13,5 @@ IUSE="+client +server lib32"
 
 DEPEND=""
 RDEPEND="~net-fs/samba-libs-${PV}[lib32?]
-	client? ( ~net-fs/samba-client-${PV}[lib32?] )
-	server? ( ~net-fs/samba-server-${PV}[lib32?] )"
+	client? ( ~net-fs/samba-client-${PV} )
+	server? ( ~net-fs/samba-server-${PV} )"

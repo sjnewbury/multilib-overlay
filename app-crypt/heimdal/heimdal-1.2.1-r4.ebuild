@@ -135,4 +135,6 @@ multilib-native_src_install_internal() {
 
 	# default database dir
 	keepdir /var/heimdal
+
+	prep_ml_binaries /usr/bin/krb5-config
 }

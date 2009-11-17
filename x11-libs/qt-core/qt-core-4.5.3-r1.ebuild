@@ -116,7 +116,7 @@ src_unpack() {
 	done
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	qt4-build_src_prepare
 
 	# bug 172219
@@ -162,11 +162,12 @@ multilib-native_src_compile_internal() {
 }
 
 multilib-native_src_install_internal() {
+die "stop here"
 	dobin "${S}"/bin/{qmake,moc,rcc,uic,lconvert,lrelease,lupdate} || die "dobin failed"
 
 	install_directories src/{corelib,xml,network,plugins/codecs}
 
-	emake INSTALL_ROOT="${D}" install_mkspecs || die "emake install_mkspecs failed"
+	emake INSTALL_ROOT="${D}" -I install_mkspecs || die "emake install_mkspecs failed"
 
 	if use doc; then
 		emake INSTALL_ROOT="${D}" install_htmldocs || die "emake install_htmldocs failed"

@@ -122,6 +122,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable xv video-x11-xv) \
 		$(use_enable xinerama video-x11-xinerama) \
 		$(use_enable X video-x11-xrandr) \
+		$(use_enable X video-x11-vm=no) \
 		$(use_enable dga video-dga) \
 		$(use_enable fbcon video-fbcon) \
 		$(use_enable ggi video-ggi) \

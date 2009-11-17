@@ -1,3 +1,5 @@
+http://rt.openssl.org/Ticket/Display.html?id=2083
+
 --- doc/crypto/ASN1_generate_nconf.pod
 +++ doc/crypto/ASN1_generate_nconf.pod
 @@ -6,6 +6,8 @@ ASN1_generate_nconf, ASN1_generate_v3 - 
