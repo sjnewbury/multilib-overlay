@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-emulation/wine/wine-1.1.32.ebuild,v 1.1 2009/10/25 05:47:08 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-emulation/wine/wine-1.1.33.ebuild,v 1.1 2009/11/15 02:00:50 vapier Exp $
 
 EAPI="2"
 
@@ -28,13 +28,13 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 # Don't add lib32 to IUSE -- otherwise it can be turned off, which would make no
 # sense!  package.use.force doesn't work in overlay profiles...
-IUSE="alsa capi cups dbus esd fontconfig +gecko gnutls gphoto2 gsm hal jack jpeg lcms ldap mp3 nas ncurses openal +opengl oss +perl png samba scanner ssl test +threads win64 +X xcomposite xinerama xml"
+IUSE="alsa capi cups dbus esd fontconfig +gecko gnutls gphoto2 gsm hal jack jpeg lcms ldap mp3 nas ncurses openal +opengl oss +perl png samba scanner ssl test +threads +truetype win64 +X xcomposite xinerama xml"
 RESTRICT="test" #72375
 
 # There isn't really a better way of doing these dependencies without messing up
 # the metadata cache :(
 RDEPEND="amd64? ( !win64? (
-		>=media-libs/freetype-2.0.0[lib32]
+		truetype? ( >=media-libs/freetype-2.0.0[lib32] media-fonts/corefonts )
 		perl? ( dev-lang/perl[lib32] dev-perl/XML-Simple )
 		alsa? ( media-libs/alsa-lib[lib32] )
 		capi? ( net-dialup/capi4k-utils )
@@ -70,7 +70,7 @@ RDEPEND="amd64? ( !win64? (
 		xinerama? ( x11-libs/libXinerama[lib32] )
 		xml? ( dev-libs/libxml2[lib32] dev-libs/libxslt[lib32] )
 	) )
-	>=media-libs/freetype-2.0.0
+	truetype? ( >=media-libs/freetype-2.0.0 media-fonts/corefonts )
 	perl? ( dev-lang/perl dev-perl/XML-Simple )
 	alsa? ( media-libs/alsa-lib )
 	cups? ( net-print/cups )
@@ -101,7 +101,6 @@ RDEPEND="amd64? ( !win64? (
 	xcomposite? ( x11-libs/libXcomposite )
 	xinerama? ( x11-libs/libXinerama )
 	xml? ( dev-libs/libxml2 dev-libs/libxslt )
-	media-fonts/corefonts
 	dev-perl/XML-Simple
 	X? ( x11-apps/xmessage )
 	win64? ( >=sys-devel/gcc-4.4.0 )"
@@ -160,6 +159,7 @@ src_configure() {
 		$(use_with threads pthread) \
 		$(use_with scanner sane) \
 		$(use_enable test tests) \
+		$(use_with truetype freetype) \
 		$(use_enable win64) \
 		$(use_with X x) \
 		$(use_with xcomposite) \
@@ -185,4 +185,8 @@ src_install() {
 	if ! use perl ; then
 		rm "${D}"/usr/bin/{wine{dump,maker},function_grep.pl} "${D}"/usr/share/man/man1/wine{dump,maker}.1 || die
 	fi
+}
+
+pkg_postinst() {
+	paxctl -psmr "${ROOT}"/usr/bin/wine{,-preloader} 2>/dev/null #255055
 }

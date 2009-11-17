@@ -51,15 +51,35 @@ rules_disable_switch()
 	# this function disables rules files
 	# by creating new files with the same name
 	# in a temp rules directory with higher priority
-	local d=/dev/.udev/rules.d bname="$1" onoff="$2"
+	local f=/dev/.udev/rules.d/"$1" bname="$1" onoff="$2"
 
 	if yesno "${onoff}"; then
-		mkdir -p "$d"
 		echo "# This file disables ${bname} due to /etc/conf.d/udev" \
-			> "${d}/${bname}"
+			> "${f}"
 	else
-		rm -f "${d}/${bname}"
+		rm -f "${f}"
 	fi
+}
+
+# only called on openrc
+is_service_enabled() {
+	local svc="$1"
+
+	[ ! -e "/etc/init.d/${svc}" ] && return 1
+
+	[ -e "/etc/runlevels/${RC_BOOTLEVEL}/${svc}" ] && return 0
+	[ -e "/etc/runlevels/${RC_DEFAULTLEVEL}/${svc}" ] && return 0
+	return 1
+}
+
+check_openrc_net()
+{
+	local f=/dev/.udev/rules.d/90-network.rules
+	is_service_enabled network || return 0
+
+	# disable network hotplugging
+	echo "# This file disables network hotplug events calling old-style openrc net scripts" >> "${f}"
+	echo "# as we use new-style network init script /etc/init.d/network" >> "${f}"
 }
 
 start_udevd()
@@ -96,6 +116,10 @@ populate_dev()
 	fi
 	eend $?
 
+	# we can speed up booting under these conditions:
+	#  * using devtmpfs so kernel creates device nodes for us
+	#  * only using kernel created device nodes at boot (in /etc/fstab and elsewhere)
+	#
 	ebegin "Waiting for uevents to be processed"
 	udevadm settle --timeout=${udev_settle_timeout:-60}
 	eend $?
@@ -136,19 +160,9 @@ display_hotplugged_services() {
 		svc="${svcfile##*/}"
 		[ -x "${svcfile}" ] || continue
 
-		# do not display this - better: do only inject it later :)
-		[ "$svc" = "udev-postmount" ] && continue
-
 		services="${services} ${svc}"
 	done
 	[ -n "${services}" ] && einfo "Device initiated services:${HILITE}${services}${NORMAL}"
-}
-
-inject_postmount_initd() {
-	if ! mark_service_hotplugged udev-postmount; then
-		IN_HOTPLUG=1 /etc/init.d/udev-postmount start >/dev/null 2>&1
-	fi
-	#einfo "Injected udev-postmount service"
 }
 
 check_persistent_net()
@@ -210,17 +224,20 @@ start()
 		return 1
 	fi
 
+	check_openrc_net
 	_start
 	
 	display_hotplugged_services
-
-	inject_postmount_initd
 
 	return 0
 }
 
 _start()
 {
+	if [ ! -e /etc/runlevels/${RC_DEFAULTLEVEL:-default}/udev-postmount ]; then
+		ewarn "You should add udev-postmount service to your default runlevel."
+	fi
+
 	root_link
 	rules_disable_switch 75-persistent-net-generator.rules "${persistent_net_disable:-no}"
 	rules_disable_switch 75-cd-aliases-generator.rules ${persistent_cd_disable:-no}
