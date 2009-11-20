@@ -1,29 +1,28 @@
-#!/bin/bash
-# ${PN}-config is a link to this abi-wrapper on multilib-systems to
-# assure options like --libs return the correct ABI-specific values.
-# This must match the multilib-behaviour of the set profile!
+#!/bin/sh
 
-if [[ -n ${ABI} ]]; then
+# Please be careful to keep this file sh compatible
+
+if [ "${ABI}" ]; then
 	abi=${ABI}
-elif [[ -n ${DEFAULT_ABI} ]]; then
+elif [ "${DEFAULT_ABI}" ]; then
 	abi=${DEFAULT_ABI}
 else 
-	# we're called from outside portage, so try default first
-	abis=$(portageq envvar DEFAULT_ABI MULTILIB_ABIS)
-	for abi in ${abis}; do
-		[[ -f ${0}-${abi} ]] && break
-		unset abi
+	# we're called from outside portage, so use the hardcoded abi list
+	hardcoded_abis="PLACEHOLDER_FOR_HARDCODED_ABIS"
+	for abi in ${hardcoded_abis}; do
+		[ -f "${0}-${abi}" ] && break
+		abi=
 	done
 fi
 
-if [[ -f ${0}-${abi} ]]; then
-	exec ${0}-${abi} "${@}"
+if [ -f "${0}-${abi}" ]; then
+	exec "${0}-${abi}" ${1+"$@"}
 else
-	if [[ -L ${0} ]]; then
-		LINK_TARGET="$(readlink ${0})"
-		exec ${LINK_TARGET} "${@}"
+	if [ -L "${0}" ]; then
+		LINK_TARGET="$(readlink "${0}")"
+		exec "${LINK_TARGET}" ${1+"$@"}
 	else
-		echo "${0}: abi-wrapper-config couldn't find script for current abi" >&2
+		echo "${0}: abi-wrapper couldn't find an executable for current abi ${abi}" >&2
 		exit 1
 	fi
 fi

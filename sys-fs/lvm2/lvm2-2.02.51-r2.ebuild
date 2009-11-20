@@ -24,7 +24,7 @@ RDEPEND="${DEPEND}
 	|| ( =sys-apps/baselayout-1* >=sys-apps/openrc-0.4 )
 	!!sys-fs/lvm-user
 	!!sys-fs/clvm
-	>=sys-apps/util-linux-2.16"
+	>=sys-apps/util-linux-2.16[lib32?]"
 
 S="${WORKDIR}/${PN/lvm/LVM}.${PV}"
 
@@ -36,10 +36,6 @@ multilib-native_pkg_setup_internal() {
 		elog "their static versions. If you need the static binaries,"
 		elog "you must append .static the filename!"
 	fi
-}
-
-multilib-native_src_unpack_internal() {
-	unpack ${A}
 }
 
 multilib-native_src_prepare_internal() {

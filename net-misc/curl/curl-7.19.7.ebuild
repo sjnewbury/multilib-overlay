@@ -22,9 +22,9 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="openssl ipv6 ldap ares gnutls libssh2 nss idn kerberos test"
 
-RDEPEND="gnutls? ( net-libs/gnutls app-misc/ca-certificates )
-	nss? ( !gnutls? ( dev-libs/nss app-misc/ca-certificates ) )
-	openssl? ( !gnutls? ( !nss? ( dev-libs/openssl app-misc/ca-certificates ) ) )
+RDEPEND="gnutls? ( net-libs/gnutls[lib32?] app-misc/ca-certificates )
+	nss? ( !gnutls? ( dev-libs/nss[lib32?] app-misc/ca-certificates ) )
+	openssl? ( !gnutls? ( !nss? ( dev-libs/openssl[lib32?] app-misc/ca-certificates ) ) )
 	ldap? ( net-nds/openldap[lib32?] )
 	idn? ( net-dns/libidn[lib32?] )
 	ares? ( >=net-dns/c-ares-1.4.0[lib32?] )
@@ -40,6 +40,7 @@ DEPEND="${RDEPEND}
 		dev-lang/perl
 	)"
 # used - but can do without in self test: net-misc/stunnel
+#S="${WORKDIR}"/${MY_P}
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/curl-7.17.0-strip-ldflags.patch

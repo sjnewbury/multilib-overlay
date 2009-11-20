@@ -30,6 +30,7 @@ src_unpack() {
 	epatch "${WORKDIR}"/${P}-coverity.patch
 	epatch "${FILESDIR}"/${PN}-5.6-gfbsd.patch
 	epatch "${FILESDIR}"/${PN}-5.6-build.patch #184700
+	epatch "${FILESDIR}"/${PN}-5.6-ldflags-multilib-overlay.patch # added by ferret
 }
 
 multilib-native_src_configure_internal() {

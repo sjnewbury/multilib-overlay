@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gvfs/gvfs-1.2.3.ebuild,v 1.4 2009/05/31 19:05:55 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gvfs/gvfs-1.4.1.ebuild,v 1.2 2009/10/30 00:35:57 eva Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -38,6 +38,7 @@ RDEPEND=">=dev-libs/glib-2.21.2[lib32?]
 	hal? (
 		cdda? ( >=dev-libs/libcdio-0.78.2[-minimal,lib32?] )
 		>=sys-apps/hal-0.5.10[lib32?] )
+	hal? ( >=sys-apps/hal-0.5.10[lib32?] )
 	samba? ( >=net-fs/samba-3[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
@@ -48,9 +49,9 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 multilib-native_pkg_setup_internal() {
-	if use cdda && ! use hal && ! use gudev; then
-		ewarn "You have \"+cdda\", but you have \"-hal\" and \"-gudev\""
-		ewarn "cdda support will NOT be built unless you enable EITHER hal OR gudev"
+	if use cdda && ! use hal && ! use udev; then
+		ewarn "You have \"+cdda\", but you have \"-hal\" and \"-udev\""
+		ewarn "cdda support will NOT be built unless you enable EITHER hal OR udev"
 	fi
 
 	G2CONF="${G2CONF}

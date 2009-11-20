@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pygobject/pygobject-2.18.0-r2.ebuild,v 1.3 2009/10/11 15:56:08 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pygobject/pygobject-2.20.0.ebuild,v 1.1 2009/10/29 23:03:42 eva Exp $
 
 EAPI="2"
 SUPPORT_PYTHON_ABIS="1"
@@ -12,13 +12,13 @@ HOMEPAGE="http://www.pygtk.org/"
 
 LICENSE="LGPL-2.1"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc examples libffi test"
 
 # FIXME: add introspection support
 RDEPEND=">=dev-lang/python-2.4.4-r5[lib32?]
 	>=dev-libs/glib-2.16[lib32?]
-	!<dev-python/pygtk-2.13
+	!<dev-python/pygtk-2.13[lib32?]
 	libffi? ( virtual/libffi[lib32?] )"
 DEPEND="${RDEPEND}
 	doc? ( dev-libs/libxslt >=app-text/docbook-xsl-stylesheets-1.70.1 )
@@ -83,19 +83,10 @@ src_test() {
 }
 
 multilib-native_src_install_internal() {
-	[[ -z ${ED} ]] && local ED="${D}"
 	installation() {
 		gnome2_src_install
-		mv "${ED}$(python_get_sitedir)/pygtk.py" "${ED}$(python_get_sitedir)/pygtk.py-2.0"
-		mv "${ED}$(python_get_sitedir)/pygtk.pth" "${ED}$(python_get_sitedir)/pygtk.pth-2.0"
-
-		if [[ ${CHOST} == *-darwin* ]]; then
-			# Python on Darwin uses bundles.
-			mv "${ED}"$(python_get_sitedir)/gtk-2.0/gio/_gio.{so,bundle} || die
-			mv "${ED}"$(python_get_sitedir)/gtk-2.0/gio/unix.{so,bundle} || die
-			mv "${ED}"$(python_get_sitedir)/gtk-2.0/glib/_glib.{so,bundle} || die
-			mv "${ED}"$(python_get_sitedir)/gtk-2.0/gobject/_gobject.{so,bundle} || die
-		fi
+		mv "${D}$(python_get_sitedir)/pygtk.py" "${D}$(python_get_sitedir)/pygtk.py-2.0"
+		mv "${D}$(python_get_sitedir)/pygtk.pth" "${D}$(python_get_sitedir)/pygtk.pth-2.0"
 	}
 	python_execute_function -s installation
 
@@ -103,6 +94,7 @@ multilib-native_src_install_internal() {
 		insinto /usr/share/doc/${P}
 		doins -r examples
 	fi
+
 }
 
 pkg_postinst() {

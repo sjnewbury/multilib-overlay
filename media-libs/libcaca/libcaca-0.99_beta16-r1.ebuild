@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libcaca/libcaca-0.99_beta16-r1.ebuild,v 1.1 2009/10/27 17:26:10 aballier Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit eutils autotools libtool mono multilib-native
 
@@ -21,7 +21,7 @@ RDEPEND="ncurses? ( >=sys-libs/ncurses-5.3[lib32?] )
 	slang? ( >=sys-libs/slang-1.4[lib32?] )
 	imlib? ( media-libs/imlib2[lib32?] )
 	X? ( x11-libs/libX11[lib32?] x11-libs/libXt[lib32?] )
-	opengl? ( virtual/opengl[lib32?] media-libs/freeglut[lib32?] )
+	opengl? ( virtual/opengl[lib32?] media-libs/freeglut[lib32?] media-libs/ftgl[lib32?] )
 	mono? ( dev-lang/mono )
 	ruby? ( virtual/ruby )"
 DEPEND="${RDEPEND}

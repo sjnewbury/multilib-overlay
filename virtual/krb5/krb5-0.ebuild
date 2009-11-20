@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/virtual/jre/jre-1.4.2.ebuild,v 1.4 2006/11/27 00:17:10 vapier Exp $
 
+EAPI="2"
+
 DESCRIPTION="Virtual for Kerberos5"
 HOMEPAGE="http://www.google.com"
 SRC_URI=""

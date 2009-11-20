@@ -30,22 +30,23 @@ IUSE="+alsa debug python sqlite" # qt-experimental
 # nspr-4.8 due to BMO #499144
 # Disable sqlite temporarily  	>=dev-db/sqlite-3.6.7[lib32?]
 RDEPEND="java? ( >=virtual/jre-1.4 )
-	>=dev-lang/python-2.3[threads]
+	>=dev-lang/python-2.3[lib32?,threads]
 	>=sys-devel/binutils-2.16.1
 	>=dev-libs/nss-3.12.3[lib32?]
 	>=dev-libs/nspr-4.8[lib32?]
-	sqlite? ( >=dev-db/sqlite-3.6.10 )
+	sqlite? ( >=dev-db/sqlite-3.6.16[lib32?] )
 	alsa? ( media-libs/alsa-lib[lib32?] )
 	>=app-text/hunspell-1.2[lib32?]
 	>=media-libs/lcms-1.17[lib32?]
 	>=x11-libs/cairo-1.8.8[X,lib32?]
-	x11-libs/pango[X,lib32?]"
+	x11-libs/pango[X,lib32?]
+	x11-libs/libXt[lib32?]"
 
 DEPEND="java? ( >=virtual/jdk-1.4 )
 	${RDEPEND}
 	dev-util/pkgconfig[lib32?]"
 
-S="${WORKDIR}/mozilla-1.9.1"
+S="${WORKDIR}/mozilla-${MAJ_PV}"
 
 # Needed by src_compile() and src_install().
 # Would do in pkg_setup but that loses the export attribute, they
@@ -263,7 +264,7 @@ multilib-native_pkg_postinst_internal() {
 	fi
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 
 	MOZLIBDIR="/usr/$(get_libdir)/${PN}-${MAJ_PV}"
 

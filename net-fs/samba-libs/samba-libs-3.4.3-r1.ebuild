@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba-libs/samba-libs-3.4.3-r1.ebuild,v 1.1 2009/10/29 20:38:39 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba-libs/samba-libs-3.4.3-r1.ebuild,v 1.1 2009/11/04 12:47:10 patrick E p $
 
 EAPI="2"
 
@@ -13,13 +13,13 @@ HOMEPAGE="http://www.samba.org/"
 SRC_URI="mirror://samba/${MY_P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~hppa ~ppc ~ppc64 ~x86"
+KEYWORDS="~amd64 ~hppa ~ppc64 ~x86"
 IUSE="samba4 ads aio caps cluster cups debug examples ldap pam syslog winbind
 	ldb +netapi +smbclient smbsharemodes addns tools"
 
 DEPEND="dev-libs/popt[lib32?]
-	sys-libs/tallocc[lib32?]
-	sys-libs/tdbc[lib32?]
+	sys-libs/talloc[lib32?]
+	sys-libs/tdb[lib32?]
 	virtual/libiconv
 	ads? ( virtual/krb5[lib32?] sys-libs/e2fsprogs-libs[lib32?] )
 	caps? ( sys-libs/libcap[lib32?] )

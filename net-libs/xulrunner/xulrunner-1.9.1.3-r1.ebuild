@@ -10,7 +10,7 @@ inherit flag-o-matic toolchain-funcs eutils mozconfig-3 makeedit multilib java-p
 MY_PV="${PV/_beta/b}" # Handle betas
 MY_PV="${PV/_/}" # Handle rc1, rc2 etc
 MY_PV="${MY_PV/1.9.1.3/3.5.3}"
-MAJ_PV="${PV/_*/}"
+MAJ_PV="1.9.1" # from mozilla-* branch name
 PATCH="${PN}-1.9.1.2-patches-0.3"
 
 DESCRIPTION="Mozilla runtime package that can be used to bootstrap XUL+XPCOM applications"
@@ -28,24 +28,24 @@ IUSE="+alsa debug python sqlite" # qt-experimental
 #		x11-libs/qt-core )
 
 # nspr-4.8 due to BMO #499144
-# Disable sqlite temporarily  	>=dev-db/sqlite-3.6.7[lib32?]
 RDEPEND="java? ( >=virtual/jre-1.4 )
-	>=dev-lang/python-2.3[threads]
+	>=dev-lang/python-2.3[lib32?,threads]
 	>=sys-devel/binutils-2.16.1
 	>=dev-libs/nss-3.12.3[lib32?]
 	>=dev-libs/nspr-4.8[lib32?]
-	sqlite? ( >=dev-db/sqlite-3.6.10 )
+	sqlite? ( >=dev-db/sqlite-3.6.10[lib32?] )
 	alsa? ( media-libs/alsa-lib[lib32?] )
 	>=app-text/hunspell-1.2[lib32?]
 	>=media-libs/lcms-1.17[lib32?]
 	>=x11-libs/cairo-1.8.8[X,lib32?]
-	x11-libs/pango[X,lib32?]"
+	x11-libs/pango[X,lib32?]
+	x11-libs/libXt[lib32?]"
 
 DEPEND="java? ( >=virtual/jdk-1.4 )
 	${RDEPEND}
 	dev-util/pkgconfig[lib32?]"
 
-S="${WORKDIR}/mozilla-1.9.1"
+S="${WORKDIR}/mozilla-${MAJ_PV}"
 
 # Needed by src_compile() and src_install().
 # Would do in pkg_setup but that loses the export attribute, they
@@ -257,9 +257,9 @@ multilib-native_pkg_postinst_internal() {
 		einfo "use of xulrunner out of the box on an average system without the user"
 		einfo "having to go through and enable the basics."
 
-	einfo
-	ewarn "Please remember to rebuild your browser(s) after update to prevent an xpcom error."
-	ewarn "This bump is needed in order to bring iceat to the tree to replace iceweasel useflag."
+		einfo
+		ewarn "Please remember to rebuild your browser(s) after update to prevent an xpcom error."
+		ewarn "This bump is needed in order to bring iceat to the tree to replace iceweasel useflag."
 	fi
 }
 

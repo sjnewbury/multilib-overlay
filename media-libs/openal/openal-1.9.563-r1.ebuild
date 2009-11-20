@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/media-libs/openal/openal-1.9.563-r1.ebuild,v 1.1 2009/10/27 18:11:17 ssuominen Exp $
 
 EAPI=2
+
 inherit cmake-utils multilib-native
 
 MY_P=${PN}-soft-${PV}

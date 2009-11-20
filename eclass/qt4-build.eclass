@@ -1,6 +1,6 @@
 # Copyright 2007-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.48 2009/10/16 15:02:15 wired Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.51 2009/11/10 00:56:29 spatz Exp $
 
 export EMULTILIB_SAVE_VARS="QTBASEDIR QTPREFIXDIR QTBINDIR QTLIBDIR \
 		QMAKE_LIBDIR_QT QTPCDIR QTDATADIR QTDOCDIR QTHEADERDIR \
@@ -184,6 +184,12 @@ qt4-build_src_prepare() {
 		symlink_binaries_to_buildtree
 	fi
 
+	# Bug 282984
+	sed -e "s/\(^SYSTEM_VARIABLES\)/CC=$(tc-getCC)\nCXX=$(tc-getCXX)\n\1/" \
+		-i configure || die "sed qmake compilers failed"
+	sed -e "s/\(\$MAKE\)/\1 CC=$(tc-getCC) CXX=$(tc-getCXX) LD=$(tc-getCXX)/" \
+		-i config.tests/unix/compile.test || die "sed test compilers failed"
+
 	# Bug 178652
 	if [[ "$(gcc-major-version)" == "3" ]] && use amd64; then
 		ewarn "Appending -fno-gcse to CFLAGS/CXXFLAGS"
@@ -197,6 +203,12 @@ qt4-build_src_prepare() {
 		# Bug 253127
 		sed -e "/^QMAKE_CFLAGS\t/ s:$: -fno-stack-protector-all:" \
 		-i "${S}"/mkspecs/common/g++.conf || die "sed ${S}/mkspecs/common/g++.conf failed"
+	fi
+
+	# Bug 261632
+	if use ppc64; then
+		ewarn "Appending -mminimal-toc to CFLAGS/CXXFLAGS"
+		append-flags -mminimal-toc
 	fi
 
 	# Bug 172219
@@ -323,7 +335,7 @@ standard_configure_options() {
 		;;
 	esac
 
-	myconf="${myconf} -platform $(qt_mkspecs_dir) -stl -verbose -largefile -confirm-license -no-rpath
+	myconf="${myconf} -platform $(qt_mkspecs_dir) -stl -verbose -largefile -confirm-license
 		-prefix ${QTPREFIXDIR} -bindir ${QTBINDIR} -libdir ${QTLIBDIR}
 		-datadir ${QTDATADIR} -docdir ${QTDOCDIR} -headerdir ${QTHEADERDIR}
 		-plugindir ${QTPLUGINDIR} -sysconfdir ${QTSYSCONFDIR}

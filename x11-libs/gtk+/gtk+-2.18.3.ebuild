@@ -1,18 +1,17 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.16.5.ebuild,v 1.1 2009/07/19 23:25:17 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.18.3.ebuild,v 1.2 2009/10/31 13:49:52 nirbheek Exp $
 
 EAPI="2"
-WANT_AUTOMAKE=1.9
 
-inherit gnome.org flag-o-matic eutils autotools virtualx multilib-native
+inherit gnome.org flag-o-matic eutils libtool virtualx multilib-native
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="http://www.gtk.org/"
 
 LICENSE="LGPL-2"
 SLOT="2"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="cups debug doc jpeg jpeg2k tiff test vim-syntax xinerama"
 
 # FIXME: configure says >=xrandr-1.2.99 but remi tells me it's broken
@@ -30,7 +29,7 @@ RDEPEND="x11-libs/libXrender[lib32?]
 	>=dev-libs/glib-2.21.3[lib32?]
 	>=x11-libs/pango-1.20[lib32?]
 	>=dev-libs/atk-1.13[lib32?]
-	>=x11-libs/cairo-1.6[X,lib32?]
+	>=x11-libs/cairo-1.6[X,svg,lib32?]
 	media-libs/fontconfig[lib32?]
 	x11-misc/shared-mime-info
 	>=media-libs/libpng-1.2.1[lib32?]
@@ -69,8 +68,8 @@ multilib-native_src_prepare_internal() {
 	# Don't break inclusion of gtkclist.h, upstream bug 536767
 	epatch "${FILESDIR}/${PN}-2.14.3-limit-gtksignal-includes.patch"
 
-	# Fix blured images when using jpeg7 in gdk-pixbuf, upstream                                               
-	# bug #588740, gentoo bug #282744.                                                                         
+	# Fix blured images when using jpeg7 in gdk-pixbuf, upstream
+	# bug #588740, gentoo bug #282744.
 	epatch "${FILESDIR}/${PN}-2.16.5-jpeg-backward-compatibility.patch"
 
 	# -O3 and company cause random crashes in applications. Bug #133469
@@ -84,7 +83,7 @@ multilib-native_src_prepare_internal() {
 		-i gtk/tests/testing.c || die "sed 1 failed"
 	sed '\%/recent-manager/add%,/recent_manager_purge/ d' \
 		-i gtk/tests/recentmanager.c || die "sed 2 failed"
-	eautoreconf
+	elibtoolize
 }
 
 multilib-native_src_configure_internal() {

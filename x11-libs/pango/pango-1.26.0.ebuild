@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.24.5.ebuild,v 1.2 2009/07/24 17:19:03 dang Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.26.0.ebuild,v 1.2 2009/10/31 14:33:29 nirbheek Exp $
 
 EAPI="2"
 GCONF_DEBUG="yes"
@@ -42,7 +42,7 @@ function multilib_enabled() {
 }
 
 multilib-native_pkg_setup_internal() {
-	# XXX: DONOT add introspection support, collides with gir-repository[pango]
+	# XXX: DO NOT add introspection support, collides with gir-repository[pango]
 	G2CONF="${G2CONF}
 		--disable-introspection
 		$(use_with X x)"
@@ -66,10 +66,20 @@ multilib-native_src_prepare_internal() {
 	# https://bugzilla.gnome.org/show_bug.cgi?id=596506
 	epatch "${FILESDIR}/${PN}-1.26.0-introspection-automagic.patch"
 
+	# Fix parallel build, bug 287825
+	epatch "${FILESDIR}/${PN}-1.26.0-fix-parallel-build.patch"
+
 	eautoreconf
 }
 
-pkg_postinst() {
+multilib-native_src_install_internal() {
+	gnome2_src_install
+	rm -f "${D}"/etc/pango/*/pango.modules || die "rm pango.modules failed"
+
+	prep_ml_binaries /usr/bin/pango-querymodules
+}
+
+multilib-native_pkg_postinst_internal() {
 	if [ "${ROOT}" = "/" ] ; then
 		einfo "Generating modules listing..."
 

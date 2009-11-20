@@ -1,0 +1,27 @@
+diff -urN ncurses-5.7/test/Makefile.in ncurses-5.7~/test/Makefile.in
+--- ncurses-5.7/test/Makefile.in	2008-09-07 14:58:29.000000000 +0100
++++ ncurses-5.7~/test/Makefile.in	2009-11-09 22:18:46.000000000 +0000
+@@ -92,19 +92,19 @@
+ 
+ # use these for linking with all of the libraries
+ LIBS_DEFAULT	= $(TEST_ARGS) @LIBS@ $(TEST_LIBS) $(MATH_LIB)
+-LDFLAGS_DEFAULT	= $(LDFLAGS_@DFT_UPR_MODEL@) $(LIBS_DEFAULT)
++LDFLAGS_DEFAULT	= $(LIBS_DEFAULT) $(LDFLAGS_@DFT_UPR_MODEL@)
+ 
+ # use these for linking with the (n)curses library and possibly pthreads
+ LIBS_THREADS	= `echo "$(TEST_ARGS) @LIBS@" | sed -e 's/-lform.*-lpanel[^ ]*//'` $(TEST_LIBS) $(MATH_LIB) @PTHREAD@
+-LDFLAGS_THREADS	= $(LDFLAGS_@DFT_UPR_MODEL@) $(LIBS_THREADS)
++LDFLAGS_THREADS	= $(LIBS_THREADS) $(LDFLAGS_@DFT_UPR_MODEL@)
+ 
+ # use these for linking with the (n)curses library
+ LIBS_CURSES	= `echo "$(TEST_ARGS) @LIBS@" | sed -e 's/-lform.*-lpanel[^ ]*//'` $(TEST_LIBS) $(MATH_LIB)
+-LDFLAGS_CURSES	= $(LDFLAGS_@DFT_UPR_MODEL@) $(LIBS_CURSES)
++LDFLAGS_CURSES	= $(LIBS_CURSES) $(LDFLAGS_@DFT_UPR_MODEL@)
+ 
+ # use these for linking with the tinfo library if we have it, or curses library if not
+ LIBS_TINFO	= @LDFLAGS_STATIC@ @TINFO_ARGS@ @LDFLAGS_SHARED@ @LIBS@ $(TEST_LIBS) $(MATH_LIB)
+-LDFLAGS_TINFO	= $(LDFLAGS_@DFT_UPR_MODEL@) $(LIBS_TINFO)
++LDFLAGS_TINFO	= $(LIBS_TINFO) $(LDFLAGS_@DFT_UPR_MODEL@)
+ 
+ LINT		= @LINT@
+ LINT_OPTS	= @LINT_OPTS@

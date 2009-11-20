@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-themes/gtk-engines/gtk-engines-2.18.3.ebuild,v 1.3 2009/10/16 21:48:44 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-themes/gtk-engines/gtk-engines-2.18.4.ebuild,v 1.1 2009/10/29 22:41:00 eva Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"

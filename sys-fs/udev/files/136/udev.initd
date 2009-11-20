@@ -215,6 +215,8 @@ start()
 	display_hotplugged_services
 
 	inject_postmount_initd
+
+	return 0
 }
 
 _start()

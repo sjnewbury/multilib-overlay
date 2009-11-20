@@ -1,18 +1,20 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-webkit/qt-webkit-4.5.3.ebuild,v 1.1 2009/10/04 10:21:59 wired Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-webkit/qt-webkit-4.5.3.ebuild,v 1.4 2009/11/01 23:42:04 yngwin Exp $
 
 EAPI="2"
 inherit qt4-build flag-o-matic multilib-native
 
 DESCRIPTION="The Webkit module for the Qt toolkit"
 SLOT="4"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 -sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 -sparc x86 ~x86-fbsd"
 IUSE="kde"
 
 DEPEND="~x11-libs/qt-core-${PV}[debug=,ssl,lib32?]
-	~x11-libs/qt-gui-${PV}[debug=,lib32?]
-	!kde? ( || ( ~x11-libs/qt-phonon-${PV}:${SLOT}[debug=,lib32?] media-sound/phonon[lib32?] ) )
+	~x11-libs/qt-dbus-${PV}[debug=,lib32?]
+	~x11-libs/qt-gui-${PV}[dbus,debug=,lib32?]
+	!kde? ( || ( ~x11-libs/qt-phonon-${PV}:${SLOT}[dbus,debug=,lib32?]
+		media-sound/phonon[lib32?] ) )
 	kde? ( media-sound/phonon[lib32?] )"
 RDEPEND="${DEPEND}"
 

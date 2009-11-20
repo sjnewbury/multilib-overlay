@@ -26,6 +26,7 @@ multilib-native_src_prepare_internal() {
 	[[ -n ${PV_SNAP} ]] && epatch "${WORKDIR}"/${MY_P}-${PV_SNAP}-patch.sh
 	epatch "${FILESDIR}"/${PN}-5.6-gfbsd.patch
 	epatch "${FILESDIR}"/${PN}-5.7-emacs.patch #270527
+	epatch "${FILESDIR}"/${P}-ldflags-multilib-overlay.patch # added by ferret
 }
 
 multilib-native_src_configure_internal() {
