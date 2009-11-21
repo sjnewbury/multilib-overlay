@@ -16,7 +16,7 @@ SRC_URI="mirror://gnome/sources/${MY_PN}/${PVP[0]}.${PVP[1]}/${MY_P}.tar.bz2"
 
 LICENSE="LGPL-2"
 SLOT="2"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE="debug doc ldap policykit"
 
 RDEPEND=">=dev-libs/glib-2.14[lib32?]
@@ -26,8 +26,7 @@ RDEPEND=">=dev-libs/glib-2.14[lib32?]
 	>=gnome-base/orbit-2.4[lib32?]
 	>=dev-libs/libxml2-2[lib32?]
 	ldap? ( net-nds/openldap[lib32?] )
-	policykit? ( >=sys-auth/policykit-0.7[lib32?]
-		     >=sys-auth/polkit-0.93[lib32?] )"
+	policykit? ( >=sys-auth/polkit-0.93[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9[lib32?]
@@ -55,7 +54,6 @@ multilib-native_src_prepare_internal() {
 
 	# Do not start gconfd when installing schemas, fix bug #238276, upstream ?
 	epatch "${FILESDIR}/${PN}-2.24.0-no-gconfd.patch"
-	epatch "${FILESDIR}/${PN}-2.26.1-duffcache.patch"
 
 	# Do not crash in gconf_entry_set_value() when entry pointer is NULL
 	epatch "${FILESDIR}/${P}-entry-set-value-sigsegv.patch"
