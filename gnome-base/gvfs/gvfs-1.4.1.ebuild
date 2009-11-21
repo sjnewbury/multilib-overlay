@@ -12,7 +12,7 @@ HOMEPAGE="http://www.gnome.org"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE="archive avahi bluetooth cdda doc fuse gdu gnome gnome-keyring gphoto2 hal samba +udev"
 
 RDEPEND=">=dev-libs/glib-2.21.2[lib32?]
@@ -38,7 +38,6 @@ RDEPEND=">=dev-libs/glib-2.21.2[lib32?]
 	hal? (
 		cdda? ( >=dev-libs/libcdio-0.78.2[-minimal,lib32?] )
 		>=sys-apps/hal-0.5.10[lib32?] )
-	hal? ( >=sys-apps/hal-0.5.10[lib32?] )
 	samba? ( >=net-fs/samba-3[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40

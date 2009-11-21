@@ -1,20 +1,19 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.3.1.ebuild,v 1.11 2009/11/18 14:49:09 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.4_pre20091119.ebuild,v 1.2 2009/11/18 21:49:26 spatz Exp $
 
 EAPI="2"
-inherit cmake-utils multilib-native
 
-KDE_VERSION="4.2.1"
+inherit cmake-utils multilib-native
 
 DESCRIPTION="KDE multimedia API"
 HOMEPAGE="http://phonon.kde.org"
-SRC_URI="mirror://kde/stable/${KDE_VERSION}/src/${P}.tar.bz2"
+SRC_URI="mirror://gentoo/${P}.tar.lzma"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="alpha amd64 hppa ia64 ppc ppc64 ~sparc x86 ~x86-fbsd"
-IUSE="debug gstreamer +xcb +xine"
+KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+IUSE="alsa debug gstreamer +xcb +xine"
 
 RDEPEND="
 	!kde-base/phonon-xine
@@ -26,18 +25,16 @@ RDEPEND="
 	gstreamer? (
 		media-libs/gstreamer[lib32?]
 		media-libs/gst-plugins-base[lib32?]
+		alsa? ( media-libs/alsa-lib[lib32?] )
 	)
 	xine? (
-		>=media-libs/xine-lib-1.1.15-r1[xcb?,lib32?]
+		>=media-libs/xine-lib-1.1.15-r1[lib32?,xcb?]
 		xcb? ( x11-libs/libxcb[lib32?] )
 	)
 "
-
 DEPEND="${RDEPEND}
 	>=kde-base/automoc-0.9.87
 "
-
-PATCHES=( "$FILESDIR/fix_nonascii_chars.patch" )
 
 pkg_setup() {
 	if use !xine && use !gstreamer; then
@@ -47,16 +44,11 @@ pkg_setup() {
 
 multilib-native_src_configure_internal() {
 	mycmakeargs="${mycmakeargs}
+		$(cmake-utils_use_with alsa)
 		$(cmake-utils_use_with gstreamer GStreamer)
 		$(cmake-utils_use_with gstreamer GStreamerPlugins)
-		$(cmake-utils_use_with xine Xine)"
+		$(cmake-utils_use_with xine)
+		$(cmake-utils_use_with xcb)"
 
-	if use xine; then
-		mycmakeargs="${mycmakeargs}
-			$(cmake-utils_use_with xcb XCB)"
-	else
-		sed -i -e '/xine/d' \
-			"${S}/CMakeLists.txt" || die "sed failed"
-	fi
 	cmake-utils_src_configure
 }
