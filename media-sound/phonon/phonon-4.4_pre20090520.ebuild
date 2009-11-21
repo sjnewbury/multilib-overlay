@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.4_pre20090520.ebuild,v 1.3 2009/10/09 20:21:52 wired Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.4_pre20090520.ebuild,v 1.5 2009/11/18 14:49:09 armin76 Exp $
 
 EAPI="2"
 
@@ -12,7 +12,7 @@ SRC_URI="http://dev.gentooexperimental.org/~alexxy/kde/${P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~hppa ~ia64 ~ppc ~ppc64 ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc x86 ~x86-fbsd"
 IUSE="debug gstreamer +xcb +xine"
 
 RDEPEND="
