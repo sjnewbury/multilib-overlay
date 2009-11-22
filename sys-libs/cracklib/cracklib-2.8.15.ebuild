@@ -40,7 +40,8 @@ multilib_src_configure_internal() {
 	econf \
 		--with-default-dict='$(libdir)/cracklib_dict' \
 		$(use_enable nls) \
-		$(use_with python)
+		$(use_with python) \
+		|| die
 }
 
 multilib-native_src_install_internal() {
