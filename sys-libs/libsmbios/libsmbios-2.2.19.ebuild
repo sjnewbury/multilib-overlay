@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/libsmbios/libsmbios-2.2.16.ebuild,v 1.2 2009/06/21 21:03:05 cedk Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/libsmbios/libsmbios-2.2.19.ebuild,v 1.1 2009/11/21 19:14:51 cedk Exp $
 
 EAPI=2
 
@@ -27,6 +27,7 @@ DEPEND="${RDEPEND}
 	test? ( >=dev-util/cppunit-1.9.6[lib32?] )"
 
 multilib-native_src_prepare_internal() {
+	sed -i 's:-Werror::g' Makefile*
 	rm pkg/py-compile
 	ln -s "$(type -P true)" pkg/py-compile || die
 }
