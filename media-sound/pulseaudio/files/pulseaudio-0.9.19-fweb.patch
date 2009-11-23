@@ -1,0 +1,59 @@
+From 8ec304d2d1e956cc3f5f35437ac4fe580b36f004 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Diego=20Elio=20'Flameeyes'=20Petten=C3=B2?= <flameeyes@gmail.com>
+Date: Wed, 7 Oct 2009 19:31:11 +0200
+Subject: [PATCH] Fix build when using -fweb, accept both register and memory constraints.
+
+This was reported as Gentoo bug #287391 by Torsten Kaiser, and the fix was
+suggested by Mike Frysinger.
+---
+ src/pulsecore/svolume_mmx.c |    4 ++--
+ src/pulsecore/svolume_sse.c |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/pulsecore/svolume_mmx.c b/src/pulsecore/svolume_mmx.c
+index 1768eb5..745c7de 100644
+--- a/src/pulsecore/svolume_mmx.c
++++ b/src/pulsecore/svolume_mmx.c
+@@ -152,7 +152,7 @@ pa_volume_s16ne_mmx (int16_t *samples, int32_t *volumes, unsigned channels, unsi
+         " emms                          \n\t"
+ 
+         : "+r" (samples), "+r" (volumes), "+r" (length), "=D" ((pa_reg_x86)channel), "=&r" (temp)
+-        : "X" ((pa_reg_x86)channels)
++        : "rm" ((pa_reg_x86)channels)
+         : "cc"
+     );
+ }
+@@ -228,7 +228,7 @@ pa_volume_s16re_mmx (int16_t *samples, int32_t *volumes, unsigned channels, unsi
+         " emms                          \n\t"
+ 
+         : "+r" (samples), "+r" (volumes), "+r" (length), "=D" ((pa_reg_x86)channel), "=&r" (temp)
+-        : "X" ((pa_reg_x86)channels)
++        : "rm" ((pa_reg_x86)channels)
+         : "cc"
+     );
+ }
+diff --git a/src/pulsecore/svolume_sse.c b/src/pulsecore/svolume_sse.c
+index ab9394f..1cc4e0a 100644
+--- a/src/pulsecore/svolume_sse.c
++++ b/src/pulsecore/svolume_sse.c
+@@ -149,7 +149,7 @@ pa_volume_s16ne_sse2 (int16_t *samples, int32_t *volumes, unsigned channels, uns
+         "8:                             \n\t"
+ 
+         : "+r" (samples), "+r" (volumes), "+r" (length), "=D" (channel), "=&r" (temp)
+-        : "X" ((pa_reg_x86)channels)
++        : "rm" ((pa_reg_x86)channels)
+         : "cc"
+     );
+ }
+@@ -237,7 +237,7 @@ pa_volume_s16re_sse2 (int16_t *samples, int32_t *volumes, unsigned channels, uns
+         "8:                             \n\t"
+ 
+         : "+r" (samples), "+r" (volumes), "+r" (length), "=D" (channel), "=&r" (temp)
+-        : "X" ((pa_reg_x86)channels)
++        : "rm" ((pa_reg_x86)channels)
+         : "cc"
+     );
+ }
+-- 
+1.6.5.rc2
+
