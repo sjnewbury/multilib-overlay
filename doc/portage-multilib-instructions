@@ -19,6 +19,9 @@ First, install the modified portage version:
 1.
 emerge -av1 portage
 
+remember that multilib-portage is following the 2.2* branch of portage,
+so it only has testing keywords and is hardmasked by package.mask
+
 2.
 check the target of /etc/make.profile
 rm /etc/make.profile
@@ -38,11 +41,11 @@ eclass-overrides = gentoo multilib
 
 4.
 
-then recompile world:
+then either recompile world:
 
 emerge -e world
 
-(you can also use /bin/add_lib32 to add the useflag to the database,
-but this branch does also remove all .la files, so you might have to
-run revdep-rebuild or lafilefixer every time you built a package with 
-multilib-portage)
+or use /path/to/multilib-overlay/bin/add_lib32 to add the useflag
+to the database. In this case, you might have to run
+/usr/bin/lafilefixer once since multilib-portage does remove most of
+.la files during install stage
