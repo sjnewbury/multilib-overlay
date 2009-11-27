@@ -55,7 +55,7 @@ DEPEND="${RDEPEND}
 	X? ( x11-proto/xproto )
 	dev-libs/libatomic_ops[lib32?]
 	dev-util/pkgconfig[lib32?]
-	dev-util/intltool[lib32?]"
+	dev-util/intltool"
 
 RDEPEND="${RDEPEND}
 	gnome-extra/gnome-audio"
