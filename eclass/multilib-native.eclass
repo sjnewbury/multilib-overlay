@@ -275,7 +275,12 @@ multilib-native_src_generic_sub() {
 			else
 				[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && multilib-native_setup_build_directory
 			fi
-			[[ -d "${S}" ]] && cd "${S}"
+			if [[ -d "${S}" ]]; then
+				einfo "Working in ${S}"
+				cd "${S}"
+			else
+				ewarn "Not changing to non-existant source directory"
+			fi
 		;;
 		configure|compile|install)
 			[[ ! -d "${WORKDIR}/${PN}_build_${ABI}" ]] && multilib-native_setup_build_directory
@@ -287,8 +292,11 @@ multilib-native_src_generic_sub() {
 	esac
 
 
-	# Ensure there is a source directory at ${EMULTILIB_SOURCE}
-	mkdir -p "${EMULTILIB_SOURCE}"
+	# FIXME: There is a failure case when there is no source directory
+	# at ${EMULTILIB_SOURCE}, creating a directory there is the *wrong*
+	# thing to do, certianly not unconditionally!
+	# mkdir -p "${EMULTILIB_SOURCE}"
+
 # Call the "real" phase function
 	multilib-native_${1}_internal
 
