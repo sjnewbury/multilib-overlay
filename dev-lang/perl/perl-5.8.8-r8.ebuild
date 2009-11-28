@@ -169,6 +169,9 @@ multilib-native_src_prepare_internal() {
 
 	epatch "${FILESDIR}"/${P}-CAN-2005-0448-rmtree-2.patch
 	epatch "${FILESDIR}"/${P}-fix_file_path_chdir.patch
+
+	# Respect CFLAGS even for linking when done with compiler
+	epatch "${FILESDIR}"/${P}-ccld-cflags.patch
 }
 
 myconf() {
