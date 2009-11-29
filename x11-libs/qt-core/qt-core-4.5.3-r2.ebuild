@@ -167,7 +167,7 @@ multilib-native_src_install_internal() {
 
 	install_directories src/{corelib,xml,network,plugins/codecs}
 
-	emake INSTALL_ROOT="${D}" -I install_mkspecs || die "emake install_mkspecs failed"
+	emake INSTALL_ROOT="${D}" install_mkspecs || die "emake install_mkspecs failed"
 
 	if use doc; then
 		emake INSTALL_ROOT="${D}" install_htmldocs || die "emake install_htmldocs failed"
