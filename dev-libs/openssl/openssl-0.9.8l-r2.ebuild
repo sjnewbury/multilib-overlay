@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-0.9.8j.ebuild,v 1.7 2009/02/19 10:40:13 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-0.9.8l-r2.ebuild,v 1.1 2009/11/27 22:00:12 vapier Exp $
 
 EAPI="2"
 
@@ -12,7 +12,7 @@ SRC_URI="mirror://openssl/source/${P}.tar.gz"
 
 LICENSE="openssl"
 SLOT="0"
-KEYWORDS="-* alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="bindist gmp kerberos sse2 test zlib"
 
 RDEPEND="gmp? ( dev-libs/gmp )
@@ -29,18 +29,21 @@ src_unpack() {
 	cd "${S}"
 
 	epatch "${FILESDIR}"/${PN}-0.9.7e-gentoo.patch
-	epatch "${FILESDIR}"/${PN}-0.9.7-alpha-default-gcc.patch
 	#Forward port of the -b patch. Parallel make fails though.
 	epatch "${FILESDIR}"/${PN}-0.9.8j-parallel-build.patch
 	epatch "${FILESDIR}"/${PN}-0.9.8-make-engines-dir.patch
-	epatch "${FILESDIR}"/${PN}-0.9.8-toolchain.patch
+	epatch "${FILESDIR}"/${PN}-0.9.8k-toolchain.patch
 	epatch "${FILESDIR}"/${PN}-0.9.8b-doc-updates.patch
 	epatch "${FILESDIR}"/${PN}-0.9.8-makedepend.patch #149583
 	epatch "${FILESDIR}"/${PN}-0.9.8e-make.patch #146316
 	#epatch "${FILESDIR}"/${PN}-0.9.8e-bsd-sparc64.patch
 	epatch "${FILESDIR}"/${PN}-0.9.8g-sslv3-no-tlsext.patch
-	epatch "${FILESDIR}"/${PN}-0.9.8h-ldflags.patch #181438
-	epatch "${FILESDIR}"/${P}-ia64.patch
+	#epatch "${FILESDIR}"/${PN}-0.9.8h-ldflags.patch #181438
+	epatch "${FILESDIR}"/${PN}-0.9.8l-CVE-2009-137{7,8,9}.patch #270305
+	epatch "${FILESDIR}"/${P}-CVE-2009-1387.patch #270305
+	epatch "${FILESDIR}"/${P}-CVE-2009-2409.patch #280591
+	epatch "${FILESDIR}"/${P}-dtls-compat.patch #280370
+	epatch "${FILESDIR}"/${PN}-0.9.8l-binutils.patch #289130
 	sed -i -e '/DIRS/ s/ fips / /g' Makefile{,.org} \
 		|| die "Removing fips from openssl failed."
 
@@ -69,6 +72,8 @@ multilib-native_src_prepare_internal() {
 		-e "s+libdir=\$\${exec_prefix}/lib+libdir=\$\${exec_prefix}/$(get_libdir)+g" \
 		Makefile.org engines/Makefile \
 		|| die "sed failed"
+	sed -i '1s,^:$,#!/usr/bin/perl,' Configure #141906
+	sed -i '/^"debug-steve/d' Configure # 0.9.8k shipped broken
 	./config --test-sanity || die "I AM NOT SANE"
 }
 
@@ -106,7 +111,6 @@ multilib-native_src_compile_internal() {
 		$(use_ssl gmp) \
 		$(use_ssl kerberos krb5 --with-krb5-flavor=${krb5}) \
 		$(use_ssl zlib) \
-		$(use_ssl zlib zlib-dynamic) \
 		--prefix=/usr \
 		--openssldir=/etc/ssl \
 		shared threads \
@@ -133,16 +137,13 @@ multilib-native_src_compile_internal() {
 }
 
 src_test() {
-	# make sure sandbox doesnt die on *BSD
-	addpredict /dev/crypto
-
 	emake -j1 test || die "make test failed"
 }
 
 multilib-native_src_install_internal() {
 	emake -j1 INSTALL_PREFIX="${D}" install || die
 	dodoc CHANGES* FAQ NEWS README doc/*.txt doc/c-indentation.el
-	dohtml doc/*
+	dohtml -r doc/*
 
 	# create the certs directory
 	dodir /etc/ssl/certs
@@ -169,6 +170,9 @@ multilib-native_src_install_internal() {
 	done
 	[[ -n $(find -L ${d} -type l) ]] && die "broken manpage links found :("
 
+	dodir /etc/sandbox.d #254521
+	echo 'SANDBOX_PREDICT="/dev/crypto"' > "${D}"/etc/sandbox.d/10openssl
+
 	diropts -m0700
 	keepdir /etc/ssl/private
 }
@@ -179,14 +183,4 @@ multilib-native_pkg_preinst_internal() {
 
 multilib-native_pkg_postinst_internal() {
 	preserve_old_lib_notify /usr/$(get_libdir)/lib{crypto,ssl}.so.0.9.{6,7}
-
-	if [[ ${CHOST} == i686* ]] ; then
-		ewarn "Due to the way openssl is architected, you cannot"
-		ewarn "switch between optimized versions without breaking"
-		ewarn "ABI.  The default i686 0.9.8 ABI was an unoptimized"
-		ewarn "version with horrible performance.  This version uses"
-		ewarn "the optimized ABI.  If you experience segfaults when"
-		ewarn "using ssl apps (like openssh), just re-emerge the"
-		ewarn "offending package."
-	fi
 }

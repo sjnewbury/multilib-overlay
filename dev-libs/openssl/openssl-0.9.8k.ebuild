@@ -40,7 +40,6 @@ src_unpack() {
 	#epatch "${FILESDIR}"/${PN}-0.9.8e-bsd-sparc64.patch
 	epatch "${FILESDIR}"/${PN}-0.9.8g-sslv3-no-tlsext.patch
 	#epatch "${FILESDIR}"/${PN}-0.9.8h-ldflags.patch #181438
-	epatch "${FILESDIR}"/${PN}-0.9.8j-ia64.patch
 	sed -i -e '/DIRS/ s/ fips / /g' Makefile{,.org} \
 		|| die "Removing fips from openssl failed."
 
