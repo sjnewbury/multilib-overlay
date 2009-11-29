@@ -99,7 +99,7 @@ multilib-native_pkg_setup_internal() {
 	fi
 }
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	if use doc; then
 		QT4_EXTRACT_DIRECTORIES="${QT4_EXTRACT_DIRECTORIES}
 					doc/"
@@ -163,7 +163,6 @@ multilib-native_src_compile_internal() {
 }
 
 multilib-native_src_install_internal() {
-die "stop here"
 	dobin "${S}"/bin/{qmake,moc,rcc,uic,lconvert,lrelease,lupdate} || die "dobin failed"
 
 	install_directories src/{corelib,xml,network,plugins/codecs}
