@@ -93,7 +93,7 @@ pkg_setup() {
 	check_old_modules
 }
 
-multilib-native_src_prepare() {
+multilib-native_src_prepare_internal() {
 	mkdir -p doc/txts
 	for readme in modules/pam_*/README; do
 		cp -f "${readme}" doc/txts/README.$(dirname "${readme}" | \

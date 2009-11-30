@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-nds/openldap/openldap-2.4.19-r1.ebuild,v 1.3 2009/11/24 23:31:54 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-nds/openldap/openldap-2.4.19-r1.ebuild,v 1.7 2009/11/28 22:25:36 robbat2 Exp $
 
 EAPI="2"
 inherit db-use eutils flag-o-matic multilib ssl-cert versionator toolchain-funcs multilib-native
@@ -11,7 +11,7 @@ SRC_URI="mirror://openldap/openldap-release/${P}.tgz"
 
 LICENSE="OPENLDAP"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 
 IUSE_DAEMON="crypt icu samba slp tcpd experimental minimal"
 IUSE_BACKEND="+berkdb"
@@ -123,14 +123,32 @@ openldap_find_versiontags() {
 	if [ -f "${SLAPD_PATH}" ]; then
 		OLDVER="$(/usr/bin/ldd ${SLAPD_PATH} \
 			| awk '/libdb-/{gsub("^libdb-","",$1);gsub(".so$","",$1);print $1}')"
-		NEWVER="$(db_findver sys-libs/db)"
-		if [ "${OLDVER}" != "${NEWVER}" ]; then
+		NEWVER="$(use berkdb && db_findver sys-libs/db)"
+		local fail=0
+		if [ -z "${OLDVER}" -a -z "${NEWVER}" ]; then
+			:
+			# Nothing wrong here.
+		elif [ -z "${OLDVER}" -a -n "${NEWVER}" ]; then
+			eerror "	Your existing version of OpenLDAP was not built against"
+			eerror "	any version of sys-libs/db, but the new one will build"
+			eerror "	against	${NEWVER} and your database may be inaccessible."
+			echo
+			fail=1
+		elif [ -n "${OLDVER}" -a -z "${NEWVER}" ]; then
+			eerror "	Your existing version of OpenLDAP was built against"
+			eerror "	sys-libs/db:${OLDVER}, but the new one will not be"
+			eerror "	built against any version and your database may be"
+			eerror "	inaccessible."
+			echo
+			fail=1
+		elif [ "${OLDVER}" != "${NEWVER}" ]; then
 			eerror "	Your existing version of OpenLDAP was built against"
 			eerror "	sys-libs/db:${OLDVER}, but the new one will build against"
 			eerror "	${NEWVER} and your database would be inaccessible."
 			echo
-			openldap_upgrade_howto
+			fail=1
 		fi
+		[ "${fail}" == "1" ] && openldap_upgrade_howto
 	fi
 
 	echo
@@ -226,9 +244,11 @@ build_contrib_module() {
 	# <dir> <sources> <outputname>
 	cd "${S}/contrib/slapd-modules/$1"
 	einfo "Compiling contrib-module: $3"
+	# Make sure it's uppercase
+	local define_name="$(echo "SLAPD_OVER_${1}" | LC_ALL=C tr '[:lower:]' '[:upper:]')"
 	"${lt}" --mode=compile --tag=CC \
 		"${CC}" \
-		-DSLAPD_OVER_${1^^}=SLAPD_MOD_DYNAMIC \
+		-D${define_name}=SLAPD_MOD_DYNAMIC \
 		-I../../../include -I../../../servers/slapd ${CFLAGS} \
 		-o ${2%.c}.lo -c $2 || die "compiling $3 failed"
 	einfo "Linking contrib-module: $3"
@@ -321,8 +341,13 @@ multilib-native_src_configure_internal() {
 	STRIP=/bin/true \
 	econf \
 		--libexecdir=/usr/$(get_libdir)/openldap \
-		${myconf}
+		${myconf} || die "econf failed"
+}
 
+src_configure_cxx() {
+	# This needs the libraries built by the first build run.
+	# So we have to run it AFTER the main build, not just after the main
+	# configure.
 	if ! use minimal ; then
 		 if use cxx ; then
 		 	local myconf_ldapcpp
@@ -338,6 +363,7 @@ multilib-native_src_configure_internal() {
 		 		CXX="${CXX}" \
 		 		|| die "econf ldapc++ failed"
 		 	CPPFLAGS="$OLD_CPPFLAGS"
+			LDFLAGS="${OLD_LDFLAGS}"
 		 fi
 	fi
 }
@@ -351,6 +377,7 @@ multilib-native_src_compile_internal() {
 	if ! use minimal ; then
 		 if use cxx ; then
 		 	einfo "Building contrib library: ldapc++"
+			src_configure_cxx
 		 	cd "${S}/contrib/ldapc++"
 		 	emake \
 		 		CC="${CC}" CXX="${CXX}" \
@@ -557,5 +584,5 @@ pkg_postinst() {
 	elog "An example file for tuning BDB backends with openldap is"
 	elog "DB_CONFIG.fast.example in /usr/share/doc/${PF}/"
 
-	preserve_old_lib_notify usr/$(get_libdir)/{liblber,libldap,libldap_r}-2.3.so.0
+	preserve_old_lib_notify /usr/$(get_libdir)/{liblber,libldap,libldap_r}-2.3.so.0
 }
