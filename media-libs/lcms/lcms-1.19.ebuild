@@ -1,10 +1,10 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/lcms/lcms-1.18-r1.ebuild,v 1.7 2009/10/19 19:17:53 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/lcms/lcms-1.19.ebuild,v 1.1 2009/12/01 11:02:40 pva Exp $
 
 EAPI="2"
 
-inherit autotools eutils multilib multilib-native
+inherit libtool eutils multilib multilib-native
 
 DESCRIPTION="A lightweight, speed optimized color management engine"
 HOMEPAGE="http://www.littlecms.com/"
@@ -12,20 +12,16 @@ SRC_URI="http://www.littlecms.com/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="tiff jpeg zlib python"
 
 RDEPEND="tiff? ( media-libs/tiff[lib32?] )
 	jpeg? ( media-libs/jpeg[lib32?] )
-	zlib? ( sys-libs/zlib[lib32?] )
-	python? ( dev-lang/python[lib32?] )"
+	zlib? ( sys-libs/zlib[lib32?] )"
 DEPEND="${RDEPEND}
 	python? ( >=dev-lang/swig-1.3.31 )"
 
 multilib-native_src_prepare_internal() {
-	# Fix for CVE-2009-0793, bug #264604
-	epatch "${FILESDIR}"/${PN}-CVE-2009-0793.patch
-
 	# run swig to regenerate lcms_wrap.cxx and lcms.py (bug #148728)
 	if use python; then
 		cd "${S}"/python
