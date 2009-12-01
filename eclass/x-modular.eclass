@@ -188,7 +188,7 @@ DEPEND="${DEPEND}
 if [[ "${PN/util-macros}" = "${PN}" ]]; then
 	DEPEND="${DEPEND}
 		>=x11-misc/util-macros-1.3.0
-		>=sys-devel/binutils"
+		sys-devel/binutils"
 fi
 
 RDEPEND="${RDEPEND}
