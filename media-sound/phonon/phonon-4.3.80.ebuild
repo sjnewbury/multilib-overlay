@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.4_pre20091119.ebuild,v 1.2 2009/11/18 21:49:26 spatz Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.3.80.ebuild,v 1.2 2009/12/04 16:04:17 scarabeus Exp $
 
 EAPI="2"
 
@@ -8,12 +8,12 @@ inherit cmake-utils multilib-native
 
 DESCRIPTION="KDE multimedia API"
 HOMEPAGE="http://phonon.kde.org"
-SRC_URI="mirror://gentoo/${P}.tar.lzma"
+SRC_URI="mirror://kde/unstable/phonon/${P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="alsa debug gstreamer +xcb +xine"
+IUSE="alsa debug gstreamer pulseaudio +xcb +xine"
 
 RDEPEND="
 	!kde-base/phonon-xine
@@ -27,6 +27,9 @@ RDEPEND="
 		media-libs/gst-plugins-base[lib32?]
 		alsa? ( media-libs/alsa-lib[lib32?] )
 	)
+	pulseaudio? (
+		dev-libs/glib:2[lib32?]
+		>=media-sound/pulseaudio-0.9.21[lib32?,glib]
 	xine? (
 		>=media-libs/xine-lib-1.1.15-r1[lib32?,xcb?]
 		xcb? ( x11-libs/libxcb[lib32?] )
@@ -47,8 +50,11 @@ multilib-native_src_configure_internal() {
 		$(cmake-utils_use_with alsa)
 		$(cmake-utils_use_with gstreamer GStreamer)
 		$(cmake-utils_use_with gstreamer GStreamerPlugins)
+		$(cmake-utils_use_with pulseaudio PulseAudio)
+		$(cmake-utils_use_with pulseaudio GLib2)
 		$(cmake-utils_use_with xine)
-		$(cmake-utils_use_with xcb)"
+		$(cmake-utils_use_with xcb)
+	"
 
 	cmake-utils_src_configure
 }

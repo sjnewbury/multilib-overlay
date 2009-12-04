@@ -1,18 +1,20 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.4_pre20090520.ebuild,v 1.5 2009/11/18 14:49:09 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.3.50_pre20090520.ebuild,v 1.1 2009/12/04 16:15:21 scarabeus Exp $
 
 EAPI="2"
 
 inherit cmake-utils multilib-native
 
+MY_P="${PN}-4.4_pre20090520"
+
 DESCRIPTION="KDE multimedia API"
 HOMEPAGE="http://phonon.kde.org"
-SRC_URI="http://dev.gentooexperimental.org/~alexxy/kde/${P}.tar.bz2"
+SRC_URI="http://dev.gentooexperimental.org/~alexxy/kde/${MY_P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~hppa ~ia64 ppc ppc64 ~sparc x86 ~x86-fbsd"
 IUSE="debug gstreamer +xcb +xine"
 
 RDEPEND="
@@ -34,6 +36,8 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	>=kde-base/automoc-0.9.87
 "
+
+S="${WORKDIR}/${MY_P}"
 
 pkg_setup() {
 	if use !xine && use !gstreamer; then
