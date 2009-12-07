@@ -1,6 +1,7 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.2.11.ebuild,v 1.2 2009/05/29 19:55:00 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.2.15.ebuild,v 1.1 2009/10/02 13:54:19 patrick Exp $
+
 EAPI="2"
 
 inherit eutils pam multilib versionator confutils multilib-native
@@ -13,14 +14,18 @@ SRC_URI="mirror://samba/${MY_P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
-IUSE_LINGUAS="linguas_ja linguas_pl"
-IUSE="${IUSE_LINGUAS} acl ads async automount caps cups doc examples ipv6 kernel_linux ldap fam
+
+# disabled for now
+#IUSE_LINGUAS="linguas_ja linguas_pl"
+
+IUSE="${IUSE_LINGUAS} acl ads async automount caps cifsupcall cups doc examples ipv6 kernel_linux ldap fam
 	pam quotas readline selinux swat syslog winbind"
 
 RDEPEND="dev-libs/popt
 	dev-libs/iniparser
 	virtual/libiconv
 	acl? ( kernel_linux? ( virtual/acl ) )
+	cifsupcall? ( sys-apps/keyutils )
 	cups? ( net-print/cups[lib32?] )
 	ipv6? ( sys-apps/xinetd )
 	ads? ( virtual/krb5 sys-fs/e2fsprogs )
@@ -47,6 +52,7 @@ RESTRICT="test"
 
 pkg_setup() {
 	confutils_use_depend_all ads ldap
+	confutils_use_depend_all cifsupcall ads
 }
 
 src_unpack() {
@@ -65,12 +71,9 @@ src_unpack() {
 	sed -i \
 		-e 's|tdbsam|tdbsam:${PRIVATEDIR}/passdb.tdb|' \
 		"${S}/source/script/tests/selftest.sh" || die "sed failed"
-
 }
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# fails with that
 	filter-ldflags -m32 -m64
 	
@@ -80,9 +83,10 @@ multilib-native_src_compile_internal() {
 	local mylangs
 	local mymod_shared
 
-	mylangs="--with-manpages-langs=en"
-	use linguas_ja && mylangs="${mylangs},ja"
-	use linguas_pl && mylangs="${mylangs},pl"
+	# this doesn't seem to work ...
+	#mylangs="--with-manpages-langs=en"
+	#use linguas_ja && mylangs="${mylangs},ja"
+	#use linguas_pl && mylangs="${mylangs},pl"
 
 	use winbind && mymod_shared="--with-shared-modules=idmap_rid"
 	if use ldap ; then
@@ -115,14 +119,14 @@ multilib-native_src_compile_internal() {
 		--with-logfilebase=/var/log/samba \
 		--with-privatedir=${PRIVATE_DST} \
 		--with-libsmbclient \
-		--without-spinlocks \
 		--enable-socket-wrapper \
 		--enable-nss-wrapper \
 		--with-cifsmount=no \
+		--disable-dnssd \
 		$(use_with acl acl-support) \
 		$(use_with async aio-support) \
 		$(use_with automount) \
-		--without-cifsupcall \
+		$(use_with cifsupcall) \
 		$(use_enable cups) \
 		$(use_enable fam) \
 		$(use_with ads krb5) \
@@ -134,9 +138,12 @@ multilib-native_src_compile_internal() {
 		$(use_with syslog) \
 		$(use_with winbind) \
 		${myconf} ${mylangs} ${mymod_shared} || die "econf failed"
+}
 
-	emake proto || die "emake proto failed"
-	emake everything || die "emake everything failed"
+multilib-native_src_compile_internal() {
+	emake -j1 proto || die "emake proto failed"
+	emake -j1 everything || die "emake everything failed"
+
 }
 
 src_test() {
@@ -147,7 +154,7 @@ src_test() {
 multilib-native_src_install_internal() {
 	cd "${S}/source"
 
-	emake DESTDIR="${D}" install-everything || die "emake install-everything failed"
+	emake -j1 DESTDIR="${D}" install-everything || die "emake install-everything failed"
 
 	# Extra rpctorture progs
 	local extra_bins="rpctorture"
@@ -177,6 +184,8 @@ multilib-native_src_install_internal() {
 	dosym samba/libtalloc.so.1 /usr/$(get_libdir)/libtalloc.so.1
 	dosym samba/libtdb.so /usr/$(get_libdir)/libtdb.so
 	dosym samba/libtdb.so.1 /usr/$(get_libdir)/libtdb.so.1
+	dosym samba/libwbclient.so.0 /usr/$(get_libdir)/libwbclient.so.0
+	dosym samba/libsmbsharemodes.so.0 /usr/$(get_libdir)/libsmbsharemodes.so.0
 
 	# make the smb backend symlink for cups printing support (bug #133133)
 	if use cups ; then
@@ -245,6 +254,7 @@ multilib-native_src_install_internal() {
 			rm -rf "${D}/usr/share/doc/${PF}/swat/using_samba"
 		fi
 	fi
+
 }
 
 pkg_preinst() {

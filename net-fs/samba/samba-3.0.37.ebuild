@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.0.35.ebuild,v 1.1 2009/06/25 18:18:09 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.0.37.ebuild,v 1.7 2009/11/21 20:01:08 nixnut Exp $
 
 EAPI="2"
 
@@ -16,13 +16,13 @@ SRC_URI="mirror://samba/${MY_P}.tar.gz
 	oav? ( http://www.openantivirus.org/download/${VSCAN_P}.tar.gz )"
 LICENSE="GPL-3 oav? ( GPL-2 LGPL-2.1 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="acl ads async automount caps cups debug doc examples ipv6 kernel_linux ldap fam
 	pam python quotas readline selinux swat syslog winbind oav"
 
 RDEPEND="dev-libs/popt
 	virtual/libiconv
-	acl?       ( kernel_linux? ( sys-apps/acl ) )
+	acl?       ( sys-apps/acl )
 	cups?      ( net-print/cups[lib32?] )
 	ipv6?      ( sys-apps/xinetd )
 	ads?       ( virtual/krb5 )
@@ -50,8 +50,7 @@ pkg_setup() {
 	confutils_use_depend_all ads ldap
 }
 
-src_unpack() {
-	unpack ${A}
+multilib-native_src_prepare_internal() {
 	cd "${S}/source"
 
 	# lazyldflags.patch: adds "-Wl,-z,now" to smb{mnt,umount}
@@ -76,9 +75,7 @@ src_unpack() {
 
 }
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# fails with that
 	filter-ldflags -m32 -m64
 	
@@ -140,12 +137,14 @@ multilib-native_src_compile_internal() {
 		$(use_with syslog) \
 		$(use_with winbind) \
 		${myconf} ${mylangs} ${mymod_shared}
+}
 
-	emake proto || die "emake proto failed"
-	emake everything || die "emake everything failed"
+multilib-native_src_compile_internal() {
+	emake -j1 proto || die "emake proto failed"
+	emake -j1 everything || die "emake everything failed"
 
 	if use python ; then
-		emake python_ext || die "emake python_ext failed"
+		emake -j1 python_ext || die "emake python_ext failed"
 	fi
 
 	if use oav ; then
@@ -162,7 +161,7 @@ multilib-native_src_compile_internal() {
 			--with-filetype \
 			--with-fileregexp \
 			$(use_enable debug)
-		emake || die "emake oav plugins failed"
+		emake -j1 || die "emake oav plugins failed"
 	fi
 }
 

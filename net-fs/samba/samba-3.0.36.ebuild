@@ -1,62 +1,68 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.2.14.ebuild,v 1.1 2009/08/17 18:31:18 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.0.36.ebuild,v 1.7 2009/09/27 14:14:21 nixnut Exp $
+
 EAPI="2"
 
-inherit eutils pam multilib versionator confutils multilib-native
+inherit autotools eutils pam python versionator confutils multilib-native
 
+VSCAN_P="samba-vscan-0.3.6c-beta5"
 MY_P=${PN}-${PV/_/}
 
 DESCRIPTION="A suite of SMB and CIFS client/server programs for UNIX"
 HOMEPAGE="http://www.samba.org/"
-SRC_URI="mirror://samba/${MY_P}.tar.gz"
-LICENSE="GPL-3"
+SRC_URI="mirror://samba/${MY_P}.tar.gz
+	mirror://samba/old-versions/${MY_P}.tar.gz
+	oav? ( http://www.openantivirus.org/download/${VSCAN_P}.tar.gz )"
+LICENSE="GPL-3 oav? ( GPL-2 LGPL-2.1 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
-
-# disabled for now
-#IUSE_LINGUAS="linguas_ja linguas_pl"
-
-IUSE="${IUSE_LINGUAS} acl ads async automount caps cifsupcall cups doc examples ipv6 kernel_linux ldap fam
-	pam quotas readline selinux swat syslog winbind"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
+IUSE="acl ads async automount caps cups debug doc examples ipv6 kernel_linux ldap fam
+	pam python quotas readline selinux swat syslog winbind oav"
 
 RDEPEND="dev-libs/popt
-	dev-libs/iniparser
 	virtual/libiconv
-	acl? ( kernel_linux? ( virtual/acl ) )
-	cifsupcall? ( sys-apps/keyutils )
-	cups? ( net-print/cups[lib32?] )
-	ipv6? ( sys-apps/xinetd )
-	ads? ( virtual/krb5 sys-fs/e2fsprogs )
-	ldap? ( net-nds/openldap[lib32?] )
-	pam? ( virtual/pam )
-	readline? ( sys-libs/readline[lib32?] )
-	selinux? ( sec-policy/selinux-samba )
-	swat? ( sys-apps/xinetd )
-	syslog? ( virtual/logger )
-	fam? ( virtual/fam )
-	caps? ( sys-libs/libcap[lib32?] )
-	lib32? ( fam? ( dev-libs/libgamin[lib32] ) )
-	lib32? ( pam? ( sys-libs/pam[lib32] ) )"
+	acl?       ( sys-apps/acl )
+	cups?      ( net-print/cups[lib32?] )
+	ipv6?      ( sys-apps/xinetd )
+	ads?       ( virtual/krb5 )
+	ldap?      ( net-nds/openldap[lib32?] )
+	pam?       ( virtual/pam )
+	python?    ( dev-lang/python[lib32?] )
+	readline?  ( sys-libs/readline[lib32?] )
+	selinux?   ( sec-policy/selinux-samba )
+	swat?      ( sys-apps/xinetd )
+	syslog?    ( virtual/logger )
+	fam?       ( virtual/fam )
+	caps?      ( sys-libs/libcap[lib32?] )
+	lib32?     ( fam? ( dev-libs/libgamin[lib32] ) )
+	lib32?     ( pam? ( sys-libs/pam[lib32] ) )"
 DEPEND="${RDEPEND}"
 
-S="${WORKDIR}/${MY_P}"
-CONFDIR="${FILESDIR}/config-3.2"
-PRIVATE_DST=/var/lib/samba/private
-
-# Tests are currently broken due to hardcoded paths (due to --with-fhs)
-# The problem is that --without-fhs lets samba use lockdir (which can be changed in smb.conf)
-# which is wrong as well.
+# Tests are broken now :-(
 RESTRICT="test"
+
+S=${WORKDIR}/${MY_P}
+CONFDIR=${FILESDIR}/config
+PRIVATE_DST=/var/lib/samba/private
 
 pkg_setup() {
 	confutils_use_depend_all ads ldap
-	confutils_use_depend_all cifsupcall ads
 }
 
-src_unpack() {
-	unpack ${A}
+multilib-native_src_prepare_internal() {
 	cd "${S}/source"
+
+	# lazyldflags.patch: adds "-Wl,-z,now" to smb{mnt,umount}
+	# invalid-free-fix.patch: Bug #196015 (upstream: #5021)
+
+	epatch \
+		"${FILESDIR}/3.0.26a-lazyldflags.patch" \
+		"${FILESDIR}/3.0.26a-invalid-free-fix.patch" \
+		"${FILESDIR}/3.0.28-fix_broken_readdir_detection.patch" \
+		"${FILESDIR}/3.0.28a-wrong_python_ldflags.patch"
+
+	eautoconf -I. -Ilib/replace
 
 	# Ok, agreed, this is ugly. But it avoids a patch we
 	# need for every samba version and we don't need autotools
@@ -67,15 +73,9 @@ src_unpack() {
 
 	rm "${S}/docs/manpages"/{mount,umount}.cifs.8
 
-	sed -i \
-		-e 's|tdbsam|tdbsam:${PRIVATEDIR}/passdb.tdb|' \
-		"${S}/source/script/tests/selftest.sh" || die "sed failed"
-
 }
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# fails with that
 	filter-ldflags -m32 -m64
 	
@@ -85,10 +85,9 @@ multilib-native_src_compile_internal() {
 	local mylangs
 	local mymod_shared
 
-	# this doesn't seem to work ...
-	#mylangs="--with-manpages-langs=en"
-	#use linguas_ja && mylangs="${mylangs},ja"
-	#use linguas_pl && mylangs="${mylangs},pl"
+	python_version
+	myconf="--with-python=no"
+	use python && myconf="--with-python=${python}"
 
 	use winbind && mymod_shared="--with-shared-modules=idmap_rid"
 	if use ldap ; then
@@ -122,27 +121,48 @@ multilib-native_src_compile_internal() {
 		--with-privatedir=${PRIVATE_DST} \
 		--with-libsmbclient \
 		--enable-socket-wrapper \
-		--enable-nss-wrapper \
 		--with-cifsmount=no \
-		--disable-dnssd \
 		$(use_with acl acl-support) \
 		$(use_with async aio-support) \
 		$(use_with automount) \
-		$(use with cifsupcall) \
 		$(use_enable cups) \
+		$(use_enable debug) \
 		$(use_enable fam) \
 		$(use_with ads krb5) \
-		$(use_with ads dnsupdate) \
 		$(use_with ldap) \
 		$(use_with pam) $(use_with pam pam_smbpass) \
 		$(use_with quotas) $(use_with quotas sys-quotas) \
 		$(use_with readline) \
+		$(use_with kernel_linux smbmount) \
 		$(use_with syslog) \
 		$(use_with winbind) \
-		${myconf} ${mylangs} ${mymod_shared} || die "econf failed"
+		${myconf} ${mylangs} ${mymod_shared}
+}
 
-	emake proto || die "emake proto failed"
-	emake everything || die "emake everything failed"
+multilib-native_src_compile_internal() {
+	emake -j1 proto || die "emake proto failed"
+	emake -j1 everything || die "emake everything failed"
+
+	if use python ; then
+		emake -j1 python_ext || die "emake python_ext failed"
+	fi
+
+	if use oav ; then
+		# maintainer-info:
+		# - there are no known releases of mks or kavdc,
+		#   setting to builtin to disable auto-detection
+		cd "${WORKDIR}/${VSCAN_P}"
+		econf \
+			--with-fhs \
+			--with-samba-source="${S}/source" \
+			--with-libmksd-builtin \
+			--with-libkavdc-builtin \
+			--without-symantec \
+			--with-filetype \
+			--with-fileregexp \
+			$(use_enable debug)
+		emake -j1 || die "emake oav plugins failed"
+	fi
 }
 
 src_test() {
@@ -165,7 +185,7 @@ multilib-native_src_install_internal() {
 	rm -f "${D}"/usr/bin/*.old
 
 	# Removing executable bits from header-files
-	fperms 644 /usr/include/libsmbclient.h
+	fperms 644 /usr/include/lib{msrpc,smbclient}.h
 
 	# Nsswitch extensions. Make link for wins and winbind resolvers
 	if use winbind ; then
@@ -175,21 +195,30 @@ multilib-native_src_install_internal() {
 		dosym libnss_winbind.so /usr/$(get_libdir)/libnss_winbind.so.2
 	fi
 
+	if use kernel_linux ; then
+		# Warning: this can byte you if /usr is
+		# on a separate volume and you have to mount
+		# a smb volume before the local mount
+		dosym ../usr/bin/smbmount /sbin/mount.smbfs
+		fperms 4755 /usr/bin/smbmnt
+		fperms 4755 /usr/bin/smbumount
+	fi
+
 	# bug #46389: samba doesn't create symlink anymore
 	# beaviour seems to be changed in 3.0.6, see bug #61046
+	dosym samba/libsmbclient.so /usr/$(get_libdir)/libsmbclient.so.0
 	dosym samba/libsmbclient.so /usr/$(get_libdir)/libsmbclient.so
-	dosym samba/libsmbclient.so.0 /usr/$(get_libdir)/libsmbclient.so.0
-	dosym samba/libtalloc.so /usr/$(get_libdir)/libtalloc.so
-	dosym samba/libtalloc.so.1 /usr/$(get_libdir)/libtalloc.so.1
-	dosym samba/libtdb.so /usr/$(get_libdir)/libtdb.so
-	dosym samba/libtdb.so.1 /usr/$(get_libdir)/libtdb.so.1
-	dosym samba/libwbclient.so.0 /usr/$(get_libdir)/libwbclient.so.0
-	dosym samba/libsmbsharemodes.so.0 /usr/$(get_libdir)/libsmbsharemodes.so.0
 
 	# make the smb backend symlink for cups printing support (bug #133133)
 	if use cups ; then
 		dodir $(cups-config --serverbin)/backend
 		dosym /usr/bin/smbspool $(cups-config --serverbin)/backend/smb
+	fi
+
+	if use python ; then
+		emake DESTDIR="${D}" python_install || die "emake installpython failed"
+		# We're doing that manually
+		find "${D}/usr/$(get_libdir)/python${PYVER}/site-packages" -iname "*.pyc" -delete
 	fi
 
 	cd "${S}/source"
@@ -243,6 +272,10 @@ multilib-native_src_install_internal() {
 		doins -r "${S}/examples/"
 		find "${D}/usr/share/doc/${PF}" -type d -print0 | xargs -0 chmod 755
 		find "${D}/usr/share/doc/${PF}/examples" ! -type d -print0 | xargs -0 chmod 644
+		if use python ; then
+			insinto /usr/share/doc/${PF}/python
+			doins -r "${S}/source/python/examples"
+		fi
 	fi
 
 	if ! use doc ; then
@@ -252,6 +285,20 @@ multilib-native_src_install_internal() {
 			rm -rf "${D}/usr/share/doc/${PF}/swat/help"/{guide,howto,devel}
 			rm -rf "${D}/usr/share/doc/${PF}/swat/using_samba"
 		fi
+	else
+		cd "${S}/docs"
+		insinto /usr/share/doc/${PF}
+		doins *.pdf
+		doins -r registry
+		dohtml -r htmldocs/*
+	fi
+
+	if use oav ; then
+		cd "${WORKDIR}/${VSCAN_P}"
+		emake DESTDIR="${D}" install || die "emake install oav plugins failed"
+		docinto samba-vscan
+		dodoc AUTHORS ChangeLog FAQ INSTALL NEWS README TODO
+		find . -iname "*.conf" -print0 | xargs -0 dodoc
 	fi
 }
 
@@ -259,7 +306,7 @@ pkg_preinst() {
 	local PRIVATE_SRC=/etc/samba/private
 	if [[ ! -r "${ROOT}/${PRIVATE_DST}/secrets.tdb" \
 		&& -r "${ROOT}/${PRIVATE_SRC}/secrets.tdb" ]] ; then
-		ebegin "Copying ${ROOT}/${PRIVATE_SRC}/* to ${ROOT}/${PRIVATE_DST}/"
+		ebegin "Copying "${ROOT}"/${PRIVATE_SRC}/* to ${ROOT}/${PRIVATE_DST}/"
 			mkdir -p "${D}/${PRIVATE_DST}"
 			cp -pPRf "${ROOT}/${PRIVATE_SRC}"/* "${D}/${PRIVATE_DST}/"
 		eend $?
@@ -271,6 +318,11 @@ pkg_preinst() {
 }
 
 multilib-native_pkg_postinst_internal() {
+	if use python ; then
+		python_version
+		python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages/samba
+	fi
+
 	if use swat ; then
 		einfo "swat must be enabled by xinetd:"
 		einfo "  change the /etc/xinetd.d/swat configuration"
@@ -289,7 +341,19 @@ multilib-native_pkg_postinst_internal() {
 	elog "The mount/umount.cifs helper applications are not included anymore."
 	elog "Please install net-fs/mount-cifs instead."
 
+	if use oav ; then
+		elog "The configure snippets for various antivirus plugins are available here:"
+		elog "  /usr/share/doc/${PF}/samba-vscan"
+	fi
+
 	ewarn "If you're upgrading from 3.0.24 or earlier, please make sure to"
 	ewarn "restart your clients to clear any cached information about the server."
 	ewarn "Otherwise they might not be able to connect to the volumes."
+}
+
+multilib-native_pkg_postrm_internal() {
+	if use python ; then
+		python_version
+		python_mod_cleanup /usr/$(get_libdir)/python${PYVER}/site-packages/samba
+	fi
 }
