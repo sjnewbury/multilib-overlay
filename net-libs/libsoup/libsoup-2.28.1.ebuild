@@ -15,7 +15,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 # Do NOT build with --disable-debug/--enable-debug=no - gnome2.eclass takes care of that
 IUSE="debug doc gnome ssl"
 
-RDEPEND=">=dev-libs/glib-2.15.3[lib32?]
+RDEPEND=">=dev-libs/glib-2.21.3[lib32?]
 	>=dev-libs/libxml2-2[lib32?]
 	ssl? ( >=net-libs/gnutls-2.1.7[lib32?] )"
 DEPEND="${RDEPEND}

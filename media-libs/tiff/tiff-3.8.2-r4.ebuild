@@ -20,9 +20,7 @@ DEPEND="jpeg? ( >=media-libs/jpeg-6b[lib32?] )
 	jbig? ( >=media-libs/jbigkit-1.6-r1[lib32?] )
 	zlib? ( >=sys-libs/zlib-1.1.3-r2[lib32?] )"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${WORKDIR}"/${P}-tiff2pdf.patch
 	epatch "${FILESDIR}"/${P}-tiffsplit.patch
 	if use jbig; then
@@ -33,9 +31,7 @@ src_unpack() {
 	elibtoolize
 }
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	econf \
 		$(use_enable !nocxx cxx) \
 		$(use_enable zlib) \
@@ -44,7 +40,6 @@ multilib-native_src_compile_internal() {
 		--with-pic --without-x \
 		--with-docdir=/usr/share/doc/${PF} \
 		|| die "econf failed"
-	emake || die "emake failed"
 }
 
 multilib-native_src_install_internal() {

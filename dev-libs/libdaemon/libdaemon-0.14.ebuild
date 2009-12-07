@@ -21,7 +21,7 @@ multilib-native_src_compile_internal() {
 		--docdir=/usr/share/doc/${PF}
 		--localstatedir=/var \
 		--disable-examples \
-		--disable-lynx 
+		--disable-lynx
 	emake || die "emake failed"
 
 	if use doc ; then

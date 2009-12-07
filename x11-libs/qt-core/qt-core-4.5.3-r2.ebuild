@@ -99,7 +99,7 @@ multilib-native_pkg_setup_internal() {
 	fi
 }
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	if use doc; then
 		QT4_EXTRACT_DIRECTORIES="${QT4_EXTRACT_DIRECTORIES}
 					doc/"
@@ -117,7 +117,7 @@ src_unpack() {
 	done
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	qt4-build_src_prepare
 
 	# bug 172219

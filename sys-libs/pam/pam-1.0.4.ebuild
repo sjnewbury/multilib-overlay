@@ -1,11 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/pam/pam-1.0.4.ebuild,v 1.11 2009/03/27 17:08:40 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/pam/pam-1.0.4.ebuild,v 1.12 2009/06/20 20:24:44 flameeyes Exp $
 
 EAPI="2"
-
-WANT_AUTOCONF="latest"
-WANT_AUTOMAKE="latest"
 
 inherit libtool multilib eutils autotools pam toolchain-funcs flag-o-matic multilib-native
 
@@ -96,10 +93,7 @@ pkg_setup() {
 	check_old_modules
 }
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	mkdir -p doc/txts
 	for readme in modules/pam_*/README; do
 		cp -f "${readme}" doc/txts/README.$(dirname "${readme}" | \
@@ -123,9 +117,7 @@ src_unpack() {
 	elibtoolize
 }
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local myconf
 
 	if use hppa || use elibc_FreeBSD; then
@@ -155,6 +147,9 @@ multilib-native_src_compile_internal() {
 		--disable-prelude \
 		--disable-regenerate-man \
 		${myconf} || die "econf failed"
+}
+
+multilib-native_src_compile_internal() {
 	emake sepermitlockdir="/var/run/sepermit" || die "emake failed"
 }
 

@@ -28,7 +28,7 @@ multilib-native_src_prepare_internal() {
 	sed -e 's:$(SHLD_FLAGS) :$(SHLD_FLAGS) $(LDFLAGS) :' -i Makefile.in
 }
 
-multlib-native_src_configure_internal() {
+multilib-native_src_configure_internal() {
 
 	econf \
 		--sysconfdir=/etc/samba \
@@ -39,14 +39,14 @@ multlib-native_src_configure_internal() {
 
 }
 
-multlib-native_src_compile_internal() {
+multilib-native_src_compile_internal() {
 
 	emake showflags || die "emake showflags failed"
 	emake shared-build || die "emake shared-build failed"
 
 }
 
-multlib-native_src_install_internal() {
+multilib-native_src_install_internal() {
 
 	emake install DESTDIR="${D}" || die "emake install failed"
 	dolib.a sharedbuild/lib/libtalloc.a

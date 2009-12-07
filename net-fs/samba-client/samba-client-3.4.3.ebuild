@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba-client/samba-client-3.4.3.ebuild,v 1.1 2009/10/29 20:38:16 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba-client/samba-client-3.4.3.ebuild,v 1.4 2009/11/30 16:24:14 armin76 Exp $
 
 EAPI="2"
 
@@ -13,29 +13,26 @@ HOMEPAGE="http://www.samba.org/"
 SRC_URI="mirror://samba/${MY_P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~hppa ~ppc64 ~x86"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 IUSE="samba4 ads aio avahi caps cluster cups debug ldap minimal syslog winbind zeroconf"
 
-# It doesn't matter that mDNSResponder isn't in the multilib overlay, because
-# it's the second choice.
 DEPEND="!<net-fs/samba-3.3
 	!net-fs/mount-cifs
-	ads? ( virtual/krb5[lib32?] sys-fs/e2fsprogs[lib32?]
-		net-fs/samba-libs[ads,lib32?] sys-apps/keyutils )
+	ads? ( virtual/krb5 sys-fs/e2fsprogs
+		net-fs/samba-libs[ads] sys-apps/keyutils )
 	!minimal? (
-		dev-libs/popt[lib32?]
-		dev-libs/iniparser[lib32?]
+		dev-libs/popt
+		dev-libs/iniparser
 		virtual/libiconv
-		zeroconf? ( || ( net-dns/avahi[mdnsresponder-compat,lib32?] net-misc/mDNSResponder[lib32?] ) )
-		caps? ( sys-libs/libcap[lib32?] )
-		cups? ( net-print/cups[lib32?] )
-		debug? ( dev-libs/dmalloc[lib32?] )
-		ldap? ( net-nds/openldap[lib32?] )
+		zeroconf? ( || ( net-dns/avahi[mdnsresponder-compat] net-misc/mDNSResponder ) )
+		caps? ( sys-libs/libcap )
+		cups? ( net-print/cups )
+		debug? ( dev-libs/dmalloc )
+		ldap? ( net-nds/openldap )
 		syslog? ( virtual/logger )
-		sys-libs/tdb[lib32?]
-		sys-libs/talloc[lib32?]
-		net-fs/samba-libs[caps?,cups?,ldap?,syslog?,winbind?,ads?,samba4?,netapi,lib32?]
-	)"
+		sys-libs/tdb
+		sys-libs/talloc
+		~net-fs/samba-libs-${PV}[caps?,cups?,ldap?,syslog?,winbind?,ads?,samba4?,netapi] )"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${MY_P}/source3"

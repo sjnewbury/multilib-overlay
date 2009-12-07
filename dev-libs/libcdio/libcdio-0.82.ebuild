@@ -18,7 +18,7 @@ IUSE="cddb minimal +cxx"
 RDEPEND="cddb? ( >=media-libs/libcddb-1.0.1[lib32?] )
 	virtual/libintl"
 DEPEND="${RDEPEND}
-	sys-devel/gettext
+	sys-devel/gettext[lib32?]
 	dev-util/pkgconfig[lib32?]"
 
 multilib-native_src_prepare_internal() {

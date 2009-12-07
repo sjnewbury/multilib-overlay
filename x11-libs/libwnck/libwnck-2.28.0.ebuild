@@ -15,8 +15,8 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc startup-notification"
 
-RDEPEND=">=x11-libs/gtk+-2.11.3[lib32?]
-	>=dev-libs/glib-2.13.0[lib32?]
+RDEPEND=">=x11-libs/gtk+-2.16.0[lib32?]
+	>=dev-libs/glib-2.16.0[lib32?]
 	x11-libs/libX11[lib32?]
 	x11-libs/libXres[lib32?]
 	x11-libs/libXext[lib32?]
@@ -31,13 +31,13 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		--disable-static
 		$(use_enable startup-notification)"
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	gnome2_src_prepare
 
 	# Fix glib-mkenum auto generation (bug #279832)

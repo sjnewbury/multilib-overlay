@@ -1,0 +1,39 @@
+diff -up cups-1.3.7/scheduler/select.c.CVE-2009-3553 cups-1.3.7/scheduler/select.c
+--- cups-1.3.7/scheduler/select.c.CVE-2009-3553	2007-11-30 19:29:50.000000000 +0000
++++ cups-1.3.7/scheduler/select.c	2009-11-11 16:36:07.223893886 +0000
+@@ -477,7 +477,7 @@ cupsdDoSelect(long timeout)		/* I - Time
+       (*(fdptr->read_cb))(fdptr->data);
+     }
+ 
+-    if (fdptr->write_cb && event->filter == EVFILT_WRITE)
++    if (fdptr->use > 1 && fdptr->write_cb && event->filter == EVFILT_WRITE)
+     {
+       cupsdLogMessage(CUPSD_LOG_DEBUG2, "cupsdDoSelect: Write on fd %d...",
+ 	              fdptr->fd);
+@@ -537,7 +537,7 @@ cupsdDoSelect(long timeout)		/* I - Time
+ 	  (*(fdptr->read_cb))(fdptr->data);
+ 	}
+ 
+-	if (fdptr->write_cb && (event->events & (EPOLLOUT | EPOLLERR | EPOLLHUP)))
++	if (fdptr->use > 1 && fdptr->write_cb && (event->events & (EPOLLOUT | EPOLLERR | EPOLLHUP)))
+ 	{
+ 	  cupsdLogMessage(CUPSD_LOG_DEBUG2, "cupsdDoSelect: Write on fd %d...",
+ 	        	  fdptr->fd);
+@@ -649,7 +649,7 @@ cupsdDoSelect(long timeout)		/* I - Time
+         (*(fdptr->read_cb))(fdptr->data);
+       }
+ 
+-      if (fdptr->write_cb && (pfd->revents & (POLLOUT | POLLERR | POLLHUP)))
++      if (fdptr->use > 1 && fdptr->write_cb && (pfd->revents & (POLLOUT | POLLERR | POLLHUP)))
+       {
+         cupsdLogMessage(CUPSD_LOG_DEBUG2, "cupsdDoSelect: Write on fd %d...",
+ 	                fdptr->fd);
+@@ -719,7 +719,7 @@ cupsdDoSelect(long timeout)		/* I - Time
+         (*(fdptr->read_cb))(fdptr->data);
+       }
+ 
+-      if (fdptr->write_cb && FD_ISSET(fdptr->fd, &cupsd_current_output))
++      if (fdptr->use > 1 && fdptr->write_cb && FD_ISSET(fdptr->fd, &cupsd_current_output))
+       {
+         cupsdLogMessage(CUPSD_LOG_DEBUG2, "cupsdDoSelect: Write on fd %d...",
+ 	                fdptr->fd);

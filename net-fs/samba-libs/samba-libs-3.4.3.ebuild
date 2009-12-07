@@ -21,9 +21,9 @@ DEPEND="dev-libs/popt[lib32?]
 	sys-libs/talloc[lib32?]
 	sys-libs/tdb[lib32?]
 	virtual/libiconv
-	ads? ( virtual/krb5[lib32?] sys-fs/e2fsprogs[lib32?] )
+	ads? ( virtual/krb5[lib32?] sys-libs/e2fsprogs-libs[lib32?] )
 	caps? ( sys-libs/libcap[lib32?] )
-	cluster? ( dev-db/ctdb )
+	cluster? ( dev-db/ctdb[lib32?] )
 	cups? ( net-print/cups[lib32?] )
 	debug? ( dev-libs/dmalloc[lib32?] )
 	ldap? ( net-nds/openldap[lib32?] )

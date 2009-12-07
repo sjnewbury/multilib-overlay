@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/tiff/tiff-3.9.2.ebuild,v 1.1 2009/11/05 18:23:16 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/tiff/tiff-3.9.2.ebuild,v 1.6 2009/11/18 17:58:31 ranger Exp $
 
 EAPI=2
 inherit eutils libtool multilib-native
@@ -11,13 +11,12 @@ SRC_URI="ftp://ftp.remotesensing.org/pub/libtiff/${P}.tar.gz"
 
 LICENSE="as-is"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha amd64 arm hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="jpeg jbig +cxx zlib"
 
-RDEPEND="jpeg? ( >=media-libs/jpeg-6b[lib32?] )
+DEPEND="jpeg? ( >=media-libs/jpeg-6b[lib32?] )
 	jbig? ( media-libs/jbigkit[lib32?] )
 	zlib? ( sys-libs/zlib[lib32?] )"
-DEPEND="${RDEPEND}"
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-3.8.2-CVE-2009-2285.patch

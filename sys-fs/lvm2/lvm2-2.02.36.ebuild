@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-fs/lvm2/lvm2-2.02.36.ebuild,v 1.10 2009/09/18 02:05:33 robbat2 Exp $
 
-EAPI=1
+EAPI=2
 inherit eutils multilib multilib-native
 
 DESCRIPTION="User-land utilities for LVM2 (device-mapper) software."
@@ -17,8 +17,8 @@ KEYWORDS="alpha amd64 ~hppa ~ia64 ~mips ppc ~ppc64 ~sparc x86"
 IUSE="readline +static clvm cman +lvm1 selinux"
 
 DEPEND=">=sys-fs/device-mapper-1.02.24[lib32?]
-		clvm? ( >=sys-cluster/dlm-1.01.00
-			cman? ( >=sys-cluster/cman-1.01.00 ) )"
+		clvm? ( >=sys-cluster/dlm-1.01.00[lib32?]
+			cman? ( >=sys-cluster/cman-1.01.00[lib32?] ) )"
 
 RDEPEND="${DEPEND}
 	|| ( =sys-apps/baselayout-1* >=sys-apps/openrc-0.4 )
@@ -32,12 +32,11 @@ multilib-native_pkg_setup_internal() {
 	use nolvm1 && eerror "USE=nolvm1 has changed to USE=lvm1 via package.use"
 }
 
-multilib-native_src_unpack_internal() {
-	unpack ${A}
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/lvm.conf-2.02.36.patch
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# Static compile of lvm2 so that the install described in the handbook works
 	# http://www.gentoo.org/doc/en/lvm2.xml
 	# fixes http://bugs.gentoo.org/show_bug.cgi?id=84463
@@ -91,7 +90,6 @@ multilib-native_src_compile_internal() {
 		--libdir=/usr/$(get_libdir) \
 		${myconf} \
 		CLDFLAGS="${LDFLAGS}" || die
-	emake || die "compile problem"
 }
 
 multilib-native_src_install_internal() {
@@ -135,13 +133,13 @@ multilib-native_src_install_internal() {
 		elog "USE=nolvm1 has changed to USE=lvm1 via package.use"
 }
 
-multilib-native_pkg_postinst_internal() {
+pkg_postinst() {
 	elog "lvm volumes are no longer automatically created for"
 	elog "baselayout-2 users. If you are using baselayout-2, be sure to"
 	elog "run: # rc-update add lvm boot"
 }
 
-multilib-native_src_test_internal() {
+src_test() {
 	einfo "Testcases disabled because of device-node mucking"
 	einfo "If you want them, compile the package and see ${S}/tests"
 }

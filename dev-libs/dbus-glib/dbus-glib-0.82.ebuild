@@ -20,7 +20,7 @@ RDEPEND=">=sys-apps/dbus-1.1[lib32?]
 	>=dev-libs/expat-1.95.8[lib32?]"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
-	sys-devel/gettext
+	sys-devel/gettext[lib32?]
 	doc? (
 		app-doc/doxygen
 		app-text/xmlto
@@ -54,6 +54,6 @@ multilib-native_src_install_internal() {
 	# FIXME: We need --with-bash-completion-dir
 	if use bash-completion ; then
 		dobashcompletion "${D}"/etc/bash_completion.d/dbus-bash-completion.sh
-		rm -rf "${D}"/etc/bash_completion.d || die "rm failed"
+		rm -rf "${D}"/etc/bash_completion.d || die "rm failed"
 	fi
 }

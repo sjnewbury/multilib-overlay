@@ -28,6 +28,7 @@ IUSE="+alsa debug python sqlite" # qt-experimental
 #		x11-libs/qt-core )
 
 # nspr-4.8 due to BMO #499144
+# Disable sqlite temporarily  	>=dev-db/sqlite-3.6.7[lib32?]
 RDEPEND="java? ( >=virtual/jre-1.4 )
 	>=dev-lang/python-2.3[lib32?,threads]
 	>=sys-devel/binutils-2.16.1
@@ -93,7 +94,6 @@ multilib-native_src_prepare_internal() {
 
 	# Patch in support to reset all LANG variables to C
 	# Do NOT add to patchset as it must be applied after eautoreconf
-	cd "${S}"
 	epatch "${FILESDIR}/000_flex-configure-LANG.patch"
 }
 

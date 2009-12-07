@@ -27,9 +27,9 @@ DEPEND="${RDEPEND}
 	~app-text/docbook-xml-dtd-4.1.2
 	x11-proto/xproto
 	>=x11-proto/randrproto-1.2"
-PDEPEND=">=dev-python/pygtk-2.8
-	>=dev-python/pygobject-2.14
-	>=dev-python/libgnome-python-2.22"
+PDEPEND=">=dev-python/pygtk-2.8[lib32?]
+	>=dev-python/pygobject-2.14[lib32?]
+	>=dev-python/libgnome-python-2.22[lib32?]"
 
 # Includes X11/Xatom.h in libgnome-desktop/gnome-bg.c which comes from xproto
 # Includes X11/extensions/Xrandr.h that includes randr.h from randrproto (and
@@ -37,7 +37,7 @@ PDEPEND=">=dev-python/pygtk-2.8
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		--with-gnome-distributor=Gentoo
 		--disable-scrollkeeper

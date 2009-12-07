@@ -25,8 +25,8 @@ RDEPEND=">=dev-libs/glib-2.14[lib32?]
 	>=sys-apps/dbus-1[lib32?]
 	>=gnome-base/orbit-2.4[lib32?]
 	>=dev-libs/libxml2-2[lib32?]
-	ldap? ( net-nds/openldap )
-	policykit? ( sys-auth/polkit[lib32?] )"
+	ldap? ( net-nds/openldap[lib32?] )
+	policykit? ( >=sys-auth/polkit-0.93[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9[lib32?]
@@ -37,7 +37,7 @@ DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 S="${WORKDIR}/${MY_P}"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		--enable-gtk
 		--disable-static

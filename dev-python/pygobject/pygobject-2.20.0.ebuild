@@ -23,7 +23,7 @@ RDEPEND=">=dev-lang/python-2.4.4-r5[lib32?]
 DEPEND="${RDEPEND}
 	doc? ( dev-libs/libxslt >=app-text/docbook-xsl-stylesheets-1.70.1 )
 	test? ( media-fonts/font-cursor-misc media-fonts/font-misc-misc )
-	>=dev-util/pkgconfig-0.12.0"
+	>=dev-util/pkgconfig-0.12.0[lib32?]"
 
 RESTRICT_PYTHON_ABIS="3.*"
 

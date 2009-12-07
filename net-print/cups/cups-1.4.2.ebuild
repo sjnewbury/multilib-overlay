@@ -161,8 +161,11 @@ multilib-native_src_install_internal() {
 		rm -rf "${D}"/etc/xinetd.d
 	fi
 
-	keepdir /usr/share/cups/profiles /usr/libexec/cups/driver /var/log/cups \
-		/var/run/cups/certs /var/cache/cups /var/spool/cups/tmp /etc/cups/ssl
+	keepdir /usr/libexec/cups/driver /usr/share/cups/{model,profiles} \
+		/var/cache/cups /var/cache/cups/rss /var/log/cups /var/run/cups/certs \
+		/var/spool/cups/tmp
+
+	keepdir /etc/cups/{interfaces,ppd,ssl}
 
 	use X || rm -r "${D}"/usr/share/applications
 

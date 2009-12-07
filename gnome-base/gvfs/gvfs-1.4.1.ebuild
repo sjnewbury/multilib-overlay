@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gvfs/gvfs-1.4.1.ebuild,v 1.2 2009/10/30 00:35:57 eva Exp $
 
 EAPI="2"
+GCONF_DEBUG="no"
 
 inherit autotools bash-completion gnome2 eutils multilib-native
 
@@ -18,7 +19,7 @@ RDEPEND=">=dev-libs/glib-2.21.2[lib32?]
 	>=sys-apps/dbus-1.0[lib32?]
 	>=net-libs/libsoup-2.25.1[gnome,lib32?]
 	dev-libs/libxml2[lib32?]
-	net-misc/openssh
+	net-misc/openssh[lib32?]
 	>=sys-fs/udev-138[lib32?]
 	archive? ( app-arch/libarchive[lib32?] )
 	avahi? ( >=net-dns/avahi-0.6[lib32?] )
@@ -27,7 +28,7 @@ RDEPEND=">=dev-libs/glib-2.21.2[lib32?]
 		net-wireless/bluez[lib32?]
 		dev-libs/expat[lib32?] )
 	fuse? ( sys-fs/fuse[lib32?] )
-	gdu? ( >=sys-apps/gnome-disk-utility-2.28 )
+	gdu? ( >=sys-apps/gnome-disk-utility-2.28[lib32?] )
 	gnome? ( >=gnome-base/gconf-2.0[lib32?] )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-1.0[lib32?] )
 	gphoto2? ( >=media-libs/libgphoto2-2.4.7[lib32?] )
@@ -37,7 +38,6 @@ RDEPEND=">=dev-libs/glib-2.21.2[lib32?]
 	hal? (
 		cdda? ( >=dev-libs/libcdio-0.78.2[-minimal,lib32?] )
 		>=sys-apps/hal-0.5.10[lib32?] )
-	hal? ( >=sys-apps/hal-0.5.10[lib32?] )
 	samba? ( >=net-fs/samba-3[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40

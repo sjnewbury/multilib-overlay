@@ -24,7 +24,7 @@ SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
 
 LICENSE="PSF-2.2"
 SLOT="2.6"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="-berkdb build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite ssl +threads tk ucs2 wininst +xml"
 
 # NOTE: dev-python/{elementtree,celementtree,pysqlite,ctypes}
@@ -55,7 +55,7 @@ RDEPEND=">=app-admin/eselect-python-20090606
 DEPEND="${RDEPEND}
 		dev-util/pkgconfig[lib32?]"
 RDEPEND+=" !build? ( app-misc/mime-types )"
-PDEPEND="app-admin/python-updater"
+PDEPEND="${DEPEND} app-admin/python-updater"
 
 PROVIDE="virtual/python"
 
@@ -72,8 +72,7 @@ multilib-native_pkg-setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
-	# Ensure that internal copies of expat and libffi aren't used.
-	rm -fr Modules/expat
+	# Ensure that internal copy of libffi isn't used.
 	rm -fr Modules/_ctypes/libffi*
 
 	if tc-is-cross-compiler; then
@@ -206,14 +205,14 @@ multilib-native_src_test_internal() {
 	host-is-pax && skip_tests+=" ctypes"
 
 	for test in ${skip_tests}; do
-		mv "${S}/Lib/test/test_${test}.py" "${T}"
+		mv "${S}"/Lib/test/test_${test}.py "${T}"
 	done
 
 	# Rerun failed tests in verbose mode (regrtest -w).
 	EXTRATESTOPTS="-w" make test || die "make test failed"
 
 	for test in ${skip_tests}; do
-		mv "${T}/test_${test}.py" "${S}/Lib/test/test_${test}.py"
+		mv "${T}"/test_${test}.py "${S}"/Lib/test/test_${test}.py
 	done
 
 	elog "The following tests have been skipped:"
@@ -260,7 +259,7 @@ multilib-native_src_install_internal() {
 
 	if use examples; then
 		insinto /usr/share/doc/${PF}/examples
-		doins -r "${S}/Tools" || die "doins failed"
+		doins -r "${S}"/Tools || die "doins failed"
 	fi
 
 	newinitd "${FILESDIR}/pydoc.init" pydoc-${SLOT}
@@ -289,7 +288,8 @@ eselect_python_update() {
 multilib-native_pkg_postinst_internal() {
 	eselect_python_update
 
-	python_mod_optimize -x "(site-packages|test)" /usr/$(get_libdir)/python${PYVER}
+	python_mod_optimize -x "(site-packages|test)" /usr/lib/python${PYVER}
+	[[ "$(get_libdir)" != "lib" ]] && python_mod_optimize -x "(site-packages|test)" /usr/$(get_libdir)/python${PYVER}
 
 	if [[ "${python_updater_warning}" == "1" ]]; then
 		ewarn
@@ -307,5 +307,6 @@ multilib-native_pkg_postinst_internal() {
 multilib-native_pkg_postrm_internal() {
 	eselect_python_update
 
-	python_mod_cleanup /usr/$(get_libdir)/python${PYVER}
+	python_mod_cleanup /usr/lib/python${PYVER}
+	[[ "$(get_libdir)" != "lib" ]] && python_mod_cleanup /usr/$(get_libdir)/python${PYVER}
 }

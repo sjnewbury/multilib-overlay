@@ -60,7 +60,7 @@ RDEPEND="sdl? ( >=media-libs/libsdl-1.2.10[lib32?] )
 	jack? ( media-sound/jack-audio-connection-kit[lib32?] )
 	X? ( x11-libs/libX11[lib32?] x11-libs/libXext[lib32?] )
 	video_cards_nvidia? (
-		vdpau? ( >=x11-drivers/nvidia-drivers-180.29 )
+		vdpau? ( >=x11-drivers/nvidia-drivers-180.29[lib32?] )
 	)"
 
 DEPEND="${RDEPEND}

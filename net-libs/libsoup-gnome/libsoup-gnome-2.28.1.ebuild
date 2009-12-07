@@ -18,6 +18,7 @@ SLOT="2.4"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 # Do NOT build with --disable-debug/--enable-debug=no - gnome2.eclass takes care of that
 IUSE="debug doc"
+
 RDEPEND="~net-libs/libsoup-${PV}[lib32?]
 	gnome-base/gnome-keyring[lib32?]
 	net-libs/libproxy[lib32?]

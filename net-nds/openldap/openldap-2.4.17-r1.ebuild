@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-nds/openldap/openldap-2.4.17-r1.ebuild,v 1.2 2009/07/29 00:21:10 mr_bones_ Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-nds/openldap/openldap-2.4.17-r1.ebuild,v 1.4 2009/11/24 23:31:54 robbat2 Exp $
 
 EAPI="2"
 inherit db-use eutils flag-o-matic multilib ssl-cert versionator toolchain-funcs multilib-native
@@ -175,6 +175,8 @@ multilib-native_src_prepare_internal() {
 	# ensure correct SLAPI path by default
 	sed -i -e 's,\(#define LDAPI_SOCK\).*,\1 "/var/run/openldap/slapd.sock",' \
 		"${S}"/include/ldap_defaults.h
+
+	epatch "${FILESDIR}"/${P}-gcc44.patch
 
 	epatch \
 		"${FILESDIR}"/${PN}-2.2.14-perlthreadsfix.patch \
@@ -534,5 +536,5 @@ pkg_postinst() {
 	elog "An example file for tuning BDB backends with openldap is"
 	elog "DB_CONFIG.fast.example in /usr/share/doc/${PF}/"
 
-	preserve_old_lib_notify usr/$(get_libdir)/{liblber,libldap,libldap_r}-2.3.so.0
+	preserve_old_lib_notify /usr/$(get_libdir)/{liblber,libldap,libldap_r}-2.3.so.0
 }

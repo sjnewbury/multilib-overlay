@@ -25,14 +25,15 @@ RDEPEND=">=dev-libs/glib-2.17.3[lib32?]
 		x11-libs/libXft[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9[lib32?]
+	dev-util/gtk-doc-am
 	doc? (
 		>=dev-util/gtk-doc-1
 		~app-text/docbook-xml-dtd-4.1.2
-		x11-libs/libXft )
+		x11-libs/libXft[lib32?] )
 	test? (
 		>=dev-util/gtk-doc-1
 		~app-text/docbook-xml-dtd-4.1.2
-		x11-libs/libXft )
+		x11-libs/libXft[lib32?] )
 	X? ( x11-proto/xproto )"
 
 DOCS="AUTHORS ChangeLog* NEWS README THANKS"

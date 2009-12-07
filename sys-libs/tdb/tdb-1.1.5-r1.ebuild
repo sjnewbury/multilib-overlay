@@ -14,7 +14,10 @@ IUSE="python tools tdbtest"
 SLOT="0"
 KEYWORDS="~amd64 ~hppa ~ppc64 ~x86"
 
-DEPEND="!net-fs/samba-libs[tdb]"
+DEPEND="
+	!net-fs/samba-libs[tdb]
+	!<net-fs/samba-libs-3.4
+	"
 RDEPEND="${DEPEND}"
 
 BINPROGS="bin/tdbdump bin/tdbtool bin/tdbbackup"

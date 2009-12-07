@@ -17,8 +17,8 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86"
 IUSE="readline +static clvm cman +lvm1 selinux"
 
 DEPEND="!!sys-fs/device-mapper
-	clvm? ( =sys-cluster/dlm-2*
-		cman? ( =sys-cluster/cman-2* ) )"
+	clvm? ( =sys-cluster/dlm-2*[lib32?]
+		cman? ( =sys-cluster/cman-2*[lib32?] ) )"
 
 RDEPEND="${DEPEND}
 	|| ( =sys-apps/baselayout-1* >=sys-apps/openrc-0.4 )
@@ -37,10 +37,6 @@ multilib-native_pkg_setup_internal() {
 		elog "you must append .static the filename!"
 	fi
 }
-
-#multlib-native_src_unpack_internal() {
-#	unpack ${A}
-#}
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-2.02.45-dmeventd.patch
@@ -208,14 +204,14 @@ multilib-native_src_install_internal() {
 	elog "Rebuild your genkernel initramfs if you are using lvm"
 }
 
-multilib-native_pkg_postinst_internal() {
+pkg_postinst() {
 	elog "lvm volumes are no longer automatically created for"
 	elog "baselayout-2 users. If you are using baselayout-2, be sure to"
 	elog "run: # rc-update add lvm boot"
 	elog "Do NOT add it if you are using baselayout-1 still."
 }
 
-multilib-native_src_test_internal() {
+src_test() {
 	einfo "Testcases disabled because of device-node mucking"
 	einfo "If you want them, compile the package and see ${S}/tests"
 }

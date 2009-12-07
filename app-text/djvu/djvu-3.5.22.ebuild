@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/djvu/djvu-3.5.22.ebuild,v 1.1 2009/10/09 18:24:00 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/djvu/djvu-3.5.22.ebuild,v 1.2 2009/10/28 09:50:48 pva Exp $
 
 EAPI=2
 inherit fdo-mime nsplugins flag-o-matic eutils multilib toolchain-funcs confutils multilib-native
@@ -74,7 +74,7 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${D}" plugindir=/usr/$(get_libdir)/${PLUGINS_DIR} install
+	emake DESTDIR="${D}" plugindir=/usr/$(get_libdir)/${PLUGINS_DIR} install || die
 
 	dodoc README TODO NEWS
 

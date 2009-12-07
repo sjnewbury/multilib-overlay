@@ -32,17 +32,15 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${PN}-0.99_beta14-deoptimise.patch"
+	epatch "${FILESDIR}/${P}-freeglut-2.6.patch"
 
 	eautoreconf
 	elibtoolize
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# temp font fix #44128
 	export VARTEXFONTS="${T}/fonts"
 
@@ -57,11 +55,10 @@ multilib-native_src_compile_internal() {
 		$(use_enable mono csharp) \
 		$(use_enable ruby) \
 		|| die "econf failed"
-	emake || die "emake failed"
-	unset VARTEXFONTS
 }
 
 multilib-native_src_install_internal() {
+	unset VARTEXFONTS
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS ChangeLog NEWS NOTES README
 

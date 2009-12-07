@@ -166,9 +166,9 @@ multilib-native_src_configure_internal() {
 			myconf="${myconf}
 				--with-state-trackers=glx,dri,egl
 				$(use_enable video_cards_nouveau gallium-nouveau)
-				$(use_enable video_cards_intel gallium-intel)"
-				#$(use_enable video_cards_radeon gallium-radeon)
-				#$(use_enable video_cards_radeonhd gallium-radeon)"
+				$(use_enable video_cards_intel gallium-intel)
+				$(use_enable video_cards_radeon gallium-radeon)
+				$(use_enable video_cards_radeonhd gallium-radeon)"
 		fi
 	else
 		# we need to disable the gallium since they enable by default...
