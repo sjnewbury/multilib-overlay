@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.8.8-r5.ebuild,v 1.11 2009/03/11 21:55:45 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.8.8-r5.ebuild,v 1.13 2009/09/28 15:58:28 tove Exp $
 
 EAPI="2"
 MULTILIB_IN_SOURCE_BUILD="yes"
@@ -71,39 +71,38 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
-	cd "${S}"
 
 	# Get -lpthread linked before -lc.  This is needed
 	# when using glibc >= 2.3, or else runtime signal
 	# handling breaks.  Fixes bug #14380.
 	# <rac@gentoo.org> (14 Feb 2003)
 	# reinstated to try to avoid sdl segfaults 03.10.02
-	epatch "${FILESDIR}"/${PN}-prelink-lpthread.patch
+	cd "${S}"; epatch "${FILESDIR}"/${PN}-prelink-lpthread.patch
 
 	# Patch perldoc to not abort when it attempts to search
 	# nonexistent directories; fixes bug #16589.
 	# <rac@gentoo.org> (28 Feb 2003)
 
-	epatch "${FILESDIR}"/${PN}-perldoc-emptydirs.patch
+	cd "${S}"; epatch "${FILESDIR}"/${PN}-perldoc-emptydirs.patch
 
 	# this lays the groundwork for solving the issue of what happens
 	# when people (or ebuilds) install different versiosn of modules
 	# that are in the core, by rearranging the @INC directory to look
 	# site -> vendor -> core.
-	epatch "${FILESDIR}"/${P}-reorder-INC.patch
+	cd "${S}"; epatch "${FILESDIR}"/${P}-reorder-INC.patch
 
 	# some well-intentioned stuff in http://groups.google.com/groups?hl=en&lr=&ie=UTF-8&selm=Pine.SOL.4.10.10205231231200.5399-100000%40maxwell.phys.lafayette.edu
 	# attempts to avoid bringing cccdlflags to bear on static
 	# extensions (like DynaLoader).  i believe this is
 	# counterproductive on a Gentoo system which has both a shared
 	# and static libperl, so effectively revert this here.
-	epatch "${FILESDIR}"/${PN}-picdl.patch
+	cd "${S}"; epatch "${FILESDIR}"/${PN}-picdl.patch
 
 	# Configure makes an unwarranted assumption that /bin/ksh is a
 	# good shell. This patch makes it revert to using /bin/sh unless
 	# /bin/ksh really is executable. Should fix bug 42665.
 	# rac 2004.06.09
-	epatch "${FILESDIR}"/${PN}-noksh.patch
+	cd "${S}"; epatch "${FILESDIR}"/${PN}-noksh.patch
 
 	# makedepend.SH contains a syntax error which is ignored by bash but causes
 	# dash to abort
@@ -126,21 +125,26 @@ multilib-native_src_prepare_internal() {
 	# filter it otherwise configure fails. See #125535.
 	epatch "${FILESDIR}"/perl-hppa-pa7200-configure.patch
 
-	[[ $(get_libdir) == lib64 ]] && epatch "${FILESDIR}"/${P}-lib64.patch
-	[[ $(get_libdir) == lib32 ]] && epatch "${FILESDIR}"/${P}-lib32.patch
+	case "$(get_libdir)" in
+		lib64) cd "${S}" && epatch "${FILESDIR}"/${P}-lib64.patch;;
+		lib32) cd "${S}" && epatch "${FILESDIR}"/${P}-lib32.patch;;
+		lib) true;;
+		*) die "Something's wrong with your libdir, don't know how to treat it.";;
+	esac
 
-	[[ ${CHOST} == *-dragonfly* ]] && epatch "${FILESDIR}"/${P}-dragonfly-clean.patch
-	[[ ${CHOST} == *-freebsd* ]] && epatch "${FILESDIR}"/${P}-fbsdhints.patch
-	epatch "${FILESDIR}"/${P}-USE_MM_LD_RUN_PATH.patch
-	epatch "${FILESDIR}"/${P}-links.patch
+	[[ ${CHOST} == *-dragonfly* ]] && cd "${S}" && epatch "${FILESDIR}"/${P}-dragonfly-clean.patch
+	[[ ${CHOST} == *-freebsd* ]] && cd "${S}" && epatch "${FILESDIR}"/${P}-fbsdhints.patch
+	cd "${S}"; epatch "${FILESDIR}"/${P}-USE_MM_LD_RUN_PATH.patch
+	cd "${S}"; epatch "${FILESDIR}"/${P}-links.patch
 	# c++ patch - should address swig related items
-	epatch "${FILESDIR}"/${P}-cplusplus.patch
+	cd "${S}"; epatch "${FILESDIR}"/${P}-cplusplus.patch
 
 	epatch "${FILESDIR}"/${P}-gcc42-command-line.patch
 
 	# Newer linux-headers don't include asm/page.h. Fix this.
 	# Patch from bug 168312, thanks Peter!
-	has_version '>sys-kernel/linux-headers-2.6.20' && epatch "${FILESDIR}"/${P}-asm-page-h-compile-failure.patch
+	echo "#include <asm/page.h>" | $(tc-getCPP) > /dev/null 2>&1 || \
+		epatch "${FILESDIR}"/${P}-asm-page-h-compile-failure.patch
 
 	# perlcc fix patch - bug #181229
 	epatch "${FILESDIR}"/${P}-perlcc.patch

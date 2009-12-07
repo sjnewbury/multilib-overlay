@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.8.8-r6.ebuild,v 1.4 2009/05/08 05:46:34 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.8.8-r6.ebuild,v 1.7 2009/11/04 12:39:15 haubi Exp $
 
 EAPI="2"
 
@@ -142,7 +142,8 @@ multilib-native_src_prepare_internal() {
 
 	# Newer linux-headers don't include asm/page.h. Fix this.
 	# Patch from bug 168312, thanks Peter!
-	has_version '>sys-kernel/linux-headers-2.6.20' && epatch "${FILESDIR}"/${P}-asm-page-h-compile-failure.patch
+	echo "#include <asm/page.h>" | $(tc-getCPP) > /dev/null 2>&1 || \
+		epatch "${FILESDIR}"/${P}-asm-page-h-compile-failure.patch
 
 	# Also add the directory prefix of the current file when the quote syntax is
 	# used; 'require' will only look in @INC, not the current directory.
@@ -160,6 +161,9 @@ multilib-native_src_prepare_internal() {
 
 	epatch "${FILESDIR}"/${P}-CAN-2005-0448-rmtree-2.patch
 	epatch "${FILESDIR}"/${P}-fix_file_path_chdir.patch
+
+	# Respect CFLAGS even for linking when done with compiler
+	epatch "${FILESDIR}"/${P}-ccld-cflags.patch
 }
 
 myconf() {
