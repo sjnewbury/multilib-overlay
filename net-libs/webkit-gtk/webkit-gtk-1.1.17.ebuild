@@ -26,7 +26,7 @@ RDEPEND="
 	x11-libs/cairo[lib32?]
 
 	>=x11-libs/gtk+-2.10[lib32?]
-	>=gnome-base/gail-1.8
+	>=gnome-base/gail-1.8[lib32?]
 	>=dev-libs/icu-3.8.1-r1[lib32?]
 	>=net-libs/libsoup-2.27.91[lib32?]
 	>=dev-db/sqlite-3[lib32?]
@@ -37,7 +37,7 @@ RDEPEND="
 		media-libs/gst-plugins-base:0.10[lib32?] )
 	introspection? (
 		>=dev-libs/gobject-introspection-0.6.2[lib32?]
-		!!dev-libs/gir-repository[webkit,lib32?]
+		!!dev-libs/gir-repository[webkit]
 		dev-libs/gir-repository[libsoup,lib32?] )
 	pango? ( >=x11-libs/pango-1.12[lib32?] )
 	!pango? (
@@ -56,14 +56,6 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${MY_P}"
 
 multilib-native_src_prepare_internal() {
-	# Add files missing from tarball...
-	# https://bugs.webkit.org/show_bug.cgi?id=31102
-	for file in JSCore-1.0.gir JSCore-1.0.typelib; do
-		cp "${FILESDIR}/$file" "${S}/WebKit/gtk/" || die "Error copying $file"
-	done
-	# ...and fix the include path for these
-	epatch "${FILESDIR}/webkit-introspection-jscore-path.patch"
-
 	# Make it libtool-1 compatible
 	rm -v autotools/lt* autotools/libtool.m4 \
 		|| die "removing libtool macros failed"
