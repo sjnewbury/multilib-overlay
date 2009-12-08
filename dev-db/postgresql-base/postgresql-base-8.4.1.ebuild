@@ -50,7 +50,7 @@ PDEPEND="doc? ( dev-db/postgresql-docs:${SLOT} )"
 
 S="${WORKDIR}/postgresql-${PV}"
 
-multilib-native_pkg_setup_internal() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/postgresql-${SLOT}-common.patch" \
 		"${FILESDIR}/postgresql-${SLOT}-base.patch"
 
