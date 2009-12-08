@@ -19,6 +19,8 @@ else
 	SRC_URI="mirror://sourceforge/xine/${MY_P}.tar.bz2"
 fi
 
+SRC_URI="${SRC_URI} mirror://gentoo/${PN}-1.1.15-textrel-fix.patch"
+
 DESCRIPTION="Core libraries for Xine movie player"
 HOMEPAGE="http://xine.sourceforge.net"
 
@@ -86,7 +88,7 @@ DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext[lib32?] )"
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}"/${PN}-1.1.15-textrel-fix.patch
+	epatch "${DISTDIR}"/${PN}-1.1.15-textrel-fix.patch
 }
 
 multilib-native_src_configure_internal() {
