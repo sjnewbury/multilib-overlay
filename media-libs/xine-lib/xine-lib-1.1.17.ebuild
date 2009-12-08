@@ -86,7 +86,7 @@ DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext[lib32?] )"
 
 multilib-native_src_prepare_internal() {
-	epatch "${DISTDIR}"/${PN}-1.1.15-textrel-fix.patch
+	epatch "${FILESDIR}"/${PN}-1.1.15-textrel-fix.patch
 }
 
 multilib-native_src_configure_internal() {
