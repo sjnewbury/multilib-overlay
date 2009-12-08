@@ -29,7 +29,7 @@ RDEPEND="
 	)
 	pulseaudio? (
 		dev-libs/glib:2[lib32?]
-		>=media-sound/pulseaudio-0.9.21[lib32?,glib]
+		>=media-sound/pulseaudio-0.9.21[lib32?,glib] )
 	xine? (
 		>=media-libs/xine-lib-1.1.15-r1[lib32?,xcb?]
 		xcb? ( x11-libs/libxcb[lib32?] )
