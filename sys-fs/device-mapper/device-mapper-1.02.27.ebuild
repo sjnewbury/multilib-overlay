@@ -22,8 +22,7 @@ RDEPEND="!<sys-fs/udev-115-r1
 
 S="${WORKDIR}/${PN}.${PV}"
 
-src_unpack() {
-	unpack ${A}
+multilib-native_src_prepare_internal() {
 	EPATCH_OPTS="-p1 -d${S}" epatch "${FILESDIR}"/device-mapper-1.02.27-export-format.diff
 }
 
@@ -35,10 +34,6 @@ multilib-native_src_configure_internal() {
 		--enable-pkgconfig \
 		$(use_enable selinux) \
 		CLDFLAGS="${LDFLAGS}" || die "econf failed"
-}
-
-multilib-native_src_compile_internal() {
-	emake || die "compile problem"
 }
 
 multilib-native_src_install_internal() {

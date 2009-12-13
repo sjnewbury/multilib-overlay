@@ -24,10 +24,6 @@ mulitlib-native_src_configure_internal() {
 	econf --sbindir=/sbin $(use_enable selinux) || die "econf failed"
 }
 
-mulitlib-native_src_compile_internal() {
-	emake || die "compile problem"
-}
-
 multilib-native_src_install_internal() {
 	make install DESTDIR="${D}" || die
 
