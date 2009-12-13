@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-devel/libtool/libtool-2.2.6a.ebuild,v 1.17 2009/09/29 17:12:42 klausman Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-devel/libtool/libtool-2.2.6a.ebuild,v 1.20 2009/10/13 17:25:27 armin76 Exp $
 
 EAPI="2"
 
@@ -13,7 +13,7 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.lzma"
 
 LICENSE="GPL-2"
 SLOT="1.5"
-KEYWORDS="alpha amd64 arm hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="vanilla test"
 
 RDEPEND="sys-devel/gnuconfig
@@ -31,7 +31,7 @@ pkg_setup() {
 		einfo "to run tests. With the stricter (older) --as-needed behaviour"
 		einfo "you'd be seeing a test failure in test #63; this has been fixed"
 		einfo "in the newer version of binutils."
-		append-ldflags -Wl,--no-as-needed
+		append-ldflags $(no-as-needed)
 	fi
 }
 
