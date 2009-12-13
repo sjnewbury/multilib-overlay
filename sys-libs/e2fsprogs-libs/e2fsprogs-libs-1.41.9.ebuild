@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/e2fsprogs-libs/e2fsprogs-libs-1.41.8.ebuild,v 1.3 2009/07/20 10:02:49 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/e2fsprogs-libs/e2fsprogs-libs-1.41.9.ebuild,v 1.11 2009/12/07 11:10:34 ssuominen Exp $
 
 EAPI="2"
 
@@ -12,7 +12,7 @@ SRC_URI="mirror://sourceforge/e2fsprogs/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="nls"
 
 RDEPEND="elibc_glibc? ( >=sys-libs/glibc-2.6 )
@@ -47,12 +47,11 @@ multilib-native_src_configure_internal() {
 		--disable-libblkid \
 		--disable-libuuid \
 		--enable-${libtype}-shlibs \
-		$(use_enable !elibc_uclibc tls) \
+		$(tc-has-tls || echo --disable-tls) \
 		$(use_enable nls)
 }
 
 multilib-native_src_install_internal() {
 	emake STRIP=: DESTDIR="${D}" install || die
-
 	gen_usr_ldscript -a com_err ss
 }
