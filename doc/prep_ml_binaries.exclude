@@ -16,4 +16,4 @@ libusb-1*
 xulrunner-1.9*
 
 #removed since 0.19.1
-fribidi-0.19.1
+fribidi-0.19.*
