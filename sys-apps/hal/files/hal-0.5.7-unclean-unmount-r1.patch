@@ -1,9 +1,0 @@
---- tools/linux/90-hal.rules	2006-01-21 14:39:58.000000000 -0500
-+++ tools/linux/90-hal.rules.new	2006-03-18 21:14:31.000000000 -0500
-@@ -1,2 +1,6 @@
- # pass all events to the HAL daemon
- RUN+="socket:/org/freedesktop/hal/udev_event"
-+
-+# unmount block devices when they are removed
-+SUBSYSTEM=="block",ACTION=="remove", RUN+="hal_unmount"
-+

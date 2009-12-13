@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/hal/hal-0.5.12_rc1-r8.ebuild,v 1.1 2009/09/30 11:59:28 leio Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/hal/hal-0.5.12_rc1-r8.ebuild,v 1.3 2009/10/03 21:56:49 fauli Exp $
 
 EAPI="2"
 
@@ -18,49 +18,47 @@ SRC_URI="http://hal.freedesktop.org/releases/${MY_P}.tar.bz2
 
 LICENSE="|| ( GPL-2 AFL-2.0 )"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
 
 KERNEL_IUSE="kernel_linux kernel_FreeBSD"
 IUSE="X acpi apm crypt consolekit debug dell disk-partition doc laptop policykit selinux ${KERNEL_IUSE}"
 
 RDEPEND=">=dev-libs/dbus-glib-0.61[lib32?]
-		 >=dev-libs/glib-2.14[lib32?]
-		 >=dev-libs/expat-1.95.8[lib32?]
-		 =virtual/libusb-0*[lib32?]
-		 >=sys-apps/pciutils-2.2.7-r1[lib32?]
-		 >=dev-util/gperf-3.0.3
-		   sys-apps/usbutils
-		   virtual/eject
-		 amd64? ( >=sys-apps/dmidecode-2.7 )
-		 dell? ( >=sys-libs/libsmbios-0.13.4[lib32?] )
-		 disk-partition? ( >=sys-apps/parted-1.8.0[lib32?] )
-		 ia64? ( >=sys-apps/dmidecode-2.7 )
-		 kernel_linux?	(
-							>=sys-fs/udev-117
-							>=sys-apps/util-linux-2.13
-							>=sys-kernel/linux-headers-2.6.19
-							crypt?	( >=sys-fs/cryptsetup-1.0.5 )
-						)
-		 kernel_FreeBSD? ( >=dev-libs/libvolume_id-0.77 )
-		 x86? ( >=sys-apps/dmidecode-2.7 )
-		 selinux? ( sys-libs/libselinux sec-policy/selinux-hal )
-		 consolekit?	(
-		 					sys-auth/consolekit[policykit=]
-					)
-		 policykit?	(
-		 					sys-auth/consolekit[policykit]
-							sys-auth/policykit[pam]
-                                       )"
+	>=dev-libs/glib-2.14[lib32?]
+	>=dev-libs/expat-1.95.8[lib32?]
+	=virtual/libusb-0*[lib32?]
+	>=sys-apps/pciutils-2.2.7-r1[lib32?]
+	>=dev-util/gperf-3.0.3
+	sys-apps/usbutils
+	virtual/eject
+	amd64? ( >=sys-apps/dmidecode-2.7 )
+	dell? ( >=sys-libs/libsmbios-0.13.4[lib32?] )
+	disk-partition? ( >=sys-apps/parted-1.8.0[lib32?] )
+	ia64? ( >=sys-apps/dmidecode-2.7 )
+	kernel_linux? (
+		>=sys-fs/udev-117
+		>=sys-apps/util-linux-2.13
+		>=sys-kernel/linux-headers-2.6.19
+		crypt? ( >=sys-fs/cryptsetup-1.0.5 )
+	)
+	kernel_FreeBSD? ( >=dev-libs/libvolume_id-0.77 )
+	x86? ( >=sys-apps/dmidecode-2.7 )
+	selinux? ( sys-libs/libselinux sec-policy/selinux-hal )
+	consolekit?	( sys-auth/consolekit[policykit=] )
+	policykit?	(
+		sys-auth/consolekit[policykit]
+		sys-auth/policykit[pam]
+	)"
 DEPEND="${RDEPEND}
-		dev-util/pkgconfig[lib32?]
-		>=dev-util/intltool-0.35
-		doc?	(
-					app-text/xmlto
-					dev-libs/libxml2[lib32?]
-					dev-util/gtk-doc
-					app-text/docbook-sgml-utils
-				)
-		!<gnome-extra/gnome-power-manager-2.24.4-r2"
+	dev-util/pkgconfig[lib32?]
+	>=dev-util/intltool-0.35
+	doc? (
+		app-text/xmlto
+		dev-libs/libxml2[lib32?]
+		dev-util/gtk-doc
+		app-text/docbook-sgml-utils
+	)
+	!<gnome-extra/gnome-power-manager-2.24.4-r2"
 PDEPEND=">=app-misc/hal-info-20081219
 	!gnome-extra/hal-device-manager
 	laptop? ( >=sys-power/pm-utils-0.99.3 )"
