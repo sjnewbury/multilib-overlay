@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/e2fsprogs/e2fsprogs-1.41.7-r1.ebuild,v 1.1 2009/07/03 19:35:20 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/e2fsprogs/e2fsprogs-1.41.7-r1.ebuild,v 1.3 2009/12/01 04:47:34 vapier Exp $
 
 EAPI=2
 
@@ -80,7 +80,7 @@ multilib-native_src_configure_internal() {
 		--with-root-prefix=/ \
 		--enable-${libtype}-shlibs \
 		--with-ldopts="${LDFLAGS}" \
-		$(use_enable !elibc_uclibc tls) \
+		$(tc-has-tls || echo --disable-tls) \
 		--without-included-gettext \
 		$(use_enable nls) \
 		$(use_enable userland_GNU fsck) \
@@ -114,14 +114,14 @@ pkg_preinst() {
 }
 
 multilib-native_src_install_internal() {
-	emake STRIP=: DESTDIR="${D}" install install-libs || die
+	# need to set root_libdir= manually as any --libdir options in the
+	# econf above (i.e. multilib) will screw up the default #276465
+	emake \
+		STRIP=: \
+		root_libdir="/$(get_libdir)" \
+		DESTDIR="${D}" \
+		install install-libs || die
 	dodoc README RELEASE-NOTES
-
-	# Move shared libraries to /lib/, install static libraries to /usr/lib/,
-	# and install linker scripts to /usr/lib/.
-	set -- "${D}"/usr/$(get_libdir)/*.a
-	set -- ${@/*\/lib}
-	gen_usr_ldscript -a "${@/.a}"
 
 	if use elibc_FreeBSD ; then
 		# Install helpers for us

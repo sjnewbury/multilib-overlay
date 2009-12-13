@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/e2fsprogs/e2fsprogs-1.41.8.ebuild,v 1.4 2009/07/20 04:19:47 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/e2fsprogs/e2fsprogs-1.41.9.ebuild,v 1.12 2009/12/07 11:11:31 ssuominen Exp $
 
 EAPI=2
 
@@ -12,7 +12,7 @@ SRC_URI="mirror://sourceforge/e2fsprogs/${P}.tar.gz"
 
 LICENSE="GPL-2 BSD"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 -x86-fbsd"
 IUSE="nls elibc_FreeBSD"
 
 RDEPEND="~sys-libs/${PN}-libs-${PV}[lib32?]
@@ -75,7 +75,7 @@ multilib-native_src_configure_internal() {
 		--with-root-prefix=/ \
 		--enable-${libtype}-shlibs \
 		--with-ldopts="${LDFLAGS}" \
-		$(use_enable !elibc_uclibc tls) \
+		$(tc-has-tls || echo --disable-tls) \
 		--without-included-gettext \
 		$(use_enable nls) \
 		--disable-libblkid \
@@ -117,6 +117,9 @@ multilib-native_src_install_internal() {
 		DESTDIR="${D}" \
 		install install-libs || die
 	dodoc README RELEASE-NOTES
+
+	insinto /etc
+	doins "${FILESDIR}"/e2fsck.conf || die
 
 	# make sure symlinks are relative, not absolute, for cross-compiling
 	cd "${D}"/usr/$(get_libdir)
