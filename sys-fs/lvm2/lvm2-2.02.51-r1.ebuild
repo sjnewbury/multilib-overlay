@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/lvm2/lvm2-2.02.51-r1.ebuild,v 1.4 2009/10/21 08:32:00 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/lvm2/lvm2-2.02.51-r1.ebuild,v 1.15 2009/12/11 16:11:22 armin76 Exp $
 
 EAPI=2
 inherit eutils multilib toolchain-funcs autotools multilib-native
@@ -12,7 +12,7 @@ SRC_URI="ftp://sources.redhat.com/pub/lvm2/${PN/lvm/LVM}.${PV}.tgz
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="alpha ~amd64 ~arm hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86"
 
 IUSE="readline +static clvm cman +lvm1 selinux"
 
@@ -21,7 +21,7 @@ DEPEND="!!sys-fs/device-mapper
 		cman? ( =sys-cluster/cman-2* ) )"
 
 RDEPEND="${DEPEND}
-	|| ( =sys-apps/baselayout-1* >=sys-apps/openrc-0.4 )
+	!<sys-apps/openrc-0.4
 	!!sys-fs/lvm-user
 	!!sys-fs/clvm
 	>=sys-apps/util-linux-2.16[lib32?]"
@@ -38,10 +38,6 @@ multilib-native_pkg_setup_internal() {
 	fi
 }
 
-#multlib-native_src_unpack_internal() {
-#	unpack ${A}
-#}
-
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-2.02.45-dmeventd.patch
 	epatch "${FILESDIR}"/lvm.conf-2.02.51.patch
@@ -49,6 +45,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-2.02.51-as-needed.patch
 	epatch "${FILESDIR}"/${PN}-2.02.48-fix-pkgconfig.patch
 	epatch "${FILESDIR}"/${PN}-2.02.51-fix-pvcreate.patch
+	epatch "${FILESDIR}"/${PN}-2.02.51-dmsetup-selinux-linking-fix.patch
 	eautoreconf
 }
 
@@ -139,6 +136,11 @@ multilib-native_src_compile_internal() {
 	emake || die "failed to build lib"
 	popd
 
+	einfo "Doing dmeventd"
+	pushd daemons/dmeventd
+	emake device-mapper || die "failed to build lib"
+	popd
+
 	einfo "Doing main build"
 	emake || die "compile problem"
 }
@@ -202,7 +204,7 @@ multilib-native_src_install_internal() {
 	elog "USE flags clvm and cman are masked"
 	elog "by default and need to be unmasked to use them"
 	elog ""
-	elog "Rebuild your genkernel initramfs if you are using lvm"
+	elog "If you are using genkernel and root-on-LVM, rebuild the initramfs."
 }
 
 multilib-native_pkg_postinst_internal() {

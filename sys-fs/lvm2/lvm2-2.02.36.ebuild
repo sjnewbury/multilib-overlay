@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/lvm2/lvm2-2.02.36.ebuild,v 1.10 2009/09/18 02:05:33 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/lvm2/lvm2-2.02.36.ebuild,v 1.12 2009/11/30 00:57:50 robbat2 Exp $
 
 EAPI=2
 inherit eutils multilib multilib-native
@@ -21,7 +21,7 @@ DEPEND=">=sys-fs/device-mapper-1.02.24[lib32?]
 			cman? ( >=sys-cluster/cman-1.01.00[lib32?] ) )"
 
 RDEPEND="${DEPEND}
-	|| ( =sys-apps/baselayout-1* >=sys-apps/openrc-0.4 )
+	!<sys-apps/openrc-0.4
 	!sys-fs/lvm-user
 	!sys-fs/clvm"
 
@@ -126,7 +126,7 @@ multilib-native_src_install_internal() {
 	elog "use flags clvm,cman and gulm are masked"
 	elog "by default and need to be unmasked to use them"
 	elog ""
-	elog "Rebuild your genkernel initramfs if you are using lvm"
+	elog "If you are using genkernel and root-on-LVM, rebuild the initramfs."
 	use nolvmstatic && \
 		elog "USE=nolvmstatic has changed to USE=static via package.use"
 	use nolvm1 && \
