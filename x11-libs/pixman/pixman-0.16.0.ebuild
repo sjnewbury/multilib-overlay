@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/pixman/pixman-0.16.0.ebuild,v 1.2 2009/09/30 20:02:53 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/pixman/pixman-0.16.0.ebuild,v 1.6 2009/10/26 21:04:39 jer Exp $
 
 # Must be before x-modular eclass is inherited
 #SNAPSHOT="yes"
@@ -10,7 +10,7 @@ EAPI="2"
 inherit x-modular toolchain-funcs versionator multilib-native
 
 DESCRIPTION="Low-level pixel manipulation routines"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 arm hppa ~ia64 ~mips ppc ~ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
 IUSE="altivec mmx sse2"
 
 multilib-native_pkg_setup_internal() {
