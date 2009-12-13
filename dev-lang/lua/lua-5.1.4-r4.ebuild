@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/lua/lua-5.1.4-r4.ebuild,v 1.1 2009/11/26 10:21:04 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/lua/lua-5.1.4-r4.ebuild,v 1.6 2009/12/08 17:12:02 ranger Exp $
 
 EAPI="2"
 
@@ -12,10 +12,12 @@ SRC_URI="http://www.lua.org/ftp/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="+deprecated readline static"
+KEYWORDS="~alpha amd64 arm hppa ~ia64 ~mips ~ppc ppc64 ~s390 ~sh sparc x86 ~x86-fbsd"
+IUSE="+deprecated emacs readline static"
 
 DEPEND="readline? ( sys-libs/readline[lib32?] )"
+RDEPEND="${DEPEND}"
+PDEPEND="emacs? ( app-emacs/lua-mode )"
 
 multilib-native_src_prepare_internal() {
 	local PATCH_PV=$(get_version_component_range 1-2)
