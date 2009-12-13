@@ -18,6 +18,6 @@ RDEPEND="x11-libs/xtrans
 	x11-proto/xproto"
 DEPEND="${RDEPEND}"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	CONFIGURE_OPTIONS="$(use_enable ipv6)"
 }
