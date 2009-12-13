@@ -140,6 +140,8 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_compile_internal() {
+	cd "${S}/source"
+
 	emake -j1 proto || die "emake proto failed"
 	emake -j1 everything || die "emake everything failed"
 
