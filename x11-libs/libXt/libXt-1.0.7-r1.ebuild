@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/libXt/libXt-1.0.7-r1.ebuild,v 1.1 2009/11/05 11:41:08 remi Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/libXt/libXt-1.0.7-r1.ebuild,v 1.4 2009/12/10 19:23:13 fauli Exp $
 
 EAPI="2"
 
@@ -10,7 +10,7 @@ inherit x-modular flag-o-matic toolchain-funcs multilib-native
 
 DESCRIPTION="X.Org Xt library"
 
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
 IUSE=""
 
 RDEPEND="x11-libs/libX11[lib32?]
@@ -31,6 +31,6 @@ multilib-native_pkg_setup_internal() {
 	filter-ldflags -Wl,-Bdirect
 
 	if tc-is-cross-compiler; then
-		CFLAGS_FOR_BUILD="${BUILD_CFLAGS}"
+		export CFLAGS_FOR_BUILD="${BUILD_CFLAGS}"
 	fi
 }
