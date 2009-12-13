@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-124-r2.ebuild,v 1.9 2009/05/12 17:46:47 zzam Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-124-r2.ebuild,v 1.10 2009/07/16 08:46:22 zzam Exp $
 
 EAPI="2"
 
@@ -364,8 +364,9 @@ pkg_postinst() {
 				killall -15 udevd &>/dev/null
 				sleep 1
 				killall -9 udevd &>/dev/null
+
+				/sbin/udevd --daemon
 			fi
-			/sbin/udevd --daemon
 		fi
 	fi
 

@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-145-r1.ebuild,v 1.6 2009/09/06 23:38:00 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-145-r1.ebuild,v 1.8 2009/10/29 19:41:57 zzam Exp $
 
 EAPI="2"
 
@@ -25,7 +25,7 @@ COMMON_DEPEND="selinux? ( sys-libs/libselinux[lib32?] )
 	extras? (
 		sys-apps/acl[lib32?]
 		>=sys-apps/usbutils-0.82
-		dev-libs/libusb[lib32?]
+		dev-libs/libusb:0[lib32?]
 		sys-apps/pciutils[lib32?]
 		dev-libs/glib:2[lib32?]
 	)
@@ -91,7 +91,7 @@ pkg_setup() {
 	# 2.6.30.4 -> 2.6.30 is all we check
 	udev_check_KV
 	case "$?" in
-		2)	einfo "Your kernel version (${KV_FULL}) is new enough to run ${P} reliable." ;;
+		2)	einfo "Your kernel version (${KV_FULL}) is new enough to run ${P} reliably." ;;
 		1)	ewarn "Your kernel version (${KV_FULL}) is new enough to run ${P},"
 			ewarn "but it may be unreliable in some cases."
 			ebeep ;;

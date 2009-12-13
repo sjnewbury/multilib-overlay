@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-146-r1.ebuild,v 1.10 2009/12/11 16:03:33 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-146-r2.ebuild,v 1.1 2009/11/11 19:15:28 zzam Exp $
 
 EAPI="2"
 
@@ -21,7 +21,7 @@ HOMEPAGE="http://www.kernel.org/pub/linux/utils/kernel/hotplug/udev.html"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 IUSE="selinux +devfs-compat -extras"
 
 COMMON_DEPEND="selinux? ( sys-libs/libselinux[lib32?] )
@@ -190,7 +190,7 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_install_internal() {
-	local scriptdir="${FILESDIR}/136"
+	local scriptdir="${FILESDIR}/147"
 
 	into /
 	emake DESTDIR="${D}" install || die "make install failed"
@@ -305,6 +305,7 @@ multilib-native_src_install_internal() {
 }
 
 pkg_preinst() {
+	# moving old files to support newer modprobe, 12 May 2009
 	local f dir=${ROOT}/etc/modprobe.d/
 	for f in pnp-aliases blacklist; do
 		if [[ -f $dir/$f && ! -f $dir/$f.conf ]]
@@ -344,13 +345,6 @@ pkg_preinst() {
 		rm -f "${ROOT}"/etc/hotplug.d/default/10-udev.hotplug
 	fi
 
-	# is there a stale coldplug initscript? (CONFIG_PROTECT leaves it behind)
-	coldplug_stale=""
-	if [[ -f ${ROOT}/etc/init.d/coldplug ]]
-	then
-		coldplug_stale="1"
-	fi
-
 	has_version "=${CATEGORY}/${PN}-103-r3"
 	previous_equal_to_103_r3=$?
 
@@ -364,6 +358,7 @@ pkg_preinst() {
 	previous_less_than_113=$?
 }
 
+# 19 Nov 2008
 fix_old_persistent_net_rules() {
 	local rules=${ROOT}/etc/udev/rules.d/70-persistent-net.rules
 	[[ -f ${rules} ]] || return
@@ -418,11 +413,16 @@ restart_udevd() {
 	fi
 }
 
-pkg_postinst() {
-	fix_old_persistent_net_rules
+postinst_init_scripts() {
+	# FIXME: we may need some code that detects if this is a system bootstrap
+	# and auto-enables udev then
+	#
+	# FIXME: inconsistent handling of init-scripts here
+	#  * udev is added to sysinit in openrc-ebuild
+	#  * we add udev-postmount to default in here
+	#
 
-	restart_udevd
-
+	# migration to >=openrc-0.4
 	if [[ -e "${ROOT}"/etc/runlevels/sysinit && ! -e "${ROOT}"/etc/runlevels/sysinit/udev ]]
 	then
 		ewarn
@@ -434,20 +434,44 @@ pkg_postinst() {
 		ewarn
 	fi
 
+	# add udev-postmount to default runlevel instead of that ugly injecting
+	# like a hotplug event, 2009/10/15
+
+	# already enabled?
+	[[ -e "${ROOT}"/etc/runlevels/default/udev-postmount ]] && return
+
+	local enable_postmount=0
+	[[ -e "${ROOT}"/etc/runlevels/sysinit/udev ]] && enable_postmount=1
+	[[ "${ROOT}" = "/" && -d /dev/.udev/ ]] && enable_postmount=1
+
+	if [[ ${enable_postmount} = 1 ]]
+	then
+		local initd=udev-postmount
+
+		if [[ -e ${ROOT}/etc/init.d/${initd} ]] && \
+			[[ ! -e ${ROOT}/etc/runlevels/default/${initd} ]]
+		then
+			ln -snf /etc/init.d/${initd} "${ROOT}"/etc/runlevels/default/${initd}
+			elog "Auto-adding '${initd}' service to your default runlevel"
+		fi
+	else
+		elog "You should add the udev-postmount service to default runlevel."
+		elog "Run this to add it:"
+		elog "\trc-update add udev-postmount default"
+	fi
+}
+
+pkg_postinst() {
+	fix_old_persistent_net_rules
+
+	restart_udevd
+
+	postinst_init_scripts
+
 	# people want reminders, I'll give them reminders.  Odds are they will
 	# just ignore them anyway...
 
-	if [[ ${coldplug_stale} == 1 ]]
-	then
-		ewarn "A stale coldplug init script found. You should run:"
-		ewarn
-		ewarn "      rc-update del coldplug"
-		ewarn "      rm -f /etc/init.d/coldplug"
-		ewarn
-		ewarn "udev now provides its own coldplug functionality."
-	fi
-
-	# delete 40-scsi-hotplug.rules - all integrated in 50-udev.rules
+	# delete 40-scsi-hotplug.rules, it is integrated in 50-udev.rules, 19 Jan 2007
 	if [[ $previous_equal_to_103_r3 = 0 ]] &&
 		[[ -e ${ROOT}/etc/udev/rules.d/40-scsi-hotplug.rules ]]
 	then
@@ -456,26 +480,27 @@ pkg_postinst() {
 		rm -f "${ROOT}"/etc/udev/rules.d/40-scsi-hotplug.rules
 	fi
 
-	# Removing some device-nodes we thought we need some time ago
+	# Removing some device-nodes we thought we need some time ago, 25 Jan 2007
 	if [[ -d ${ROOT}/lib/udev/devices ]]
 	then
 		rm -f "${ROOT}"/lib/udev/devices/{null,zero,console,urandom}
 	fi
 
-	# Removing some old file
+	# Removing some old file, 29 Jan 2007
 	if [[ $previous_less_than_104_r5 = 0 ]]
 	then
 		rm -f "${ROOT}"/etc/dev.d/net/hotplug.dev
 		rmdir --ignore-fail-on-non-empty "${ROOT}"/etc/dev.d/net 2>/dev/null
 	fi
 
+	# 19 Mar 2007
 	if [[ $previous_less_than_106_r5 = 0 ]] &&
 		[[ -e ${ROOT}/etc/udev/rules.d/95-net.rules ]]
 	then
 		rm -f "${ROOT}"/etc/udev/rules.d/95-net.rules
 	fi
 
-	# Try to remove /etc/dev.d as that is obsolete
+	# Try to remove /etc/dev.d as that is obsolete, 23 Apr 2007
 	if [[ -d ${ROOT}/etc/dev.d ]]
 	then
 		rmdir --ignore-fail-on-non-empty "${ROOT}"/etc/dev.d/default "${ROOT}"/etc/dev.d 2>/dev/null
@@ -487,7 +512,7 @@ pkg_postinst() {
 	fi
 
 	# 64-device-mapper.rules now gets installed by sys-fs/device-mapper
-	# remove it if user don't has sys-fs/device-mapper installed
+	# remove it if user don't has sys-fs/device-mapper installed, 27 Jun 2007
 	if [[ $previous_less_than_113 = 0 ]] &&
 		[[ -f ${ROOT}/etc/udev/rules.d/64-device-mapper.rules ]] &&
 		! has_version sys-fs/device-mapper

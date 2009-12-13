@@ -1,6 +1,11 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-141-r1.ebuild,v 1.2 2009/06/17 13:29:39 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-141-r1.ebuild,v 1.3 2009/12/05 16:38:53 zzam Exp $
+
+#
+# Please do not remove this version:
+#   It is the highest version that works with xen-sources
+#
 
 EAPI="2"
 
@@ -138,8 +143,6 @@ multilib-native_src_configure_internal() {
 		--with-libdir-name=$(get_libdir) \
 		--enable-logging \
 		$(use_with selinux)
-
-	emake || die "compiling udev failed"
 }
 
 multilib-native_src_install_internal() {

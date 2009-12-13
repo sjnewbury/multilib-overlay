@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-145.ebuild,v 1.2 2009/07/16 07:40:20 zzam Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-145.ebuild,v 1.5 2009/10/02 11:30:20 zzam Exp $
 
 EAPI="2"
 
@@ -25,11 +25,12 @@ COMMON_DEPEND="selinux? ( sys-libs/libselinux )
 	extras? (
 		sys-apps/acl[lib32?]
 		>=sys-apps/usbutils-0.82
-		dev-libs/libusb[lib32?]
+		dev-libs/libusb:0[lib32?]
 		sys-apps/pciutils[lib32?]
 		dev-libs/glib:2[lib32?]
 	)
-	>=sys-apps/util-linux-2.16"
+	>=sys-apps/util-linux-2.16
+	>=sys-libs/glibc-2.7"
 
 DEPEND="${COMMON_DEPEND}
 	extras? ( dev-util/gperf )"
@@ -250,6 +251,12 @@ multilib-native_src_install_internal() {
 
 	# documentation
 	dodoc ChangeLog README TODO || die "failed installing docs"
+
+	# keep doc in just one directory, Bug #281137
+	rm -rf "${D}/usr/share/doc/${PN}"
+	if use extras; then
+		dodoc extras/keymap/README.keymap.txt || die "failed installing docs"
+	fi
 
 	cd docs/writing_udev_rules
 	mv index.html writing_udev_rules.html

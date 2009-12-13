@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-141.ebuild,v 1.5 2009/06/26 18:00:43 gentoofan23 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-141.ebuild,v 1.9 2009/09/26 14:04:38 ranger Exp $
 
 EAPI=2
 
@@ -18,7 +18,7 @@ HOMEPAGE="http://www.kernel.org/pub/linux/utils/kernel/hotplug/udev.html"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86"
+KEYWORDS="alpha amd64 arm ~hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
 IUSE="selinux"
 
 COMMON_DEPEND="selinux? ( sys-libs/libselinux[lib32?] )"
@@ -134,8 +134,6 @@ multilib-native_src_configure_internal() {
 		--with-libdir-name=$(get_libdir) \
 		--enable-logging \
 		$(use_with selinux)
-
-	emake || die "compiling udev failed"
 }
 
 multilib-native_src_install_internal() {
