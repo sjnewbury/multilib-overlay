@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/sys-apps/util-linux/util-linux-2.14.2.ebuild,v 1.12 2009/07/26 20:41:50 zmedico Exp $
 
 EGIT_REPO_URI="git://git.kernel.org/pub/scm/utils/util-linux-ng/util-linux-ng.git"
-inherit eutils autotools
+inherit eutils autotools multilib-native
 [[ ${PV} == "9999" ]] && inherit git autotools
 
 MY_PV=${PV/_/-}
@@ -22,19 +22,19 @@ fi
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
-IUSE="crypt loop-aes nls old-linux selinux slang uclibc unicode lib32"
+IUSE="crypt loop-aes nls old-linux selinux slang uclibc unicode"
 
 RDEPEND="!sys-process/schedutils
 	!sys-apps/setarch
-	>=sys-libs/ncurses-5.2-r2
-	>=sys-libs/e2fsprogs-libs-1.41
+	>=sys-libs/ncurses-5.2-r2[lib32?]
+	>=sys-libs/e2fsprogs-libs-1.41[lib32?]
 	selinux? ( sys-libs/libselinux )
-	slang? ( sys-libs/slang )"
+	slang? ( sys-libs/slang[lib32?] )"
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )
 	virtual/os-headers"
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	if [[ ${PV} == "9999" ]] ; then
 		git_src_unpack
 		cd "${S}"
@@ -56,7 +56,7 @@ src_unpack() {
 	fi
 }
 
-src_compile() {
+multilib-native_src_compile_internal() {
 	econf \
 		--with-fsprobe=blkid \
 		$(use_enable nls) \
@@ -84,7 +84,7 @@ src_compile() {
 	emake || die "emake failed"
 }
 
-src_install() {
+multilib-native_src_install_internal() {
 	emake install DESTDIR="${D}" || die "install failed"
 	dodoc AUTHORS NEWS README* TODO docs/*
 

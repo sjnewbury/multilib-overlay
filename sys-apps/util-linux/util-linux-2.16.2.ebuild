@@ -16,7 +16,7 @@ DESCRIPTION="Various useful Linux utilities"
 HOMEPAGE="http://www.kernel.org/pub/linux/utils/util-linux-ng/"
 if [[ ${PV} == "9999" ]] ; then
 	SRC_URI=""
-	KEYWORDS=""
+	#KEYWORDS=""
 else
 	SRC_URI="mirror://kernel/linux/utils/util-linux-ng/v${PV:0:4}/${MY_P}.tar.bz2
 		loop-aes? ( http://dev.gentoo.org/~ssuominen/${PN}-2.16.1-loop-aes.patch.bz2 )"
@@ -25,13 +25,14 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="crypt loop-aes nls old-linux selinux slang uclibc unicode"
+IUSE="crypt loop-aes nls old-linux perl selinux slang uclibc unicode"
 
 RDEPEND="!sys-process/schedutils
 	!sys-apps/setarch
 	>=sys-libs/ncurses-5.2-r2[lib32?]
 	!<sys-libs/e2fsprogs-libs-1.41.8
 	!<sys-fs/e2fsprogs-1.41.8
+	perl? ( dev-lang/perl )
 	selinux? ( sys-libs/libselinux[lib32?] )
 	slang? ( sys-libs/slang[lib32?] )"
 DEPEND="${RDEPEND}
@@ -70,12 +71,18 @@ multilib-native_src_configure_internal() {
 		--without-pam \
 		$(use unicode || echo --with-ncurses) \
 		$(use_with selinux) \
-		$(use_with slang)
+		$(use_with slang) \
+		$(tc-has-tls || echo --disable-tls)
 }
 
 multilib-native_src_install_internal() {
 	emake install DESTDIR="${D}" || die "install failed"
 	dodoc AUTHORS NEWS README* TODO docs/*
+
+	if ! use perl ; then #284093
+		rm "${D}"/usr/bin/chkdupexe || die
+		rm "${D}"/usr/share/man/man1/chkdupexe.1 || die
+	fi
 
 	# need the libs in /
 	gen_usr_ldscript -a blkid uuid
