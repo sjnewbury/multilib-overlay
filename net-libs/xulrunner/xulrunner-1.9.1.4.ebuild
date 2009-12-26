@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.1.4.ebuild,v 1.8 2009/11/04 14:12:30 anarchy Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.1.4.ebuild,v 1.12 2009/12/13 10:57:14 armin76 Exp $
 
 EAPI="2"
 WANT_AUTOCONF="2.1"
@@ -11,14 +11,14 @@ MY_PV="${PV/_beta/b}" # Handle betas
 MY_PV="${PV/_/}" # Handle rc1, rc2 etc
 MY_PV="${MY_PV/1.9.1.4/3.5.4}"
 MAJ_PV="1.9.1" # from mozilla-* branch name
-PATCH="${PN}-1.9.1.4-patches-0.1"
+PATCH="${PN}-1.9.1.5-patches-0.1"
 
 DESCRIPTION="Mozilla runtime package that can be used to bootstrap XUL+XPCOM applications"
 HOMEPAGE="http://developer.mozilla.org/en/docs/XULRunner"
 SRC_URI="http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${MY_PV}/source/firefox-${MY_PV}.source.tar.bz2
 	http://dev.gentoo.org/~anarchy/dist/${PATCH}.tar.bz2"
 
-KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~ppc ~ppc64 -sparc ~x86"
+KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ppc ppc64 ~sparc x86"
 SLOT="1.9"
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 IUSE="+alsa debug python sqlite" # qt-experimental
