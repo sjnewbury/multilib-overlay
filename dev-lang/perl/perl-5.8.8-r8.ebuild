@@ -1,10 +1,10 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.8.8-r8.ebuild,v 1.4 2009/12/03 10:59:24 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.8.8-r8.ebuild,v 1.9 2009/12/10 20:50:09 ranger Exp $
 
 EAPI="2"
 
-inherit eutils flag-o-matic toolchain-funcs multilib-native
+inherit eutils alternatives flag-o-matic toolchain-funcs multilib multilib-native
 
 # The slot of this binary compat version of libperl.so
 PERLSLOT="1"
@@ -20,7 +20,7 @@ LIBPERL="libperl$(get_libname ${PERLSLOT}.${SHORT_PV})"
 
 LICENSE="|| ( Artistic GPL-2 )"
 SLOT="0"
-KEYWORDS="~alpha amd64 arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="berkdb debug doc gdbm ithreads perlsuid build elibc_FreeBSD"
 PERL_OLDVERSEN="5.8.0 5.8.2 5.8.4 5.8.5 5.8.6 5.8.7"
 
@@ -345,13 +345,6 @@ multilib-native_src_install_internal() {
 	make DESTDIR="${D}" ${installtarget} || die "Unable to make ${installtarget}"
 
 	rm "${D}"/usr/bin/perl
-
-	if use lib32; then
-		cp perl perl${MY_PV}-${ABI}
-		dobin perl${MY_PV}-${ABI}
-		ln -s perl${MY_PV}-${ABI} "${D}"/usr/bin/perl-${ABI}
-	fi
-
 	ln -s perl${MY_PV} "${D}"/usr/bin/perl
 
 	cp -f utils/h2ph utils/h2ph_patched
@@ -418,6 +411,8 @@ EOF
 	if use build ; then
 		src_remove_extra_files
 	fi
+
+	prep_ml_binaries /usr/bin/perl
 }
 
 multilib-native_pkg_postinst_internal() {
