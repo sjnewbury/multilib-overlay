@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.4.ebuild,v 1.1 2009/10/30 11:49:20 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.4.ebuild,v 1.9 2009/12/20 16:02:41 armin76 Exp $
 
 EAPI="2"
 
@@ -24,8 +24,8 @@ SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
 
 LICENSE="PSF-2.2"
 SLOT="2.6"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="-berkdb build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite ssl +threads tk ucs2 wininst +xml"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ~ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
+IUSE="-berkdb build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite ssl +threads tk +wide-unicode wininst +xml"
 
 # NOTE: dev-python/{elementtree,celementtree,pysqlite,ctypes}
 #       do not conflict with the ones in python proper. - liquidx
@@ -53,9 +53,10 @@ RDEPEND=">=app-admin/eselect-python-20090606
 			xml? ( >=dev-libs/expat-2[lib32?] )
 		)"
 DEPEND="${RDEPEND}
-		dev-util/pkgconfig[lib32?]"
+		dev-util/pkgconfig[lib32?]
+		!sys-devel/gcc[libffi]"
 RDEPEND+=" !build? ( app-misc/mime-types )"
-PDEPEND="${DEPEND} app-admin/python-updater"
+PDEPEND="app-admin/python-updater"
 
 PROVIDE="virtual/python"
 
@@ -72,7 +73,8 @@ multilib-native_pkg-setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
-	# Ensure that internal copy of libffi isn't used.
+	# Ensure that internal copies of expat and libffi aren't used.
+	rm -fr Modules/expat
 	rm -fr Modules/_ctypes/libffi*
 
 	if tc-is-cross-compiler; then
@@ -179,7 +181,7 @@ multilib-native_src_configure_internal() {
 		--enable-shared \
 		$(use_enable ipv6) \
 		$(use_with threads) \
-		$(use ucs2 && echo "--enable-unicode=ucs2" || echo "--enable-unicode=ucs4") \
+		$(use wide-unicode && echo "--enable-unicode=ucs4" || echo "--enable-unicode=ucs2") \
 		--infodir='${prefix}'/share/info \
 		--mandir='${prefix}'/share/man \
 		--with-libc='' \
@@ -199,20 +201,20 @@ multilib-native_src_test_internal() {
 
 	# Skip all tests that fail during emerge but pass without emerge:
 	# (See bug #67970)
-	local skip_tests="distutils minidom pyexpat sax tcl"
+	local skip_tests="distutils httpservers minidom pyexpat sax tcl"
 
 	# test_ctypes fails with PAX kernel (bug #234498).
 	host-is-pax && skip_tests+=" ctypes"
 
 	for test in ${skip_tests}; do
-		mv "${S}"/Lib/test/test_${test}.py "${T}"
+		mv "${S}/Lib/test/test_${test}.py" "${T}"
 	done
 
 	# Rerun failed tests in verbose mode (regrtest -w).
 	EXTRATESTOPTS="-w" make test || die "make test failed"
 
 	for test in ${skip_tests}; do
-		mv "${T}"/test_${test}.py "${S}"/Lib/test/test_${test}.py
+		mv "${T}/test_${test}.py" "${S}/Lib/test/test_${test}.py"
 	done
 
 	elog "The following tests have been skipped:"
@@ -229,9 +231,6 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" altinstall maninstall || die "emake altinstall maninstall failed"
 
 	mv "${D}usr/bin/python${PYVER}-config" "${D}usr/bin/python-config-${PYVER}"
-	if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
-		mv "${D}usr/bin/python${PYVER}" "${D}usr/bin/python${PYVER}-${ABI}"
-	fi
 
 	# Fix collisions between different slots of Python.
 	mv "${D}usr/bin/2to3" "${D}usr/bin/2to3-${PYVER}"
@@ -259,14 +258,16 @@ multilib-native_src_install_internal() {
 
 	if use examples; then
 		insinto /usr/share/doc/${PF}/examples
-		doins -r "${S}"/Tools || die "doins failed"
+		doins -r "${S}/Tools" || die "doins failed"
 	fi
 
 	newinitd "${FILESDIR}/pydoc.init" pydoc-${SLOT}
 	newconfd "${FILESDIR}/pydoc.conf" pydoc-${SLOT}
 
-	# Installs empty directory.
-	rmdir "${D}usr/$(get_libdir)/${PN}${PYVER}/lib-old"
+	# Don't install empty directory.
+	rmdir "${D}usr/$(get_libdir)/python${PYVER}/lib-old"
+
+	prep_ml_binaries usr/bin/python${PYVER}
 }
 
 multilib-native_pkg_preinst_internal() {
@@ -288,8 +289,7 @@ eselect_python_update() {
 multilib-native_pkg_postinst_internal() {
 	eselect_python_update
 
-	python_mod_optimize -x "(site-packages|test)" /usr/lib/python${PYVER}
-	[[ "$(get_libdir)" != "lib" ]] && python_mod_optimize -x "(site-packages|test)" /usr/$(get_libdir)/python${PYVER}
+	python_mod_optimize -x "(site-packages|test)" /usr/$(get_libdir)/python${PYVER}
 
 	if [[ "${python_updater_warning}" == "1" ]]; then
 		ewarn
@@ -307,6 +307,5 @@ multilib-native_pkg_postinst_internal() {
 multilib-native_pkg_postrm_internal() {
 	eselect_python_update
 
-	python_mod_cleanup /usr/lib/python${PYVER}
-	[[ "$(get_libdir)" != "lib" ]] && python_mod_cleanup /usr/$(get_libdir)/python${PYVER}
+	python_mod_cleanup /usr/$(get_libdir)/python${PYVER}
 }

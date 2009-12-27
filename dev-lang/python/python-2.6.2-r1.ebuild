@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.2-r1.ebuild,v 1.18 2009/09/27 14:30:35 nixnut Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.2-r1.ebuild,v 1.20 2009/12/06 17:50:22 arfrever Exp $
 
 # NOTE about python-portage interactions :
 # - Do not add a pkg_setup() check for a certain version of portage
@@ -12,7 +12,7 @@ EAPI="2"
 inherit autotools eutils flag-o-matic libtool multilib pax-utils python toolchain-funcs versionator multilib-native
 MULTILIB_IN_SOURCE_BUILD="yes"
 
-# We need this so that we don't depend on python.eclass
+# We need this so that we don't depend on python.eclass.
 PYVER_MAJOR=$(get_major_version)
 PYVER_MINOR=$(get_version_component_range 2)
 PYVER="${PYVER_MAJOR}.${PYVER_MINOR}"
@@ -29,8 +29,8 @@ SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
 
 LICENSE="PSF-2.2"
 SLOT="2.6"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ppc ppc64 ~s390 ~sh sparc x86 ~sparc-fbsd ~x86-fbsd"
-IUSE="-berkdb build doc elibc_uclibc examples gdbm ipv6 ncurses readline sqlite ssl +threads tk ucs2 wininst +xml"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
+IUSE="-berkdb build doc elibc_uclibc examples gdbm ipv6 ncurses readline sqlite ssl +threads tk +wide-unicode wininst +xml"
 
 # NOTE: dev-python/{elementtree,celementtree,pysqlite,ctypes}
 #       do not conflict with the ones in python proper. - liquidx
@@ -146,9 +146,9 @@ multilib-native_src_configure_internal() {
 	# Super-secret switch. Don't use this unless you know what you're
 	# doing. Enabling UCS2 support will break your existing python
 	# modules
-	use ucs2 \
-		&& myconf="${myconf} --enable-unicode=ucs2" \
-		|| myconf="${myconf} --enable-unicode=ucs4"
+	use wide-unicode \
+		&& myconf="${myconf} --enable-unicode=ucs4" \
+		|| myconf="${myconf} --enable-unicode=ucs2"
 
 	filter-flags -malign-double
 
@@ -235,9 +235,6 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" altinstall maninstall || die "emake altinstall maninstall failed"
 
 	mv "${D}usr/bin/python${PYVER}-config" "${D}usr/bin/python-config-${PYVER}"
-	if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
-		mv "${D}usr/bin/python${PYVER}" "${D}usr/bin/python${PYVER}-${ABI}"
-	fi
 
 	# Fix collisions between different slots of Python.
 	mv "${D}usr/bin/2to3" "${D}usr/bin/2to3-${PYVER}"
@@ -273,6 +270,8 @@ multilib-native_src_install_internal() {
 
 	# Installs empty directory.
 	rmdir "${D}usr/$(get_libdir)/${PN}${PYVER}/lib-old"
+
+	prep_ml_binaries usr/bin/python${PYVER}
 }
 
 multilib-native_pkg_preinst_internal() {

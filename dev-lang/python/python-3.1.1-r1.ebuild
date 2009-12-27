@@ -1,20 +1,20 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-3.1.1-r1.ebuild,v 1.7 2009/09/29 20:02:56 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-3.1.1-r1.ebuild,v 1.21 2009/12/19 21:16:36 arfrever Exp $
 
 EAPI="2"
 
 inherit autotools eutils flag-o-matic multilib pax-utils python toolchain-funcs versionator multilib-native
 
 # We need this so that we don't depend on python.eclass.
-PYVER_MAJOR=$(get_major_version)
-PYVER_MINOR=$(get_version_component_range 2)
+PYVER_MAJOR="$(get_major_version)"
+PYVER_MINOR="$(get_version_component_range 2)"
 PYVER="${PYVER_MAJOR}.${PYVER_MINOR}"
 
 MY_P="Python-${PV}"
 S="${WORKDIR}/${MY_P}"
 
-PATCHSET_REVISION="2"
+PATCHSET_REVISION="3"
 
 DESCRIPTION="Python is an interpreted, interactive, object-oriented programming language."
 HOMEPAGE="http://www.python.org/"
@@ -23,11 +23,13 @@ SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
 
 LICENSE="PSF-2.2"
 SLOT="3.1"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
-IUSE="build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite ssl +threads tk ucs2 wininst +xml"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+IUSE="build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite ssl +threads tk +wide-unicode wininst +xml"
 
 RDEPEND=">=app-admin/eselect-python-20090606
 		>=sys-libs/zlib-1.1.3[lib32?]
+		virtual/libffi
+		virtual/libintl
 		!build? (
 			doc? ( dev-python/python-docs:${SLOT} )
 			gdbm? ( sys-libs/gdbm[lib32?] )
@@ -39,10 +41,10 @@ RDEPEND=">=app-admin/eselect-python-20090606
 			ssl? ( dev-libs/openssl[lib32?] )
 			tk? ( >=dev-lang/tk-8.0[lib32?] )
 			xml? ( >=dev-libs/expat-2[lib32?] )
-		)
-		!m68k? ( !mips? ( !sparc-fbsd? ( virtual/libffi[lib32?] ) ) )"
+		)"
 DEPEND="${RDEPEND}
-		!m68k? ( !mips? ( !sparc-fbsd? ( dev-util/pkgconfig[lib32?] ) ) )"
+		dev-util/pkgconfig
+		!sys-devel/gcc[libffi]"
 RDEPEND+=" !build? ( app-misc/mime-types )"
 PDEPEND="app-admin/python-updater
 		=dev-lang/python-2*"
@@ -50,7 +52,8 @@ PDEPEND="app-admin/python-updater
 PROVIDE="virtual/python"
 
 multilib-native_src_prepare_internal() {
-	# Ensure that internal copy of libffi isn't used.
+	# Ensure that internal copies of expat and libffi aren't used.
+	rm -fr Modules/expat
 	rm -fr Modules/_ctypes/libffi*
 
 	if ! tc-is-cross-compiler; then
@@ -76,9 +79,6 @@ multilib-native_src_prepare_internal() {
 		# Remove Microsoft Windows executables.
 		rm Lib/distutils/command/wininst-*.exe
 	fi
-
-	# Don't silence output of setup.py.
-	sed -e '/setup\.py -q build/d' -i Makefile.pre.in
 
 	# Fix OtherFileTests.testStdin() not to assume
 	# that stdin is a tty for bug #248081.
@@ -116,8 +116,6 @@ multilib-native_src_configure_internal() {
 
 	export OPT="${CFLAGS}"
 
-	local myconf
-
 	filter-flags -malign-double
 
 	[[ "${ARCH}" == "alpha" ]] && append-flags -fPIC
@@ -151,12 +149,7 @@ multilib-native_src_configure_internal() {
 
 	local dbmliborder
 	if use gdbm; then
-		dbmliborder+=":gdbm"
-	fi
-	dbmliborder="${dbmliborder#:}"
-
-	if ! use m68k && ! use mips && ! use sparc-fbsd; then
-		myconf+=" --with-system-ffi"
+		dbmliborder+="${dbmliborder:+:}gdbm"
 	fi
 
 	econf \
@@ -164,12 +157,13 @@ multilib-native_src_configure_internal() {
 		--enable-shared \
 		$(use_enable ipv6) \
 		$(use_with threads) \
-		$(use_with !ucs2 wide-unicode) \
+		$(use_with wide-unicode) \
 		--infodir='${prefix}'/share/info \
 		--mandir='${prefix}'/share/man \
-		--with-libc='' \
+		--with-computed-gotos \
 		--with-dbmliborder=${dbmliborder} \
-		${myconf}
+		--with-libc='' \
+		--with-system-ffi
 }
 
 multilib-native_src_test_internal() {
@@ -196,14 +190,14 @@ multilib-native_src_test_internal() {
 	host-is-pax && skip_tests+=" ctypes"
 
 	for test in ${skip_tests}; do
-		mv "${S}"/Lib/test/test_${test}.py "${T}"
+		mv "${S}/Lib/test/test_${test}.py" "${T}"
 	done
 
 	# Rerun failed tests in verbose mode (regrtest -w).
 	EXTRATESTOPTS="-w" make test || die "make test failed"
 
 	for test in ${skip_tests}; do
-		mv "${T}"/test_${test}.py "${S}"/Lib/test/test_${test}.py
+		mv "${T}/test_${test}.py" "${S}/Lib/test/test_${test}.py"
 	done
 
 	elog "The following tests have been skipped:"
@@ -220,9 +214,6 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" altinstall || die "emake altinstall failed"
 
 	mv "${D}usr/bin/python${PYVER}-config" "${D}usr/bin/python-config-${PYVER}"
-	if [[ $(number_abis) -gt 1 ]] && ! is_final_abi; then
-		mv "${D}usr/bin/python${PYVER}" "${D}usr/bin/python${PYVER}-${ABI}"
-	fi
 
 	# Fix collisions between different slots of Python.
 	mv "${D}usr/bin/2to3" "${D}usr/bin/2to3-${PYVER}"
@@ -248,37 +239,35 @@ multilib-native_src_install_internal() {
 
 	if use examples; then
 		insinto /usr/share/doc/${PF}/examples
-		doins -r "${S}"/Tools || die "doins failed"
+		doins -r "${S}/Tools" || die "doins failed"
 	fi
 
 	newinitd "${FILESDIR}/pydoc.init" pydoc-${SLOT}
 	newconfd "${FILESDIR}/pydoc.conf" pydoc-${SLOT}
+
+	prep_ml_binaries usr/bin/python${PYVER}
 }
 
 multilib-native_pkg_preinst_internal() {
 	if has_version "<${CATEGORY}/${PN}-${SLOT}" && ! has_version ">=${CATEGORY}/${PN}-${SLOT}_alpha"; then
-		# Delete this check after global switching to Python 3.
-		if [[ "$(eselect python show)" == "python3."* ]]; then
-			python_updater_warning="1"
-		fi
+		python_updater_warning="1"
 	fi
 }
 
 eselect_python_update() {
-	local ignored_python_slots
-	[[ "$(eselect python show)" == "python2."* ]] && ignored_python_slots="--ignore 3.0 --ignore 3.1 --ignore 3.2"
+	local ignored_python_slots_options=
+	[[ "$(eselect python show)" == "python2."* ]] && ignored_python_slots_options="--ignore 3.0 --ignore 3.1 --ignore 3.2"
 
 	# Create python3 symlink.
 	eselect python update > /dev/null
 
-	eselect python update ${ignored_python_slots}
+	eselect python update ${ignored_python_slots_options}
 }
 
 multilib-native_pkg_postinst_internal() {
 	eselect_python_update
 
-	python_mod_optimize -x "(site-packages|test)" /usr/lib/python${PYVER}
-	[[ "$(get_libdir)" != "lib" ]] && python_mod_optimize -x "(site-packages|test)" /usr/$(get_libdir)/python${PYVER}
+	python_mod_optimize -x "(site-packages|test)" /usr/$(get_libdir)/python${PYVER}
 
 	if [[ "$(eselect python show)" == "python2."* ]]; then
 		ewarn
@@ -286,6 +275,8 @@ multilib-native_pkg_postinst_internal() {
 		ewarn "Many Python modules haven't been ported yet to Python 3.*."
 		ewarn "Python 3 hasn't been activated and Python wrapper is still configured to use Python 2."
 		ewarn "You can manually activate Python ${SLOT} using \`eselect python set python${SLOT}\`."
+		ewarn "It is recommended to currently have Python wrapper configured to use Python 2."
+		ewarn "Having Python wrapper configured to use Python 3 is unsupported."
 		ewarn
 		ebeep 6
 	fi
@@ -306,6 +297,5 @@ multilib-native_pkg_postinst_internal() {
 pkg_postrm() {
 	eselect_python_update
 
-	python_mod_cleanup /usr/lib/python${PYVER}
-	[[ "$(get_libdir)" != "lib" ]] && python_mod_cleanup /usr/$(get_libdir)/python${PYVER}
+	python_mod_cleanup /usr/$(get_libdir)/python${PYVER}
 }
