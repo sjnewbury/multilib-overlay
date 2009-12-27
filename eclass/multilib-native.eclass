@@ -385,11 +385,11 @@ multilib-native_setup_abi_env() {
 # find the python install dir but there may be more than one version installed.
 # Use the system default python to find the ABI specific version.
 	if ! [[ "${ABI}" == "${DEFAULT_ABI}" ]]; then
+		[ "$(readlink /usr/bin/perl)" == "/usr/bin/abi-wrapper" ] || die multilib-native.eclass: please rebuild dev-lang/perl to avoid problems
 		pyver=$(python --version 2>&1)
 		pyver=${pyver/Python /python}
 		pyver=${pyver%.*}
-		PYTHON="/usr/bin/${pyver}-${ABI}"
-		PERLBIN="/usr/bin/perl-${ABI}"
+		[ "$(readlink /usr/bin/${pyver})" == "/usr/bin/abi-wrapper" ] || die multilib-native.eclass: please rebuild dev-lang/python to avoid problems
 	fi
 
 # ccache is ABI dependent
