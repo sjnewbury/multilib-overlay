@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.0.14.ebuild,v 1.6 2009/09/13 14:22:42 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.0.14.ebuild,v 1.9 2009/12/13 06:42:49 nirbheek Exp $
 EAPI="2"
 WANT_AUTOCONF="2.1"
 
@@ -14,7 +14,7 @@ SRC_URI="mirror://gentoo/${P}.tar.bz2
 	mirror://gentoo/${PATCH}.tar.bz2
 	http://dev.gentoo.org/~armin76/dist/${PATCH}.tar.bz2"
 
-KEYWORDS="alpha amd64 arm hppa ia64 ~ppc ppc64 sparc x86"
+KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 -sparc x86"
 SLOT="1.9"
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 IUSE=""
@@ -59,6 +59,9 @@ multilib-native_src_prepare_internal() {
 
 	# We need to re-patch this because autoreconf overwrites it
 	epatch "${WORKDIR}"/patch/000_flex-configure-LANG.patch
+
+	# ARM EABI can't use -fshort-wchar
+	use arm && sed -i -e 's/-fshort-wchar//g' xulrunner/installer/libxul*
 }
 
 multilib-native_src_configure_internal() {

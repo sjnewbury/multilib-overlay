@@ -34,7 +34,7 @@ RDEPEND="java? ( >=virtual/jre-1.4 )
 	>=sys-devel/binutils-2.16.1
 	>=dev-libs/nss-3.12.3[lib32?]
 	>=dev-libs/nspr-4.8[lib32?]
-	sqlite? ( >=dev-db/sqlite-3.6.16[lib32?] )
+	sqlite? ( >=dev-db/sqlite-3.6.20-r1[lib32?] )
 	alsa? ( media-libs/alsa-lib[lib32?] )
 	>=app-text/hunspell-1.2[lib32?]
 	>=media-libs/lcms-1.17[lib32?]

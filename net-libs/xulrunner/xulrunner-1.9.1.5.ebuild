@@ -28,13 +28,12 @@ IUSE="+alsa debug python sqlite" # qt-experimental
 #		x11-libs/qt-core )
 
 # nspr-4.8 due to BMO #499144
-# Disable sqlite temporarily  	>=dev-db/sqlite-3.6.7[lib32?]
 RDEPEND="java? ( >=virtual/jre-1.4 )
 	>=dev-lang/python-2.3[lib32?,threads]
 	>=sys-devel/binutils-2.16.1
 	>=dev-libs/nss-3.12.3[lib32?]
 	>=dev-libs/nspr-4.8[lib32?]
-	sqlite? ( >=dev-db/sqlite-3.6.16[lib32?] )
+	sqlite? ( >=dev-db/sqlite-3.6.20[lib32?] )
 	alsa? ( media-libs/alsa-lib[lib32?] )
 	>=app-text/hunspell-1.2[lib32?]
 	>=media-libs/lcms-1.17[lib32?]
