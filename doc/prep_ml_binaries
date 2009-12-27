@@ -41,3 +41,4 @@ x11-libs/pango prep_ml_binaries /usr/bin/pango-querymodules
 x11-libs/qt-core prep_ml_binaries /usr/bin/qmake /usr/bin/moc /usr/bin/rcc /usr/bin/uic
 x11-misc/imake prep_ml_binaries /usr/bin/xmkmf /usr/bin/imake
 www-client/mozilla-firefox prep_ml_binaries /usr/bin/firefox
+dev-lang/python prep_ml_binaries usr/bin/python${PYVER}
