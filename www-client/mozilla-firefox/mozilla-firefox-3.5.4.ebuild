@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/mozilla-firefox/mozilla-firefox-3.5.4.ebuild,v 1.7 2009/11/04 14:16:29 anarchy Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/mozilla-firefox/mozilla-firefox-3.5.4.ebuild,v 1.11 2009/12/13 11:26:17 armin76 Exp $
 EAPI="2"
 WANT_AUTOCONF="2.1"
 
@@ -23,7 +23,7 @@ PATCH="${PN}-3.5.2-patches-0.1"
 DESCRIPTION="Firefox Web Browser"
 HOMEPAGE="http://www.mozilla.com/firefox"
 
-KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~ppc ~ppc64 -sparc ~x86"
+KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ppc ppc64 ~sparc x86"
 SLOT="0"
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 IUSE="+alsa bindist java mozdevelop restrict-javascript -sqlite iceweasel" # qt-experimental
@@ -264,10 +264,14 @@ multilib-native_src_install_internal() {
 	# Plugins dir
 	dosym ../nsbrowser/plugins "${MOZILLA_FIVE_HOME}"/plugins \
 		|| die "failed to symlink"
+
+	# very ugly hack to make firefox not sigbus on sparc
+	use sparc && sed -i -e 's/Firefox/FirefoxGentoo/g' ${D}/${MOZILLA_FIVE_HOME}/application.ini
 }
 
 pkg_postinst() {
-	ewarn "If firefox says \"Couldn't load XPCOM\", try running revdep-rebuild"
+	ewarn "All the packages built against ${PN} won't compile,"
+	ewarn "any package that fails to build warrants a bug report."
 	elog
 
 	# Update mimedb for the new .desktop file

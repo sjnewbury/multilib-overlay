@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/mozilla-firefox/mozilla-firefox-3.5.6.ebuild,v 1.2 2009/12/19 18:09:02 anarchy Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/mozilla-firefox/mozilla-firefox-3.5.6.ebuild,v 1.6 2009/12/23 18:29:44 pacho Exp $
 EAPI="2"
 WANT_AUTOCONF="2.1"
 
@@ -18,12 +18,12 @@ MAJ_PV="${PV/_*/}" # Without the _rc and _beta stuff
 DESKTOP_PV="3.5"
 MY_PV="${PV/_beta/b}" # Handle betas for SRC_URI
 MY_PV="${PV/_/}" # Handle rcs for SRC_URI
-PATCH="${PN}-3.5.2-patches-0.1"
+PATCH="${PN}-3.5.5-patches-0.1"
 
 DESCRIPTION="Firefox Web Browser"
 HOMEPAGE="http://www.mozilla.com/firefox"
 
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 -sparc ~x86"
+KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ppc ppc64 ~sparc ~x86"
 SLOT="0"
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 IUSE="+alsa bindist java mozdevelop sqlite iceweasel" # qt-experimental
@@ -59,7 +59,7 @@ RDEPEND="
 	>=dev-libs/nss-3.12.2[lib32?]
 	>=dev-libs/nspr-4.7.3[lib32?]
 	>=app-text/hunspell-1.2[lib32?]
-	sqlite? ( >=dev-db/sqlite-3.6.10[lib32?] )
+	sqlite? ( >=dev-db/sqlite-3.6.20-r1[lib32?] )
 	alsa? ( media-libs/alsa-lib[lib32?] )
 	~net-libs/xulrunner-${XUL_PV}[java=,sqlite=,lib32?]
 	>=x11-libs/cairo-1.8.8[X,lib32?]
@@ -263,10 +263,19 @@ multilib-native_src_install_internal() {
 	# Plugins dir
 	dosym ../nsbrowser/plugins "${MOZILLA_FIVE_HOME}"/plugins \
 		|| die "failed to symlink"
+
+	# very ugly hack to make firefox not sigbus on sparc
+	if use sparc ; then
+		sed -i \
+			-e 's/Firefox/FirefoxGentoo/g' \
+			"${D}/${MOZILLA_FIVE_HOME}/application.ini" \
+			|| die "sparc sed failed"
+	fi
 }
 
 pkg_postinst() {
-	ewarn "If firefox says \"Couldn't load XPCOM\", try running revdep-rebuild"
+	ewarn "All the packages built against ${PN} won't compile,"
+	ewarn "any package that fails to build warrants a bug report."
 	elog
 
 	# Update mimedb for the new .desktop file
