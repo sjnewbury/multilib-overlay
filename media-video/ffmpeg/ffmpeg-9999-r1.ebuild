@@ -1,25 +1,41 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999-r1.ebuild,v 1.7 2009/07/04 08:20:56 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999-r1.ebuild,v 1.25 2009/11/25 06:06:20 beandog Exp $
 
 EAPI=2
+SCM=""
+if [ "${PV#9999}" != "${PV}" ] ; then
+	SCM=subversion
+	ESVN_REPO_URI="svn://svn.ffmpeg.org/ffmpeg/trunk"
+fi
 
-ESVN_REPO_URI="svn://svn.mplayerhq.hu/ffmpeg/trunk"
+inherit eutils flag-o-matic multilib toolchain-funcs ${SCM} multilib-native
 
-inherit eutils flag-o-matic multilib toolchain-funcs subversion multilib-native
-
-DESCRIPTION="Complete solution to record, convert and stream audio and video.
-Includes libavcodec. live svn"
+DESCRIPTION="Complete solution to record, convert and stream audio and video. Includes libavcodec."
 HOMEPAGE="http://ffmpeg.org/"
+if [ "${PV#9999}" != "${PV}" ] ; then
+	SRC_URI=""
+elif [ "${PV%_p*}" != "${PV}" ] ; then # Snapshot
+	SRC_URI="mirror://gentoo/${P}.tar.bz2"
+else # Release
+	SRC_URI="http://ffmpeg.org/releases/${P}.tar.bz2"
+fi
+FFMPEG_REVISION="${PV#*_p}"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="+3dnow +3dnowext alsa altivec amr cpudetection custom-cflags debug dirac
+IUSE="+3dnow +3dnowext alsa altivec cpudetection custom-cflags debug dirac
 	  doc ieee1394 +encode faac faad gsm ipv6 jack +mmx +mmxext vorbis test
-	  theora threads x264 xvid network zlib sdl X mp3 opencore-amrnb
-	  opencore-amrwb oss schroedinger +hardcoded-tables bindist v4l v4l2
-	  speex +ssse3 jpeg2k"
+	  theora threads x264 xvid network zlib sdl X mp3 opencore-amr
+	  oss pic schroedinger +hardcoded-tables bindist v4l v4l2
+	  speex +ssse3 jpeg2k vdpau"
+
+VIDEO_CARDS="nvidia"
+
+for x in ${VIDEO_CARDS}; do
+	IUSE="${IUSE} video_cards_${x}"
+done
 
 RDEPEND="sdl? ( >=media-libs/libsdl-1.2.10[lib32?] )
 	alsa? ( media-libs/alsa-lib[lib32?] )
@@ -27,8 +43,8 @@ RDEPEND="sdl? ( >=media-libs/libsdl-1.2.10[lib32?] )
 		faac? ( media-libs/faac[lib32?] )
 		mp3? ( media-sound/lame[lib32?] )
 		vorbis? ( media-libs/libvorbis[lib32?] media-libs/libogg[lib32?] )
-		theora? ( media-libs/libtheora[lib32?] media-libs/libogg[lib32?] )
-		x264? ( >=media-libs/x264-0.0.20081006[lib32?] )
+		theora? ( >=media-libs/libtheora-1.1.1[encode,lib32?] media-libs/libogg[lib32?] )
+		x264? ( >=media-libs/x264-0.0.20091021[lib32?] )
 		xvid? ( >=media-libs/xvid-1.1.0[lib32?] ) )
 	faad? ( >=media-libs/faad2-2.6.1[lib32?] )
 	zlib? ( sys-libs/zlib[lib32?] )
@@ -37,10 +53,14 @@ RDEPEND="sdl? ( >=media-libs/libsdl-1.2.10[lib32?] )
 	dirac? ( media-video/dirac[lib32?] )
 	gsm? ( >=media-sound/gsm-1.0.12-r1[lib32?] )
 	jpeg2k? ( >=media-libs/openjpeg-1.3-r2[lib32?] )
+	opencore-amr? ( media-libs/opencore-amr[lib32?] )
 	schroedinger? ( media-libs/schroedinger[lib32?] )
 	speex? ( >=media-libs/speex-1.2_beta3[lib32?] )
+	jack? ( media-sound/jack-audio-connection-kit[lib32?] )
 	X? ( x11-libs/libX11[lib32?] x11-libs/libXext[lib32?] )
-	amr? ( media-libs/amrnb[lib32?] media-libs/amrwb[lib32?] )"
+	video_cards_nvidia? (
+		vdpau? ( x11-libs/libvdpau[lib32?] )
+	)"
 
 DEPEND="${RDEPEND}
 	>=sys-devel/make-3.81
@@ -50,8 +70,18 @@ DEPEND="${RDEPEND}
 	v4l? ( sys-kernel/linux-headers )
 	v4l2? ( sys-kernel/linux-headers )"
 
+multilib-native_src_prepare_internal() {
+	if [[ ${PV} = *9999* ]]; then
+		# Set SVN version manually
+		subversion_wc_info
+		sed -i s/UNKNOWN/SVN-r${ESVN_WC_REVISION}/ "${S}/version.sh"
+	elif [ "${PV%_p*}" != "${PV}" ] ; then # Snapshot
+		sed -i s/UNKNOWN/SVN-r${FFMPEG_REVISION}/ "${S}/version.sh"
+	fi
+}
+
 multilib-native_src_configure_internal() {
-	local myconf="${EXTRA_ECONF}"
+	local myconf="${EXTRA_FFMPEG_CONF}"
 
 	# enabled by default
 	use debug || myconf="${myconf} --disable-debug"
@@ -95,7 +125,9 @@ multilib-native_src_configure_internal() {
 	use threads && myconf="${myconf} --enable-pthreads"
 
 	# Decoders
-	for i in faad dirac schroedinger speex opencore-amrnb opencore-amrwb ; do
+	use opencore-amr && myconf="${myconf} --enable-libopencore-amrwb
+		--enable-libopencore-amrnb"
+	for i in faad dirac schroedinger speex; do
 		use $i && myconf="${myconf} --enable-lib$i"
 	done
 	use jpeg2k && myconf="${myconf} --enable-libopenjpeg"
@@ -106,15 +138,19 @@ multilib-native_src_configure_internal() {
 	fi
 	if use bindist
 	then
-		use amr && ewarn "libamr is nonfree and cannot be distributed; disabling amr support."
 		use faac && ewarn "faac is nonfree and cannot be distributed; disabling
 		faac support."
 	else
-		use amr && myconf="${myconf} --enable-libamr-nb \
-									 --enable-libamr-wb"
 		use faac && myconf="${myconf} --enable-libfaac"
-		{ use faac || use amr ; } && myconf="${myconf} --enable-nonfree"
+		{ use faac ; } && myconf="${myconf} --enable-nonfree"
 	fi
+
+	#for i in h264_vdpau mpeg1_vdpau mpeg_vdpau vc1_vdpau wmv3_vdpau; do
+	#	use video_cards_nvidia || myconf="${myconf} --disable-decoder=$i"
+	#	use vdpau || myconf="${myconf} --disable-decoder=$i"
+	#done
+	use video_cards_nvidia || myconf="${myconf} --disable-vdpau"
+	use vdpau || myconf="${myconf} --disable-vdpau"
 
 	# CPU features
 	for i in mmx ssse3 altivec ; do
@@ -129,12 +165,16 @@ multilib-native_src_configure_internal() {
 		myconf="${myconf} --disable-mmx --disable-mmx2"
 	fi
 
+	# Option to force building pic
+	use pic && myconf="${myconf} --enable-pic"
+
 	# Try to get cpu type based on CFLAGS.
 	# Bug #172723
 	# We need to do this so that features of that CPU will be better used
 	# If they contain an unknown CPU it will not hurt since ffmpeg's configure
 	# will just ignore it.
 	for i in $(get-flag march) $(get-flag mcpu) $(get-flag mtune) ; do
+		[ "${i}" = "native" ] && i="host" # bug #273421
 		myconf="${myconf} --cpu=$i"
 		break
 	done
@@ -145,10 +185,24 @@ multilib-native_src_configure_internal() {
 			--disable-stripping"
 
 	# cross compile support
-	tc-is-cross-compiler && myconf="${myconf} --enable-cross-compile --arch=$(tc-arch-kernel)"
+	if tc-is-cross-compiler ; then
+		myconf="${myconf} --enable-cross-compile --arch=$(tc-arch-kernel) --cross-prefix=${CHOST}-"
+		case ${CHOST} in
+			*freebsd*)
+				myconf="${myconf} --target-os=freebsd"
+				;;
+			mingw32*)
+				myconf="${myconf} --target-os=mingw32"
+				;;
+			*linux*)
+				myconf="${myconf} --target-os=linux"
+				;;
+		esac
+	fi
 
 	# Misc stuff
 	use hardcoded-tables && myconf="${myconf} --enable-hardcoded-tables"
+	use doc || myconf="${myconf} --disable-doc"
 
 	# Specific workarounds for too-few-registers arch...
 	if [[ $(tc-arch) == "x86" ]]; then
@@ -189,8 +243,12 @@ multilib-native_src_install_internal() {
 }
 
 src_test() {
-	for t in codectest lavftest seektest ; do
-		LD_LIBRARY_PATH="${S}/libpostproc:${S}/libswscale:${S}/libavcodec:${S}/libavdevice:${S}/libavfilter:${S}/libavformat:${S}/libavutil" \
-			emake ${t} || die "Some tests in ${t} failed"
-	done
+	if use encode ; then
+		for t in codectest lavftest seektest ; do
+			LD_LIBRARY_PATH="${S}/libpostproc:${S}/libswscale:${S}/libavcodec:${S}/libavdevice:${S}/libavfilter:${S}/libavformat:${S}/libavutil" \
+				emake ${t} || die "Some tests in ${t} failed"
+		done
+	else
+		ewarn "Tests fail without USE=encode, skipping"
+	fi
 }
