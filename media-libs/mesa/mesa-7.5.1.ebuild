@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.5.1.ebuild,v 1.7 2009/10/26 20:24:06 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.5.1.ebuild,v 1.8 2009/12/15 15:50:44 armin76 Exp $
 
 EAPI="2"
 
@@ -39,7 +39,7 @@ fi
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 arm hppa ~ia64 ~mips ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ~ppc64 sh sparc x86 ~x86-fbsd"
 
 IUSE_VIDEO_CARDS="${IUSE_VIDEO_CARDS_UNSTABLE}
 	video_cards_intel

@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.7_rc2.ebuild,v 1.3 2009/12/14 17:39:15 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.6.1.ebuild,v 1.1 2009/12/22 13:50:33 nirbheek Exp $
 
 EAPI="2"
 
@@ -17,7 +17,7 @@ inherit autotools multilib flag-o-matic ${GIT_ECLASS} portability multilib-nativ
 OPENGL_DIR="xorg-x11"
 
 MY_PN="${PN/m/M}"
-MY_P="${MY_PN}-${PV/_/-}"
+MY_P="${MY_PN}-${PV/_*/}"
 MY_SRC_P="${MY_PN}Lib-${PV/_/-}"
 DESCRIPTION="OpenGL-like graphic library for Linux"
 HOMEPAGE="http://mesa3d.sourceforge.net/"
@@ -42,10 +42,12 @@ IUSE_VIDEO_CARDS="${IUSE_VIDEO_CARDS_UNSTABLE}
 	video_cards_r128
 	video_cards_radeon
 	video_cards_radeonhd
+	video_cards_s3virge
 	video_cards_savage
 	video_cards_sis
 	video_cards_sunffb
 	video_cards_tdfx
+	video_cards_trident
 	video_cards_via"
 IUSE="${IUSE_VIDEO_CARDS}
 	debug gallium motif +nptl pic +xcb kernel_FreeBSD"
@@ -56,7 +58,7 @@ RDEPEND="!<x11-base/xorg-server-1.7
 	!<=x11-proto/xf86driproto-2.0.3
 	>=app-admin/eselect-opengl-1.1.1-r2
 	dev-libs/expat[lib32?]
-	>=x11-libs/libdrm-2.4.16[lib32?]
+	>=x11-libs/libdrm-2.4.17[lib32?]
 	x11-libs/libICE[lib32?]
 	x11-libs/libX11[xcb?,lib32?]
 	x11-libs/libXdamage[lib32?]
@@ -103,6 +105,11 @@ src_prepare() {
 		EPATCH_SUFFIX="patch" \
 		epatch
 	fi
+
+	# The drmClip interface changed with libdrm-2.4.17
+	# bug 297891 (patch from upstream git)
+	epatch "${FILESDIR}/0001-st-xorg-Adopt-to-new-dirty-clip-rect-type.patch"
+
 	# FreeBSD 6.* doesn't have posix_memalign().
 	[[ ${CHOST} == *-freebsd6.* ]] && \
 		sed -i -e "s/-DHAVE_POSIX_MEMALIGN//" configure.ac
@@ -122,10 +129,12 @@ multilib-native_src_configure_internal() {
 	# ATI has two implementations as video_cards
 	driver_enable video_cards_radeon radeon r200 r300 r600
 	driver_enable video_cards_radeonhd r300 r600
+	driver_enable video_cards_s3virge s3v
 	driver_enable video_cards_savage savage
 	driver_enable video_cards_sis sis
 	driver_enable video_cards_sunffb ffb
 	driver_enable video_cards_tdfx tdfx
+	driver_enable video_cards_trident trident
 	driver_enable video_cards_via unichrome
 
 	# all live (experimental) stuff is wrapped around with experimental variable
