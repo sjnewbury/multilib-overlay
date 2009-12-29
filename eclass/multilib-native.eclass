@@ -385,11 +385,11 @@ multilib-native_setup_abi_env() {
 # find the python install dir but there may be more than one version installed.
 # Use the system default python to find the ABI specific version.
 	if ! [[ "${ABI}" == "${DEFAULT_ABI}" ]]; then
-		[ "$(readlink /usr/bin/perl)" == "/usr/bin/abi-wrapper" ] || die multilib-native.eclass: please rebuild dev-lang/perl to avoid problems
+		[ built_with_use dev-lang/perl lib32 ] && [ "$(readlink /usr/bin/perl)" == "/usr/bin/abi-wrapper" ] || die multilib-native.eclass: please rebuild dev-lang/perl to avoid problems
 		pyver=$(python --version 2>&1)
 		pyver=${pyver/Python /python}
 		pyver=${pyver%.*}
-		[ "$(readlink /usr/bin/${pyver})" == "/usr/bin/abi-wrapper" ] || die multilib-native.eclass: please rebuild dev-lang/python to avoid problems
+		[ built_with_use dev-lang/python lib32 ] && [ "$(readlink /usr/bin/${pyver})" == "/usr/bin/abi-wrapper" ] || die multilib-native.eclass: please rebuild dev-lang/python to avoid problems
 	fi
 
 # ccache is ABI dependent
@@ -404,7 +404,6 @@ multilib-native_setup_abi_env() {
 	# Strip any trailing slash (fixes build failure with python.eclass)
 	CMAKE_BUILD_DIR="${CMAKE_BUILD_DIR%/}"
 
-	export PYTHON PERLBIN QMAKESPEC
 	EMULTILIB_INITIALISED[$(multilib-native_abi_to_index_key ${1})]=1
 }
 
