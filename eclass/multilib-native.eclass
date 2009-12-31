@@ -380,17 +380,13 @@ multilib-native_setup_abi_env() {
 		PKG_CONFIG_PATH="${PKG_CONFIG_PATH/lib*\//$(get_libdir)/}:/usr/$(get_libdir)/pkgconfig"
 	fi
 
-# If we aren't building for the DEFAULT ABI we may need to use some ABI
-# specific programs during the build.  The python binary is sometimes used to
-# find the python install dir but there may be more than one version installed.
-# Use the system default python to find the ABI specific version.
-	if ! [[ "${ABI}" == "${DEFAULT_ABI}" ]]; then
-		built_with_use dev-lang/perl lib32 && [[ "$(readlink /usr/bin/perl)" == "/usr/bin/abi-wrapper" ]] || eerror multilib-native.eclass: please rebuild dev-lang/perl to avoid problems
-		pyver=$(python --version 2>&1)
-		pyver=${pyver/Python /python}
-		pyver=${pyver%.*}
-		built_with_use dev-lang/python lib32 && [[ "$(readlink /usr/bin/${pyver})" == "/usr/bin/abi-wrapper" ]] || eerror multilib-native.eclass: please rebuild dev-lang/python to avoid problems
-	fi
+#	if ! [[ "${ABI}" == "${DEFAULT_ABI}" ]]; then
+#		built_with_use dev-lang/perl lib32 && [[ "$(readlink /usr/bin/perl)" == "/usr/bin/abi-wrapper" ]] || eerror multilib-native.eclass: please rebuild dev-lang/perl to avoid problems
+#		pyver=$(python --version 2>&1)
+#		pyver=${pyver/Python /python}
+#		pyver=${pyver%.*}
+#		built_with_use dev-lang/python lib32 && [[ "$(readlink /usr/bin/${pyver})" == "/usr/bin/abi-wrapper" ]] || eerror multilib-native.eclass: please rebuild dev-lang/python to avoid problems
+#	fi
 
 # ccache is ABI dependent
 	if [[ -z ${CCACHE_DIR} ]] ; then 
