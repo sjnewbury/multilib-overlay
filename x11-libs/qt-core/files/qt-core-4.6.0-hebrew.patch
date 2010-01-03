@@ -1,0 +1,69 @@
+From ddf34f39efcbe679f1a8216df58da0c61e98ec79 Mon Sep 17 00:00:00 2001
+From: Lars Knoll <lars.knoll@nokia.com>
+Date: Mon, 21 Dec 2009 14:30:40 +0100
+Subject: [PATCH] update harfbuzz to 2b78f0d78ad3075fd1657d1260b31219e1a5155
+
+Fix a regression in Hebrew text rendering that got introduced
+in Harfbuzz.
+Fix some uninitialized variables.
+
+Task-number: http://bugreports.qt.nokia.com/browse/QTBUG-6436
+Reviewed-by: Simon Hausmann
+---
+ src/3rdparty/harfbuzz/src/harfbuzz-hebrew.c   |    4 +---
+ src/3rdparty/harfbuzz/src/harfbuzz-shaper.cpp |    3 +++
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/src/3rdparty/harfbuzz/src/harfbuzz-hebrew.c b/src/3rdparty/harfbuzz/src/harfbuzz-hebrew.c
+index 2bda386..67029be 100644
+--- a/src/3rdparty/harfbuzz/src/harfbuzz-hebrew.c
++++ b/src/3rdparty/harfbuzz/src/harfbuzz-hebrew.c
+@@ -56,8 +56,6 @@ HB_Bool HB_HebrewShape(HB_ShaperItem *shaper_item)
+ 
+     assert(shaper_item->item.script == HB_Script_Hebrew);
+ 
+-    HB_HeuristicSetGlyphAttributes(shaper_item);
+-
+ #ifndef NO_OPENTYPE
+     if (HB_SelectScript(shaper_item, hebrew_features)) {
+ 
+@@ -65,7 +63,7 @@ HB_Bool HB_HebrewShape(HB_ShaperItem *shaper_item)
+         if (!HB_ConvertStringToGlyphIndices(shaper_item))
+             return FALSE;
+ 
+-
++        HB_HeuristicSetGlyphAttributes(shaper_item);
+         HB_OpenTypeShape(shaper_item, /*properties*/0);
+         return HB_OpenTypePosition(shaper_item, availableGlyphs, /*doLogClusters*/TRUE);
+     }
+diff --git a/src/3rdparty/harfbuzz/src/harfbuzz-shaper.cpp b/src/3rdparty/harfbuzz/src/harfbuzz-shaper.cpp
+index bfb03ab..bfc7bd4 100644
+--- a/src/3rdparty/harfbuzz/src/harfbuzz-shaper.cpp
++++ b/src/3rdparty/harfbuzz/src/harfbuzz-shaper.cpp
+@@ -980,6 +980,7 @@ HB_Face HB_NewFace(void *font, HB_GetFontTableFunc tableFunc)
+     HB_Stream gdefStream;
+ 
+     gdefStream = getTableStream(font, tableFunc, TTAG_GDEF);
++    error = HB_Err_Not_Covered;
+     if (!gdefStream || (error = HB_Load_GDEF_Table(gdefStream, &face->gdef))) {
+         //DEBUG("error loading gdef table: %d", error);
+         face->gdef = 0;
+@@ -987,6 +988,7 @@ HB_Face HB_NewFace(void *font, HB_GetFontTableFunc tableFunc)
+ 
+     //DEBUG() << "trying to load gsub table";
+     stream = getTableStream(font, tableFunc, TTAG_GSUB);
++    error = HB_Err_Not_Covered;
+     if (!stream || (error = HB_Load_GSUB_Table(stream, &face->gsub, face->gdef, gdefStream))) {
+         face->gsub = 0;
+         if (error != HB_Err_Not_Covered) {
+@@ -998,6 +1000,7 @@ HB_Face HB_NewFace(void *font, HB_GetFontTableFunc tableFunc)
+     _hb_close_stream(stream);
+ 
+     stream = getTableStream(font, tableFunc, TTAG_GPOS);
++    error = HB_Err_Not_Covered;
+     if (!stream || (error = HB_Load_GPOS_Table(stream, &face->gpos, face->gdef, gdefStream))) {
+         face->gpos = 0;
+         DEBUG("error loading gpos table: %d", error);
+-- 
+1.6.6.rc4
+
