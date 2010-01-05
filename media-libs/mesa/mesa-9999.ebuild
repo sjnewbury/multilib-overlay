@@ -31,7 +31,7 @@ fi
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS=""
 
 VIDEO_CARDS="intel mach64 mga none nouveau r128 radeon radeonhd savage sis sunffb svga tdfx via"
 for card in ${VIDEO_CARDS}; do
