@@ -1,8 +1,8 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/sdl-mixer/sdl-mixer-1.2.11.ebuild,v 1.1 2009/11/15 20:09:30 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/sdl-mixer/sdl-mixer-1.2.11.ebuild,v 1.7 2010/01/15 09:47:39 fauli Exp $
 
-EAPI="2"
+EAPI=2
 
 inherit eutils multilib-native
 
@@ -13,7 +13,7 @@ SRC_URI="http://www.libsdl.org/projects/SDL_mixer/release/${MY_P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 arm ~hppa ~ia64 ~mips ppc ppc64 ~sh ~sparc x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x86-macos ~x86-solaris"
 IUSE="flac mad +midi mikmod mp3 timidity vorbis +wav"
 
 DEPEND=">=media-libs/libsdl-1.2.10[lib32?]
@@ -29,13 +29,14 @@ S=${WORKDIR}/${MY_P}
 multilib-native_src_configure_internal() {
 	econf \
 		--disable-dependency-tracking \
-		$(use_enable timidity music-midi) \
-		$(use_enable timidity timidity-midi) \
+		$(use_enable wav music-wave) \
+		$(use_enable midi music-midi) \
+		$(use_enable timidity music-timidity-midi) \
 		$(use_enable mikmod music-mod) \
-		$(use_enable mikmod music-libmikmod) \
-		$(use_enable mp3 music-mp3) \
 		$(use_enable vorbis music-ogg) \
-		|| die
+		$(use_enable flac music-flac) \
+		$(use mad && echo --disable-music-mp3 || use_enable mp3 music-mp3) \
+		$(use_enable mad music-mp3-mad-gpl)
 }
 
 multilib-native_src_install_internal() {
