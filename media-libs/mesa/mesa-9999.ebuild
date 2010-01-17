@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.7-r1.ebuild,v 1.2 2009/12/28 23:47:30 ssuominen Exp $
 
 EAPI="2"
 
@@ -73,7 +73,7 @@ S="${WORKDIR}/${MY_P}"
 
 # Think about: ggi, svga, fbcon, no-X configs
 
-multilib-native_pkg_setup_internal() {
+pkg_setup() {
 	# gcc 4.2 has buggy ivopts
 	if [[ $(gcc-version) = "4.2" ]]; then
 		append-flags -fno-ivopts
@@ -83,11 +83,11 @@ multilib-native_pkg_setup_internal() {
 	append-flags -ffast-math
 }
 
-multilib-native_src_unpack_internal() {
+src_unpack() {
 	[[ $PV = 9999* ]] && git_src_unpack || unpack ${A}
 }
 
-multilib-native_src_prepare_internal() {
+src_prepare() {
 	# apply patches
 	if [[ ${PV} != 9999* && -n ${SRC_PATCHES} ]]; then
 		EPATCH_FORCE="yes" \
@@ -124,16 +124,17 @@ multilib-native_src_configure_internal() {
 	if use gallium; then
 		elog "You have enabled gallium infrastructure."
 		elog "This infrastructure currently support these drivers:"
-		elog "    Intel: works only i915."
-		elog "    Nouveau: Support for nVidia NV30 and later cards."
-		elog "    Radeon: Newest implementation of r300-r500 driver."
-		elog "    Svga: VMWare Virtual GPU driver."
+		elog "    Intel: driver not really functional, thus disabled."
+		elog "    Nouveau: only available implementation. Experimental Quality."
+		elog "    Radeon: implementation up to the r500. Testing Quality."
+		elog "    Svga: VMWare Virtual GPU driver. Hic sunt leones."
 		echo
 		myconf="${myconf}
+			--disable-gallium-intel
 			--with-state-trackers=glx,dri,egl
 			$(use_enable video_cards_svga gallium-svga)
-			$(use_enable video_cards_nouveau gallium-nouveau)
-			$(use_enable video_cards_intel gallium-intel)"
+			$(use_enable video_cards_nouveau gallium-nouveau)"
+			#$(use_enable video_cards_intel gallium-intel)"
 		if use video_cards_radeon || use video_cards_radeonhd; then
 			myconf="${myconf} --enable-gallium-radeon"
 		else
@@ -142,7 +143,7 @@ multilib-native_src_configure_internal() {
 	else
 		if use video_cards_nouveau || use video_cards_svga; then
 			elog "SVGA and nouveau drivers are available only via gallium interface."
-			elog "Enable gallium useflag if you want to use them."
+			elog "Enable gallium useflag if you insist to use them."
 		fi
 	fi
 
