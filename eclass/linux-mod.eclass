@@ -1,6 +1,6 @@
 # Copyright 1999-2004 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/linux-mod.eclass,v 1.95 2009/09/06 23:16:37 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/linux-mod.eclass,v 1.98 2010/01/17 04:00:07 robbat2 Exp $
 
 # Author(s): John Mylchreest <johnm@gentoo.org>,
 #            Stefan Schweizer <genstef@gentoo.org>
@@ -131,14 +131,8 @@
 # See http://bugs.gentoo.org/show_bug.cgi?id=127506
 
 inherit eutils linux-info multilib
-case "${EAPI:-0}" in
-	2)
-		EXPORT_FUNCTIONS pkg_setup pkg_preinst pkg_postinst src_install src_configure src_compile pkg_postrm
-		;;
-	*)
-		EXPORT_FUNCTIONS pkg_setup pkg_preinst pkg_postinst src_install src_compile pkg_postrm
-		;;
-esac
+EXPORT_FUNCTIONS pkg_setup pkg_preinst pkg_postinst src_install src_compile pkg_postrm
+
 IUSE="kernel_linux"
 SLOT="0"
 DESCRIPTION="Based on the $ECLASS eclass"
@@ -156,7 +150,7 @@ check_vermagic() {
 	local curr_gcc_ver=$(gcc -dumpversion)
 	local tmpfile old_chost old_gcc_ver result=0
 
-	tmpfile=`find ${KV_DIR}/ -iname "*.o.cmd" -exec grep usr/lib/gcc {} \; -quit`
+	tmpfile=`find "${KV_DIR}/" -iname "*.o.cmd" -exec grep usr/lib/gcc {} \; -quit`
 	tmpfile=${tmpfile//*usr/lib}
 	tmpfile=${tmpfile//\/include*}
 	old_chost=${tmpfile//*gcc\/}
@@ -217,7 +211,7 @@ convert_to_m() {
 		[ ! -f "${1}" ] && \
 			die "convert_to_m() requires a filename as an argument"
 		ebegin "Converting ${1/${WORKDIR}\//} to use M= instead of SUBDIRS="
-		sed -i 's:SUBDIRS=:M=:g' ${1}
+		sed -i 's:SUBDIRS=:M=:g' "${1}"
 		eend $?
 	fi
 }
@@ -234,9 +228,9 @@ update_depmod() {
 	get_version;
 
 	ebegin "Updating module dependencies for ${KV_FULL}"
-	if [ -r ${KV_OUT_DIR}/System.map ]
+	if [ -r "${KV_OUT_DIR}"/System.map ]
 	then
-		depmod -ae -F ${KV_OUT_DIR}/System.map -b ${ROOT} -r ${KV_FULL}
+		depmod -ae -F "${KV_OUT_DIR}"/System.map -b "${ROOT}" -r ${KV_FULL}
 		eend $?
 	else
 		ewarn
@@ -256,12 +250,12 @@ update_modules() {
 	debug-print-function ${FUNCNAME} $*
 
 	if [ -x /sbin/update-modules ] && \
-		grep -v -e "^#" -e "^$" ${D}/etc/modules.d/* >/dev/null 2>&1; then
+		grep -v -e "^#" -e "^$" "${D}"/etc/modules.d/* >/dev/null 2>&1; then
 		ebegin "Updating modules.conf"
 		/sbin/update-modules
 		eend $?
 	elif [ -x /sbin/update-modules ] && \
-		grep -v -e "^#" -e "^$" ${D}/etc/modules.d/* >/dev/null 2>&1; then
+		grep -v -e "^#" -e "^$" "${D}"/etc/modules.d/* >/dev/null 2>&1; then
 		ebegin "Updating modules.conf"
 		/sbin/update-modules
 		eend $?
@@ -276,15 +270,15 @@ update_modules() {
 move_old_moduledb() {
 	debug-print-function ${FUNCNAME} $*
 
-	local OLDDIR=${ROOT}/usr/share/module-rebuild/
-	local NEWDIR=${ROOT}/var/lib/module-rebuild/
+	local OLDDIR="${ROOT}"/usr/share/module-rebuild/
+	local NEWDIR="${ROOT}"/var/lib/module-rebuild/
 
-	if [[ -f ${OLDDIR}/moduledb ]]; then
-		[[ ! -d ${NEWDIR} ]] && mkdir -p ${NEWDIR}
-		[[ ! -f ${NEWDIR}/moduledb ]] && \
-			mv ${OLDDIR}/moduledb ${NEWDIR}/moduledb
-		rm -f ${OLDDIR}/*
-		rmdir ${OLDDIR}
+	if [[ -f "${OLDDIR}"/moduledb ]]; then
+		[[ ! -d "${NEWDIR}" ]] && mkdir -p "${NEWDIR}"
+		[[ ! -f "${NEWDIR}"/moduledb ]] && \
+			mv "${OLDDIR}"/moduledb "${NEWDIR}"/moduledb
+		rm -f "${OLDDIR}"/*
+		rmdir "${OLDDIR}"
 	fi
 }
 
@@ -296,17 +290,17 @@ move_old_moduledb() {
 update_moduledb() {
 	debug-print-function ${FUNCNAME} $*
 
-	local MODULEDB_DIR=${ROOT}/var/lib/module-rebuild/
+	local MODULEDB_DIR="${ROOT}"/var/lib/module-rebuild/
 	move_old_moduledb
 
-	if [[ ! -f ${MODULEDB_DIR}/moduledb ]]; then
-		[[ ! -d ${MODULEDB_DIR} ]] && mkdir -p ${MODULEDB_DIR}
-		touch ${MODULEDB_DIR}/moduledb
+	if [[ ! -f "${MODULEDB_DIR}"/moduledb ]]; then
+		[[ ! -d "${MODULEDB_DIR}" ]] && mkdir -p "${MODULEDB_DIR}"
+		touch "${MODULEDB_DIR}"/moduledb
 	fi
 
-	if ! grep -qs ${CATEGORY}/${PN}-${PVR} ${MODULEDB_DIR}/moduledb ; then
+	if ! grep -qs ${CATEGORY}/${PN}-${PVR} "${MODULEDB_DIR}"/moduledb ; then
 		einfo "Adding module to moduledb."
-		echo "a:1:${CATEGORY}/${PN}-${PVR}" >> ${MODULEDB_DIR}/moduledb
+		echo "a:1:${CATEGORY}/${PN}-${PVR}" >> "${MODULEDB_DIR}"/moduledb
 	fi
 }
 
@@ -319,12 +313,12 @@ update_moduledb() {
 remove_moduledb() {
 	debug-print-function ${FUNCNAME} $*
 
-	local MODULEDB_DIR=${ROOT}/var/lib/module-rebuild/
+	local MODULEDB_DIR="${ROOT}"/var/lib/module-rebuild/
 	move_old_moduledb
 
-	if grep -qs ${CATEGORY}/${PN}-${PVR} ${MODULEDB_DIR}/moduledb ; then
+	if grep -qs ${CATEGORY}/${PN}-${PVR} "${MODULEDB_DIR}"/moduledb ; then
 		einfo "Removing ${CATEGORY}/${PN}-${PVR} from moduledb."
-		sed -i -e "/.*${CATEGORY}\/${PN}-${PVR}.*/d" ${MODULEDB_DIR}/moduledb
+		sed -i -e "/.*${CATEGORY}\/${PN}-${PVR}.*/d" "${MODULEDB_DIR}"/moduledb
 	fi
 }
 
@@ -422,36 +416,36 @@ generate_modulesd() {
 
 		ebegin "Preparing file for modules.d"
 		#-----------------------------------------------------------------------
-		echo "# modules.d configuration file for ${currm}" >> ${module_config}
+		echo "# modules.d configuration file for ${currm}" >> "${module_config}"
 		#-----------------------------------------------------------------------
 		[[ -n ${module_docs} ]] && \
-			echo "# For more information please read:" >> ${module_config}
+			echo "# For more information please read:" >> "${module_config}"
 		for t in ${module_docs}
 		do
-			echo "#    ${t//*\/}" >> ${module_config}
+			echo "#    ${t//*\/}" >> "${module_config}"
 		done
-		echo >> ${module_config}
+		echo >> "${module_config}"
 
 		#-----------------------------------------------------------------------
 		if [[ ${module_aliases} -gt 0 ]]
 		then
-			echo  "# Internal Aliases - Do not edit" >> ${module_config}
-			echo  "# ------------------------------" >> ${module_config}
+			echo  "# Internal Aliases - Do not edit" >> "${module_config}"
+			echo  "# ------------------------------" >> "${module_config}"
 
 			for((t=0; t<${module_aliases}; t++))
 			do
 				echo "alias $(eval echo \${MODULESD_${currm}_ALIASES[$t]})" \
-					>> ${module_config}
+					>> "${module_config}"
 			done
-			echo '' >> ${module_config}
+			echo '' >> "${module_config}"
 		fi
 
 		#-----------------------------------------------------------------------
 		if [[ -n ${module_modinfo} ]]
 		then
-			echo >> ${module_config}
-			echo  "# Configurable module parameters" >> ${module_config}
-			echo  "# ------------------------------" >> ${module_config}
+			echo >> "${module_config}"
+			echo  "# Configurable module parameters" >> "${module_config}"
+			echo  "# ------------------------------" >> "${module_config}"
 			myIFS="${IFS}"
 			IFS="$(echo -en "\n\b")"
 
@@ -462,10 +456,10 @@ generate_modulesd() {
 				then
 					module_opts="${module_opts} ${t%%:*}:${myVAR}"
 				fi
-				echo -e "# ${t%%:*}:\t${t#*:}" >> ${module_config}
+				echo -e "# ${t%%:*}:\t${t#*:}" >> "${module_config}"
 			done
 			IFS="${myIFS}"
-			echo '' >> ${module_config}
+			echo '' >> "${module_config}"
 		fi
 
 		#-----------------------------------------------------------------------
@@ -474,24 +468,24 @@ generate_modulesd() {
 			# So lets do some guesswork eh?
 			if [[ -n ${module_opts} ]]
 			then
-				echo "# For Example..." >> ${module_config}
-				echo "# --------------" >> ${module_config}
+				echo "# For Example..." >> "${module_config}"
+				echo "# --------------" >> "${module_config}"
 				for t in ${module_opts}
 				do
-					echo "# options ${currm} ${t//:*}=${t//*:}" >> ${module_config}
+					echo "# options ${currm} ${t//:*}=${t//*:}" >> "${module_config}"
 				done
-				echo '' >> ${module_config}
+				echo '' >> "${module_config}"
 			fi
 		elif [[ ${module_examples} -gt 0 ]]
 		then
-			echo "# For Example..." >> ${module_config}
-			echo "# --------------" >> ${module_config}
+			echo "# For Example..." >> "${module_config}"
+			echo "# --------------" >> "${module_config}"
 			for((t=0; t<${module_examples}; t++))
 			do
 				echo "options $(eval echo \${MODULESD_${currm}_EXAMPLES[$t]})" \
-					>> ${module_config}
+					>> "${module_config}"
 			done
-			echo '' >> ${module_config}
+			echo '' >> "${module_config}"
 		fi
 
 		#-----------------------------------------------------------------------
@@ -500,9 +494,9 @@ generate_modulesd() {
 			for((t=0; t<${module_additions}; t++))
 			do
 				echo "$(eval echo \${MODULESD_${currm}_ADDITIONS[$t]})" \
-					>> ${module_config}
+					>> "${module_config}"
 			done
-			echo '' >> ${module_config}
+			echo '' >> "${module_config}"
 		fi
 
 		#-----------------------------------------------------------------------
@@ -513,7 +507,7 @@ generate_modulesd() {
 		else
 			insinto /etc/modules.d
 		fi
-		newins ${module_config} ${currm_path//*\/}.conf
+		newins "${module_config}" "${currm_path//*\/}.conf"
 
 		# and install any documentation we might have.
 		[[ -n ${module_docs} ]] && dodoc ${module_docs}
@@ -582,6 +576,12 @@ find_module_params() {
 linux-mod_pkg_setup() {
 	debug-print-function ${FUNCNAME} $*
 
+	# If we are installing a binpkg, take a different path.
+	if [[ $EMERGE_FROM == binary ]]; then
+		linux-mod_pkg_setup_binary
+		return
+	fi
+
 	linux-info_pkg_setup;
 	require_configured_kernel
 	check_kernel_built;
@@ -592,6 +592,25 @@ linux-mod_pkg_setup() {
 	# who intentionally use different kernel and userland compilers can be
 	# introduced - Jason Wever <weeve@gentoo.org>, 23 Oct 2005
 	#check_vermagic;
+}
+
+# @FUNCTION: linux-mod_pkg_setup_binary
+# @DESCRIPTION:
+# Perform all kernel option checks non-fatally, as the .config and
+# /proc/config.gz might not be present. Do not do anything that requires kernel
+# sources.
+linux-mod_pkg_setup_binary() {
+	debug-print-function ${FUNCNAME} $*
+	local new_CONFIG_CHECK
+	for config in $CONFIG_CHECK ; do
+		case ${config:0:1} in
+			~) optional="" ;;
+			*) optional="~" ;;
+		esac
+		new_CONFIG_CHECK="${new_CONFIG_CHECK} ${optional}${config}"
+	done
+	export CONFIG_CHECK="${new_CONFIG_CHECK}"
+	linux-info_pkg_setup;
 }
 
 strip_modulenames() {
@@ -686,11 +705,10 @@ linux-mod_src_compile() {
 
 		if [ ! -f "${srcdir}/.built" ];
 		then
-			cd ${srcdir}
+			cd "${srcdir}"
 			ln -s "${S}"/Module.symvers Module.symvers
 			einfo "Preparing ${modulename} module"
-			if [[ -n ${ECONF_PARAMS} ]] && [ ! -f "${srcdir}/.configured" ];
-
+			if [[ -n ${ECONF_PARAMS} ]]
 			then
 				econf ${ECONF_PARAMS} || \
 				die "Unable to run econf ${ECONF_PARAMS}"
@@ -702,14 +720,14 @@ linux-mod_src_compile() {
 			# inside the variables gets used as targets for Make, which then
 			# fails.
 			eval "emake HOSTCC=\"$(tc-getBUILD_CC)\" \
-						CROSS_COMPILE=${CHOST_default}- \
+						CROSS_COMPILE=${CHOST}- \
 						LDFLAGS=\"$(get_abi_LDFLAGS)\" \
 						${BUILD_FIXES} \
 						${BUILD_PARAMS} \
 						${BUILD_TARGETS} " \
-				|| die "Unable to emake HOSTCC="$(tc-getBUILD_CC)" CROSS_COMPILE=${CHOST_default}- LDFLAGS="$(get_abi_LDFLAGS)" ${BUILD_FIXES} ${BUILD_PARAMS} ${BUILD_TARGETS}"
-			cd ${OLDPWD}
-			touch ${srcdir}/.built
+				|| die "Unable to emake HOSTCC="$(tc-getBUILD_CC)" CROSS_COMPILE=${CHOST}- LDFLAGS="$(get_abi_LDFLAGS)" ${BUILD_FIXES} ${BUILD_PARAMS} ${BUILD_TARGETS}"
+			cd "${OLDPWD}"
+			touch "${srcdir}"/.built
 		fi
 	done
 
@@ -746,12 +764,12 @@ linux-mod_src_install() {
 		objdir=${objdir:-${srcdir}}
 
 		einfo "Installing ${modulename} module"
-		cd ${objdir} || die "${objdir} does not exist"
+		cd "${objdir}" || die "${objdir} does not exist"
 		insinto /lib/modules/${KV_FULL}/${libdir}
 		doins ${modulename}.${KV_OBJ} || die "doins ${modulename}.${KV_OBJ} failed"
-		cd ${OLDPWD}
+		cd "${OLDPWD}"
 
-		generate_modulesd ${objdir}/${modulename}
+		generate_modulesd "${objdir}/${modulename}"
 	done
 }
 
