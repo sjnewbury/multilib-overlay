@@ -1,6 +1,6 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/ncurses/ncurses-5.6-r2.ebuild,v 1.11 2008/04/20 16:53:33 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/ncurses/ncurses-5.6-r2.ebuild,v 1.14 2009/10/11 05:38:15 vapier Exp $
 
 EAPI="2"
 
@@ -34,6 +34,7 @@ src_unpack() {
 }
 
 multilib-native_src_configure_internal() {
+	export ac_cv_prog_AWK=gawk #259510
 	# The ebuild keeps failing if this variable is set when a
 	# crossdev compiler is installed so is better to remove it
 	#tc-export BUILD_CC
@@ -43,7 +44,6 @@ multilib-native_src_configure_internal() {
 
 	local myconf=""
 	use nocxx && myconf="${myconf} --without-cxx --without-cxx-binding"
-	use ada || myconf="${myconf} --without-ada"
 
 	# First we build the regular ncurses ...
 	einfo "Configuring regular ncurses in ${WORKDIR}/narrowc.${ABI} ..."
@@ -89,7 +89,8 @@ do_configure() {
 		--enable-const \
 		--enable-colorfgbg \
 		--enable-echo \
-		$(use_enable !ada warnings) \
+		--without-ada \
+		--enable-warnings \
 		$(use_with debug assertions) \
 		$(use_with !debug leaks) \
 		$(use_with debug expanded) \
@@ -133,10 +134,10 @@ multilib-native_src_install_internal() {
 	# Move static and extraneous ncurses libraries out of /lib
 	dodir /usr/$(get_libdir)
 	cd "${D}"/$(get_libdir)
-	mv lib{form,menu,panel}.so* *.a "${D}"/usr/$(get_libdir)/ || die
+	mv lib{form,menu,panel}.so* *.a "${D}"/usr/$(get_libdir)/
 	gen_usr_ldscript lib{,n}curses.so
 	if use unicode ; then
-		mv lib{form,menu,panel}w.so* "${D}"/usr/$(get_libdir)/ || die
+		mv lib{form,menu,panel}w.so* "${D}"/usr/$(get_libdir)/
 		gen_usr_ldscript lib{,n}cursesw.so
 	fi
 
@@ -163,6 +164,9 @@ multilib-native_src_install_internal() {
 	doenvd "${T}"/50ncurses
 
 	use minimal && rm -r "${D}"/usr/share/terminfo
+	# Because ncurses5-config --terminfo returns the directory we keep it
+	keepdir /usr/share/terminfo #245374
+
 	cd "${S}"
 	dodoc ANNOUNCE MANIFEST NEWS README* TO-DO doc/*.doc
 	use doc && dohtml -r doc/html/

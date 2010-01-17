@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/ncurses/ncurses-5.7-r1.ebuild,v 1.2 2009/06/20 15:42:22 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/ncurses/ncurses-5.7-r1.ebuild,v 1.3 2009/06/24 19:42:12 flameeyes Exp $
 
 EAPI="2"
 inherit eutils flag-o-matic toolchain-funcs multilib-native
@@ -26,6 +26,7 @@ multilib-native_src_prepare_internal() {
 	[[ -n ${PV_SNAP} ]] && epatch "${WORKDIR}"/${MY_P}-${PV_SNAP}-patch.sh
 	epatch "${FILESDIR}"/${PN}-5.6-gfbsd.patch
 	epatch "${FILESDIR}"/${PN}-5.7-emacs.patch #270527
+	epatch "${FILESDIR}"/${PN}-5.7-nongnu.patch
 	epatch "${FILESDIR}"/${P}-ldflags-multilib-overlay.patch # added by ferret
 }
 
@@ -120,10 +121,10 @@ multilib-native_src_install_internal() {
 	# Move static and extraneous ncurses libraries out of /lib
 	dodir /usr/$(get_libdir)
 	cd "${D}"/$(get_libdir)
-	mv lib{form,menu,panel}.so* *.a "${D}"/usr/$(get_libdir)/ || die
+	mv lib{form,menu,panel}.so* *.a "${D}"/usr/$(get_libdir)/
 	gen_usr_ldscript lib{,n}curses.so
 	if use unicode ; then
-		mv lib{form,menu,panel}w.so* "${D}"/usr/$(get_libdir)/ || die
+		mv lib{form,menu,panel}w.so* "${D}"/usr/$(get_libdir)/
 		gen_usr_ldscript libncursesw.so
 	fi
 

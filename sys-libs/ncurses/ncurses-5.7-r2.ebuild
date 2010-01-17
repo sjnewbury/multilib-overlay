@@ -67,44 +67,44 @@ do_configure() {
 	# The chtype/mmask-t settings below are to retain ABI compat
 	# with ncurses-5.4 so dont change em !
 	local conf_abi="
-	--with-chtype=long \
-	--with-mmask-t=long \
-	--disable-ext-colors \
-	--disable-ext-mouse \
-	--without-pthread \
-	--without-reentrant \
+		--with-chtype=long \
+		--with-mmask-t=long \
+		--disable-ext-colors \
+		--disable-ext-mouse \
+		--without-pthread \
+		--without-reentrant \
 	"
 	# We need the basic terminfo files in /etc, bug #37026.  We will
 	# add '--with-terminfo-dirs' and then populate /etc/terminfo in
 	# multilib-native_src_install_internal() ...
-	#		$(use_with berkdb hashed-db)
+#		$(use_with berkdb hashed-db)
 	econf \
-	--libdir="/$(get_libdir)" \
-	--with-terminfo-dirs="/etc/terminfo:/usr/share/terminfo" \
-	--with-shared \
-	--without-hashed-db \
-	$(use_with ada) \
-	$(use_with cxx) \
-	$(use_with cxx cxx-binding) \
-	$(use_with debug) \
-	$(use_with profile) \
-	$(use_with gpm) \
-	--disable-termcap \
-	--enable-symlinks \
-	--with-rcs-ids \
-	--with-manpage-format=normal \
-	--enable-const \
-	--enable-colorfgbg \
-	--enable-echo \
-	$(use_enable !ada warnings) \
-	$(use_with debug assertions) \
-	$(use_with !debug leaks) \
-	$(use_with debug expanded) \
-	$(use_with !debug macros) \
-	$(use_with trace) \
-	${conf_abi} \
-	"$@" \
-	|| die "configure failed"
+		--libdir="/$(get_libdir)" \
+		--with-terminfo-dirs="/etc/terminfo:/usr/share/terminfo" \
+		--with-shared \
+		--without-hashed-db \
+		$(use_with ada) \
+		$(use_with cxx) \
+		$(use_with cxx cxx-binding) \
+		$(use_with debug) \
+		$(use_with profile) \
+		$(use_with gpm) \
+		--disable-termcap \
+		--enable-symlinks \
+		--with-rcs-ids \
+		--with-manpage-format=normal \
+		--enable-const \
+		--enable-colorfgbg \
+		--enable-echo \
+		$(use_enable !ada warnings) \
+		$(use_with debug assertions) \
+		$(use_with !debug leaks) \
+		$(use_with debug expanded) \
+		$(use_with !debug macros) \
+		$(use_with trace) \
+		${conf_abi} \
+		"$@" \
+		|| die "configure failed"
 }
 
 multilib-native_src_compile_internal() {
@@ -141,33 +141,33 @@ multilib-native_src_install_internal() {
 	# Move static and extraneous ncurses libraries out of /lib
 	dodir /usr/$(get_libdir)
 	cd "${D}"/$(get_libdir)
-	mv lib{form,menu,panel}.so* *.a "${D}"/usr/$(get_libdir)/ || die
+	mv lib{form,menu,panel}.so* *.a "${D}"/usr/$(get_libdir)/
 	gen_usr_ldscript lib{,n}curses.so
 	if use unicode ; then
-		mv lib{form,menu,panel}w.so* "${D}"/usr/$(get_libdir)/ || die
+		mv lib{form,menu,panel}w.so* "${D}"/usr/$(get_libdir)/
 		gen_usr_ldscript libncursesw.so
 	fi
 
-	#	if ! use berkdb ; then
-	# We need the basic terminfo files in /etc, bug #37026
-	einfo "Installing basic terminfo files in /etc..."
-	for x in ansi console dumb linux rxvt screen sun vt{52,100,102,200,220} \
-		xterm xterm-color xterm-xfree86
-	do
-		local termfile=$(find "${D}"/usr/share/terminfo/ -name "${x}" 2>/dev/null)
-		local basedir=$(basename $(dirname "${termfile}"))
+#	if ! use berkdb ; then
+		# We need the basic terminfo files in /etc, bug #37026
+		einfo "Installing basic terminfo files in /etc..."
+		for x in ansi console dumb linux rxvt screen sun vt{52,100,102,200,220} \
+				xterm xterm-color xterm-xfree86
+		do
+			local termfile=$(find "${D}"/usr/share/terminfo/ -name "${x}" 2>/dev/null)
+			local basedir=$(basename $(dirname "${termfile}"))
 
-		if [[ -n ${termfile} ]] ; then
-			dodir /etc/terminfo/${basedir}
-			mv ${termfile} "${D}"/etc/terminfo/${basedir}/
-			dosym ../../../../etc/terminfo/${basedir}/${x} \
-			/usr/share/terminfo/${basedir}/${x}
-		fi
-	done
+			if [[ -n ${termfile} ]] ; then
+				dodir /etc/terminfo/${basedir}
+				mv ${termfile} "${D}"/etc/terminfo/${basedir}/
+				dosym ../../../../etc/terminfo/${basedir}/${x} \
+					/usr/share/terminfo/${basedir}/${x}
+			fi
+		done
 
-	# Build fails to create this ...
-	dosym ../share/terminfo /usr/$(get_libdir)/terminfo
-	#	fi
+		# Build fails to create this ...
+		dosym ../share/terminfo /usr/$(get_libdir)/terminfo
+#	fi
 
 	echo "CONFIG_PROTECT_MASK=\"/etc/terminfo\"" > "${T}"/50ncurses
 	doenvd "${T}"/50ncurses
