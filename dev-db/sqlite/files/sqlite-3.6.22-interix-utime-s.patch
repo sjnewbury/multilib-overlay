@@ -1,0 +1,12 @@
+diff -ru sqlite-3.6.22.orig/sqlite3.c sqlite-3.6.22/sqlite3.c
+--- sqlite-3.6.22.orig/sqlite3.c	2010-01-14 15:20:11 +0100
++++ sqlite-3.6.22/sqlite3.c	2010-01-14 15:21:25 +0100
+@@ -23343,7 +23343,7 @@
+     pFile->locktype = locktype;
+ #if !OS_VXWORKS
+     /* Always update the timestamp on the old file */
+-    utimes(zLockFile, NULL);
++    utime(zLockFile, NULL);
+ #endif
+     return SQLITE_OK;
+   }
