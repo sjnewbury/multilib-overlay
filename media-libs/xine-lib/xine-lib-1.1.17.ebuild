@@ -89,6 +89,7 @@ DEPEND="${RDEPEND}
 
 multilib-native_src_prepare_internal() {
 	epatch "${DISTDIR}"/${PN}-1.1.15-textrel-fix.patch
+	epatch "${FILESDIR}"/${PN}-1.1.17-xxmc.patch
 }
 
 multilib-native_src_configure_internal() {
