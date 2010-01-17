@@ -1,10 +1,10 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/libsmbios/libsmbios-2.2.19.ebuild,v 1.1 2009/11/21 19:14:51 cedk Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/libsmbios/libsmbios-2.2.19.ebuild,v 1.4 2010/01/06 17:37:46 armin76 Exp $
 
 EAPI=2
 
-inherit python multilib-native
+inherit python flag-o-matic multilib-native
 
 DESCRIPTION="Provide access to (SM)BIOS information"
 HOMEPAGE="http://linux.dell.com/libsmbios/main/index.html"
@@ -12,7 +12,7 @@ SRC_URI="http://linux.dell.com/libsmbios/download/libsmbios/${P}/${P}.tar.bz2"
 
 LICENSE="GPL-2 OSL-2.0"
 SLOT="0"
-KEYWORDS="~amd64 ~ia64 ~x86"
+KEYWORDS="amd64 ia64 x86"
 IUSE="doc graphviz nls python test"
 
 RDEPEND="dev-libs/libxml2[lib32?]
@@ -27,12 +27,13 @@ DEPEND="${RDEPEND}
 	test? ( >=dev-util/cppunit-1.9.6[lib32?] )"
 
 multilib-native_src_prepare_internal() {
-	sed -i 's:-Werror::g' Makefile*
 	rm pkg/py-compile
 	ln -s "$(type -P true)" pkg/py-compile || die
 }
 
 multilib-native_src_configure_internal() {
+	#Remove -O3 for bug #290097
+	replace-flags -O3 -O2
 	econf \
 		$(use_enable doc doxygen) \
 		$(use_enable graphviz) \

@@ -620,3 +620,79 @@ prep_ml_binaries() {
 		done
 	fi		
 }
+
+# @FUNCTION: prep_ml_includes
+# @DESCRIPTION:
+# Some includes (include/asm, glibc, etc) are ABI dependent.  In this case,
+# We can install them in different locations for each ABI and create a common
+# header which includes the right one based on CDEFINE_${ABI}.  If your
+# package installs ABI-specific headers, just add 'prep_ml_includes' to the
+# end of your src_install().  It takes a list of directories that include
+# files are installed in (default is /usr/include if none are passed).
+#
+# Example:
+#     src_install() {
+#        ...
+#        prep_ml_includes /usr/qt/3/include
+#     }
+prep_ml_includes() {
+	if [[ $(number_abis) -gt 1 ]] ; then
+		local dir
+		local dirs
+		local base
+
+		if [[ $# -eq 0 ]] ; then
+			dirs=/usr/include
+		else
+			dirs="$@"
+		fi
+
+		for dir in ${dirs} ; do
+			base=${T}/gentoo-multilib/${dir}/gentoo-multilib
+			mkdir -p "${base}"
+			[[ -d ${base}/${ABI} ]] && rm -rf "${base}/${ABI}"
+			mv "${D}/${dir}" "${base}/${ABI}"
+		done
+
+		if is_final_abi; then
+			base=${T}/gentoo-multilib
+
+			local files_differ=
+			local install_abis=$(get_install_abis)
+			local alternate_abis=${install_abis% *}
+			for dir in ${dirs}; do
+				pushd "${base}${dir}/gentoo-multilib/${ABI}"
+				for i in $(find . -type f); do
+					for diffabi in ${alternate_abis}; do
+						diff -q "${i}" ../${diffabi}/"${i}" >/dev/null || files_differ=1
+					done
+					if [ -z "${files_differ}" ]; then
+						[ -d "${D}${dir}/${i%/*}" ] || mkdir -p "${D}${dir}/${i%/*}"
+						mv ${base}${dir}/gentoo-multilib/${ABI}/"${i}" "${D}${dir}/${i}"
+						einfo rm -rf ${base}${dir}/gentoo-multilib/*/"${i}"
+						rm -rf ${base}${dir}/gentoo-multilib/*/"${i}"
+					fi
+					files_differ=
+				done
+				popd
+			done
+
+
+			pushd "${base}"
+			find . | tar -c -T - -f - | tar -x --no-same-owner -f - -C "${D}"
+			popd
+
+			# This 'set' stuff is required by mips profiles to properly pass
+			# CDEFINE's (which have spaces) to sub-functions
+			set --
+			for dir in ${dirs} ; do
+				set -- "$@" "${dir}"
+				local abi
+				for abi in $(get_install_abis); do
+					set -- "$@" "$(get_abi_CDEFINE ${abi}):${dir}/gentoo-multilib/${abi}"
+				done
+				create_ml_includes "$@"
+			done
+		fi
+	fi
+}

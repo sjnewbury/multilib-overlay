@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/ncurses/ncurses-5.7-r3.ebuild,v 1.1 2009/10/28 12:18:12 wired Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/ncurses/ncurses-5.7-r3.ebuild,v 1.7 2010/01/16 13:24:38 klausman Exp $
 
 EAPI="2"
 inherit eutils flag-o-matic toolchain-funcs multilib-native
@@ -14,7 +14,7 @@ SRC_URI="mirror://gnu/ncurses/${MY_P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="5"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 ~arm hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="ada +cxx debug doc gpm minimal profile trace unicode"
 
 DEPEND="gpm? ( sys-libs/gpm )"
@@ -44,7 +44,7 @@ multilib-native_src_configure_internal() {
 	# when cross-compiling, we need to build up our own tic
 	# because people often don't keep matching host/target
 	# ncurses versions #249363
-	if tc-is-cross-compiler ; then
+	if tc-is-cross-compiler && ! ROOT=/ has_version ~sys-libs/${P} ; then
 		make_flags="-C progs tic"
 		CHOST=${CBUILD} \
 		CFLAGS=${BUILD_CFLAGS} \
@@ -69,44 +69,44 @@ do_configure() {
 	# The chtype/mmask-t settings below are to retain ABI compat
 	# with ncurses-5.4 so dont change em !
 	local conf_abi="
-	--with-chtype=long \
-	--with-mmask-t=long \
-	--disable-ext-colors \
-	--disable-ext-mouse \
-	--without-pthread \
-	--without-reentrant \
+		--with-chtype=long \
+		--with-mmask-t=long \
+		--disable-ext-colors \
+		--disable-ext-mouse \
+		--without-pthread \
+		--without-reentrant \
 	"
 	# We need the basic terminfo files in /etc, bug #37026.  We will
 	# add '--with-terminfo-dirs' and then populate /etc/terminfo in
 	# multilib-native_src_install_internal() ...
-	#		$(use_with berkdb hashed-db)
+#		$(use_with berkdb hashed-db)
 	econf \
-	--libdir="/$(get_libdir)" \
-	--with-terminfo-dirs="/etc/terminfo:/usr/share/terminfo" \
-	--with-shared \
-	--without-hashed-db \
-	$(use_with ada) \
-	$(use_with cxx) \
-	$(use_with cxx cxx-binding) \
-	$(use_with debug) \
-	$(use_with profile) \
-	$(use_with gpm) \
-	--disable-termcap \
-	--enable-symlinks \
-	--with-rcs-ids \
-	--with-manpage-format=normal \
-	--enable-const \
-	--enable-colorfgbg \
-	--enable-echo \
-	$(use_enable !ada warnings) \
-	$(use_with debug assertions) \
-	$(use_with !debug leaks) \
-	$(use_with debug expanded) \
-	$(use_with !debug macros) \
-	$(use_with trace) \
-	${conf_abi} \
-	"$@" \
-	|| die "configure failed"
+		--libdir="/$(get_libdir)" \
+		--with-terminfo-dirs="/etc/terminfo:/usr/share/terminfo" \
+		--with-shared \
+		--without-hashed-db \
+		$(use_with ada) \
+		$(use_with cxx) \
+		$(use_with cxx cxx-binding) \
+		$(use_with debug) \
+		$(use_with profile) \
+		$(use_with gpm) \
+		--disable-termcap \
+		--enable-symlinks \
+		--with-rcs-ids \
+		--with-manpage-format=normal \
+		--enable-const \
+		--enable-colorfgbg \
+		--enable-echo \
+		$(use_enable !ada warnings) \
+		$(use_with debug assertions) \
+		$(use_with !debug leaks) \
+		$(use_with debug expanded) \
+		$(use_with !debug macros) \
+		$(use_with trace) \
+		${conf_abi} \
+		"$@" \
+		|| die "configure failed"
 }
 
 multilib-native_src_compile_internal() {
@@ -143,33 +143,33 @@ multilib-native_src_install_internal() {
 	# Move static and extraneous ncurses libraries out of /lib
 	dodir /usr/$(get_libdir)
 	cd "${D}"/$(get_libdir)
-	mv lib{form,menu,panel}.so* *.a "${D}"/usr/$(get_libdir)/ || die
+	mv lib{form,menu,panel}.so* *.a "${D}"/usr/$(get_libdir)/
 	gen_usr_ldscript lib{,n}curses.so
 	if use unicode ; then
-		mv lib{form,menu,panel}w.so* "${D}"/usr/$(get_libdir)/ || die
+		mv lib{form,menu,panel}w.so* "${D}"/usr/$(get_libdir)/
 		gen_usr_ldscript libncursesw.so
 	fi
 
-	#	if ! use berkdb ; then
-	# We need the basic terminfo files in /etc, bug #37026
-	einfo "Installing basic terminfo files in /etc..."
+#	if ! use berkdb ; then
+		# We need the basic terminfo files in /etc, bug #37026
+		einfo "Installing basic terminfo files in /etc..."
 		for x in ansi console dumb linux rxvt rxvt-unicode screen sun vt{52,100,102,200,220} \
-		xterm xterm-color xterm-xfree86
-	do
-		local termfile=$(find "${D}"/usr/share/terminfo/ -name "${x}" 2>/dev/null)
-		local basedir=$(basename $(dirname "${termfile}"))
+				xterm xterm-color xterm-xfree86
+		do
+			local termfile=$(find "${D}"/usr/share/terminfo/ -name "${x}" 2>/dev/null)
+			local basedir=$(basename $(dirname "${termfile}"))
 
-		if [[ -n ${termfile} ]] ; then
-			dodir /etc/terminfo/${basedir}
-			mv ${termfile} "${D}"/etc/terminfo/${basedir}/
-			dosym ../../../../etc/terminfo/${basedir}/${x} \
-			/usr/share/terminfo/${basedir}/${x}
-		fi
-	done
+			if [[ -n ${termfile} ]] ; then
+				dodir /etc/terminfo/${basedir}
+				mv ${termfile} "${D}"/etc/terminfo/${basedir}/
+				dosym ../../../../etc/terminfo/${basedir}/${x} \
+					/usr/share/terminfo/${basedir}/${x}
+			fi
+		done
 
-	# Build fails to create this ...
-	dosym ../share/terminfo /usr/$(get_libdir)/terminfo
-	#	fi
+		# Build fails to create this ...
+		dosym ../share/terminfo /usr/$(get_libdir)/terminfo
+#	fi
 
 	echo "CONFIG_PROTECT_MASK=\"/etc/terminfo\"" > "${T}"/50ncurses
 	doenvd "${T}"/50ncurses
