@@ -37,6 +37,11 @@ fi
 # @DESCRIPTION:
 # Set this to use separate source directories for each enabled version of Python.
 
+# @ECLASS-VARIABLE: DISTUTILS_DISABLE_VERSIONING_OF_PYTHON_SCRIPTS
+# @DESCRIPTION:
+# Set this to disable renaming of Python scripts containing versioned shebangs
+# and generation of wrapper scripts.
+
 # @ECLASS-VARIABLE: DISTUTILS_GLOBAL_OPTIONS
 # @DESCRIPTION:
 # Global options passed to setup.py.
@@ -109,21 +114,25 @@ distutils_src_compile() {
 		die "${FUNCNAME}() can be used only in src_compile() phase"
 	fi
 
-	if is_final_abi || (! has_multilib_profile); then
-		if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
-			python=python${PYTHON_SLOT_VERSION}
+	if has "${EAPI:-0}" 0 1 2; then
+		if is_final_abi || (! has_multilib_profile); then
+			if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
+				python=python${PYTHON_SLOT_VERSION}
+			else
+				python=python
+			fi
 		else
-			python=python
+			[[ -z $(get_abi_var SETARCH_ARCH ${ABI}) ]] && die "SETARCH_ARCH_${ABI} is missing in your portage profile take a look at http://wiki.github.com/sjnewbury/multilib-overlay to get further information"
+			if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
+				python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) python${PYTHON_SLOT_VERSION}-${ABI}"
+			elif [[ -n "${PYTHON}" ]]; then
+				python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) ${PYTHON}"
+			else
+				python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) python"
+			fi	
 		fi
 	else
-		[[ -z $(get_abi_var SETARCH_ARCH ${ABI}) ]] && die "SETARCH_ARCH_${ABI} is missing in your portage profile take a look at http://wiki.github.com/sjnewbury/multilib-overlay to get further information"
-		if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
-			python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) python${PYTHON_SLOT_VERSION}-${ABI}"
-		elif [[ -n "${PYTHON}" ]]; then
-			python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) ${PYTHON}"
-		else
-			python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) python"
-		fi	
+		python="die"
 	fi
 	einfo Using ${python}
 	if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
@@ -149,9 +158,8 @@ distutils_src_compile() {
 			python_execute_function building "$@"
 		fi
 	else
-		python_version
-		echo "$(PYTHON "${PYVER}")" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build "$@"
-		"$(PYTHON "${PYVER}")" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build "$@" || die "Building failed"
+		echo "$(PYTHON -A)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build "$@"
+		"$(PYTHON -A)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build "$@" || die "Building failed"
 	fi
 }
 
@@ -186,10 +194,25 @@ distutils_src_install() {
 	einfo Using ${python}
 	local pylibdir
 
-	# Mark the package to be rebuilt after a python upgrade.
-	python_need_rebuild
-
 	if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
+		if [[ -z "${DISTUTILS_DISABLE_VERSIONING_OF_PYTHON_SCRIPTS}" && "${BASH_VERSINFO[0]}" -ge "4" ]]; then
+			declare -A wrapper_scripts=()
+
+			rename_scripts_with_versioned_shebangs() {
+				if [[ -d "${D}usr/bin" ]]; then
+					cd "${D}usr/bin"
+
+					local file
+					for file in *; do
+						if [[ -f "${file}" && ! "${file}" =~ [[:digit:]]+\.[[:digit:]]+$ && "$(head -n1 "${file}")" =~ ^'#!'.*python[[:digit:]]+\.[[:digit:]]+ ]]; then
+							mv "${file}" "${file}-${PYTHON_ABI}" || die "Renaming of '${file}' failed"
+							wrapper_scripts+=(["${D}usr/bin/${file}"]=)
+						fi
+					done
+				fi
+			}
+		fi
+
 		if [[ -n "${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES}" ]]; then
 			installation() {
 				_distutils_hook pre
@@ -203,6 +226,10 @@ distutils_src_install() {
 
 				echo "$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" install --root="${D}" --no-compile "$@"
 				"$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" install --root="${D}" --no-compile "$@" || return "$?"
+
+				if [[ -z "${DISTUTILS_DISABLE_VERSIONING_OF_PYTHON_SCRIPTS}" && "${BASH_VERSINFO[0]}" -ge "4" ]]; then
+					rename_scripts_with_versioned_shebangs
+				fi
 
 				_distutils_hook post
 			}
@@ -221,20 +248,32 @@ distutils_src_install() {
 				echo "$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build -b "build-${PYTHON_ABI}" install --root="${D}" --no-compile "$@"
 				"$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build -b "build-${PYTHON_ABI}" install --root="${D}" --no-compile "$@" || return "$?"
 
+				if [[ -z "${DISTUTILS_DISABLE_VERSIONING_OF_PYTHON_SCRIPTS}" && "${BASH_VERSINFO[0]}" -ge "4" ]]; then
+					rename_scripts_with_versioned_shebangs
+				fi
+
 				_distutils_hook post
 			}
 			python_execute_function installation "$@"
 		fi
+
+		if [[ -z "${DISTUTILS_DISABLE_VERSIONING_OF_PYTHON_SCRIPTS}" && "${#wrapper_scripts[@]}" -ne "0" && "${BASH_VERSINFO[0]}" -ge "4" ]]; then
+			python_generate_wrapper_scripts "${!wrapper_scripts[@]}"
+		fi
+		unset wrapper_scripts
 	else
+		# Mark the package to be rebuilt after a Python upgrade.
+		python_need_rebuild
+
 		# need this for python-2.5 + setuptools in cases where
 		# a package uses distutils but does not install anything
 		# in site-packages. (eg. dev-java/java-config-2.x)
 		# - liquidx (14/08/2006)
-		pylibdir="$("$(PYTHON "${PYVER}")" -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')"
+		pylibdir="$("$(PYTHON -A)" -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')"
 		[[ -n "${pylibdir}" ]] && dodir "${pylibdir}"
 
-		echo "$(PYTHON "${PYVER}")" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" install --root="${D}" --no-compile "$@"
-		"$(PYTHON "${PYVER}")" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" install --root="${D}" --no-compile "$@" || die "Installation failed"
+		echo "$(PYTHON -A)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" install --root="${D}" --no-compile "$@"
+		"$(PYTHON -A)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" install --root="${D}" --no-compile "$@" || die "Installation failed"
 	fi
 
 	if [[ -e "${D}usr/local" ]]; then
@@ -318,8 +357,12 @@ distutils_pkg_postrm() {
 # @FUNCTION: distutils_python_version
 # @DESCRIPTION:
 # Calls python_version, so that you can use something like
-# e.g. insinto ${ROOT}/usr/include/python${PYVER}
+# e.g. insinto $(python_get_includedir)
 distutils_python_version() {
+	if ! has "${EAPI:-0}" 0 1 2; then
+		die "${FUNCNAME}() cannot be used in this EAPI"
+	fi
+
 	python_version
 }
 
@@ -327,5 +370,9 @@ distutils_python_version() {
 # @DESCRIPTION:
 # Checks for if tkinter support is compiled into python
 distutils_python_tkinter() {
+	if ! has "${EAPI:-0}" 0 1 2; then
+		die "${FUNCNAME}() cannot be used in this EAPI"
+	fi
+
 	python_tkinter_exists
 }
