@@ -10,7 +10,7 @@ LICENSE="GPL-2"
 
 KEYWORDS="-* amd64"
 SLOT="0"
-IUSE="-nodep"
+IUSE="-nodep +alsa"
 
 
 RDEPEND="
