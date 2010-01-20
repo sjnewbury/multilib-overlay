@@ -23,4 +23,5 @@ IUSE=""
 DEPEND=">=media-libs/libcuefile-${PV}[lib32?]
 	>=media-libs/libreplaygain-${PV}[lib32?]"
 
-PATCHES=( "${FILESDIR}/${P}-gentoo.patch" )
+PATCHES=( "${FILESDIR}/${P}-gentoo.patch"
+	  "${FILESDIR}/${P}-CFLAGS.patch" )
