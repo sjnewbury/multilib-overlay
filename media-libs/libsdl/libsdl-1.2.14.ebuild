@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libsdl/libsdl-1.2.14.ebuild,v 1.1 2009/10/21 07:21:46 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libsdl/libsdl-1.2.14.ebuild,v 1.5 2009/11/14 07:55:24 mr_bones_ Exp $
 
 EAPI=2
 inherit flag-o-matic toolchain-funcs eutils libtool multilib-native
@@ -16,12 +16,10 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-
 # if you disable the audio, video, joystick use flags or turn on the custom-cflags use flag
 # in USE and something breaks, you pick up the pieces.  Be prepared for
 # bug reports to be marked INVALID.
-IUSE="oss alsa esd arts nas X dga xv xinerama fbcon directfb ggi svga aalib opengl libcaca +audio +video +joystick custom-cflags pulseaudio"
+IUSE="oss alsa nas X dga xv xinerama fbcon directfb ggi svga tslib aalib opengl libcaca +audio +video +joystick custom-cflags pulseaudio ps3"
 
 RDEPEND="audio? ( >=media-libs/audiofile-0.1.9[lib32?] )
 	alsa? ( media-libs/alsa-lib[lib32?] )
-	esd? ( >=media-sound/esound-0.2.19[lib32?] )
-	arts? ( kde-base/arts[lib32?] )
 	nas? (
 		media-libs/nas[lib32?]
 		x11-libs/libXt[lib32?]
@@ -40,6 +38,8 @@ RDEPEND="audio? ( >=media-libs/audiofile-0.1.9[lib32?] )
 	aalib? ( media-libs/aalib[lib32?] )
 	libcaca? ( >=media-libs/libcaca-0.9-r1[lib32?] )
 	opengl? ( virtual/opengl[lib32?] virtual/glu[lib32?] )
+	ppc64? ( ps3? ( sys-libs/libspe2 ) )
+	tslib? ( x11-libs/tslib[lib32?] )
 	pulseaudio? ( media-sound/pulseaudio[lib32?] )"
 DEPEND="${RDEPEND}
 	nas? (
@@ -54,7 +54,7 @@ DEPEND="${RDEPEND}
 
 S=${WORKDIR}/SDL-${PV}
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if use !audio || use !video || use !joystick ; then
 		ewarn "Since you've chosen to turn off some of libsdl's functionality,"
 		ewarn "don't bother filing libsdl-related bugs until trying to remerge"
@@ -105,6 +105,8 @@ multilib-native_src_configure_internal() {
 
 	econf \
 		--disable-rpath \
+		--disable-arts \
+		--disable-esd \
 		--enable-events \
 		--enable-cdrom \
 		--enable-threads \
@@ -113,9 +115,7 @@ multilib-native_src_configure_internal() {
 		--enable-cpuinfo \
 		$(use_enable oss) \
 		$(use_enable alsa) \
-		$(use_enable esd) \
 		$(use_enable pulseaudio) \
-		$(use_enable arts) \
 		$(use_enable nas) \
 		$(use_enable X video-x11) \
 		$(use_enable dga) \
@@ -130,6 +130,8 @@ multilib-native_src_configure_internal() {
 		$(use_enable aalib video-aalib) \
 		$(use_enable libcaca video-caca) \
 		$(use_enable opengl video-opengl) \
+		$(use_enable ps3 video-ps3) \
+		$(use_enable tslib input-tslib) \
 		$(use_with X x) \
 		--disable-video-x11-xme \
 		${myconf}
