@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/alsa-lib/alsa-lib-1.0.22.ebuild,v 1.2 2010/01/15 00:09:26 abcd Exp $
 
+EAPI="2"
+
 inherit eutils libtool multilib-native
 
 MY_P="${P/_rc/rc}"
@@ -16,7 +18,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-linux ~x86-linux"
 IUSE="doc debug alisp python"
 
-RDEPEND="python? ( dev-lang/python )"
+RDEPEND="python? ( dev-lang/python[lib32?] )"
 DEPEND="${RDEPEND}
 	>=media-sound/alsa-headers-${PV}
 	doc? ( >=app-doc/doxygen-1.2.6 )"
@@ -38,17 +40,17 @@ multilib-native_pkg_setup_internal() {
 	fi
 }
 
-multilib-native_src_unpack_internal() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	elibtoolize
 	epunt_cxx
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local myconf
 	use elibc_uclibc && myconf="--without-versioned"
+
+	# needed to avoid gcc looping internaly
+	use hppa && export CFLAGS="-O1 -pipe"
 
 	econf \
 		--enable-static \
@@ -64,7 +66,9 @@ multilib-native_src_compile_internal() {
 		--disable-dependency-tracking \
 		${myconf} \
 		|| die "configure failed"
+}
 
+multilib-native_src_compile_internal() {
 	emake || die "make failed"
 
 	if use doc; then

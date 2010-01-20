@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/distutils.eclass,v 1.67 2009/11/28 18:39:27 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/distutils.eclass,v 1.69 2010/01/10 17:24:32 arfrever Exp $
 
 # @ECLASS: distutils.eclass
 # @MAINTAINER:
@@ -33,6 +33,12 @@ if [[ -z "${DISTUTILS_DISABLE_PYTHON_DEPENDENCY}" ]]; then
 	RDEPEND="${DEPEND}"
 fi
 
+if has "${EAPI:-0}" 0 1 2; then
+	python="python"
+else
+	python="die"
+fi
+
 # @ECLASS-VARIABLE: DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES
 # @DESCRIPTION:
 # Set this to use separate source directories for each enabled version of Python.
@@ -45,6 +51,11 @@ fi
 # @ECLASS-VARIABLE: DISTUTILS_GLOBAL_OPTIONS
 # @DESCRIPTION:
 # Global options passed to setup.py.
+
+# @ECLASS-VARIABLE: DISTUTILS_DISABLE_VERSIONING_OF_PYTHON_SCRIPTS
+# @DESCRIPTION:
+# Set this to disable renaming of Python scripts containing versioned shebangs
+# and generation of wrapper scripts.
 
 # @ECLASS-VARIABLE: DOCS
 # @DESCRIPTION:

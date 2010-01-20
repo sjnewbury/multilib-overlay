@@ -1,5 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
+
 # $Header: /var/cvsroot/gentoo-x86/dev-lang/tcl/tcl-8.5.8.ebuild,v 1.1 2010/01/07 14:20:04 patrick Exp $
 
 WANT_AUTOCONF=latest
@@ -21,7 +22,7 @@ DEPEND=""
 
 S="${WORKDIR}/${MY_P}"
 
-multilib-native_pkg_setup_internal() {
+pkg_setup() {
 	if use threads ; then
 		ewarn ""
 		ewarn "PLEASE NOTE: You are compiling ${P} with"

@@ -1,6 +1,6 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.410 2009/10/19 01:49:36 dirtyepic Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.416 2010/01/09 20:42:19 vapier Exp $
 #
 # Maintainer: Toolchain Ninjas <toolchain@gentoo.org>
 
@@ -151,7 +151,7 @@ else
 
 			# gcc-{nios2,bfin} don't accept these
 			if [[ ${PN} == "gcc" ]] ; then
-				IUSE="${IUSE} ip28 ip32r10k n32 n64"
+				IUSE="${IUSE} n32 n64"
 			fi
 
 			tc_version_is_at_least "4.0" && IUSE="${IUSE} objc-gc mudflap"
@@ -975,6 +975,9 @@ gcc-compiler_pkg_postrm() {
 	[[ ${ROOT} != "/" ]] && return 0
 
 	if [[ ! -e ${LIBPATH}/libstdc++.so ]] ; then
+		# make sure the profile is sane during same-slot upgrade #289403
+		do_gcc_config
+
 		einfo "Running 'fix_libtool_files.sh ${GCC_RELEASE_VER}'"
 		/sbin/fix_libtool_files.sh ${GCC_RELEASE_VER}
 		if [[ -n ${BRANCH_UPDATE} ]] ; then
@@ -1116,7 +1119,6 @@ gcc_src_unpack() {
 	if [[ ${GCCMAJOR}.${GCCMINOR} > 4.0 ]] ; then
 		if [[ -n ${SNAPSHOT} || -n ${PRERELEASE} ]] ; then
 			echo ${PV/_/-} > "${S}"/gcc/BASE-VER
-			echo "" > "${S}"/gcc/DATESTAMP
 		fi
 	fi
 
@@ -2330,8 +2332,7 @@ do_gcc_config() {
 
 	local current_gcc_config="" current_specs="" use_specs=""
 
-	# We grep out any possible errors
-	current_gcc_config=$(env -i ROOT="${ROOT}" gcc-config -c ${CTARGET} | grep -v '^ ')
+	current_gcc_config=$(env -i ROOT="${ROOT}" gcc-config -c ${CTARGET} 2>/dev/null)
 	if [[ -n ${current_gcc_config} ]] ; then
 		# figure out which specs-specific config is active
 		current_specs=$(gcc-config -S ${current_gcc_config} | awk '{print $3}')

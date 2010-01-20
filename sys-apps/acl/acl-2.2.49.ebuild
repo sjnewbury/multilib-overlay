@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-apps/acl/acl-2.2.49.ebuild,v 1.1 2010/01/09 03:02:04 vapier Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit eutils toolchain-funcs multilib-native
 

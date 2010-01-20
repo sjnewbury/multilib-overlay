@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-dns/libidn/libidn-1.16.ebuild,v 1.1 2010/01/14 04:01:41 jer Exp $
 
+EAPI="2"
+
 inherit java-pkg-opt-2 mono elisp-common multilib-native
 
 DESCRIPTION="Internationalized Domain Names (IDN) implementation"
@@ -16,7 +18,7 @@ IUSE="doc emacs java mono nls"
 COMMON_DEPEND="emacs? ( virtual/emacs )
 	mono? ( >=dev-lang/mono-0.95 )"
 DEPEND="${COMMON_DEPEND}
-	nls? ( >=sys-devel/gettext-0.17 )
+	nls? ( >=sys-devel/gettext-0.17[lib32?] )
 	java? ( >=virtual/jdk-1.4 dev-java/gjdoc )"
 RDEPEND="${COMMON_DEPEND}
 	nls? ( virtual/libintl )
@@ -24,13 +26,13 @@ RDEPEND="${COMMON_DEPEND}
 
 SITEFILE=50${PN}-gentoo.el
 
-multilib-native_src_unpack_internal() {
+src_unpack() {
 	unpack ${A}
 	# bundled, with wrong bytecode
 	rm "${S}/java/${P}.jar" || die
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	econf \
 		$(use_enable nls) \
 		$(use_enable java) \
@@ -40,7 +42,9 @@ multilib-native_src_compile_internal() {
 		--with-packager-version="r${PR}" \
 		--with-packager-bug-reports="https://bugs.gentoo.org" \
 		|| die
+}
 
+multilib-native_src_compile_internal() {
 	emake || die
 
 	if use emacs; then
@@ -69,7 +73,7 @@ multilib-native_src_install_internal() {
 		rm -rf "${D}"/usr/share/java || die
 
 		if use doc ; then
-			java-pkg_dojavadoc doc/java
+			[[ -d "${D}"/usr/share/doc/"${P}"/html ]] || java-pkg_dojavadoc doc/java
 		fi
 	fi
 }
