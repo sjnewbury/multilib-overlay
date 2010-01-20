@@ -1,0 +1,49 @@
+--- openct-0.6.18.ebuild	2009-11-10 23:20:43.661695886 +0000
++++ /usr/portage/dev-libs/openct/openct-0.6.19.ebuild	2010-01-07 18:32:10.000000000 +0000
+@@ -1,10 +1,10 @@
+-# Copyright 1999-2009 Gentoo Foundation
++# Copyright 1999-2010 Gentoo Foundation
+ # Distributed under the terms of the GNU General Public License v2
+-# $Header: /var/cvsroot/gentoo-x86/dev-libs/openct/openct-0.6.18.ebuild,v 1.1 2009/09/26 19:42:09 arfrever Exp $
++# $Header: /var/cvsroot/gentoo-x86/dev-libs/openct/openct-0.6.19.ebuild,v 1.1 2010/01/07 18:32:10 arfrever Exp $
+ 
+ EAPI="2"
+ 
+-inherit eutils multilib-native
++inherit eutils
+ 
+ DESCRIPTION="library for accessing smart card terminals"
+ HOMEPAGE="http://www.opensc-project.org/openct/"
+@@ -16,19 +16,19 @@
+ SLOT="0"
+ IUSE="doc pcsc-lite usb"
+ 
+-RDEPEND="pcsc-lite? ( sys-apps/pcsc-lite[lib32?] )
+-		usb? ( virtual/libusb:0[lib32?] )
++RDEPEND="pcsc-lite? ( sys-apps/pcsc-lite )
++		usb? ( virtual/libusb:0 )
+ 		>=sys-fs/udev-096"
+ 
+ DEPEND="${RDEPEND}
+ 	doc? ( app-doc/doxygen )"
+ 
+-multilib-native_pkg_setup_internal() {
++pkg_setup() {
+ 	enewgroup openct
+ 	enewuser openctd
+ }
+ 
+-multilib-native_src_configure_internal() {
++src_configure() {
+ 	econf \
+ 		--docdir="/usr/share/doc/${PF}" \
+ 		--htmldir="/usr/share/doc/${PF}/html" \
+@@ -43,7 +43,7 @@
+ 		$(use_enable usb)
+ }
+ 
+-multilib-native_src_install_internal() {
++src_install() {
+ 	emake DESTDIR="${D}" install || die "emake install failed"
+ 
+ 	insinto /etc/udev/rules.d/
