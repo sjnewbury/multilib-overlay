@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-dns/avahi/avahi-0.6.25.ebuild,v 1.1 2009/04/17 18:41:14 swegener Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-dns/avahi/avahi-0.6.25.ebuild,v 1.5 2010/01/03 15:23:37 ssuominen Exp $
 
 EAPI="2"
 
@@ -13,19 +13,14 @@ SRC_URI="http://avahi.org/download/${P}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="bookmarks howl-compat mdnsresponder-compat gdbm dbus doc mono gtk python qt3 qt4 autoipd kernel_linux test ipv6"
+IUSE="bookmarks howl-compat mdnsresponder-compat gdbm dbus doc mono gtk python qt4 autoipd kernel_linux test ipv6"
 
 RDEPEND=">=dev-libs/libdaemon-0.11-r1[lib32?]
 	dev-libs/expat[lib32?]
 	>=dev-libs/glib-2[lib32?]
 	gdbm? ( sys-libs/gdbm[lib32?] )
 	qt3? ( x11-libs/qt:3[lib32?] )
-	qt4? (
-		|| (
-			x11-libs/qt-core:4[lib32?]
-			x11-libs/qt:4[lib32?]
-		)
-	)
+	qt4? ( x11-libs/qt-core:4[lib32?] )
 	gtk? (
 		>=x11-libs/gtk+-2.4.0[lib32?]
 		>=gnome-base/libglade-2.4.0[lib32?]
@@ -153,7 +148,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable dbus) \
 		$(use_enable python) \
 		$(use_enable gtk) \
-		$(use_enable qt3) \
+		--disable-qt3 \
 		$(use_enable qt4) \
 		$(use_enable gdbm) \
 		${myconf} \
@@ -182,7 +177,7 @@ multilib-native_src_install_internal() {
 		newins "${FILESDIR}"/autoipd-openrc.sh autoipd.sh
 	fi
 
-	dodoc docs/{AUTHORS,README,TODO}
+	dodoc docs/{AUTHORS,NEWS,README,TODO}
 
 	if use doc
 	then
