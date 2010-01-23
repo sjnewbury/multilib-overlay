@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-auth/policykit/policykit-0.92.ebuild,v 1.2 2009/07/06 10:53:44 alexxy Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-auth/polkit/polkit-0.94.ebuild,v 1.2 2009/10/30 17:31:04 nirbheek Exp $
 
 EAPI="2"
 
@@ -34,6 +34,7 @@ DEPEND="${RDEPEND}
 
 multilib-native_pkg_setup_internal() {
 	enewgroup polkituser
+	enewuser polkituser -1 "-1" /dev/null polkituser
 }
 
 multilib-native_src_prepare_internal() {
