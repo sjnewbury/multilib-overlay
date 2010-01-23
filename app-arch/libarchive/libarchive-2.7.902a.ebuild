@@ -1,8 +1,8 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-arch/libarchive/libarchive-2.7.1.ebuild,v 1.1 2009/09/09 13:04:32 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-arch/libarchive/libarchive-2.7.902a.ebuild,v 1.1 2010/01/05 15:12:20 flameeyes Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit eutils libtool toolchain-funcs flag-o-matic multilib-native
 
@@ -14,7 +14,7 @@ SRC_URI="http://${PN}.googlecode.com/files/${P}.tar.gz
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
-IUSE="static acl xattr kernel_linux +bzip2 +lzma +zlib"
+IUSE="static static-libs acl xattr kernel_linux +bzip2 +lzma +zlib"
 
 COMPRESS_LIBS_DEPEND="lzma? ( app-arch/xz-utils[lib32?] )
 		bzip2? ( app-arch/bzip2[lib32?] )
@@ -27,7 +27,7 @@ RDEPEND="!dev-libs/libarchive
 	!static? ( ${COMPRESS_LIBS_DEPEND} )"
 DEPEND="${RDEPEND}
 	${COMPRESS_LIBS_DEPEND}
-	kernel_linux? ( sys-fs/e2fsprogs[lib32?]
+	kernel_linux? ( sys-fs/e2fsprogs
 		virtual/os-headers )"
 
 multilib-native_src_prepare_internal() {
@@ -42,6 +42,11 @@ multilib-native_src_configure_internal() {
 		myconf="--enable-bsdtar=shared --enable-bsdcpio=shared"
 	fi
 
+	# force static libs for static binaries
+	if use static && ! use static-libs; then
+		myconf="${myconf} --enable-static"
+	fi
+
 	# Check for need of this in 2.7.1 and later, on 2.7.0, -Werror was
 	# added to the final release, but since it's done in the
 	# Makefile.am we can just work it around this way.
@@ -54,13 +59,22 @@ multilib-native_src_configure_internal() {
 		$(use_enable acl) $(use_enable xattr) \
 		$(use_with zlib) \
 		$(use_with bzip2 bz2lib) $(use_with lzma) \
+		$(use_enable static-libs static) \
 		--without-lzmadec \
 		${myconf} \
 		--disable-dependency-tracking || die "econf failed."
 }
 
+src_test() {
+	# Replace the default src_test so that it builds tests in parallel
+	emake check || die "tests failed"
+}
+
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed."
+
+	# remove useless .a and .la files (only for non static compilation)
+	use static-libs || find "${D}" \( -name '*.a' -or -name '*.la' \) -delete
 
 	# Create tar symlink for FreeBSD
 	if [[ ${CHOST} == *-freebsd* ]]; then
