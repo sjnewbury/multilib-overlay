@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libsndfile/libsndfile-1.0.19.ebuild,v 1.8 2009/04/15 19:45:13 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libsndfile/libsndfile-1.0.20.ebuild,v 1.7 2009/05/20 18:09:02 armin76 Exp $
 
 EAPI="2"
 
@@ -32,16 +32,13 @@ DEPEND="${RDEPEND}
 
 S=${WORKDIR}/${MY_P}
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	sed -i -e "s/noinst_PROGRAMS/check_PROGRAMS/" "${S}/tests/Makefile.am" \
-	        "${S}/examples/Makefile.am" || die "sed failed"
+		"${S}/examples/Makefile.am" || die "sed failed"
 
 	epatch "${FILESDIR}"/${PN}-1.0.17-regtests-need-sqlite.patch \
-	        "${FILESDIR}"/${PN}-1.0.18-less_strict_tests.patch \
-			"${FILESDIR}"/${PN}-1.0.19-automagic_jack.patch
+		"${FILESDIR}"/${PN}-1.0.18-less_strict_tests.patch \
+		"${FILESDIR}"/${PN}-1.0.19-automagic_jack.patch
 
 	# cheap fix for multilib
 	use lib32 && epatch "${FILESDIR}/${PN}-1.0.19-no-jack-revdep.patch"
@@ -65,6 +62,6 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${D}" htmldocdir="/usr/share/doc/${PF}/html" install || die "emake install failed."
+	emake DESTDIR="${D}" htmldocdir="/usr/share/doc/${PF}/html" install || die "emake install failed"
 	dodoc AUTHORS ChangeLog NEWS README
 }
