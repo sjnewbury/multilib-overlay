@@ -45,10 +45,11 @@ DEPEND="${RDEPEND}
 
 S=${WORKDIR}/${MY_P}
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${MY_P}.tar.gz
+}
 
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	[[ ${PLEVEL} -gt 0 ]] && epatch $(patches -s)
 	epatch "${FILESDIR}"/${PN}-5.0-no_rpath.patch
 	epatch "${FILESDIR}"/${PN}-5.2-no-ignore-shlib-errors.patch #216952
@@ -56,22 +57,41 @@ src_unpack() {
 	# force ncurses linking #71420
 	sed -i -e 's:^SHLIB_LIBS=:SHLIB_LIBS=-lncurses:' support/shobj-conf || die "sed"
 
+	# fix building under Gentoo/FreeBSD; upstream FreeBSD deprecated
+	# objformat for years, so we don't want to rely on that.
+	sed -i -e '/objformat/s:if .*; then:if true; then:' support/shobj-conf || die
+
 	ln -s ../.. examples/rlfe/readline # for local readline headers
 }
 
-src_configure() { :; }
+multilib-native_src_confgure_internal() {
+	append-cppflags -D_GNU_SOURCE
+
+	econf --with-curses || die
+
+	if ! tc-is-cross-compiler ; then
+		# code is full of AC_TRY_RUN()
+		cd examples/rlfe
+		append-ldflags -L.
+		local l
+		for l in readline history ; do
+			ln -s ../../shlib/lib${l}$(get_libname)* lib${l}$(get_libname)
+			ln -sf ../../lib${l}.a lib${l}.a
+		done
+		econf || die
+	fi
+}
 
 multilib-native_src_compile_internal() {
 	append-cppflags -D_GNU_SOURCE
 
-	econf --with-curses || die
 	emake || die
 
 	if ! tc-is-cross-compiler ; then
+		# code is full of AC_TRY_RUN()
 		cd examples/rlfe
-		append-ldflags -Lreadline
-		econf || die
-		emake || die "make rlfe failed"
+		append-ldflags -L.
+		emake || die
 	fi
 }
 
