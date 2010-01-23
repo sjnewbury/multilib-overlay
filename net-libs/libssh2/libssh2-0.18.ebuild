@@ -21,7 +21,7 @@ DEPEND="!gcrypt? ( dev-libs/openssl[lib32?] )
 RDEPEND=${DEPEND}
 
 multilib-native_src_configure_internal() {
-	econf $(use_enable libgcrypt) || die "econf failed"
+	econf $(use_enable gcrypt libgcrypt)
 }
 
 multilib-native_src_install_internal() {
