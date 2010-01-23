@@ -24,7 +24,7 @@ multilib-native_src_prepare_internal() {
 	append-lfs-flags
 }
 
-multilib-native_src_confgure_internal() {
+multilib-native_src_configure_internal() {
 	use berkdb || export ac_cv_lib_dbm_main=no ac_cv_lib_ndbm_main=no
 	econf \
 		--includedir=/usr/include/gdbm \
