@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/jpeg/jpeg-7.ebuild,v 1.13 2009/09/30 16:58:59 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/jpeg/jpeg-7.ebuild,v 1.20 2010/01/17 21:58:31 ssuominen Exp $
 
 EAPI="2"
 
@@ -8,7 +8,7 @@ DEB_PV="7-1"
 DEB_PN="libjpeg${PV}"
 DEB="${DEB_PN}_${DEB_PV}"
 
-inherit eutils libtool toolchain-funcs multilib-native
+inherit eutils libtool multilib multilib-native
 
 DESCRIPTION="Library to load, handle and manipulate images in the JPEG format"
 HOMEPAGE="http://jpegclub.org/ http://www.ijg.org/"
@@ -17,8 +17,10 @@ SRC_URI="http://www.ijg.org/files/${PN}src.v${PV}.tar.gz
 
 LICENSE="as-is"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd ~x64-freebsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 IUSE=""
+
+DEPEND="!media-libs/jpeg:7"
 
 src_unpack() {
 	unpack ${A}
@@ -45,12 +47,4 @@ multilib-native-src_configure_internal() {
 multilib-native-src_install_internal() {
 	emake DESTDIR="${D}" install || die
 	dodoc change.log example.c README *.txt
-}
-
-multilib-native-pkg_preinst_internal() {
-	has_version media-libs/jpeg-compat || preserve_old_lib /usr/$(get_libdir)/libjpeg.so.62
-}
-
-multilib-native-pkg_postinst_internal() {
-	has_version media-libs/jpeg-compat || preserve_old_lib_notify /usr/$(get_libdir)/libjpeg.so.62
 }
