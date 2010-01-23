@@ -15,20 +15,17 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="berkdb"
 
-DEPEND="berkdb? ( sys-libs/db )"
+DEPEND="berkdb? ( sys-libs/db[lib32?] )"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-fix-install-ownership.patch #24178
 	epatch "${FILESDIR}"/${P}-compat-linking.patch #165263
 	elibtoolize
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	use berkdb || export ac_cv_lib_dbm_main=no ac_cv_lib_ndbm_main=no
 	econf --includedir=/usr/include/gdbm || die
-	emake || die
 }
 
 multilib-native_src_install_internal() {
