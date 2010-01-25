@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/xine-lib/xine-lib-1.1.17.ebuild,v 1.2 2009/12/02 16:55:38 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/xine-lib/xine-lib-1.1.17.ebuild,v 1.8 2010/01/17 19:17:27 armin76 Exp $
 
 EAPI=2
 
@@ -26,7 +26,7 @@ HOMEPAGE="http://xine.sourceforge.net"
 
 LICENSE="GPL-2"
 SLOT="1"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd"
 
 IUSE="-aalib -libcaca esd win32codecs nls +css +X directfb +vorbis +alsa
 gnome sdl speex +theora ipv6 altivec opengl aac -fbcon +xv xvmc
@@ -152,7 +152,7 @@ multilib-native_src_configure_internal() {
 		$(use_with xcb) \
 		$(use_enable oss) \
 		$(use_with alsa) \
-		$(use_with arts) \
+		--without-arts \
 		$(use_with esd esound) \
 		$(use_with pulseaudio) \
 		$(use_with jack) \

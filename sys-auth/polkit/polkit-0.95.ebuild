@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-auth/polkit/polkit-0.95.ebuild,v 1.1 2009/11/14 16:16:57 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-auth/polkit/polkit-0.95.ebuild,v 1.3 2010/01/06 17:59:03 jer Exp $
 
 EAPI="2"
 
@@ -12,7 +12,7 @@ SRC_URI="http://hal.freedesktop.org/releases/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~hppa ~x86"
 IUSE="debug doc examples expat nls"
 # building w/o pam is broken, bug 291116
 # introspection pam
@@ -31,9 +31,11 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.36
 	dev-util/gtk-doc-am
 	doc? ( >=dev-util/gtk-doc-1.10 )"
+PDEPEND=">=sys-auth/consolekit-0.4[policykit]"
 
 multilib-native_pkg_setup_internal() {
 	enewgroup polkituser
+	enewuser polkituser -1 "-1" /dev/null polkituser
 }
 
 multilib-native_src_prepare_internal() {

@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libsndfile/libsndfile-1.0.21.ebuild,v 1.1 2009/12/14 12:11:14 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libsndfile/libsndfile-1.0.21.ebuild,v 1.7 2010/01/07 18:04:17 armin76 Exp $
 
 EAPI="2"
 
@@ -18,7 +18,7 @@ fi
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="alsa minimal sqlite"
 
 RDEPEND="!minimal? ( >=media-libs/flac-1.2.1[lib32?]
@@ -31,12 +31,9 @@ DEPEND="${RDEPEND}
 
 S=${WORKDIR}/${MY_P}
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	sed -i -e "s/noinst_PROGRAMS/check_PROGRAMS/" "${S}/tests/Makefile.am" \
-	        "${S}/examples/Makefile.am" || die "sed failed"
+		"${S}/examples/Makefile.am" || die "sed failed"
 
 	epatch "${FILESDIR}"/${PN}-1.0.17-regtests-need-sqlite.patch
 
@@ -58,6 +55,6 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${D}" htmldocdir="/usr/share/doc/${PF}/html" install || die "emake install failed."
+	emake DESTDIR="${D}" htmldocdir="/usr/share/doc/${PF}/html" install || die "emake install failed"
 	dodoc AUTHORS ChangeLog NEWS README
 }

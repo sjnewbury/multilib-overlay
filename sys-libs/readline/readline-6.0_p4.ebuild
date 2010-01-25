@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/readline/readline-6.0_p4.ebuild,v 1.1 2009/08/29 21:10:20 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/readline/readline-6.0_p4.ebuild,v 1.10 2010/01/06 22:31:08 maekke Exp $
 
 EAPI="2"
 
@@ -33,7 +33,7 @@ SRC_URI="mirror://gnu/${PN}/${MY_P}.tar.gz $(patches)"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE=""
 
 # We must be certain that we have a bash that is linked
@@ -44,10 +44,11 @@ DEPEND="${RDEPEND}
 
 S=${WORKDIR}/${MY_P}
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${MY_P}.tar.gz
+}
 
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	[[ ${PLEVEL} -gt 0 ]] && epatch $(patches -s)
 	epatch "${FILESDIR}"/${PN}-5.0-no_rpath.patch
 	epatch "${FILESDIR}"/${PN}-6.0-rlfe-build.patch #151174
@@ -56,26 +57,44 @@ src_unpack() {
 	# force ncurses linking #71420
 	sed -i -e 's:^SHLIB_LIBS=:SHLIB_LIBS=-lncurses:' support/shobj-conf || die "sed"
 
+	# fix building under Gentoo/FreeBSD; upstream FreeBSD deprecated
+	# objformat for years, so we don't want to rely on that.
+	sed -i -e '/objformat/s:if .*; then:if true; then:' support/shobj-conf || die
+
 	# the bundled rlfe had its configure.in updated, but no one actually
 	# ran autoconf to have the configure file updated
-	ln -s ../.. examples/rlfe/readline
+	ln -s ../.. examples/rlfe/readline # for headers
 	cd examples/rlfe
 	eautoconf
 }
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	append-cppflags -D_GNU_SOURCE
 
 	econf --with-curses || die
+
+	if ! tc-is-cross-compiler ; then
+		# code is full of AC_TRY_RUN()
+		cd examples/rlfe
+		append-ldflags -L.
+		local l
+		for l in readline history ; do
+			ln -s ../../shlib/lib${l}$(get_libname)* lib${l}$(get_libname)
+			ln -sf ../../lib${l}.a lib${l}.a
+		done
+		econf || die
+	fi
+}
+
+multilib-native_src_compile_internal() {
+	append-cppflags -D_GNU_SOURCE
 	emake || die
 
 	if ! tc-is-cross-compiler ; then
+		# code is full of AC_TRY_RUN()
 		cd examples/rlfe
-		append-ldflags -Lreadline
-		econf || die
-		emake || die "make rlfe failed"
+		append-ldflags -L.
+		emake || die
 	fi
 }
 
