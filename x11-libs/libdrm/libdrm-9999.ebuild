@@ -23,7 +23,7 @@ RESTRICT="test" # see bug #236845
 RDEPEND="dev-libs/libpthread-stubs[lib32?]"
 DEPEND="${RDEPEND}"
 
-CONFIGURE_OPTIONS="--enable-udev --enable-nouveau-experimental-api --enable-radeon-experimental-api"
+CONFIGURE_OPTIONS="--enable-udev --enable-nouveau-experimental-api --enable-radeon-experimental-api --enable-libkms"
 
 pkg_postinst() {
 	x-modular_pkg_postinst
