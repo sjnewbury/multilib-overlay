@@ -33,4 +33,5 @@ multilib-native_src_compile_internal() {
 
 multilib-native_src_install_internal() {
 	emake install DESTDIR=${D} || die "Failed to install"
+	prep_ml_binaries /usr/bin/g-ir-scanner /usr/bin/g-ir-compiler /usr/bin/g-ir-generate
 }

@@ -16,11 +16,12 @@ SRC_URI="http://${PN}.freedesktop.org/src/${PN}/${P}.tar.bz2"
 LICENSE="LGPL-2"
 SLOT=${PV_MAJ_MIN}
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="nls test"
+IUSE="nls test introspection"
 
 RDEPEND=">=dev-libs/glib-2.16:2[lib32?]
 	dev-libs/libxml2[lib32?]
-	>=dev-libs/check-0.9.2[lib32?]"
+	>=dev-libs/check-0.9.2[lib32?]
+	introspection? ( >=dev-libs/gobject-introspection-0.6.5[lib32?] )"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	nls? ( sys-devel/gettext[lib32?] )"
@@ -35,7 +36,7 @@ multilib-native_src_configure_internal() {
 		--disable-valgrind \
 		--disable-examples \
 		--enable-check \
-		--disable-introspection \
+		$(use_enable introspection) \
 		$(use_enable test tests) \
 		--with-package-name="GStreamer ebuild for Gentoo" \
 		--with-package-origin="http://packages.gentoo.org/package/media-libs/gstreamer"

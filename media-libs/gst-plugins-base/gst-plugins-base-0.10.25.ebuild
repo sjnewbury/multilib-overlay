@@ -14,12 +14,13 @@ SRC_URI="http://gstreamer.freedesktop.org/src/${PN}/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="nls"
+IUSE="nls introspection"
 
 RDEPEND=">=dev-libs/glib-2.16[lib32?]
 	>=media-libs/gstreamer-0.10.25[lib32?]
 	>=dev-libs/liboil-0.3.14[lib32?]
-	!<media-libs/gst-plugins-bad-0.10.10"
+	!<media-libs/gst-plugins-bad-0.10.10
+	introspection? ( >=dev-libs/gobject-introspection-0.6.2[lib32?] )"
 DEPEND="${RDEPEND}
 	nls? ( >=sys-devel/gettext-0.11.5[lib32?] )
 	dev-util/pkgconfig[lib32?]"
@@ -32,7 +33,7 @@ multilib-native_src_configure_internal() {
 	replace-flags "-O3" "-O2"
 
 	gst-plugins-base_src_configure \
-		--disable-introspection \
+		$(use_enable introspection)
 		$(use_enable nls)
 }
 

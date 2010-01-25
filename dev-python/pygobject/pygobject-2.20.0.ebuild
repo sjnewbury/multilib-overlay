@@ -13,13 +13,14 @@ HOMEPAGE="http://www.pygtk.org/"
 LICENSE="LGPL-2.1"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="doc examples libffi test"
+IUSE="doc examples libffi introspection test"
 
 # FIXME: add introspection support
 RDEPEND=">=dev-lang/python-2.4.4-r5[lib32?]
 	>=dev-libs/glib-2.16[lib32?]
 	!<dev-python/pygtk-2.13[lib32?]
-	libffi? ( virtual/libffi[lib32?] )"
+	libffi? ( virtual/libffi[lib32?] )
+	introspection? ( >=dev-libs/gobject-introspection-0.6.5[lib32?] )"
 DEPEND="${RDEPEND}
 	doc? ( dev-libs/libxslt >=app-text/docbook-xsl-stylesheets-1.70.1 )
 	test? ( media-fonts/font-cursor-misc media-fonts/font-misc-misc )
@@ -33,7 +34,8 @@ multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		--disable-dependency-tracking
 		$(use_enable doc docs)
-		$(use_with libffi ffi)"
+		$(use_with libffi ffi)
+		$(use_enable introspection)"
 }
 
 multilib-native_src_prepare_internal() {

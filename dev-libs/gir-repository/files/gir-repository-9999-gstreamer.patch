@@ -1,0 +1,39 @@
+--- ./configure.ac~	2010-01-21 02:38:06.000000000 +0000
++++ ./configure.ac	2010-01-21 02:53:55.179864580 +0000
+@@ -96,7 +96,7 @@
+ dnl gstbufferlist.h, gsttaskpool.h were added in 0.10.24 (and in
+ dnl prereleases of that)
+ have_gstbufferlist_h=false
+-if $have_gstreamer ; then
++if $have_gstreamer && echo $with_skipped_gir_modules | grep -q ,Gst,; then
+    save_CPPFLAGS="$CPPFLAGS"; CPPFLAGS="$CPPFLAGS $GSTREAMER_CFLAGS"
+    AC_CHECK_HEADER(gst/gstbufferlist.h, [have_gstbufferlist_h=true])
+    CPPFLAGS="$save_CPPFLAGS"
+@@ -104,7 +104,7 @@
+ AM_CONDITIONAL(HAVE_GSTBUFFERLIST_H, $have_gstbufferlist_h)
+ 
+ have_gsttaskpool_h=false
+-if $have_gstreamer ; then
++if $have_gstreamer && echo $with_skipped_gir_modules | grep -q ,Gst, ; then
+    save_CPPFLAGS="$CPPFLAGS"; CPPFLAGS="$CPPFLAGS $GSTREAMER_CFLAGS"
+    AC_CHECK_HEADER(gst/gsttaskpool.h, [have_gsttaskpool_h=true])
+    CPPFLAGS="$save_CPPFLAGS"
+@@ -112,10 +112,14 @@
+ AM_CONDITIONAL(HAVE_GSTTASKPOOL_H, $have_gsttaskpool_h)
+ 
+ dnl gst-plugins-base supports introspection starting from 0.10.25
+-PKG_CHECK_MODULES(GSTREAMER_PLUGINS_BASE, [gstreamer-plugins-base-0.10 >= 0.10.0],
+-                  have_gstreamer_plugins_base=true,
+-                  have_gstreamer_plugins_base=false)
+-AM_CONDITIONAL(BUILD_GSTREAMER_PLUGINS_BASE, $have_gstreamer_plugins_base)
++if test $have_gstreamer && echo $with_skipped_gir_modules | grep -q ,Gst,; then
++	PKG_CHECK_MODULES(GSTREAMER_PLUGINS_BASE, [gstreamer-plugins-base-0.10 >= 0.10.0],
++	                  have_gstreamer_plugins_base=true,
++	                  have_gstreamer_plugins_base=false)
++else
++  have_gstreamer_plugins_base=false
++fi
++AM_CONDITIONAL(BUILD_GSTREAMER_PLUGINS_BASE, $have_gstreamer_plugins_base)
+ 
+ dnl gtksourceview
+ GIR_CHECK(GtkSourceView, gtksourceview-2.0)
