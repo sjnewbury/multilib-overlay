@@ -1,0 +1,12 @@
+diff -Nur pilot-link-0.12.3/bindings/Java/Makefile.am pilot-link-0.12.3_patched/bindings/Java/Makefile.am
+--- pilot-link-0.12.3/bindings/Java/Makefile.am	2007-11-09 16:42:41.000000000 +0200
++++ pilot-link-0.12.3_patched/bindings/Java/Makefile.am	2009-04-26 08:03:30.000000000 +0300
+@@ -70,7 +70,7 @@
+ $(java_classes): java_compile
+ 
+ java_compile: $(java_files)
+-	$(JAVAC) -d . $(java_files)
++	$(JAVAC) $(JAVACFLAGS) -d . $(java_files)
+ 
+ java_lib: libjpisock.c
+ 	$(CXX) $(INCLUDES) -fPIC $(DEFS) -L $(top_builddir)/libpisock/.libs -lpisock -shared -o libjpisock.so $(srcdir)/libjpisock.c

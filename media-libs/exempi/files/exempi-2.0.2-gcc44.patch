@@ -1,0 +1,30 @@
+--- source/XMPFiles/XMPFiles_Impl.cpp
++++ source/XMPFiles/XMPFiles_Impl.cpp
+@@ -17,6 +17,7 @@
+ 	#include <fcntl.h>
+ 	#include <sys/stat.h>
+ 	#include <unistd.h>
++	#include <stdio.h>
+ #endif
+ 
+ using namespace std;
+--- samples/source/XMPFilesCoverage.cpp
++++ samples/source/XMPFilesCoverage.cpp
+@@ -4,6 +4,7 @@
+ #include <errno.h>
+ #include <time.h>
+ #include <cstring>
++#include <cstdio>
+ 
+ #define TXMP_STRING_TYPE std::string
+ #define XMP_INCLUDE_XMPFILES 1
+--- exempi/tests/utils.cpp
++++ exempi/tests/utils.cpp
+@@ -38,6 +38,7 @@
+ #include <boost/test/unit_test.hpp>
+ 
+ #include "utils.h"
++#include <cstdio>
+ 
+ std::string g_testfile;
+ std::string g_src_testdir;

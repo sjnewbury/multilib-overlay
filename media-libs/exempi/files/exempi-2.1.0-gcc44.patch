@@ -1,0 +1,54 @@
+From 9c751b6f0f09cf6605af49bb2a6c90e7b7468d65 Mon Sep 17 00:00:00 2001
+From: Michael Biebl <biebl@debian.org>
+Date: Mon, 29 Dec 2008 00:35:38 +0100
+Subject: [PATCH] fix build failures with GCC 4.4
+
+- Add missing includes to fix FTBFS with GCC 4.4. See Debian
+Bug#504944
+
+Signed-off-by: Hubert Figuiere <hub@figuiere.net>
+---
+ exempi/tests/utils.cpp              |    1 +
+ samples/source/XMPFilesCoverage.cpp |    1 +
+ source/common/XML_Node.cpp          |    1 +
+ 3 files changed, 3 insertions(+), 0 deletions(-)
+
+diff --git a/exempi/tests/utils.cpp b/exempi/tests/utils.cpp
+index 64be1ee..ee1c3a9 100644
+--- a/exempi/tests/utils.cpp
++++ b/exempi/tests/utils.cpp
+@@ -34,6 +34,7 @@
+  * OF THE POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
++#include <cstdio>
+ 
+ #include <boost/test/unit_test.hpp>
+ 
+diff --git a/samples/source/XMPFilesCoverage.cpp b/samples/source/XMPFilesCoverage.cpp
+index dc9ce41..007c12b 100644
+--- a/samples/source/XMPFilesCoverage.cpp
++++ b/samples/source/XMPFilesCoverage.cpp
+@@ -17,6 +17,7 @@
+ #include <errno.h>
+ #include <time.h>
+ #include <cstring>
++#include <cstdio>
+ 
+ #define TXMP_STRING_TYPE std::string
+ #define XMP_INCLUDE_XMPFILES 1
+diff --git a/source/common/XML_Node.cpp b/source/common/XML_Node.cpp
+index de3866f..75298a8 100644
+--- a/source/common/XML_Node.cpp
++++ b/source/common/XML_Node.cpp
+@@ -11,6 +11,7 @@
+ 
+ #include <string.h>
+ #include <cstring>
++#include <cstdio>
+ #include <map>
+ 
+ // ! Can't include XMP..._Impl.hpp - used by both Core and Files.
+-- 
+1.6.3
+

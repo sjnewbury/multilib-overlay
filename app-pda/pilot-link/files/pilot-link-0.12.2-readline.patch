@@ -1,0 +1,43 @@
+diff -Naur pilot-link-0.12.2.orig/m4/vl_lib_readline.m4 pilot-link-0.12.2/m4/vl_lib_readline.m4
+--- pilot-link-0.12.2.orig/m4/vl_lib_readline.m4	2005-06-03 20:39:24.000000000 +0200
++++ pilot-link-0.12.2/m4/vl_lib_readline.m4	2007-08-25 15:23:58.000000000 +0200
+@@ -89,23 +89,23 @@
+       fi
+       LIBS="$ORIG_LIBS"
+     ])
+-  fi
+ 
+-  if test "$vl_cv_lib_readline" != "no"; then
+-    msg_readline="yes"
+-    RL_LIBS="$vl_cv_lib_readline"
+-    AC_DEFINE(HAVE_LIBREADLINE, 1,
+-              [Define if you have a readline compatible library])
+-    AC_CHECK_HEADERS(readline.h readline/readline.h)
+-    AC_CACHE_CHECK([whether readline supports history],
+-                   vl_cv_lib_readline_history, [
+-      vl_cv_lib_readline_history="no"
+-      AC_TRY_LINK_FUNC(add_history, vl_cv_lib_readline_history="yes")
+-    ])
+-    if test "$vl_cv_lib_readline_history" = "yes"; then
+-      AC_DEFINE(HAVE_READLINE_HISTORY, 1,
+-                [Define if your readline library has \`add_history'])
+-      AC_CHECK_HEADERS(history.h readline/history.h)
++    if test "$vl_cv_lib_readline" != "no"; then
++      msg_readline="yes"
++      RL_LIBS="$vl_cv_lib_readline"
++      AC_DEFINE(HAVE_LIBREADLINE, 1,
++                [Define if you have a readline compatible library])
++      AC_CHECK_HEADERS(readline.h readline/readline.h)
++      AC_CACHE_CHECK([whether readline supports history],
++                     vl_cv_lib_readline_history, [
++        vl_cv_lib_readline_history="no"
++        AC_TRY_LINK_FUNC(add_history, vl_cv_lib_readline_history="yes")
++      ])
++      if test "$vl_cv_lib_readline_history" = "yes"; then
++        AC_DEFINE(HAVE_READLINE_HISTORY, 1,
++                  [Define if your readline library has \`add_history'])
++        AC_CHECK_HEADERS(history.h readline/history.h)
++      fi
+     fi
+   fi
+   AC_SUBST(RL_LIBS)

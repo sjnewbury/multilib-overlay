@@ -1,0 +1,112 @@
+From d1c148903394634a69fb978fc214a18d006c8f7a Mon Sep 17 00:00:00 2001
+From: Matt Davey <mcdavey@mrao.cam.ac.uk>
+Date: Thu, 06 Aug 2009 19:12:56 +0000
+Subject: 2009-08-06  Matt Davey  <mcdavey@mrao.cam.ac.uk>
+
+	* applet/pilot.c: Fix for bug #584894.  gnome panel-applet code
+		was changed in gnome-2.25 and now it does not call
+		gnome_program_init, which the gnome-pilot applet code assumed
+---
+diff --git a/applet/pilot.c b/applet/pilot.c
+index 9ca8453..0e07585 100644
+--- a/applet/pilot.c
++++ b/applet/pilot.c
+@@ -29,7 +29,7 @@
+ #include <errno.h>
+ #include <gnome.h>
+ #include <glade/glade.h>
+-#include <libgnomeui/gnome-window-icon.h>
++#include <gtk/gtk.h>
+ #include <panel-applet-gconf.h>
+ 
+ #include <signal.h>
+@@ -59,6 +59,7 @@ typedef struct {
+ 
+ typedef enum { INITIALISING, PAUSED, CONNECTING_TO_DAEMON, SYNCING, WAITING, NUM_STATES } state;
+ 
++
+ char *pixmaps[] = 
+ {
+     GNOME_ICONDIR "/sync_broken.png",
+@@ -131,6 +132,7 @@ gpilotd_connect_cb (GnomePilotClient *client,
+ {
+ 	GdkColormap *colormap;
+ 	gchar *buf;
++	GError *error;
+ 	PilotApplet *applet = PILOT_APPLET (user_data);
+ 
+ 	gtk_tooltips_set_tip (applet->tooltips, GTK_WIDGET(applet->applet),
+@@ -146,8 +148,8 @@ gpilotd_connect_cb (GnomePilotClient *client,
+ 	if (applet->properties.popups == FALSE) return;
+ 
+ 	if (applet->progressDialog == NULL) {
+-		gnome_window_icon_set_default_from_file (
+-				GNOME_ICONDIR "/sync_icon.png");
++		gtk_window_set_default_icon_from_file (
++		    GNOME_ICONDIR "/sync_icon.png", &error);
+ 		GladeXML *xml              = glade_xml_new (applet->glade_file,"ProgressDialog",NULL);
+ 		applet->progressDialog       = glade_xml_get_widget (xml,"ProgressDialog");
+ 		applet->sync_label           = glade_xml_get_widget (xml,"sync_label");
+@@ -427,7 +429,10 @@ handle_client_error (PilotApplet *self)
+ 
+ static void
+ about_cb(BonoboUIComponent *uic, PilotApplet *pilot, const gchar *verbname)
++
+ {
++	GError *error;
++
+ 	GtkWidget *about;
+ 	const gchar *authors[] = {"Vadim Strizhevsky <vadim@optonline.net>",
+ 				  "Eskil Heyn Olsen, <eskil@eskil.dk>",
+@@ -437,8 +442,15 @@ about_cb(BonoboUIComponent *uic, PilotApplet *pilot, const gchar *verbname)
+ 				  "Matt Davey <mcdavey@mrao.cam.ac.uk>",
+ 				  NULL};
+ 
+-	gnome_window_icon_set_default_from_file (
+-				GNOME_ICONDIR "/sync_icon.png");
++	gtk_window_set_default_icon_from_file (
++	    GNOME_ICONDIR "/sync_icon.png", &error);
++
++
++	if (error)
++	{
++		g_warning ("Can't find icon: " GNOME_ICONDIR "/sync_icon.png" );
++	}
++
+ 	about = gnome_about_new (_("gnome-pilot applet"), 
+ 				 VERSION,
+ 				 _("Copyright 2000-2006 Free Software Foundation, Inc."),
+@@ -493,8 +505,9 @@ properties_cb (BonoboUIComponent *uic, gpointer user_data, const gchar *verbname
+ 	PilotApplet *self = user_data;
+ 	GtkWidget *button, *entry, *dialog;
+ 	GladeXML *xml;
++	GError *error;
+ 
+-	gnome_window_icon_set_default_from_file (GNOME_ICONDIR "/sync_icon.png");
++	gtk_window_set_default_icon_from_file (GNOME_ICONDIR "/sync_icon.png", &error);
+ 	xml =glade_xml_new (self->glade_file,"PropertiesDialog", NULL);
+ 	dialog=glade_xml_get_widget (xml,"PropertiesDialog");
+ 	
+@@ -1325,7 +1338,6 @@ static void
+ create_pilot_widgets (GtkWidget *widget, PilotApplet *self) 
+ { 
+ 	GtkStyle *style; 
+-	int i; 
+ 
+ 	static GtkTargetEntry drop_types [] = {  
+ 		{ "text/uri-list", 0, TARGET_URI_LIST }, 
+@@ -1345,10 +1357,10 @@ create_pilot_widgets (GtkWidget *widget, PilotApplet *self)
+ 
+ 	self->curstate = INITIALISING; 
+ 
+-	for (i = 0; i < sizeof (pixmaps)/sizeof (pixmaps[0]); i++) 
++	/*	for (i = 0; i < sizeof (pixmaps)/sizeof (pixmaps[0]); i++) 
+ 		pixmaps[i] = gnome_program_locate_file(
+ 		    NULL, GNOME_FILE_DOMAIN_PIXMAP, pixmaps[i], TRUE, NULL);
+-
++	*/
+ 	self->image = gtk_image_new_from_file (pixmaps[self->curstate]); 
+ 
+ 	gtk_signal_connect (GTK_OBJECT (widget), "button-press-event", 
+--
+cgit v0.8.2

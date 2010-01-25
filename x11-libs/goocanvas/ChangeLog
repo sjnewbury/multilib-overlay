@@ -1,0 +1,60 @@
+# ChangeLog for x11-libs/goocanvas
+# Copyright 1999-2009 Gentoo Foundation; Distributed under the GPL v2
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/goocanvas/ChangeLog,v 1.14 2009/11/08 19:14:03 nixnut Exp $
+
+  08 Nov 2009; nixnut <nixnut@gentoo.org> goocanvas-0.14.ebuild:
+  ppc stable #286916
+
+  03 Oct 2009; Markus Meier <maekke@gentoo.org> goocanvas-0.14.ebuild:
+  amd64/x86 stable, bug #286916
+
+*goocanvas-0.14 (18 Mar 2009)
+
+  18 Mar 2009; Gilles Dartiguelongue <eva@gentoo.org>
+  +goocanvas-0.14.ebuild:
+  Bump to 0.14.
+
+*goocanvas-0.13 (18 Jan 2009)
+
+  18 Jan 2009; Gilles Dartiguelongue <eva@gentoo.org>
+  +goocanvas-0.13.ebuild:
+  Bump to 0.13.
+
+  14 Dec 2008; Gilles Dartiguelongue <eva@gentoo.org> goocanvas-0.10.ebuild:
+  Build fix for gtk+-2.14.
+
+*goocanvas-0.10 (01 May 2008)
+
+  01 May 2008; Samuli Suominen <drac@gentoo.org> -goocanvas-0.8.ebuild,
+  -goocanvas-0.9.ebuild, +goocanvas-0.10.ebuild:
+  Version bump wrt #219954, thanks to Dieter Verfaillie for reporting.
+
+  31 Jan 2008; Michael Hanselmann <hansmi@gentoo.org> metadata.xml:
+  Remove myself as maintainer.
+
+  09 Nov 2007; Joe Peterson <lavajoe@gentoo.org> goocanvas-0.9.ebuild:
+  Add ~x86-fbsd keyword and elibtoolize (bug #198475); fix HOMEPAGE URL
+
+  08 Sep 2007; Christoph Mende <angelos@gentoo.org> goocanvas-0.9.ebuild:
+  Added ~amd64 wrt bug #190230
+
+*goocanvas-0.9 (20 Aug 2007)
+
+  20 Aug 2007; Michael Hanselmann <hansmi@gentoo.org> -goocanvas-0.4.ebuild,
+  +goocanvas-0.9.ebuild:
+  Version bump (bug 189446).
+
+  27 Apr 2007; Michael Hanselmann <hansmi@gentoo.org> goocanvas-0.8.ebuild:
+  Fix description, dependencies and clean up functions.
+
+*goocanvas-0.8 (27 Apr 2007)
+
+  27 Apr 2007; Michael Hanselmann <hansmi@gentoo.org> +goocanvas-0.8.ebuild:
+  Version bump, bug #176124.
+
+*goocanvas-0.4 (14 Dec 2006)
+
+  14 Dec 2006; Michael Hanselmann <hansmi@gentoo.org> +metadata.xml,
+  +goocanvas-0.4.ebuild:
+  Added to portage, ebuild by myself.
+

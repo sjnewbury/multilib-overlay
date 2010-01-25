@@ -1,0 +1,30 @@
+From 571670cab5a6564ca560dbe0606b0b008906e992 Mon Sep 17 00:00:00 2001
+From: C de-Avillez <hggdh2@gmail.com>
+Date: Tue, 03 Nov 2009 14:05:11 +0000
+Subject: Bug #599627 - Crash when adding a new task in a table
+
+---
+diff --git a/calendar/gui/e-cal-model.c b/calendar/gui/e-cal-model.c
+index 490c48c..b212dcf 100644
+--- a/calendar/gui/e-cal-model.c
++++ b/calendar/gui/e-cal-model.c
+@@ -913,15 +913,11 @@ ecm_append_row (ETableModel *etm, ETableModel *source, gint row)
+ 		g_warning (G_STRLOC ": Could not create the object!");
+ 
+ 		/* FIXME: show error dialog */
+-		icalcomponent_free (comp_data->icalcomp);
+-		g_object_unref (comp_data);
+-		return;
++	} else {
++		g_signal_emit (G_OBJECT (model), signals[ROW_APPENDED], 0);
+ 	}
+ 
+-	icalcomponent_free (comp_data->icalcomp);
+ 	g_object_unref (comp_data);
+-
+-	g_signal_emit (G_OBJECT (model), signals[ROW_APPENDED], 0);
+ }
+ 
+ static gpointer
+--
+cgit v0.8.2

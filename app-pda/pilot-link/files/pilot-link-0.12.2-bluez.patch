@@ -1,0 +1,52 @@
+diff -Naur pilot-link-0.12.2.orig/configure.ac pilot-link-0.12.2/configure.ac
+--- pilot-link-0.12.2.orig/configure.ac	2007-02-09 22:50:17.000000000 +0100
++++ pilot-link-0.12.2/configure.ac	2007-08-25 18:49:58.000000000 +0200
+@@ -346,27 +346,32 @@
+ use_bluez=no
+ msg_bluez=no
+ 
+-PKG_CHECK_MODULES(BLUEZ, bluez, have_bluez=yes, AC_MSG_RESULT(no))
++AC_ARG_WITH([bluez], AS_HELP_STRING([--without-bluez], [Build without BlueZ bluetooth support (default: test)]))
+ 
+-AC_MSG_CHECKING([for BlueZ bluetooth support])
+-AC_ARG_WITH(bluez,
++if test "x$with_bluez" != "xno"; then
++	PKG_CHECK_MODULES(BLUEZ, bluez, have_bluez=yes, AC_MSG_RESULT(no))
++
++	AC_MSG_CHECKING([for BlueZ bluetooth support])
++	AC_ARG_WITH(bluez,
+                 AC_HELP_STRING([--with-bluez],
+-                        [Enable usage of BlueZ]),,
++                        [Enable usage of BlueZ]),[use_bluez="$withval"],
+                 use_bluez=auto)
+-if test "x$use_bluez" != "xno"; then
+-        if test "x$have_bluez" = xno && test "x$use_bluez" = xyes; then
+-                AC_MSG_ERROR([BlueZ explicitly requested but no support found])
+-        fi
+-        if test "x$have_bluez" = xyes; then
+-                AC_DEFINE(HAVE_BLUEZ, 1, [Define if we have BlueZ bluetooth support])
+-                AC_MSG_RESULT([enabled])
+-                msg_bluez="yes"
+-        else
+-                AC_MSG_RESULT([not found])
+-        fi
++	if test "x$use_bluez" != "xno"; then
++        	if test "x$have_bluez" = xno && test "x$use_bluez" = xyes; then
++                	AC_MSG_ERROR([BlueZ explicitly requested but no support found])
++        	fi
++		use_bluez="$have_bluez"
++        	if test "x$have_bluez" = xyes; then
++                	AC_DEFINE(HAVE_BLUEZ, 1, [Define if we have BlueZ bluetooth support])
++                	AC_MSG_RESULT([enabled])
++                	msg_bluez="yes"
++        	else
++                	AC_MSG_RESULT([not found])
++        	fi
++	fi
+ fi
+ 
+-AM_CONDITIONAL(WITH_BLUEZ, test x$have_bluez = "xyes")
++AM_CONDITIONAL(WITH_BLUEZ, test x$use_bluez != "xno")
+ 
+ 
+ dnl *********************************

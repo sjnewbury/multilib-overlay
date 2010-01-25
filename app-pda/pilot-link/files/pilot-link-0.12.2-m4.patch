@@ -1,0 +1,10 @@
+diff --git a/pilot-link.m4.in b/pilot-link.m4.in
+index 129dfc3..a271c74 100644
+--- a/pilot-link.m4.in
++++ b/pilot-link.m4.in
+@@ -1,5 +1,3 @@
+-AC_DEFUN([IT_PROG_INTLTOOL], [AC_PREREQ([2.50])dnl
+-
+ AC_DEFUN([AC_PILOT_LINK_HOOK],
+ [
+ PILOT_LINK_VERS=0
