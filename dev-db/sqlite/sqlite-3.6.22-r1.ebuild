@@ -1,12 +1,12 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.22.ebuild,v 1.9 2010/01/15 08:16:21 mduft Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.22-r1.ebuild,v 1.1 2010/01/22 11:33:29 yngwin Exp $
 
 EAPI="2"
 
-inherit eutils flag-o-matic multilib versionator libtool multilib-native
+inherit eutils flag-o-matic multilib versionator libtool autotools multilib-native
 
-DESCRIPTION="an SQL Database Engine in a C Library"
+DESCRIPTION="An SQL Database Engine in a C Library"
 HOMEPAGE="http://www.sqlite.org/"
 DOC_BASE="$(get_version_component_range 1-3)"
 DOC_PV="$(replace_all_version_separators _ ${DOC_BASE})"
@@ -38,6 +38,8 @@ multilib-native_src_prepare_internal() {
 
 	if use tcl || use test; then
 		epatch "${FILESDIR}"/${P}-interix-fixes.patch
+		epatch "${FILESDIR}"/${P}-dlopen.patch  # bug 300836
+		eautoreconf  # dlopen.patch patches configure.ac
 	else
 		epatch "${FILESDIR}"/${P}-interix-fixes-amalgamation.patch
 	fi
