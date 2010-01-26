@@ -13,7 +13,7 @@ EGIT_REPO_URI="git://anongit.freedesktop.org/git/${PN}/${PN}"
 
 LICENSE="|| ( GPL-2 AFL-2.1 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS=""
 IUSE="debug doc selinux test X"
 
 RDEPEND="X? ( x11-libs/libXt[lib32?] x11-libs/libX11[lib32?] )
