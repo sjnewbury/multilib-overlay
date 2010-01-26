@@ -258,7 +258,7 @@ multilib-native_src_install_internal() {
 
 	use threads || rm -fr "${D}usr/$(get_libdir)/python${PYVER}/multiprocessing"
 
-	prep_ml_includes usr/include/python${PYVER}
+	prep_ml_includes /usr/include/python${PYVER}
 
 	if use examples; then
 		insinto /usr/share/doc/${PF}/examples
