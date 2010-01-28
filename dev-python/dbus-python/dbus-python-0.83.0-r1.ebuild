@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/dbus-python/dbus-python-0.83.0-r1.ebuild,v 1.11 2009/10/21 19:40:13 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/dbus-python/dbus-python-0.83.0-r1.ebuild,v 1.15 2010/01/20 00:11:09 abcd Exp $
 
 EAPI="2"
 PYTHON_DEFINE_DEFAULT_FUNCTIONS="1"
@@ -15,7 +15,7 @@ SRC_URI="http://dbus.freedesktop.org/releases/${PN}/${P}.tar.gz"
 
 SLOT="0"
 LICENSE="MIT"
-KEYWORDS="alpha amd64 arm hppa ~ia64 ~mips ppc ~ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd ~amd64-linux ~x86-linux"
 IUSE="doc examples test"
 
 RDEPEND=">=dev-lang/python-2.4.4-r5[lib32?]
@@ -37,17 +37,17 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
+	use prefix || EPREFIX=
+
 	configuration() {
 		econf \
-			--docdir=/usr/share/doc/dbus-python-${PV} \
+			--docdir="${EPREFIX}"/usr/share/doc/dbus-python-${PV} \
 			$(use_enable doc api-docs)
 	}
 	python_execute_function -s configuration
 }
 
 multilib-native_src_install_internal() {
-	python_need_rebuild
-
 	python_src_install
 
 	if use doc; then
