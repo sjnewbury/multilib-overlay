@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pygobject/pygobject-2.20.0.ebuild,v 1.1 2009/10/29 23:03:42 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pygobject/pygobject-2.20.0.ebuild,v 1.4 2010/01/11 16:56:25 arfrever Exp $
 
 EAPI="2"
 SUPPORT_PYTHON_ABIS="1"
@@ -12,15 +12,14 @@ HOMEPAGE="http://www.pygtk.org/"
 
 LICENSE="LGPL-2.1"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="doc examples libffi introspection test"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+IUSE="doc examples libffi test"
 
 # FIXME: add introspection support
 RDEPEND=">=dev-lang/python-2.4.4-r5[lib32?]
 	>=dev-libs/glib-2.16[lib32?]
 	!<dev-python/pygtk-2.13[lib32?]
-	libffi? ( virtual/libffi[lib32?] )
-	introspection? ( >=dev-libs/gobject-introspection-0.6.5[lib32?] )"
+	libffi? ( virtual/libffi[lib32?] )"
 DEPEND="${RDEPEND}
 	doc? ( dev-libs/libxslt >=app-text/docbook-xsl-stylesheets-1.70.1 )
 	test? ( media-fonts/font-cursor-misc media-fonts/font-misc-misc )
@@ -34,8 +33,7 @@ multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		--disable-dependency-tracking
 		$(use_enable doc docs)
-		$(use_with libffi ffi)
-		$(use_enable introspection)"
+		$(use_with libffi ffi)"
 }
 
 multilib-native_src_prepare_internal() {
@@ -85,6 +83,7 @@ src_test() {
 }
 
 multilib-native_src_install_internal() {
+	[[ -z ${ED} ]] && local ED="${D}"
 	installation() {
 		gnome2_src_install
 		mv "${D}$(python_get_sitedir)/pygtk.py" "${D}$(python_get_sitedir)/pygtk.py-2.0"
@@ -96,12 +95,9 @@ multilib-native_src_install_internal() {
 		insinto /usr/share/doc/${P}
 		doins -r examples
 	fi
-
 }
 
 pkg_postinst() {
-	python_need_rebuild
-
 	create_symlinks() {
 		alternatives_auto_makesym $(python_get_sitedir)/pygtk.py pygtk.py-[0-9].[0-9]
 		alternatives_auto_makesym $(python_get_sitedir)/pygtk.pth pygtk.pth-[0-9].[0-9]
