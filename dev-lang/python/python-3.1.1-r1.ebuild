@@ -1,20 +1,15 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-3.1.1-r1.ebuild,v 1.21 2009/12/19 21:16:36 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-3.1.1-r1.ebuild,v 1.27 2010/01/16 14:34:44 arfrever Exp $
 
 EAPI="2"
 
-inherit autotools eutils flag-o-matic multilib pax-utils python toolchain-funcs versionator multilib-native
-
-# We need this so that we don't depend on python.eclass.
-PYVER_MAJOR="$(get_major_version)"
-PYVER_MINOR="$(get_version_component_range 2)"
-PYVER="${PYVER_MAJOR}.${PYVER_MINOR}"
+inherit autotools eutils flag-o-matic multilib pax-utils python toolchain-funcs multilib-native
 
 MY_P="Python-${PV}"
 S="${WORKDIR}/${MY_P}"
 
-PATCHSET_REVISION="3"
+PATCHSET_REVISION="4"
 
 DESCRIPTION="Python is an interpreted, interactive, object-oriented programming language."
 HOMEPAGE="http://www.python.org/"
@@ -23,6 +18,7 @@ SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
 
 LICENSE="PSF-2.2"
 SLOT="3.1"
+PYTHON_ABI="${SLOT}"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite ssl +threads tk +wide-unicode wininst +xml"
 
@@ -206,36 +202,38 @@ multilib-native_src_test_internal() {
 	done
 
 	elog "If you'd like to run them, you may:"
-	elog "cd /usr/$(get_libdir)/python${PYVER}/test"
+	elog "cd $(python_get_libdir)/test"
 	elog "and run the tests separately."
+
+	python_disable_pyc
 }
 
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" altinstall || die "emake altinstall failed"
 
-	mv "${D}usr/bin/python${PYVER}-config" "${D}usr/bin/python-config-${PYVER}"
+	mv "${D}usr/bin/python${SLOT}-config" "${D}usr/bin/python-config-${SLOT}"
 
 	# Fix collisions between different slots of Python.
-	mv "${D}usr/bin/2to3" "${D}usr/bin/2to3-${PYVER}"
-	mv "${D}usr/bin/pydoc3" "${D}usr/bin/pydoc${PYVER}"
-	mv "${D}usr/bin/idle3" "${D}usr/bin/idle${PYVER}"
+	mv "${D}usr/bin/2to3" "${D}usr/bin/2to3-${SLOT}"
+	mv "${D}usr/bin/pydoc3" "${D}usr/bin/pydoc${SLOT}"
+	mv "${D}usr/bin/idle3" "${D}usr/bin/idle${SLOT}"
 	rm -f "${D}usr/bin/smtpd.py"
 
 	# Fix the OPT variable so that it doesn't have any flags listed in it.
 	# Prevents the problem with compiling things with conflicting flags later.
-	sed -e "s:^OPT=.*:OPT=-DNDEBUG:" -i "${D}usr/$(get_libdir)/python${PYVER}/config/Makefile"
+	sed -e "s:^OPT=.*:OPT=-DNDEBUG:" -i "${D}$(python_get_libdir)/config/Makefile"
 
 	if use build; then
-		rm -fr "${D}usr/$(get_libdir)/python${PYVER}/"{email,sqlite3,test,tkinter}
+		rm -fr "${D}$(python_get_libdir)/"{email,sqlite3,test,tkinter}
 	else
-		use elibc_uclibc && rm -fr "${D}usr/$(get_libdir)/python${PYVER}/test"
-		use sqlite || rm -fr "${D}usr/$(get_libdir)/python${PYVER}/"{sqlite3,test/test_sqlite*}
-		use tk || rm -fr "${D}usr/$(get_libdir)/python${PYVER}/"{tkinter,test/test_tk*}
+		use elibc_uclibc && rm -fr "${D}$(python_get_libdir)/test"
+		use sqlite || rm -fr "${D}$(python_get_libdir)/"{sqlite3,test/test_sqlite*}
+		use tk || rm -fr "${D}$(python_get_libdir)/"{tkinter,test/test_tk*}
 	fi
 
-	use threads || rm -fr "${D}usr/$(get_libdir)/python${PYVER}/multiprocessing"
+	use threads || rm -fr "${D}$(python_get_libdir)/multiprocessing"
 
-	prep_ml_includes /usr/include/python${PYVER}
+	prep_ml_includes $(python_get_includedir)
 
 	if use examples; then
 		insinto /usr/share/doc/${PF}/examples
@@ -245,7 +243,7 @@ multilib-native_src_install_internal() {
 	newinitd "${FILESDIR}/pydoc.init" pydoc-${SLOT}
 	newconfd "${FILESDIR}/pydoc.conf" pydoc-${SLOT}
 
-	prep_ml_binaries usr/bin/python${PYVER}
+	prep_ml_binaries usr/bin/python${SLOT} usr/bin/python-config-${SLOT}
 }
 
 multilib-native_pkg_preinst_internal() {
@@ -267,7 +265,7 @@ eselect_python_update() {
 multilib-native_pkg_postinst_internal() {
 	eselect_python_update
 
-	python_mod_optimize -x "(site-packages|test)" /usr/$(get_libdir)/python${PYVER}
+	python_mod_optimize -x "(site-packages|test)" $(python_get_libdir)
 
 	if [[ "$(eselect python show)" == "python2."* ]]; then
 		ewarn
@@ -297,5 +295,5 @@ multilib-native_pkg_postinst_internal() {
 pkg_postrm() {
 	eselect_python_update
 
-	python_mod_cleanup /usr/$(get_libdir)/python${PYVER}
+	python_mod_cleanup $(python_get_libdir)
 }

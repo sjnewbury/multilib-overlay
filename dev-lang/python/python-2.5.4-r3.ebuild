@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.5.4-r3.ebuild,v 1.27 2009/12/06 17:50:22 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.5.4-r3.ebuild,v 1.31 2010/01/16 14:34:44 arfrever Exp $
 
 EAPI="2"
 
@@ -25,6 +25,7 @@ SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
 
 LICENSE="PSF-2.2"
 SLOT="2.5"
+PYTHON_ABI="${SLOT}"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="-berkdb build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite ssl +threads tk +wide-unicode wininst +xml"
 
@@ -241,7 +242,7 @@ multilib-native_src_install_internal() {
 		use tk || rm -fr "${D}usr/$(get_libdir)/python${PYVER}/lib-tk"
 	fi
 
-	prep_ml_includes /usr/include/python${PYVER}
+	prep_ml_includes usr/include/python${PYVER}
 
 	if use examples; then
 		insinto /usr/share/doc/${PF}/examples
@@ -251,7 +252,7 @@ multilib-native_src_install_internal() {
 	newinitd "${FILESDIR}/pydoc.init" pydoc-${SLOT}
 	newconfd "${FILESDIR}/pydoc.conf" pydoc-${SLOT}
 
-	prep_ml_binaries usr/bin/python${PYVER}
+	prep_ml_binaries usr/bin/python${SLOT} usr/bin/python-config-${SLOT}
 }
 
 pkg_preinst() {
