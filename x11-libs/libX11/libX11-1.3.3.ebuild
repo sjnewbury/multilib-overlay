@@ -20,8 +20,12 @@ RDEPEND=">=x11-libs/xtrans-1.2.3[lib32?]
 		x11-libs/libXdmcp[lib32?]
 	)"
 DEPEND="${RDEPEND}
+	doc? (
+		app-text/ghostscript-gpl
+		sys-apps/groff
+	)
 	x11-proto/xf86bigfontproto
-	xcb? (
+	!xcb? (
 		x11-proto/bigreqsproto
 		x11-proto/xcmiscproto
 	)
@@ -29,7 +33,7 @@ DEPEND="${RDEPEND}
 	x11-proto/xextproto"
 
 multilib-native_pkg_setup_internal() {
-	CONFIGURE_OPTIONS="$(use_enable ipv6)
+	CONFIGURE_OPTIONS="$(use_enable doc specs) $(use_enable ipv6)
 		$(use_with xcb)"
 	# xorg really doesn't like xlocale disabled.
 	# $(use_enable nls xlocale)
