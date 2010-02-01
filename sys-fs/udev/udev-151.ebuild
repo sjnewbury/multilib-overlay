@@ -205,20 +205,6 @@ multilib-native_src_install_internal() {
 
 	into /
 	emake DESTDIR="${D}" install || die "make install failed"
-	# without this code, multilib-strict is angry
-	if [[ "$(get_libdir)" != "lib" ]]; then
-		# check if this code is needed, bug #281338
-		if [[ -d "${D}/lib" ]]; then
-			# we can not just rename /lib to /lib64, because
-			# make install creates /lib64 and /lib
-			einfo "Moving lib to $(get_libdir)"
-			mkdir -p "${D}/$(get_libdir)"
-			mv "${D}"/lib/* "${D}/$(get_libdir)/"
-			rmdir "${D}"/lib
-		else
-			einfo "There is no ${D}/lib, move code can be deleted."
-		fi
-	fi
 
 	exeinto "${udev_libexec_dir}"
 	newexe "${FILESDIR}"/net-130-r1.sh net.sh	|| die "net.sh not installed properly"
@@ -304,11 +290,6 @@ multilib-native_src_install_internal() {
 	if use extras; then
 		dodoc extras/keymap/README.keymap.txt || die "failed installing docs"
 	fi
-
-	cd docs/writing_udev_rules
-	mv index.html writing_udev_rules.html
-	dohtml *.html
-	cd "${S}"
 }
 
 pkg_preinst() {
