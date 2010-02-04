@@ -60,7 +60,7 @@ multilib-native_src_install_internal() {
 multilib-native_pkg_postinst() {
 	if [[ ${ROOT} == "/" ]] ; then
 		ebegin "Regenerating cracklib dictionary"
-		create-cracklib-dict -o $(libdir)/cracklib_dict /usr/share/dict/* > /dev/null
+		create-cracklib-dict /usr/share/dict/* > /dev/null
 		eend $?
 	fi
 }
