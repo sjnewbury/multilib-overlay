@@ -36,7 +36,7 @@ src_unpack() {
 	elibtoolize #269003
 }
 
-multilib_src_configure_internal() {
+multilib-native_src_configure_internal() {
 	econf \
 		--with-default-dict='$(libdir)/cracklib_dict' \
 		$(use_enable nls) \
@@ -57,7 +57,7 @@ multilib-native_src_install_internal() {
 	dodoc AUTHORS ChangeLog NEWS README*
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst() {
 	if [[ ${ROOT} == "/" ]] ; then
 		ebegin "Regenerating cracklib dictionary"
 		create-cracklib-dict /usr/share/dict/* > /dev/null
