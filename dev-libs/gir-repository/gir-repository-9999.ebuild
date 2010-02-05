@@ -42,7 +42,7 @@ DEPEND="${RDEPEND}
 	gtk? ( >=x11-libs/gtk+-2.19.2[lib32?] )
 "
 
-GIR_MODULES="${IUSE}"
+GIR_MODULES="${IUSE/+}"
 
 _auto_dep() {
 	if use ${1} && ! use ${2}; then
@@ -89,8 +89,8 @@ multilib-native_pkg_setup_internal() {
 	# Already upstream:
 	SKIPPED_GIR_MODULES="Atk,Gtk,Gnio,Gst,Unique,WebKit,Soup,Pango"
 
-	for MODULE in "${GIR_MODULES}"; do
-		use ${MODULE} || 
+	for MODULE in ${GIR_MODULES}; do
+		use ${MODULE} ||
 			SKIPPED_GIR_MODULES="${SKIPPED_GIR_MODULES},$(_gir_to_module ${MODULE})"
 	done
 
