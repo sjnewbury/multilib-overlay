@@ -1,6 +1,6 @@
 # Copyright 1999-2005 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/x-modular.eclass,v 1.118 2009/12/09 10:21:49 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/x-modular.eclass,v 1.116 2009/10/31 23:08:25 dirtyepic Exp $
 #
 # @ECLASS: x-modular.eclass
 # @MAINTAINER:
@@ -17,13 +17,13 @@
 # with the other X packages, you don't need to set SRC_URI. Pretty much
 # everything else should be automatic.
 
+MULTILIB_EXT_SOURCE_BUILD=yes
+
 if [[ ${PV} = 9999* ]]; then
 	GIT_ECLASS="git"
 	SNAPSHOT="yes"
 	SRC_URI=""
 fi
-
-MULTILIB_EXT_SOURCE_BUILD=yes
 
 # If we're a font package, but not the font.alias one
 FONT_ECLASS=""
@@ -69,11 +69,13 @@ XDIR="/usr"
 IUSE=""
 HOMEPAGE="http://xorg.freedesktop.org/"
 
+if [[ -z ${SNAPSHOT} ]]; then
 # @ECLASS-VARIABLE: SNAPSHOT
 # @DESCRIPTION:
 # If set to 'yes' and configure.ac exists, eautoreconf will run. Set
 # before inheriting this eclass.
-: ${SNAPSHOT:=no}
+	SNAPSHOT="no"
+fi
 
 # Set up SRC_URI for individual modular releases
 BASE_INDIVIDUAL_URI="http://xorg.freedesktop.org/releases/individual"
@@ -83,6 +85,7 @@ BASE_INDIVIDUAL_URI="http://xorg.freedesktop.org/releases/individual"
 # doc, data, util, driver, font, lib, proto, xserver. Set above the
 # inherit to override the default autoconfigured module.
 if [[ -z ${MODULE} ]]; then
+	MODULE=""
 	case ${CATEGORY} in
 		app-doc)             MODULE="doc"     ;;
 		media-fonts)         MODULE="font"    ;;
@@ -114,11 +117,20 @@ if [[ -n "${SNAPSHOT}" ]]; then
 	DEPEND="${DEPEND}
 		>=sys-devel/libtool-1.5
 		>=sys-devel/m4-1.4"
+	# util-macros and font-util are needed for autoreconf
+	if [[ "${PN/util-macros}" = "${PN}" ]]; then
+		DEPEND="${DEPEND} >=x11-misc/util-macros-1.3.0"
+		if [[ "${PN/font-util}" = "${PN}" ]]; then
+			DEPEND="${DEPEND} >=media-fonts/font-util-1.1.1-r1"
+		fi
+	fi
 	WANT_AUTOCONF="latest"
 	WANT_AUTOMAKE="latest"
 fi
 
 if [[ -n "${FONT}" ]]; then
+	DEPEND="${DEPEND}
+		>=media-fonts/font-util-1.1.1-r1"
 	RDEPEND="${RDEPEND}
 		media-fonts/encodings
 		x11-apps/mkfontscale
@@ -129,13 +141,17 @@ if [[ -n "${FONT}" ]]; then
 	# Starting with 7.0RC3, we can specify the font directory
 	# But oddly, we can't do the same for encodings or font-alias
 
+	# Wrap in `if` so ebuilds can set it too
+	if [[ -z ${FONT_DIR} ]]; then
 # @ECLASS-VARIABLE: FONT_DIR
 # @DESCRIPTION:
 # If you're creating a font package and the suffix of PN is not equal to
 # the subdirectory of /usr/share/fonts/ it should install into, set
 # FONT_DIR to that directory or directories. Set before inheriting this
 # eclass.
-	: ${FONT_DIR:=${PN##*-}}
+		FONT_DIR=${PN##*-}
+
+	fi
 
 	# Fix case of font directories
 	FONT_DIR=${FONT_DIR/ttf/TTF}
@@ -177,12 +193,6 @@ fi
 
 DEPEND="${DEPEND}
 	>=dev-util/pkgconfig-0.18"
-
-if [[ "${PN/util-macros}" = "${PN}" ]]; then
-	DEPEND="${DEPEND}
-		>=x11-misc/util-macros-1.3.0
-		sys-devel/binutils"
-fi
 
 RDEPEND="${RDEPEND}
 	!<=x11-base/xorg-x11-6.9"
@@ -390,7 +400,8 @@ x-modular_src_configure() {
 
 # @VARIABLE: CONFIGURE_OPTIONS
 # @DESCRIPTION:
-# Any extra options to pass to configure
+# Any options to pass to configure
+[[ -n ${CONFIGURE_OPTIONS} ]]
 
 	# If prefix isn't set here, .pc files cause problems
 	if [[ -x ${ECONF_SOURCE:-.}/configure ]]; then
@@ -427,13 +438,13 @@ x-modular_src_compile() {
 x-modular_src_install() {
 	# Install everything to ${XDIR}
 	if [[ ${CATEGORY} = x11-proto ]]; then
-		make \
+		emake \
 			${PN/proto/}docdir=/usr/share/doc/${PF} \
 			DESTDIR="${D}" \
 			install \
 			|| die
 	else
-		make \
+		emake \
 			docdir=/usr/share/doc/${PF} \
 			DESTDIR="${D}" \
 			install \
@@ -446,16 +457,16 @@ x-modular_src_install() {
 
 	if [[ -n ${GIT_ECLASS} ]]; then
 		pushd "${EGIT_STORE_DIR}/${EGIT_CLONE_DIR}"
-		git log ${GIT_TREE} > "${ECONF_SOURCE}"/ChangeLog
+		git log ${GIT_TREE} > "${S}"/ChangeLog
 		popd
 	fi
 
-	if [[ -e ${ECONF_SOURCE}/ChangeLog ]]; then
-		dodoc "${ECONF_SOURCE}"/ChangeLog
+	if [[ -e ${S}/ChangeLog ]]; then
+		dodoc "${S}"/ChangeLog
 	fi
 # @VARIABLE: DOCS
 # @DESCRIPTION:
-# Any documentation to install via dodoc
+# Any documentation to install
 	[[ -n ${DOCS} ]] && dodoc ${DOCS}
 
 	# Don't install libtool archives for server modules
