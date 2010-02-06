@@ -1,0 +1,13 @@
+diff --git a/Makefile.tools b/Makefile.tools
+index d9a2425..a382e05 100644
+--- a/Makefile.tools
++++ b/Makefile.tools
+@@ -122,7 +122,7 @@ EXTRA_DIST += tools/dfubabel.1 tools/avctrl.8
+ 
+ 
+ if CUPS
+-cupsdir = $(libdir)/cups/backend
++cupsdir = `cups-config --serverbin`/backend
+ 
+ cups_PROGRAMS = cups/bluetooth
+ 
