@@ -145,6 +145,7 @@ multilib-native_src_install_internal() {
 
 	# environment file
 	sed -r 	-e "s#@GCJ_JAVA_HOME@#${GCJ_JAVA_HOME}#g" \
+		-e "s#@CP_NATIVE_TOOLS@#${CP_NATIVE_TOOLS}#g" \
 		-e "s#@GCJJAVAVERSION@#${gcj_java_version}#g" \
 		-e "s#@LIBGCJPATH@#${libgcjpath}#g" \
 		< ${FILESDIR}/gcj-jdk.env.in \
