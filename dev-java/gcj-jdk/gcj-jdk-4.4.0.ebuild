@@ -155,15 +155,6 @@ multilib-native_src_install_internal() {
 
 	set_java_env "${S}"/gcj-jdk${abi_suffix}-"${PV}".env
 
-	# the gcj native classpath libraries need to be in the
-	# system linker search path (so why aren't they versioned?)
-	# really this should probably happen via gcc ... 
-	cat <<EOF > "${T}"/45gcj-"${ABI}"-"${SLOT}"
-LDPATH=${CP_NATIVE_TOOLS}
-EOF
-
-	doenvd "${T}"/45gcj-"${ABI}"-"${SLOT}"
-
         # copy scripts
         exeinto "${GCJ_JAVA_HOME}"/bin/
         doexe "${S}"/java
