@@ -1,0 +1,33 @@
+diff -Nru libcap-ng-0.6.1.orig/configure.ac libcap-ng-0.6.1/configure.ac
+--- libcap-ng-0.6.1.orig/configure.ac	2009-09-12 05:39:48.000000000 +0200
++++ libcap-ng-0.6.1/configure.ac	2009-09-12 05:40:11.000000000 +0200
+@@ -100,12 +100,25 @@
+ 
+ AC_SUBST(DEBUG)
+ 
+-AC_CHECK_PROG(swig_found, swig, yes, no)
+-if test x"${swig_found}" = x"no" ; then
+-	AC_MSG_WARN("Swig not found, python bindings will not be made")
++AC_ARG_ENABLE(python,
++[  --disable-python        disable python bindings],
++[
++if test "x${enableval}" = xyes; then
++        PYTHONBINDINGS="yes"
++else
++        PYTHONBINDINGS="no"
++fi
++],PYTHONBINDINGS="yes")
++if test x"${PYTHONBINDINGS}" = xyes; then
++	AC_CHECK_PROG(swig_found, swig, yes, no)
++	if test x"${swig_found}" = x"no" ; then
++		AC_MSG_WARN("Swig not found, python bindings will not be made")
++	fi
++	AM_PATH_PYTHON
++else
++	swig_found="no"
+ fi
+ AM_CONDITIONAL(HAVE_SWIG, test x"${swig_found}" = x"yes")
+-AM_PATH_PYTHON
+ 
+ AC_OUTPUT(Makefile src/Makefile src/test/Makefile bindings/Makefile
+ 	  bindings/python/Makefile bindings/python/test/Makefile
