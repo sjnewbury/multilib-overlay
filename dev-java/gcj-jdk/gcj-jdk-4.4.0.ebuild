@@ -95,6 +95,7 @@ multilib-native_src_install_internal() {
 		dosym ${nativelibs} "${GCJ_JAVA_HOME}"/jre/lib/${ABI}/
 	done
 	dosym ${CP_NATIVE_TOOLS}/libjvm.so "${GCJ_JAVA_HOME}"/jre/lib/"${ABI}"/client/libjvm.so
+	dosym "${GCJ_JAVA_HOME}"/jre/lib/"${ABI}"/client "${GCJ_JAVA_HOME}"/jre/lib/"${ABI}"/server
 
 	dosym /usr/share/gcc-data/"${CTARGET}"/"${GCC_CONFIG_VER}"/java/libgcj-"${GCC_CONFIG_VER}".jar "${GCJ_JAVA_HOME}"/jre/lib/rt.jar
 	dodir "${GCJ_JAVA_HOME}"/lib
