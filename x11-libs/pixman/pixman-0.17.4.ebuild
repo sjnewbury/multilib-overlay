@@ -5,8 +5,6 @@
 # Must be before x-modular eclass is inherited
 #SNAPSHOT="yes"
 
-EAPI="2"
-
 inherit x-modular toolchain-funcs versionator multilib-native
 
 EGIT_REPO_URI="git://anongit.freedesktop.org/git/pixman"

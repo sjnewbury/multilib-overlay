@@ -5,8 +5,6 @@
 # Must be before x-modular eclass is inherited
 #SNAPSHOT="yes"
 
-EAPI="2"
-
 inherit x-modular toolchain-funcs versionator multilib-native
 
 EGIT_REPO_URI="git://anongit.freedesktop.org/git/pixman"
@@ -47,8 +45,9 @@ multilib-native_pkg_setup_internal() {
 	esac
 }
 
-multilib-native_src_prepare_internal() {
-	x-modular_src_prepare
+multilib-native_src_unpack_internal() {
+	x-modular_src_unpack
+	cd "${S}"
 
 	# Late fix for ARM
 	epatch "${FILESDIR}"/${P}-armv7.patch
