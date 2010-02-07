@@ -19,7 +19,7 @@ fi
 inherit base multilib
 
 case "${EAPI:-0}" in
-	2)
+	2|3)
 		EXPORT_FUNCTIONS pkg_setup src_unpack src_prepare src_configure src_compile src_install pkg_preinst pkg_postinst pkg_postrm
 		;;
 	*)
