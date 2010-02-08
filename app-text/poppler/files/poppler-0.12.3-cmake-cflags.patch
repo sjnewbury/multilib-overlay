@@ -1,0 +1,11 @@
+--- ./CMakeLists.txt.orig	2010-02-08 19:02:08.246657131 +0000
++++ ./CMakeLists.txt	2010-02-08 19:02:56.217673405 +0000
+@@ -31,6 +31,8 @@
+ option(USE_FIXEDPOINT "Use fixed point arithmetic" OFF)
+ 
+ set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)")
++set(CMAKE_C_FLAGS)
++set(CMAKE_CXX_FLAGS)
+ 
+ # Enable these unconditionally.
+ set(MULTITHREAD ON)

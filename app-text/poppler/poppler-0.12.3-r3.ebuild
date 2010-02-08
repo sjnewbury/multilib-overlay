@@ -41,6 +41,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${P}-cmake-disable-tests.patch"
 	epatch "${FILESDIR}/${P}-fix-headers-installation.patch"
 	epatch "${FILESDIR}/${P}-gdk.patch"
+	epatch "${FILESDIR}/${P}-cmake-cflags.patch"
 }
 
 multilib-native_src_configure_internal() {
