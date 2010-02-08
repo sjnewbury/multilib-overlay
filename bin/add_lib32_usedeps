@@ -91,6 +91,8 @@ sed -i "
 	s/\"\(\[.*\)/\1\"/ 
 	#append space to every usedep
 	s/\(\]\)\(.\)/\1 \2/g 
+	#remove multiple spaces after usedeps
+	s/\(\]\)[[:space:]]\+/\1 /g
 	#remove space between usedep and \"
 	s/\][[:space:]]*\"/\]\"/
 	#remove space between atom and usedep
