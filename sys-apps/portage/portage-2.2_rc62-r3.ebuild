@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/portage/portage-2.2_rc45.ebuild,v 1.1 2009/10/11 00:35:09 zmedico Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/portage/portage-2.2_rc62.ebuild,v 1.2 2010/02/07 02:11:42 arfrever Exp $
 
 # Require EAPI 2 since we now require at least python-2.6 (for python 3
 # syntax support) which also requires EAPI 2.
@@ -20,20 +20,21 @@ IUSE="build doc epydoc linguas_pl python3 selinux"
 python_dep="python3? ( =dev-lang/python-3* )
 	!python3? ( || ( ( >=dev-lang/python-2.6 <dev-lang/python-3 ) >=dev-lang/python-3 ) )"
 
-# the pysqlite blocker is for bug #282760
+# The pysqlite blocker is for bug #282760.
 DEPEND="${python_dep}
 	!build? ( >=sys-apps/sed-4.0.5 )
 	doc? ( app-text/xmlto ~app-text/docbook-xml-dtd-4.4 )
 	epydoc? ( >=dev-python/epydoc-2.0 !<=dev-python/pysqlite-2.4.1 )
 	>=sys-apps/abi-wrapper-1.0-r2"
+# Require sandbox-2.2 for bug #288863.
 RDEPEND="${python_dep}
 	!build? ( >=sys-apps/sed-4.0.5
 		>=app-shells/bash-3.2_p17
 		>=app-admin/eselect-1.2 )
 	dev-util/lafilefixer
 	elibc_FreeBSD? ( sys-freebsd/freebsd-bin )
-	elibc_glibc? ( >=sys-apps/sandbox-1.6 )
-	elibc_uclibc? ( >=sys-apps/sandbox-1.6 )
+	elibc_glibc? ( >=sys-apps/sandbox-2.2 )
+	elibc_uclibc? ( >=sys-apps/sandbox-2.2 )
 	>=app-misc/pax-utils-0.1.17
 	selinux? ( sys-libs/libselinux )
 	>=sys-apps/abi-wrapper-1.0-r2"
@@ -45,9 +46,33 @@ PDEPEND="
 # coreutils-6.4 rdep is for date format in emerge-webrsync #164532
 # rsync-2.6.4 rdep is for the --filter option #167668
 
+compatible_python_is_selected() {
+	[[ $(/usr/bin/python -c 'import sys ; sys.stdout.write(sys.hexversion >= 0x2060000 and "good" or "bad")') = good ]]
+}
+
 pkg_setup() {
-	if [[ $(python -c 'import sys ; sys.stdout.write(sys.hexversion >= 0x2060000 and "good" or "bad")') != good ]] ; then
-		die "This version of portage requires at least python-2.6 to be selected as the default python interpreter (see \`eselect python --help\`)."
+	if ! use python3 && ! compatible_python_is_selected ; then
+		ewarn "Attempting to select a compatible default python interpreter"
+		local x success=0
+		for x in /usr/bin/python2.* ; do
+			x=${x#/usr/bin/python2.}
+			if [[ $x -ge 6 ]] 2>/dev/null ; then
+				eselect python set python2.$x
+				if compatible_python_is_selected ; then
+					elog "Default python interpreter is now set to python-2.$x"
+					success=1
+					break
+				fi
+			fi
+		done
+		if [ $success != 1 ] ; then
+			eerror "Unable to select a compatible default python interpreter!"
+			die "This version of portage requires at least python-2.6 to be selected as the default python interpreter (see \`eselect python --help\`)."
+		fi
+	fi
+
+	if use python3; then
+		python_set_active_version 3
 	fi
 }
 
@@ -57,7 +82,7 @@ src_prepare() {
 		die "Failed to patch portage.VERSION"
 
 	if use python3; then
-		sed -e '1s/\(^#!.*\)python\(.*$\)/\1python3\2/' -i $(find -perm /111 -type f) || die "Conversion of shebangs failed"
+		python_convert_shebangs -r 3 .
 	fi
 }
 
@@ -127,6 +152,13 @@ src_install() {
 	fi
 
 	local x symlinks
+
+	# current tarball contains outdated stuff
+	rm -rf "$S"/bin/ebuild-helpers/3
+	for x in dohard dosed ; do
+		dosym ../../banned-helper ${portage_base}/bin/ebuild-helpers/4/$x
+	done
+
 	for x in $(find "$S"/bin -type d) ; do
 		x=${x#$S/}
 		exeinto $portage_base/$x || die "exeinto failed"
@@ -222,15 +254,6 @@ pkg_preinst() {
 		has_version ">=${CATEGORY}/${PN}-2.1.6_rc" )
 	NEEDED_REBUILD_UPGRADE=$?
 
-	has_version "<${CATEGORY}/${PN}-2.2_alpha"
-	ADD_SYSTEM_TO_WORLD=$?
-
-	if [ $ADD_SYSTEM_TO_WORLD != 0 -a "$ROOT" != / ] && \
-		! has_version "${CATEGORY}/${PN}" ; then
-		# building stage 1
-		ADD_SYSTEM_TO_WORLD=0
-	fi
-
 	[[ -n $PORTDIR_OVERLAY ]] && has_version "<${CATEGORY}/${PN}-2.1.6.12"
 	REPO_LAYOUT_CONF_WARN=$?
 }
@@ -239,12 +262,6 @@ pkg_postinst() {
 	# Compile all source files recursively. Any orphans
 	# will be identified and removed in postrm.
 	python_mod_optimize /usr/$(get_libdir)/portage/pym
-
-	if [ $ADD_SYSTEM_TO_WORLD = 0 ] && \
-		[ ! -e "$ROOT"var/lib/portage/world_sets ] ; then
-		einfo "adding @system to world_sets for backward compatibility"
-		echo @system > "$ROOT"var/lib/portage/world_sets
-	fi
 
 	if [ $WORLD_MIGRATION_UPGRADE = 0 ] ; then
 		einfo "moving set references from the worldfile into world_sets"
