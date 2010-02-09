@@ -15,5 +15,5 @@ IUSE="+lcms"
 
 PROPERTIES="virtual lib32"
 
-RDEPEND="~app-text/poppler-${PV}[lcms?,xpdf-headers]"
+RDEPEND="~app-text/poppler-${PV}[lcms?,xpdf-headers,lib32?]"
 DEPEND="${RDEPEND}"
