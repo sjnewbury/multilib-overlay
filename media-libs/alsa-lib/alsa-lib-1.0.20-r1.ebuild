@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/alsa-lib/alsa-lib-1.0.20-r1.ebuild,v 1.3 2009/08/05 15:19:50 chainsaw Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/alsa-lib/alsa-lib-1.0.20-r1.ebuild,v 1.11 2009/12/09 14:58:16 jer Exp $
 
 EAPI="2"
 
@@ -15,10 +15,10 @@ SRC_URI="mirror://alsaproject/lib/${MY_P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86"
 IUSE="doc debug alisp python"
 
-RDEPEND="python? ( dev-lang/python )"
+RDEPEND="python? ( dev-lang/python[lib32?] )"
 DEPEND="${RDEPEND}
 	>=media-sound/alsa-headers-${PV}
 	doc? ( >=app-doc/doxygen-1.2.6 )"
@@ -31,7 +31,7 @@ for plugin in ${IUSE_PCM_PLUGIN}; do
 	IUSE="${IUSE} alsa_pcm_plugins_${plugin}"
 done
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if [ -z "${ALSA_PCM_PLUGINS}" ] ; then
 		ewarn "You haven't selected _any_ PCM plugins. Either you set it to something like the default"
 		ewarn "(which is being set in the profile UNLESS you unset them) or alsa based applications"
@@ -40,7 +40,7 @@ pkg_setup() {
 	fi
 }
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 
@@ -51,9 +51,6 @@ src_unpack() {
 multilib-native_src_configure_internal() {
 	local myconf
 	use elibc_uclibc && myconf="--without-versioned"
-
-	# needed to avoid gcc looping internaly
-	use hppa && export CFLAGS="-O1 -pipe"
 
 	if use lib32 && ! is_final_abi; then
 		myconf="${myconf} --disable-python"
@@ -92,7 +89,7 @@ multilib-native_src_install_internal() {
 	use doc && dohtml -r doc/doxygen/html/*
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	ewarn "Starting from alsa 1.0.11_rc3 the configuration for dmix is changed."
 	ewarn "Leaving around old asound.conf or ~/.asoundrc might make all apps"
 	ewarn "using ALSA output crash."

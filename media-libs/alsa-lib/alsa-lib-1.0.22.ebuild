@@ -85,7 +85,7 @@ multilib-native_src_install_internal() {
 	use doc && dohtml -r doc/doxygen/html/*
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "Please try in-kernel ALSA drivers instead of the alsa-drivers ebuild."
 	elog "If alsa-drivers works for you where a *recent* kernel does not, we want "
 	elog "to know about this. Our e-mail address is alsa-bugs@gentoo.org"
