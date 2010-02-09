@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/alsa-lib/alsa-lib-1.0.21a.ebuild,v 1.1 2009/09/13 21:53:54 loki_val Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/alsa-lib/alsa-lib-1.0.21a.ebuild,v 1.7 2010/02/06 18:12:23 tcunha Exp $
 
 EAPI="2"
 
@@ -15,7 +15,7 @@ SRC_URI="mirror://alsaproject/lib/${MY_P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86"
+KEYWORDS="~alpha amd64 arm hppa ~ia64 ~mips ~ppc ~ppc64 ~sh sparc x86"
 IUSE="doc debug alisp python"
 
 RDEPEND="python? ( dev-lang/python[lib32?] )"
@@ -48,9 +48,6 @@ multilib-native_src_prepare_internal() {
 multilib-native_src_configure_internal() {
 	local myconf
 	use elibc_uclibc && myconf="--without-versioned"
-
-	# needed to avoid gcc looping internaly
-	use hppa && export CFLAGS="-O1 -pipe"
 
 	econf \
 		--enable-static \
@@ -85,7 +82,7 @@ multilib-native_src_install_internal() {
 	use doc && dohtml -r doc/doxygen/html/*
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "Please try in-kernel ALSA drivers instead of the alsa-drivers ebuild."
 	elog "If alsa-drivers works for you where a *recent* kernel does not, we want "
 	elog "to know about this. Our e-mail address is alsa-bugs@gentoo.org"

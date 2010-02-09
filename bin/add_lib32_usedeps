@@ -1,0 +1,105 @@
+#!/bin/bash
+
+
+ALNUM="A-Za-z0-9" # [:alnum:] may accept unwanted letters like in some parts of the world ;-)
+
+PREFIX="\(>\|>=\|=\|<=\|<\|~\)\?"
+
+#PACKAGE="$(find . -name "*.ebuild" | cut -d "/" -f 2-3 | sort -u | xargs echo | cat | sed "s/ /\\\|/g")"
+#PACKAGE="dev-libs/openssl\|sys-libs/db\|sys-libs/gdbm\|dev-db/sqlite\|sys-libs/e2fsprogs-libs\|sys-apps/util-linux\|sys-libs/e2fsprogs-libs\|net-fs/openafs\|net-nds/openldap\|virtual/krb5\|dev-util/pkgconfig\|sys-devel/autoconf\|sys-devel/libtool\|test-lib/gammel"
+#PACKAGE="dev-libs/openssl\|sys-libs/db\|sys-libs/gdbm\|dev-db/sqlite\|sys-libs/e2fsprogs-libs\|sys-apps/util-linux\|sys-libs/e2fsprogs-libs\|net-fs/openafs\|net-nds/openldap\|virtual/krb5\|dev-util/pkgconfig\|sys-devel/libtool\|test-lib/gammel"
+
+CATEGORY_NAME="[A-Za-z0-9+_][A-Za-z0-9+_.-]*"
+PACKAGE_NAME="[A-Za-z0-9+_][A-Za-z0-9+_-]*"
+PACKAGE="\(${CATEGORY_NAME}/${PACKAGE_NAME}\)"
+
+VERSION_NUMBER="[0-9]\+\(\.[0-9]\+\)*"
+VERSION_LETTER="[a-z]\?"
+VERSION_SUFFIX="\(\(_alpha\|_beta\|_pre\|_rc\|_p\)[0-9]*\)*"
+VERSION_EBUILD_REVISION="\(-r[1-9][0-9]*\)\?"
+VERSION="-${VERSION_NUMBER}${VERSION_LETTER}${VERSION_SUFFIX}${VERSION_EBUILD_REVISION}"
+VERSION="\(${VERSION}\)\?"
+
+SLOT="\(:[${ALNUM}+_][${ALNUM}+_.-]*\)\?"
+
+USEDEP_PREFIX="!\?"
+USEDEP_NAME="[${ALNUM}][${ALNUM}+_@-]*"
+USEDEP_SUFFIX="\(=\|?\)\?"
+USEDEP_EXP="\(-${USEDEP_NAME}\|${USEDEP_PREFIX}${USEDEP_NAME}${USEDEP_SUFFIX}\)"
+
+USEDEP="\(\[${USEDEP_EXP}\(,${USEDEP_EXP}\)*\]\)\?"
+
+BEGIN="\(^\|\"\|[[:space:]]\|\<\)"
+END="\($\|\"\|[[:space:]]\)"
+
+REGEXP="\(${BEGIN}\)\(${PREFIX}\)\(${PACKAGE}\)\(${VERSION}\)\(${SLOT}\)\(${USEDEP}\)\(${END}\)"
+
+DEPEND_REG_EXP="\([A-Za-z_][A-Za-z_0-9]*\)\?DEPEND[A-Za-z_0-9]*"
+
+PACKAGE_LIST="$(cat $* | sed -n "
+/${DEPEND_REG_EXP}=\".*\"/ b process_line
+/${DEPEND_REG_EXP}=\"/,/\"/ { 
+	:process_line
+	s/${DEPEND_REG_EXP}=\"//
+	s/\"//
+	p
+}" | sed -n "
+#remove choose parameter
+s/[[:space:]]*|| ([[:space:]]*/\n/g
+#remove use conditional
+s/[[:space:]]*!\?${USEDEP_NAME}? ([[:space:]]*/\n/g
+#remove closing paranthesis
+s/[[:space:]]*)/\n/g
+#remove shell vars
+s/[[:space:]]*\${[A-Za-z_][A-Za-z_0-9]*}[[:space:]]*/\n/g
+#remove blocked packages
+s@[[:space:]]*\(${BEGIN}\)!\(${PACKAGE}\).*@\n@g
+#replace the atom with only the category/package-name and append \n
+s@\(${REGEXP}\)@\6\n@g
+#print until \n
+P
+#delete until \n
+D
+" | sort -u)"
+
+# echo -e "$PACKAGE_LIST"
+PACKAGE=""
+for PKG in ${PACKAGE_LIST}
+do
+	# echo PKG: $PKG
+	if [[ -d $PKG ]];then
+		if [[ "" != "$(grep -r multilib-native $PKG)" ]];then
+			# echo +
+			PACKAGE+=" ${PKG}"
+		fi
+	fi
+
+done
+
+# echo -e "PACKAGE: ${PACKAGE}"
+
+PACKAGE="$(echo ${PACKAGE:-no-categroy/no-packages} | sed "s/ \+/\\\|/g" )"
+# echo -e "PACKAGE: \"${PACKAGE}\""
+REGEXP="\(${BEGIN}\)\(${PREFIX}\)\(${PACKAGE}\)\(${VERSION}\)\(${SLOT}\)\(${USEDEP}\)\(${END}\)"
+
+sed -i "
+/DEPEND=\".*\"/ b process_line
+/DEPEND=\"/,/\"/ { 
+	:process_line
+	s@${REGEXP}@&[lib32?]@g
+	#move the \" to the end of the line
+	s/\"\(\[.*\)/\1\"/ 
+	#append space to every usedep
+	s/\(\]\)\(.\)/\1 \2/g 
+	#remove multiple spaces after usedeps
+	s/\(\]\)[[:space:]]\+/\1 /g
+	#remove space between usedep and \"
+	s/\][[:space:]]*\"/\]\"/
+	#remove space between atom and usedep
+	s/[[:space:]]*\[/[/g 
+	#merge two usedeps
+	s/\]\[/,/g 
+	#remove double useflags
+	s/lib32?,lib32?/lib32?/g
+}" $*
+
