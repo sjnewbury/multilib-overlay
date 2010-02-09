@@ -10,17 +10,21 @@ PREFIX="\(>\|>=\|=\|<=\|<\|~\)\?"
 #PACKAGE="dev-libs/openssl\|sys-libs/db\|sys-libs/gdbm\|dev-db/sqlite\|sys-libs/e2fsprogs-libs\|sys-apps/util-linux\|sys-libs/e2fsprogs-libs\|net-fs/openafs\|net-nds/openldap\|virtual/krb5\|dev-util/pkgconfig\|sys-devel/libtool\|test-lib/gammel"
 
 CATEGORY_NAME="[A-Za-z0-9+_][A-Za-z0-9+_.-]*"
-PACKAGE_NAME="[A-Za-z0-9+_][A-Za-z0-9+_-]*"
+PACKAGE_NAME="[A-Za-z0-9+_][A-Za-z0-9+_-]*[A-Za-z+_][A-Za-z0-9+_]*"
 PACKAGE="\(${CATEGORY_NAME}/${PACKAGE_NAME}\)"
 
-VERSION_NUMBER="[0-9]\+\(\.[0-9]\+\)*"
+VERSION_NUMBER="[0-9*]\+\(\.[0-9*]\+\)*"
 VERSION_LETTER="[a-z]\?"
 VERSION_SUFFIX="\(\(_alpha\|_beta\|_pre\|_rc\|_p\)[0-9]*\)*"
 VERSION_EBUILD_REVISION="\(-r[1-9][0-9]*\)\?"
-VERSION="-${VERSION_NUMBER}${VERSION_LETTER}${VERSION_SUFFIX}${VERSION_EBUILD_REVISION}"
+VERSION_IN_SHELL_VAR="\${[A-Za-z_][A-Za-z_0-9]*}\*\?"
+VERSION="-\(${VERSION_NUMBER}${VERSION_LETTER}${VERSION_SUFFIX}${VERSION_EBUILD_REVISION}\|${VERSION_IN_SHELL_VAR}\)"
 VERSION="\(${VERSION}\)\?"
 
-SLOT="\(:[${ALNUM}+_][${ALNUM}+_.-]*\)\?"
+SLOT_NAME="[${ALNUM}+_][${ALNUM}+_.-]*"
+SLOT_IN_SHELL_VAR="\${[A-Za-z_][A-Za-z_0-9]*}"
+SLOT=":\(${SLOT_NAME}\|${SLOT_IN_SHELL_VAR}\)"
+SLOT="\(${SLOT}\)\?"
 
 USEDEP_PREFIX="!\?"
 USEDEP_NAME="[${ALNUM}][${ALNUM}+_@-]*"
@@ -44,16 +48,20 @@ PACKAGE_LIST="$(cat $* | sed -n "
 	s/\"//
 	p
 }" | sed -n "
+#remove shell vars
+s/\([[:space:]]\+\|^\)\${[A-Za-z_][A-Za-z_0-9]*}[[:space:]]*/\n/g
 #remove choose parameter
 s/[[:space:]]*|| ([[:space:]]*/\n/g
 #remove use conditional
 s/[[:space:]]*!\?${USEDEP_NAME}? ([[:space:]]*/\n/g
+#remove opening paranthesis
+s/[[:space:]]*([[:space:]]*/\n/g
 #remove closing paranthesis
-s/[[:space:]]*)/\n/g
-#remove shell vars
-s/[[:space:]]*\${[A-Za-z_][A-Za-z_0-9]*}[[:space:]]*/\n/g
+s/[[:space:]]*)[[:space:]]*/\n/g
 #remove blocked packages
 s@[[:space:]]*\(${BEGIN}\)!\(${PACKAGE}\).*@\n@g
+#remove space
+s/[[:space:]]\+/\n/g
 #replace the atom with only the category/package-name and append \n
 s@\(${REGEXP}\)@\6\n@g
 #print until \n
@@ -62,24 +70,25 @@ P
 D
 " | sort -u)"
 
-# echo -e "$PACKAGE_LIST"
+echo -e "PACKAGE_LIST: $PACKAGE_LIST" | cat -t
 PACKAGE=""
 for PKG in ${PACKAGE_LIST}
 do
-	# echo PKG: $PKG
 	if [[ -d $PKG ]];then
 		if [[ "" != "$(grep -r multilib-native $PKG)" ]];then
-			# echo +
+			echo "PKG: $PKG is in multilib overlay"
 			PACKAGE+=" ${PKG}"
+		else
+			echo "PKG: $PKG not"
 		fi
 	fi
 
 done
 
-# echo -e "PACKAGE: ${PACKAGE}"
+echo -e "PACKAGE: ${PACKAGE}"
 
 PACKAGE="$(echo ${PACKAGE:-no-categroy/no-packages} | sed "s/ \+/\\\|/g" )"
-# echo -e "PACKAGE: \"${PACKAGE}\""
+echo -e "PACKAGE: \"${PACKAGE}\""
 REGEXP="\(${BEGIN}\)\(${PREFIX}\)\(${PACKAGE}\)\(${VERSION}\)\(${SLOT}\)\(${USEDEP}\)\(${END}\)"
 
 sed -i "
