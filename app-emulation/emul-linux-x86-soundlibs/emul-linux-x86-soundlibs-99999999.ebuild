@@ -28,5 +28,4 @@ RDEPEND="!nodep? ( =app-emulation/emul-linux-x86-baselibs-${PV}
 		media-libs/portaudio[lib32]
 		media-sound/esound[lib32]
 		media-sound/jack-audio-connection-kit[lib32]
-		media-sound/pulseaudio[lib32]
-		www-plugins/libflashsupport[lib32] )"
+		media-sound/pulseaudio[lib32]"
