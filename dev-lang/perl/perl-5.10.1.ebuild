@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.10.1.ebuild,v 1.15 2009/12/09 18:05:51 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.10.1.ebuild,v 1.18 2010/02/13 12:01:07 tove Exp $
 
 EAPI=2
 
@@ -22,9 +22,9 @@ SRC_URI="mirror://cpan/src/${MY_P}.tar.bz2
 	http://dev.gentoo.org/~tove/files/${MY_P}-${PATCH_VER}.tar.bz2"
 HOMEPAGE="http://www.perl.org/"
 
-LICENSE="|| ( Artistic GPL-2 )"
+LICENSE="|| ( Artistic GPL-1 GPL-2 GPL-3 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~ppc ~s390 ~sh ~sparc ~x86"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 #KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="berkdb build debug doc gdbm ithreads"
 
@@ -213,6 +213,12 @@ multilib-native_src_configure_internal() {
 		-Dvendorarch="/usr/$(get_libdir)/perl5/vendor_perl/${MY_PV}/${myarch}${mythreading}" \
 		-Dsitelib="/usr/$(get_libdir)/perl5/site_perl/${MY_PV}" \
 		-Dsitearch="/usr/$(get_libdir)/perl5/site_perl/${MY_PV}/${myarch}${mythreading}" \
+		-Dman1dir=/usr/share/man/man1 \
+		-Dman3dir=/usr/share/man/man3 \
+		-Dinstallman1dir=/usr/share/man/man1 \
+		-Dinstallman3dir=/usr/share/man/man3 \
+		-Dman1ext='1' \
+		-Dman3ext='3pm' \
 		-Dlibperl="${LIBPERL}" \
 		-Dlocincpth=' ' \
 		-Duselargefiles \
