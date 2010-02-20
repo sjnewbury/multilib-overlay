@@ -240,6 +240,29 @@ src_test() {
 }
 
 multilib-native_src_install_internal() {
+	# multilib: we need to redo this here, else we get the vars from x86_64 build
+        case ${CHOST} in
+                *-freebsd*)   osname="freebsd" ;;
+                *-dragonfly*) osname="dragonfly" ;;
+                *-netbsd*)    osname="netbsd" ;;
+                *-openbsd*)   osname="openbsd" ;;
+                *-darwin*)    osname="darwin" ;;
+                *)            osname="linux" ;;
+        esac
+
+        if use ithreads ; then
+                mythreading="-multi"
+                myconf -Dusethreads
+                myarch=${CHOST}
+                myarch="${myarch%%-*}-${osname}-thread"
+        else
+                myarch=${CHOST}
+                myarch="${myarch%%-*}-${osname}"
+        fi
+        if use debug ; then
+                myarch="${myarch}-debug"
+        fi
+
 	export LC_ALL="C"
 	local i
 	local coredir="/usr/$(get_libdir)/perl5/${MY_PV}/${myarch}${mythreading}/CORE"
