@@ -15,6 +15,18 @@ IUSE=""
 
 PDEPEND=">=dev-lang/perl-5.10.1"
 
+src_unpack(){
+	einfo "Nothing to do"
+}
+
+src_compile() {
+	einfo "Nothing to do"
+}
+
+src_install() {
+	einfo "Nothing to do"
+}
+	
 pkg_postinst() {
 	if [[ $(readlink "${ROOT}/usr/$(get_libdir )/libperl$(get_libname)" ) == libperl$(get_libname).1 ]] ; then
 		einfo "Removing stale symbolic link: ${ROOT}usr/$(get_libdir)/libperl$(get_libname)"
