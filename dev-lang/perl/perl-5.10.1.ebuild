@@ -100,6 +100,27 @@ myconf() {
 	myconf=( "${myconf[@]}" "$@" )
 }
 
+myperlarch() {
+	# multilib: needs to be called in both src_configure and src_install
+	case ${CHOST} in
+		*-freebsd*)   osname="freebsd" ;;
+		*-dragonfly*) osname="dragonfly" ;;
+		*-netbsd*)    osname="netbsd" ;;
+		*-openbsd*)   osname="openbsd" ;;
+		*-darwin*)    osname="darwin" ;;
+		*)            osname="linux" ;;
+	esac
+
+	if use ithreads ; then
+		mythreading="-multi"
+		myarch=${CHOST}
+		myarch="${myarch%%-*}-${osname}-thread"
+	else
+		myarch=${CHOST}
+		myarch="${myarch%%-*}-${osname}"
+	fi
+}
+
 multilib-native_src_configure_internal() {
 	declare -a myconf
 
@@ -138,23 +159,11 @@ multilib-native_src_configure_internal() {
 		GZIP_OS_CODE = AUTO_DETECT
 	EOF
 
-	case ${CHOST} in
-		*-freebsd*)   osname="freebsd" ;;
-		*-dragonfly*) osname="dragonfly" ;;
-		*-netbsd*)    osname="netbsd" ;;
-		*-openbsd*)   osname="openbsd" ;;
-		*-darwin*)    osname="darwin" ;;
-		*)            osname="linux" ;;
-	esac
+	# set myarch
+	myperlarch
 
 	if use ithreads ; then
-		mythreading="-multi"
 		myconf -Dusethreads
-		myarch=${CHOST}
-		myarch="${myarch%%-*}-${osname}-thread"
-	else
-		myarch=${CHOST}
-		myarch="${myarch%%-*}-${osname}"
 	fi
 	if use debug ; then
 		myarch="${myarch}-debug"
@@ -240,28 +249,8 @@ src_test() {
 }
 
 multilib-native_src_install_internal() {
-	# multilib: we need to redo this here, else we get the vars from x86_64 build
-        case ${CHOST} in
-                *-freebsd*)   osname="freebsd" ;;
-                *-dragonfly*) osname="dragonfly" ;;
-                *-netbsd*)    osname="netbsd" ;;
-                *-openbsd*)   osname="openbsd" ;;
-                *-darwin*)    osname="darwin" ;;
-                *)            osname="linux" ;;
-        esac
-
-        if use ithreads ; then
-                mythreading="-multi"
-                myconf -Dusethreads
-                myarch=${CHOST}
-                myarch="${myarch%%-*}-${osname}-thread"
-        else
-                myarch=${CHOST}
-                myarch="${myarch%%-*}-${osname}"
-        fi
-        if use debug ; then
-                myarch="${myarch}-debug"
-        fi
+	# set myarch again, if needed
+	use lib32 && myperlarch
 
 	export LC_ALL="C"
 	local i
