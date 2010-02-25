@@ -1,0 +1,13 @@
+http://bugs.gentoo.org/303887
+
+--- openmotif-2.3.2-orig/lib/Xm/PanedW.c
++++ openmotif-2.3.2/lib/Xm/PanedW.c
+@@ -60,7 +60,7 @@
+ #include "MessagesI.h"
+ #include "RepTypeI.h"
+ 
+-#define FIX_1476
++/*#define FIX_1476*/
+ 
+ typedef enum {FirstPane='U', LastPane='L'} Direction;
+ 
