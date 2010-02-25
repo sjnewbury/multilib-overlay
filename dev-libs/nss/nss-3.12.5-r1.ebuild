@@ -1,12 +1,12 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/nss/nss-3.12.5.ebuild,v 1.2 2009/12/15 22:59:34 anarchy Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/nss/nss-3.12.5-r1.ebuild,v 1.4 2010/02/14 14:27:14 anarchy Exp $
 
 EAPI="2"
 
 inherit eutils flag-o-matic multilib toolchain-funcs multilib-native
 
-NSPR_VER="4.8"
+NSPR_VER="4.8.3-r2"
 RTM_NAME="NSS_${PV//./_}_RTM"
 DESCRIPTION="Mozilla's Network Security Services library that implements PKI support"
 HOMEPAGE="http://www.mozilla.org/projects/security/pki/nss/"
@@ -16,7 +16,7 @@ SRC_URI="ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/${RTM_NAME}
 
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="utils"
 
 DEPEND="dev-util/pkgconfig[lib32?]"
@@ -40,7 +40,7 @@ multilib-native_src_prepare_internal() {
 	sed -i -e '/ARCHFLAG.*=/s:^:# :' Linux.mk
 
 	# Ensure we stay multilib aware
-	sed -i -e "s:gentoo:$(get_libdir):" "${S}"/mozilla/security/nss/config/Makefile || die "Failed to fix for multilib"
+	sed -i -e "s:gentoo\/nss:$(get_libdir):" "${S}"/mozilla/security/nss/config/Makefile || die "Failed to fix for multilib"
 }
 
 multilib-native_src_compile_internal() {
@@ -54,18 +54,16 @@ multilib-native_src_compile_internal() {
 	*) die "Failed to detect whether your arch is 64bits or 32bits, disable distcc if you're using it, please";;
 	esac
 
-	export BUILD_OPT=1
-	export NSS_USE_SYSTEM_SQLITE=1
+	export PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
+	export PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
 	export NSPR_INCLUDE_DIR=`pkg-config --cflags-only-I nspr | sed 's/-I//'`
 	export NSPR_LIB_DIR=`pkg-config --libs-only-L nspr | sed 's/-L//'`
-	export USE_SYSTEM_ZLIB=1
-	export ZLIB_LIBS=-lz
+	export BUILD_OPT=1
+	export NSS_USE_SYSTEM_SQLITE=1
 	export NSDISTMODE=copy
 	export NSS_ENABLE_ECC=1
 	export XCFLAGS="${CFLAGS}"
 	export FREEBL_NO_DEPEND=1
-	export PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
-	export PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
 
 	cd "${S}"/mozilla/security/coreconf
 	emake -j1 CC="$(tc-getCC)" || die "coreconf make failed"
@@ -79,12 +77,10 @@ multilib-native_src_install_internal() {
 	MINOR_VERSION=12
 	cd "${S}"/mozilla/security/dist
 
-	# put all *.a files in /usr/lib/nss (because some have conflicting names
-	# with existing libraries)
-	dodir /usr/$(get_libdir)/nss
-	cp -L */lib/*.so "${D}"/usr/$(get_libdir)/nss || die "copying shared libs failed"
-	cp -L */lib/*.chk "${D}"/usr/$(get_libdir)/nss || die "copying chk files failed"
-	cp -L */lib/*.a "${D}"/usr/$(get_libdir)/nss || die "copying libs failed"
+	dodir /usr/$(get_libdir)
+	cp -L */lib/*.so "${D}"/usr/$(get_libdir) || die "copying shared libs failed"
+	cp -L */lib/*.chk "${D}"/usr/$(get_libdir) || die "copying chk files failed"
+	cp -L */lib/libcrmf.a "${D}"/usr/$(get_libdir) || die "copying libs failed"
 
 	# Install nspr-config and pkgconfig file
 	dodir /usr/bin
@@ -94,23 +90,20 @@ multilib-native_src_install_internal() {
 
 	# all the include files
 	insinto /usr/include/nss
-	doins private/nss/*.h
 	doins public/nss/*.h
-	cd "${D}"/usr/$(get_libdir)/nss
+	cd "${D}"/usr/$(get_libdir)
 	for file in *.so; do
 		mv ${file} ${file}.${MINOR_VERSION}
 		ln -s ${file}.${MINOR_VERSION} ${file}
 	done
 
-	# coping with nss being in a different path. We move up priority to
-	# ensure that nss/nspr are used specifically before searching elsewhere.
-	dodir /etc/env.d
-	echo "LDPATH=/usr/$(get_libdir)/nss" > "${D}/etc/env.d/08nss-${ABI}"
-
 	if use utils; then
+		local nssutils
+		nssutils="certutil crlutil cmsutil modutil pk12util signtool signver ssltap addbuiltin"
+
 		cd "${S}"/mozilla/security/dist/*/bin/
-		for f in *; do
-			newbin ${f} nss${f}
+		for f in $nssutils; do
+			dobin ${f}
 		done
 	fi
 
