@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/util-linux/util-linux-2.17.ebuild,v 1.1 2010/01/08 09:55:00 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/util-linux/util-linux-2.17.ebuild,v 1.2 2010/01/23 10:07:38 ssuominen Exp $
 
 EAPI="2"
 
@@ -19,7 +19,7 @@ if [[ ${PV} == "9999" ]] ; then
 	#KEYWORDS=""
 else
 	SRC_URI="mirror://kernel/linux/utils/util-linux-ng/v${PV:0:4}/${MY_P}.tar.bz2
-		loop-aes? ( http://dev.gentoo.org/~ssuominen/${PN}-2.16.1-loop-aes.patch.bz2 )"
+		loop-aes? ( http://loop-aes.sourceforge.net/updates/util-linux-ng-2.17-20100120.diff.bz2 )"
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 fi
 
@@ -32,7 +32,7 @@ RDEPEND="!sys-process/schedutils
 	>=sys-libs/ncurses-5.2-r2[lib32?]
 	!<sys-libs/e2fsprogs-libs-1.41.8
 	!<sys-fs/e2fsprogs-1.41.8
-	perl? ( dev-lang/perl )
+	perl? ( dev-lang/perl[lib32?] )
 	selinux? ( sys-libs/libselinux[lib32?] )
 	slang? ( sys-libs/slang[lib32?] )"
 DEPEND="${RDEPEND}
@@ -44,7 +44,7 @@ multilib-native_src_prepare_internal() {
 		autopoint --force
 		eautoreconf
 	else
-		use loop-aes && epatch "${WORKDIR}"/${PN}-2.16.1-loop-aes.patch
+		use loop-aes && epatch "${WORKDIR}"/util-linux-ng-*.diff
 	fi
 	use uclibc && sed -i -e s/versionsort/alphasort/g -e s/strverscmp.h/dirent.h/g mount/lomount.c
 	elibtoolize
