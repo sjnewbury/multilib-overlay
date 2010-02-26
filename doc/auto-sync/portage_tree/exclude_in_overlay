@@ -1,0 +1,2 @@
+# exclude list of ebuilds and files in the ${FILESDIR} which are in the overlay but not in the source_dir
+

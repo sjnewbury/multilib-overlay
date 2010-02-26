@@ -1,0 +1,106 @@
+#!/bin/bash 
+
+echo_red() {
+	echo -e "\033[1;31m$*\033[0m"
+}
+
+echo_green() {
+	echo -e "\033[1;32m$*\033[0m"
+}
+
+echo_yellow() {
+	echo -e "\033[1;33m$*\033[0m"
+}
+
+DEBUG="2"
+
+SOURCE_DIR="/usr/portage"
+PATCH_DIR="doc/patches"
+
+PACKAGE_LIST_FILE="doc/auto-sync/portage_tree/package_list"
+PACKAGE_EXCLUDE_IN_OVERLAY_FILE="doc/auto-sync/portage_tree/exclude_in_overlay"
+PACKAGE_EXCLUDE_IN_SOURCE_DIR_FILE="doc/auto-sync/portage_tree/exclude_in_source_dir"
+
+PACKAGE_LIST="$(cat ${PACKAGE_LIST_FILE} | sed "s/#.*//")"
+[[ -n ${DEBUG} ]] && echo ${PACKAGE_LIST}
+
+EXCLUDES=""
+for EXCLUDE in $(cat ${PACKAGE_EXCLUDE_IN_OVERLAY_FILE} | sed "s/#.*//"); do
+	if [[ -f ${EXCLUDE} ]]; then
+		[[ "${DEBUG}" > "1" ]] && echo "exclude_in_overlay: excluding ${EXCLUDE}"
+		EXCLUDES+="-not -name ${EXCLUDE} "
+	else
+		echo_red "exclude_in_overlay: ${EXCLUDE} is not in the overlay"
+	fi
+done
+
+for EXCLUDE in $(cat ${PACKAGE_EXCLUDE_IN_SOURCE_DIR_FILE} | sed "s/#.*//"); do
+	if [[ -f ${SOURCE_DIR}/${EXCLUDE} ]]; then
+		[[ "${DEBUG}" > "1" ]] && echo "exclude_in_source_dir: excluding ${EXCLUDE}"
+		EXCLUDES+="-not -name ${EXCLUDE} "
+	else
+		echo_red "exclude_in_source_dir: ${EXCLUDE} is not in the source_dir"
+	fi
+done
+
+
+
+for PACKAGE in ${PACKAGE_LIST}; do
+	[[ -n ${DEBUG} ]] && echo_yellow "\nworking on: ${PACKAGE}"
+	EBUILDS=""
+	for I in . ${SOURCE_DIR}; do
+		pushd ${I} >/dev/null
+		if [[ -d ${PACKAGE} ]]; then
+			EBUILDS+="$(find ${PACKAGE} -name "*.ebuild" ${EXCLUDES}) "
+		else
+			echo "${PACKAGE} is not in ${I}"
+		fi
+		popd >/dev/null
+	done
+	EBUILDS="$(echo ${EBUILDS} | sed "s/[[:space:]]\+/\n/g" | sort -u)"
+	[[ -n ${DEBUG} ]] && echo -e  "EBUILDS: ${EBUILDS}"
+	EBUILD_CHANGED=""
+	for EBUILD in ${EBUILDS}; do
+		if [[ -f ${SOURCE_DIR}/${EBUILD} ]]; then
+			EBUILD_CHANGED="yes"
+			cp ${SOURCE_DIR}/${EBUILD} ${EBUILD}
+			if [[ -f ${PATCH_DIR}/${EBUILD}.patch ]]; then
+				patch -p1 < ${PATCH_DIR}/${EBUILD}.patch
+			fi
+			bin/make_multilib --no-manifest ${EBUILD} 
+		else
+			echo_red "${EBUILD} is not in ${SOURCE_DIR}"
+		fi
+	done
+
+	FILES=""
+	for I in . ${SOURCE_DIR}; do
+		pushd ${I} >/dev/null
+		if [[ -d ${PACKAGE}/files ]]; then
+			FILES+="$(find ${PACKAGE}/files -type f ${EXCLUDES} ) "
+		else
+			[[ -n ${DEBUG} ]] && echo -e "no patches in ${I}"
+		fi
+		popd >/dev/null
+	done
+	FILES="$(echo ${FILES} | sed "s/[[:space:]]\+/\n/g" | sort -u)"
+	[[ -n ${DEBUG} ]] && echo -e "FILES: ${FILES}"
+	for FILE in ${FILES}; do
+		if [[ -f ${SOURCE_DIR}/${FILE} ]]; then
+			EBUILD_CHANGED="yes"
+			mkdir -p ${PACKAGE}/files
+			cp ${SOURCE_DIR}/${FILE} ${FILE}
+		else
+			echo_red "${FILE} is not in ${SOURCE_DIR}"
+		fi
+	done
+	if [[ -d ${PATCH_DIR}/${PACKAGE}/files ]]; then
+		EBUILD_CHANGED="yes"
+		cat ${PATCH_DIR}/${PACKAGE}/files/* | patch -p1
+	fi
+	if [[ -n ${EBUILD_CHANGED} ]]; then
+		ebuild ${EBUILD} manifest
+		egencache --update --repo=multilib ${PACKAGE}
+	fi
+	[[ -n ${DEBUG} ]] && echo_green "finished working on: ${PACKAGE}\n"
+done
