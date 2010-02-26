@@ -1,8 +1,8 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/sdl-image/sdl-image-1.2.10.ebuild,v 1.1 2009/11/15 20:06:09 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/sdl-image/sdl-image-1.2.10.ebuild,v 1.9 2010/02/04 17:15:11 hwoarang Exp $
 
-EAPI="2"
+EAPI=2
 
 inherit multilib-native
 
@@ -13,13 +13,13 @@ SRC_URI="http://www.libsdl.org/projects/SDL_image/release/${MY_P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x86-macos ~x86-solaris"
 IUSE="gif jpeg tiff png"
 
 DEPEND="sys-libs/zlib[lib32?]
 	media-libs/libsdl[lib32?]
 	png? ( media-libs/libpng[lib32?] )
-	jpeg? ( >=media-libs/jpeg-7[lib32?] )
+	jpeg? ( >=media-libs/jpeg-7:0[lib32?] )
 	tiff? ( media-libs/tiff[lib32?] )"
 RDEPEND="${DEPEND}"
 
@@ -31,13 +31,14 @@ multilib-native_src_configure_internal() {
 		$(use_enable jpeg jpg) \
 		$(use_enable tiff tif) \
 		$(use_enable png) \
-		$(use_enable png pnm) \
 		--enable-bmp \
 		--enable-lbm \
 		--enable-pcx \
+		--enable-pnm \
 		--enable-tga \
 		--enable-xcf \
 		--enable-xpm \
+		--enable-xv \
 		|| die
 }
 

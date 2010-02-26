@@ -3,7 +3,6 @@
 # $Header: /var/cvsroot/gentoo-x86/media-libs/sdl-image/sdl-image-1.2.10-r1.ebuild,v 1.1 2010/02/18 18:07:19 mr_bones_ Exp $
 
 EAPI=2
-
 inherit autotools multilib-native
 
 MY_P="${P/sdl-/SDL_}"
@@ -19,13 +18,13 @@ IUSE="gif jpeg tiff png"
 DEPEND="sys-libs/zlib[lib32?]
 	media-libs/libsdl[lib32?]
 	png? ( media-libs/libpng[lib32?] )
-	jpeg? ( >=media-libs/jpeg-7[lib32?] )
+	jpeg? ( >=media-libs/jpeg-7:0[lib32?] )
 	tiff? ( media-libs/tiff[lib32?] )"
 RDEPEND="${DEPEND}"
 
 S=${WORKDIR}/${MY_P}
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	sed -i \
 		-e 's/sort/sort -r/' \
 		configure.in \
@@ -39,10 +38,10 @@ multilib-native_src_configure_internal() {
 		$(use_enable jpeg jpg) \
 		$(use_enable tiff tif) \
 		$(use_enable png) \
-		$(use_enable png pnm) \
 		--enable-bmp \
 		--enable-lbm \
 		--enable-pcx \
+		--enable-pnm \
 		--enable-tga \
 		--enable-xcf \
 		--enable-xpm \

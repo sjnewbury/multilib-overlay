@@ -215,7 +215,7 @@
 # media-libs/openexr
 # media-libs/openjpeg
 # media-libs/schroedinger
-# media-libs/sdl-image
+media-libs/sdl-image
 # media-libs/sdl-mixer
 # media-libs/sdl-net
 # media-libs/sdl-ttf
