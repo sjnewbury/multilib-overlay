@@ -22,21 +22,21 @@ IUSE=""
 
 DEPEND="!media-libs/jpeg:7"
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 	epatch "${WORKDIR}"/${DEB}.diff
 	cp "${FILESDIR}"/Makefile.in.extra debian/extra/Makefile.in
 }
 
-multilib-native-src_prepare_internal() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-maxmem_sysconf.patch
 	elibtoolize
 	# hook the Debian extra dir into the normal jpeg build env
 	sed -i '/all:/s:$:\n\t./config.status --file debian/extra/Makefile\n\t$(MAKE) -C debian/extra $@:' Makefile.in
 }
 
-multilib-native-src_configure_internal() {
+multilib-native_src_configure_internal() {
 	econf \
 		--disable-dependency-tracking \
 		--enable-shared \
@@ -44,7 +44,7 @@ multilib-native-src_configure_internal() {
 		--enable-maxmem=64
 }
 
-multilib-native-src_install_internal() {
+multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
 	dodoc change.log example.c README *.txt
 }
