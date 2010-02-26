@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.3.50_pre20090520.ebuild,v 1.1 2009/12/04 16:15:21 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.3.50_pre20090520.ebuild,v 1.5 2010/01/26 18:37:36 yngwin Exp $
 
 EAPI="2"
 
@@ -14,7 +14,7 @@ SRC_URI="http://dev.gentooexperimental.org/~alexxy/kde/${MY_P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~hppa ~ia64 ppc ppc64 ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="debug gstreamer +xcb +xine"
 
 RDEPEND="
@@ -26,20 +26,20 @@ RDEPEND="
 	>=x11-libs/qt-opengl-4.4.0:4[lib32?]
 	gstreamer? (
 		media-libs/gstreamer[lib32?]
-		media-libs/gst-plugins-base[lib32?]
+		media-plugins/gst-plugins-meta
 	)
 	xine? (
-		>=media-libs/xine-lib-1.1.15-r1[lib32?,xcb?]
+		>=media-libs/xine-lib-1.1.15-r1[xcb?,lib32?]
 		xcb? ( x11-libs/libxcb[lib32?] )
 	)
 "
 DEPEND="${RDEPEND}
-	>=kde-base/automoc-0.9.87
+	>=kde-base/automoc-0.9.87[lib32?]
 "
 
 S="${WORKDIR}/${MY_P}"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if use !xine && use !gstreamer; then
 		die "you must at least select one backend for phonon"
 	fi

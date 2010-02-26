@@ -232,7 +232,7 @@
 # media-sound/lame
 # media-sound/mpg123
 # media-sound/musepack-tools
-# media-sound/phonon
+media-sound/phonon
 # media-sound/pulseaudio
 # media-sound/wavpack
 # media-video/dirac
