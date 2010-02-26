@@ -32,7 +32,14 @@ make_multilib() {
 			sed -i "/^EAPI/ { s/\(=\"\?\)[[:digit:]]\+\(\"\?\)/\12\2/ }" $1
 		fi
 	fi
-	sed -i "/^inherit / { /multilib-native/ b; s/$/ multilib-native/ }" $1
+	if [[ "" == "$(grep inherit $1)" ]]; then
+		sed -i "/^EAPI/ {
+			a \
+			\\\ninherit multilib-native
+		}" $1
+	else
+		sed -i "/^inherit / { /multilib-native/ b; s/$/ multilib-native/ }" $1
+	fi
 }
 
 if [[ "$1" == "--no-manifest" ]];then
