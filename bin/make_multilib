@@ -35,5 +35,11 @@ make_multilib() {
 	sed -i "/^inherit / { /multilib-native/ b; s/$/ multilib-native/ }" $1
 }
 
-make_multilib $1
-ebuild $1 manifest
+if [[ "$1" == "--no-manifest" ]];then
+	make_multilib $2
+else
+	make_multilib $1
+	ebuild $1 manifest
+fi
+
+
