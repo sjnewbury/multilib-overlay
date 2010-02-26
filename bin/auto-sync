@@ -61,6 +61,7 @@ for PACKAGE in ${PACKAGE_LIST}; do
 	[[ -n ${DEBUG} ]] && echo -e  "EBUILDS: ${EBUILDS}"
 	EBUILD_CHANGED=""
 	for EBUILD in ${EBUILDS}; do
+		[[ -n ${DEBUG} ]] && echo_yellow "working on: ${EBUILD}"
 		if [[ -f ${SOURCE_DIR}/${EBUILD} ]]; then
 			EBUILD_CHANGED="yes"
 			cp ${SOURCE_DIR}/${EBUILD} ${EBUILD}
@@ -71,6 +72,7 @@ for PACKAGE in ${PACKAGE_LIST}; do
 		else
 			echo_red "${EBUILD} is not in ${SOURCE_DIR}"
 		fi
+		[[ -n ${DEBUG} ]] && echo_green "finished working on: ${EBUILD}"
 	done
 
 	FILES=""
