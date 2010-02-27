@@ -106,3 +106,5 @@ for PACKAGE in ${PACKAGE_LIST}; do
 	fi
 	[[ -n ${DEBUG} ]] && echo_green "finished working on: ${PACKAGE}\n"
 done
+
+bin/check_prep_ml_binaries.sh
