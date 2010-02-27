@@ -9,14 +9,14 @@ done
 
 for PACKAGE in ${PACKAGES}; do
 	EBUILDS="$(find ${PACKAGE} -name "*.ebuild" ${EXCLUDES})"
-	find ${PACKAGE} -name "*.ebuild" ${EXCLUDES}
+	[[ -n ${DEBUG} ]] && echo "${EBUILDS}"
 	EBUILD_CHANGED=""
 	for EBUILD in ${EBUILDS}; do
 		EBUILD_PREP_ML="$(grep prep_ml_binaries ${EBUILD} | tr "\t" "")"
 		PREP_ML="$(grep ${PACKAGE} doc/prep_ml_binaries | cut -d " " -f 2-)"
-		echo "EBUILD:${EBUILD}"
-		echo "EBUILD_PREP_ML:${EBUILD_PREP_ML}"
-		echo "PREP_ML:${PREP_ML}"
+		[[ -n ${DEBUG} ]] && echo "EBUILD:${EBUILD}"
+		[[ -n ${DEBUG} ]] && echo "EBUILD_PREP_ML:${EBUILD_PREP_ML}"
+		[[ -n ${DEBUG} ]] && echo "PREP_ML:${PREP_ML}"
 		if [[ -z ${EBUILD_PREP_ML} ]]; then
 			EBUILD_CHANGED="yes"
 			echo -e "\033[1;31m\"${PREP_ML}\" added automatically to ${EBUILD}\033[0m"
