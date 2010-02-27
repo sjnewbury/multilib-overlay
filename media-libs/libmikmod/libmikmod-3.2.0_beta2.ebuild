@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libmikmod/libmikmod-3.2.0_beta2.ebuild,v 1.1 2009/07/23 18:07:55 ssuominen Exp $
 
-EAPI="2"
+EAPI=2
 MY_P=${P/_/-}
 
 inherit autotools eutils multilib-native
