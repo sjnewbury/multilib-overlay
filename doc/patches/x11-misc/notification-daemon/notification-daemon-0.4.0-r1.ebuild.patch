@@ -1,0 +1,13 @@
+--- ./x11-misc/notification-daemon/notification-daemon-0.4.0-r1.ebuild.orig	2010-02-28 22:49:17.000000000 +0100
++++ ./x11-misc/notification-daemon/notification-daemon-0.4.0-r1.ebuild	2010-02-28 22:50:21.000000000 +0100
+@@ -30,9 +30,7 @@
+ 		!xfce-extra/notification-daemon-xfce
+ 		!x11-misc/xfce4-notifyd"
+ 
+-src_unpack() {
+-	gnome2_src_unpack
+-	cd "${S}" || die "cd failed"
++src_prepare() {
+ 	epatch "${FILESDIR}"/${P}-report-sound-capability.patch
+ }
+ 

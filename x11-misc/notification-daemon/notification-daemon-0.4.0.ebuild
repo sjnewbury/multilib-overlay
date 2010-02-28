@@ -32,7 +32,7 @@ DEPEND="${RDEPEND}
 		!xfce-extra/notification-daemon-xfce
 		!x11-misc/xfce4-notifyd"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	DOCS="AUTHORS ChangeLog NEWS"
 	G2CONF="$(use_enable gstreamer sound gstreamer)"
 }

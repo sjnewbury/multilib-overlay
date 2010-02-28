@@ -28,10 +28,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	# fix line wrapping, upstream bug #162
 	epatch "${FILESDIR}"/${PN}-0.3.7-line-wrapping.patch
 }
