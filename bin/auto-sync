@@ -69,7 +69,7 @@ for PACKAGE in ${PACKAGE_LIST}; do
 				NUM_PATCHED_EBUILDS+=1
 				patch -p1 < ${PATCH_DIR}/${EBUILD}.patch
 			else
-				EBUILDS_WITH_MISSING_PATCHES+="${EBUILD}.patch "
+				EBUILDS_WITH_MISSING_PATCHES+="${PATCH_DIR}/${EBUILD}.patch "
 			fi
 			bin/make_multilib --no-manifest ${EBUILD} 
 		else
