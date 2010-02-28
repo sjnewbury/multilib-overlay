@@ -63,7 +63,7 @@ s/[[:space:]]*([[:space:]]*/\n/g
 #remove closing paranthesis
 s/[[:space:]]*)[[:space:]]*/\n/g
 #remove blocked packages
-s@[[:space:]]*\(${BEGIN}\)!\(${PACKAGE}\).*@\n@g
+s@[[:space:]]*\(${BEGIN}\)!\(${PREFIX}\)\(${PACKAGE}\).*@\n@g
 #remove space
 s/[[:space:]]\+/\n/g
 #replace the atom with only the category/package-name and append \n
