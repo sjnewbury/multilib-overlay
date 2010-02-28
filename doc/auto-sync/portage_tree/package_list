@@ -393,7 +393,7 @@ sys-apps/util-linux
 # x11-libs/vte
 # x11-libs/xcb-util
 # x11-libs/xtrans
-# x11-misc/imake
+x11-misc/imake
 x11-misc/notification-daemon
 x11-misc/xorg-cf-files
 x11-proto/dri2proto
