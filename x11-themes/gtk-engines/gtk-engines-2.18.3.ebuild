@@ -27,7 +27,6 @@ multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF} --enable-animation $(use_enable lua) $(use_with lua system-lua)"
 	use accessibility || G2CONF="${G2CONF} --disable-hc"
 }
-
 multilib-native_src_prepare_internal() {
 	gnome2_src_prepare
 	# Fix typo in AM_CONDITIONNAL for system lua feature,

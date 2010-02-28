@@ -21,7 +21,7 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	G2CONF="--enable-animation --enable-lua"
 	use accessibility || G2CONF="${G2CONF} --disable-hc"
 }
