@@ -57,14 +57,21 @@ for PACKAGE in ${PACKAGE_LIST}; do
 		fi
 		popd >/dev/null
 	done
+	let NUM_EBUILDS=0
+	let NUM_PATCHED_EBUILDS=0
+	EBUILDS_WITH_MISSING_PATCHES=""
 	EBUILDS="$(echo ${EBUILDS} | sed "s/[[:space:]]\+/\n/g" | sort -u)"
 	[[ -n ${DEBUG} ]] && echo -e  "EBUILDS: ${EBUILDS}"
 	for EBUILD in ${EBUILDS}; do
+		NUM_EBUILDS+=1
 		[[ -n ${DEBUG} ]] && echo_yellow "working on: ${EBUILD}"
 		if [[ -f ${SOURCE_DIR}/${EBUILD} ]]; then
 			cp ${SOURCE_DIR}/${EBUILD} ${EBUILD}
 			if [[ -f ${PATCH_DIR}/${EBUILD}.patch ]]; then
+				NUM_PATCHED_EBUILDS+=1
 				patch -p1 < ${PATCH_DIR}/${EBUILD}.patch
+			else
+				EBUILDS_WITH_MISSING_PATCHES+="${EBUILD}.patch "
 			fi
 			bin/make_multilib --no-manifest ${EBUILD} 
 		else
@@ -72,6 +79,12 @@ for PACKAGE in ${PACKAGE_LIST}; do
 		fi
 		[[ -n ${DEBUG} ]] && echo_green "finished working on: ${EBUILD}"
 	done
+	if [[ "$NUM_EBUILDS" != "$NUM_PATCHED_EBUILDS" ]];then
+		if [[ "$NUM_PATCHED_EBUILDS" > 0 ]]; then
+			echo_red "the following patches are missing: ${EBUILDS_WITH_MISSING_PATCHES}"
+			echo_red "if those ebuilds do not need a patch add a empty file"
+		fi
+	fi
 	bin/check_prep_ml_binaries.sh --no-manifest ${PACKAGE}
 
 	FILES=""
