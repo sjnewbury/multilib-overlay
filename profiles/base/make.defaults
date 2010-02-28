@@ -2,3 +2,7 @@ NO_AUTO_FLAG="dev-libs/boost dev-util/boost-build net-p2p/freenet x11-plugins/en
 
 MULTILIB_BINARIES="dev-lang/perl dev-lang/python x11-libs/qt-core x11-libs/qt-gui"
 USE="${USE} multilib"
+
+# set a default for $PKG_CONFIG to avoid a collision with crossdev-wrappers
+# suggested by and thanks to ohnobinki
+PKG_CONFIG="pkg-config"
