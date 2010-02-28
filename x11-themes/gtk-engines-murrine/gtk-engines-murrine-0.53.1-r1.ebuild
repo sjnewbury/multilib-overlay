@@ -25,10 +25,7 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
-src_unpack() {
-	unpack ${A}
-	cd "$S"
-
+multilib-native_src_prepare_internal() {
 	# Fix for bug #198815
 	epatch "${FILESDIR}/${P}-use-gtk_free.patch"
 }

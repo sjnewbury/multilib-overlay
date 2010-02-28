@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-themes/gtk-engines-murrine/gtk-engines-murrine-0.90.3-r1.ebuild,v 1.1 2009/05/21 20:09:59 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-themes/gtk-engines-murrine/gtk-engines-murrine-0.90.3-r1.ebuild,v 1.7 2010/02/14 06:23:53 nirbheek Exp $
 
 EAPI="2"
 
@@ -14,12 +14,14 @@ SRC_URI="${SRC_URI//${PN}/${MY_PN}}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~ppc ~x86 ~x86-fbsd"
+KEYWORDS="amd64 ppc x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux"
 IUSE="+themes animation-rtl"
 
-RDEPEND=">=x11-libs/gtk+-2.12[lib32?]
-	themes? ( x11-themes/murrine-themes )"
+RDEPEND=">=x11-libs/gtk+-2.12[lib32?]"
+PDEPEND="themes? ( x11-themes/murrine-themes )"
 DEPEND="${RDEPEND}
+	>=dev-util/intltool-0.37.1
+	sys-devel/gettext[lib32?]
 	dev-util/pkgconfig[lib32?]"
 
 S="${WORKDIR}/${MY_PN}-${PV}"

@@ -1,0 +1,22 @@
+--- ./x11-themes/gtk-engines-murrine/gtk-engines-murrine-0.53.1-r1.ebuild.orig	2010-02-28 21:44:02.000000000 +0100
++++ ./x11-themes/gtk-engines-murrine/gtk-engines-murrine-0.53.1-r1.ebuild	2010-02-28 21:44:51.000000000 +0100
+@@ -23,17 +23,13 @@
+ 
+ S="${WORKDIR}/${MY_P}"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "$S"
+-
++src_prepare() {
+ 	# Fix for bug #198815
+ 	epatch "${FILESDIR}/${P}-use-gtk_free.patch"
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	econf --enable-animation || die "econf failed"
+-	emake || die "emake failed"
+ }
+ 
+ src_install() {

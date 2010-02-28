@@ -1,0 +1,13 @@
+--- ./x11-themes/gtk-engines-murrine/gtk-engines-murrine-0.53.1.ebuild.orig	2010-02-28 21:48:18.000000000 +0100
++++ ./x11-themes/gtk-engines-murrine/gtk-engines-murrine-0.53.1.ebuild	2010-02-28 21:48:51.000000000 +0100
+@@ -20,9 +20,8 @@
+ 
+ S="${WORKDIR}/${MY_P}"
+ 
+-src_compile() {
++src_configure() {
+ 	econf --enable-animation || die "econf failed"
+-	emake || die "emake failed"
+ }
+ 
+ src_install() {

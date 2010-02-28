@@ -398,5 +398,5 @@ sys-apps/util-linux
 # x11-misc/xorg-cf-files
 # x11-proto/dri2proto
 # x11-themes/gtk-engines
-# x11-themes/gtk-engines-murrine
+x11-themes/gtk-engines-murrine
 x11-themes/gtk-engines-xfce
