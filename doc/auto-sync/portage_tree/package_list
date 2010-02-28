@@ -176,7 +176,7 @@
 # media-libs/jbigkit
 media-libs/jpeg
 # media-libs/lasi
-# media-libs/lcms
+media-libs/lcms
 # media-libs/libart_lgpl
 # media-libs/libcaca
 # media-libs/libcanberra
