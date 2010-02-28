@@ -12,8 +12,6 @@ echo_yellow() {
 	echo -e "\033[1;33m$*\033[0m"
 }
 
-DEBUG="2"
-
 SOURCE_DIR="/usr/portage"
 PATCH_DIR="doc/patches"
 
@@ -46,7 +44,7 @@ done
 
 
 for PACKAGE in ${PACKAGE_LIST}; do
-	[[ -n ${DEBUG} ]] && echo_yellow "\nworking on: ${PACKAGE}"
+	echo_yellow "\nworking on: ${PACKAGE}"
 	EBUILDS=""
 	for I in . ${SOURCE_DIR}; do
 		pushd ${I} >/dev/null
@@ -64,7 +62,7 @@ for PACKAGE in ${PACKAGE_LIST}; do
 	[[ -n ${DEBUG} ]] && echo -e  "EBUILDS: ${EBUILDS}"
 	for EBUILD in ${EBUILDS}; do
 		NUM_EBUILDS+=1
-		[[ -n ${DEBUG} ]] && echo_yellow "working on: ${EBUILD}"
+		echo_yellow "working on: ${EBUILD}"
 		if [[ -f ${SOURCE_DIR}/${EBUILD} ]]; then
 			cp ${SOURCE_DIR}/${EBUILD} ${EBUILD}
 			if [[ -f ${PATCH_DIR}/${EBUILD}.patch ]]; then
@@ -77,7 +75,7 @@ for PACKAGE in ${PACKAGE_LIST}; do
 		else
 			echo_red "${EBUILD} is not in ${SOURCE_DIR}"
 		fi
-		[[ -n ${DEBUG} ]] && echo_green "finished working on: ${EBUILD}"
+		echo_green "finished working on: ${EBUILD}"
 	done
 	if [[ "$NUM_EBUILDS" != "$NUM_PATCHED_EBUILDS" ]];then
 		if [[ "$NUM_PATCHED_EBUILDS" > 0 ]]; then
@@ -111,9 +109,10 @@ for PACKAGE in ${PACKAGE_LIST}; do
 		cat ${PATCH_DIR}/${PACKAGE}/files/* | patch -p1
 	fi
 	if [[ "" != "$(git diff ${PACKAGE})" ]]; then
+		cat ${SOURCE_DIR}/${PACKAGE}/Manifest >> ${PACKAGE}/Manifest
 		ebuild ${EBUILD} manifest
 		egencache --update --repo=multilib ${PACKAGE}
 	fi
-	[[ -n ${DEBUG} ]] && echo_green "finished working on: ${PACKAGE}\n"
+	echo_green "finished working on: ${PACKAGE}\n"
 done
 
