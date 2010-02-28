@@ -26,7 +26,7 @@ EXCLUDES=""
 for EXCLUDE in $(cat ${PACKAGE_EXCLUDE_IN_OVERLAY_FILE} | sed "s/#.*//"); do
 	if [[ -f ${EXCLUDE} ]]; then
 		[[ "${DEBUG}" > "1" ]] && echo "exclude_in_overlay: excluding ${EXCLUDE}"
-		EXCLUDES+="-not -name ${EXCLUDE} "
+		EXCLUDES+="-not -wholename ${EXCLUDE} "
 	else
 		echo_red "exclude_in_overlay: ${EXCLUDE} is not in the overlay"
 	fi
@@ -35,7 +35,7 @@ done
 for EXCLUDE in $(cat ${PACKAGE_EXCLUDE_IN_SOURCE_DIR_FILE} | sed "s/#.*//"); do
 	if [[ -f ${SOURCE_DIR}/${EXCLUDE} ]]; then
 		[[ "${DEBUG}" > "1" ]] && echo "exclude_in_source_dir: excluding ${EXCLUDE}"
-		EXCLUDES+="-not -name ${EXCLUDE} "
+		EXCLUDES+="-not -wholename ${EXCLUDE} "
 	else
 		echo_red "exclude_in_source_dir: ${EXCLUDE} is not in the source_dir"
 	fi
