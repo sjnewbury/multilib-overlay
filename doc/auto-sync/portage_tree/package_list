@@ -140,7 +140,7 @@
 # kde-base/automoc
 # mail-client/evolution
 # media-gfx/gimp
-# media-gfx/graphviz
+media-gfx/graphviz
 # media-gfx/gtkimageview
 # media-gfx/imagemagick
 # media-gfx/sane-backends

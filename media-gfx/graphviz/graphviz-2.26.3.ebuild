@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/graphviz/graphviz-2.24.0-r2.ebuild,v 1.5 2009/10/15 11:40:39 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/graphviz/graphviz-2.26.3.ebuild,v 1.1 2010/02/07 22:42:21 maekke Exp $
 
 EAPI=2
 inherit eutils autotools multilib python multilib-native
@@ -11,7 +11,7 @@ SRC_URI="http://www.graphviz.org/pub/graphviz/ARCHIVE/${P}.tar.gz"
 
 LICENSE="CPL-1.0"
 SLOT="0"
-KEYWORDS="alpha amd64 arm ~hppa ~ia64 ~mips ppc ~ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="cairo doc examples gtk java lasi nls perl python ruby tcl"
 
 # Requires ksh
@@ -62,7 +62,8 @@ DEPEND="${RDEPEND}
 # - gdk-pixbuf
 #   Disabled, GTK-1 junk.
 # - ming
-#   Disabled, depends on ming-3.0 which is still p.masked.
+#   flash plugin via -Tswf requires media-libs/ming-0.4. Disabled as it's
+#   incomplete.
 # - cairo:
 #   Needs pango for text layout, uses cairo methods to draw stuff
 # - xlib :
@@ -103,17 +104,6 @@ multilib-native_src_prepare_internal() {
 			| xargs sed -i -e '/html_DATA/d' -e '/pdf_DATA/d' || die
 	fi
 
-	local pf="$(get_libdir)"
-	pf="${pf#lib}"
-
-	sed -i -e \
-		's:LIBPOSTFIX=.*:LIBPOSTFIX='"${pf}"':' \
-		configure.ac || die "sed fix EXPAT_LIBS failed"
-	
-	sed -i -e \
-		's:AC_CHECK_PROG(PERL,perl,perl):AC_CHECK_PROG(PERL,perl-'"$ABI"',perl-'"$ABI"'):' \
-		configure.ac || die "sed fix perl config failed"
-
 	# This is an old version of libtool
 	rm -rf libltdl
 	sed -i -e '/libltdl/d' configure.ac || die
@@ -145,7 +135,7 @@ multilib-native_src_configure_internal() {
 
 	# Core functionality:
 	# All of X, cairo-output, gtk need the pango+cairo functionality
-	if use gtk || use cairo ; then
+	if use gtk || use cairo; then
 		myconf="${myconf} --with-x"
 	else
 		myconf="${myconf} --without-x"
