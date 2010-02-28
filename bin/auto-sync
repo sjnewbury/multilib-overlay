@@ -59,11 +59,9 @@ for PACKAGE in ${PACKAGE_LIST}; do
 	done
 	EBUILDS="$(echo ${EBUILDS} | sed "s/[[:space:]]\+/\n/g" | sort -u)"
 	[[ -n ${DEBUG} ]] && echo -e  "EBUILDS: ${EBUILDS}"
-	EBUILD_CHANGED=""
 	for EBUILD in ${EBUILDS}; do
 		[[ -n ${DEBUG} ]] && echo_yellow "working on: ${EBUILD}"
 		if [[ -f ${SOURCE_DIR}/${EBUILD} ]]; then
-			EBUILD_CHANGED="yes"
 			cp ${SOURCE_DIR}/${EBUILD} ${EBUILD}
 			if [[ -f ${PATCH_DIR}/${EBUILD}.patch ]]; then
 				patch -p1 < ${PATCH_DIR}/${EBUILD}.patch
@@ -74,6 +72,7 @@ for PACKAGE in ${PACKAGE_LIST}; do
 		fi
 		[[ -n ${DEBUG} ]] && echo_green "finished working on: ${EBUILD}"
 	done
+	bin/check_prep_ml_binaries.sh --no-manifest ${PACKAGE}
 
 	FILES=""
 	for I in . ${SOURCE_DIR}; do
@@ -89,7 +88,6 @@ for PACKAGE in ${PACKAGE_LIST}; do
 	[[ -n ${DEBUG} ]] && echo -e "FILES: ${FILES}"
 	for FILE in ${FILES}; do
 		if [[ -f ${SOURCE_DIR}/${FILE} ]]; then
-			EBUILD_CHANGED="yes"
 			mkdir -p ${PACKAGE}/files
 			cp ${SOURCE_DIR}/${FILE} ${FILE}
 		else
@@ -97,14 +95,12 @@ for PACKAGE in ${PACKAGE_LIST}; do
 		fi
 	done
 	if [[ -d ${PATCH_DIR}/${PACKAGE}/files ]]; then
-		EBUILD_CHANGED="yes"
 		cat ${PATCH_DIR}/${PACKAGE}/files/* | patch -p1
 	fi
-	if [[ -n ${EBUILD_CHANGED} ]]; then
+	if [[ "" != "$(git diff ${PACKAGE})" ]]; then
 		ebuild ${EBUILD} manifest
 		egencache --update --repo=multilib ${PACKAGE}
 	fi
 	[[ -n ${DEBUG} ]] && echo_green "finished working on: ${PACKAGE}\n"
 done
 
-bin/check_prep_ml_binaries.sh
