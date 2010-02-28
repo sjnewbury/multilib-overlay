@@ -14,14 +14,14 @@ check_prep_ml ()
 	if [[ -n "${PREP_ML}" ]]; then
 		if [[ "${PREP_ML}" != "${EBUILD_PREP_ML}" ]]; then
 			if [[ -z "${EBUILD_PREP_ML}" ]]; then
-				echo -e "\033[1;31m\"${PREP_ML}\" added automatically to ${EBUILD}\033[0m"
+				echo -e "\033[1;33m\"${PREP_ML}\" added automatically to ${EBUILD}\033[0m"
 				if [[ -z "$(grep multilib-native_src_install_internal ${EBUILD})" ]]; then
 					echo -e "\nmultilib-native_src_install_internal() {\n\tmultilib-native_check_inherited_funcs src_install\n\t${PREP_ML}\n}" >> ${EBUILD}
 				else
 					sed -i "/^multilib-native_src_install_internal.*/ { :asdf ; /\n\}/! { N ; b asdf  }; s@\n\}\$@\n\n\t${PREP_ML}&@ }" ${EBUILD}
 				fi
 			else
-				echo -e "\033[1;31mautomatically replaced \"${EBUILD_PREP_ML}\" with \"${PREP_ML}\" in ${EBUILD}\033[0m"
+				echo -e "\033[1;33mautomatically replaced \"${EBUILD_PREP_ML}\" with \"${PREP_ML}\" in ${EBUILD}\033[0m"
 				sed -i "/prep_ml_binaries/ { s@.*@\t${PREP_ML}@ }"  ${EBUILD}
 			fi
 		fi
