@@ -22,8 +22,8 @@ RDEPEND=">=dev-libs/glib-2.14[lib32?]
 	media-libs/fontconfig[lib32?]
 	sys-libs/ncurses[lib32?]
 	opengl? (
-		virtual/opengl
-		virtual/glu
+		virtual/opengl[lib32?]
+		virtual/glu[lib32?]
 	)
 	python? (
 		>=dev-python/pygtk-2.4[lib32?]
