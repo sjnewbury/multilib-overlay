@@ -391,7 +391,7 @@ sys-apps/util-linux
 # x11-libs/qt-xmlpatterns
 # x11-libs/startup-notification
 # x11-libs/vte
-# x11-libs/xcb-util
+x11-libs/xcb-util
 x11-libs/xtrans
 x11-misc/imake
 x11-misc/notification-daemon

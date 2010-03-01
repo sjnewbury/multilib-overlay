@@ -2,10 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/xcb-util/xcb-util-0.3.6.ebuild,v 1.10 2010/01/15 21:57:31 fauli Exp $
 
+EAPI="2"
+
 # Must be before x-modular eclass is inherited
 #SNAPSHOT="yes"
-
-EAPI="2"
 
 inherit x-modular multilib-native
 
@@ -22,9 +22,9 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	>=x11-proto/xproto-7.0.8
 	>=x11-proto/xcb-proto-1.5
-	test? ( >=dev-libs/check-0.9.4 )"
+	test? ( >=dev-libs/check-0.9.4[lib32?] )"
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	x-modular_pkg_postinst
 
 	echo
