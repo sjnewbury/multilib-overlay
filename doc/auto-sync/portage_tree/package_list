@@ -376,7 +376,7 @@ sys-apps/util-linux
 # x11-libs/qt-assistant
 # x11-libs/qt-core
 # x11-libs/qt-dbus
-# x11-libs/qt-demo
+x11-libs/qt-demo
 x11-libs/qt-embedded
 x11-libs/qt-gui
 x11-libs/qt-multimedia
