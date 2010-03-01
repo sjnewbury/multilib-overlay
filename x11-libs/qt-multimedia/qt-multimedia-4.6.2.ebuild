@@ -1,18 +1,19 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-multimedia/qt-multimedia-4.6.0-r1.ebuild,v 1.1 2009/12/25 15:41:27 abcd Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-multimedia/qt-multimedia-4.6.2.ebuild,v 1.1 2010/02/15 15:10:01 spatz Exp $
 
 EAPI="2"
 inherit qt4-build multilib-native
 
 DESCRIPTION="The Qt multimedia module"
 SLOT="4"
-KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x64-solaris ~x86-solaris"
-IUSE=""
+KEYWORDS="~amd64 ~ppc64 ~x86 ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos"
+IUSE="iconv"
 
-DEPEND="~x11-libs/qt-core-${PV}[aqua=,debug=,lib32?]
-	~x11-libs/qt-gui-${PV}[aqua=,debug=,lib32?]
-"
+# currently supported audio backends are: alsa, mac, win32
+DEPEND="!aqua? ( media-libs/alsa-lib[lib32?] )
+	~x11-libs/qt-core-${PV}[aqua=,debug=,lib32?]
+	~x11-libs/qt-gui-${PV}[aqua=,debug=,lib32?]"
 RDEPEND="${DEPEND}"
 
 QT4_TARGET_DIRECTORIES="src/multimedia"
