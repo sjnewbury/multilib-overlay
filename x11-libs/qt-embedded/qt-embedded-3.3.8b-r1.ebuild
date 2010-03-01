@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit multilib-native
+inherit eutils multilib-native
 
 DESCRIPTION="Embedded Linux port of Qt"
 HOMEPAGE="http://www.qtsoftware.com/products/platform/qt-for-embedded-linux"
@@ -21,12 +21,12 @@ DEPEND="media-libs/libpng[lib32?]
 	media-libs/lcms[lib32?]
 	sys-libs/zlib[lib32?]
 	cups? ( net-print/cups[lib32?] )
-	firebird? ( dev-db/firebird[lib32?] )
+	firebird? ( dev-db/firebird )
 	mysql? ( virtual/mysql[lib32?] )
 	opengl? ( virtual/opengl[lib32?] virtual/glu[lib32?] )
-	postgres? ( virtual/postgresql-server[lib32?] )"
+	postgres? ( virtual/postgresql-server )"
 RDEPEND="${DEPEND}"
-PDEPEND="odbc? ( ~dev-db/qt-unixODBC-${PV}[lib32?] )"
+PDEPEND="odbc? ( ~dev-db/qt-unixODBC-${PV} )"
 
 S=${WORKDIR}/qt-embedded-free-${PV}
 
@@ -57,8 +57,6 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
-	cd ${S}
-
 	sed -i -e 's:read acceptance:acceptance=yes:' configure
 
 	# avoid using -rpath
@@ -92,7 +90,6 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_compile_internal() {
-
 	export LD_LIBRARY_PATH="${S}/lib:${LD_LIBRARY_PATH}"
 
 	cd "${S}" && emake symlinks src-qmake src-moc sub-src || die "make failed"
@@ -146,7 +143,7 @@ EOF
 	ln -s "${XPLATFORM}" "${D}/${QTBASE}/mkspecs/default"
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	echo
 	einfo "If you want to compile and run a test application using"
 	einfo "QT/Embedded instead of standard Qt, you must properly"
