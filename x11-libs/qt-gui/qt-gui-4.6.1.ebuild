@@ -1,18 +1,18 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-gui/qt-gui-4.6.1.ebuild,v 1.4 2010/01/20 16:27:20 spatz Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-gui/qt-gui-4.6.1.ebuild,v 1.6 2010/02/10 20:11:56 yngwin Exp $
 
 EAPI="2"
-inherit eutils qt4-build multilib-native
+inherit confutils eutils qt4-build multilib-native
 
 DESCRIPTION="The GUI module for the Qt toolkit"
 SLOT="4"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x64-solaris ~x86-solaris"
 IUSE="+accessibility cups dbus +glib gtk mng nas nis raster tiff qt3support xinerama"
 
 RDEPEND="media-libs/fontconfig[lib32?]
 	>=media-libs/freetype-2[lib32?]
-	media-libs/jpeg[lib32?]
+	media-libs/jpeg:0[lib32?]
 	media-libs/libpng[lib32?]
 	sys-libs/zlib[lib32?]
 	~x11-libs/qt-core-${PV}[aqua=,debug=,glib=,qt3support=,lib32?]
@@ -41,41 +41,37 @@ DEPEND="${RDEPEND}
 	xinerama? ( x11-proto/xineramaproto )"
 PDEPEND="qt3support? ( ~x11-libs/qt-qt3support-${PV}[aqua=,debug=,lib32?] )"
 
-QT4_TARGET_DIRECTORIES="
-src/gui
-src/scripttools
-tools/designer
-tools/linguist/linguist
-src/plugins/imageformats/gif
-src/plugins/imageformats/ico
-src/plugins/imageformats/jpeg
-src/plugins/inputmethods"
-
-QT4_EXTRACT_DIRECTORIES="
-include
-src
-tools/linguist/phrasebooks
-tools/linguist/shared
-tools/shared"
-
 multilib-native_pkg_setup_internal() {
 	if ! use qt3support; then
 		ewarn "WARNING: if you need 'qtconfig', you _must_ enable qt3support."
-		ebeep 5
 	fi
 
 	confutils_use_depend_all gtk glib
-	qt4-build_pkg_setup
-}
 
-multilib-native_src_unpack_internal() {
+	QT4_TARGET_DIRECTORIES="
+		src/gui
+		src/scripttools
+		tools/designer
+		tools/linguist/linguist
+		src/plugins/imageformats/gif
+		src/plugins/imageformats/ico
+		src/plugins/imageformats/jpeg
+		src/plugins/inputmethods"
+
+	QT4_EXTRACT_DIRECTORIES="
+		include
+		src
+		tools/linguist/phrasebooks
+		tools/linguist/shared
+		tools/shared"
+
 	use dbus && QT4_TARGET_DIRECTORIES="${QT4_TARGET_DIRECTORIES} tools/qdbus/qdbusviewer"
 	use mng && QT4_TARGET_DIRECTORIES="${QT4_TARGET_DIRECTORIES} src/plugins/imageformats/mng"
 	use tiff && QT4_TARGET_DIRECTORIES="${QT4_TARGET_DIRECTORIES} src/plugins/imageformats/tiff"
 	use accessibility && QT4_TARGET_DIRECTORIES="${QT4_TARGET_DIRECTORIES} src/plugins/accessible/widgets"
 	QT4_EXTRACT_DIRECTORIES="${QT4_TARGET_DIRECTORIES} ${QT4_EXTRACT_DIRECTORIES}"
 
-	qt4-build_src_unpack
+	qt4-build_pkg_setup
 }
 
 multilib-native_src_prepare_internal() {
