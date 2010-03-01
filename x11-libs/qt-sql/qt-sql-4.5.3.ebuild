@@ -1,20 +1,20 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-sql/qt-sql-4.5.3.ebuild,v 1.3 2009/10/31 13:54:29 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-sql/qt-sql-4.5.3.ebuild,v 1.8 2010/01/21 20:52:37 spatz Exp $
 
 EAPI="2"
 inherit qt4-build multilib-native
 
 DESCRIPTION="The SQL module for the Qt toolkit"
 SLOT="4"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="firebird iconv mysql odbc postgres qt3support +sqlite"
 
 DEPEND="~x11-libs/qt-core-${PV}[debug=,qt3support=,lib32?]
-	firebird? ( dev-db/firebird[lib32?] )
+	firebird? ( dev-db/firebird )
 	mysql? ( virtual/mysql[lib32?] )
 	odbc? ( dev-db/unixODBC[lib32?] )
-	postgres? ( virtual/postgresql-base[lib32?] )
+	postgres? ( virtual/postgresql-base )
 	sqlite? ( dev-db/sqlite:3[lib32?] )"
 RDEPEND="${DEPEND}"
 
@@ -27,7 +27,6 @@ include/QtScript/
 src/src.pro
 src/corelib/
 src/plugins
-src/sql
 src/3rdparty
 src/tools"
 
