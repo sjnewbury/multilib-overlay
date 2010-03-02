@@ -1,0 +1,9 @@
+--- ./x11-libs/xtrans/xtrans-1.2.5.ebuild.orig	2010-03-01 23:35:51.000000000 +0100
++++ ./x11-libs/xtrans/xtrans-1.2.5.ebuild	2010-03-01 23:36:20.000000000 +0100
+@@ -11,4 +11,5 @@
+ IUSE=""
+ 
+ RDEPEND=""
+-DEPEND="${RDEPEND}"
++DEPEND="${RDEPEND}
++	dev-util/pkgconfig"

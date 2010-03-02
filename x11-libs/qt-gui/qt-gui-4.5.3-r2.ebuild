@@ -1,13 +1,13 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-gui/qt-gui-4.5.3-r2.ebuild,v 1.2 2009/10/31 13:50:40 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-gui/qt-gui-4.5.3-r2.ebuild,v 1.7 2009/11/10 22:38:04 jer Exp $
 
 EAPI="2"
 inherit eutils qt4-build multilib-native
 
 DESCRIPTION="The GUI module for the Qt toolkit"
 SLOT="4"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="+accessibility cups dbus +glib gtk mng nas nis raster tiff qt3support xinerama"
 
 RDEPEND="media-libs/fontconfig[lib32?]
@@ -71,7 +71,7 @@ multilib-native_pkg_setup_internal() {
 	qt4-build_pkg_setup
 }
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	use dbus && QT4_TARGET_DIRECTORIES="${QT4_TARGET_DIRECTORIES} tools/qdbus/qdbusviewer"
 	use mng && QT4_TARGET_DIRECTORIES="${QT4_TARGET_DIRECTORIES} src/plugins/imageformats/mng"
 	use tiff && QT4_TARGET_DIRECTORIES="${QT4_TARGET_DIRECTORIES} src/plugins/imageformats/tiff"
@@ -169,7 +169,7 @@ multilib-native_src_install_internal() {
 			|| die "designer make_desktop_entry failed"
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	if use gtk ; then
 		ewarn 'If you get the following error when setting Qt to use the GTK style:'
 		ewarn '    "QGtkStyle cannot be used together with the GTK_Qt engine."'

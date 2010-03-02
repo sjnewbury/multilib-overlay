@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/xtrans/xtrans-1.2.4.ebuild,v 1.1 2009/09/28 10:42:37 remi Exp $
 
+EAPI="2"
+
 # Must be before x-modular eclass is inherited
 #SNAPSHOT="yes"
 
@@ -12,4 +14,5 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~spar
 IUSE=""
 
 RDEPEND=""
-DEPEND="${RDEPEND}"
+DEPEND="${RDEPEND}
+	dev-util/pkgconfig[lib32?]"

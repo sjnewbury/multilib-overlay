@@ -79,7 +79,7 @@ PACKAGE=""
 for PKG in ${PACKAGE_LIST}
 do
 	if [[ -d $PKG ]];then
-		if [[ "" != "$(grep -r multilib-native $PKG)" ]];then
+		if [[ "" != "$(grep -r multilib-native $PKG)" || "" != "$(grep -r "IUSE.*lib32" $PKG)" ]];then
 			debug "PKG: $PKG is in multilib overlay"
 			PACKAGE+=" ${PKG}"
 		else

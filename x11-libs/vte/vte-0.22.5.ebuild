@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/vte/vte-0.22.5.ebuild,v 1.1 2009/11/21 10:18:13 mrpouet Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/vte/vte-0.22.5.ebuild,v 1.5 2010/02/23 18:51:36 armin76 Exp $
 
 EAPI="2"
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm ~hppa ia64 ~ppc ~ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="debug doc glade python"
 
 RDEPEND=">=dev-libs/glib-2.18.0[lib32?]
@@ -22,7 +22,6 @@ RDEPEND=">=dev-libs/glib-2.18.0[lib32?]
 	python? ( >=dev-python/pygtk-2.4[lib32?] )
 	x11-libs/libX11[lib32?]
 	x11-libs/libXft[lib32?]"
-
 DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.0 )
 	>=dev-util/intltool-0.35
@@ -37,12 +36,6 @@ multilib-native_pkg_setup_internal() {
 		--disable-static
 		$(use_enable debug)
 		$(use_enable glade glade-catalogue)
-		$(use_enable python)"
+		$(use_enable python)
+		--with-html-dir=/usr/share/doc/${PF}/html"
 }
-
-#multilib-native_src_prepare_internal() {
-#	gnome2_src_prepare
-
-	# Fix intltoolize broken file, see upstream #577133
-#	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
-#}

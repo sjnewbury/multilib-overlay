@@ -3,11 +3,11 @@
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-core/qt-core-4.6.2-r1.ebuild,v 1.1 2010/02/20 09:55:06 ayoy Exp $
 
 EAPI="2"
-inherit qt4-build multilib multilib-native
+inherit qt4-build multilib-native
 
 DESCRIPTION="The Qt toolkit is a comprehensive C++ application development framework"
 SLOT="4"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x64-solaris ~x86-solaris"
 IUSE="doc +glib iconv optimized-qmake qt3support ssl"
 
 RDEPEND="sys-libs/zlib[lib32?]
@@ -18,107 +18,62 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]"
 PDEPEND="qt3support? ( ~x11-libs/qt-gui-${PV}[aqua=,qt3support,lib32?] )"
 
-QT4_TARGET_DIRECTORIES="
-src/tools/bootstrap
-src/tools/moc
-src/tools/rcc
-src/tools/uic
-src/corelib
-src/xml
-src/network
-src/plugins/codecs
-tools/linguist/lconvert
-tools/linguist/lrelease
-tools/linguist/lupdate"
-
-# Most ebuilds include almost everything for testing
-# Will clear out unneeded directories after everything else works OK
-QT4_EXTRACT_DIRECTORIES="
-include/Qt
-include/QtCore
-include/QtNetwork
-include/QtScript
-include/QtXml
-src/plugins/plugins.pro
-src/plugins/qpluginbase.pri
-src/src.pro
-src/3rdparty/des
-src/3rdparty/harfbuzz
-src/3rdparty/md4
-src/3rdparty/md5
-src/3rdparty/sha1
-src/3rdparty/easing
-src/script
-tools/linguist/shared
-translations"
-
 PATCHES=(
 	"${FILESDIR}/qt-4.6-nolibx11.patch"
 	"${FILESDIR}/qt-4.6-nox11r6.patch"
 )
 
 multilib-native_pkg_setup_internal() {
-	qt4-build_pkg_setup
+	QT4_TARGET_DIRECTORIES="
+		src/tools/bootstrap
+		src/tools/moc
+		src/tools/rcc
+		src/tools/uic
+		src/corelib
+		src/xml
+		src/network
+		src/plugins/codecs
+		tools/linguist/lconvert
+		tools/linguist/lrelease
+		tools/linguist/lupdate"
 
-	if has_version x11-libs/qt-core; then
-		# Check to see if they've changed the glib flag since the last time installing this package.
-		if use glib && ! built_with_use x11-libs/qt-core glib && has_version x11-libs/qt-gui; then
-			ewarn "You have changed the \"glib\" use flag since the last time you have emerged this package."
-			ewarn "You should also re-emerge x11-libs/qt-gui in order for it to pick up this change."
-		elif ! use glib && built_with_use x11-libs/qt-core glib && has_version x11-libs/qt-gui; then
-			ewarn "You have changed the \"glib\" use flag since the last time you have emerged this package."
-			ewarn "You should also re-emerge x11-libs/qt-gui in order for it to pick up this change."
-		fi
+	QT4_EXTRACT_DIRECTORIES="
+		include/Qt
+		include/QtCore
+		include/QtNetwork
+		include/QtScript
+		include/QtXml
+		src/plugins/plugins.pro
+		src/plugins/qpluginbase.pri
+		src/src.pro
+		src/3rdparty/des
+		src/3rdparty/harfbuzz
+		src/3rdparty/md4
+		src/3rdparty/md5
+		src/3rdparty/sha1
+		src/3rdparty/easing
+		src/script
+		tools/linguist/shared
+		translations"
 
-		# Check to see if they've changed the qt3support flag since the last time installing this package.
-		# If so, give a list of packages they need to uninstall first.
-		if use qt3support && ! built_with_use x11-libs/qt-core qt3support; then
-			local need_to_remove
-			ewarn "You have changed the \"qt3support\" use flag since the last time you have emerged this package."
-			for x in sql opengl gui qt3support; do
-				local pkg="x11-libs/qt-${x}"
-				if has_version $pkg; then
-					need_to_remove="${need_to_remove} ${pkg}"
-				fi
-			done
-			if [[ -n ${need_to_remove} ]]; then
-				die "You must first uninstall these packages before continuing: \n\t\t${need_to_remove}"
-			fi
-		elif ! use qt3support && built_with_use x11-libs/qt-core qt3support ; then
-			local need_to_remove
-			ewarn "You have changed the \"qt3support\" use flag since the last time you have emerged this package."
-			for x in sql opengl gui qt3support; do
-				local pkg="x11-libs/qt-${x}"
-				if has_version $pkg; then
-					need_to_remove="${need_to_remove} ${pkg}"
-				fi
-			done
-			if [[ -n ${need_to_remove} ]]; then
-				die "You must first uninstall these packages before continuing: \n\t\t${need_to_remove}"
-			fi
-		fi
-	fi
-}
-
-multilib-native_src_unpack_internal() {
 	if use doc; then
 		QT4_EXTRACT_DIRECTORIES="${QT4_EXTRACT_DIRECTORIES}
-					doc/"
+			doc/"
 		QT4_TARGET_DIRECTORIES="${QT4_TARGET_DIRECTORIES}
-					tools/qdoc3"
+			tools/qdoc3"
 	fi
 	QT4_EXTRACT_DIRECTORIES="${QT4_TARGET_DIRECTORIES}
 				${QT4_EXTRACT_DIRECTORIES}"
 
-	qt4-build_src_unpack
+	qt4-build_pkg_setup
+}
 
+multilib-native_src_prepare_internal() {
 	# Don't pre-strip, bug 235026
 	for i in kr jp cn tw ; do
 		echo "CONFIG+=nostrip" >> "${S}"/src/plugins/codecs/${i}/${i}.pro
 	done
-}
 
-multilib-native_src_prepare_internal() {
 	qt4-build_src_prepare
 
 	# bug 172219
@@ -224,12 +179,12 @@ qatomic_windows.h,\
 qatomic_windowsce.h,\
 qt_windows.h}
 
-	prep_ml_includes
-
 	keepdir "${QTSYSCONFDIR#${EPREFIX}}"
 
 	# Framework magic
 	fix_includes
+
+	prep_ml_includes
 
 	prep_ml_binaries /usr/bin/qmake /usr/bin/moc /usr/bin/rcc /usr/bin/uic
 }
