@@ -372,7 +372,6 @@ sys-apps/util-linux
 # x11-libs/openmotif
 # x11-libs/pango
 # x11-libs/pixman
-# x11-libs/qt
 x11-libs/qt-assistant
 x11-libs/qt-core
 x11-libs/qt-dbus
