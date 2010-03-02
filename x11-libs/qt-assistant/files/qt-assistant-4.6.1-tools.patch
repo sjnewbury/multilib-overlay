@@ -1,11 +1,11 @@
-diff --git a/tools/tools.pro b/tools/tools.pro
-index 87ba3c9..26a82ed 100644
---- a/tools/tools.pro
-+++ b/tools/tools.pro
-@@ -5,31 +5,8 @@ no-png {
+diff -ur qt-everywhere-opensource-src-4.6.1-orig/tools/tools.pro qt-everywhere-opensource-src-4.6.1/tools/tools.pro
+--- qt-everywhere-opensource-src-4.6.1-orig/tools/tools.pro	2010-01-15 19:01:30.000000000 +0200
++++ qt-everywhere-opensource-src-4.6.1/tools/tools.pro	2010-01-19 21:03:04.747379416 +0200
+@@ -4,33 +4,9 @@
+     message("Some graphics-related tools are unavailable without PNG support")
  } else {
       SUBDIRS += assistant \
- 		pixeltool \
+-		pixeltool \
 -		porting \
 -                qtestlib \
 -                qttracereplay
@@ -19,7 +19,7 @@ index 87ba3c9..26a82ed 100644
 -     wince*: SUBDIRS = qtestlib designer
 -     unix:!mac:!embedded:contains(QT_CONFIG, qt3support):SUBDIRS += qtconfig
 -     win32:!wince*:SUBDIRS += activeqt
-+        qdoc3
++		pixeltool
  }
  
 -mac {
@@ -33,5 +33,6 @@ index 87ba3c9..26a82ed 100644
 -!wince*:contains(QT_CONFIG, xmlpatterns): SUBDIRS += xmlpatterns xmlpatternsvalidator
 -embedded: SUBDIRS += makeqpf
 -
+ !wince*:!cross_compile:SUBDIRS += qdoc3
+ 
  CONFIG+=ordered
- QTDIR_build:REQUIRES = "contains(QT_CONFIG, full-config)"
