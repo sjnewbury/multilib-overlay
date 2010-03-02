@@ -1,0 +1,33 @@
+--- ./x11-libs/qt-embedded/qt-embedded-3.3.8b-r1.ebuild.orig	2010-03-02 00:51:47.000000000 +0100
++++ ./x11-libs/qt-embedded/qt-embedded-3.3.8b-r1.ebuild	2010-03-02 00:53:03.000000000 +0100
+@@ -54,10 +54,7 @@
+ 	fi
+ }
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	sed -i -e 's:read acceptance:acceptance=yes:' configure
+ 
+ 	# avoid using -rpath
+@@ -70,7 +67,7 @@
+ 	epatch "${FILESDIR}"/${PN}-3.3.8-castfix.patch
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	addwrite "${QTBASE}/etc/settings"
+ 
+ 	use gif && myconf="${myconf} -qt-gif" || myconf="${myconf} -no-gif"
+@@ -88,7 +85,9 @@
+ 		-freetype -qvfb -plugin-imgfmt-{jpeg,mng,png} -system-lib{jpeg,mng,png} \
+ 		-prefix ${QTBASE} -platform ${PLATFORM} -xplatform ${XPLATFORM} \
+ 		-embedded -no-sql-odbc || die
++}
+ 
++src_compile() {
+ 	export LD_LIBRARY_PATH="${S}/lib:${LD_LIBRARY_PATH}"
+ 
+ 	cd "${S}" && emake symlinks src-qmake src-moc sub-src || die "make failed"
