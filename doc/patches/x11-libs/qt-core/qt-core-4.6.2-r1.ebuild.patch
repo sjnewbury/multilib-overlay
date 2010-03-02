@@ -1,0 +1,9 @@
+--- ./x11-libs/qt-core/qt-core-4.6.2-r1.ebuild.orig	2010-03-02 01:38:12.000000000 +0100
++++ ./x11-libs/qt-core/qt-core-4.6.2-r1.ebuild	2010-03-02 01:38:33.000000000 +0100
+@@ -183,4 +183,6 @@
+ 
+ 	# Framework magic
+ 	fix_includes
++
++	prep_ml_includes
+ }

@@ -1,0 +1,9 @@
+--- ./x11-libs/qt-core/qt-core-4.5.3-r2.ebuild.orig	2010-03-02 01:36:36.000000000 +0100
++++ ./x11-libs/qt-core/qt-core-4.5.3-r2.ebuild	2010-03-02 01:37:11.000000000 +0100
+@@ -214,4 +214,6 @@
+ qt_windows.h}
+ 
+ 	keepdir "${QTSYSCONFDIR}"
++
++	prep_ml_includes
+ }

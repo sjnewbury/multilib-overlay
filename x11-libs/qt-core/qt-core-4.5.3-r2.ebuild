@@ -1,13 +1,13 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-core/qt-core-4.5.3-r2.ebuild,v 1.3 2009/10/31 13:46:02 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-core/qt-core-4.5.3-r2.ebuild,v 1.7 2009/11/10 22:36:15 jer Exp $
 
 EAPI="2"
 inherit qt4-build multilib-native
 
 DESCRIPTION="The Qt toolkit is a comprehensive C++ application development framework"
 SLOT="4"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="doc +glib iconv qt3support ssl"
 
 RDEPEND="sys-libs/zlib[lib32?]
@@ -128,9 +128,7 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
-	if ! use lib32; then
-		unset QMAKESPEC
-	fi
+	unset QMAKESPEC
 
 	myconf="${myconf}
 		$(qt_use glib)
@@ -215,9 +213,9 @@ qatomic_windows.h,\
 qatomic_windowsce.h,\
 qt_windows.h}
 
-	prep_ml_includes
-
 	keepdir "${QTSYSCONFDIR}"
+
+	prep_ml_includes
 
 	prep_ml_binaries /usr/bin/qmake /usr/bin/moc /usr/bin/rcc /usr/bin/uic
 }
