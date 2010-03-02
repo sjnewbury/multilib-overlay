@@ -1,6 +1,8 @@
 NO_AUTO_FLAG="dev-libs/boost dev-util/boost-build net-p2p/freenet x11-plugins/enigmail sys-apps/pciutils dev-python/PyQt4 x11-misc/shared-mime-info"
 
-MULTILIB_BINARIES="dev-lang/perl dev-lang/python x11-libs/qt-core x11-libs/qt-gui"
+# following packages added to MULTILIB_BINARIES because of none-default -config binaries:
+# dev-libs/libIDL, net-libs/courier-authlib
+MULTILIB_BINARIES="dev-lang/perl dev-lang/python dev-libs/libIDL net-libs/courier-authlib x11-libs/qt-core x11-libs/qt-gui"
 USE="${USE} multilib"
 
 # set a default for $PKG_CONFIG to avoid a collision with crossdev-wrappers
