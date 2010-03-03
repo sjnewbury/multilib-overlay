@@ -3,3 +3,4 @@ x11-proto/dri2proto/dri2proto-9999.ebuild # live ebuild
 x11-libs/xtrans/xtrans-9999.ebuild
 x11-libs/xcb-util/xcb-util-9999.ebuild
 x11-libs/vte/vte-0.23.5.ebuild
+x11-libs/pixman/pixman-9999.ebuild
