@@ -6,7 +6,7 @@
 # @MAINTAINER:
 # x11@gentoo.org
 
-# Author: Tomáš Chvátal <scarabeus@gentoo.org>
+# Author: TomÃ¡Å¡ ChvÃ¡tal <scarabeus@gentoo.org>
 # Author: Donnie Berkholz <dberkholz@gentoo.org>
 # @BLURB: Reduces code duplication in the modularized X11 ebuilds.
 # @DESCRIPTION:
@@ -111,13 +111,13 @@ if [[ ${SNAPSHOT} != no ]]; then
 		sys-devel/m4"
 	# These 2 versions MUST BE STABLE
 	[[ ${PN} == util-macros ]] || DEPEND+=" >=x11-misc/util-macros-1.3.0"
-	[[ ${PN} == font-util ]] || DEPEND+=" >=media-fonts/font-util-1.1.1-r1"
+	[[ ${PN} == font-util ]] || DEPEND+=" >=media-fonts/font-util-1.1.1"
 	WANT_AUTOCONF="latest"
 	WANT_AUTOMAKE="latest"
 fi
 
 if [[ ${FONT} == yes ]]; then
-	DEPEND+=" >=media-fonts/font-util-1.1.1-r1"
+	DEPEND+=" >=media-fonts/font-util-1.1.1"
 	RDEPEND+=" media-fonts/encodings
 		x11-apps/mkfontscale
 		x11-apps/mkfontdir"
