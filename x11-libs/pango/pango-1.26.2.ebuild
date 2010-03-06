@@ -1,11 +1,11 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.26.2.ebuild,v 1.1 2009/12/21 23:28:30 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.26.2.ebuild,v 1.2 2010/02/07 19:45:58 solar Exp $
 
 EAPI="2"
 GCONF_DEBUG="yes"
 
-inherit autotools eutils gnome2 multilib multilib-native
+inherit autotools eutils gnome2 multilib toolchain-funcs multilib-native
 
 DESCRIPTION="Internationalized text layout and rendering library"
 HOMEPAGE="http://www.pango.org/"
@@ -23,7 +23,7 @@ RDEPEND=">=dev-libs/glib-2.17.3[lib32?]
 		x11-libs/libXrender[lib32?]
 		x11-libs/libX11[lib32?]
 		x11-libs/libXft[lib32?] )
-	introspection? ( dev-libs/gobject-introspection )"
+	introspection? ( dev-libs/gobject-introspection[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9[lib32?]
 	dev-util/gtk-doc-am
@@ -44,6 +44,7 @@ function multilib_enabled() {
 }
 
 multilib-native_pkg_setup_internal() {
+	tc-export CXX
 	# XXX: DO NOT add introspection support, collides with gir-repository[pango]
 	G2CONF="${G2CONF}
 		$(use_enable introspection)
@@ -71,13 +72,6 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_install_internal() {
-	gnome2_src_install
-	rm -f "${D}"/etc/pango/*/pango.modules || die "rm pango.modules failed"
-
-	prep_ml_binaries /usr/bin/pango-querymodules
-}
-
 multilib-native_pkg_postinst_internal() {
 	if [ "${ROOT}" = "/" ] ; then
 		einfo "Generating modules listing..."
@@ -94,4 +88,9 @@ multilib-native_pkg_postinst_internal() {
 
 		pango-querymodules > ${PANGO_CONFDIR}/pango.modules
 	fi
+}
+
+multilib-native_src_install_internal() {
+	multilib-native_check_inherited_funcs src_install
+	prep_ml_binaries /usr/bin/pango-querymodules
 }

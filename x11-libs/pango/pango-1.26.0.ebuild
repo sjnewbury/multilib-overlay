@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.26.0.ebuild,v 1.2 2009/10/31 14:33:29 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.26.0.ebuild,v 1.5 2009/11/28 17:39:38 remi Exp $
 
 EAPI="2"
 GCONF_DEBUG="yes"
@@ -73,13 +73,6 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_install_internal() {
-	gnome2_src_install
-	rm -f "${D}"/etc/pango/*/pango.modules || die "rm pango.modules failed"
-
-	prep_ml_binaries /usr/bin/pango-querymodules
-}
-
 multilib-native_pkg_postinst_internal() {
 	if [ "${ROOT}" = "/" ] ; then
 		einfo "Generating modules listing..."
@@ -96,4 +89,9 @@ multilib-native_pkg_postinst_internal() {
 
 		pango-querymodules > ${PANGO_CONFDIR}/pango.modules
 	fi
+}
+
+multilib-native_src_install_internal() {
+	multilib-native_check_inherited_funcs src_install
+	prep_ml_binaries /usr/bin/pango-querymodules
 }

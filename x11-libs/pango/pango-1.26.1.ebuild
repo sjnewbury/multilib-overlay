@@ -70,13 +70,6 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-multilib-native_src_install_internal() {
-	gnome2_src_install
-	rm -f "${D}"/etc/pango/*/pango.modules || die "rm pango.modules failed"
-
-	prep_ml_binaries /usr/bin/pango-querymodules
-}
-
 multilib-native_pkg_postinst_internal() {
 	if [ "${ROOT}" = "/" ] ; then
 		einfo "Generating modules listing..."
@@ -93,4 +86,9 @@ multilib-native_pkg_postinst_internal() {
 
 		pango-querymodules > ${PANGO_CONFDIR}/pango.modules
 	fi
+}
+
+multilib-native_src_install_internal() {
+	multilib-native_check_inherited_funcs src_install
+	prep_ml_binaries /usr/bin/pango-querymodules
 }
