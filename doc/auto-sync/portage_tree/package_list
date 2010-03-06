@@ -345,7 +345,7 @@ sys-apps/util-linux
 # x11-libs/libXau
 # x11-libs/libXaw
 # x11-libs/libxcb
-# x11-libs/libXcomposite
+x11-libs/libXcomposite
 x11-libs/libXcursor
 x11-libs/libXdamage
 x11-libs/libXdmcp
