@@ -366,7 +366,7 @@ sys-apps/util-linux
 # x11-libs/libXTrap
 # x11-libs/libXtst
 # x11-libs/libXv
-# x11-libs/libXvMC
+x11-libs/libXvMC
 x11-libs/libXxf86dga
 x11-libs/libXxf86vm
 x11-libs/openmotif
