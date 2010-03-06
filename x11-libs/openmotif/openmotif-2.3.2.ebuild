@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/openmotif/openmotif-2.3.2.ebuild,v 1.6 2009/06/15 00:30:18 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/openmotif/openmotif-2.3.2.ebuild,v 1.13 2010/02/06 15:47:55 ulm Exp $
 
 EAPI="2"
 
@@ -8,13 +8,13 @@ inherit autotools eutils flag-o-matic multilib multilib-native
 
 DOC_P=${PN}-2.3.0
 DESCRIPTION="Open Motif"
-HOMEPAGE="http://www.motifzone.org/"
+HOMEPAGE="http://www.motifzone.net/"
 SRC_URI="ftp://ftp.ics.com/openmotif/${PV%.*}/${PV}/${P}.tar.gz
 	doc? ( http://www.motifzone.net/files/documents/${DOC_P}-manual.pdf.tgz )"
 
-LICENSE="MOTIF libXpm doc? ( OPL )"
+LICENSE="MOTIF MIT doc? ( OPL )"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="doc examples jpeg png unicode xft"
 
 # make people unmerge motif-config and all previous slots
@@ -30,7 +30,7 @@ RDEPEND="!x11-libs/motif-config
 	png? ( media-libs/libpng[lib32?] )"
 
 DEPEND="${RDEPEND}
-	sys-devel/flex
+	sys-devel/flex[lib32?]
 	x11-misc/xbitmaps"
 
 multilib-native_pkg_setup_internal() {
@@ -62,6 +62,7 @@ multilib-native_pkg_setup_internal() {
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${PN}-2.3.1-multilist-stipple.patch" #215984
 	epatch "${FILESDIR}/${PN}-2.3.1-ac-editres.patch" #82081
+	epatch "${FILESDIR}/${P}-ldflags.patch" #293573
 
 	# disable compilation of demo binaries
 	sed -i -e '/^SUBDIRS/{:x;/\\$/{N;bx;};s/[ \t\n\\]*demos//;}' Makefile.am
@@ -119,7 +120,7 @@ multilib-native_src_install_internal() {
 	use doc && cp "${WORKDIR}"/*.pdf "${D}"/usr/share/doc/${PF}
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	local line
 	while read line; do elog "${line}"; done <<-EOF
 	Gentoo is no longer providing slotted Open Motif libraries.

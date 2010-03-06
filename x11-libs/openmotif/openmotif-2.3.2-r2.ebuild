@@ -2,12 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/openmotif/openmotif-2.3.2-r2.ebuild,v 1.2 2010/02/11 22:04:07 ulm Exp $
 
-EAPI="3"
+EAPI=3
 
 inherit autotools eutils flag-o-matic multilib multilib-native
 
 DESCRIPTION="Open Motif"
-HOMEPAGE="http://www.motifzone.org/"
+HOMEPAGE="http://www.motifzone.net/"
 SRC_URI="ftp://ftp.ics.com/openmotif/${PV%.*}/${PV}/${P}.tar.gz"
 
 LICENSE="MOTIF MIT"
@@ -36,7 +36,7 @@ RDEPEND="!x11-libs/motif-config
 	png? ( media-libs/libpng[lib32?] )"
 
 DEPEND="${RDEPEND}
-	sys-devel/flex
+	sys-devel/flex[lib32?]
 	x11-misc/xbitmaps"
 
 pkg_nofetch() {
@@ -60,7 +60,7 @@ multilib-native_pkg_setup_internal() {
 	for i in "${EROOT}"/usr/bin/{mwm,uil,xmbind} \
 		"${EROOT}"/usr/include/{Xm,uil,Mrm} \
 		"${EROOT}"/usr/$(get_libdir)/lib{Xm,Uil,Mrm}.*; do
-			[[ -L "${i}" ]] || continue
+		[[ -L "${i}" ]] || continue
 		l=$(readlink "${i}")
 		if [[ ${l} == *openmotif-* || ${l} == *lesstif-* ]]; then
 			einfo "Cleaning up orphaned ${i} symlink ..."
@@ -68,7 +68,7 @@ multilib-native_pkg_setup_internal() {
 		fi
 	done
 
-	cd "${EROOT}"usr/share/man
+	cd "${EROOT}"/usr/share/man
 	for i in $(find . -type l); do
 		l=$(readlink "${i}")
 		if [[ ${l} == *-openmotif-* || ${l} == *-lesstif-* ]]; then
@@ -77,7 +77,7 @@ multilib-native_pkg_setup_internal() {
 		fi
 	done
 	[[ ${count} -ne 0 ]] && \
-		einfo "Cleaned up ${count} orphaned symlinks in ${EROOT}usr/share/man"
+		einfo "Cleaned up ${count} orphaned symlinks in ${EROOT}/usr/share/man"
 }
 
 multilib-native_src_prepare_internal() {
@@ -153,7 +153,7 @@ multilib-native_src_install_internal() {
 	dodoc BUGREPORT ChangeLog README RELEASE RELNOTES TODO
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	local line
 	while read line; do elog "${line}"; done <<-EOF
 	From the Open Motif 2.3.0 (upstream) release notes:

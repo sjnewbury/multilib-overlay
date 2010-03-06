@@ -1,0 +1,32 @@
+--- ./x11-libs/openmotif/openmotif-2.3.2.ebuild.orig	2010-03-06 15:21:49.000000000 +0100
++++ ./x11-libs/openmotif/openmotif-2.3.2.ebuild	2010-03-06 15:23:03.000000000 +0100
+@@ -57,9 +57,7 @@
+ 		einfo "Cleaned up ${count} orphaned symlinks in ${ROOT}usr/share/man"
+ }
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}/${PN}-2.3.1-multilist-stipple.patch" #215984
+ 	epatch "${FILESDIR}/${PN}-2.3.1-ac-editres.patch" #82081
+ 	epatch "${FILESDIR}/${P}-ldflags.patch" #293573
+@@ -73,7 +71,7 @@
+ 	AT_M4DIR=. eautoreconf
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	# get around some LANG problems in make (#15119)
+ 	unset LANG
+ 
+@@ -91,7 +89,9 @@
+ 		$(use_enable xft) \
+ 		$(use_enable jpeg) \
+ 		$(use_enable png)
++}
+ 
++src_compile() {
+ 	emake -j1 || die "emake failed"
+ }
+ 
