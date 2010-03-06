@@ -15,3 +15,4 @@ x11-libs/libXScrnSaver/libXScrnSaver-9999.ebuild # x11
 x11-libs/libXres/libXres-9999.ebuild # x11
 x11-libs/libXrender/libXrender-9999.ebuild # x11
 x11-libs/libXrandr/libXrandr-9999.ebuild # x11
+x11-libs/libXpm/libXpm-9999.ebuild # x11
