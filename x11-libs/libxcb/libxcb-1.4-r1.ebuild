@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/libxcb/libxcb-1.4-r1.ebuild,v 1.3 2009/09/30 20:05:31 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/libxcb/libxcb-1.4-r1.ebuild,v 1.10 2009/12/15 19:52:48 ranger Exp $
 
 EAPI="2"
 
@@ -12,19 +12,18 @@ inherit x-modular multilib-native
 DESCRIPTION="X C-language Bindings library"
 HOMEPAGE="http://xcb.freedesktop.org/"
 SRC_URI="http://xcb.freedesktop.org/dist/${P}.tar.bz2"
-LICENSE="X11"
 
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~m68k ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="doc selinux"
 
 RDEPEND="x11-libs/libXau[lib32?]
 	x11-libs/libXdmcp[lib32?]
-	dev-libs/libpthread-stubs"
+	dev-libs/libpthread-stubs[lib32?]"
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )
-	dev-libs/libxslt
+	dev-libs/libxslt[lib32?]
 	>=x11-proto/xcb-proto-1.5
-	>=dev-lang/python-2.5[xml]"
+	>=dev-lang/python-2.5[xml,lib32?]"
 
 multilib-native_pkg_setup_internal() {
 	CONFIGURE_OPTIONS="$(use_enable doc build-docs)
@@ -37,12 +36,12 @@ multilib-native_src_install_internal() {
 	dobin "${FILESDIR}"/xcb-rebuilder.sh || die
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	x-modular_pkg_preinst
 	preserve_old_lib "${ROOT}"/usr/$(get_libdir)/libxcb-xlib.so.0.0.0
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	x-modular_pkg_postinst
 
 	if [[ -e "${ROOT}"/usr/$(get_libdir)/libxcb-xlib.so.0.0.0 ]]; then

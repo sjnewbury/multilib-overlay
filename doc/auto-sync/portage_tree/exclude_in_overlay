@@ -28,3 +28,4 @@ x11-libs/libXdmcp/libXdmcp-9999.ebuild # x11
 x11-libs/libXdamage/libXdamage-9999.ebuild # x11
 x11-libs/libXcursor/libXcursor-9999.ebuild # x11
 x11-libs/libXcomposite/libXcomposite-9999.ebuild # x11
+x11-libs/libxcb/libxcb-9999.ebuild # x11

@@ -17,12 +17,12 @@ IUSE="doc selinux"
 
 RDEPEND="x11-libs/libXau[lib32?]
 	x11-libs/libXdmcp[lib32?]
-	dev-libs/libpthread-stubs"
+	dev-libs/libpthread-stubs[lib32?]"
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )
-	dev-libs/libxslt
+	dev-libs/libxslt[lib32?]
 	>=x11-proto/xcb-proto-1.6
-	>=dev-lang/python-2.5[xml]"
+	>=dev-lang/python-2.5[xml,lib32?]"
 
 multilib-native_pkg_setup_internal() {
 	CONFIGURE_OPTIONS="$(use_enable doc build-docs)
