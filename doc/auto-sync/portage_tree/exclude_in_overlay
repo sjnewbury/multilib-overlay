@@ -22,3 +22,4 @@ x11-libs/libXinerama/libXinerama-9999.ebuild # x11
 x11-libs/libXi/libXi-9999.ebuild # x11
 x11-libs/libXft/libXft-9999.ebuild # x11
 x11-libs/libXfont/libXfont-9999.ebuild # x11 
+x11-libs/libXfixes/libXfixes-9999.ebuild # x11
