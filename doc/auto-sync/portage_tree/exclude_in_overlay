@@ -5,3 +5,5 @@ x11-libs/xcb-util/xcb-util-9999.ebuild
 x11-libs/vte/vte-0.23.5.ebuild
 x11-libs/pixman/pixman-9999.ebuild
 x11-libs/libXxf86vm/libXxf86vm-9999.ebuild # live ebuild from x11 overlay
+x11-libs/libXxf86dga/libXxf86dga-9999.ebuild # live ebuild from x11 overlay
+

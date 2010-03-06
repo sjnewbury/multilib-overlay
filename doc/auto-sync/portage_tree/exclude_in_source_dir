@@ -1,1 +1,2 @@
 # exclude list of ebuilds and files in the ${FILESDIR} which are in the source_dir but not in the overlay
+x11-libs/libXxf86dga/libXxf86dga-1.0.1.ebuild
