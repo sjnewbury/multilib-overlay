@@ -64,6 +64,7 @@ for PACKAGE in ${PACKAGE_LIST}; do
 		NUM_EBUILDS+=1
 		echo_yellow "working on: ${EBUILD}"
 		if [[ -f ${SOURCE_DIR}/${EBUILD} ]]; then
+			mkdir -p ${PACKAGE}
 			cp ${SOURCE_DIR}/${EBUILD} ${EBUILD}
 			if [[ -f ${PATCH_DIR}/${EBUILD}.patch ]]; then
 				NUM_PATCHED_EBUILDS+=1
@@ -108,7 +109,7 @@ for PACKAGE in ${PACKAGE_LIST}; do
 	if [[ -d ${PATCH_DIR}/${PACKAGE}/files ]]; then
 		cat ${PATCH_DIR}/${PACKAGE}/files/* | patch -p1
 	fi
-	if [[ "" != "$(git diff ${PACKAGE})" ]]; then
+	if [[ "" != "$(git status | grep ${PACKAGE})" ]]; then
 		cat ${SOURCE_DIR}/${PACKAGE}/Manifest >> ${PACKAGE}/Manifest
 		ebuild ${EBUILD} manifest
 		egencache --update --repo=multilib ${PACKAGE}
