@@ -5,8 +5,6 @@
 # Must be before x-modular eclass is inherited
 #SNAPSHOT="yes"
 
-EAPI="2" 
-
 inherit x-modular multilib-native
 
 DESCRIPTION="X.Org Xdmcp library"
