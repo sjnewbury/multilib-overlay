@@ -26,3 +26,4 @@ x11-libs/libXfixes/libXfixes-9999.ebuild # x11
 x11-libs/libXext/libXext-9999.ebuild # x11
 x11-libs/libXdmcp/libXdmcp-9999.ebuild # x11
 x11-libs/libXdamage/libXdamage-9999.ebuild # x11
+x11-libs/libXcursor/libXcursor-9999.ebuild # x11
