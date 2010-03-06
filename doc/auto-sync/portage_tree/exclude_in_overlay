@@ -18,3 +18,4 @@ x11-libs/libXrandr/libXrandr-9999.ebuild # x11
 x11-libs/libXpm/libXpm-9999.ebuild # x11
 x11-libs/libXp/libXp-9999.ebuild # x11
 x11-libs/libXmu/libXmu-9999.ebuild # x11
+x11-libs/libXinerama/libXinerama-9999.ebuild # x11
