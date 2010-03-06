@@ -13,3 +13,4 @@ x11-libs/libXTrap/libXTrap-9999.ebuild # live ebuild from x11 overlay
 x11-libs/libXt/libXt-9999.ebuild # live ebuild from x11 overlay
 x11-libs/libXScrnSaver/libXScrnSaver-9999.ebuild # x11
 x11-libs/libXres/libXres-9999.ebuild # x11
+x11-libs/libXrender/libXrender-9999.ebuild # x11

@@ -359,7 +359,7 @@ sys-apps/util-linux
 # x11-libs/libXp
 # x11-libs/libXpm
 # x11-libs/libXrandr
-# x11-libs/libXrender
+x11-libs/libXrender
 x11-libs/libXres
 x11-libs/libXScrnSaver
 x11-libs/libXt
