@@ -9,4 +9,5 @@ x11-libs/libXxf86dga/libXxf86dga-9999.ebuild # live ebuild from x11 overlay
 x11-libs/libXvMC/libXvMC-9999.ebuild # live ebuild from x11 overlay
 x11-libs/libXv/libXv-9999.ebuild # live ebuild from x11 overlay
 x11-libs/libXtst/libXtst-9999.ebuild # live ebuild from x11 overlay
+x11-libs/libXTrap/libXTrap-9999.ebuild # live ebuild from x11 overlay
 
