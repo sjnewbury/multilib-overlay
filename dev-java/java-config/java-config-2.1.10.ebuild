@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-java/java-config/java-config-2.1.10.ebuild,v 1.4 2010/01/20 02:23:29 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-java/java-config/java-config-2.1.10.ebuild,v 1.8 2010/02/26 19:26:02 arfrever Exp $
 
 EAPI="2"
 NEED_PYTHON="2.4"
@@ -14,7 +14,7 @@ SRC_URI="mirror://gentoo/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ppc64 x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm ia64 ppc ppc64 x86 ~x86-fbsd"
 IUSE=""
 
 DEPEND=""
@@ -44,7 +44,6 @@ multilib-native_src_install_internal() {
 }
 
 pkg_postrm() {
-	distutils_python_version
 	distutils_pkg_postrm
 	fdo-mime_desktop_database_update
 	gnome2_icon_cache_update

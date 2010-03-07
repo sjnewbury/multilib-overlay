@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-java/java-config/java-config-2.1.9-r2.ebuild,v 1.3 2009/12/28 20:49:25 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-java/java-config/java-config-2.1.9-r2.ebuild,v 1.4 2010/02/26 19:26:02 arfrever Exp $
 
 inherit fdo-mime gnome2-utils distutils eutils multilib-native
 
@@ -35,7 +35,6 @@ multilib-native_src_install_internal() {
 }
 
 pkg_postrm() {
-	distutils_python_version
 	distutils_pkg_postrm
 	fdo-mime_desktop_database_update
 	gnome2_icon_cache_update

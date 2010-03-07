@@ -62,10 +62,6 @@ multilib-native_pkg-setup_internal() {
 		ewarn "been additionally removed in Python 3. You should use external, still maintained \"bsddb3\""
 		ewarn "module provided by dev-python/bsddb3 which supports both Python 2 and Python 3."
 	fi
-
-	if ! has_version "=dev-lang/python-3*"; then
-		elog "It is highly recommended to additionally install Python 3, but without configuring Python wrapper to use Python 3."
-	fi
 }
 
 multilib-native_src_prepare_internal() {

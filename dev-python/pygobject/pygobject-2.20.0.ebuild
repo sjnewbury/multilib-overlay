@@ -86,8 +86,8 @@ multilib-native_src_install_internal() {
 	[[ -z ${ED} ]] && local ED="${D}"
 	installation() {
 		gnome2_src_install
-		mv "${D}$(python_get_sitedir)/pygtk.py" "${D}$(python_get_sitedir)/pygtk.py-2.0"
-		mv "${D}$(python_get_sitedir)/pygtk.pth" "${D}$(python_get_sitedir)/pygtk.pth-2.0"
+		mv "${ED}$(python_get_sitedir)/pygtk.py" "${ED}$(python_get_sitedir)/pygtk.py-2.0"
+		mv "${ED}$(python_get_sitedir)/pygtk.pth" "${ED}$(python_get_sitedir)/pygtk.pth-2.0"
 	}
 	python_execute_function -s installation
 

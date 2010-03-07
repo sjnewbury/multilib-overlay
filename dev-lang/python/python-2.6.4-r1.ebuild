@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.4-r1.ebuild,v 1.1 2010/01/26 18:52:04 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.4-r1.ebuild,v 1.7 2010/03/07 12:20:05 ssuominen Exp $
 
 EAPI="2"
 
@@ -20,13 +20,13 @@ SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
 LICENSE="PSF-2.2"
 SLOT="2.6"
 PYTHON_ABI="${SLOT}"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
-IUSE="-berkdb build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite ssl +threads tk +wide-unicode wininst +xml"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ~ppc ~ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
+IUSE="-berkdb build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite +ssl +threads tk +wide-unicode wininst +xml"
 
 # NOTE: dev-python/{elementtree,celementtree,pysqlite,ctypes}
 #       do not conflict with the ones in python proper. - liquidx
 
-RDEPEND=">=app-admin/eselect-python-20090606
+RDEPEND=">=app-admin/eselect-python-20091230
 		>=sys-libs/zlib-1.1.3[lib32?]
 		virtual/libffi[lib32?]
 		virtual/libintl
@@ -61,10 +61,6 @@ multilib-native_pkg-setup_internal() {
 		ewarn "\"bsddb\" module is out-of-date and no longer maintained inside dev-lang/python. It has"
 		ewarn "been additionally removed in Python 3. You should use external, still maintained \"bsddb3\""
 		ewarn "module provided by dev-python/bsddb3 which supports both Python 2 and Python 3."
-	fi
-
-	if ! has_version "=dev-lang/python-3*"; then
-		elog "It is highly recommended to additionally install Python 3, but without configuring Python wrapper to use Python 3."
 	fi
 }
 
@@ -178,9 +174,9 @@ multilib-native_src_configure_internal() {
 		$(use_enable ipv6) \
 		$(use_with threads) \
 		$(use wide-unicode && echo "--enable-unicode=ucs4" || echo "--enable-unicode=ucs2") \
-		--infodir='${prefix}'/share/info \
-		--mandir='${prefix}'/share/man \
-		--with-libc='' \
+		--infodir='${prefix}/share/info' \
+		--mandir='${prefix}/share/man' \
+		--with-libc="" \
 		--with-system-ffi
 }
 
@@ -239,15 +235,15 @@ multilib-native_src_install_internal() {
 
 	# Fix the OPT variable so that it doesn't have any flags listed in it.
 	# Prevents the problem with compiling things with conflicting flags later.
-	sed -e "s:^OPT=.*:OPT=-DNDEBUG:" -i "${D}$(python_get_libdir)/config/Makefile"
+	sed -e "s:^OPT=.*:OPT=\t\t-DNDEBUG:" -i "${D}$(python_get_libdir)/config/Makefile"
 
 	if use build; then
-		rm -fr "${D}$(python_get_libdir)/"{bsddb,email,lib-tk,sqlite3,test}
+		rm -fr "${D}usr/bin/idle${SLOT}" "${D}$(python_get_libdir)/"{bsddb,email,idlelib,lib-tk,sqlite3,test}
 	else
 		use elibc_uclibc && rm -fr "${D}$(python_get_libdir)/"{bsddb/test,test}
 		use berkdb || rm -fr "${D}$(python_get_libdir)/"{bsddb,test/test_bsddb*}
 		use sqlite || rm -fr "${D}$(python_get_libdir)/"{sqlite3,test/test_sqlite*}
-		use tk || rm -fr "${D}$(python_get_libdir)/lib-tk"
+		use tk || rm -fr "${D}usr/bin/idle${SLOT}" "${D}$(python_get_libdir)/"{idlelib,lib-tk}
 	fi
 
 	use threads || rm -fr "${D}$(python_get_libdir)/multiprocessing"
@@ -275,13 +271,13 @@ multilib-native_pkg_preinst_internal() {
 }
 
 eselect_python_update() {
-	local ignored_python_slots_options=
-	[[ "$(eselect python show)" == "python2."* ]] && ignored_python_slots_options="--ignore 3.0 --ignore 3.1 --ignore 3.2"
+	local eselect_python_options=
+	[[ "$(eselect python show)" == "python2."* ]] && eselect_python_options="--python2"
 
 	# Create python2 symlink.
-	eselect python update --ignore 3.0 --ignore 3.1 --ignore 3.2 > /dev/null
+	eselect python update --python2 > /dev/null
 
-	eselect python update ${ignored_python_slots_options}
+	eselect python update ${eselect_python_options}
 }
 
 multilib-native_pkg_postinst_internal() {

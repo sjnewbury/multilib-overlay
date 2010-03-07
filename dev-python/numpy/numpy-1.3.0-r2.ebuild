@@ -1,49 +1,42 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.3.0-r2.ebuild,v 1.2 2009/11/20 20:03:39 bicatali Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.3.0-r2.ebuild,v 1.3 2009/12/28 02:34:00 arfrever Exp $
 
 EAPI="2"
-
-NEED_PYTHON="2.4"
 SUPPORT_PYTHON_ABIS="1"
 
-inherit eutils distutils flag-o-matic toolchain-funcs versionator multilib-native
+inherit distutils eutils flag-o-matic toolchain-funcs versionator multilib-native
 
 NP="${PN}-$(get_version_component_range 1-2)"
 
 DESCRIPTION="Fast array and numerical python library"
+HOMEPAGE="http://numpy.scipy.org/ http://pypi.python.org/pypi/numpy"
 SRC_URI="mirror://sourceforge/numpy/${P}.tar.gz
 	doc? (
 		http://docs.scipy.org/doc/${NP}.x/numpy-html.zip -> ${NP}-html.zip
 		http://docs.scipy.org/doc/${NP}.x/numpy-ref.pdf -> ${NP}-ref.pdf
 		http://docs.scipy.org/doc/${NP}.x/numpy-user.pdf -> ${NP}-user.pdf
 	)"
-HOMEPAGE="http://numpy.scipy.org/"
+
+LICENSE="BSD"
+SLOT="0"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x64-solaris ~x86-solaris"
+IUSE="doc lapack test"
 
 RDEPEND="dev-python/setuptools
 	lapack? ( virtual/cblas virtual/lapack )"
 DEPEND="${RDEPEND}
 	lapack? ( dev-util/pkgconfig )
-	test? ( >=dev-python/nose-0.10 )"
-
-IUSE="doc lapack test"
-SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x64-solaris ~x86-solaris"
-LICENSE="BSD"
-
-RESTRICT_PYTHON_ABIS="3*"
+	test? ( >=dev-python/nose-0.10 )
+	doc? ( app-arch/unzip )"
+RESTRICT_PYTHON_ABIS="3.*"
 
 multilib-native_pkg_setup_internal() {
-	# whatever LDFLAGS set will break linking
-	# see progress in http://projects.scipy.org/scipy/numpy/ticket/573
+	# See progress in http://projects.scipy.org/scipy/numpy/ticket/573
 	# with the subtle difference that we don't want to break Darwin where
 	# -shared is not a valid linker argument
 	if [[ ${CHOST} != *-darwin* ]] ; then
-		if [[ -n "${LDFLAGS}" ]]; then
-			append-ldflags -shared
-		else
-			LDFLAGS="-shared"
-		fi
+		append-ldflags -shared
 	fi
 
 	# only one fortran to link with:

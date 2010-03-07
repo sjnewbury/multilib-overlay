@@ -1,29 +1,28 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pycairo/pycairo-1.8.8.ebuild,v 1.12 2009/10/11 09:37:29 grobian Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pycairo/pycairo-1.8.8.ebuild,v 1.16 2010/02/07 20:55:36 pva Exp $
 
 EAPI="2"
 
 NEED_PYTHON="2.6"
 SUPPORT_PYTHON_ABIS="1"
 
-inherit distutils multilib-native
+inherit eutils distutils multilib-native
 
 DESCRIPTION="Python wrapper for cairo vector graphics library"
-HOMEPAGE="http://cairographics.org/pycairo/"
+HOMEPAGE="http://cairographics.org/pycairo/ http://pypi.python.org/pypi/pycairo"
 SRC_URI="http://cairographics.org/releases/${P}.tar.gz"
 
 LICENSE="|| ( LGPL-2.1 MPL-1.1 )"
 SLOT="0"
-KEYWORDS="alpha amd64 ~arm hppa ~ia64 ~mips ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 IUSE="doc examples svg"
 
 RDEPEND=">=x11-libs/cairo-1.8.8[svg?,lib32?]"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	doc? ( >=dev-python/sphinx-0.6 )"
-
-RESTRICT_PYTHON_ABIS="2.4 2.5 3*"
+RESTRICT_PYTHON_ABIS="2.4 2.5 3.*"
 
 PYTHON_MODNAME="cairo"
 DOCS="AUTHORS NEWS README"
@@ -68,7 +67,7 @@ src_test() {
 }
 
 multilib-native_src_install_internal() {
-	[[ -z ${ED} ]] && local ED=${D}
+	[[ -z "${ED}" ]] && local ED="${D}"
 	PKGCONFIG_DIR="${EPREFIX}/usr/$(get_libdir)/pkgconfig" distutils_src_install
 
 	if use doc; then

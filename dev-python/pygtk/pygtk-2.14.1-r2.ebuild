@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pygtk/pygtk-2.16.0.ebuild,v 1.1 2009/08/29 03:10:28 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pygtk/pygtk-2.14.1-r2.ebuild,v 1.2 2010/01/11 16:59:58 arfrever Exp $
 
 EAPI="2"
 SUPPORT_PYTHON_ABIS="1"
@@ -37,7 +37,18 @@ multilib-native_src_prepare_internal() {
 	# Fix declaration of codegen in .pc
 	epatch "${FILESDIR}/${PN}-2.13.0-fix-codegen-location.patch"
 
-	# Disable pyc compiling
+	# Fix test failurs due to ltihooks
+	# gentoo bug #268315, upstream bug #565593
+	epatch "${FILESDIR}/${P}-ltihooks.patch"
+
+	# Switch to numpy, bug #185692
+	epatch "${FILESDIR}/${P}-numpy.patch"
+	epatch "${FILESDIR}/${P}-fix-numpy-warning.patch"
+
+	# Fix bug with GtkToggleButton and gtk+-2.16, bug #275449
+	epatch "${FILESDIR}/${P}-gtktoggle.patch"
+
+	# disable pyc compiling
 	mv "${S}"/py-compile "${S}"/py-compile.orig
 	ln -s $(type -P true) "${S}"/py-compile
 
@@ -52,6 +63,10 @@ multilib-native_src_configure_internal() {
 		econf $(use_enable doc docs) --enable-thread
 	}
 	python_execute_function -s configuration
+}
+
+multilib-native_src_compile_internal() {
+	python_execute_function -d -s
 }
 
 multilib-native_src_install_internal() {
@@ -81,7 +96,6 @@ src_test() {
 }
 
 multilib-native_pkg_postinst_internal() {
-	python_need_rebuild
 	python_mod_optimize gtk-2.0
 
 	create_symlinks() {
