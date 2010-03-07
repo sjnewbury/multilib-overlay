@@ -574,14 +574,14 @@ multilib-native_pkg_postrm_internal() {
 	multilib-native_check_inherited_funcs pkg_postrm
 }
 
-# @FUNCTION: _check_build_dir
+# @FUNCTION: is_crosscompile
 # @USAGE:
 # @DESCRIPTION:
 # True if we are cross-compiling.
-is_crosscompile() {
-This is identical to the version in
+# This is identical to the version in
 # toolchain.eclass, but inheriting that eclass from here breaks many packages
 # so just define locally.
+is_crosscompile() {
 	[[ ${CHOST} != ${CTARGET} ]]
 }
 
