@@ -17,7 +17,7 @@ IUSE="hardened"
 
 DEPEND=""
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 
@@ -33,7 +33,7 @@ src_unpack() {
 
 	# Fix inline with gcc-4.3
 	epatch "${FILESDIR}"/${P}-gcc43-inline.patch
-
+	
 	use ppc64 && use hardened && replace-flags -O[2-3] -O1
 	append-ldflags $(dlopen_lib)
 

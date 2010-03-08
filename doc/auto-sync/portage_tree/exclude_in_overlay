@@ -32,3 +32,5 @@ x11-libs/libxcb/libxcb-9999.ebuild # x11
 x11-libs/libXaw/libXaw-9999.ebuild # x11
 x11-libs/libXau/libXau-9999.ebuild # x11
 x11-libs/libX11/libX11-9999.ebuild # x11
+dev-libs/glib/glib-2.23.1.ebuild 
+dev-libs/glib/files/glib-1.2.10-gcc43-inline.patch # patch of multilib overlay for glib-1.2.10-r5

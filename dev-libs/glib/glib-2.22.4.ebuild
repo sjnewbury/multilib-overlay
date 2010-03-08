@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.22.4.ebuild,v 1.1 2010/01/28 23:54:51 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.22.4.ebuild,v 1.3 2010/03/06 16:14:28 phajdan.jr Exp $
 
 EAPI="2"
 
@@ -11,18 +11,17 @@ HOMEPAGE="http://www.gtk.org/"
 
 LICENSE="LGPL-2"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
-
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="debug doc fam hardened selinux xattr"
 
 RDEPEND="virtual/libiconv
 	xattr? ( sys-apps/attr[lib32?] )
-	fam? ( virtual/fam[lib32?] )"
+	fam? ( virtual/fam )"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.16[lib32?]
 	>=sys-devel/gettext-0.11[lib32?]
 	doc? (
-		>=dev-libs/libxslt-1.0
+		>=dev-libs/libxslt-1.0[lib32?]
 		>=dev-util/gtk-doc-1.11
 		~app-text/docbook-xml-dtd-4.1.2 )"
 
@@ -50,7 +49,7 @@ multilib-native_src_prepare_internal() {
 
 	# Do not try to remove files on live filesystem, bug #XXX ?
 	sed 's:^\(.*"/desktop-app-info/delete".*\):/*\1*/:' \
-	-i "${S}"/gio/tests/desktop-app-info.c || die "sed failed"
+		-i "${S}"/gio/tests/desktop-app-info.c || die "sed failed"
 
 	[[ ${CHOST} == *-freebsd* ]] && elibtoolize
 }

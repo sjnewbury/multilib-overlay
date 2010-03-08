@@ -16,12 +16,12 @@ IUSE="debug doc fam hardened selinux xattr"
 
 RDEPEND="virtual/libiconv
 	xattr? ( sys-apps/attr[lib32?] )
-	fam? ( virtual/fam[lib32?] )"
+	fam? ( virtual/fam )"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.16[lib32?]
 	>=sys-devel/gettext-0.11[lib32?]
 	doc? (
-		>=dev-libs/libxslt-1.0
+		>=dev-libs/libxslt-1.0[lib32?]
 		>=dev-util/gtk-doc-1.11
 		~app-text/docbook-xml-dtd-4.1.2 )"
 

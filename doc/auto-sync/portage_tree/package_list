@@ -59,7 +59,7 @@
 # dev-libs/foo
 # dev-libs/fribidi
 # dev-libs/gir-repository
-# dev-libs/glib
+dev-libs/glib
 # dev-libs/gobject-introspection
 # dev-libs/icu
 # dev-libs/iniparser
