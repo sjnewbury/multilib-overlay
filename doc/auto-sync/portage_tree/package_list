@@ -100,7 +100,7 @@
 # dev-libs/poppler-glib
 # dev-libs/popt
 # dev-libs/pth
-# dev-python/dbus-python
+dev-python/dbus-python
 # dev-python/gnome-vfs-python
 # dev-python/libbonobo-python
 # dev-python/libgnomecanvas-python
