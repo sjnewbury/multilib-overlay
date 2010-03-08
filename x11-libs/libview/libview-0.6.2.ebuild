@@ -22,8 +22,8 @@ DEPEND="${RDEPEND}
 
 G2CONF="--enable-deprecated"
 
-src_unpack() {
-	gnome2_src_unpack
+multilib-native_src_prepare_internal() {
+	gnome2_src_prepare
 
 	# Fix the pkgconfig file
 	epatch "${FILESDIR}"/${PN}-0.5.6-pcfix.patch

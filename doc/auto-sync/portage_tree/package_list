@@ -339,7 +339,7 @@ sys-apps/util-linux
 # x11-libs/libnotify
 # x11-libs/libsexy
 # x11-libs/libSM
-# x11-libs/libview
+x11-libs/libview
 x11-libs/libwnck
 x11-libs/libX11
 x11-libs/libXau
