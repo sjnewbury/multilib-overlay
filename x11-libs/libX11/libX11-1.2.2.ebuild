@@ -13,7 +13,7 @@ DESCRIPTION="X.Org X11 library"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="ipv6 +xcb"
 
-RDEPEND=">=x11-libs/xtrans-1.2.3
+RDEPEND=">=x11-libs/xtrans-1.2.3[lib32?]
 	x11-proto/kbproto
 	>=x11-proto/xproto-7.0.15
 	xcb? ( >=x11-libs/libxcb-1.2[lib32?] )
@@ -36,7 +36,7 @@ multilib-native_pkg_setup_internal() {
 	# $(use_enable nls xlocale)
 }
 
-multilib-native_pkg_compile_internal() {
+multilib-native_src_compile_internal() {
 	x-modular_src_configure
 	# [Cross-Compile Love] Disable {C,LD}FLAGS and redefine CC= for 'makekeys'
 	( filter-flags -m* ; cd src/util && make CC=$(tc-getBUILD_CC) CFLAGS="${CFLAGS}" LDFLAGS="" clean all)

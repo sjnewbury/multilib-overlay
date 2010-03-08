@@ -21,7 +21,7 @@ RDEPEND=">=x11-libs/xtrans-1.2.3[lib32?]
 	)"
 DEPEND="${RDEPEND}
 	doc? (
-		app-text/ghostscript-gpl
+		app-text/ghostscript-gpl[lib32?]
 		sys-apps/groff
 	)
 	x11-proto/xf86bigfontproto
@@ -39,7 +39,7 @@ multilib-native_pkg_setup_internal() {
 	# $(use_enable nls xlocale)
 }
 
-multilib-native_pkg_compile_internal() {
+multilib-native_src_compile_internal() {
 	x-modular_src_configure
 	# [Cross-Compile Love] Disable {C,LD}FLAGS and redefine CC= for 'makekeys'
 	( filter-flags -m* ; cd src/util && make CC=$(tc-getBUILD_CC) CFLAGS="${CFLAGS}" LDFLAGS="" clean all)

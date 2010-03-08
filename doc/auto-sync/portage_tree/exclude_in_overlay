@@ -31,3 +31,4 @@ x11-libs/libXcomposite/libXcomposite-9999.ebuild # x11
 x11-libs/libxcb/libxcb-9999.ebuild # x11
 x11-libs/libXaw/libXaw-9999.ebuild # x11
 x11-libs/libXau/libXau-9999.ebuild # x11
+x11-libs/libX11/libX11-9999.ebuild # x11
