@@ -44,3 +44,4 @@ net-libs/libsoup-gnome/libsoup-gnome-2.29.3.ebuild
 net-libs/libsoup-gnome/libsoup-gnome-2.29.5.ebuild
 net-libs/libsoup-gnome/libsoup-gnome-2.29.6.ebuild
 net-libs/libsoup-gnome/files/libsoup-gnome-system-lib.patch # patch from libsoup-gnome-2.29
+x11-libs/libICE/libICE-9999.ebuild # x11
