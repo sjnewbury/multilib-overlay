@@ -2,3 +2,4 @@
 x11-libs/libXxf86dga/libXxf86dga-1.0.1.ebuild
 x11-libs/libview/libview-0.5.6-r1.ebuild
 x11-libs/libview/libview-0.6.1.ebuild
+x11-libs/libdrm/libdrm-2.4.18_pre20100211.ebuild

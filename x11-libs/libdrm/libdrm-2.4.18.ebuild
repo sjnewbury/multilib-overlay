@@ -20,15 +20,16 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86
 IUSE=""
 RESTRICT="test" # see bug #236845
 
-RDEPEND="dev-libs/libpthread-stubs"
+RDEPEND="dev-libs/libpthread-stubs[lib32?]
+	sys-fs/udev[lib32?]"
 DEPEND="${RDEPEND}"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	# Fails to build on ARM if dev-libs/libatomic_ops is installed, bug 297630
 	CONFIGURE_OPTIONS="--enable-udev --enable-nouveau-experimental-api $(use_enable !arm intel) $(use_enable !arm radeon)"
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	x-modular_pkg_postinst
 
 	ewarn "libdrm's ABI may have changed without change in library name"
