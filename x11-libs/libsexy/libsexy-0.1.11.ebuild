@@ -21,7 +21,7 @@ RDEPEND=">=dev-libs/glib-2.6[lib32?]
 		 >=x11-libs/pango-1.4.0[lib32?]
 		 >=app-text/iso-codes-0.49"
 DEPEND="${RDEPEND}
-		>=dev-lang/perl-5
+		>=dev-lang/perl-5[lib32?]
 		>=dev-util/pkgconfig-0.19[lib32?]
 		doc? ( >=dev-util/gtk-doc-1.4 )"
 
