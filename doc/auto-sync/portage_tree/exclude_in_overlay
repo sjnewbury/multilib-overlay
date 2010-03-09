@@ -39,3 +39,4 @@ net-libs/libsoup/libsoup-2.29.5-r1.ebuild
 net-libs/libsoup/libsoup-2.29.6.ebuild
 net-libs/libsoup/files/libsoup-fix-build-without-gnome-with-doc.patch # patch from libsoup-2.29
 net-libs/libsoup/files/libsoup-fix-gzip-decode-hang.patch # patch from libsoup-2.29.5-r1
+x11-libs/libSM/libSM-9999.ebuild # x11
