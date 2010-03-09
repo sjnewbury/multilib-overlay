@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup-gnome/libsoup-gnome-2.26.3-r1.ebuild,v 1.4 2009/09/28 18:31:54 klausman Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup-gnome/libsoup-gnome-2.26.3-r1.ebuild,v 1.12 2010/01/16 16:59:13 armin76 Exp $
 
 EAPI="2"
 
@@ -15,11 +15,12 @@ SRC_URI="mirror://gnome/sources/${MY_PN}/${MY_P}.tar.bz2"
 
 LICENSE="LGPL-2"
 SLOT="2.4"
-KEYWORDS="alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd ~amd64-linux ~x86-solaris"
 # Do NOT build with --disable-debug/--enable-debug=no - gnome2.eclass takes care of that
 IUSE="debug doc"
+
 RDEPEND="!<net-libs/libsoup-2.26.3-r3[gnome,lib32?]
-	~net-libs/libsoup-${PV}
+	~net-libs/libsoup-${PV}[lib32?]
 	net-libs/libproxy[lib32?]
 	>=gnome-base/gconf-2[lib32?]
 	dev-db/sqlite:3[lib32?]"

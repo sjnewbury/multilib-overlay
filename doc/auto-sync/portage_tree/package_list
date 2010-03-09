@@ -252,7 +252,7 @@ media-sound/phonon
 # net-libs/libasyncns
 # net-libs/libproxy
 net-libs/libsoup
-# net-libs/libsoup-gnome
+net-libs/libsoup-gnome
 # net-libs/libssh2
 # net-libs/openslp
 # net-libs/webkit-gtk

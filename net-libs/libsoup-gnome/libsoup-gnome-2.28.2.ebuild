@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup-gnome/libsoup-gnome-2.28.2.ebuild,v 1.1 2009/12/17 22:55:30 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup-gnome/libsoup-gnome-2.28.2.ebuild,v 1.4 2010/03/06 21:19:04 phajdan.jr Exp $
 
 EAPI="2"
 
@@ -15,7 +15,7 @@ SRC_URI="${SRC_URI//-gnome}"
 
 LICENSE="LGPL-2"
 SLOT="2.4"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd ~amd64-linux ~x86-solaris"
 # Do NOT build with --disable-debug/--enable-debug=no - gnome2.eclass takes care of that
 IUSE="debug doc"
 
