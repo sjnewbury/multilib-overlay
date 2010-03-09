@@ -26,7 +26,7 @@ DEPEND="${RDEPEND}
 #		www-servers/apache
 #		dev-lang/php
 #		net-misc/curl )
-PDEPEND="gnome? ( ~net-libs/libsoup-gnome-${PV}[lib32?] )"
+PDEPEND="gnome? ( ~net-libs/${PN}-gnome-${PV}[lib32?] )"
 
 DOCS="AUTHORS NEWS README"
 
