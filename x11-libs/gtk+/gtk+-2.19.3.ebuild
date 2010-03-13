@@ -158,6 +158,8 @@ multilib-native_src_install_internal() {
 	use aqua && for i in gtk+-2.0.pc gtk+-quartz-2.0.pc gtk+-unix-print-2.0.pc; do
 		sed -i -e "s:Libs\: :Libs\: -framework Carbon :" "${D%/}${EPREFIX}"/usr/lib/pkgconfig/$i || die "sed failed"
 	done
+
+	prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
 }
 
 multilib-native_pkg_postinst_internal() {

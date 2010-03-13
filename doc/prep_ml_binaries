@@ -35,7 +35,7 @@ net-libs/xulrunner prep_ml_binaries /usr/bin/xulrunner-config
 net-misc/curl prep_ml_binaries /usr/bin/curl-config
 net-print/cups prep_ml_binaries /usr/bin/cups-config
 sys-libs/ncurses prep_ml_binaries /usr/bin/ncurses5-config /usr/bin/ncursesw5-config
-x11-libs/gtk+ prep_ml_binaries /usr/bin/gtk-config
+x11-libs/gtk+ prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
 x11-libs/libXft prep_ml_binaries /usr/bin/xft-config
 x11-libs/pango prep_ml_binaries /usr/bin/pango-querymodules
 x11-libs/qt-core prep_ml_binaries /usr/bin/qmake /usr/bin/moc /usr/bin/rcc /usr/bin/uic

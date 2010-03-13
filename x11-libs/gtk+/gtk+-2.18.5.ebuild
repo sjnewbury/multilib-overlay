@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.18.5.ebuild,v 1.3 2010/01/09 21:16:33 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.18.5.ebuild,v 1.4 2010/01/19 18:52:39 ssuominen Exp $
 
 EAPI="2"
 
@@ -40,7 +40,7 @@ RDEPEND="!aqua? (
 	x11-misc/shared-mime-info
 	>=media-libs/libpng-1.2.1[lib32?]
 	cups? ( net-print/cups[lib32?] )
-	jpeg? ( >=media-libs/jpeg-6b-r2[lib32?] )
+	jpeg? ( >=media-libs/jpeg-6b-r2:0[lib32?] )
 	jpeg2k? ( media-libs/jasper[lib32?] )
 	tiff? ( >=media-libs/tiff-3.5.7[lib32?] )
 	!<gnome-base/gail-1000"
@@ -68,7 +68,7 @@ set_gtk2_confdir() {
 	GTK2_CONFDIR=${GTK2_CONFDIR:=/etc/gtk-2.0}
 }
 
-multilib-native_pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	use prefix || EPREFIX=
 }
 
@@ -116,10 +116,6 @@ multilib-native_src_configure_internal() {
 	# Passing --disable-debug is not recommended for production use
 	use debug && myconf="${myconf} --enable-debug=yes"
 
-	if use lib32 && ! is_final_abi; then
-			myconf="${myconf} --program-suffix=-${ABI}"
-	fi
-
 	# need libdir here to avoid a double slash in a path that libtool doesn't
 	# grok so well during install (// between $EPREFIX and usr ...)
 	econf --libdir="${EPREFIX}/usr/$(get_libdir)" ${myconf}
@@ -156,19 +152,16 @@ multilib-native_src_install_internal() {
 	use aqua && for i in gtk+-2.0.pc gtk+-quartz-2.0.pc gtk+-unix-print-2.0.pc; do
 		sed -i -e "s:Libs\: :Libs\: -framework Carbon :" "${D%/}${EPREFIX}"/usr/lib/pkgconfig/$i || die "sed failed"
 	done
+
+	prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
 }
 
 multilib-native_pkg_postinst_internal() {
 	set_gtk2_confdir
 
 	if [ -d "${ROOT%/}${EPREFIX}${GTK2_CONFDIR}" ]; then
-		if use lib32 && ! is_final_abi; then
-			gtk-query-immodules-2.0-${ABI}  > "${ROOT%/}${EPREFIX}${GTK2_CONFDIR}/gtk.immodules"
-			gdk-pixbuf-query-loaders-${ABI} > "${ROOT%/}${EPREFIX}${GTK2_CONFDIR}/gdk-pixbuf.loaders"
-		else
-			gtk-query-immodules-2.0  > "${ROOT%/}${EPREFIX}${GTK2_CONFDIR}/gtk.immodules"
-			gdk-pixbuf-query-loaders > "${ROOT%/}${EPREFIX}${GTK2_CONFDIR}/gdk-pixbuf.loaders"
-		fi
+		gtk-query-immodules-2.0  > "${ROOT%/}${EPREFIX}${GTK2_CONFDIR}/gtk.immodules"
+		gdk-pixbuf-query-loaders > "${ROOT%/}${EPREFIX}${GTK2_CONFDIR}/gdk-pixbuf.loaders"
 	else
 		ewarn "The destination path ${ROOT%/}${EPREFIX}${GTK2_CONFDIR} doesn't exist;"
 		ewarn "to complete the installation of GTK+, please create the"

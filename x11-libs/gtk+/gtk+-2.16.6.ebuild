@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.16.6.ebuild,v 1.2 2009/09/19 19:15:46 tester Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.16.6.ebuild,v 1.10 2009/10/26 18:12:02 armin76 Exp $
 
 EAPI="2"
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gtk.org/"
 
 LICENSE="LGPL-2"
 SLOT="2"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="cups debug doc jpeg jpeg2k tiff test vim-syntax xinerama"
 
 # FIXME: configure says >=xrandr-1.2.99 but remi tells me it's broken
@@ -47,11 +47,11 @@ DEPEND="${RDEPEND}
 	xinerama? ( x11-proto/xineramaproto )
 	>=dev-util/gtk-doc-am-1.11
 	doc? (
-			>=dev-util/gtk-doc-1.11
-			~app-text/docbook-xml-dtd-4.1.2 )
+		>=dev-util/gtk-doc-1.11
+		~app-text/docbook-xml-dtd-4.1.2 )
 	test? (
-			media-fonts/font-misc-misc
-			media-fonts/font-cursor-misc )"
+		media-fonts/font-misc-misc
+		media-fonts/font-cursor-misc )"
 PDEPEND="vim-syntax? ( app-vim/gtk-syntax )"
 
 set_gtk2_confdir() {
@@ -71,6 +71,9 @@ multilib-native_src_prepare_internal() {
 	# Fix blured images when using jpeg7 in gdk-pixbuf, upstream
 	# bug #588740, gentoo bug #282744.
 	epatch "${FILESDIR}/${PN}-2.16.5-jpeg-backward-compatibility.patch"
+
+	# Fix pltcheck.sh test, bug 285698
+	epatch "${FILESDIR}/${P}-fix-pltcheck-test.patch"
 
 	# -O3 and company cause random crashes in applications. Bug #133469
 	replace-flags -O3 -O2
@@ -102,10 +105,6 @@ multilib-native_src_configure_internal() {
 	# Passing --disable-debug is not recommended for production use
 	use debug && myconf="${myconf} --enable-debug=yes"
 
-	if use lib32 && ! is_final_abi; then
-			myconf="${myconf} --program-suffix=-${ABI}"
-	fi
-
 	econf ${myconf}
 }
 
@@ -133,19 +132,16 @@ multilib-native_src_install_internal() {
 	# This has to be removed, because it's multilib specific; generated in
 	# postinst
 	rm "${D}/etc/gtk-2.0/gtk.immodules"
+
+	prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
 }
 
 multilib-native_pkg_postinst_internal() {
 	set_gtk2_confdir
 
 	if [ -d "${ROOT}${GTK2_CONFDIR}" ]; then
-		if use lib32 && ! is_final_abi; then
-			gtk-query-immodules-2.0-${ABI} > "${ROOT}${GTK2_CONFDIR}/gtk.immodules"
-			gdk-pixbuf-query-loaders-${ABI} > "${ROOT}${GTK2_CONFDIR}/gdk-pixbuf.loaders"
-		else
-			gtk-query-immodules-2.0  > "${ROOT}${GTK2_CONFDIR}/gtk.immodules"
-			gdk-pixbuf-query-loaders > "${ROOT}${GTK2_CONFDIR}/gdk-pixbuf.loaders"
-		fi
+		gtk-query-immodules-2.0  > "${ROOT}${GTK2_CONFDIR}/gtk.immodules"
+		gdk-pixbuf-query-loaders > "${ROOT}${GTK2_CONFDIR}/gdk-pixbuf.loaders"
 	else
 		ewarn "The destination path ${ROOT}${GTK2_CONFDIR} doesn't exist;"
 		ewarn "to complete the installation of GTK+, please create the"

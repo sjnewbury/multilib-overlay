@@ -1,8 +1,9 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.14.7-r2.ebuild,v 1.7 2009/03/29 14:36:23 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.14.7-r2.ebuild,v 1.8 2009/04/27 13:08:12 jer Exp $
 
 EAPI="2"
+
 WANT_AUTOMAKE="1.7"
 
 inherit gnome.org flag-o-matic eutils libtool virtualx multilib-native
@@ -12,7 +13,7 @@ HOMEPAGE="http://www.gtk.org/"
 
 LICENSE="LGPL-2"
 SLOT="2"
-KEYWORDS="alpha amd64 arm ~hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="cups debug doc jpeg jpeg2k tiff vim-syntax xinerama"
 
 RDEPEND="x11-libs/libXrender[lib32?]
@@ -33,7 +34,6 @@ RDEPEND="x11-libs/libXrender[lib32?]
 	media-libs/fontconfig[lib32?]
 	x11-misc/shared-mime-info
 	>=media-libs/libpng-1.2.1[lib32?]
-	dev-libs/expat[lib32?]
 	cups? ( net-print/cups[lib32?] )
 	jpeg? ( >=media-libs/jpeg-6b-r2[lib32?] )
 	jpeg2k? ( media-libs/jasper[lib32?] )
@@ -59,10 +59,7 @@ set_gtk2_confdir() {
 	GTK2_CONFDIR=${GTK2_CONFDIR:=/etc/gtk-2.0}
 }
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	# use an arch-specific config directory so that 32bit and 64bit versions
 	# dont clash on multilib systems
 	has_multilib_profile && epatch "${FILESDIR}/${PN}-2.8.0-multilib.patch"
@@ -106,10 +103,6 @@ multilib-native_src_configure_internal() {
 	# Passing --disable-debug is not recommended for production use
 	use debug && myconf="${myconf} --enable-debug=yes"
 
-	if use lib32 && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
-		myconf="${myconf} --program-suffix=-32"
-	fi
-	
 	econf ${myconf} || die "configure failed"
 }
 
@@ -137,19 +130,16 @@ multilib-native_src_install_internal() {
 	# This has to be removed, because it's multilib specific; generated in
 	# postinst
 	rm "${D}/etc/gtk-2.0/gtk.immodules"
+
+	prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
 }
 
 multilib-native_pkg_postinst_internal() {
 	set_gtk2_confdir
 
 	if [ -d "${ROOT}${GTK2_CONFDIR}" ]; then
-		if use lib32 && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
-			gtk-query-immodules-2.0-32 > "${ROOT}${GTK2_CONFDIR}/gtk.immodules"
-			gdk-pixbuf-query-loaders-32 > "${ROOT}${GTK2_CONFDIR}/gdk-pixbuf.loaders"
-		else
-			gtk-query-immodules-2.0 > "${ROOT}${GTK2_CONFDIR}/gtk.immodules"
-			gdk-pixbuf-query-loaders > "${ROOT}${GTK2_CONFDIR}/gdk-pixbuf.loaders"
-		fi
+		gtk-query-immodules-2.0  > "${ROOT}${GTK2_CONFDIR}/gtk.immodules"
+		gdk-pixbuf-query-loaders > "${ROOT}${GTK2_CONFDIR}/gdk-pixbuf.loaders"
 	else
 		ewarn "The destination path ${ROOT}${GTK2_CONFDIR} doesn't exist;"
 		ewarn "to complete the installation of GTK+, please create the"

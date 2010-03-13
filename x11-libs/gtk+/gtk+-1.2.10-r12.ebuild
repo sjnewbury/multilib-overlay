@@ -30,7 +30,6 @@ DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext[lib32?] dev-util/intltool )"
 
 multilib-native_src_prepare_internal() {
-	cd "${S}"
 	epatch "${FILESDIR}"/${P}-m4.patch
 	epatch "${FILESDIR}"/${P}-automake.patch
 	epatch "${FILESDIR}"/${P}-cleanup.patch
@@ -59,6 +58,10 @@ multilib-native_src_configure_internal() {
 		${myconf} || die
 }
 
+multilib-native_src_compile_internal() {
+	emake CC="$(tc-getCC)" || die
+}
+
 multilib-native_src_install_internal() {
 	make install DESTDIR="${D}" || die
 
@@ -73,10 +76,10 @@ multilib-native_src_install_internal() {
 	insinto /usr/share/themes/Gentoo/gtk
 	doins "${FILESDIR}"/gtkrc
 
-	prep_ml_binaries /usr/bin/gtk-config 
+	prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	if [[ -e /etc/X11/gtk/gtkrc ]] ; then
 		ewarn "Older versions added /etc/X11/gtk/gtkrc which changed settings for"
 		ewarn "all themes it seems.  Please remove it manually as it will not due"

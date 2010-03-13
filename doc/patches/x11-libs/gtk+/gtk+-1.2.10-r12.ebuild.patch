@@ -1,0 +1,32 @@
+--- /usr/portage/x11-libs/gtk+/gtk+-1.2.10-r12.ebuild	2009-04-12 10:07:53.000000000 +0200
++++ ./x11-libs/gtk+/gtk+-1.2.10-r12.ebuild	2010-03-10 00:58:31.000000000 +0100
+@@ -27,9 +27,7 @@
+ 	x11-proto/xextproto
+ 	nls? ( sys-devel/gettext dev-util/intltool )"
+ 
+-src_unpack() {
+-	unpack ${P}.tar.gz
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/${P}-m4.patch
+ 	epatch "${FILESDIR}"/${P}-automake.patch
+ 	epatch "${FILESDIR}"/${P}-cleanup.patch
+@@ -40,7 +38,7 @@
+ 	eautoreconf
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	local myconf=
+ 	use nls || myconf="${myconf} --disable-nls"
+ 	strip-linguas ${MY_AVAILABLE_LINGUAS}
+@@ -56,7 +54,9 @@
+ 		--with-xinput=xfree \
+ 		--with-x \
+ 		${myconf} || die
++}
+ 
++src_compile() {
+ 	emake CC="$(tc-getCC)" || die
+ }
+ 

@@ -1,8 +1,6 @@
 #glib-2* do not have *-config
 glib-2*
 
-gtk+-2* #gkt+-2* too
-
 libtasn1-2.*
 
 #removed since gnutls 2.8
