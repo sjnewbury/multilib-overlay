@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-149.ebuild,v 1.1 2009/12/05 16:34:54 zzam Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-149.ebuild,v 1.7 2010/03/07 22:49:13 maekke Exp $
 
 EAPI="2"
 
@@ -21,7 +21,7 @@ HOMEPAGE="http://www.kernel.org/pub/linux/utils/kernel/hotplug/udev.html"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="-alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 -sh ~sparc ~x86"
+KEYWORDS="-alpha amd64 arm hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 -sh ~sparc x86"
 IUSE="selinux +devfs-compat -extras test introspection"
 
 COMMON_DEPEND="selinux? ( sys-libs/libselinux[lib32?] )
@@ -33,7 +33,7 @@ COMMON_DEPEND="selinux? ( sys-libs/libselinux[lib32?] )
 		dev-libs/glib:2[lib32?]
 	)
 	>=sys-apps/util-linux-2.16[lib32?]
-	>=sys-libs/glibc-2.7
+	>=sys-libs/glibc-2.9
 	introspection? ( >=dev-libs/gobject-introspection-0.6.5[lib32?] )"
 
 DEPEND="${COMMON_DEPEND}
@@ -304,7 +304,7 @@ multilib-native_src_install_internal() {
 	cd "${S}"
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	# moving old files to support newer modprobe, 12 May 2009
 	local f dir=${ROOT}/etc/modprobe.d/
 	for f in pnp-aliases blacklist; do
@@ -461,7 +461,7 @@ postinst_init_scripts() {
 	fi
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	fix_old_persistent_net_rules
 
 	restart_udevd
@@ -549,7 +549,7 @@ pkg_postinst() {
 
 	if use devfs-compat; then
 		ewarn
-		ewarn "You have devfs-compat use flag enabled."
+		ewarn "devfs-compat use flag is enabled (by default)."
 		ewarn "This enables devfs compatible device names."
 		ewarn "If you use /dev/md/*, /dev/loop/* or /dev/rd/*,"
 		ewarn "then please migrate over to using the device names"

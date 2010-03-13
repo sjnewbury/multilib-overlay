@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-151-r1.ebuild,v 1.1 2010/02/01 20:53:59 zzam Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-151-r1.ebuild,v 1.2 2010/02/07 20:32:51 zzam Exp $
 
 EAPI="2"
 
@@ -295,7 +295,7 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	# moving old files to support newer modprobe, 12 May 2009
 	local f dir=${ROOT}/etc/modprobe.d/
 	for f in pnp-aliases blacklist; do
@@ -452,7 +452,7 @@ postinst_init_scripts() {
 	fi
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	fix_old_persistent_net_rules
 
 	restart_udevd
@@ -540,7 +540,7 @@ pkg_postinst() {
 
 	if use devfs-compat; then
 		ewarn
-		ewarn "devfs-compat use flag is enabled."
+		ewarn "devfs-compat use flag is enabled (by default)."
 		ewarn "This enables devfs compatible device names."
 		ewarn "If you use /dev/md/*, /dev/loop/* or /dev/rd/*,"
 		ewarn "then please migrate over to using the device names"
@@ -551,7 +551,7 @@ pkg_postinst() {
 
 	if use old-hd-rules; then
 		ewarn
-		ewarn "old-hd-rules use flag is enabled."
+		ewarn "old-hd-rules use flag is enabled (by default)."
 		ewarn "This adds the removed rules for /dev/hd* devices"
 		ewarn "Please migrate to the new libata."
 		ewarn "These rules will be removed in the future"
