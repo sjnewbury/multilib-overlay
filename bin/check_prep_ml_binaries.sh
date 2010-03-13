@@ -1,13 +1,11 @@
 #!/bin/bash
 
-DEBUG=""
-
 check_prep_ml ()
 {
 	EBUILD="$2"
 	PACKAGE="$1"
-	EBUILD_PREP_ML="$(grep prep_ml_binaries ${EBUILD} | tr -d "\t")"
-	PREP_ML="$(grep ${PACKAGE} doc/prep_ml_binaries | cut -d " " -f 2-)"
+	EBUILD_PREP_ML="$(sed "s/#.*$//" ${EBUILD} | grep prep_ml_binaries | tr -d "\t")"
+	PREP_ML="$(sed "s/#.*$//" doc/prep_ml_binaries | grep ${PACKAGE} | cut -d " " -f 2-)"
 	[[ -n ${DEBUG} ]] && echo "EBUILD:${EBUILD}"
 	[[ -n ${DEBUG} ]] && echo "EBUILD_PREP_ML:${EBUILD_PREP_ML}"
 	[[ -n ${DEBUG} ]] && echo "PREP_ML:${PREP_ML}"
