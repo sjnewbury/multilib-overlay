@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libmikmod/libmikmod-3.1.12.ebuild,v 1.1 2010/03/06 19:07:30 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libmikmod/libmikmod-3.1.12.ebuild,v 1.2 2010/03/12 12:23:24 ssuominen Exp $
 
 # this ebuild is only for the libmikmod.so.2 SONAME for ABI compat
 
@@ -44,4 +44,8 @@ multilib-native_src_install_internal() {
 	newexe ${PN}/.libs/${PN}.so.2.0.4 ${PN}.so.2 || die
 
 	prep_ml_binaries /usr/bin/libmikmod-config
+}
+
+multilib-native_pkg_postinst_internal() {
+	use oss || ewarn "No audio output will be available because of USE=\"-oss\"."
 }
