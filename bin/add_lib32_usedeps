@@ -120,8 +120,8 @@ debug "PACKAGE: \"${PACKAGE}\""
 REGEXP="\(${BEGIN}\)\(${PREFIX}\)\(${PACKAGE}\)\(${VERSION}\)\(${SLOT}\)\(${USEDEP}\)\(${END}\)"
 
 sed -i "
-/DEPEND=\".*\"/ b process_line
-/DEPEND=\"/,/\"/ { 
+/${DEPEND_REG_EXP}=\".*\"/ b process_line
+/${DEPEND_REG_EXP}=\"/,/\"/ { 
 	:process_line
 	s@${REGEXP}@&[lib32?]@g
 	#move the \" to the end of the line
