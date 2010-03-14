@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/tdb/tdb-1.1.5-r1.ebuild,v 1.1 2009/10/23 16:55:31 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/tdb/tdb-1.1.5-r1.ebuild,v 1.6 2009/12/06 16:57:49 flameeyes Exp $
 
 EAPI="2"
 
@@ -12,10 +12,9 @@ SRC_URI="http://samba.org/ftp/tdb/${P}.tar.gz"
 LICENSE="GPL-3"
 IUSE="python tools tdbtest"
 SLOT="0"
-KEYWORDS="~amd64 ~hppa ~ppc64 ~x86"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 
-DEPEND="
-	!net-fs/samba-libs[tdb]
+DEPEND="!<net-fs/samba-3.3
 	!<net-fs/samba-libs-3.4
 	"
 RDEPEND="${DEPEND}"
