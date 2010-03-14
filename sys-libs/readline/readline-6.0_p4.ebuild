@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/readline/readline-6.0_p4.ebuild,v 1.10 2010/01/06 22:31:08 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/readline/readline-6.0_p4.ebuild,v 1.12 2010/03/12 18:14:16 ssuominen Exp $
 
 EAPI="2"
 
@@ -31,9 +31,9 @@ DESCRIPTION="Another cute console display library"
 HOMEPAGE="http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html"
 SRC_URI="mirror://gnu/${PN}/${MY_P}.tar.gz $(patches)"
 
-LICENSE="GPL-2"
+LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE=""
 
 # We must be certain that we have a bash that is linked
@@ -87,13 +87,11 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_compile_internal() {
-	append-cppflags -D_GNU_SOURCE
 	emake || die
 
 	if ! tc-is-cross-compiler ; then
 		# code is full of AC_TRY_RUN()
 		cd examples/rlfe
-		append-ldflags -L.
 		emake || die
 	fi
 }
@@ -112,10 +110,10 @@ multilib-native_src_install_internal() {
 	dohtml -r doc
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	preserve_old_lib /$(get_libdir)/lib{history,readline}.so.{4,5} #29865
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	preserve_old_lib_notify /$(get_libdir)/lib{history,readline}.so.{4,5}
 }

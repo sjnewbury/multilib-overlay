@@ -1,0 +1,25 @@
+--- /usr/portage/sys-libs/readline/readline-4.3_p5.ebuild	2009-10-04 02:06:52.000000000 +0200
++++ ./sys-libs/readline/readline-4.3_p5.ebuild	2010-03-14 15:15:36.000000000 +0100
+@@ -43,15 +43,20 @@
+ 
+ src_unpack() {
+ 	unpack ${MY_P}.tar.gz
+-	cd "${S}"
++}
++
++src_prepare() {
+ 	[[ ${PLEVEL} -gt 0 ]] && epatch $(patches -s)
+ 	# force ncurses linking #71420
+ 	sed -i -e 's:^SHLIB_LIBS=:SHLIB_LIBS=-lncurses:' support/shobj-conf || die "sed"
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	append-cppflags -D_GNU_SOURCE
+ 	econf --with-curses --disable-static || die
++}
++
++src_compile() {
+ 	emake -C shlib || die
+ }
+ 

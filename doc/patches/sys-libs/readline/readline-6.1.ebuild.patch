@@ -1,0 +1,42 @@
+--- /usr/portage/sys-libs/readline/readline-6.1.ebuild	2010-03-12 19:39:38.000000000 +0100
++++ ./sys-libs/readline/readline-6.1.ebuild	2010-03-14 15:19:32.000000000 +0100
+@@ -45,8 +45,9 @@
+ 
+ src_unpack() {
+ 	unpack ${MY_P}.tar.gz
++}
+ 
+-	cd "${S}"
++src_prepare() {
+ 	[[ ${PLEVEL} -gt 0 ]] && epatch $(patches -s)
+ 	epatch "${FILESDIR}"/${PN}-5.0-no_rpath.patch
+ 	epatch "${FILESDIR}"/${PN}-5.2-no-ignore-shlib-errors.patch #216952
+@@ -61,11 +62,10 @@
+ 	ln -s ../.. examples/rlfe/readline # for local readline headers
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	append-cppflags -D_GNU_SOURCE
+ 
+ 	econf --with-curses || die
+-	emake || die
+ 
+ 	if ! tc-is-cross-compiler ; then
+ 		# code is full of AC_TRY_RUN()
+@@ -77,6 +77,15 @@
+ 			ln -sf ../../lib${l}.a lib${l}.a
+ 		done
+ 		econf || die
++	fi
++}
++
++src_compile() {
++	emake || die
++
++	if ! tc-is-cross-compiler ; then
++		# code is full of AC_TRY_RUN()
++		cd examples/rlfe
+ 		emake || die
+ 	fi
+ }

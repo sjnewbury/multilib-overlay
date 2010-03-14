@@ -1,0 +1,42 @@
+--- /usr/portage/sys-libs/readline/readline-6.0_p4.ebuild	2010-03-12 19:39:38.000000000 +0100
++++ ./sys-libs/readline/readline-6.0_p4.ebuild	2010-03-14 15:16:59.000000000 +0100
+@@ -44,8 +44,9 @@
+ 
+ src_unpack() {
+ 	unpack ${MY_P}.tar.gz
++}
+ 
+-	cd "${S}"
++src_prepare() {
+ 	[[ ${PLEVEL} -gt 0 ]] && epatch $(patches -s)
+ 	epatch "${FILESDIR}"/${PN}-5.0-no_rpath.patch
+ 	epatch "${FILESDIR}"/${PN}-6.0-rlfe-build.patch #151174
+@@ -65,11 +66,10 @@
+ 	eautoconf
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	append-cppflags -D_GNU_SOURCE
+ 
+ 	econf --with-curses || die
+-	emake || die
+ 
+ 	if ! tc-is-cross-compiler ; then
+ 		# code is full of AC_TRY_RUN()
+@@ -81,6 +81,15 @@
+ 			ln -sf ../../lib${l}.a lib${l}.a
+ 		done
+ 		econf || die
++	fi
++}
++
++src_compile() {
++	emake || die
++
++	if ! tc-is-cross-compiler ; then
++		# code is full of AC_TRY_RUN()
++		cd examples/rlfe
+ 		emake || die
+ 	fi
+ }

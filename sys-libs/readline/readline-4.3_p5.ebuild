@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-libs/readline/readline-4.3_p5.ebuild,v 1.2 2009/10/03 23:38:24 vapier Exp $
 
-# This version is just for the ABI .4 library
-
 EAPI="2"
+
+# This version is just for the ABI .4 library
 
 inherit eutils flag-o-matic multilib-native
 
@@ -43,9 +43,11 @@ DEPEND="${RDEPEND}"
 
 S=${WORKDIR}/${MY_P}
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${MY_P}.tar.gz
-	cd "${S}"
+}
+
+multilib-native_src_prepare_internal() {
 	[[ ${PLEVEL} -gt 0 ]] && epatch $(patches -s)
 	# force ncurses linking #71420
 	sed -i -e 's:^SHLIB_LIBS=:SHLIB_LIBS=-lncurses:' support/shobj-conf || die "sed"
