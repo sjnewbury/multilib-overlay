@@ -1,10 +1,10 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/libbonoboui/libbonoboui-2.24.1.ebuild,v 1.4 2009/04/19 15:44:13 maekke Exp $
-
-GCONF_DEBUG="no"
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/libbonoboui/libbonoboui-2.24.1.ebuild,v 1.6 2009/05/10 14:58:55 jer Exp $
 
 EAPI="2"
+
+GCONF_DEBUG="no"
 
 inherit eutils virtualx gnome2 multilib-native
 
@@ -13,7 +13,7 @@ HOMEPAGE="http://developer.gnome.org/arch/gnome/componentmodel/bonobo.html"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="alpha amd64 ~arm ~hppa ~ia64 ~mips ppc ppc64 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="doc"
 
 # GTK+ dep due to bug #126565
@@ -29,7 +29,7 @@ RDEPEND=">=gnome-base/libgnomecanvas-1.116[lib32?]
 
 DEPEND="${RDEPEND}
 	x11-apps/xrdb
-	sys-devel/gettext
+	sys-devel/gettext[lib32?]
 	>=dev-util/pkgconfig-0.20[lib32?]
 	>=dev-util/intltool-0.40
 	doc? ( >=dev-util/gtk-doc-1 )"
