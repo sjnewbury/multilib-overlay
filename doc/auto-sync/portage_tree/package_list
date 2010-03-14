@@ -284,7 +284,7 @@ sys-apps/util-linux
 sys-devel/gettext
 # sys-devel/libperl
 # sys-devel/libtool
-# sys-fs/device-mapper
+sys-fs/device-mapper
 sys-fs/e2fsprogs
 sys-fs/fuse
 sys-fs/lvm2

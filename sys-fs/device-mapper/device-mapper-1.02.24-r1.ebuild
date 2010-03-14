@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
 IUSE="selinux"
 
-DEPEND="selinux? ( sys-libs/libselinux )"
+DEPEND="selinux? ( sys-libs/libselinux[lib32?] )"
 RDEPEND="!<sys-fs/udev-115-r1
 		${DEPEND}"
 

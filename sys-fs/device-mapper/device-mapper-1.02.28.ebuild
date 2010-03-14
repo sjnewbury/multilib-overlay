@@ -1,6 +1,6 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/device-mapper/device-mapper-1.02.28.ebuild,v 1.1 2008/11/07 21:22:19 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/device-mapper/device-mapper-1.02.28.ebuild,v 1.2 2009/12/21 13:26:05 ssuominen Exp $
 
 EAPI="2"
 
@@ -16,14 +16,16 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 IUSE="selinux"
 
-DEPEND="selinux? ( sys-libs/libselinux )"
+DEPEND="selinux? ( sys-libs/libselinux[lib32?] )"
 RDEPEND="!<sys-fs/udev-115-r1
 		${DEPEND}"
 
 S="${WORKDIR}/${PN}.${PV}"
 
 multilib-native_src_prepare_internal() {
-	EPATCH_OPTS="-p1 -d${S}" epatch "${FILESDIR}"/device-mapper-1.02.27-export-format.diff
+	EPATCH_OPTS="-p1 -d${S}" epatch \
+		"${FILESDIR}"/device-mapper-1.02.27-export-format.diff \
+		"${FILESDIR}"/${P}-asneeded.patch
 }
 
 multilib-native_src_configure_internal() {
@@ -43,7 +45,8 @@ multilib-native_src_install_internal() {
 	dolib.a lib/ioctl/libdevmapper.a || die "dolib.a"
 	gen_usr_ldscript libdevmapper.so
 
-
+	# for more information why this is needed look at multilib overlay commit
+	# message 4fb6f4d24c8702984f45e6e55e626d9a3fbe378d
 	mv "${D}"/usr/lib/pkgconfig "${D}"/usr/$(get_libdir)
 
 	insinto /etc

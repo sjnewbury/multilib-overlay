@@ -1,0 +1,37 @@
+--- /usr/portage/sys-fs/device-mapper/device-mapper-1.02.28.ebuild	2009-12-21 14:36:51.000000000 +0100
++++ ./sys-fs/device-mapper/device-mapper-1.02.28.ebuild	2010-03-14 19:38:20.000000000 +0100
+@@ -20,20 +20,19 @@
+ 
+ S="${WORKDIR}/${PN}.${PV}"
+ 
+-src_unpack() {
+-	unpack ${A}
++src_prepare() {
+ 	EPATCH_OPTS="-p1 -d${S}" epatch \
+ 		"${FILESDIR}"/device-mapper-1.02.27-export-format.diff \
+ 		"${FILESDIR}"/${P}-asneeded.patch
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	econf \
+ 		--sbindir=/sbin \
+ 		--enable-dmeventd \
++		--enable-pkgconfig \
+ 		$(use_enable selinux) \
+ 		CLDFLAGS="${LDFLAGS}" || die "econf failed"
+-	emake || die "compile problem"
+ }
+ 
+ src_install() {
+@@ -44,6 +43,10 @@
+ 	dolib.a lib/ioctl/libdevmapper.a || die "dolib.a"
+ 	gen_usr_ldscript libdevmapper.so
+ 
++	# for more information why this is needed look at multilib overlay commit
++	# message 4fb6f4d24c8702984f45e6e55e626d9a3fbe378d
++	mv "${D}"/usr/lib/pkgconfig "${D}"/usr/$(get_libdir)
++
+ 	insinto /etc
+ 	doins "${FILESDIR}"/dmtab
+ 	insinto /lib/rcscripts/addons

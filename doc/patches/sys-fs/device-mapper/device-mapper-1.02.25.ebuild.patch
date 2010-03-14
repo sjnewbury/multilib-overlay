@@ -1,0 +1,23 @@
+--- /usr/portage/sys-fs/device-mapper/device-mapper-1.02.25.ebuild	2009-04-05 10:08:24.000000000 +0200
++++ ./sys-fs/device-mapper/device-mapper-1.02.25.ebuild	2010-03-14 19:27:23.000000000 +0100
+@@ -20,18 +20,16 @@
+ 
+ S="${WORKDIR}/${PN}.${PV}"
+ 
+-src_unpack() {
+-	unpack ${A}
++src_prepare() {
+ 	EPATCH_OPTS="-p1 -d${S}" epatch "${FILESDIR}"/device-mapper-1.02.24-export-format.diff
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	econf \
+ 		--sbindir=/sbin \
+ 		--enable-dmeventd \
+ 		$(use_enable selinux) \
+ 		CLDFLAGS="${LDFLAGS}" || die "econf failed"
+-	emake || die "compile problem"
+ }
+ 
+ src_install() {

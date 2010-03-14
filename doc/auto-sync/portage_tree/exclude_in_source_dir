@@ -76,3 +76,11 @@ sys-fs/lvm2/lvm2-2.02.49-r3.ebuild
 sys-fs/lvm2/lvm2-2.02.51.ebuild
 sys-fs/e2fsprogs/e2fsprogs-1.40.9.ebuild
 sys-fs/e2fsprogs/e2fsprogs-1.41.7-r1.ebuild
+sys-fs/device-mapper/device-mapper-1.02.19.ebuild
+sys-fs/device-mapper/device-mapper-1.02.19-r1.ebuild
+sys-fs/device-mapper/device-mapper-1.02.22.ebuild
+sys-fs/device-mapper/device-mapper-1.02.22-r1.ebuild
+sys-fs/device-mapper/device-mapper-1.02.22-r3.ebuild
+sys-fs/device-mapper/device-mapper-1.02.22-r4.ebuild
+sys-fs/device-mapper/device-mapper-1.02.22-r5.ebuild
+sys-fs/device-mapper/device-mapper-1.02.24.ebuild
