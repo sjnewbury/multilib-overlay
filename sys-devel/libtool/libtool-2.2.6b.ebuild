@@ -5,7 +5,7 @@
 EAPI="2"
 
 LIBTOOLIZE="true" #225559
-inherit eutils autotools flag-o-matic multilib-native
+inherit eutils autotools flag-o-matic multilib multilib-native
 
 DESCRIPTION="A shared library tool for developers"
 HOMEPAGE="http://www.gnu.org/software/libtool/"
@@ -20,10 +20,10 @@ RDEPEND="sys-devel/gnuconfig
 	>=sys-devel/autoconf-2.60
 	>=sys-devel/automake-1.10.1"
 DEPEND="${RDEPEND}
-	|| ( app-arch/xz-utils app-arch/lzma-utils )
+	|| ( app-arch/xz-utils[lib32?] app-arch/lzma-utils[lib32?] )
 	sys-apps/help2man"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if use test && ! has_version '>sys-devel/binutils-2.19.51'; then
 		einfo "Disabling --as-needed, since you got older binutils and you asked"
 		einfo "to run tests. With the stricter (older) --as-needed behaviour"
@@ -33,9 +33,7 @@ pkg_setup() {
 	fi
 }
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/2.2.6a/${PN}-2.2.6a-tests-locale.patch #249168
 
 	if ! use vanilla ; then
@@ -70,10 +68,10 @@ multilib-native_src_install_internal() {
 	done
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	preserve_old_lib /usr/$(get_libdir)/libltdl.so.3
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	preserve_old_lib_notify /usr/$(get_libdir)/libltdl.so.3
 }
