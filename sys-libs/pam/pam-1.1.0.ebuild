@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/pam/pam-1.1.0.ebuild,v 1.11 2009/11/26 10:11:59 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/pam/pam-1.1.0.ebuild,v 1.14 2010/01/24 18:27:13 armin76 Exp $
 
 EAPI="2"
 
@@ -15,9 +15,9 @@ DESCRIPTION="Linux-PAM (Pluggable Authentication Modules)"
 SRC_URI="mirror://kernel/linux/libs/pam/library/${MY_P}.tar.bz2
 	mirror://kernel/linux/libs/pam/documentation/${MY_P}-docs.tar.bz2"
 
-LICENSE="PAM"
+LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
-KEYWORDS="~alpha amd64 arm hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc x86"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
 IUSE="cracklib nls elibc_FreeBSD selinux vim-syntax audit test elibc_glibc debug"
 
 RDEPEND="nls? ( virtual/libintl )
@@ -73,7 +73,7 @@ check_old_modules() {
 	return $retval
 }
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	check_old_modules
 }
 
@@ -158,6 +158,6 @@ multilib-native_src_install_internal() {
 	find "${D}" -name '*.la' -delete
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	check_old_modules || die "deprecated PAM modules still used"
 }

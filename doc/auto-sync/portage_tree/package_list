@@ -303,7 +303,7 @@ sys-fs/udev
 # sys-libs/libsepol
 # sys-libs/libsmbios
 # sys-libs/ncurses
-# sys-libs/pam
+sys-libs/pam
 sys-libs/readline
 sys-libs/slang
 sys-libs/talloc

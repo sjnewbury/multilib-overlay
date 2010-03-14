@@ -1,0 +1,33 @@
+--- /usr/portage/sys-libs/pam/pam-1.1.0.ebuild	2010-01-24 19:38:22.000000000 +0100
++++ ./sys-libs/pam/pam-1.1.0.ebuild	2010-03-14 15:27:15.000000000 +0100
+@@ -75,10 +75,7 @@
+ 	check_old_modules
+ }
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	# Avoid building xtests during "make all"; note that for what
+ 	# we're concerned xtests are not even executed, so we should
+ 	# probably use EXTRA_PROGRAMS.
+@@ -101,7 +98,7 @@
+ 	elibtoolize
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	local myconf
+ 
+ 	if use hppa || use elibc_FreeBSD; then
+@@ -123,6 +120,9 @@
+ 		--disable-dependency-tracking \
+ 		--disable-prelude \
+ 		${myconf} || die "econf failed"
++}
++
++src_compile() {
+ 	emake sepermitlockdir="/var/run/sepermit" || die "emake failed"
+ }
+ 

@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/pam/pam-1.1.1.ebuild,v 1.1 2009/12/16 18:16:14 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/pam/pam-1.1.1.ebuild,v 1.3 2010/01/06 15:51:10 ulm Exp $
 
 EAPI="2"
 
@@ -15,7 +15,7 @@ DESCRIPTION="Linux-PAM (Pluggable Authentication Modules)"
 SRC_URI="mirror://kernel/linux/libs/pam/library/${MY_P}.tar.bz2
 	mirror://kernel/linux/libs/pam/documentation/${MY_P}-docs.tar.bz2"
 
-LICENSE="PAM"
+LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 IUSE="cracklib nls elibc_FreeBSD selinux vim-syntax audit test elibc_glibc debug"
@@ -73,7 +73,7 @@ check_old_modules() {
 	return $retval
 }
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	check_old_modules
 }
 
@@ -82,6 +82,10 @@ multilib-native_src_prepare_internal() {
 	# we're concerned xtests are not even executed, so we should
 	# probably use EXTRA_PROGRAMS.
 	epatch "${FILESDIR}/${MY_PN}-0.99.8.1-xtests.patch"
+
+	# Fix building on uClibc; it is added since 1.1.1 but applies to
+	# 1.1.0 as well.
+	epatch "${FILESDIR}/${MY_PN}-1.1.0-uclibc.patch"
 
 	# Remove libtool-2 libtool macros, see bug 261167
 	rm m4/libtool.m4 m4/lt*.m4 || die "rm libtool macros failed."
@@ -149,6 +153,6 @@ multilib-native_src_install_internal() {
 	find "${D}" -name '*.la' -delete
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	check_old_modules || die "deprecated PAM modules still used"
 }
