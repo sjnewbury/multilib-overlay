@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/db/db-4.7.25_p4.ebuild,v 1.11 2009/10/01 20:27:01 klausman Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/db/db-4.7.25_p4.ebuild,v 1.13 2010/01/24 18:29:31 armin76 Exp $
 
 EAPI="2"
 
@@ -28,7 +28,7 @@ done
 
 LICENSE="OracleDB"
 SLOT="4.7"
-KEYWORDS="alpha amd64 ~arm hppa ~ia64 ~m68k ppc ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="doc java nocxx tcl test"
 
 # the entire testsuite needs the TCL functionality
@@ -81,8 +81,9 @@ multilib-native_src_prepare_internal() {
 
 multilib-native_src_configure_internal() {
 	local myconf=''
+
 	# compilation with -O0 fails on amd64, see bug #171231
-	if use amd64; then
+	if use amd64 && [ ${ABI} = "amd64" ]; then
 		replace-flags -O0 -O2
 		is-flagq -O[s123] || append-flags -O2
 	fi

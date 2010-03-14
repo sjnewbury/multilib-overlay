@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/db/db-4.7.25_p3.ebuild,v 1.2 2009/09/20 19:52:44 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/db/db-4.8.26.ebuild,v 1.1 2010/03/12 20:14:55 robbat2 Exp $
 
 EAPI="2"
 
@@ -27,8 +27,8 @@ for (( i=1 ; i<=${PATCHNO} ; i++ )) ; do
 done
 
 LICENSE="OracleDB"
-SLOT="4.7"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+SLOT="4.8"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="doc java nocxx tcl test"
 
 # the entire testsuite needs the TCL functionality
@@ -45,11 +45,14 @@ multilib-native_src_prepare_internal() {
 	do
 		epatch "${DISTDIR}"/patch."${MY_PV}"."${i}"
 	done
-	epatch "${FILESDIR}"/"${PN}"-4.6-libtool.patch
+	epatch "${FILESDIR}"/${PN}-4.8-libtool.patch
+	epatch "${FILESDIR}"/${PN}-4.8.24-java-manifest-location.patch
 
 	# use the includes from the prefix
-	epatch "${FILESDIR}"/"${PN}"-4.6-jni-check-prefix-first.patch
-	epatch "${FILESDIR}"/"${PN}"-4.3-listen-to-java-options.patch
+	epatch "${FILESDIR}"/${PN}-4.6-jni-check-prefix-first.patch
+	epatch "${FILESDIR}"/${PN}-4.3-listen-to-java-options.patch
+
+	sed -e "/^DB_RELEASE_DATE=/s/%B %e, %Y/%Y-%m-%d/" -i dist/RELEASE
 
 	# Include the SLOT for Java JAR files
 	# This supersedes the unused jarlocation patches.
@@ -78,8 +81,10 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
+	local myconf=''
+
 	# compilation with -O0 fails on amd64, see bug #171231
-	if use amd64; then
+	if use amd64 && [ ${ABI} = "amd64" ]; then
 		replace-flags -O0 -O2
 		is-flagq -O[s123] || append-flags -O2
 	fi
@@ -98,6 +103,14 @@ multilib-native_src_configure_internal() {
 		append-ldflags -Wl,--default-symver
 	fi
 
+	# Bug #270851: test needs TCL support
+	if use tcl || use test ; then
+		myconf="${myconf} --enable-tcl"
+		myconf="${myconf} --with-tcl=/usr/$(get_libdir)"
+	else
+		myconf="${myconf} --disable-tcl"
+	fi
+
 	cd "${S}"
 	ECONF_SOURCE="${S}"/../dist \
 	STRIP="true" \
@@ -105,12 +118,12 @@ multilib-native_src_configure_internal() {
 		--enable-compat185 \
 		--enable-o_direct \
 		--without-uniquename \
-		--enable-rpc \
+		$(use arm && echo --with-mutex=ARM/gcc-assembly) \
 		$(use amd64 && echo --with-mutex=x86/gcc-assembly) \
 		$(use_enable !nocxx cxx) \
+		$(use_enable !nocxx stl) \
 		$(use_enable java) \
-		$(use_enable tcl) \
-		$(use tcl && echo --with-tcl=/usr/$(get_libdir)) \
+		${myconf} \
 		$(use_enable test) \
 		"$@"
 }

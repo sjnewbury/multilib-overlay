@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-libs/db/db-4.8.24.ebuild,v 1.3 2009/09/20 19:52:44 robbat2 Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit eutils db flag-o-matic java-pkg-opt-2 autotools libtool multilib-native
 
@@ -84,7 +84,7 @@ multilib-native_src_configure_internal() {
 	local myconf=''
 
 	# compilation with -O0 fails on amd64, see bug #171231
-	if use amd64; then
+	if use amd64 && [ ${ABI} = "amd64" ]; then
 		replace-flags -O0 -O2
 		is-flagq -O[s123] || append-flags -O2
 	fi

@@ -1,0 +1,37 @@
+--- /usr/portage/sys-libs/db/db-4.7.25_p4.ebuild	2010-01-24 19:38:22.000000000 +0100
++++ ./sys-libs/db/db-4.7.25_p4.ebuild	2010-03-14 18:17:09.000000000 +0100
+@@ -37,9 +37,8 @@
+ RDEPEND="tcl? ( dev-lang/tcl )
+ 	java? ( >=virtual/jre-1.5 )"
+ 
+-src_unpack() {
+-	unpack "${MY_P}".tar.gz
+-	cd "${WORKDIR}"/"${MY_P}"
++src_prepare() {
++	cd "${S}"/..
+ 	for (( i=1 ; i<=${PATCHNO} ; i++ ))
+ 	do
+ 		epatch "${DISTDIR}"/patch."${MY_PV}"."${i}"
+@@ -78,11 +77,11 @@
+ 		-e "s/__EDIT_DB_VERSION__/$DB_VERSION/g" configure
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	local myconf=''
+ 
+ 	# compilation with -O0 fails on amd64, see bug #171231
+-	if use amd64; then
++	if use amd64 && [ ${ABI} = "amd64" ]; then
+ 		replace-flags -O0 -O2
+ 		is-flagq -O[s123] || append-flags -O2
+ 	fi
+@@ -124,8 +123,6 @@
+ 		${myconf} \
+ 		$(use_enable test) \
+ 		"$@"
+-
+-	emake || die "make failed"
+ }
+ 
+ src_install() {

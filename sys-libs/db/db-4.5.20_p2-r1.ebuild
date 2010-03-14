@@ -166,10 +166,10 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	db_fix_so
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	db_fix_so
 }
