@@ -55,7 +55,7 @@
 # dev-libs/dbus-glib
 # dev-libs/DirectFB
 # dev-libs/eggdbus
-# dev-libs/expat
+dev-libs/expat
 # dev-libs/foo
 # dev-libs/fribidi
 # dev-libs/gir-repository
