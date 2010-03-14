@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-libs/gpm/gpm-1.20.1-r6.ebuild,v 1.11 2009/02/15 21:05:33 vapier Exp $
 
-# emacs support disabled due to Bug 99533
-
 EAPI="2"
+
+# emacs support disabled due to Bug 99533
 
 inherit eutils toolchain-funcs multilib-native
 #elisp-common
@@ -25,19 +25,18 @@ DEPEND="sys-libs/ncurses[lib32?]"
 #	emacs? ( virtual/emacs )"
 RDEPEND="selinux? ( sec-policy/selinux-gpm )"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	EPATCH_SUFFIX="patch" epatch "${WORKDIR}"/patch
 }
 
-src_configure() { :; }
-
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	econf \
 		--libdir=/$(get_libdir) \
 		--sysconfdir=/etc/gpm \
 		|| die "econf failed"
+}
+
+multilib-native_src_compile_internal() {
 	emake \
 		CC=$(tc-getCC) \
 		AR=$(tc-getAR) \

@@ -294,7 +294,7 @@ sys-fs/udev
 # sys-libs/db
 # sys-libs/e2fsprogs-libs
 # sys-libs/gdbm
-# sys-libs/gpm
+sys-libs/gpm
 sys-libs/libcap
 sys-libs/libcap-ng
 sys-libs/libieee1284
