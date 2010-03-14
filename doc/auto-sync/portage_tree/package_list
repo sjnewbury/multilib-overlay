@@ -33,7 +33,7 @@
 # dev-cpp/cairomm
 # dev-cpp/glibmm
 # dev-cpp/gtkmm
-# dev-cpp/pangomm
+dev-cpp/pangomm
 # dev-db/mysql
 # dev-db/postgresql-base
 dev-db/sqlite
