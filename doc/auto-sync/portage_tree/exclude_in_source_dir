@@ -74,3 +74,5 @@ sys-fs/lvm2/lvm2-2.02.49-r1.ebuild
 sys-fs/lvm2/lvm2-2.02.49-r2.ebuild
 sys-fs/lvm2/lvm2-2.02.49-r3.ebuild
 sys-fs/lvm2/lvm2-2.02.51.ebuild
+sys-fs/e2fsprogs/e2fsprogs-1.40.9.ebuild
+sys-fs/e2fsprogs/e2fsprogs-1.41.7-r1.ebuild

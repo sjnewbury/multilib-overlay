@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-fs/e2fsprogs/e2fsprogs-1.41.9.ebuild,v 1.12 2009/12/07 11:11:31 ssuominen Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit eutils flag-o-matic toolchain-funcs multilib multilib-native
 
@@ -23,7 +23,7 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	sys-apps/texinfo"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if [[ ! -e ${ROOT}/etc/mtab ]] ; then
 		# add some crap to deal with missing /etc/mtab #217719
 		ewarn "No /etc/mtab file, creating one temporarily"
@@ -82,15 +82,15 @@ multilib-native_src_configure_internal() {
 		--disable-libuuid \
 		--disable-fsck \
 		--disable-uuidd
-}
-
-multilib-native_src_compile_internal() {
 	if [[ ${CHOST} != *-uclibc ]] && grep -qs 'USE_INCLUDED_LIBINTL.*yes' config.{log,status} ; then
 		eerror "INTL sanity check failed, aborting build."
 		eerror "Please post your ${S}/config.log file as an"
 		eerror "attachment to http://bugs.gentoo.org/show_bug.cgi?id=81096"
 		die "Preventing included intl cruft from building"
 	fi
+}
+
+multilib-native_src_compile_internal() {
 	emake COMPILE_ET=compile_et MK_CMDS=mk_cmds || die
 
 	# Build the FreeBSD helper
@@ -100,7 +100,7 @@ multilib-native_src_compile_internal() {
 	fi
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	if [[ -r ${ROOT}/etc/mtab ]] ; then
 		if [[ $(<"${ROOT}"/etc/mtab) == "${PN} crap for src_test" ]] ; then
 			rm -f "${ROOT}"/etc/mtab
