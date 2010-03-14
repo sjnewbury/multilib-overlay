@@ -328,7 +328,7 @@ sys-fs/udev
 # www-client/mozilla-firefox
 # www-plugins/adobe-flash
 # x11-apps/mesa-progs
-# x11-libs/cairo
+x11-libs/cairo
 x11-libs/goocanvas
 x11-libs/gtk+
 x11-libs/gtkglext
