@@ -282,7 +282,7 @@ sys-apps/util-linux
 # sys-auth/polkit
 # sys-devel/flex
 sys-devel/gettext
-# sys-devel/libperl
+sys-devel/libperl
 sys-devel/libtool
 sys-fs/device-mapper
 sys-fs/e2fsprogs

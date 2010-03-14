@@ -56,7 +56,7 @@ EAPI="2"
 
 IUSE="berkdb debug gdbm ithreads"
 
-inherit eutils flag-o-matic toolchain-funcs multilib-native
+inherit eutils flag-o-matic toolchain-funcs multilib multilib-native
 
 # The slot of this binary compat version of libperl.so
 PERLSLOT="1"
@@ -92,7 +92,7 @@ RDEPEND="
 
 PDEPEND="~dev-lang/perl-${PV}[lib32?]"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	# I think this should rather be displayed if you *have* 'ithreads'
 	# in USE if it could break things ...
 	if use ithreads
@@ -109,7 +109,6 @@ pkg_setup() {
 }
 
 multilib-native_src_prepare_internal() {
-
 	# Fix the build scripts to create libperl with a soname of ${SLOT}.
 	# We basically add:
 	#
@@ -141,7 +140,7 @@ multilib-native_src_prepare_internal() {
 
 	if use amd64 || use ppc64; then
 		if use lib32 && ( [[ "${ABI}" == "x86" ]] || \
-					[[ "${ABI}" == "ppc" ]] ); then
+				[[ "${ABI}" == "ppc" ]] ); then
 			epatch "${FILESDIR}"/${P}-lib32.patch
 		else
 			epatch "${FILESDIR}"/${P}-lib64.patch

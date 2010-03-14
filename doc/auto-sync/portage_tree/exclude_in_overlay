@@ -53,3 +53,4 @@ dev-cpp/glibmm/glibmm-2.23.1.ebuild
 x11-libs/cairo/cairo-9999.ebuild # x11
 sys-libs/ncurses/files/ncurses-5.6-ldflags-multilib-overlay.patch # patch of multilib overlay look into the ebuild for more information
 sys-libs/ncurses/files/ncurses-5.7-ldflags-multilib-overlay.patch # patch of multilib overlay look into the ebuild for more information
+sys-devel/libperl/files/libperl-5.8.8-lib32.patch # patch of multilib overlay

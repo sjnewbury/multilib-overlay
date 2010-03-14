@@ -1,0 +1,63 @@
+--- /usr/portage/sys-devel/libperl/libperl-5.8.8-r2.ebuild	2010-02-03 01:37:24.000000000 +0100
++++ ./sys-devel/libperl/libperl-5.8.8-r2.ebuild	2010-03-15 00:03:07.000000000 +0100
+@@ -106,10 +106,7 @@
+ 	fi
+ }
+ 
+-src_unpack() {
+-
+-	unpack ${A}
+-
++src_prepare() {
+ 	# Fix the build scripts to create libperl with a soname of ${SLOT}.
+ 	# We basically add:
+ 	#
+@@ -139,7 +136,14 @@
+ 	# filter it otherwise configure fails. See #125535.
+ 	epatch "${FILESDIR}"/perl-hppa-pa7200-configure.patch
+ 
+-	use amd64 || use ppc64 && cd "${S}" && epatch "${FILESDIR}"/${P}-lib64.patch
++	if use amd64 || use ppc64; then
++		if use lib32 && ( [[ "${ABI}" == "x86" ]] || \
++				[[ "${ABI}" == "ppc" ]] ); then
++			epatch "${FILESDIR}"/${P}-lib32.patch
++		else
++			epatch "${FILESDIR}"/${P}-lib64.patch
++		fi
++	fi
+ 	[[ ${CHOST} == *-dragonfly* ]] && cd "${S}" && epatch "${FILESDIR}"/${P}-dragonfly-clean.patch
+ 	[[ ${CHOST} == *-freebsd* ]] && cd "${S}" && epatch "${FILESDIR}"/${P}-fbsdhints.patch
+ 	cd "${S}"; epatch "${FILESDIR}"/${P}-cplusplus.patch
+@@ -163,7 +167,7 @@
+ 	myconf=( "${myconf[@]}" "$@" )
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	declare -a myconf
+ 
+ 	# Perl has problems compiling with -Os in your flags
+@@ -280,10 +284,13 @@
+ 		-Dcf_by="Gentoo" \
+ 		-Ud_csh \
+ 		"${myconf[@]}" || die "Unable to configure"
++}
+ 
++src_compile() {
+ 	emake -j1 -f Makefile depend || die "Couldn't make libperl$(get_libname) depends"
+ 	emake -j1 -f Makefile LDFLAGS="${LDFLAGS}" LIBPERL=${LIBPERL} ${LIBPERL} || die "Unable to make libperl$(get_libname)"
+-	mv ${LIBPERL} "${WORKDIR}"
++	mkdir "${WORKDIR}/libperl.${ABI}"
++	mv ${LIBPERL} "${WORKDIR}/libperl.${ABI}"
+ }
+ 
+ src_install() {
+@@ -292,7 +299,7 @@
+ 
+ 	if [ "${PN}" = "libperl" ]
+ 	then
+-		dolib.so "${WORKDIR}"/${LIBPERL}
++		dolib.so "${WORKDIR}"/libperl.${ABI}/${LIBPERL}
+ 		dosym ${LIBPERL} /usr/$(get_libdir)/libperl$(get_libname ${PERLSLOT})
+ 	else
+ 		# Need to do this, else apps do not link to dynamic version of

@@ -1,0 +1,15 @@
+--- /usr/portage/sys-devel/libperl/libperl-5.10.1.ebuild	2010-02-03 01:37:24.000000000 +0100
++++ ./sys-devel/libperl/libperl-5.10.1.ebuild	2010-03-14 23:57:17.000000000 +0100
+@@ -15,6 +15,12 @@
+ 
+ PDEPEND=">=dev-lang/perl-5.10.1"
+ 
++src_install() {
++	# This is empty function is needed because base_src_install does not work
++	# without any data
++	einfo "Nothing to do"
++}
++
+ pkg_postinst() {
+ 	if [[ $(readlink "${ROOT}/usr/$(get_libdir )/libperl$(get_libname)" ) == libperl$(get_libname).1 ]] ; then
+ 		einfo "Removing stale symbolic link: ${ROOT}usr/$(get_libdir)/libperl$(get_libname)"
