@@ -1,0 +1,43 @@
+--- /usr/portage/dev-db/sqlite/sqlite-2.8.16-r4.ebuild	2009-04-05 10:08:24.000000000 +0200
++++ ./dev-db/sqlite/sqlite-2.8.16-r4.ebuild	2010-03-14 02:33:07.000000000 +0100
+@@ -23,7 +23,7 @@
+ 
+ RESTRICT="!tcl? ( test )"
+ 
+-src_unpack() {
++pkg_setup() {
+ 	# test
+ 	if has test ${FEATURES}; then
+ 		if ! has userpriv ${FEATURES}; then
+@@ -36,10 +36,9 @@
+ 			eerror "Testsuite will not be run."
+ 		fi
+ 	fi
++}
+ 
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	use hppa && epatch "${FILESDIR}"/${PN}-2.8.15-alignement-fix.patch
+ 
+ 	epatch "${FILESDIR}"/${P}-multilib.patch
+@@ -61,7 +60,7 @@
+ 		"${S}"/Makefile.linux-gcc
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	local myconf="--enable-incore-db --enable-tempdb-in-ram"
+ 
+ 	if ! use tcl ; then
+@@ -71,7 +70,9 @@
+ 	econf ${myconf} \
+ 		$(use_enable nls utf8) \
+ 		|| die "econf failed"
++}
+ 
++src_compile() {
+ 	emake all || die "emake all failed"
+ 
+ 	if use doc ; then

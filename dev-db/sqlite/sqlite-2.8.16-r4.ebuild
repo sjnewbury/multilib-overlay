@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-2.8.16-r4.ebuild,v 1.20 2008/03/11 18:24:52 betelgeuse Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit eutils alternatives toolchain-funcs multilib-native
 
@@ -25,7 +25,7 @@ ALTERNATIVES="${SOURCE}-3 ${SOURCE}-0"
 
 RESTRICT="!tcl? ( test )"
 
-multilib-native_src_unpack_internal() {
+multilib-native_pkg_setup_internal() {
 	# test
 	if has test ${FEATURES}; then
 		if ! has userpriv ${FEATURES}; then
@@ -38,8 +38,6 @@ multilib-native_src_unpack_internal() {
 			eerror "Testsuite will not be run."
 		fi
 	fi
-
-	unpack ${A}
 }
 
 multilib-native_src_prepare_internal() {

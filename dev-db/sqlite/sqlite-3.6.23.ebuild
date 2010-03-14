@@ -1,12 +1,12 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.22-r1.ebuild,v 1.1 2010/01/22 11:33:29 yngwin Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.23.ebuild,v 1.1 2010/03/13 14:23:15 arfrever Exp $
 
-EAPI="2"
+EAPI="3"
 
-inherit eutils flag-o-matic multilib versionator libtool autotools multilib-native
+inherit autotools eutils flag-o-matic multilib versionator multilib-native
 
-DESCRIPTION="An SQL Database Engine in a C Library"
+DESCRIPTION="A SQL Database Engine in a C Library"
 HOMEPAGE="http://www.sqlite.org/"
 DOC_BASE="$(get_version_component_range 1-3)"
 DOC_PV="$(replace_all_version_separators _ ${DOC_BASE})"
@@ -22,13 +22,13 @@ SRC_URI="
 LICENSE="as-is"
 SLOT="3"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~ppc-aix ~sparc-fbsd ~x86-fbsd ~x86-freebsd ~hppa-hpux ~ia64-hpux ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~m68k-mint ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
-IUSE="debug doc extensions +fts3 icu +readline soundex tcl +threadsafe test"
+IUSE="debug doc extensions +fts3 icu +readline secure-delete soundex tcl +threadsafe test"
 
 RDEPEND="icu? ( dev-libs/icu[lib32?] )
 	readline? ( sys-libs/readline[lib32?] )
 	tcl? ( dev-lang/tcl[lib32?] )"
 DEPEND="${RDEPEND}
-	test? ( dev-lang/tcl )
+	test? ( dev-lang/tcl[lib32?] )
 	doc? ( app-arch/unzip )"
 
 multilib-native_src_prepare_internal() {
@@ -37,15 +37,15 @@ multilib-native_src_prepare_internal() {
 	fi
 
 	if use tcl || use test; then
-		epatch "${FILESDIR}"/${P}-interix-fixes.patch
-		epatch "${FILESDIR}"/${P}-dlopen.patch  # bug 300836
+		epatch "${FILESDIR}/${PN}-3.6.22-interix-fixes.patch"
+		epatch "${FILESDIR}/${PN}-3.6.22-dlopen.patch"  # bug 300836
 		eautoreconf  # dlopen.patch patches configure.ac
 	else
-		epatch "${FILESDIR}"/${P}-interix-fixes-amalgamation.patch
+		epatch "${FILESDIR}/${PN}-3.6.22-interix-fixes-amalgamation.patch"
 	fi
 
+	eautoreconf  # for MiNT and interix
 	epunt_cxx
-	elibtoolize # for MiNT
 }
 
 multilib-native_src_configure_internal() {
@@ -66,19 +66,24 @@ multilib-native_src_configure_internal() {
 		fi
 	fi
 
-	# Support soundex, bug #143794
-	if use soundex; then
-		append-cppflags -DSQLITE_SOUNDEX
-	fi
-
 	# Support FTS3, bug #207701
 	if use fts3; then
 		append-cppflags -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS
 	fi
 
+	# Enable secure_delete pragma by default
+	if use secure-delete; then
+		append-cppflags -DSQLITE_SECURE_DELETE -DSQLITE_CHECK_PAGES -DSQLITE_CORE
+	fi
+
+	# Support soundex, bug #143794
+	if use soundex; then
+		append-cppflags -DSQLITE_SOUNDEX
+	fi
+
 	# The amalgamation source doesn't have these via Makefile
 	if use debug; then
-		append-cppflags -DSQLITE_DEBUG=1
+		append-cppflags -DSQLITE_DEBUG
 	else
 		append-cppflags -DNDEBUG
 	fi
@@ -98,7 +103,7 @@ multilib-native_src_configure_internal() {
 		$({ use tcl || use test; } && echo --with-readline-inc="-I${EPREFIX}/usr/include/readline") \
 		$(use_enable threadsafe) \
 		$(use tcl && echo --enable-tcl) \
-		$(use !tcl && use test && echo --disable-tcl)
+		$(use !tcl && use test && echo --enable-tcl)
 }
 
 multilib-native_src_compile_internal() {

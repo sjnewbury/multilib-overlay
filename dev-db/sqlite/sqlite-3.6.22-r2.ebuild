@@ -1,12 +1,12 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.22-r1.ebuild,v 1.1 2010/01/22 11:33:29 yngwin Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.22-r2.ebuild,v 1.5 2010/03/09 21:42:17 josejx Exp $
 
 EAPI="2"
 
-inherit eutils flag-o-matic multilib versionator libtool autotools multilib-native
+inherit eutils flag-o-matic multilib versionator autotools multilib-native
 
-DESCRIPTION="An SQL Database Engine in a C Library"
+DESCRIPTION="A SQL Database Engine in a C Library"
 HOMEPAGE="http://www.sqlite.org/"
 DOC_BASE="$(get_version_component_range 1-3)"
 DOC_PV="$(replace_all_version_separators _ ${DOC_BASE})"
@@ -21,14 +21,14 @@ SRC_URI="
 
 LICENSE="as-is"
 SLOT="3"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~ppc-aix ~sparc-fbsd ~x86-fbsd ~x86-freebsd ~hppa-hpux ~ia64-hpux ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~m68k-mint ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~ppc-aix ~sparc-fbsd ~x86-fbsd ~x86-freebsd ~hppa-hpux ~ia64-hpux ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~m68k-mint ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 IUSE="debug doc extensions +fts3 icu +readline secure-delete soundex tcl +threadsafe test"
 
 RDEPEND="icu? ( dev-libs/icu[lib32?] )
 	readline? ( sys-libs/readline[lib32?] )
 	tcl? ( dev-lang/tcl[lib32?] )"
 DEPEND="${RDEPEND}
-	test? ( dev-lang/tcl )
+	test? ( dev-lang/tcl[lib32?] )
 	doc? ( app-arch/unzip )"
 
 multilib-native_src_prepare_internal() {
@@ -44,8 +44,8 @@ multilib-native_src_prepare_internal() {
 		epatch "${FILESDIR}"/${P}-interix-fixes-amalgamation.patch
 	fi
 
+	eautoreconf  # for MiNT and interix
 	epunt_cxx
-	elibtoolize # for MiNT
 }
 
 multilib-native_src_configure_internal() {
@@ -103,7 +103,7 @@ multilib-native_src_configure_internal() {
 		$({ use tcl || use test; } && echo --with-readline-inc="-I${EPREFIX}/usr/include/readline") \
 		$(use_enable threadsafe) \
 		$(use tcl && echo --enable-tcl) \
-		$(use !tcl && use test && echo --disable-tcl)
+		$(use !tcl && use test && echo --enable-tcl)
 }
 
 multilib-native_src_compile_internal() {
