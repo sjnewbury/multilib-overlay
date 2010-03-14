@@ -19,7 +19,7 @@ RDEPEND="elibc_glibc? ( >=sys-libs/glibc-2.6 )
 	!sys-libs/com_err
 	!sys-libs/ss
 	!<sys-fs/e2fsprogs-1.41.8"
-DEPEND="nls? ( sys-devel/gettext )
+DEPEND="nls? ( sys-devel/gettext[lib32?] )
 	dev-util/pkgconfig[lib32?]
 	sys-devel/bc"
 

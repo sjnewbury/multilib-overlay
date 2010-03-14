@@ -1,12 +1,12 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/e2fsprogs-libs/e2fsprogs-libs-1.41.6.ebuild,v 1.3 2009/12/01 04:49:06 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/e2fsprogs-libs/e2fsprogs-libs-1.41.10.ebuild,v 1.1 2010/03/07 02:34:18 vapier Exp $
 
 EAPI="2"
 
-inherit flag-o-matic toolchain-funcs multilib-native
+inherit toolchain-funcs multilib-native
 
-DESCRIPTION="e2fsprogs libraries (common error, subsystem, uuid, block id)"
+DESCRIPTION="e2fsprogs libraries (common error and subsystem)"
 HOMEPAGE="http://e2fsprogs.sourceforge.net/"
 SRC_URI="mirror://sourceforge/e2fsprogs/${P}.tar.gz"
 
@@ -18,15 +18,12 @@ IUSE="nls"
 RDEPEND="elibc_glibc? ( >=sys-libs/glibc-2.6 )
 	!sys-libs/com_err
 	!sys-libs/ss
-	!<sys-fs/e2fsprogs-1.41"
-DEPEND="nls? ( sys-devel/gettext )
+	!<sys-fs/e2fsprogs-1.41.8"
+DEPEND="nls? ( sys-devel/gettext[lib32?] )
 	dev-util/pkgconfig[lib32?]
 	sys-devel/bc"
 
-multilib-native_src_prepare_internal() {
-	# stupid configure script clobbers CC for us
-	sed -i '/if test -z "$CC" ; then CC=cc; fi/d' configure
-}
+export VARTEXFONTS=${T}/fonts #281390
 
 multilib-native_src_configure_internal() {
 	# We want to use the "bsd" libraries while building on Darwin, but while
@@ -37,8 +34,13 @@ multilib-native_src_configure_internal() {
 		*)         libtype=elf;;
 	esac
 
+	# we use blkid/uuid from util-linux now
+	ac_cv_lib_uuid_uuid_generate=yes \
+	ac_cv_lib_blkid_blkid_get_cache=yes \
 	ac_cv_path_LDCONFIG=: \
 	econf \
+		--disable-libblkid \
+		--disable-libuuid \
 		--enable-${libtype}-shlibs \
 		$(tc-has-tls || echo --disable-tls) \
 		$(use_enable nls)
@@ -46,8 +48,5 @@ multilib-native_src_configure_internal() {
 
 multilib-native_src_install_internal() {
 	emake STRIP=: DESTDIR="${D}" install || die
-
-	set -- "${D}"/usr/$(get_libdir)/*.a
-	set -- ${@/*\/lib}
-	gen_usr_ldscript -a "${@/.a}"
+	gen_usr_ldscript -a com_err ss
 }
