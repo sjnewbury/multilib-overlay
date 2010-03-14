@@ -23,14 +23,16 @@ DEPEND="gpm? ( sys-libs/gpm[lib32?] )"
 
 S=${WORKDIR}/${MY_P}
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	[[ -n ${PV_SNAP} ]] && epatch "${WORKDIR}"/${MY_P}-${PV_SNAP}-patch.sh
 	epatch "${WORKDIR}"/${P}-coverity.patch
 	epatch "${FILESDIR}"/${PN}-5.6-gfbsd.patch
 	epatch "${FILESDIR}"/${PN}-5.6-build.patch #184700
-	epatch "${FILESDIR}"/${PN}-5.6-ldflags-multilib-overlay.patch # added by ferret
+
+	# Becaus of adding -L/usr/$(get_lib_dir) to LDFLAGS we see a bug when
+	# upgrading this lib. This is because the buildsystem try to link against the old
+	# version installed in the system. This patch should fix that
+	epatch "${FILESDIR}"/${PN}-5.6-ldflags-multilib-overlay.patch 
 }
 
 multilib-native_src_configure_internal() {
@@ -62,8 +64,6 @@ multilib-native_src_configure_internal() {
 do_configure() {
 	ECONF_SOURCE=${S}
 
-	einfo "ECONF_SOURCE is $ECONF_SOURCE"
-	
 	# We need the basic terminfo files in /etc, bug #37026.  We will
 	# add '--with-terminfo-dirs' and then populate /etc/terminfo in
 	# multilib-native_src_install_internal() ...
@@ -174,10 +174,10 @@ multilib-native_src_install_internal() {
 	prep_ml_binaries /usr/bin/ncurses5-config /usr/bin/ncursesw5-config
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	use unicode || preserve_old_lib /$(get_libdir)/libncursesw.so.5
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	use unicode || preserve_old_lib_notify /$(get_libdir)/libncursesw.so.5
 }

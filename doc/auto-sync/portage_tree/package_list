@@ -302,7 +302,7 @@ sys-fs/udev
 # sys-libs/libselinux
 # sys-libs/libsepol
 # sys-libs/libsmbios
-# sys-libs/ncurses
+sys-libs/ncurses
 sys-libs/pam
 sys-libs/readline
 sys-libs/slang

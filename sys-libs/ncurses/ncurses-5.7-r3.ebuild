@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/ncurses/ncurses-5.7-r3.ebuild,v 1.7 2010/01/16 13:24:38 klausman Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/ncurses/ncurses-5.7-r3.ebuild,v 1.10 2010/03/06 23:12:41 vapier Exp $
 
 EAPI="2"
 inherit eutils flag-o-matic toolchain-funcs multilib-native
@@ -14,10 +14,10 @@ SRC_URI="mirror://gnu/ncurses/${MY_P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="5"
-KEYWORDS="alpha amd64 ~arm hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="ada +cxx debug doc gpm minimal profile trace unicode"
 
-DEPEND="gpm? ( sys-libs/gpm )"
+DEPEND="gpm? ( sys-libs/gpm[lib32?] )"
 #	berkdb? ( sys-libs/db )"
 RDEPEND="!<x11-terms/rxvt-unicode-9.06-r3"
 
@@ -31,7 +31,12 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-5.7-tic-cross-detection.patch #288881
 	epatch "${FILESDIR}"/${PN}-5.7-rxvt-unicode.patch #192083
 	epatch "${FILESDIR}"/${P}-hashdb-open.patch #245370
-	epatch "${FILESDIR}"/${P}-ldflags-multilib-overlay.patch # added by ferret
+	sed -i '/with_no_leaks=yes/s:=.*:=$enableval:' configure #305889
+
+	# Becaus of adding -L/usr/$(get_lib_dir) to LDFLAGS we see a bug when
+	# upgrading this lib. This is because the buildsystem try to link against the old
+	# version installed in the system. This patch should fix that
+	epatch "${FILESDIR}"/${PN}-5.7-ldflags-multilib-overlay.patch 
 }
 
 multilib-native_src_configure_internal() {
@@ -55,7 +60,6 @@ multilib-native_src_configure_internal() {
 	fi
 
 	make_flags=""
-
 	do_configure narrowc
 	use unicode && do_configure widec --enable-widec --includedir=/usr/include/ncursesw
 }
@@ -100,7 +104,7 @@ do_configure() {
 		--enable-echo \
 		$(use_enable !ada warnings) \
 		$(use_with debug assertions) \
-		$(use_with !debug leaks) \
+		$(use_enable !debug leaks) \
 		$(use_with debug expanded) \
 		$(use_with !debug macros) \
 		$(use_with trace) \
@@ -154,7 +158,7 @@ multilib-native_src_install_internal() {
 		# We need the basic terminfo files in /etc, bug #37026
 		einfo "Installing basic terminfo files in /etc..."
 		for x in ansi console dumb linux rxvt rxvt-unicode screen sun vt{52,100,102,200,220} \
-				xterm xterm-color xterm-xfree86
+				 xterm xterm-color xterm-xfree86
 		do
 			local termfile=$(find "${D}"/usr/share/terminfo/ -name "${x}" 2>/dev/null)
 			local basedir=$(basename $(dirname "${termfile}"))

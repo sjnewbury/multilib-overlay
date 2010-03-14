@@ -17,7 +17,7 @@ SLOT="5"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
 IUSE="ada +cxx debug doc gpm minimal profile trace unicode"
 
-DEPEND="gpm? ( sys-libs/gpm )"
+DEPEND="gpm? ( sys-libs/gpm[lib32?] )"
 #	berkdb? ( sys-libs/db )"
 
 S=${WORKDIR}/${MY_P}
@@ -29,7 +29,11 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-5.7-nongnu.patch
 	epatch "${FILESDIR}"/${PN}-5.7-tic-cross-detection.patch #288881
 	epatch "${FILESDIR}"/${P}-hashdb-open.patch #245370
-	epatch "${FILESDIR}"/${P}-ldflags-multilib-overlay.patch # added by ferret
+
+	# Becaus of adding -L/usr/$(get_lib_dir) to LDFLAGS we see a bug when
+	# upgrading this lib. This is because the buildsystem try to link against the old
+	# version installed in the system. This patch should fix that
+	epatch "${FILESDIR}"/${PN}-5.7-ldflags-multilib-overlay.patch 
 }
 
 multilib-native_src_configure_internal() {
@@ -53,7 +57,6 @@ multilib-native_src_configure_internal() {
 	fi
 
 	make_flags=""
-
 	do_configure narrowc
 	use unicode && do_configure widec --enable-widec --includedir=/usr/include/ncursesw
 }
@@ -152,7 +155,7 @@ multilib-native_src_install_internal() {
 		# We need the basic terminfo files in /etc, bug #37026
 		einfo "Installing basic terminfo files in /etc..."
 		for x in ansi console dumb linux rxvt screen sun vt{52,100,102,200,220} \
-				xterm xterm-color xterm-xfree86
+				 xterm xterm-color xterm-xfree86
 		do
 			local termfile=$(find "${D}"/usr/share/terminfo/ -name "${x}" 2>/dev/null)
 			local basedir=$(basename $(dirname "${termfile}"))

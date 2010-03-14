@@ -17,7 +17,7 @@ SLOT="5"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
 IUSE="ada +cxx debug doc gpm minimal profile trace unicode"
 
-DEPEND="gpm? ( sys-libs/gpm )"
+DEPEND="gpm? ( sys-libs/gpm[lib32?] )"
 #	berkdb? ( sys-libs/db )"
 
 S=${WORKDIR}/${MY_P}
@@ -27,7 +27,11 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-5.6-gfbsd.patch
 	epatch "${FILESDIR}"/${PN}-5.7-emacs.patch #270527
 	epatch "${FILESDIR}"/${PN}-5.7-nongnu.patch
-	epatch "${FILESDIR}"/${P}-ldflags-multilib-overlay.patch # added by ferret
+
+	# Becaus of adding -L/usr/$(get_lib_dir) to LDFLAGS we see a bug when
+	# upgrading this lib. This is because the buildsystem try to link against the old
+	# version installed in the system. This patch should fix that
+	epatch "${FILESDIR}"/${PN}-5.7-ldflags-multilib-overlay.patch 
 }
 
 multilib-native_src_configure_internal() {
@@ -96,10 +100,12 @@ multilib-native_src_compile_internal() {
 	# non-parallel), we can then build the rest of the package
 	# in parallel.  This is not really a perf hit since the source
 	# generation is quite small.  -vapier
+
 	cd "${WORKDIR}"/narrowc.${ABI}
 	einfo "Compiling regular ncurses in ${WORKDIR}/narrowc.${ABI} ..."
 	emake -j1 sources || die "make sources failed"
 	emake || die "make failed"
+
 	if use unicode ; then
 		cd "${WORKDIR}"/widec.${ABI}
 		einfo "Compiling unicode ncurses in ${WORKDIR}/widec.${ABI} .."
