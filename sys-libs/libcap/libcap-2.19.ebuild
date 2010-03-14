@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/libcap/libcap-2.16.ebuild,v 1.7 2009/04/18 18:22:11 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/libcap/libcap-2.19.ebuild,v 1.1 2010/03/07 00:12:48 vapier Exp $
 
 EAPI="2"
 
@@ -12,7 +12,7 @@ SRC_URI="mirror://kernel/linux/libs/security/linux-privs/libcap${PV:0:1}/${P}.ta
 
 LICENSE="GPL-2 BSD"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ~ppc ppc64 s390 sh sparc x86"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 IUSE="pam"
 
 RDEPEND="sys-apps/attr[lib32?]
@@ -21,12 +21,12 @@ DEPEND="${RDEPEND}
 	sys-kernel/linux-headers"
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}"/${PV}/*.patch
+	epatch "${FILESDIR}"/2.16/*.patch
 	sed -i -e '/cap_setfcap.*morgan/s:^:#:' pam_cap/capability.conf
 	sed -i \
 		-e "/^PAM_CAP/s:=.*:=$(use pam && echo yes || echo no):" \
 		-e '/^DYNAMIC/s:=.*:=yes:' \
-		-e "/^lib=/s:=.*:=$(get_libdir):" \
+		-e "/^lib=/s:=.*:=/usr/$(get_libdir):" \
 		Make.Rules
 }
 
@@ -38,8 +38,7 @@ multilib-native_src_compile_internal() {
 multilib-native_src_install_internal() {
 	emake install lib=$(get_libdir) DESTDIR="${D}" || die
 
-	gen_usr_ldscript libcap.so
-	mv "${D}"/$(get_libdir)/libcap.a "${D}"/usr/$(get_libdir)/ || die
+	gen_usr_ldscript -a cap
 
 	dopammod pam_cap/pam_cap.so
 	dopamsecurity '' pam_cap/capability.conf

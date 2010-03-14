@@ -1,0 +1,29 @@
+--- /usr/portage/sys-libs/libcap/libcap-2.17.ebuild	2010-01-24 19:38:22.000000000 +0100
++++ ./sys-libs/libcap/libcap-2.17.ebuild	2010-03-14 17:44:00.000000000 +0100
+@@ -18,9 +18,7 @@
+ DEPEND="${RDEPEND}
+ 	sys-kernel/linux-headers"
+ 
+-src_unpack() {
+-	unpack ${P}.tar.bz2
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/2.16/*.patch
+ 	sed -i -e '/cap_setfcap.*morgan/s:^:#:' pam_cap/capability.conf
+ 	sed -i \
+@@ -31,12 +29,12 @@
+ }
+ 
+ src_compile() {
+-	tc-export BUILD_CC CC AR RANLIB
+-	emake || die
++	[[ -z ${EMULTILIB_PKG} ]] && tc-export BUILD_CC CC AR RANLIB
++	emake lib=$(get_libdir) || die
+ }
+ 
+ src_install() {
+-	emake install DESTDIR="${D}" || die
++	emake install lib=$(get_libdir) DESTDIR="${D}" || die
+ 
+ 	gen_usr_ldscript libcap.so
+ 	mv "${D}"/$(get_libdir)/libcap.a "${D}"/usr/$(get_libdir)/ || die
