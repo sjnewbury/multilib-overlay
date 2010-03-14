@@ -1,10 +1,10 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-devel/gettext/gettext-0.17.ebuild,v 1.14 2008/11/28 22:37:38 ulm Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-devel/gettext/gettext-0.17.ebuild,v 1.15 2009/05/29 19:57:17 flameeyes Exp $
 
 EAPI="2"
 
-inherit flag-o-matic eutils multilib toolchain-funcs mono libtool java-pkg-2 multilib-native
+inherit flag-o-matic eutils multilib toolchain-funcs mono libtool multilib-native
 
 DESCRIPTION="GNU locale utilities"
 HOMEPAGE="http://www.gnu.org/software/gettext/gettext.html"
@@ -19,14 +19,12 @@ DEPEND="virtual/libiconv
 	dev-libs/libxml2[lib32?]
 	sys-libs/ncurses[lib32?]
 	dev-libs/expat[lib32?]
-	acl? ( kernel_linux? ( sys-apps/acl[lib32?] ) )"
+	acl? ( virtual/acl[lib32?] )"
 PDEPEND="emacs? ( app-emacs/po-mode )"
 RDEPEND="${DEPEND}
 	java? ( >=virtual/jdk-1.4 )"
 
 multilib-native_src_prepare_internal() {
-	cd "${S}"
-
 	epunt_cxx
 
 	epatch "${FILESDIR}"/${PN}-0.14.1-lib-path-tests.patch #81628
@@ -99,7 +97,7 @@ multilib-native_src_install_internal() {
 
 	if use java; then
 		java-pkg_newjar "${S}"/gettext-runtime/intl-java/libintl.jar || die
-
+		
 		if use doc; then
 			rm -rf "${D}"/usr/share/doc/${PF}/{html,javadoc2,javadoc1}
 			java-pkg_dojavadoc gettext-runtime/intl-java/javadoc*

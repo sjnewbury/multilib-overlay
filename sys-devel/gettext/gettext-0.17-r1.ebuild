@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-devel/gettext/gettext-0.17-r1.ebuild,v 1.1 2010/01/05 07:13:54 pva Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-devel/gettext/gettext-0.17-r1.ebuild,v 1.7 2010/03/13 02:56:11 aballier Exp $
 
 EAPI="2"
 
-inherit flag-o-matic eutils multilib toolchain-funcs mono libtool java-pkg-2 multilib-native
+inherit flag-o-matic eutils multilib toolchain-funcs mono libtool multilib-native
 
 DESCRIPTION="GNU locale utilities"
 HOMEPAGE="http://www.gnu.org/software/gettext/gettext.html"
@@ -12,21 +12,19 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-3 LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="acl doc emacs nls nocxx openmp java"
 
 DEPEND="virtual/libiconv
 	dev-libs/libxml2[lib32?]
 	sys-libs/ncurses[lib32?]
 	dev-libs/expat[lib32?]
-	acl? ( kernel_linux? ( sys-apps/acl[lib32?] ) )"
+	acl? ( virtual/acl[lib32?] )"
 PDEPEND="emacs? ( app-emacs/po-mode )"
 RDEPEND="${DEPEND}
 	java? ( >=virtual/jdk-1.4 )"
 
 multilib-native_src_prepare_internal() {
-	cd "${S}"
-
 	epunt_cxx
 
 	epatch "${FILESDIR}"/${PN}-0.14.1-lib-path-tests.patch #81628
@@ -91,7 +89,7 @@ multilib-native_src_install_internal() {
 	rm -f "${D}"/usr/share/locale/locale.alias "${D}"/usr/lib/charset.alias
 
 	if [[ ${USERLAND} == "BSD" ]] ; then
-		libname="libintl$(get_libname 8)"
+		libname="libintl$(get_libname)"
 		# Move dynamic libs and creates ldscripts into /usr/lib
 		dodir /$(get_libdir)
 		mv "${D}"/usr/$(get_libdir)/${libname}* "${D}"/$(get_libdir)/
@@ -100,7 +98,7 @@ multilib-native_src_install_internal() {
 
 	if use java; then
 		java-pkg_newjar "${S}"/gettext-runtime/intl-java/libintl.jar || die
-
+		
 		if use doc; then
 			rm -rf "${D}"/usr/share/doc/${PF}/{html,javadoc2,javadoc1}
 			java-pkg_dojavadoc gettext-runtime/intl-java/javadoc*

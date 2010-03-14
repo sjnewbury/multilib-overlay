@@ -281,7 +281,7 @@ sys-apps/util-linux
 # sys-auth/policykit
 # sys-auth/polkit
 # sys-devel/flex
-# sys-devel/gettext
+sys-devel/gettext
 # sys-devel/libperl
 # sys-devel/libtool
 # sys-fs/device-mapper
