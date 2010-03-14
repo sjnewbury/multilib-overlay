@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/tiff/tiff-3.9.2-r1.ebuild,v 1.3 2010/02/28 15:26:15 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/tiff/tiff-3.9.2-r1.ebuild,v 1.7 2010/03/09 21:46:10 josejx Exp $
 
 EAPI=2
 inherit eutils libtool multilib-native
@@ -11,10 +11,10 @@ SRC_URI="ftp://ftp.remotesensing.org/pub/libtiff/${P}.tar.gz"
 
 LICENSE="as-is"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd ~x64-freebsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd ~x64-freebsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 IUSE="jpeg jbig +cxx zlib"
 
-DEPEND="jpeg? ( >=media-libs/jpeg-6b[lib32?] )
+DEPEND="jpeg? ( >=media-libs/jpeg-6b:0[lib32?] )
 	jbig? ( media-libs/jbigkit[lib32?] )
 	zlib? ( sys-libs/zlib[lib32?] )"
 
@@ -25,6 +25,7 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
+	use prefix || EPREFIX=
 	econf \
 		--disable-dependency-tracking \
 		$(use_enable cxx) \
@@ -32,7 +33,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable jpeg) \
 		$(use_enable jbig) \
 		--without-x \
-		--with-docdir=/usr/share/doc/${PF}
+		--with-docdir="${EPREFIX}"/usr/share/doc/${PF}
 }
 
 multilib-native_src_install_internal() {
@@ -40,7 +41,7 @@ multilib-native_src_install_internal() {
 	dodoc ChangeLog README TODO
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	if use jbig; then
 		echo
 		elog "JBIG support is intended for Hylafax fax compression, so we"
