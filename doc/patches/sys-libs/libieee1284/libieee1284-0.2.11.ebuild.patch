@@ -1,0 +1,10 @@
+--- /usr/portage/sys-libs/libieee1284/libieee1284-0.2.11.ebuild	2007-06-17 23:15:21.000000000 +0200
++++ ./sys-libs/libieee1284/libieee1284-0.2.11.ebuild	2010-03-14 17:21:28.000000000 +0100
+@@ -13,6 +13,7 @@
+ 
+ RDEPEND=""
+ DEPEND="${RDEPEND}
++	dev-lang/python
+ 	doc? (
+		app-text/docbook-sgml-utils
+ 		>=app-text/docbook-sgml-dtd-4.1

@@ -297,7 +297,7 @@ sys-fs/udev
 # sys-libs/gpm
 # sys-libs/libcap
 # sys-libs/libcap-ng
-# sys-libs/libieee1284
+sys-libs/libieee1284
 sys-libs/libraw1394
 sys-libs/libselinux
 sys-libs/libsepol

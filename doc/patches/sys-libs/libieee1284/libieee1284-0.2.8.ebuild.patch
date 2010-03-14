@@ -1,0 +1,21 @@
+--- /usr/portage/./sys-libs/libieee1284/libieee1284-0.2.8.ebuild	2009-04-12 10:07:53.000000000 +0200
++++ ./sys-libs/libieee1284/libieee1284-0.2.8.ebuild	2010-03-14 17:26:42.000000000 +0100
+@@ -16,6 +16,7 @@
+ 
+ RDEPEND=""
+ DEPEND="${RDEPEND}
++	dev-lang/python
+ 	doc? (
+ 		app-text/docbook-sgml-utils
+ 		>=app-text/docbook-sgml-dtd-4.1
+@@ -23,9 +24,7 @@
+ 		dev-perl/XML-RegExp
+ 	)"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${DISTDIR}/${P}-dbjh-v4.diff.bz2"
+ 	eautoreconf
+ }

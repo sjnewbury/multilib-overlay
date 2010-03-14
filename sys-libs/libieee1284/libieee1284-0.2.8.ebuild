@@ -26,9 +26,7 @@ DEPEND="${RDEPEND}
 		dev-perl/XML-RegExp
 	)"
 
-multilib-native_src_unpack_internal() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${DISTDIR}/${P}-dbjh-v4.diff.bz2"
 	eautoreconf
 }
