@@ -1,0 +1,11 @@
+--- /usr/portage/x11-libs/gtkglext/gtkglext-1.2.0.ebuild	2009-05-05 18:37:07.000000000 +0200
++++ ./x11-libs/gtkglext/gtkglext-1.2.0.ebuild	2010-03-14 03:20:18.000000000 +0100
+@@ -23,3 +23,8 @@
+ 	dev-util/pkgconfig"
+ 
+ DOCS="AUTHORS ChangeLog* NEWS README TODO"
++
++multilib-native_src_configure_internal() {
++	G2CONF="--x-libraries=/usr/$(get_libdir)"
++	gnome2_src_configure
++}
