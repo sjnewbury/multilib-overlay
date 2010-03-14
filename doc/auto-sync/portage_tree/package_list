@@ -300,7 +300,7 @@ sys-fs/udev
 # sys-libs/libieee1284
 # sys-libs/libraw1394
 # sys-libs/libselinux
-# sys-libs/libsepol
+sys-libs/libsepol
 sys-libs/libsmbios
 sys-libs/ncurses
 sys-libs/pam
