@@ -32,3 +32,5 @@ dev-db/sqlite/sqlite-3.6.20-r1.ebuild
 dev-db/sqlite/sqlite-3.6.21.ebuild
 dev-db/sqlite/sqlite-3.6.22.ebuild
 dev-db/sqlite/sqlite-3.6.22-r1.ebuild
+dev-cpp/gtkmm/gtkmm-1.2.9-r2.ebuild
+dev-cpp/gtkmm/gtkmm-2.2.12.ebuild

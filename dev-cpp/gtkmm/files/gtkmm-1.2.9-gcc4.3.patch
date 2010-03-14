@@ -1,0 +1,17 @@
+--- src/gtkmmproc/gtkmmproc.cc~ 2007-04-01 20:46:07.000000000 +0000
++++ src/gtkmmproc/gtkmmproc.cc  2007-04-01 20:46:11.000000000 +0000
+@@ -1,5 +1,6 @@
+ // $Id: gtkmm-1.2.9-gcc4.3.patch,v 1.1 2008/07/11 09:00:23 remi Exp $
+ 
++#include <cstdlib>
+ #include <stdio.h>
+ #include <iostream>
+ #include <string>
+--- src/gtkmmproc/fixate.cc~    2007-04-01 20:46:21.000000000 +0000
++++ src/gtkmmproc/fixate.cc     2007-04-01 20:46:26.000000000 +0000
+@@ -1,3 +1,4 @@
++#include <cstdlib>
+ #include <stdio.h>
+ #include <string>
+ #include <string.h>
+
