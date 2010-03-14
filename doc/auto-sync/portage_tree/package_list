@@ -306,7 +306,7 @@ sys-fs/udev
 # sys-libs/pam
 # sys-libs/readline
 # sys-libs/slang
-# sys-libs/talloc
+sys-libs/talloc
 sys-libs/tdb
 sys-libs/zlib
 # virtual/acl

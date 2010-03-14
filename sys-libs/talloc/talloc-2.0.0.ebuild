@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/talloc/talloc-2.0.0.ebuild,v 1.2 2009/10/09 17:24:13 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/talloc/talloc-2.0.0.ebuild,v 1.4 2009/11/04 11:30:19 patrick Exp $
 
 EAPI="2"
 
@@ -14,7 +14,9 @@ IUSE="compat"
 SLOT="0"
 KEYWORDS="~amd64 ~hppa ~ppc64 ~x86"
 
-DEPEND="!net-fs/samba-libs[talloc]"
+DEPEND="
+	!<net-fs/samba-libs-3.4
+	"
 RDEPEND="${DEPEND}"
 
 multilib-native_src_prepare_internal() {
