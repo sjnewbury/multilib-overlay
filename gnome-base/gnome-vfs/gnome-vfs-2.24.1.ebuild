@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-vfs/gnome-vfs-2.24.1.ebuild,v 1.6 2009/08/02 14:21:18 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-vfs/gnome-vfs-2.24.1.ebuild,v 1.8 2009/08/19 16:36:29 jer Exp $
 
 EAPI="2"
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="2"
-KEYWORDS="alpha amd64 arm ~hppa ia64 ~mips ~ppc ppc64 sh sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="acl avahi doc fam gnutls hal ipv6 kerberos samba ssl"
 
 RDEPEND=">=gnome-base/gconf-2[lib32?]
@@ -34,10 +34,10 @@ RDEPEND=">=gnome-base/gconf-2[lib32?]
 	avahi? ( >=net-dns/avahi-0.6[lib32?] )
 	kerberos? ( virtual/krb5 )
 	acl? (
-		sys-apps/acl
-		sys-apps/attr )"
+		sys-apps/acl[lib32?]
+		sys-apps/attr[lib32?] )"
 DEPEND="${RDEPEND}
-	sys-devel/gettext
+	sys-devel/gettext[lib32?]
 	gnome-base/gnome-common
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.9[lib32?]
@@ -47,7 +47,7 @@ PDEPEND="hal? ( >=gnome-base/gnome-mount-0.6 )"
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README TODO"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		--disable-schemas-install
 		--disable-static
@@ -77,8 +77,8 @@ pkg_setup() {
 	use gnutls && use ssl && G2CONF="${G2CONF} --disable-openssl"
 }
 
-src_unpack() {
-	gnome2_src_unpack
+multilib-native_src_prepare_internal() {
+	gnome2_src_prepare
 
 	# Allow the Trash on afs filesystems (#106118)
 	epatch "${FILESDIR}"/${PN}-2.12.0-afs.patch

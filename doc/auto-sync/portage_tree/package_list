@@ -121,7 +121,7 @@ dev-python/dbus-python
 # gnome-base/gnome-keyring
 # gnome-base/gnome-menus
 # gnome-base/gnome-panel
-# gnome-base/gnome-vfs
+gnome-base/gnome-vfs
 # gnome-base/gvfs
 # gnome-base/libbonobo
 gnome-base/libbonoboui
