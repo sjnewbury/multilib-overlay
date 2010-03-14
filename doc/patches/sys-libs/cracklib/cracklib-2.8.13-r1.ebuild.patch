@@ -1,0 +1,25 @@
+--- /usr/portage/sys-libs/cracklib/cracklib-2.8.13-r1.ebuild	2010-03-08 23:37:33.000000000 +0100
++++ ./sys-libs/cracklib/cracklib-2.8.13-r1.ebuild	2010-03-14 18:25:23.000000000 +0100
+@@ -27,20 +27,17 @@
+ 	fi
+ }
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/${P}-python-linkage.patch #246747
+ 	elibtoolize #269003
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	econf \
+ 		--with-default-dict='$(libdir)/cracklib_dict' \
+ 		$(use_enable nls) \
+ 		$(use_with python) \
+ 		|| die
+-	emake || die
+ }
+ 
+ src_install() {

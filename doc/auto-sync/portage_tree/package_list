@@ -290,7 +290,7 @@ sys-devel/gettext
 # sys-fs/lvm2
 # sys-fs/sysfsutils
 sys-fs/udev
-# sys-libs/cracklib
+sys-libs/cracklib
 sys-libs/db
 sys-libs/e2fsprogs-libs
 sys-libs/gdbm
