@@ -93,6 +93,6 @@ multilib-native_src_install_internal() {
 EOF
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	use kernel_linux && linux-mod_pkg_postinst
 }
