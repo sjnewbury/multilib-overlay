@@ -305,7 +305,7 @@ sys-fs/udev
 # sys-libs/ncurses
 # sys-libs/pam
 # sys-libs/readline
-# sys-libs/slang
+sys-libs/slang
 sys-libs/talloc
 sys-libs/tdb
 sys-libs/zlib

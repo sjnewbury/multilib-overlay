@@ -14,12 +14,12 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="cjk pcre png readline zlib"
 
-RDEPEND="sys-libs/ncurses[-minimal,lib32?]
+RDEPEND="sys-libs/ncurses[lib32?]
 	pcre? ( dev-libs/libpcre[lib32?] )
 	png? ( media-libs/libpng[lib32?] )
 	cjk? ( dev-libs/oniguruma[lib32?] )
 	readline? ( sys-libs/readline[lib32?] )
-	zlib? ( sys-libs/zlib )"
+	zlib? ( sys-libs/zlib[lib32?] )"
 DEPEND="${RDEPEND}"
 
 multilib-native_src_prepare_internal() {

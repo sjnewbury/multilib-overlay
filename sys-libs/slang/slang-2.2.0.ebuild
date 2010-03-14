@@ -1,9 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/slang/slang-2.2.0.ebuild,v 1.7 2009/10/25 12:25:25 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/slang/slang-2.2.0.ebuild,v 1.9 2009/12/17 18:32:56 armin76 Exp $
 
 EAPI=2
-
 inherit eutils multilib-native
 
 DESCRIPTION="a portable programmer's library designed to allow a developer to create robust portable software."
@@ -12,15 +11,15 @@ SRC_URI="ftp://ftp.fu-berlin.de/pub/unix/misc/slang/v${PV%.*}/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ~ia64 ~mips ppc ~ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="cjk pcre png readline zlib"
 
-RDEPEND="sys-libs/ncurses[-minimal,lib32?]
+RDEPEND="sys-libs/ncurses[lib32?]
 	pcre? ( dev-libs/libpcre[lib32?] )
 	png? ( media-libs/libpng[lib32?] )
 	cjk? ( dev-libs/oniguruma[lib32?] )
 	readline? ( sys-libs/readline[lib32?] )
-	zlib? ( sys-libs/zlib )"
+	zlib? ( sys-libs/zlib[lib32?] )"
 DEPEND="${RDEPEND}"
 
 multilib-native_src_prepare_internal() {
