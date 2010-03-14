@@ -17,8 +17,8 @@ KEYWORDS="alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 IUSE="readline +static clvm cman +lvm1 selinux"
 
 DEPEND="!!sys-fs/device-mapper
-	clvm? ( =sys-cluster/dlm-2*[lib32?]
-		cman? ( =sys-cluster/cman-2*[lib32?] ) )"
+	clvm? ( =sys-cluster/dlm-2*
+		cman? ( =sys-cluster/cman-2* ) )"
 
 RDEPEND="${DEPEND}
 	!<sys-apps/openrc-0.4
@@ -36,6 +36,10 @@ multilib-native_pkg_setup_internal() {
 		elog "their static versions. If you need the static binaries,"
 		elog "you must append .static the filename!"
 	fi
+}
+
+multilib-native_src_unpack_internal() {
+	unpack ${A}
 }
 
 multilib-native_src_prepare_internal() {
@@ -198,7 +202,7 @@ multilib-native_src_install_internal() {
 	elog "If you are using genkernel and root-on-LVM, rebuild the initramfs."
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "lvm volumes are no longer automatically created for"
 	elog "baselayout-2 users. If you are using baselayout-2, be sure to"
 	elog "run: # rc-update add lvm boot"

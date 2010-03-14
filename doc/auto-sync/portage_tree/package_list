@@ -287,7 +287,7 @@ sys-devel/gettext
 # sys-fs/device-mapper
 # sys-fs/e2fsprogs
 # sys-fs/fuse
-# sys-fs/lvm2
+sys-fs/lvm2
 sys-fs/sysfsutils
 sys-fs/udev
 sys-libs/cracklib

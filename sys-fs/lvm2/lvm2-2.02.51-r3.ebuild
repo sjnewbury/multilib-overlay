@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/lvm2/lvm2-2.02.56-r2.ebuild,v 1.8 2010/02/02 18:15:22 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/lvm2/lvm2-2.02.51-r3.ebuild,v 1.4 2009/12/11 15:44:06 armin76 Exp $
 
 EAPI=2
 inherit eutils multilib toolchain-funcs autotools multilib-native
@@ -12,22 +12,19 @@ SRC_URI="ftp://sources.redhat.com/pub/lvm2/${PN/lvm/LVM}.${PV}.tgz
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 
 IUSE="readline +static clvm cman +lvm1 selinux"
 
-DEPEND_COMMON="!!sys-fs/device-mapper
+DEPEND="!!sys-fs/device-mapper
 	clvm? ( =sys-cluster/dlm-2*
-			cman? ( =sys-cluster/cman-2* ) )"
+		cman? ( =sys-cluster/cman-2* ) )"
 
-RDEPEND="${DEPEND_COMMON}
+RDEPEND="${DEPEND}
 	!<sys-apps/openrc-0.4
 	!!sys-fs/lvm-user
 	!!sys-fs/clvm
 	>=sys-apps/util-linux-2.16[lib32?]"
-
-DEPEND="${DEPEND_COMMON}
-		dev-util/pkgconfig[lib32?]"
 
 S="${WORKDIR}/${PN/lvm/LVM}.${PV}"
 
@@ -46,22 +43,13 @@ multilib-native_src_unpack_internal() {
 }
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}"/${PN}-2.02.56-dmeventd.patch
-	epatch "${FILESDIR}"/lvm.conf-2.02.56.patch
-	epatch "${FILESDIR}"/${PN}-2.02.56-device-mapper-export-format.patch
-
-	# Merged upstream:
-	#epatch "${FILESDIR}"/${PN}-2.02.51-as-needed.patch
-	# Merged upstream:
-	#epatch "${FILESDIR}"/${PN}-2.02.48-fix-pkgconfig.patch
-	# Merged upstream:
-	#epatch "${FILESDIR}"/${PN}-2.02.51-fix-pvcreate.patch
-	# Fixed differently upstream:
-	#epatch "${FILESDIR}"/${PN}-2.02.51-dmsetup-selinux-linking-fix-r3.patch
-
-	epatch "${FILESDIR}"/${PN}-2.02.56-always-make-static-libdm.patch
-	epatch "${FILESDIR}"/lvm2-2.02.56-lvm2create_initrd.patch
-
+	epatch "${FILESDIR}"/${PN}-2.02.45-dmeventd.patch
+	epatch "${FILESDIR}"/lvm.conf-2.02.51.patch
+	epatch "${FILESDIR}"/${PN}-2.02.51-device-mapper-export-format.patch
+	epatch "${FILESDIR}"/${PN}-2.02.51-as-needed.patch
+	epatch "${FILESDIR}"/${PN}-2.02.48-fix-pkgconfig.patch
+	epatch "${FILESDIR}"/${PN}-2.02.51-fix-pvcreate.patch
+	epatch "${FILESDIR}"/${PN}-2.02.51-dmsetup-selinux-linking-fix-r3.patch
 	eautoreconf
 }
 
@@ -174,12 +162,10 @@ multilib-native_src_install_internal() {
 	fi
 
 	# move shared libs to /lib(64)
-	dolib.a libdm/ioctl/libdevmapper.a || die "dolib.a libdevmapper.a"
+	if use static; then
+		dolib.a libdm/ioctl/libdevmapper.a || die "dolib.a libdevmapper.a"
+	fi
 	#gen_usr_ldscript libdevmapper.so
-
-	dosbin "${S}"/scripts/lvm2create_initrd/lvm2create_initrd
-	doman  "${S}"/scripts/lvm2create_initrd/lvm2create_initrd.8
-	newdoc "${S}"/scripts/lvm2create_initrd/README README.lvm2create_initrd
 
 	insinto /etc
 	doins "${FILESDIR}"/dmtab
@@ -191,8 +177,10 @@ multilib-native_src_install_internal() {
 	newconfd "${FILESDIR}"/device-mapper.conf-1.02.22-r3 device-mapper || die
 
 	newinitd "${FILESDIR}"/1.02.22-dmeventd.initd dmeventd || die
-	dolib.a daemons/dmeventd/libdevmapper-event.a \
-	|| die "dolib.a libdevmapper-event.a"
+	if use static; then
+		dolib.a daemons/dmeventd/libdevmapper-event.a \
+		|| die "dolib.a libdevmapper-event.a"
+	fi
 	#gen_usr_ldscript libdevmapper-event.so
 
 	insinto /etc/udev/rules.d/

@@ -38,6 +38,10 @@ multilib-native_pkg_setup_internal() {
 	fi
 }
 
+multilib-native_src_unpack_internal() {
+	unpack ${A}
+}
+
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-2.02.45-dmeventd.patch
 	epatch "${FILESDIR}"/lvm.conf-2.02.51.patch
@@ -214,7 +218,7 @@ multilib-native_pkg_postinst_internal() {
 	elog "Do NOT add it if you are using baselayout-1 still."
 }
 
-multilib-native_src_test_internal() {
+src_test() {
 	einfo "Testcases disabled because of device-node mucking"
 	einfo "If you want them, compile the package and see ${S}/tests"
 }
