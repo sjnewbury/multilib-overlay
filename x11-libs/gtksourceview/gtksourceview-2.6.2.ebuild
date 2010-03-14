@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/gtksourceview/gtksourceview-2.6.2.ebuild,v 1.9 2010/01/17 23:29:44 jer Exp $
 
 EAPI="2"
+
 GCONF_DEBUG="no"
 
 inherit gnome2 multilib-native

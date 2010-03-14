@@ -332,7 +332,7 @@ sys-fs/udev
 # x11-libs/goocanvas
 x11-libs/gtk+
 # x11-libs/gtkglext
-# x11-libs/gtksourceview
+x11-libs/gtksourceview
 x11-libs/libdrm
 x11-libs/libfontenc
 x11-libs/libICE
