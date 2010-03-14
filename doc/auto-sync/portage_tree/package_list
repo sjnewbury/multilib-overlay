@@ -70,7 +70,7 @@ dev-libs/glib
 # dev-libs/libcroco
 # dev-libs/libdaemon
 # dev-libs/libedit
-# dev-libs/libffi
+dev-libs/libffi
 # dev-libs/libgamin
 dev-libs/libgcrypt
 # dev-libs/libgee
