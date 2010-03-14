@@ -22,3 +22,5 @@ sys-fs/udev/udev-146-r2.ebuild
 sys-fs/udev/udev-147-r1.ebuild
 sys-fs/udev/udev-9999.ebuild
 sys-devel/gettext/gettext-0.16.1-r1.ebuild
+net-misc/openssh/openssh-5.1_p1-r2.ebuild
+net-misc/openssh/openssh-5.2_p1-r3.ebuild

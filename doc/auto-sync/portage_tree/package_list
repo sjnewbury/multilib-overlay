@@ -259,7 +259,7 @@ net-libs/libsoup-gnome
 # net-libs/xulrunner
 # net-misc/curl
 # net-misc/networkmanager
-# net-misc/openssh
+net-misc/openssh
 # net-nds/openldap
 # net-print/cups
 # net-print/libgnomecups
