@@ -37,6 +37,12 @@ make_multilib() {
 			a \
 			\\\ninherit multilib-native
 		}" $1
+		if [[ "" == "$(grep inherit $1)" ]]; then
+			sed -i "/^# \$Header/ {
+				a \
+				\\\ninherit multilib-native
+			}" $1
+		fi
 	else
 		sed -i "/^inherit / { /multilib-native/ b; s/$/ multilib-native/ }" $1
 	fi
