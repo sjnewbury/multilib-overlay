@@ -22,8 +22,8 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
-src_unpack() {
-	gnome2_src_unpack
+multilib-native_src_prepare_internal() {
+	gnome2_src_prepare
 
 	# don't waste time building tests
 	# no USE=test because there is no "check" target

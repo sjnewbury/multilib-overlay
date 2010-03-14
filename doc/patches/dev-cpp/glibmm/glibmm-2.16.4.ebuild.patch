@@ -1,0 +1,13 @@
+--- /usr/portage/dev-cpp/glibmm/glibmm-2.16.4.ebuild	2009-01-07 19:06:27.000000000 +0100
++++ ./dev-cpp/glibmm/glibmm-2.16.4.ebuild	2010-03-14 02:54:48.000000000 +0100
+@@ -20,8 +20,8 @@
+ 
+ DOCS="AUTHORS ChangeLog NEWS README"
+ 
+-src_unpack() {
+-	gnome2_src_unpack
++src_prepare() {
++	gnome2_src_prepare
+ 
+ 	# don't waste time building tests
+ 	# no USE=test because there is no "check" target

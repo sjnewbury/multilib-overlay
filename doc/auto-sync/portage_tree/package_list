@@ -31,7 +31,7 @@
 # app-text/opensp
 # app-text/poppler
 # dev-cpp/cairomm
-# dev-cpp/glibmm
+dev-cpp/glibmm
 dev-cpp/gtkmm
 dev-cpp/pangomm
 # dev-db/mysql
