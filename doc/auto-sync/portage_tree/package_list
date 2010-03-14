@@ -256,7 +256,7 @@ net-libs/libsoup-gnome
 # net-libs/libssh2
 # net-libs/openslp
 # net-libs/webkit-gtk
-# net-libs/xulrunner
+net-libs/xulrunner
 # net-misc/curl
 # net-misc/networkmanager
 net-misc/openssh
@@ -325,9 +325,8 @@ sys-fs/udev
 # virtual/tdb
 # www-client/epiphany
 # www-client/epiphany-extensions
-# www-client/mozilla-firefox
+www-client/mozilla-firefox
 # www-plugins/adobe-flash
-# x11-apps/mesa-progs
 x11-libs/cairo
 x11-libs/goocanvas
 x11-libs/gtk+

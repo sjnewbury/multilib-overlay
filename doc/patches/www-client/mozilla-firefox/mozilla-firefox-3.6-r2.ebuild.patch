@@ -1,0 +1,21 @@
+--- /usr/portage/www-client/mozilla-firefox/mozilla-firefox-3.6-r2.ebuild	2010-02-20 04:07:09.000000000 +0100
++++ ./www-client/mozilla-firefox/mozilla-firefox-3.6-r2.ebuild	2010-03-14 04:27:16.000000000 +0100
+@@ -113,11 +113,13 @@
+ src_unpack() {
+ 	unpack firefox-${MY_PV}.source.tar.bz2 ${PATCH}.tar.bz2
+ 
+-	linguas
+-	for X in ${linguas}; do
+-		# FIXME: Add support for unpacking xpis to portage
+-		[[ ${X} != "en" ]] && xpi_unpack "${P}-${X}.xpi"
+-	done
++	if is_final_abi; then
++		linguas
++		for X in ${linguas}; do
++			# FIXME: Add support for unpacking xpis to portage
++			[[ ${X} != "en" ]] && xpi_unpack "${P}-${X}.xpi"
++		done
++	fi
+ }
+ 
+ src_prepare() {

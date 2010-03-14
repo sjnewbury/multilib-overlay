@@ -23,11 +23,11 @@ LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 IUSE="+alsa debug libnotify wifi"
 
 RDEPEND="java? ( >=virtual/jre-1.4 )
-	>=dev-lang/python-2.3[lib32?,threads]
+	>=dev-lang/python-2.3[threads,lib32?]
 	>=sys-devel/binutils-2.16.1
 	>=dev-libs/nss-3.12.4[lib32?]
 	>=dev-libs/nspr-4.8[lib32?]
-	sqlite? ( >=dev-db/sqlite-3.6.22-r2[fts3,secure-delete,lib32?] )
+	>=dev-db/sqlite-3.6.22-r2[fts3,secure-delete,lib32?]
 	alsa? ( media-libs/alsa-lib[lib32?] )
 	>=app-text/hunspell-1.2[lib32?]
 	>=media-libs/lcms-1.17[lib32?]
@@ -35,7 +35,7 @@ RDEPEND="java? ( >=virtual/jre-1.4 )
 	x11-libs/pango[X,lib32?]
 	x11-libs/libXt[lib32?]
 	wifi? ( net-wireless/wireless-tools )
-	libnotify? ( >=x11-libs/libnotify-0.4 )"
+	libnotify? ( >=x11-libs/libnotify-0.4[lib32?] )"
 
 DEPEND="java? ( >=virtual/jdk-1.4 )
 	${RDEPEND}
@@ -43,18 +43,13 @@ DEPEND="java? ( >=virtual/jdk-1.4 )
 
 S="${WORKDIR}/mozilla-${MAJ_PV}"
 
-# Needed by src_compile() and src_install().
-# Would do in pkg_setup but that loses the export attribute, they
-# become pure shell variables.
-export BUILD_OFFICIAL=1
-export MOZILLA_OFFICIAL=1
-
 multilib-native_pkg_setup_internal() {
 	# Ensure we always build with C locale.
 	export LANG="C"
 	export LC_ALL="C"
 	export LC_MESSAGES="C"
 	export LC_CTYPE="C"
+
 	java-pkg-opt-2_pkg_setup
 }
 
@@ -192,7 +187,7 @@ multilib-native_src_install_internal() {
 
 	# env.d file for ld search path
 	dodir /etc/env.d
-	echo "LDPATH=${MOZLIBDIR}" > "${D}/etc/env.d/08xulrunner-${ABI}" || die "env.d failed"
+	echo "LDPATH=${MOZLIBDIR}" > "${D}"/etc/env.d/08xulrunner-${ABI} || die "env.d failed"
 
 	# Add our defaults to xulrunner and out of firefox
 	cp "${FILESDIR}"/xulrunner-default-prefs.js \
