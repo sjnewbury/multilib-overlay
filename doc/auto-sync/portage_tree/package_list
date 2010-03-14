@@ -128,7 +128,7 @@ dev-python/dbus-python
 # gnome-base/libglade
 # gnome-base/libgnome
 # gnome-base/libgnomecanvas
-# gnome-base/libgnomeui
+gnome-base/libgnomeui
 # gnome-base/libgtop
 # gnome-base/librsvg
 # gnome-base/nautilus
