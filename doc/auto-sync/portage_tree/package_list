@@ -288,7 +288,7 @@ sys-devel/gettext
 # sys-fs/e2fsprogs
 # sys-fs/fuse
 # sys-fs/lvm2
-# sys-fs/sysfsutils
+sys-fs/sysfsutils
 sys-fs/udev
 sys-libs/cracklib
 sys-libs/db
