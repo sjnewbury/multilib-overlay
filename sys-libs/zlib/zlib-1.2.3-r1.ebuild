@@ -57,7 +57,6 @@ multilib-native_src_install_internal() {
 
 	# we don't need the static lib in /lib
 	# as it's only for compiling against
-	into /usr/
 	dolib libz.a
 
 	# all the shared libs go into /lib
