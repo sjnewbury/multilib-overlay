@@ -1,8 +1,6 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/zlib/zlib-1.2.3-r1.ebuild,v 1.13 2008/05/02 04:13:33 vapier Exp $
-
-EAPI="2"
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/zlib/zlib-1.2.3-r1.ebuild,v 1.14 2009/10/10 17:01:04 vapier Exp $
 
 inherit eutils flag-o-matic toolchain-funcs multilib-native
 
@@ -18,7 +16,7 @@ IUSE=""
 
 RDEPEND=""
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 	epatch "${FILESDIR}"/${P}-build.patch
@@ -29,10 +27,9 @@ src_unpack() {
 	epatch "${FILESDIR}"/${PN}-1.2.1-fPIC.patch
 	epatch "${FILESDIR}"/${PN}-1.2.3-r1-bsd-soname.patch #123571
 	epatch "${FILESDIR}"/${PN}-1.2.3-LDFLAGS.patch #126718
+	epatch "${FILESDIR}"/${PN}-1.2.3-mingw-implib.patch #288212
 	sed -i -e '/ldconfig/d' Makefile*
 }
-
-src_configure() { :; }
 
 multilib-native_src_compile_internal() {
 	tc-export AR CC RANLIB
@@ -62,12 +59,13 @@ multilib-native_src_install_internal() {
 	# as it's only for compiling against
 	into /usr/
 	dolib libz.a
-	
+
 	# all the shared libs go into /lib
 	# for NFS based /usr
 	case ${CHOST} in
 	*-mingw*|mingw*)
-		dolib zlib1.dll libzdll.a || die
+		dobin zlib1.dll || die
+		dolib libz.dll.a || die
 		;;
 	*)
 		into /

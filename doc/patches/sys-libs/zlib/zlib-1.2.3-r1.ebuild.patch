@@ -1,0 +1,10 @@
+--- /usr/portage/sys-libs/zlib/zlib-1.2.3-r1.ebuild	2009-10-10 19:22:09.000000000 +0200
++++ ./sys-libs/zlib/zlib-1.2.3-r1.ebuild	2010-03-14 05:11:00.000000000 +0100
+@@ -57,6 +57,7 @@
+ 
+ 	# we don't need the static lib in /lib
+ 	# as it's only for compiling against
++	into /usr/
+ 	dolib libz.a
+ 
+ 	# all the shared libs go into /lib

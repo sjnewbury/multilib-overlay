@@ -308,7 +308,7 @@ sys-fs/udev
 # sys-libs/slang
 # sys-libs/talloc
 # sys-libs/tdb
-# sys-libs/zlib
+sys-libs/zlib
 # virtual/acl
 # virtual/ghostscript
 # virtual/glu
