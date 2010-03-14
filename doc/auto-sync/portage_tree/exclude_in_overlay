@@ -48,3 +48,4 @@ x11-libs/libICE/libICE-9999.ebuild # x11
 x11-libs/libfontenc/libfontenc-9999.ebuild # x11
 x11-libs/libdrm/libdrm-9999.ebuild # x11
 x11-libs/gtk+/gtk+-2.19.3.ebuild
+dev-libs/atk/atk-1.29.4.ebuild
