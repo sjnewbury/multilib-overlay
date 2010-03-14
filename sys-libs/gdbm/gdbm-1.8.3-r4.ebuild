@@ -1,8 +1,9 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/gdbm/gdbm-1.8.3-r4.ebuild,v 1.9 2010/01/15 04:32:29 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/gdbm/gdbm-1.8.3-r4.ebuild,v 1.12 2010/02/06 06:33:26 vapier Exp $
 
-EAPI=2
+EAPI="2"
+
 inherit eutils libtool flag-o-matic multilib-native
 
 DESCRIPTION="Standard GNU database libraries"
@@ -11,7 +12,7 @@ SRC_URI="mirror://gnu/gdbm/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="berkdb"
 
 DEPEND="berkdb? ( sys-libs/db[lib32?] )"
@@ -39,15 +40,21 @@ multilib-native_src_install_internal() {
 	dodoc ChangeLog NEWS README
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	preserve_old_lib libgdbm.so.2 #32510
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	preserve_old_lib_notify libgdbm.so.2 #32510
 
 	ewarn "32bit systems might have to rebuild all gdbm databases due to"
 	ewarn "LFS changes in the gdbm format.  You can either delete the db"
 	ewarn "and regenerate it from scratch, or use the converter:"
 	ewarn "http://bugs.gentoo.org/attachment.cgi?id=215326"
+	ewarn
+	ewarn "See this comment for information on how to use it:"
+	ewarn "http://bugs.gentoo.org/show_bug.cgi?id=299390#c15"
+	ewarn
+	ewarn "You should be able to locate most gdbm db's on your system with:"
+	ewarn "find /etc /var -type f -exec file {} + | grep 'GNU dbm 1.x or ndbm database'"
 }

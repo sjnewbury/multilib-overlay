@@ -34,10 +34,10 @@ multilib-native_src_install_internal() {
 	dodoc ChangeLog NEWS README
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	preserve_old_lib libgdbm.so.2 #32510
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	preserve_old_lib_notify libgdbm.so.2 #32510
 }
