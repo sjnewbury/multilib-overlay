@@ -27,23 +27,14 @@ DEPEND="=sys-libs/libsepol-${SEPOL_VER}*[lib32?]
 RDEPEND="=sys-libs/libsepol-${SEPOL_VER}*[lib32?]
 	ruby? ( dev-lang/ruby[lib32?] )"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
-	[ ! -z "${BUGFIX_PATCH}" ] && epatch "${BUGFIX_PATCH}"
-}
-
 multilib-native_src_prepare_internal() {
-	# fix up paths for multilib
-	sed -i -e "/^LIBDIR/s/lib/$(get_libdir)/" src/Makefile \
-		|| die "Fix for multilib LIBDIR failed."
-	sed -i -e "/^SHLIBDIR/s/lib/$(get_libdir)/" src/Makefile \
-		|| die "Fix for multilib SHLIBDIR failed."
+	[ ! -z "${BUGFIX_PATCH}" ] && epatch "${BUGFIX_PATCH}"
 
-	# environmental variable clash with multilib-native.eclass
-	sed -i -e "s/LIBDIR/LIB__DIR/g" "${S}"/src/Makefile \
-		|| die "Fix for multilib LIBDIR => LIB__DIR failed."
+	# fix up paths for multilib
+	sed -i -e "/^LIBDIR/s/lib/$(get_libdir)/" "${S}/src/Makefile" \
+		|| die "Fix for multilib LIBDIR failed."
+	sed -i -e "/^SHLIBDIR/s/lib/$(get_libdir)/" "${S}/src/Makefile" \
+		|| die "Fix for multilib SHLIBDIR failed."
 }
 
 multilib-native_src_compile_internal() {
@@ -69,12 +60,12 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	python_version
 	python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	python_version
 	python_mod_cleanup /usr/$(get_libdir)/python${PYVER}/site-packages
 }
