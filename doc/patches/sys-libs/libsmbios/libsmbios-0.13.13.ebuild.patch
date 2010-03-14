@@ -1,0 +1,14 @@
+--- /usr/portage/sys-libs/libsmbios/libsmbios-0.13.13.ebuild	2008-08-09 00:07:05.000000000 +0200
++++ ./sys-libs/libsmbios/libsmbios-0.13.13.ebuild	2010-03-14 16:31:54.000000000 +0100
+@@ -16,11 +16,6 @@
+ 	test? ( dev-util/cppunit )"
+ RDEPEND=${DEPEND}
+ 
+-src_compile() {
+-	econf || die "econf failed"
+-	emake || die "emake failed"
+-}
+-
+ src_test() {
+ 	einfo "testing currently broken - bypassing"
+ }

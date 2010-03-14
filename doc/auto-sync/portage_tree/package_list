@@ -301,7 +301,7 @@ sys-fs/udev
 # sys-libs/libraw1394
 # sys-libs/libselinux
 # sys-libs/libsepol
-# sys-libs/libsmbios
+sys-libs/libsmbios
 sys-libs/ncurses
 sys-libs/pam
 sys-libs/readline

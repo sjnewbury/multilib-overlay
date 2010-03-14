@@ -53,10 +53,10 @@ multilib-native_src_install_internal() {
 	dodoc AUTHORS ChangeLog NEWS README TODO
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	use python && python_mod_optimize /usr/share/smbios-utils
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	use python && python_mod_cleanup /usr/share/smbios-utils
 }
