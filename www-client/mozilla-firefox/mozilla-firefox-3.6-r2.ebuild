@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/mozilla-firefox/mozilla-firefox-3.6-r2.ebuild,v 1.1 2010/02/12 20:51:53 anarchy Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/mozilla-firefox/mozilla-firefox-3.6-r2.ebuild,v 1.2 2010/02/20 03:01:42 anarchy Exp $
 EAPI="2"
 WANT_AUTOCONF="2.1"
 
@@ -52,27 +52,22 @@ RDEPEND="
 	>=dev-libs/nss-3.12.4[lib32?]
 	>=dev-libs/nspr-4.8[lib32?]
 	>=app-text/hunspell-1.2[lib32?]
-	sqlite? ( >=dev-db/sqlite-3.6.22-r2[fts3,secure-delete,lib32?] )
+	>=dev-db/sqlite-3.6.22-r2[fts3,secure-delete,lib32?]
 	alsa? ( media-libs/alsa-lib[lib32?] )
 	>=x11-libs/cairo-1.8.8[X,lib32?]
 	x11-libs/pango[X,lib32?]
 	wifi? ( net-wireless/wireless-tools )
 	libnotify? ( >=x11-libs/libnotify-0.4[lib32?] )
-	~net-libs/xulrunner-${XUL_PV}[java=,wifi=,libnotify=,lib32?]]"
+	~net-libs/xulrunner-${XUL_PV}[java=,wifi=,libnotify=,lib32?]"
 
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig[lib32?]
-	java? ( >=virtual/jdk-1.4 )"
+	java? ( >=virtual/jdk-1.4 )
+	dev-util/pkgconfig[lib32?]"
 
 RDEPEND="${RDEPEND} java? ( >=virtual/jre-1.4 )"
 
 S="${WORKDIR}/mozilla-1.9.2"
 
-# Needed by src_compile() and src_install().
-# Would do in pkg_setup but that loses the export attribute, they
-# become pure shell variables.
-export BUILD_OFFICIAL=1
-export MOZILLA_OFFICIAL=1
 QA_PRESTRIPPED="usr/$(get_libdir)/${PN}/firefox"
 
 linguas() {
@@ -97,7 +92,7 @@ linguas() {
 	done
 }
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	# Ensure we always build with C locale.
 	export LANG="C"
 	export LC_ALL="C"
@@ -246,7 +241,7 @@ multilib-native_src_install_internal() {
 		newmenu "${FILESDIR}"/icon/mozilla-firefox-1.5.desktop \
 			${PN}-${DESKTOP_PV}.desktop
 	else
-		newicon "${S}"/browser/base/branding/icon48.png firefox-icon-unbranded.png
+		newicon "${S}"/browser/branding/unofficial/content/icon48.png firefox-icon-unbranded.png
 		newmenu "${FILESDIR}"/icon/mozilla-firefox-1.5-unbranded.desktop \
 			${PN}-${DESKTOP_PV}.desktop
 		sed -i -e "s:Bon Echo:Namoroka:" \
@@ -258,7 +253,6 @@ multilib-native_src_install_internal() {
 		echo "StartupNotify=true" >> "${D}"/usr/share/applications/${PN}-${DESKTOP_PV}.desktop
 	fi
 
-	prep_ml_binaries "/usr/bin/firefox"
 	pax-mark m "${D}"/${MOZILLA_FIVE_HOME}/firefox
 
 	# Enable very specific settings not inherited from xulrunner
@@ -272,11 +266,13 @@ multilib-native_src_install_internal() {
 
 	# very ugly hack to make firefox not sigbus on sparc
 	use sparc && { sed -e 's/Firefox/FirefoxGentoo/g' \
-		-i "${D}/${MOZILLA_FIVE_HOME}/application.ini" || \
-		die "sparc sed failed"; }
+					 -i "${D}/${MOZILLA_FIVE_HOME}/application.ini" || \
+					 die "sparc sed failed"; }
+
+	prep_ml_binaries /usr/bin/firefox
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	ewarn "All the packages built against ${PN} won't compile,"
 	ewarn "any package that fails to build warrants a bug report."
 	elog
