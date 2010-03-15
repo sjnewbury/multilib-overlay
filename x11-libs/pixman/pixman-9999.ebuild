@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI=3
-inherit x-modular-r2 toolchain-funcs versionator multilib-native
+inherit xorg-2 toolchain-funcs versionator multilib-native
 
 EGIT_REPO_URI="git://anongit.freedesktop.org/git/pixman"
 DESCRIPTION="Low-level pixel manipulation routines"
@@ -12,7 +12,7 @@ KEYWORDS=""
 IUSE="altivec mmx sse2"
 
 multilib-native_pkg_setup_internal() {
-	x-modular-r2_pkg_setup
+	xorg-r2_pkg_setup
 	CONFIGURE_OPTIONS="
 		$(use_enable altivec vmx)
 		--disable-gtk"
