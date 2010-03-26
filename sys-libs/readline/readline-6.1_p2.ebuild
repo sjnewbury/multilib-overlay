@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/readline/readline-6.1.ebuild,v 1.4 2010/03/23 20:42:06 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/readline/readline-6.1_p2.ebuild,v 1.2 2010/03/24 04:14:27 the_paya Exp $
 
 EAPI="2"
 
@@ -34,7 +34,7 @@ SRC_URI="mirror://gnu/${PN}/${MY_P}.tar.gz $(patches)"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE=""
 
 # We must be certain that we have a bash that is linked
@@ -47,12 +47,12 @@ S=${WORKDIR}/${MY_P}
 
 multilib-native_src_unpack_internal() {
 	unpack ${MY_P}.tar.gz
-}
 
-multilib-native_src_prepare_internal() {
+	cd "${S}"
 	[[ ${PLEVEL} -gt 0 ]] && epatch $(patches -s)
 	epatch "${FILESDIR}"/${PN}-5.0-no_rpath.patch
 	epatch "${FILESDIR}"/${PN}-5.2-no-ignore-shlib-errors.patch #216952
+	epatch "${FILESDIR}"/${PN}-6.1-rlfe-freebsd.patch # 301508
 
 	# force ncurses linking #71420
 	sed -i -e 's:^SHLIB_LIBS=:SHLIB_LIBS=-lncurses:' support/shobj-conf || die "sed"
@@ -64,10 +64,11 @@ multilib-native_src_prepare_internal() {
 	ln -s ../.. examples/rlfe/readline # for local readline headers
 }
 
-multilib-native_src_configure_internal() {
+multilib-native_src_compile_internal() {
 	append-cppflags -D_GNU_SOURCE
 
 	econf --with-curses || die
+	emake || die
 
 	if ! tc-is-cross-compiler ; then
 		# code is full of AC_TRY_RUN()
@@ -79,15 +80,6 @@ multilib-native_src_configure_internal() {
 			ln -sf ../../lib${l}.a lib${l}.a
 		done
 		econf || die
-	fi
-}
-
-multilib-native_src_compile_internal() {
-	emake || die
-
-	if ! tc-is-cross-compiler ; then
-		# code is full of AC_TRY_RUN()
-		cd examples/rlfe
 		emake || die
 	fi
 }
