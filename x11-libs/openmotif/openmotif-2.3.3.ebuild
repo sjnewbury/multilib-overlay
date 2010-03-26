@@ -1,8 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/openmotif/openmotif-2.3.2-r2.ebuild,v 1.8 2010/03/23 13:03:09 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/openmotif/openmotif-2.3.3.ebuild,v 1.2 2010/03/20 17:48:09 grobian Exp $
 
-EAPI=3
+EAPI="3"
 
 inherit autotools eutils flag-o-matic multilib multilib-native
 
@@ -12,7 +12,7 @@ SRC_URI="ftp://ftp.ics.com/openmotif/${PV%.*}/${PV}/${P}.tar.gz"
 
 LICENSE="MOTIF MIT"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ppc64 ~sh ~sparc ~x86 ~ppc-aix ~x86-fbsd ~ia64-hpux ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~ppc-aix ~x86-fbsd ~ia64-hpux ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 IUSE="doc examples jpeg png unicode xft"
 # license allows distribution only for "open source operating systems"
 RESTRICT="!kernel_linux? (
@@ -79,14 +79,11 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}/${PN}-2.3.1-multilist-stipple.patch" #215984
-	epatch "${FILESDIR}/${PN}-2.3.1-ac-editres.patch" #82081
-	epatch "${FILESDIR}/${P}-ldflags.patch" #293573
-	epatch "${FILESDIR}/${P}-ddd-layout.patch" #303887
-	epatch "${FILESDIR}/${P}-sanitise-paths.patch"
-	epatch "${FILESDIR}/${P}-libpng14.patch"
+	epatch "${FILESDIR}/${PN}-2.3.2-darwin.patch"
+	epatch "${FILESDIR}/${PN}-2.3.2-sanitise-paths.patch"
+	epatch "${FILESDIR}/${PN}-2.3.2-libpng14.patch"
 	[[ ${CHOST} == *-solaris2.11 ]] \
-		&& epatch "${FILESDIR}/${P}-solaris-2.11.patch"
+		&& epatch "${FILESDIR}/${PN}-2.3.2-solaris-2.11.patch"
 
 	# disable compilation of demo binaries
 	sed -i -e '/^SUBDIRS/{:x;/\\$/{N;bx;};s/[ \t\n\\]*demos//;}' Makefile.am
@@ -127,19 +124,16 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_compile_internal() {
-	emake -j1 || die "emake failed"
+	emake -j1 MWMRCDIR="${EPREFIX}"/etc/X11/mwm || die "emake failed"
 }
 
 multilib-native_src_install_internal() {
-	emake -j1 DESTDIR="${D}" install || die "emake install failed"
+	emake -j1 DESTDIR="${D}" MWMRCDIR="${EPREFIX}"/etc/X11/mwm install \
+		|| die "emake install failed"
 
 	# mwm default configs
 	insinto /usr/share/X11/app-defaults
 	newins "${FILESDIR}"/Mwm.defaults Mwm
-
-	dodir /etc/X11/mwm
-	mv -f "${ED}"/usr/$(get_libdir)/X11/system.mwmrc "${ED}"/etc/X11/mwm
-	dosym /etc/X11/mwm/system.mwmrc /usr/$(get_libdir)/X11/
 
 	if use examples; then
 		emake -j1 -C demos DESTDIR="${D}" install-data \
