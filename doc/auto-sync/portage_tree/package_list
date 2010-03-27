@@ -209,7 +209,7 @@ media-libs/libtheora
 # media-libs/libv4l
 # media-libs/libvorbis
 # media-libs/libwmf
-# media-libs/mesa
+media-libs/mesa
 # media-libs/nas
 media-libs/openal
 # media-libs/openexr

@@ -61,7 +61,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	x11-misc/makedepend
-	>=x11-proto/dri2proto-1.99.3
+	>=x11-proto/dri2proto-1.99.3[lib32?]
 	>=x11-proto/glproto-1.4.8
 	x11-proto/inputproto
 	>=x11-proto/xextproto-7.0.99.1
@@ -73,7 +73,7 @@ S="${WORKDIR}/${MY_P}"
 
 # Think about: ggi, svga, fbcon, no-X configs
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	# gcc 4.2 has buggy ivopts
 	if [[ $(gcc-version) = "4.2" ]]; then
 		append-flags -fno-ivopts
@@ -83,11 +83,11 @@ pkg_setup() {
 	append-flags -ffast-math
 }
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	[[ $PV = 9999* ]] && git_src_unpack || unpack ${A}
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# apply patches
 	if [[ ${PV} != 9999* && -n ${SRC_PATCHES} ]]; then
 		EPATCH_FORCE="yes" \
@@ -194,7 +194,7 @@ multilib-native_src_install_internal() {
 	eend $?
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	# Switch to the xorg implementation.
 	echo
 	eselect opengl set --use-old ${OPENGL_DIR}
