@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/fontconfig/fontconfig-2.6.0-r2.ebuild,v 1.14 2009/03/07 19:10:43 betelgeuse Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/fontconfig/fontconfig-2.6.0-r2.ebuild,v 1.15 2009/12/14 10:02:29 remi Exp $
 
 EAPI="2"
 WANT_AUTOMAKE=1.9
@@ -11,7 +11,7 @@ DESCRIPTION="A library for configuring and customizing font access"
 HOMEPAGE="http://fontconfig.org/"
 SRC_URI="http://fontconfig.org/release/${P}.tar.gz"
 
-LICENSE="fontconfig"
+LICENSE="MIT"
 SLOT="1.0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="doc"
@@ -23,8 +23,8 @@ IUSE="doc"
 # libxml2 support, this confuses users and results in most people getting the
 # non-standard behavior of libxml2 usage since most profiles have USE=xml
 
-RDEPEND=">=media-libs/freetype-2.2.1
-	>=dev-libs/expat-1.95.3"
+RDEPEND=">=media-libs/freetype-2.2.1[lib32?]
+	>=dev-libs/expat-1.95.3[lib32?]"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	doc? (
@@ -50,11 +50,6 @@ multilib-native_src_configure_internal() {
 		replace-flags -mtune=* -DMTUNE_CENSORED
 		replace-flags -march=* -DMARCH_CENSORED
 	fi
-
-	if use lib32 && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
-		myconf="${myconf} --program-suffix=32"
-	fi
-	
 	econf $(use_enable doc docs) \
 		--localstatedir=/var \
 		--with-docdir=/usr/share/doc/${PF} \
@@ -91,6 +86,8 @@ multilib-native_src_install_internal() {
 	# <azarah@gentoo.org> (11 Dec 2002)
 	echo 'CONFIG_PROTECT_MASK="/etc/fonts/fonts.conf"' > "${T}"/37fontconfig
 	doenvd "${T}"/37fontconfig
+
+	prep_ml_binaries /usr/bin/fc-cache
 }
 
 multilib-native_pkg_postinst_internal() {
@@ -100,14 +97,8 @@ multilib-native_pkg_postinst_internal() {
 	echo
 
 	if [[ ${ROOT} = / ]]; then
-		if use lib32 && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
-			ebegin "Creating global 32bit font cache..."
-			/usr/bin/fc-cache32 -sr
-			eend $?
-		else
-			ebegin "Creating global font cache..."
-			/usr/bin/fc-cache -sr
-			eend $?
-		fi
+		ebegin "Creating global font cache..."
+		/usr/bin/fc-cache -sr
+		eend $?
 	fi
 }

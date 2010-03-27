@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/fontconfig/fontconfig-2.8.0.ebuild,v 1.1 2009/11/22 23:53:58 dirtyepic Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/fontconfig/fontconfig-2.8.0.ebuild,v 1.6 2010/03/23 20:18:30 ranger Exp $
 
 EAPI="2"
 
@@ -10,16 +10,16 @@ DESCRIPTION="A library for configuring and customizing font access"
 HOMEPAGE="http://fontconfig.org/"
 SRC_URI="http://fontconfig.org/release/${P}.tar.gz"
 
-LICENSE="fontconfig"
+LICENSE="MIT"
 SLOT="1.0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="doc"
 
 # Purposefully dropped the xml USE flag and libxml2 support.  Expat is the
 # default and used by every distro.  See bug #283191.
 
-RDEPEND=">=media-libs/freetype-2.2.1
-	>=dev-libs/expat-1.95.3"
+RDEPEND=">=media-libs/freetype-2.2.1[lib32?]
+	>=dev-libs/expat-1.95.3[lib32?]"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	doc? (
@@ -29,7 +29,7 @@ DEPEND="${RDEPEND}
 PDEPEND="app-admin/eselect-fontconfig"
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}"/${PN}-2.7.1-latin-reorder.patch   #130466
+	epatch "${FILESDIR}"/${PN}-2.7.1-latin-reorder.patch	#130466
 	epunt_cxx	#74077
 
 	# Needed to get a sane .so versioning on fbsd, please dont drop
@@ -45,11 +45,6 @@ multilib-native_src_configure_internal() {
 		replace-flags -mtune=* -DMTUNE_CENSORED
 		replace-flags -march=* -DMARCH_CENSORED
 	fi
-
-	if use lib32 && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
-		myconf="${myconf} --program-suffix=32"
-	fi
-	
 	econf $(use_enable doc docs) \
 		--localstatedir=/var \
 		--with-default-fonts=/usr/share/fonts \
@@ -59,6 +54,7 @@ multilib-native_src_configure_internal() {
 
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install"
+	emake DESTDIR="${D}" -C doc install-man || die "emake install-man"
 
 	#fc-lang directory contains language coverage datafiles
 	#which are needed to test the coverage of fonts.
@@ -85,13 +81,14 @@ multilib-native_src_install_internal() {
 	# As of fontconfig 2.7, everything sticks their noses in here.
 	dodir /etc/sandbox.d
 	echo 'SANDBOX_PREDICT="/var/cache/fontconfig"' > "${D}"/etc/sandbox.d/37fontconfig
+
+	prep_ml_binaries /usr/bin/fc-cache
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	# Bug #193476
 	# /etc/fonts/conf.d/ contains symlinks to ../conf.avail/ to include various
 	# config files.  If we install as-is, we'll blow away user settings.
-
 	ebegin "Syncing fontconfig configuration to system"
 	if [[ -e ${ROOT}/etc/fonts/conf.d ]]; then
 		for file in "${ROOT}"/etc/fonts/conf.avail/*; do
@@ -121,14 +118,8 @@ multilib-native_pkg_postinst_internal() {
 	echo
 
 	if [[ ${ROOT} = / ]]; then
-		if use lib32 && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
-			ebegin "Creating global 32bit font cache"
-			/usr/bin/fc-cache32 -srf
-			eend $?
-		else
-			ebegin "Creating global font cache"
-			/usr/bin/fc-cache -srf
-			eend $?
-		fi
+		ebegin "Creating global font cache"
+		/usr/bin/fc-cache -srf
+		eend $?
 	fi
 }

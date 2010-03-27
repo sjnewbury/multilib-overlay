@@ -157,7 +157,7 @@ media-gfx/graphviz
 # media-libs/faac
 # media-libs/faad2
 # media-libs/flac
-# media-libs/fontconfig
+media-libs/fontconfig
 # media-libs/freealut
 # media-libs/freeglut
 # media-libs/freetype
