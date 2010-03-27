@@ -1,13 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/xorg-2.eclass,v 1.1 2010/03/14 10:27:07 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/xorg-2.eclass,v 1.2 2010/03/17 14:29:20 scarabeus Exp $
 #
 # @ECLASS: xorg-2.eclass
 # @MAINTAINER:
 # x11@gentoo.org
-
-# Author: Tomáš Chvátal <scarabeus@gentoo.org>
-# Author: Donnie Berkholz <dberkholz@gentoo.org>
 # @BLURB: Reduces code duplication in the modularized X11 ebuilds.
 # @DESCRIPTION:
 # This eclass makes trivial X ebuilds possible for apps, fonts, drivers,
@@ -19,6 +16,9 @@
 # DESCRIPTION, KEYWORDS and RDEPEND/DEPEND. If your package is hosted
 # with the other X packages, you don't need to set SRC_URI. Pretty much
 # everything else should be automatic.
+
+# Author: Tomáš Chvátal <scarabeus@gentoo.org>
+# Author: Donnie Berkholz <dberkholz@gentoo.org>
 
 MULTILIB_EXT_SOURCE_BUILD=yes
 
@@ -93,7 +93,7 @@ fi
 # Set the license for the package. This can be overridden by setting
 # LICENSE after the inherit. Nearly all FreeDesktop-hosted X packages
 # are under the MIT license. (This is what Red Hat does in their rpms)
-: ${LICENSE=MIT}
+: ${LICENSE:=MIT}
 
 # Set up shared dependencies
 if [[ ${XORG_EAUTORECONF} != no ]]; then
@@ -139,8 +139,16 @@ fi
 # If we're a driver package, then enable DRIVER case
 [[ ${PN} == xf86-video-* || ${PN} == xf86-input-* ]] && DRIVER="yes"
 
+# @ECLASS-VARIABLE: XORG_STATIC
+# @DESCRIPTION:
+# Enables static-libs useflag. Set to no, if your package gets:
+#
+# QA: configure: WARNING: unrecognized options: --disable-static
+: ${XORG_STATIC:="yes"}
+
 # Add static-libs useflag where usefull.
-if [[ ${FONT} != yes \
+if [[ ${XORG_STATIC} == yes \
+		&& ${FONT} != yes \
 		&& ${CATEGORY} != app-doc \
 		&& ${CATEGORY} != x11-proto \
 		&& ${CATEGORY} != x11-drivers \

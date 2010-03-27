@@ -1,0 +1,11 @@
+--- /usr/portage/./eclass/xorg-2.eclass	2010-03-17 15:35:41.000000000 +0100
++++ ./eclass/xorg-2.eclass	2010-03-27 23:02:41.000000000 +0100
+@@ -20,6 +20,8 @@
+ # Author: Tomáš Chvátal <scarabeus@gentoo.org>
+ # Author: Donnie Berkholz <dberkholz@gentoo.org>
+ 
++MULTILIB_EXT_SOURCE_BUILD=yes
++
+ GIT_ECLASS=""
+ if [[ ${PV} == *9999* ]]; then
+ 	GIT_ECLASS="git"
