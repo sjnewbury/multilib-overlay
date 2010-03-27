@@ -1,0 +1,70 @@
+diff --git b/eclass/distutils.eclass a/eclass/distutils.eclass
+index 6362b26..cc948e5 100644
+--- b/eclass/distutils.eclass
++++ a/eclass/distutils.eclass
+@@ -23,7 +23,11 @@ case "${EAPI:-0}" in
+ esac
+ 
+ if [[ -z "$(declare -p PYTHON_DEPEND 2> /dev/null)" ]]; then
+-	DEPEND="dev-lang/python[lib32?]"
++	if [[ $(number_abis) -gt 1 ]] ; then
++		DEPEND="dev-lang/python[lib32?]"
++	else
++		DEPEND="dev-lang/python"
++	fi
+ 	RDEPEND="${DEPEND}"
+ fi
+ 
+@@ -274,6 +278,24 @@ distutils_src_install() {
+ 		die "${FUNCNAME}() can be used only in src_install() phase"
+ 	fi
+ 
++	if is_final_abi || (! has_multilib_profile); then
++		if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
++			python=python${PYTHON_SLOT_VERSION}
++		else
++			python=python
++		fi
++	else
++		[[ -z $(get_abi_var SETARCH_ARCH ${ABI}) ]] && die "SETARCH_ARCH_${ABI} is missing in your portage profile take a look at http://wiki.github.com/sjnewbury/multilib-overlay to get further information"
++		if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
++			python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) python${PYTHON_SLOT_VERSION}-${ABI}"
++		elif [[ -n "${PYTHON}" ]]; then
++			python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) ${PYTHON}"
++		else
++			python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) python"
++		fi	
++	fi
++	einfo Using ${python}
++
+ 	_python_initialize_prefix_variables
+ 	_python_set_color_variables
+ 
+@@ -364,6 +386,27 @@ distutils_pkg_postinst() {
+ 		done
+ 	fi
+ 
++	if has "${EAPI:-0}" 0 1 2; then
++		if is_final_abi || (! has_multilib_profile); then
++			if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
++				python=python${PYTHON_SLOT_VERSION}
++			else
++				python=python
++			fi
++		else
++			[[ -z $(get_abi_var SETARCH_ARCH ${ABI}) ]] && die "SETARCH_ARCH_${ABI} is missing in your portage profile take a look at http://wiki.github.com/sjnewbury/multilib-overlay to get further information"
++			if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
++				python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) python${PYTHON_SLOT_VERSION}-${ABI}"
++			elif [[ -n "${PYTHON}" ]]; then
++				python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) ${PYTHON}"
++			else
++				python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) python"
++			fi	
++		fi
++	else
++		python="die"
++	fi
++	einfo Using ${python}
+ 	if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
+ 		python_mod_optimize ${PYTHON_MODNAME}
+ 	else
