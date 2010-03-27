@@ -167,7 +167,7 @@ media-gfx/graphviz
 # media-libs/giflib
 # media-libs/glew
 # media-libs/glitz
-# media-libs/gst-plugins-base
+media-libs/gst-plugins-base
 # media-libs/gstreamer
 # media-libs/id3lib
 # media-libs/ilmbase
