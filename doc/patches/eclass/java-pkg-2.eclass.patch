@@ -1,0 +1,28 @@
+diff --git b/eclass/java-pkg-2.eclass a/eclass/java-pkg-2.eclass
+index e2732e6..5d8aad8 100644
+--- b/eclass/java-pkg-2.eclass
++++ a/eclass/java-pkg-2.eclass
+@@ -24,8 +24,9 @@ inherit java-utils-2
+ # the eclass can automatically add the needed dependencies for the java-pkg_do*
+ # functions.
+ #
++# Build Java packages to native libraries
+ # ------------------------------------------------------------------------------
+-IUSE="${JAVA_PKG_IUSE}"
++IUSE="${JAVA_PKG_IUSE} gcj multislot"
+ 
+ # ------------------------------------------------------------------------------
+ # @depend
+@@ -170,5 +171,12 @@ java-pkg-2_pkg_preinst() {
+ }
+ 
+ # ------------------------------------------------------------------------------
++# @eclass-pkg_postinst
++# ------------------------------------------------------------------------------
++pre_pkg_postinst() {
++	java-pkg_reg-cachejar_
++}
++
++# ------------------------------------------------------------------------------
+ # @eclass-end
+ # ------------------------------------------------------------------------------
