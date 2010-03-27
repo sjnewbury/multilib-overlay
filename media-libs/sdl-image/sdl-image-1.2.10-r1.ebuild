@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/sdl-image/sdl-image-1.2.10-r1.ebuild,v 1.1 2010/02/18 18:07:19 mr_bones_ Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/sdl-image/sdl-image-1.2.10-r1.ebuild,v 1.3 2010/03/15 18:26:19 mr_bones_ Exp $
 
 EAPI=2
-inherit autotools multilib-native
 
+inherit multilib-native
 MY_P="${P/sdl-/SDL_}"
 DESCRIPTION="image file loading library"
 HOMEPAGE="http://www.libsdl.org/projects/SDL_image/"
@@ -24,16 +24,11 @@ RDEPEND="${DEPEND}"
 
 S=${WORKDIR}/${MY_P}
 
-multilib-native_src_prepare_internal() {
-	sed -i \
-		-e 's/sort/sort -r/' \
-		configure.in \
-		|| die
-	eautoreconf
-}
-
 multilib-native_src_configure_internal() {
 	econf \
+		--disable-jpg-shared \
+		--disable-png-shared \
+		--disable-tif-shared \
 		$(use_enable gif) \
 		$(use_enable jpeg jpg) \
 		$(use_enable tiff tif) \
