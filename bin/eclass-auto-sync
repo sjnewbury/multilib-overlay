@@ -21,6 +21,7 @@ ECLASS_LIST="$(find eclass -type f -not -wholename 'eclass/multilib-native.eclas
 for ECLASS in ${ECLASS_LIST}; do
 	echo_yellow "\nworking on: ${ECLASS}"
 	cp ${SOURCE_DIR}/${ECLASS} ${ECLASS}
+	bash bin/add_lib32_usedeps ${ECLASS}
 	if [[ -f ${PATCH_DIR}/${ECLASS}.patch ]]; then
 		patch -p1 < ${PATCH_DIR}/${ECLASS}.patch
 	else
