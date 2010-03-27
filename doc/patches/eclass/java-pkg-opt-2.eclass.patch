@@ -1,0 +1,22 @@
+--- /usr/portage/eclass/java-pkg-opt-2.eclass	2010-02-01 11:05:40.000000000 +0100
++++ ./eclass/java-pkg-opt-2.eclass	2010-03-27 21:44:18.000000000 +0100
+@@ -34,7 +34,7 @@
+ # ------------------------------------------------------------------------------
+ # ------------------------------------------------------------------------------
+ # See java-pkg-2.eclass for JAVA_PKG_IUSE documentation
+-IUSE="${JAVA_PKG_IUSE} ${JAVA_PKG_OPT_USE}"
++IUSE="${JAVA_PKG_IUSE} ${JAVA_PKG_OPT_USE} gcj multislot"
+ 
+ case "${EAPI:-0}" in
+ 	0|1) EXPORT_FUNCTIONS pkg_setup pkg_preinst ;;
+@@ -64,3 +64,10 @@
+ java-pkg-opt-2_pkg_preinst() {
+ 	use ${JAVA_PKG_OPT_USE} && java-utils-2_pkg_preinst
+ }
++
++# ------------------------------------------------------------------------------
++# @eclass-pkg_postinst
++# ------------------------------------------------------------------------------
++pre_pkg_postinst() {
++        java-pkg_reg-cachejar_
++}
