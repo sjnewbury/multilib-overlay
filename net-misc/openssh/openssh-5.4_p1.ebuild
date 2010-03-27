@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/openssh/openssh-5.4_p1.ebuild,v 1.2 2010/03/13 01:28:51 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/openssh/openssh-5.4_p1.ebuild,v 1.3 2010/03/20 00:17:55 vapier Exp $
 
 EAPI="2"
 
@@ -133,7 +133,7 @@ multilib-native_src_configure_internal() {
 		--with-ssl-engine \
 		$(static_use_with pam) \
 		$(static_use_with kerberos kerberos5 /usr) \
-		${LDAP_PATCH:+$(use ldap && use_with ldap)} \
+		${LDAP_PATCH:+$(use X509 || ( use ldap && use_with ldap ))} \
 		$(use_with libedit) \
 		$(use_with selinux) \
 		$(use_with skey) \

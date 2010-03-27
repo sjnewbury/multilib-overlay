@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/openssh/openssh-5.3_p1-r1.ebuild,v 1.6 2010/03/12 17:31:43 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/openssh/openssh-5.3_p1-r1.ebuild,v 1.10 2010/03/20 00:17:55 vapier Exp $
 
 EAPI="2"
 
@@ -25,7 +25,7 @@ SRC_URI="mirror://openbsd/OpenSSH/portable/${PARCH}.tar.gz
 
 LICENSE="as-is"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="hpn kerberos ldap libedit pam pkcs11 selinux skey smartcard static tcpd X X509"
 
 RDEPEND="pam? ( virtual/pam[lib32?] )
@@ -169,7 +169,7 @@ multilib-native_src_configure_internal() {
 		--with-ssl-engine \
 		$(static_use_with pam) \
 		$(static_use_with kerberos kerberos5 /usr) \
-		${LDAP_PATCH:+$(use ldap && use_with ldap)} \
+		${LDAP_PATCH:+$(use X509 || ( use ldap && use_with ldap ))} \
 		$(use_with libedit) \
 		${PKCS11_PATCH:+$(use pkcs11 && static_use_with pkcs11)} \
 		$(use_with selinux) \
