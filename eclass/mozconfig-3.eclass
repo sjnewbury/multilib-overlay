@@ -1,6 +1,6 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/mozconfig-3.eclass,v 1.7 2009/02/23 16:36:12 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/mozconfig-3.eclass,v 1.8 2010/01/27 12:06:22 ssuominen Exp $
 #
 # mozconfig.eclass: the new mozilla.eclass
 
@@ -11,7 +11,7 @@ IUSE="gnome dbus startup-notification"
 RDEPEND="x11-libs/libXrender[lib32?]
 	x11-libs/libXt[lib32?]
 	x11-libs/libXmu[lib32?]
-	>=media-libs/jpeg-6b[lib32?]
+	>=media-libs/jpeg-7[lib32?]
 	dev-libs/expat[lib32?]
 	app-arch/zip
 	app-arch/unzip
