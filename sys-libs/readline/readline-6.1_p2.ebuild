@@ -47,8 +47,9 @@ S=${WORKDIR}/${MY_P}
 
 multilib-native_src_unpack_internal() {
 	unpack ${MY_P}.tar.gz
+}
 
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	[[ ${PLEVEL} -gt 0 ]] && epatch $(patches -s)
 	epatch "${FILESDIR}"/${PN}-5.0-no_rpath.patch
 	epatch "${FILESDIR}"/${PN}-5.2-no-ignore-shlib-errors.patch #216952
@@ -64,11 +65,10 @@ multilib-native_src_unpack_internal() {
 	ln -s ../.. examples/rlfe/readline # for local readline headers
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	append-cppflags -D_GNU_SOURCE
 
 	econf --with-curses || die
-	emake || die
 
 	if ! tc-is-cross-compiler ; then
 		# code is full of AC_TRY_RUN()
@@ -80,6 +80,15 @@ multilib-native_src_compile_internal() {
 			ln -sf ../../lib${l}.a lib${l}.a
 		done
 		econf || die
+	fi
+}
+
+multilib-native_src_compile_internal() {
+	emake || die
+
+	if ! tc-is-cross-compiler ; then
+		# code is full of AC_TRY_RUN()
+		cd examples/rlfe
 		emake || die
 	fi
 }
