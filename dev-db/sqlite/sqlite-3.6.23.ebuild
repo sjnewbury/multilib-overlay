@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.23.ebuild,v 1.1 2010/03/13 14:23:15 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.23.ebuild,v 1.2 2010/03/19 18:33:37 grobian Exp $
 
 EAPI="3"
 
@@ -93,6 +93,16 @@ multilib-native_src_configure_internal() {
 		extensions_option="load-extension"
 	else
 		extensions_option="dynamic-extensions"
+	fi
+
+	# Starting from 3.6.23, SQLite has locking strategies that are specific to
+	# OSX.  By default they are enabled, and use semantics that only make sense
+	# on OSX.  However, they require gethostuuid() function for that, which is
+	# only available on OSX starting from 10.6 (Snow Leopard).  For earlier
+	# versions of OSX we have to disable all this nifty locking options, as
+	# suggested by upstream.
+	if [[ ${CHOST} == *-darwin[56789] ]] ; then
+		append-cppflags -DSQLITE_ENABLE_LOCKING_STYLE=0
 	fi
 
 	# `configure` from amalgamation tarball doesn't support
