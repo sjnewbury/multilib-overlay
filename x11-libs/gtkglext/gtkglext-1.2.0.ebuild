@@ -1,8 +1,9 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtkglext/gtkglext-1.2.0.ebuild,v 1.18 2009/05/05 16:14:30 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtkglext/gtkglext-1.2.0.ebuild,v 1.19 2010/03/14 22:31:49 eva Exp $
 
-EAPI=2
+EAPI="2"
+
 inherit gnome2 multilib-native
 
 DESCRIPTION="GL extensions for Gtk+ 2.0"
@@ -23,6 +24,19 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]"
 
 DOCS="AUTHORS ChangeLog* NEWS README TODO"
+
+multilib-native_src_prepare_internal() {
+	gnome2_src_prepare
+
+	# Remove development knobs, bug #308973
+	sed -i 's:-D\(G.*DISABLE_DEPRECATED\):-D__\1__:g' \
+		examples/Makefile.am examples/Makefile.in \
+		gdk/Makefile.am gdk/Makefile.in \
+		gdk/win32/Makefile.am gdk/win32/Makefile.in \
+		gdk/x11/Makefile.am gdk/x11/Makefile.in \
+		gtk/Makefile.am gtk/Makefile.in \
+		|| die "sed failed"
+}
 
 multilib-native_src_configure_internal() {
 	G2CONF="--x-libraries=/usr/$(get_libdir)"
