@@ -6,7 +6,7 @@
 #
 # Licensed under the GNU General Public License, v2
 #
-# $Header: /var/cvsroot/gentoo-x86/eclass/java-utils-2.eclass,v 1.130 2009/11/08 20:39:30 caster Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/java-utils-2.eclass,v 1.133 2010/03/24 12:11:05 betelgeuse Exp $
 
 # -----------------------------------------------------------------------------
 # @eclass-begin
@@ -72,7 +72,7 @@ hasq "${EAPI}" 0 1 && JAVA_PKG_PORTAGE_DEP=">=sys-apps/portage-2.1.2.7"
 # the version of java-config we want to use. Usually the latest stable version
 # so that ebuilds can use new features without depending on specific versions.
 # -----------------------------------------------------------------------------
-JAVA_PKG_E_DEPEND=">=dev-java/java-config-2.1.6 ${JAVA_PKG_PORTAGE_DEP}"
+JAVA_PKG_E_DEPEND=">=dev-java/java-config-2.1.9-r1 ${JAVA_PKG_PORTAGE_DEP}"
 hasq source ${JAVA_PKG_IUSE} && JAVA_PKG_E_DEPEND="${JAVA_PKG_E_DEPEND} source? ( app-arch/zip )"
 
 # -----------------------------------------------------------------------------
@@ -1370,6 +1370,36 @@ java-pkg_register-environment-variable() {
 	java-pkg_do_write_
 }
 
+# ------------------------------------------------------------------------------
+# @ebuild-function java-pkg_get-bootclasspath
+#
+# Returns classpath of a given bootclasspath-providing package version.
+#
+# @param $1 - the version of bootclasspath (e.g. 1.5), 'auto' for bootclasspath
+#             of the current JDK
+# ------------------------------------------------------------------------------
+
+java-pkg_get-bootclasspath() {
+	local version="${1}"
+
+	local bcp
+	case "${version}" in 
+		auto)
+			bcp="$(java-config -g BOOTCLASSPATH)"
+			;;
+		1.5)
+			bcp="$(java-pkg_getjars --build-only gnu-classpath-0.98)"
+			;;
+		*)
+			eerror "unknown parameter of java-pkg_get-bootclasspath"
+			die "unknown parameter of java-pkg_get-bootclasspath"
+			;;
+	esac
+
+	echo "${bcp}"
+}
+
+
 # This function reads stdin, and based on that input, figures out how to
 # populate jars from the filesystem.
 # Need to figure out a good way of making use of this, ie be able to use a
@@ -2435,12 +2465,12 @@ java-pkg_do_write_() {
 			[[ -n "${JAVA_PKG_LIBRARY}" ]] && echo "LIBRARY_PATH=\"${JAVA_PKG_LIBRARY}\""
 			[[ -n "${JAVA_PROVIDE}" ]] && echo "PROVIDES=\"${JAVA_PROVIDE}\""
 			[[ -f "${JAVA_PKG_DEPEND_FILE}" ]] \
-				&& echo "DEPEND=\"$(cat "${JAVA_PKG_DEPEND_FILE}" | uniq | tr '\n' ':')\""
+				&& echo "DEPEND=\"$(sort -u "${JAVA_PKG_DEPEND_FILE}" | tr '\n' ':')\""
 			[[ -f "${JAVA_PKG_OPTIONAL_DEPEND_FILE}" ]] \
-				&& echo "OPTIONAL_DEPEND=\"$(cat "${JAVA_PKG_OPTIONAL_DEPEND_FILE}" | uniq | tr '\n' ':')\""
+				&& echo "OPTIONAL_DEPEND=\"$(sort -u "${JAVA_PKG_OPTIONAL_DEPEND_FILE}" | tr '\n' ':')\""
 			echo "VM=\"$(echo ${RDEPEND} ${DEPEND} | sed -e 's/ /\n/g' | sed -n -e '/virtual\/\(jre\|jdk\)/ { p;q }')\"" # TODO cleanup !
 			[[ -f "${JAVA_PKG_BUILD_DEPEND_FILE}" ]] \
-				&& echo "BUILD_DEPEND=\"$(cat "${JAVA_PKG_BUILD_DEPEND_FILE}" | uniq | tr '\n' ':')\""
+				&& echo "BUILD_DEPEND=\"$(sort -u "${JAVA_PKG_BUILD_DEPEND_FILE}" | tr '\n' ':')\""
 		) > "${JAVA_PKG_ENV}"
 
 		# register target/source
