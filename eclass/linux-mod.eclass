@@ -131,8 +131,14 @@
 # See http://bugs.gentoo.org/show_bug.cgi?id=127506
 
 inherit eutils linux-info multilib
-EXPORT_FUNCTIONS pkg_setup pkg_preinst pkg_postinst src_install src_compile pkg_postrm
-
+case "${EAPI:-0}" in
+	2)
+		EXPORT_FUNCTIONS pkg_setup pkg_preinst pkg_postinst src_install src_configure src_compile pkg_postrm
+		;;
+	*)
+		EXPORT_FUNCTIONS pkg_setup pkg_preinst pkg_postinst src_install src_compile pkg_postrm
+		;;
+esac
 IUSE="kernel_linux"
 SLOT="0"
 DESCRIPTION="Based on the $ECLASS eclass"
@@ -708,7 +714,8 @@ linux-mod_src_compile() {
 			cd "${srcdir}"
 			ln -s "${S}"/Module.symvers Module.symvers
 			einfo "Preparing ${modulename} module"
-			if [[ -n ${ECONF_PARAMS} ]]
+			if [[ -n ${ECONF_PARAMS} ]] && [ ! -f "${srcdir}/.configured" ];
+
 			then
 				econf ${ECONF_PARAMS} || \
 				die "Unable to run econf ${ECONF_PARAMS}"
@@ -720,12 +727,12 @@ linux-mod_src_compile() {
 			# inside the variables gets used as targets for Make, which then
 			# fails.
 			eval "emake HOSTCC=\"$(tc-getBUILD_CC)\" \
-						CROSS_COMPILE=${CHOST}- \
+						CROSS_COMPILE=${CHOST_default}- \
 						LDFLAGS=\"$(get_abi_LDFLAGS)\" \
 						${BUILD_FIXES} \
 						${BUILD_PARAMS} \
 						${BUILD_TARGETS} " \
-				|| die "Unable to emake HOSTCC="$(tc-getBUILD_CC)" CROSS_COMPILE=${CHOST}- LDFLAGS="$(get_abi_LDFLAGS)" ${BUILD_FIXES} ${BUILD_PARAMS} ${BUILD_TARGETS}"
+				|| die "Unable to emake HOSTCC="$(tc-getBUILD_CC)" CROSS_COMPILE=${CHOST_default}- LDFLAGS="$(get_abi_LDFLAGS)" ${BUILD_FIXES} ${BUILD_PARAMS} ${BUILD_TARGETS}"
 			cd "${OLDPWD}"
 			touch "${srcdir}"/.built
 		fi

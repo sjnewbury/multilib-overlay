@@ -1,0 +1,102 @@
+--- /usr/portage/eclass/linux-mod.eclass	2010-01-17 05:11:37.000000000 +0100
++++ ./eclass/linux-mod.eclass	2010-03-27 22:15:57.000000000 +0100
+@@ -131,8 +131,14 @@
+ # See http://bugs.gentoo.org/show_bug.cgi?id=127506
+ 
+ inherit eutils linux-info multilib
+-EXPORT_FUNCTIONS pkg_setup pkg_preinst pkg_postinst src_install src_compile pkg_postrm
+-
++case "${EAPI:-0}" in
++	2)
++		EXPORT_FUNCTIONS pkg_setup pkg_preinst pkg_postinst src_install src_configure src_compile pkg_postrm
++		;;
++	*)
++		EXPORT_FUNCTIONS pkg_setup pkg_preinst pkg_postinst src_install src_compile pkg_postrm
++		;;
++esac
+ IUSE="kernel_linux"
+ SLOT="0"
+ DESCRIPTION="Based on the $ECLASS eclass"
+@@ -622,6 +628,57 @@
+ 	done
+ }
+ 
++# @FUNCTION: linux-mod_src_configure
++# @DESCRIPTION:
++# It configures all the modules specified in MODULE_NAMES. For each module the econf command is
++# executed only if ECONF_PARAMS is defined, the name of the target is specified by BUILD_TARGETS
++# while the options are in BUILD_PARAMS (all the modules share these variables). The compilation
++# happens inside ${srcdir}.
++#
++# Look at the description of these variables for more details.
++linux-mod_src_configure() {
++	debug-print-function ${FUNCNAME} $*
++
++	local modulename libdir srcdir objdir i n myABI="${ABI}"
++	set_arch_to_kernel
++	ABI="${KERNEL_ABI}"
++
++	BUILD_TARGETS=${BUILD_TARGETS:-clean module}
++	strip_modulenames;
++	cd "${S}"
++	touch Module.symvers
++	for i in ${MODULE_NAMES}
++	do
++		unset libdir srcdir objdir
++		for n in $(find_module_params ${i})
++		do
++			eval ${n/:*}=${n/*:/}
++		done
++		libdir=${libdir:-misc}
++		srcdir=${srcdir:-${S}}
++		objdir=${objdir:-${srcdir}}
++
++		if [ ! -f "${srcdir}/.configured" ];
++		then
++			cd ${srcdir}
++			ln -s "${S}"/Module.symvers Module.symvers
++			einfo "Preparing ${modulename} module"
++			if [[ -n ${ECONF_PARAMS} ]]
++			then
++				econf ${ECONF_PARAMS} || \
++				die "Unable to run econf ${ECONF_PARAMS}"
++			fi
++
++			cd ${OLDPWD}
++			touch ${srcdir}/.configured
++		fi
++	done
++
++	set_arch_to_portage
++	ABI="${myABI}"
++}
++
++
+ # @FUNCTION: linux-mod_src_compile
+ # @DESCRIPTION:
+ # It compiles all the modules specified in MODULE_NAMES. For each module the econf command is
+@@ -657,7 +714,8 @@
+ 			cd "${srcdir}"
+ 			ln -s "${S}"/Module.symvers Module.symvers
+ 			einfo "Preparing ${modulename} module"
+-			if [[ -n ${ECONF_PARAMS} ]]
++			if [[ -n ${ECONF_PARAMS} ]] && [ ! -f "${srcdir}/.configured" ];
++
+ 			then
+ 				econf ${ECONF_PARAMS} || \
+ 				die "Unable to run econf ${ECONF_PARAMS}"
+@@ -669,12 +727,12 @@
+ 			# inside the variables gets used as targets for Make, which then
+ 			# fails.
+ 			eval "emake HOSTCC=\"$(tc-getBUILD_CC)\" \
+-						CROSS_COMPILE=${CHOST}- \
++						CROSS_COMPILE=${CHOST_default}- \
+ 						LDFLAGS=\"$(get_abi_LDFLAGS)\" \
+ 						${BUILD_FIXES} \
+ 						${BUILD_PARAMS} \
+ 						${BUILD_TARGETS} " \
+-				|| die "Unable to emake HOSTCC="$(tc-getBUILD_CC)" CROSS_COMPILE=${CHOST}- LDFLAGS="$(get_abi_LDFLAGS)" ${BUILD_FIXES} ${BUILD_PARAMS} ${BUILD_TARGETS}"
++				|| die "Unable to emake HOSTCC="$(tc-getBUILD_CC)" CROSS_COMPILE=${CHOST_default}- LDFLAGS="$(get_abi_LDFLAGS)" ${BUILD_FIXES} ${BUILD_PARAMS} ${BUILD_TARGETS}"
+ 			cd "${OLDPWD}"
+ 			touch "${srcdir}"/.built
+ 		fi
