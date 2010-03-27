@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.65 2010/02/17 23:32:24 wired Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.66 2010/03/24 14:36:28 yngwin Exp $
 
 export EMULTILIB_SAVE_VARS="QTBASEDIR QTPREFIXDIR QTBINDIR QTLIBDIR \
 		QMAKE_LIBDIR_QT QTPCDIR QTDATADIR QTDOCDIR QTHEADERDIR \
@@ -75,6 +75,17 @@ S=${WORKDIR}/${MY_P}
 qt4-build_pkg_setup() {
 	[[ ${EAPI} == 2 ]] && use !prefix && EPREFIX=
 
+	# Protect users by not allowing downgrades between releases
+	# Downgrading revisions within the same release should be allowed
+	if has_version '>'${CATEGORY}/${P}-r9999 ; then
+		if [[ -z $I_KNOW_WHAT_I_AM_DOING ]] ; then
+			eerror "Sanity check to keep you from breaking your system:"
+			eerror "  Downgrading Qt is completely unsupported and will break your system!"
+			die "aborting to save your system"
+		else
+			ewarn "Downgrading Qt is completely unsupported and will break your system!"
+		fi
+	fi
 
 	PATH="${S}/bin${PATH:+:}${PATH}"
 	if [[ ${CHOST} != *-darwin* ]]; then
@@ -85,7 +96,8 @@ qt4-build_pkg_setup() {
 		# platform detection. Note: needs to come before any directories to
 		# avoid extract failure.
 		[[ ${CHOST} == *-apple-darwin* ]] && \
-			QT4_EXTRACT_DIRECTORIES="src/gui/kernel/qapplication_mac.mm ${QT4_EXTRACT_DIRECTORIES}"
+			QT4_EXTRACT_DIRECTORIES="src/gui/kernel/qapplication_mac.mm
+				${QT4_EXTRACT_DIRECTORIES}"
 	fi
 
 	# Make sure ebuilds use the required EAPI
@@ -98,8 +110,6 @@ qt4-build_pkg_setup() {
 
 	if ! version_is_at_least 4.1 $(gcc-version); then
 		ewarn "Using a GCC version lower than 4.1 is not supported!"
-		echo
-		ebeep 3
 	fi
 }
 
