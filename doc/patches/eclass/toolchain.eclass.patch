@@ -1,0 +1,64 @@
+--- /usr/portage/./eclass/toolchain.eclass	2010-03-07 06:08:49.000000000 +0100
++++ ./eclass/toolchain.eclass	2010-03-27 23:18:36.000000000 +0100
+@@ -157,6 +157,7 @@
+ 			tc_version_is_at_least "4.0" && IUSE="${IUSE} objc-gc mudflap"
+ 			tc_version_is_at_least "4.1" && IUSE="${IUSE} objc++"
+ 			tc_version_is_at_least "4.2" && IUSE="${IUSE} openmp"
++			tc_version_is_at_least "4.2" && IUSE="${IUSE} nsplugin"
+ 			tc_version_is_at_least "4.3" && IUSE="${IUSE} fixed-point"
+ 			tc_version_is_at_least "4.4" && IUSE="${IUSE} graphite"
+ 		fi
+@@ -1168,7 +1169,7 @@
+ 			done
+ 	fi
+ 
+-	disable_multilib_libjava || die "failed to disable multilib java"
++#	disable_multilib_libjava || die "failed to disable multilib java"
+ }
+ 
+ gcc-library-configure() {
+@@ -1226,7 +1227,14 @@
+ 	if ! is_gcj ; then
+ 		confgcc="${confgcc} --disable-libgcj"
+ 	elif use gtk ; then
+-		confgcc="${confgcc} --enable-java-awt=gtk"
++		confgcc="${confgcc} --enable-java-awt=gtk \
++		$(use_enable nsplugin plugin)"
++	elif use qt ; then
++		confgcc="${confgcc} --enable-java-awt=qt"
++	fi
++
++	if is_crosscompile && is_gcj ; then
++		confgcc="${confgcc} --disable-jni"
+ 	fi
+ 
+ 	case $(tc-arch) in
+@@ -1935,10 +1943,24 @@
+ 		mv -f "${D}"${PREFIX}/lib/libgcj.spec "${D}"${LIBPATH}/libgcj.spec
+ 
+ 	# SLOT up libgcj.pc (and let gcc-config worry about links)
+-	local libgcj=$(find "${D}"${PREFIX}/lib/pkgconfig/ -name 'libgcj*.pc')
+-	if [[ -n ${libgcj} ]] ; then
+-		sed -i "/^libdir=/s:=.*:=${LIBPATH}:" "${libgcj}"
+-		mv "${libgcj}" "${D}"/usr/lib/pkgconfig/libgcj-${GCC_PV}.pc || die
++	local libgcj
++	for libgcj in "${D}${PREFIX}"/lib/pkgconfig/libgcj*.pc ; do
++		if [[ -f ${libgcj} ]] ; then
++			sed -i "/^libdir=/s:=.*:=${LIBPATH}:" "${libgcj}"
++			if ! is_crosscompile; then
++				mv "${libgcj}" "${D}"/${PREFIX}/lib/pkgconfig/libgcj-${GCC_PV}.pc || die
++			else
++				dodir /${PREFIX}/${CTARGET}/${PREFIX}/lib/pkgconfig
++				mv "${libgcj}" "${D}"/${PREFIX}/${CTARGET}/${PREFIX}/lib/pkgconfig/libgcj-${GCC_PV}.pc || die
++			fi
++		fi
++	done
++
++	# Move JNI native (CTARGET) java libraries  
++	if is_crosscompile; then
++		dodir /${PREFIX}/${CTARGET}/${PREFIX}/lib
++		find "${D}"/${PREFIX}/lib -name 'gcj-*' -type d -exec \
++			mv {} "${D}"/${PREFIX}/${CTARGET}/${PREFIX}/lib/ \;
+ 	fi
+ 
+ 	# Rename jar because it could clash with Kaffe's jar if this gcc is
