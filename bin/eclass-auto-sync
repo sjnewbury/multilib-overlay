@@ -1,0 +1,31 @@
+#!/bin/bash 
+
+echo_red() {
+	echo -e "\033[1;31m$*\033[0m"
+}
+
+echo_green() {
+	echo -e "\033[1;32m$*\033[0m"
+}
+
+echo_yellow() {
+	echo -e "\033[1;33m$*\033[0m"
+}
+
+SOURCE_DIR="/usr/portage"
+PATCH_DIR="doc/patches"
+
+ECLASS_LIST="$(find eclass -type f -not -wholename 'eclass/multilib-native.eclass' )"
+[[ -n ${DEBUG} ]] && echo ${ECLASS_LIST}
+
+for ECLASS in ${ECLASS_LIST}; do
+	echo_yellow "\nworking on: ${ECLASS}"
+	cp ${SOURCE_DIR}/${ECLASS} ${ECLASS}
+	if [[ -f ${PATCH_DIR}/${ECLASS}.patch ]]; then
+		patch -p1 < ${PATCH_DIR}/${ECLASS}.patch
+	else
+		echo_red "${PATCH_DIR}/${ECLASS}.patch is not available"
+	fi
+	echo_green "finished working on: ${ECLASS}\n"
+done
+
