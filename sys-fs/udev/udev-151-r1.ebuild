@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-151-r1.ebuild,v 1.2 2010/02/07 20:32:51 zzam Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-151-r1.ebuild,v 1.3 2010/03/15 21:43:05 zzam Exp $
 
 EAPI="2"
 
@@ -13,7 +13,9 @@ if [[ ${PV} == "9999" ]]; then
 	EGIT_BRANCH="master"
 	inherit git autotools
 else
-	SRC_URI="mirror://kernel/linux/utils/kernel/hotplug/${P}.tar.bz2"
+	# please update testsys-tarball whenever udev-xxx/test/sys/ is changed
+	SRC_URI="mirror://kernel/linux/utils/kernel/hotplug/${P}.tar.bz2
+			 test? ( mirror://gentoo/${PN}-151-testsys.tar.bz2 )"
 	[[ -n "${PATCHSET}" ]] && SRC_URI="${SRC_URI} mirror://gentoo/${PATCHSET}.tar.bz2"
 fi
 DESCRIPTION="Linux dynamic and persistent device naming support (aka userspace devfs)"
@@ -132,6 +134,10 @@ multilib-native_src_unpack_internal() {
 		git_src_unpack
 	else
 		unpack ${A}
+
+		if use test; then
+			mv "${WORKDIR}"/test/sys "${S}"/test/
+		fi
 	fi
 }
 
