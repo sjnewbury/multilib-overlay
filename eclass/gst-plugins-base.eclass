@@ -38,11 +38,11 @@ S=${WORKDIR}/${MY_P}
 # added to remove circular deps
 # 6/2/2006 - zaheerm
 if [ "${PN}" != "${MY_PN}" ]; then
-RDEPEND=">=media-libs/gst-plugins-base-${PV}"
+RDEPEND=">=media-libs/gst-plugins-base-${PV}[lib32?]"
 DEPEND="${RDEPEND}
-	~media-libs/gst-plugins-base-${PV}
+	~media-libs/gst-plugins-base-${PV}[lib32?]
 	>=sys-apps/sed-4
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 RESTRICT=test
 fi
 
