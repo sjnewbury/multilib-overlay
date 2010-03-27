@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/imagemagick/imagemagick-6.5.8.8.ebuild,v 1.1 2009/12/28 15:37:28 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/imagemagick/imagemagick-6.5.8.8.ebuild,v 1.7 2010/03/14 16:35:16 hwoarang Exp $
 
 EAPI="2"
 
@@ -19,7 +19,7 @@ SRC_URI="mirror://imagemagick/${MY_P2}.tar.bz2
 RESTRICT="perl? ( userpriv )"
 LICENSE="imagemagick"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
+KEYWORDS="alpha amd64 arm ~hppa ia64 ppc ppc64 s390 sh sparc x86"
 IUSE="autotrace bzip2 +corefonts djvu doc fftw fontconfig fpx graphviz gs hdri
 	jbig jpeg jpeg2k lcms lqr nocxx openexr openmp perl png q8 q32 raw svg tiff
 	truetype X wmf xml zlib"
@@ -27,19 +27,19 @@ IUSE="autotrace bzip2 +corefonts djvu doc fftw fontconfig fpx graphviz gs hdri
 RDEPEND="
 	autotrace? ( >=media-gfx/autotrace-0.31.1 )
 	bzip2? ( app-arch/bzip2[lib32?] )
-	djvu? ( app-text/djvu )
+	djvu? ( app-text/djvu[lib32?] )
 	fftw? ( sci-libs/fftw )
 	fontconfig? ( media-libs/fontconfig[lib32?] )
 	fpx? ( media-libs/libfpx[lib32?] )
 	graphviz? ( >=media-gfx/graphviz-2.6[lib32?] )
-	gs? ( virtual/ghostscript[lib32?] )
+	gs? ( app-text/ghostscript-gpl[lib32?] )
 	jbig? ( media-libs/jbigkit[lib32?] )
-	jpeg? ( >=media-libs/jpeg-6b[lib32?] )
+	jpeg? ( >=media-libs/jpeg-6b:0[lib32?] )
 	jpeg2k? ( media-libs/jasper[lib32?] )
 	lcms? ( >=media-libs/lcms-1.06[lib32?] )
 	lqr? ( >=media-libs/liblqr-0.1.0 )
 	openexr? ( media-libs/openexr[lib32?] )
-	perl? ( >=dev-lang/perl-5.8.6-r6 )
+	perl? ( >=dev-lang/perl-5.8.6-r6[lib32?] )
 	png? ( media-libs/libpng[lib32?] )
 	raw? ( media-gfx/ufraw[lib32?] )
 	tiff? ( >=media-libs/tiff-3.5.5[lib32?] )
@@ -105,7 +105,7 @@ multilib-native_src_configure_internal() {
 
 	# openmp support only works with >=sys-devel/gcc-4.3, bug #223825
 	if use openmp && version_is_at_least 4.3 $(gcc-version) ; then
-		if built_with_use --missing false =sys-devel/gcc-$(gcc-version)* openmp ; then
+		if has_version =sys-devel/gcc-$(gcc-version)*[openmp] ; then
 			myconf="${myconf} --enable-openmp"
 		else
 			elog "disabling openmp support (requires >=sys-devel/gcc-4.3 with USE='openmp')"

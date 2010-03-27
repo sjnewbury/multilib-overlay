@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/imagemagick/imagemagick-6.5.2.9.ebuild,v 1.14 2009/11/24 16:48:27 bicatali Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/imagemagick/imagemagick-6.5.2.9.ebuild,v 1.15 2009/12/26 17:38:06 pva Exp $
 
 EAPI="2"
 
@@ -24,17 +24,17 @@ IUSE="bzip2 +corefonts djvu doc fontconfig fpx graphviz gs hdri jbig jpeg jpeg2k
 	lcms nocxx openexr openmp perl png q8 q32 raw svg tiff truetype X wmf xml zlib"
 
 RDEPEND="bzip2? ( app-arch/bzip2[lib32?] )
-	djvu? ( app-text/djvu )
+	djvu? ( app-text/djvu[lib32?] )
 	fontconfig? ( media-libs/fontconfig[lib32?] )
 	fpx? ( media-libs/libfpx[lib32?] )
 	graphviz? ( >=media-gfx/graphviz-2.6[lib32?] )
-	gs? ( virtual/ghostscript[lib32?] )
+	gs? ( app-text/ghostscript-gpl[lib32?] )
 	jbig? ( media-libs/jbigkit[lib32?] )
 	jpeg? ( >=media-libs/jpeg-6b[lib32?] )
 	jpeg2k? ( media-libs/jasper[lib32?] )
 	lcms? ( >=media-libs/lcms-1.06[lib32?] )
 	openexr? ( media-libs/openexr[lib32?] )
-	perl? ( >=dev-lang/perl-5.8.6-r6 !=dev-lang/perl-5.8.7 )
+	perl? ( >=dev-lang/perl-5.8.6-r6[lib32?] !=dev-lang/perl-5.8.7[lib32?] )
 	png? ( media-libs/libpng[lib32?] )
 	raw? ( media-gfx/ufraw[lib32?] )
 	tiff? ( >=media-libs/tiff-3.5.5[lib32?] )

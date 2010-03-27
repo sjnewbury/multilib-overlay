@@ -27,19 +27,19 @@ IUSE="autotrace bzip2 +corefonts djvu doc fftw fontconfig fpx graphviz gs hdri
 RDEPEND="
 	autotrace? ( >=media-gfx/autotrace-0.31.1 )
 	bzip2? ( app-arch/bzip2[lib32?] )
-	djvu? ( app-text/djvu )
+	djvu? ( app-text/djvu[lib32?] )
 	fftw? ( sci-libs/fftw )
 	fontconfig? ( media-libs/fontconfig[lib32?] )
 	fpx? ( media-libs/libfpx[lib32?] )
 	graphviz? ( >=media-gfx/graphviz-2.6[lib32?] )
-	gs? ( virtual/ghostscript[lib32?] )
+	gs? ( app-text/ghostscript-gpl[lib32?] )
 	jbig? ( media-libs/jbigkit[lib32?] )
-	jpeg? ( >=media-libs/jpeg-6b[lib32?] )
+	jpeg? ( >=media-libs/jpeg-6b:0[lib32?] )
 	jpeg2k? ( media-libs/jasper[lib32?] )
 	lcms? ( >=media-libs/lcms-1.06[lib32?] )
 	lqr? ( >=media-libs/liblqr-0.1.0 )
 	openexr? ( media-libs/openexr[lib32?] )
-	perl? ( >=dev-lang/perl-5.8.6-r6 )
+	perl? ( >=dev-lang/perl-5.8.6-r6[lib32?] )
 	png? ( media-libs/libpng[lib32?] )
 	raw? ( media-gfx/ufraw[lib32?] )
 	tiff? ( >=media-libs/tiff-3.5.5[lib32?] )
@@ -105,7 +105,7 @@ multilib-native_src_configure_internal() {
 
 	# openmp support only works with >=sys-devel/gcc-4.3, bug #223825
 	if use openmp && version_is_at_least 4.3 $(gcc-version) ; then
-		if built_with_use --missing false =sys-devel/gcc-$(gcc-version)* openmp ; then
+		if has_version =sys-devel/gcc-$(gcc-version)*[openmp] ; then
 			myconf="${myconf} --enable-openmp"
 		else
 			elog "disabling openmp support (requires >=sys-devel/gcc-4.3 with USE='openmp')"

@@ -142,7 +142,7 @@ gnome-base/libgnomeui
 # media-gfx/gimp
 media-gfx/graphviz
 # media-gfx/gtkimageview
-# media-gfx/imagemagick
+media-gfx/imagemagick
 # media-gfx/sane-backends
 # media-gfx/ufraw
 # media-libs/a52dec
