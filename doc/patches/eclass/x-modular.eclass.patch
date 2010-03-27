@@ -1,0 +1,13 @@
+diff --git b/eclass/x-modular.eclass a/eclass/x-modular.eclass
+index 01b298b..7732943 100644
+--- b/eclass/x-modular.eclass
++++ a/eclass/x-modular.eclass
+@@ -23,6 +23,8 @@ if [[ ${PV} = 9999* ]]; then
+ 	SRC_URI=""
+ fi
+ 
++MULTILIB_EXT_SOURCE_BUILD=yes
++
+ # If we're a font package, but not the font.alias one
+ FONT_ECLASS=""
+ if [[ "${PN/#font-}" != "${PN}" ]] \

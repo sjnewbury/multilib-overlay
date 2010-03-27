@@ -112,7 +112,7 @@ LICENSE="MIT"
 if [[ -n "${SNAPSHOT}" ]]; then
 # FIXME: What's the minimal libtool version supporting arbitrary versioning?
 	DEPEND="${DEPEND}
-		>=sys-devel/libtool-1.5
+		>=sys-devel/libtool-1.5[lib32?]
 		>=sys-devel/m4-1.4"
 	WANT_AUTOCONF="latest"
 	WANT_AUTOMAKE="latest"
@@ -176,7 +176,7 @@ if [[ -z "${FONT}" ]] \
 fi
 
 DEPEND="${DEPEND}
-	>=dev-util/pkgconfig-0.18"
+	>=dev-util/pkgconfig-0.18[lib32?]"
 
 if [[ "${PN/util-macros}" = "${PN}" ]]; then
 	DEPEND="${DEPEND}
