@@ -5,7 +5,7 @@
 #
 # Licensed under the GNU General Public License, v2
 #
-# $Header: /var/cvsroot/gentoo-x86/eclass/java-pkg-2.eclass,v 1.34 2009/09/02 21:41:29 betelgeuse Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/java-pkg-2.eclass,v 1.35 2010/02/01 09:38:44 caster Exp $
 
 inherit java-utils-2
 
@@ -50,8 +50,10 @@ if [[ ${CATEGORY} = dev-java && ${PN} = commons-* ]]; then
 	SRC_URI="mirror://apache/${PN/-///}/source/${P}-src.tar.gz"
 fi
 
-EXPORT_FUNCTIONS pkg_setup src_compile pkg_preinst
-[[ "${EAPI:-0}" == "2" ]] && EXPORT_FUNCTIONS src_prepare
+case "${EAPI:-0}" in
+	0|1) EXPORT_FUNCTIONS pkg_setup src_compile pkg_preinst ;;
+	*) EXPORT_FUNCTIONS pkg_setup src_prepare src_compile pkg_preinst ;;
+esac
 
 # ------------------------------------------------------------------------------
 # @eclass-pkg_setup
@@ -159,9 +161,11 @@ java-pkg-2_src_test() {
 	fi
 }
 
+# ------------------------------------------------------------------------------
 # @eclass-pkg_preinst
 #
 # wrapper for java-utils-2_pkg_preinst
+# ------------------------------------------------------------------------------
 java-pkg-2_pkg_preinst() {
 	java-utils-2_pkg_preinst
 }
