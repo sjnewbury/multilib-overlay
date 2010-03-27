@@ -77,8 +77,8 @@ multilib-native_pkg_setup_internal() {
 	use gnutls && use ssl && G2CONF="${G2CONF} --disable-openssl"
 }
 
-multilib-native_src_unpack_internal() {
-	gnome2_src_unpack
+multilib-native_src_prepare_internal() {
+	gnome2_src_prepare
 
 	# Allow the Trash on afs filesystems (#106118)
 	epatch "${FILESDIR}"/${PN}-2.12.0-afs.patch
