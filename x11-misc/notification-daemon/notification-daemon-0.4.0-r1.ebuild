@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-misc/notification-daemon/notification-daemon-0.4.0-r1.ebuild,v 1.9 2010/01/10 18:43:58 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-misc/notification-daemon/notification-daemon-0.4.0-r1.ebuild,v 1.10 2010/03/26 16:45:43 ssuominen Exp $
 
 EAPI="2"
 
@@ -29,8 +29,7 @@ RDEPEND=">=dev-libs/glib-2.4.0[lib32?]
 DEPEND="${RDEPEND}
 		dev-util/intltool
 		>=sys-devel/gettext-0.14[lib32?]
-		!xfce-extra/notification-daemon-xfce
-		!x11-misc/xfce4-notifyd"
+		!xfce-extra/xfce4-notifyd"
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-report-sound-capability.patch

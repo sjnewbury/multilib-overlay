@@ -1,8 +1,8 @@
---- ./x11-misc/notification-daemon/notification-daemon-0.4.0-r1.ebuild.orig	2010-02-28 22:49:17.000000000 +0100
-+++ ./x11-misc/notification-daemon/notification-daemon-0.4.0-r1.ebuild	2010-02-28 22:50:21.000000000 +0100
-@@ -30,9 +30,7 @@
- 		!xfce-extra/notification-daemon-xfce
- 		!x11-misc/xfce4-notifyd"
+--- /usr/portage/x11-misc/notification-daemon/notification-daemon-0.4.0-r1.ebuild	2010-03-26 18:08:06.000000000 +0100
++++ ./x11-misc/notification-daemon/notification-daemon-0.4.0-r1.ebuild	2010-03-27 20:55:35.000000000 +0100
+@@ -29,9 +29,7 @@
+ 		>=sys-devel/gettext-0.14
+ 		!xfce-extra/xfce4-notifyd"
  
 -src_unpack() {
 -	gnome2_src_unpack
