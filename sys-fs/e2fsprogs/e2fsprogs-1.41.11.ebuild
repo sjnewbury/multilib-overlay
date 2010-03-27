@@ -31,9 +31,7 @@ multilib-native_pkg_setup_internal() {
 	fi
 }
 
-multilib-native_src_unpack_internal() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-1.38-tests-locale.patch #99766
 	epatch "${FILESDIR}"/${PN}-1.41.8-makefile.patch
 	epatch "${FILESDIR}"/${PN}-1.40-fbsd.patch
@@ -59,7 +57,7 @@ multilib-native_src_unpack_internal() {
 	touch lib/ss/ss_err.h
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# Keep the package from doing silly things #261411
 	export VARTEXFONTS=${T}/fonts
 
@@ -88,6 +86,9 @@ multilib-native_src_compile_internal() {
 		eerror "attachment to http://bugs.gentoo.org/show_bug.cgi?id=81096"
 		die "Preventing included intl cruft from building"
 	fi
+}
+
+multilib-native_src_compile_internal() {
 	emake COMPILE_ET=compile_et MK_CMDS=mk_cmds || die
 
 	# Build the FreeBSD helper
