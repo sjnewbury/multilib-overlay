@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-auth/nss_ldap/nss_ldap-264.ebuild,v 1.1 2009/07/28 18:45:51 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-auth/nss_ldap/nss_ldap-264.ebuild,v 1.2 2010/02/19 19:25:50 robbat2 Exp $
 
 EAPI=2
 inherit fixheadtails eutils multilib autotools multilib-native
@@ -23,8 +23,6 @@ RDEPEND="${DEPEND}
 		!<net-fs/autofs-4.1.3"
 
 multilib-native_src_prepare_internal() {
-	cd "${S}"
-
 	epatch "${FILESDIR}"/nsswitch.ldap.diff
 
 	# Applied by upstream
@@ -95,7 +93,7 @@ multilib-native_src_install_internal() {
 	docinto docs; dodoc doc/*
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "If you use a ldaps:// string in the 'uri' setting of"
 	elog "your /etc/ldap.conf, you must set 'ssl on'!"
 }

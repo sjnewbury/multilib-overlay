@@ -1,0 +1,31 @@
+--- /usr/portage/./sys-auth/nss_ldap/nss_ldap-262.ebuild	2009-04-12 10:07:53.000000000 +0200
++++ ./sys-auth/nss_ldap/nss_ldap-262.ebuild	2010-03-28 19:14:28.000000000 +0200
+@@ -20,9 +20,7 @@
+ RDEPEND="${DEPEND}
+ 		!<net-fs/autofs-4.1.3"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/nsswitch.ldap.diff
+ 	# Applied by upstream
+ 	#epatch "${FILESDIR}"/${PN}-239-tls-security-bug.patch
+@@ -50,7 +48,7 @@
+ 	eautoreconf
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	local myconf=""
+ 	use debug && myconf="${myconf} --enable-debugging"
+ 	use kerberos && myconf="${myconf} --enable-configurable-krb5-ccname-gssapi"
+@@ -61,8 +59,6 @@
+ 		--enable-paged-results \
+ 		--enable-rfc2307bis \
+ 		${myconf} || die "configure failed"
+-
+-	emake || die "make failed"
+ }
+ 
+ src_install() {

@@ -277,7 +277,7 @@ net-misc/openssh
 # sys-apps/pciutils
 # sys-apps/tcp-wrappers
 sys-apps/util-linux
-# sys-auth/nss_ldap
+sys-auth/nss_ldap
 sys-auth/policykit
 # sys-auth/polkit
 sys-devel/flex

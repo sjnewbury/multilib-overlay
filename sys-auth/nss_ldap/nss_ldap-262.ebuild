@@ -1,6 +1,6 @@
-# Copyright 1999-2007 Gentoo Foundation
+# Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-auth/nss_ldap/nss_ldap-258.ebuild,v 1.8 2007/11/14 03:56:40 beandog Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-auth/nss_ldap/nss_ldap-262.ebuild,v 1.1 2008/09/24 19:01:23 robbat2 Exp $
 
 EAPI="2"
 
@@ -14,7 +14,7 @@ SRC_URI="http://www.padl.com/download/${P}.tar.gz"
 
 SLOT="0"
 LICENSE="LGPL-2"
-KEYWORDS="alpha amd64 hppa ~ia64 ~mips ppc ppc64 sparc x86"
+KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86"
 
 DEPEND=">=net-nds/openldap-2.1.30-r5[lib32?]
 		sasl? ( dev-libs/cyrus-sasl[lib32?] )
@@ -42,7 +42,11 @@ multilib-native_src_prepare_internal() {
 	    -e '/^install-exec-local: nss_ldap.so/s,nss_ldap.so,,g' \
 	    "${S}"/$i
 	done
+	# Upstream forgets the version number sometimes
 	epatch "${FILESDIR}"/${PN}-257.2-gssapi-headers.patch
+	sed -i \
+		-e "/^AM_INIT_AUTOMAKE/s~2..~$PV~" \
+		"${S}"/configure.in
 	eautoreconf
 }
 
