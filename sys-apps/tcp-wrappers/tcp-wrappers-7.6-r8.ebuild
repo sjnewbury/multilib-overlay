@@ -2,8 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-apps/tcp-wrappers/tcp-wrappers-7.6-r8.ebuild,v 1.24 2007/01/17 03:22:59 vapier Exp $
 
-EAPI="2"
-
 inherit eutils toolchain-funcs multilib-native
 
 MY_P="${P//-/_}"
@@ -22,7 +20,10 @@ DEPEND=""
 
 S=${WORKDIR}/${MY_P}
 
-multilib-native_src_prepare_internal() {
+multilib-native_src_unpack_internal() {
+	unpack ${A}
+	cd "${S}"
+
 	chmod ug+w Makefile
 
 	EPATCH_SUFFIX="patch"
