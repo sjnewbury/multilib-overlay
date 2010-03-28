@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-auth/policykit/policykit-0.9.ebuild,v 1.4 2009/04/23 15:38:23 armin76 Exp $
 
-EAPI=2
+EAPI="2"
 
-inherit eutils autotools bash-completion multilib pam multilib-native
+inherit autotools bash-completion eutils multilib pam multilib-native
 
 MY_PN="PolicyKit"
 
@@ -20,10 +20,10 @@ IUSE="bash-completion doc pam selinux zsh-completion"
 RDEPEND=">=dev-libs/glib-2.6[lib32?]
 	>=dev-libs/dbus-glib-0.73[lib32?]
 	dev-libs/expat[lib32?]
-	pam? ( virtual/pam )
+	pam? ( virtual/pam[lib32?] )
 	selinux? ( sys-libs/libselinux[lib32?] )"
 DEPEND="${RDEPEND}
-	dev-libs/libxslt
+	dev-libs/libxslt[lib32?]
 	app-text/docbook-xsl-stylesheets
 	>=dev-util/pkgconfig-0.18[lib32?]
 	>=dev-util/intltool-0.36
@@ -32,12 +32,12 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_PN}-${PV}"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	enewgroup polkituser
 	enewuser polkituser -1 "-1" /dev/null polkituser
 }
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 
@@ -106,13 +106,13 @@ multilib-native_src_install_internal() {
 	keepdir /var/lib/PolicyKit
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	# Stolen from vixie-cron ebuilds
 	has_version "<${CATEGORY}/${PN}-0.9"
 	fix_var_dir_perms=$?
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	# bug #239231
 	if [[ $fix_var_dir_perms = 0 ]] ; then
 		echo

@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-auth/policykit/policykit-0.9-r1.ebuild,v 1.11 2009/10/03 09:47:32 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-auth/policykit/policykit-0.9-r1.ebuild,v 1.14 2009/11/29 19:38:47 armin76 Exp $
 
 EAPI="2"
 
@@ -15,16 +15,16 @@ SRC_URI="http://hal.freedesktop.org/releases/${MY_P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ~ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="bash-completion doc pam selinux zsh-completion"
 
 RDEPEND=">=dev-libs/glib-2.6[lib32?]
 	>=dev-libs/dbus-glib-0.73[lib32?]
 	dev-libs/expat[lib32?]
-	pam? ( virtual/pam )
+	pam? ( virtual/pam[lib32?] )
 	selinux? ( sys-libs/libselinux[lib32?] )"
 DEPEND="${RDEPEND}
-	dev-libs/libxslt
+	dev-libs/libxslt[lib32?]
 	app-text/docbook-xsl-stylesheets
 	>=dev-util/pkgconfig-0.18[lib32?]
 	>=dev-util/intltool-0.36
@@ -33,12 +33,12 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	enewgroup polkituser
 	enewuser polkituser -1 "-1" /dev/null polkituser
 }
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 
@@ -109,13 +109,13 @@ multilib-native_src_install_internal() {
 	keepdir /var/lib/PolicyKit
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	# Stolen from vixie-cron ebuilds
 	has_version "<${CATEGORY}/${PN}-0.9"
 	fix_var_dir_perms=$?
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	# bug #239231
 	if [[ $fix_var_dir_perms = 0 ]] ; then
 		echo
