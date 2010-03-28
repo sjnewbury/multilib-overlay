@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libxml2/libxml2-2.7.6.ebuild,v 1.1 2009/12/23 16:29:20 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libxml2/libxml2-2.7.6.ebuild,v 1.5 2010/03/24 18:17:32 ranger Exp $
 
 EAPI="2"
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.xmlsoft.org/"
 
 LICENSE="MIT"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="debug doc examples ipv6 python readline test"
 
 XSTS_HOME="http://www.w3.org/XML/2004/xml-schema-test-suite"
@@ -25,8 +25,8 @@ SRC_URI="ftp://xmlsoft.org/${PN}/${P}.tar.gz
 		${XSTS_HOME}/${XSTS_NAME_1}/${XSTS_TARBALL_1}
 		${XSTS_HOME}/${XSTS_NAME_2}/${XSTS_TARBALL_2} )"
 
-RDEPEND="sys-libs/zlib
-	python? ( dev-lang/python[lib32?] )
+RDEPEND="sys-libs/zlib[lib32?]
+	python? ( <dev-lang/python-3[lib32?] )
 	readline? ( sys-libs/readline[lib32?] )"
 
 DEPEND="${RDEPEND}
@@ -87,7 +87,7 @@ multilib-native_src_install_internal() {
 		exampledir=/usr/share/doc/${PF}/python/examples \
 		install || die "Installation failed"
 
-	rm "${D}"/usr/share/doc/${P}/{AUTHORS,ChangeLog,Copyright,NEWS,README*,TODO*}
+	rm -rf "${D}"/usr/share/doc/${P}
 	dodoc AUTHORS ChangeLog Copyright NEWS README* TODO* || die "dodoc failed"
 
 	if ! use python; then

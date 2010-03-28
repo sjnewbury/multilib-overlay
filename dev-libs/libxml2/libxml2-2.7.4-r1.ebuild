@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libxml2/libxml2-2.7.4-r1.ebuild,v 1.1 2009/09/16 08:05:17 mrpouet Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libxml2/libxml2-2.7.4-r1.ebuild,v 1.3 2010/03/08 22:30:16 zmedico Exp $
 
 EAPI="2"
 
@@ -25,8 +25,8 @@ SRC_URI="ftp://xmlsoft.org/${PN}/${P}.tar.gz
 		${XSTS_HOME}/${XSTS_NAME_1}/${XSTS_TARBALL_1}
 		${XSTS_HOME}/${XSTS_NAME_2}/${XSTS_TARBALL_2} )"
 
-RDEPEND="sys-libs/zlib
-	python? ( dev-lang/python[lib32?] )
+RDEPEND="sys-libs/zlib[lib32?]
+	python? ( <dev-lang/python-3[lib32?] )
 	readline? ( sys-libs/readline[lib32?] )"
 
 DEPEND="${RDEPEND}
@@ -44,13 +44,13 @@ multilib-native_src_unpack_internal() {
 			"${S}"/xstc/ \
 			|| die "Failed to install test tarballs"
 	fi
-
-	# Fix inkscape extension loader problem, bug #285125,
-	# patch import from upstream bug #595128.
-	epatch "${FILESDIR}"/${P}-parser-grow.patch
 }
 
 multilib-native_src_prepare_internal() {
+	# Fix inkscape extension loader problem, bug #285125,
+	# patch import from upstream bug #595128.
+	epatch "${FILESDIR}"/${P}-parser-grow.patch
+
 	epunt_cxx
 }
 
@@ -91,7 +91,7 @@ multilib-native_src_install_internal() {
 		exampledir=/usr/share/doc/${PF}/python/examples \
 		install || die "Installation failed"
 
-	rm "${D}"/usr/share/doc/${P}/{AUTHORS,ChangeLog,Copyright,NEWS,README*,TODO*}
+	rm -rf "${D}"/usr/share/doc/${P}
 	dodoc AUTHORS ChangeLog Copyright NEWS README* TODO* || die "dodoc failed"
 
 	if ! use python; then

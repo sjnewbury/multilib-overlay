@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libxml2/libxml2-2.7.3-r2.ebuild,v 1.7 2009/08/30 23:18:00 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libxml2/libxml2-2.7.3-r2.ebuild,v 1.8 2010/03/08 22:30:16 zmedico Exp $
 
 EAPI="2"
 
@@ -25,14 +25,14 @@ SRC_URI="ftp://xmlsoft.org/${PN}/${P}.tar.gz
 		${XSTS_HOME}/${XSTS_NAME_1}/${XSTS_TARBALL_1}
 		${XSTS_HOME}/${XSTS_NAME_2}/${XSTS_TARBALL_2} )"
 
-RDEPEND="sys-libs/zlib
-	python?   ( dev-lang/python[lib32?] )
+RDEPEND="sys-libs/zlib[lib32?]
+	python?   ( <dev-lang/python-3[lib32?] )
 	readline? ( sys-libs/readline[lib32?] )"
 
 DEPEND="${RDEPEND}
 	hppa? ( >=sys-devel/binutils-2.15.92.0.2 )"
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	# ${A} isn't used to avoid unpacking of test tarballs into $WORKDIR,
 	# as they are needed as tarballs in ${S}/xstc instead and not unpacked
 	unpack ${P}.tar.gz
@@ -44,6 +44,9 @@ src_unpack() {
 			"${S}"/xstc/ \
 			|| die "Failed to install test tarballs"
 	fi
+}
+
+multilib-native_src_prepare_internal() {
 	# Fix macro conflict with wxGTK, bug #266653
 	epatch "${FILESDIR}/${P}-printf-rename.patch"
 
@@ -64,6 +67,8 @@ multilib-native_src_configure_internal() {
 	# --with-mem-debug causes unusual segmentation faults (bug #105120).
 
 	local myconf="--with-zlib \
+		--with-html-subdir=${PF}/html \
+		--docdir=/usr/share/doc/${PF} \
 		$(use_with debug run-debug)  \
 		$(use_with python)           \
 		$(use_with readline)         \
@@ -91,18 +96,29 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${D}" install || die "Installation failed"
+	emake DESTDIR="${D}" \
+		EXAMPLES_DIR=/usr/share/doc/${PF}/examples \
+		docsdir=/usr/share/doc/${PF}/python \
+		exampledir=/usr/share/doc/${PF}/python/examples \
+		install || die "Installation failed"
 
 	dodoc AUTHORS ChangeLog Copyright NEWS README* TODO* || die "dodoc failed"
+	rm "${D}"/usr/share/doc/${P}/Copyright
+	rm -rf "${D}"/usr/share/doc/${P}
+
+	if ! use python; then
+		rm -rf "${D}"/usr/share/doc/${PF}/python
+		rm -rf "${D}"/usr/share/doc/${PN}-python-${PV}
+	fi
 
 	if ! use doc; then
 		rm -rf "${D}"/usr/share/gtk-doc
-		rm -rf "${D}"/usr/share/doc/${P}/html
+		rm -rf "${D}"/usr/share/doc/${PF}/html
 	fi
 
 	if ! use examples; then
-		rm -rf "${D}/usr/share/doc/${P}/examples"
-		rm -rf "${D}/usr/share/doc/${PN}-python-${PV}/examples"
+		rm -rf "${D}/usr/share/doc/${PF}/examples"
+		rm -rf "${D}/usr/share/doc/${PF}/python/examples"
 	fi
 
 	prep_ml_binaries /usr/bin/xml2-config
@@ -111,7 +127,7 @@ multilib-native_src_install_internal() {
 multilib-native_pkg_postinst_internal() {
 	if use python; then
 		python_need_rebuild
-		python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages
+		python_mod_optimize $(python_get_sitedir)
 	fi
 
 	# We don't want to do the xmlcatalog during stage1, as xmlcatalog will not

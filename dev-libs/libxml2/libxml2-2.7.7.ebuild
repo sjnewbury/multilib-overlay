@@ -25,8 +25,8 @@ SRC_URI="ftp://xmlsoft.org/${PN}/${P}.tar.gz
 		${XSTS_HOME}/${XSTS_NAME_1}/${XSTS_TARBALL_1}
 		${XSTS_HOME}/${XSTS_NAME_2}/${XSTS_TARBALL_2} )"
 
-RDEPEND="sys-libs/zlib
-	python? ( dev-lang/python[lib32?] )
+RDEPEND="sys-libs/zlib[lib32?]
+	python? ( <dev-lang/python-3[lib32?] )
 	readline? ( sys-libs/readline[lib32?] )"
 
 DEPEND="${RDEPEND}
@@ -87,7 +87,7 @@ multilib-native_src_install_internal() {
 		exampledir=/usr/share/doc/${PF}/python/examples \
 		install || die "Installation failed"
 
-	rm "${D}"/usr/share/doc/${P}/{AUTHORS,ChangeLog,Copyright,NEWS,README*,TODO*}
+	rm -rf "${D}"/usr/share/doc/${P}
 	dodoc AUTHORS ChangeLog Copyright NEWS README* TODO* || die "dodoc failed"
 
 	if ! use python; then
