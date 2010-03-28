@@ -38,10 +38,7 @@ multilib-native_pkg_setup_internal() {
 	enewuser polkituser -1 "-1" /dev/null polkituser
 }
 
-multilib-native_src_unpack_internal() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	# Add zsh/bash completion
 	epatch "${FILESDIR}/${PN}-0.7-completions.patch"
 
@@ -59,7 +56,7 @@ multilib-native_src_unpack_internal() {
 	eautoreconf
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	local authdb=
 
 	if use pam ; then
@@ -80,7 +77,6 @@ multilib-native_src_compile_internal() {
 		--localstatedir=/var
 	# won't install with tests
 	#	$(use_enable test tests) \
-	emake || die "emake failed"
 }
 
 multilib-native_src_install_internal() {
