@@ -1,7 +1,6 @@
-diff -Nuar pciutils-2.2.7.orig/update-pciids.sh pciutils-2.2.7/update-pciids.sh
---- pciutils-2.2.7.orig/update-pciids.sh	2007-10-30 16:17:03.253630000 -0800
-+++ pciutils-2.2.7/update-pciids.sh	2007-10-30 16:39:46.810463056 -0800
-@@ -72,4 +72,18 @@
+--- pciutils-2.2.7/update-pciids.sh
++++ pciutils-2.2.7/update-pciids.sh
+@@ -72,4 +72,19 @@
  	rm -f ${DEST%.gz} ${DEST%.gz}.old
  fi
  
@@ -18,5 +17,6 @@ diff -Nuar pciutils-2.2.7.orig/update-pciids.sh pciutils-2.2.7/update-pciids.sh
 +if [ ${DEST%.gz} != ${DEST} ] ; then
 +	gzip -d <${DEST} >${DEST%.gz}
 +fi
++chmod a+r ${DEST} ${DEST%.gz}
 +
  ${quiet} || echo "Done."

@@ -17,31 +17,18 @@ IUSE="network-cron zlib"
 
 DEPEND="zlib? ( sys-libs/zlib[lib32?] )"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-3.0.0-build.patch #233314
 	epatch "${FILESDIR}"/pcimodules-${PN}-3.0.0.patch
 	epatch "${FILESDIR}"/${PN}-2.2.7-update-pciids-both-forms.patch
 	epatch "${FILESDIR}"/${PN}-3.0.0-locale-happiness.patch
 	cp "${FILESDIR}"/pcimodules.c . || die
-}
-
-multilib-native_src_prepare_internal() {
 	sed -i -e "/^LIBDIR=/s:/lib:/$(get_libdir):" Makefile
 }
 
 uyesno() { use $1 && echo yes || echo no ; }
 pemake() {
-
-	if use lib32 && [[ "${ABI}" == "x86" ]]; then
-		CROSS_COMPILE="x86_64-pc-linux-gnu"
-	else
-		CROSS_COMPILE="${CHOST}"
-	fi
-
 	emake \
-		CROSS_COMPILE="${CROSS_COMPILE}-" \
 		DNS="yes" \
 		IDSDIR="/usr/share/misc" \
 		MANDIR="/usr/share/man" \

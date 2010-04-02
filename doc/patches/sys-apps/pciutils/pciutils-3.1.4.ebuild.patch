@@ -1,0 +1,13 @@
+--- /usr/portage/sys-apps/pciutils/pciutils-3.1.4.ebuild	2010-01-30 20:07:22.000000000 +0100
++++ ./sys-apps/pciutils/pciutils-3.1.4.ebuild	2010-04-02 19:15:54.000000000 +0200
+@@ -15,9 +15,7 @@
+ 
+ DEPEND="zlib? ( sys-libs/zlib )"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/${P}-install-lib.patch #273489
+ 	epatch "${FILESDIR}"/${PN}-2.2.7-update-pciids-both-forms.patch
+ 	sed -i -e "/^LIBDIR=/s:/lib:/$(get_libdir):" Makefile

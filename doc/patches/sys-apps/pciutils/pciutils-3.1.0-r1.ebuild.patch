@@ -1,0 +1,13 @@
+--- /usr/portage/sys-apps/pciutils/pciutils-3.1.0-r1.ebuild	2009-01-29 19:57:16.000000000 +0100
++++ ./sys-apps/pciutils/pciutils-3.1.0-r1.ebuild	2010-04-02 19:14:44.000000000 +0200
+@@ -15,9 +15,7 @@
+ 
+ DEPEND="zlib? ( sys-libs/zlib )"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/${PN}-3.0.0-build.patch #233314
+ 	epatch "${FILESDIR}"/pcimodules-${PN}-3.1.0.patch
+ 	epatch "${FILESDIR}"/${P}-null-ptr.patch #256464

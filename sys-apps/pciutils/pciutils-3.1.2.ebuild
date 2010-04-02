@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils multilib-native
+inherit eutils multilib multilib-native
 
 DESCRIPTION="Various utilities dealing with the PCI bus"
 HOMEPAGE="http://atrey.karlin.mff.cuni.cz/~mj/pciutils.html"
@@ -15,32 +15,20 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="network-cron zlib"
 
-DEPEND="zlib? ( sys-libs/zlib )"
+DEPEND="zlib? ( sys-libs/zlib[lib32?] )"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/pcimodules-${PN}-3.1.0.patch
 	epatch "${FILESDIR}"/${PN}-2.2.7-update-pciids-both-forms.patch
 	cp "${FILESDIR}"/pcimodules.c . || die
-}
-
-multilib-native_src_prepare_internal() {
 	sed -i -e "/^LIBDIR=/s:/lib:/$(get_libdir):" Makefile
 }
 
 uyesno() { use $1 && echo yes || echo no ; }
 pemake() {
-
-	if use lib32 && [[ "${ABI}" == "x86" ]]; then
-		CROSS_COMPILE="x86_64-pc-linux-gnu"
-	else
-		CROSS_COMPILE="${CHOST}"
-	fi
-
 	emake \
 		HOST="${CHOST}" \
-		CROSS_COMPILE="${CROSS_COMPILE}-" \
+		CROSS_COMPILE="${CHOST}-" \
 		DNS="yes" \
 		IDSDIR="/usr/share/misc" \
 		MANDIR="/usr/share/man" \

@@ -1,10 +1,10 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/pciutils/pciutils-3.1.4.ebuild,v 1.12 2010/01/30 18:36:57 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/pciutils/pciutils-3.0.0.ebuild,v 1.12 2009/01/26 03:28:41 vapier Exp $
 
 EAPI="2"
 
-inherit eutils multilib toolchain-funcs multilib-native
+inherit eutils flag-o-matic toolchain-funcs multilib multilib-native
 
 DESCRIPTION="Various utilities dealing with the PCI bus"
 HOMEPAGE="http://atrey.karlin.mff.cuni.cz/~mj/pciutils.html"
@@ -18,17 +18,17 @@ IUSE="network-cron zlib"
 DEPEND="zlib? ( sys-libs/zlib[lib32?] )"
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}"/${P}-install-lib.patch #273489
+	epatch "${FILESDIR}"/${PN}-3.0.0-build.patch #233314
+	epatch "${FILESDIR}"/${PN}-3.0.0-resolv.patch #218555
+	epatch "${FILESDIR}"/pcimodules-${PN}-3.0.0.patch
 	epatch "${FILESDIR}"/${PN}-2.2.7-update-pciids-both-forms.patch
+	cp "${FILESDIR}"/pcimodules.c . || die
 	sed -i -e "/^LIBDIR=/s:/lib:/$(get_libdir):" Makefile
 }
 
 uyesno() { use $1 && echo yes || echo no ; }
 pemake() {
 	emake \
-		HOST="${CHOST}" \
-		CROSS_COMPILE="${CHOST}-" \
-		CC="$(tc-getCC)" \
 		DNS="yes" \
 		IDSDIR="/usr/share/misc" \
 		MANDIR="/usr/share/man" \
@@ -40,12 +40,14 @@ pemake() {
 }
 
 multilib-native_src_compile_internal() {
-	pemake OPT="${CFLAGS}" all || die
+	tc-export AR CC RANLIB
+	pemake OPT="${CFLAGS}" all pcimodules || die "emake failed"
 }
 
 multilib-native_src_install_internal() {
 	pemake DESTDIR="${D}" install install-lib || die
-	dodoc ChangeLog README TODO
+	dosbin pcimodules || die
+	doman "${FILESDIR}"/pcimodules.8
 
 	if use network-cron ; then
 		exeinto /etc/cron.monthly
@@ -59,11 +61,4 @@ multilib-native_src_install_internal() {
 		elog "Providing a backwards compatibility non-compressed pci.ids"
 		gzip -d <"${sharedir}"/pci.ids.gz >"${sharedir}"/pci.ids
 	fi
-
-	newinitd "${FILESDIR}"/init.d-pciparm pciparm
-	newconfd "${FILESDIR}"/conf.d-pciparm pciparm
-}
-
-multilib-native_pkg_postinst_internal() {
-	elog "The 'pcimodules' program has been replaced by 'lspci -k'"
 }
