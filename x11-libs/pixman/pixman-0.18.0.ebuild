@@ -1,11 +1,9 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/pixman/pixman-0.17.4.ebuild,v 1.1 2010/01/22 09:24:07 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/pixman/pixman-0.18.0.ebuild,v 1.1 2010/04/02 10:29:30 scarabeus Exp $
 
-# Must be before x-modular eclass is inherited
-#SNAPSHOT="yes"
-
-inherit x-modular toolchain-funcs versionator multilib-native
+EAPI=3
+inherit xorg-2 toolchain-funcs versionator multilib-native
 
 EGIT_REPO_URI="git://anongit.freedesktop.org/git/pixman"
 DESCRIPTION="Low-level pixel manipulation routines"
@@ -14,6 +12,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86
 IUSE="altivec mmx sse2"
 
 multilib-native_pkg_setup_internal() {
+	xorg-2_pkg_setup
 	CONFIGURE_OPTIONS="
 		$(use_enable altivec vmx)
 		--disable-gtk"
