@@ -1,8 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-crypt/gnupg/gnupg-2.0.14.ebuild,v 1.8 2010/02/12 20:22:33 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-crypt/gnupg/gnupg-2.0.14.ebuild,v 1.9 2010/04/01 21:28:21 abcd Exp $
 
-EAPI="2"
+EAPI="3"
 
 inherit flag-o-matic toolchain-funcs multilib-native
 
@@ -13,7 +13,7 @@ SRC_URI="ftp://ftp.gnupg.org/gcrypt/${PN}/${P}.tar.bz2"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd ~x64-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x64-solaris ~x86-solaris"
 IUSE="adns bzip2 caps doc ldap nls openct pcsc-lite static selinux smartcard"
 
 COMMON_DEPEND_LIBS="
@@ -52,7 +52,7 @@ multilib-native_src_configure_internal() {
 	use static && append-ldflags -static
 
 	econf \
-		--docdir="/usr/share/doc/${PF}" \
+		--docdir="${EPREFIX}/usr/share/doc/${PF}" \
 		--enable-symcryptrun \
 		--enable-gpg \
 		--enable-gpgsm \
@@ -78,8 +78,8 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc ChangeLog NEWS README THANKS TODO VERSION
 
-	mv "${D}usr/share/gnupg/help"* "${D}usr/share/doc/${PF}"
-	ecompressdir "/usr/share/doc/${P}"
+	mv "${ED}usr/share/gnupg/help"* "${ED}usr/share/doc/${PF}"
+	ecompressdir "/usr/share/doc/${PF}"
 
 	dosym gpg2 /usr/bin/gpg
 	dosym gpgv2 /usr/bin/gpgv
@@ -87,8 +87,8 @@ multilib-native_src_install_internal() {
 	dosym gpg2keys_finger /usr/libexec/gpgkeys_finger
 	dosym gpg2keys_curl /usr/libexec/gpgkeys_curl
 	use ldap && dosym gpg2keys_ldap /usr/libexec/gpgkeys_ldap
-	echo ".so man1/gpg2.1" > "${D}usr/share/man/man1/gpg.1"
-	echo ".so man1/gpgv2.1" > "${D}usr/share/man/man1/gpgv.1"
+	echo ".so man1/gpg2.1" > "${ED}usr/share/man/man1/gpg.1"
+	echo ".so man1/gpgv2.1" > "${ED}usr/share/man/man1/gpgv.1"
 
 	use doc && dohtml doc/gnupg.html/* doc/*jpg doc/*png
 }
