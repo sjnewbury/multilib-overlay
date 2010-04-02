@@ -273,7 +273,7 @@ sys-apps/acl
 # sys-apps/file
 # sys-apps/hal
 # sys-apps/keyutils
-# sys-apps/parted
+sys-apps/parted
 sys-apps/pciutils
 sys-apps/tcp-wrappers
 sys-apps/util-linux
