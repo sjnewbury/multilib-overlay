@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-plugins/adobe-flash/adobe-flash-10.0.45.2.ebuild,v 1.1 2010/02/12 14:09:00 lack Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-plugins/adobe-flash/adobe-flash-10.0.45.2.ebuild,v 1.3 2010/03/04 14:11:50 pacho Exp $
 
 EAPI="2"
 inherit nsplugins rpm multilib toolchain-funcs
@@ -12,7 +12,7 @@ DESCRIPTION="Adobe Flash Player"
 SRC_URI="x86? ( ${MY_32B_URI} )
 amd64? (
 	multilib? (
-		32bit? ( ${MY_32B_URI} )
+		32bit? ( ${MY_32B_URI} mirror://gentoo/flash-libcompat-0.2.tar.bz2 )
 		64bit? ( ${MY_64B_URI} )
 	)
 	!multilib? ( ${MY_64B_URI} )
@@ -21,29 +21,31 @@ HOMEPAGE="http://www.adobe.com/"
 IUSE="multilib +32bit +64bit"
 SLOT="0"
 
-KEYWORDS="-* ~amd64 ~x86"
+KEYWORDS="-* amd64 x86"
 LICENSE="AdobeFlash-10"
 RESTRICT="strip mirror"
 
 S="${WORKDIR}"
 
-MULTILIB_DEPS=""
-
-RDEPEND="x11-libs/gtk+:2
+NATIVE_DEPS="x11-libs/gtk+:2
 	media-libs/fontconfig
 	dev-libs/nss
 	net-misc/curl
 	>=sys-libs/glibc-2.4
-	|| ( media-fonts/freefont-ttf media-fonts/corefonts )
+	|| ( media-fonts/freefont-ttf media-fonts/corefonts )"
+
+EMUL_DEPS="app-emulation/emul-linux-x86-baselibs
+	app-emulation/emul-linux-x86-gtklibs
+	app-emulation/emul-linux-x86-soundlibs
+	app-emulation/emul-linux-x86-xlibs"
+
+RDEPEND="x86? ( $NATIVE_DEPS )
 	amd64? (
 		multilib? (
-			32bit? (
-				x11-libs/gtk+:2[lib32]
-				media-libs/fontconfig[lib32]
-				dev-libs/nss[lib32]
-				net-misc/curl[lib32]
-			)
+			64bit? ( $NATIVE_DEPS )
+			32bit? ( $EMUL_DEPS )
 		)
+		!multilib? ( $NATIVE_DEPS )
 	)
 	!www-plugins/libflashsupport"
 
@@ -126,6 +128,20 @@ src_install() {
 			inst_plugin /opt/netscape/plugins32/libflashplayer.so
 			dodoc "${S}/usr/share/doc/flash-plugin-${PV}/readme.txt"
 		popd
+
+		# 32b library compatibility:
+		#
+		# libcurl and libnss are not currently available in any emul-linux-x86
+		# packages, so for amd64 we provide these snarfed out of other binary
+		# packages.  libcurl and its ssl dependencies come from
+		# app-text/acroread; libnss and its friends come from
+		# net-libs/xulrunner-bin
+		exeinto /opt/flash-libcompat
+		pushd "${WORKDIR}/flash-libcompat-0.2/"
+			doexe *
+		popd
+		echo 'LDPATH="/opt/flash-libcompat"' > 99flash-libcompat
+		doenvd 99flash-libcompat
 
 		ABI="${oldabi}"
 	fi

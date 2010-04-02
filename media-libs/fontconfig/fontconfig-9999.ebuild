@@ -93,6 +93,8 @@ multilib-native_src_install_internal() {
 	# <azarah@gentoo.org> (11 Dec 2002)
 	echo 'CONFIG_PROTECT_MASK="/etc/fonts/fonts.conf"' > "${T}"/37fontconfig
 	doenvd "${T}"/37fontconfig
+
+	prep_ml_binaries /usr/bin/fc-cache
 }
 
 multilib-native_pkg_postinst_internal() {
