@@ -1,0 +1,33 @@
+--- /usr/portage/dev-libs/openssl/openssl-1.0.0_beta5.ebuild	2010-02-13 11:35:30.000000000 +0100
++++ ./dev-libs/openssl/openssl-1.0.0_beta5.ebuild	2010-04-02 18:53:55.000000000 +0200
+@@ -25,10 +25,7 @@
+ 
+ S=${WORKDIR}/${MY_P}
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	epatch "${FILESDIR}"/${PN}-0.9.7e-gentoo.patch
+ 	#epatch "${FILESDIR}"/${PN}-0.9.8j-parallel-build.patch
+ 	#epatch "${FILESDIR}"/${PN}-0.9.8b-doc-updates.patch
+@@ -62,7 +59,7 @@
+ 	./config --test-sanity || die "I AM NOT SANE"
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	unset APPS #197996
+ 
+ 	tc-export CC AR RANLIB
+@@ -116,7 +113,9 @@
+ 		-e "/^CFLAG/s:=.*:=${CFLAG} ${CFLAGS}:" \
+ 		-e "/^SHARED_LDFLAGS=/s:$: ${LDFLAGS}:" \
+ 		Makefile || die
++}
+ 
++src_compile() {
+ 	# depend is needed to use $confopts
+ 	# rehash is needed to prep the certs/ dir
+ 	emake -j1 depend || die "depend failed"

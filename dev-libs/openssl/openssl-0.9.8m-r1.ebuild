@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-0.9.8l-r2.ebuild,v 1.10 2010/02/15 06:39:39 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-0.9.8m-r1.ebuild,v 1.1 2010/03/09 13:25:30 lxnay Exp $
 
 EAPI="2"
 
@@ -12,7 +12,7 @@ SRC_URI="mirror://openssl/source/${P}.tar.gz"
 
 LICENSE="openssl"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="bindist gmp kerberos sse2 test zlib"
 
 RDEPEND="gmp? ( dev-libs/gmp )
@@ -26,20 +26,11 @@ PDEPEND="app-misc/ca-certificates"
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-0.9.7e-gentoo.patch
-	epatch "${FILESDIR}"/${PN}-0.9.8j-parallel-build.patch
-	epatch "${FILESDIR}"/${PN}-0.9.8-make-engines-dir.patch
-	epatch "${FILESDIR}"/${PN}-0.9.8k-toolchain.patch
 	epatch "${FILESDIR}"/${PN}-0.9.8b-doc-updates.patch
-	epatch "${FILESDIR}"/${PN}-0.9.8-makedepend.patch #149583
-	epatch "${FILESDIR}"/${PN}-0.9.8e-make.patch #146316
 	epatch "${FILESDIR}"/${PN}-0.9.8e-bsd-sparc64.patch
-	epatch "${FILESDIR}"/${PN}-0.9.8g-sslv3-no-tlsext.patch
 	epatch "${FILESDIR}"/${PN}-0.9.8h-ldflags.patch #181438
-	epatch "${FILESDIR}"/${PN}-0.9.8l-CVE-2009-137{7,8,9}.patch #270305
-	epatch "${FILESDIR}"/${P}-CVE-2009-1387.patch #270305
-	epatch "${FILESDIR}"/${P}-CVE-2009-2409.patch #280591
-	epatch "${FILESDIR}"/${P}-dtls-compat.patch #280370
-	epatch "${FILESDIR}"/${PN}-0.9.8l-binutils.patch #289130
+	epatch "${FILESDIR}"/${PN}-0.9.8m-binutils.patch #289130
+	epatch "${FILESDIR}"/${PN}-0.9.8m-cfb.patch #308123
 
 	# disable fips in the build
 	# make sure the man pages are suffixed #302165
@@ -64,11 +55,11 @@ multilib-native_src_prepare_internal() {
 	append-flags -Wa,--noexecstack
 
 	# using a library directory other than lib requires some magic
-	sed -i \
-		-e "s+\(\$(INSTALL_PREFIX)\$(INSTALLTOP)\)/lib+\1/$(get_libdir)+g" \
-		-e "s+libdir=\$\${exec_prefix}/lib+libdir=\$\${exec_prefix}/$(get_libdir)+g" \
-		Makefile.org engines/Makefile \
-		|| die "sed failed"
+#	sed -i \
+#		-e "s+\(\$(INSTALL_PREFIX)\$(INSTALLTOP)\)/lib+\1/$(get_libdir)+g" \
+#		-e "s+libdir=\$\${exec_prefix}/lib+libdir=\$\${exec_prefix}/$(get_libdir)+g" \
+#		Makefile.org engines/Makefile \
+#		|| die "sed failed"
 	sed -i '1s,^:$,#!/usr/bin/perl,' Configure #141906
 	sed -i '/^"debug-steve/d' Configure # 0.9.8k shipped broken
 	./config --test-sanity || die "I AM NOT SANE"
@@ -123,6 +114,7 @@ multilib-native_src_configure_internal() {
 		-e 's:-m[a-z0-9]* ::g' \
 	)
 	sed -i \
+		-e "/^LIBDIR=/s:=.*:=$(get_libdir):" \
 		-e "/^CFLAG/s:=.*:=${CFLAG} ${CFLAGS}:" \
 		-e "/^SHARED_LDFLAGS=/s:$: ${LDFLAGS}:" \
 		Makefile || die

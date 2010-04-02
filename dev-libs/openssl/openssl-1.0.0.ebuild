@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-0.9.8l-r2.ebuild,v 1.10 2010/02/15 06:39:39 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-1.0.0.ebuild,v 1.1 2010/03/29 19:15:41 vapier Exp $
 
 EAPI="2"
 
@@ -12,8 +12,8 @@ SRC_URI="mirror://openssl/source/${P}.tar.gz"
 
 LICENSE="openssl"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
-IUSE="bindist gmp kerberos sse2 test zlib"
+KEYWORDS=""
+IUSE="bindist gmp kerberos rfc3779 sse2 test zlib"
 
 RDEPEND="gmp? ( dev-libs/gmp )
 	zlib? ( sys-libs/zlib[lib32?] )
@@ -26,19 +26,10 @@ PDEPEND="app-misc/ca-certificates"
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-0.9.7e-gentoo.patch
-	epatch "${FILESDIR}"/${PN}-0.9.8j-parallel-build.patch
-	epatch "${FILESDIR}"/${PN}-0.9.8-make-engines-dir.patch
-	epatch "${FILESDIR}"/${PN}-0.9.8k-toolchain.patch
-	epatch "${FILESDIR}"/${PN}-0.9.8b-doc-updates.patch
-	epatch "${FILESDIR}"/${PN}-0.9.8-makedepend.patch #149583
-	epatch "${FILESDIR}"/${PN}-0.9.8e-make.patch #146316
-	epatch "${FILESDIR}"/${PN}-0.9.8e-bsd-sparc64.patch
-	epatch "${FILESDIR}"/${PN}-0.9.8g-sslv3-no-tlsext.patch
-	epatch "${FILESDIR}"/${PN}-0.9.8h-ldflags.patch #181438
-	epatch "${FILESDIR}"/${PN}-0.9.8l-CVE-2009-137{7,8,9}.patch #270305
-	epatch "${FILESDIR}"/${P}-CVE-2009-1387.patch #270305
-	epatch "${FILESDIR}"/${P}-CVE-2009-2409.patch #280591
-	epatch "${FILESDIR}"/${P}-dtls-compat.patch #280370
+	#epatch "${FILESDIR}"/${PN}-0.9.8j-parallel-build.patch
+	#epatch "${FILESDIR}"/${PN}-0.9.8b-doc-updates.patch
+	#epatch "${FILESDIR}"/${PN}-0.9.8e-bsd-sparc64.patch
+	#epatch "${FILESDIR}"/${PN}-0.9.8h-ldflags.patch #181438
 	epatch "${FILESDIR}"/${PN}-0.9.8l-binutils.patch #289130
 
 	# disable fips in the build
@@ -63,14 +54,7 @@ multilib-native_src_prepare_internal() {
 	append-flags -fno-strict-aliasing
 	append-flags -Wa,--noexecstack
 
-	# using a library directory other than lib requires some magic
-	sed -i \
-		-e "s+\(\$(INSTALL_PREFIX)\$(INSTALLTOP)\)/lib+\1/$(get_libdir)+g" \
-		-e "s+libdir=\$\${exec_prefix}/lib+libdir=\$\${exec_prefix}/$(get_libdir)+g" \
-		Makefile.org engines/Makefile \
-		|| die "sed failed"
 	sed -i '1s,^:$,#!/usr/bin/perl,' Configure #141906
-	sed -i '/^"debug-steve/d' Configure # 0.9.8k shipped broken
 	./config --test-sanity || die "I AM NOT SANE"
 }
 
@@ -107,9 +91,11 @@ multilib-native_src_configure_internal() {
 		enable-tlsext \
 		$(use_ssl gmp gmp -lgmp) \
 		$(use_ssl kerberos krb5 --with-krb5-flavor=${krb5}) \
+		$(use_ssl rfc3779) \
 		$(use_ssl zlib) \
 		--prefix=/usr \
 		--openssldir=/etc/ssl \
+		--libdir=$(get_libdir) \
 		shared threads \
 		|| die "Configure failed"
 
@@ -154,11 +140,11 @@ multilib-native_src_install_internal() {
 	local m d s
 	for m in $(find . -type f | xargs grep -L '#include') ; do
 		d=${m%/*} ; d=${d#./} ; m=${m##*/}
-		# fix up references to renamed man pages
-		sed -i '/^[.]SH "SEE ALSO"/,/^[.][^I]/s:\([^(, I]*([15])\):ssl-\1:g' ${d}/${m}
 		[[ ${m} == openssl.1* ]] && continue
 		[[ -n $(find -L ${d} -type l) ]] && die "erp, broken links already!"
 		mv ${d}/{,ssl-}${m}
+		# fix up references to renamed man pages
+		sed -i '/^[.]SH "SEE ALSO"/,/^[.]/s:\([^(, ]*(1)\):ssl-\1:g' ${d}/ssl-${m}
 		ln -s ssl-${m} ${d}/openssl-${m}
 		# locate any symlinks that point to this man page ... we assume
 		# that any broken links are due to the above renaming
@@ -179,9 +165,9 @@ multilib-native_src_install_internal() {
 }
 
 multilib-native_pkg_preinst_internal() {
-	preserve_old_lib /usr/$(get_libdir)/lib{crypto,ssl}.so.0.9.{6,7}
+	preserve_old_lib /usr/$(get_libdir)/lib{crypto,ssl}.so.0.9.{6,7,8}
 }
 
 multilib-native_pkg_postinst_internal() {
-	preserve_old_lib_notify /usr/$(get_libdir)/lib{crypto,ssl}.so.0.9.{6,7}
+	preserve_old_lib_notify /usr/$(get_libdir)/lib{crypto,ssl}.so.0.9.{6,7,8}
 }

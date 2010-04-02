@@ -94,7 +94,7 @@ dev-libs/libxml2
 # dev-libs/oniguruma
 # dev-libs/openct
 # dev-libs/opensc
-# dev-libs/openssl
+dev-libs/openssl
 # dev-libs/pkcs11-helper
 # dev-libs/poppler
 # dev-libs/poppler-glib

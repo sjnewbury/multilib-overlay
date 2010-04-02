@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-0.9.8n.ebuild,v 1.5 2010/03/26 14:02:23 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-0.9.8n.ebuild,v 1.7 2010/03/29 21:49:11 maekke Exp $
 
 EAPI="2"
 
@@ -12,7 +12,7 @@ SRC_URI="mirror://openssl/source/${P}.tar.gz"
 
 LICENSE="openssl"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="bindist gmp kerberos sse2 test zlib"
 
 RDEPEND="gmp? ( dev-libs/gmp )
@@ -24,10 +24,7 @@ DEPEND="${RDEPEND}
 	test? ( sys-devel/bc )"
 PDEPEND="app-misc/ca-certificates"
 
-multilib-native_src_unpack_internal() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-0.9.7e-gentoo.patch
 	epatch "${FILESDIR}"/${PN}-0.9.8b-doc-updates.patch
 	epatch "${FILESDIR}"/${PN}-0.9.8e-bsd-sparc64.patch
@@ -61,7 +58,7 @@ multilib-native_src_unpack_internal() {
 	./config --test-sanity || die "I AM NOT SANE"
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	unset APPS #197996
 
 	tc-export CC AR RANLIB
@@ -114,7 +111,9 @@ multilib-native_src_compile_internal() {
 		-e "/^CFLAG/s:=.*:=${CFLAG} ${CFLAGS}:" \
 		-e "/^SHARED_LDFLAGS=/s:$: ${LDFLAGS}:" \
 		Makefile || die
+}
 
+multilib-native_src_compile_internal() {
 	# depend is needed to use $confopts
 	# rehash is needed to prep the certs/ dir
 	emake -j1 depend || die "depend failed"
