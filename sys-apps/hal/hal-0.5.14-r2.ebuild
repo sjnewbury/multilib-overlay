@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/hal/hal-0.5.14-r2.ebuild,v 1.1 2010/01/20 13:42:15 dang Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/hal/hal-0.5.14-r2.ebuild,v 1.3 2010/03/17 13:14:40 aballier Exp $
 
 EAPI="2"
 
@@ -18,7 +18,7 @@ SRC_URI="http://hal.freedesktop.org/releases/${MY_P}.tar.bz2
 
 LICENSE="|| ( GPL-2 AFL-2.0 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 -x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 
 KERNEL_IUSE="kernel_linux kernel_FreeBSD"
 IUSE="X acpi apm crypt consolekit debug dell disk-partition doc laptop policykit selinux ${KERNEL_IUSE}"
@@ -36,13 +36,13 @@ RDEPEND=">=dev-libs/dbus-glib-0.61[lib32?]
 		 ia64? ( >=sys-apps/dmidecode-2.7 )
 		 kernel_linux?	(
 							>=sys-fs/udev-125[lib32?]
-							>=sys-apps/util-linux-2.16
+							>=sys-apps/util-linux-2.16[lib32?]
 							>=sys-kernel/linux-headers-2.6.22
 							crypt?	( >=sys-fs/cryptsetup-1.0.5 )
 						)
 		 kernel_FreeBSD? ( >=dev-libs/libvolume_id-0.77 )
 		 x86? ( >=sys-apps/dmidecode-2.7 )
-		 selinux? ( sys-libs/libselinux sec-policy/selinux-hal )
+		 selinux? ( sys-libs/libselinux[lib32?] sec-policy/selinux-hal )
 		 consolekit?	(
 		 					|| (
 									<sys-auth/consolekit-0.4[policykit=]
@@ -55,7 +55,7 @@ RDEPEND=">=dev-libs/dbus-glib-0.61[lib32?]
 		 			)"
 DEPEND="${RDEPEND}
 		dev-util/pkgconfig[lib32?]
-		>=dev-util/gperf-3.0.3
+		 >=dev-util/gperf-3.0.3
 		>=dev-util/intltool-0.35
 		doc?	(
 					app-text/xmlto
@@ -91,7 +91,7 @@ function check_acpi_proc() {
 	check_extra_config
 }
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if use kernel_linux ; then
 		if [[ -e "${ROOT}/usr/src/linux/.config" ]] ; then
 			kernel_is ge 2 6 19 || ewarn "HAL requires a kernel version 2.6.19 or newer"
@@ -132,6 +132,9 @@ pkg_setup() {
 }
 
 multilib-native_src_prepare_internal() {
+	# Patch for fbsd, Bug #309263.  MOVE INTO PATCHSET FOR NEXT BUMP!
+	epatch "${FILESDIR}"/${PF}-fbsd.patch
+
 	# Only apply one of the policy patches.  Bug #267042
 	if use policykit ; then
 		rm "${WORKDIR}/${PATCHNAME}/patches/0001-plugdev-dbus-policy.patch"
@@ -282,7 +285,7 @@ multilib-native_src_install_internal() {
 	keepdir /var/lib/hal
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	# Despite what people keep changing this location. Either one works.. it doesn't matter
 	# http://dev.gentoo.org/~plasmaroo/devmanual/ebuild-writing/functions/
 

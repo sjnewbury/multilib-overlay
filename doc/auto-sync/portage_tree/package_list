@@ -271,7 +271,7 @@ sys-apps/acl
 # sys-apps/attr
 # sys-apps/dbus
 # sys-apps/file
-# sys-apps/hal
+sys-apps/hal
 sys-apps/keyutils
 sys-apps/parted
 sys-apps/pciutils

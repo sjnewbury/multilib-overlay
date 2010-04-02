@@ -36,15 +36,18 @@ RDEPEND=">=dev-libs/dbus-glib-0.61[lib32?]
 		 ia64? ( >=sys-apps/dmidecode-2.7 )
 		 kernel_linux?	(
 							>=sys-fs/udev-125[lib32?]
-							>=sys-apps/util-linux-2.16
+							>=sys-apps/util-linux-2.16[lib32?]
 							>=sys-kernel/linux-headers-2.6.22
 							crypt?	( >=sys-fs/cryptsetup-1.0.5 )
 						)
 		 kernel_FreeBSD? ( >=dev-libs/libvolume_id-0.77 )
 		 x86? ( >=sys-apps/dmidecode-2.7 )
-		 selinux? ( sys-libs/libselinux sec-policy/selinux-hal )
+		 selinux? ( sys-libs/libselinux[lib32?] sec-policy/selinux-hal )
 		 consolekit?	(
-		 					sys-auth/consolekit[policykit=]
+		 					|| (
+									<sys-auth/consolekit-0.4[policykit=]
+		 							>=sys-auth/consolekit-0.4
+								)
 					)
 		 policykit?	(
 		 					sys-auth/consolekit[policykit]
@@ -52,15 +55,14 @@ RDEPEND=">=dev-libs/dbus-glib-0.61[lib32?]
 		 			)"
 DEPEND="${RDEPEND}
 		dev-util/pkgconfig[lib32?]
-		>=dev-util/gperf-3.0.3
+		 >=dev-util/gperf-3.0.3
 		>=dev-util/intltool-0.35
 		doc?	(
 					app-text/xmlto
 					dev-libs/libxml2[lib32?]
 					dev-util/gtk-doc
 					app-text/docbook-sgml-utils
-				)
-		!<gnome-extra/gnome-power-manager-2.24.4-r2"
+				)"
 PDEPEND=">=app-misc/hal-info-20081219
 	!gnome-extra/hal-device-manager
 	laptop? ( >=sys-power/pm-utils-0.99.3 )"
@@ -89,7 +91,7 @@ function check_acpi_proc() {
 	check_extra_config
 }
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if use kernel_linux ; then
 		if [[ -e "${ROOT}/usr/src/linux/.config" ]] ; then
 			kernel_is ge 2 6 19 || ewarn "HAL requires a kernel version 2.6.19 or newer"
@@ -274,7 +276,7 @@ multilib-native_src_install_internal() {
 	keepdir /var/lib/hal
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	# Despite what people keep changing this location. Either one works.. it doesn't matter
 	# http://dev.gentoo.org/~plasmaroo/devmanual/ebuild-writing/functions/
 
