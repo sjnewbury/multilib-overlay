@@ -19,16 +19,11 @@ KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
 IUSE="nfs nls"
 
 RDEPEND=">=sys-apps/attr-2.4[lib32?]
-	nfs? ( net-libs/libnfsidmap[lib32?] )"
+	nfs? ( net-libs/libnfsidmap )"
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext[lib32?] )"
 
-src_unpack() {
-	unpack ${MY_P}.tar.gz
-}
-
 multilib-native_src_prepare_internal() {
-	cd "${S}"
 	if use nfs ; then
 		cp "${DISTDIR}"/acl-2.2.42-CITI_NFS4_ALL-2.dif . || die
 		sed -i '/^diff --git a.debian.changelog b.debian.changelog/,/^diff --git/d' acl-2.2.42-CITI_NFS4_ALL-2.dif || die

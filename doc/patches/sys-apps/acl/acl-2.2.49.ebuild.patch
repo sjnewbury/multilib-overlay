@@ -1,0 +1,31 @@
+--- /usr/portage/sys-apps/acl/acl-2.2.49.ebuild	2010-04-01 15:38:50.000000000 +0200
++++ ./sys-apps/acl/acl-2.2.49.ebuild	2010-04-02 18:43:52.000000000 +0200
+@@ -19,9 +19,7 @@
+ DEPEND="${RDEPEND}
+ 	nls? ( sys-devel/gettext )"
+ 
+-src_unpack() {
+-	unpack ${P}.src.tar.gz
+-	cd "${S}"
++src_prepare() {
+ 	if use nfs ; then
+ 		cp "${DISTDIR}"/acl-2.2.42-CITI_NFS4_ALL-2.dif . || die
+ 		sed -i \
+@@ -41,7 +39,7 @@
+ 	strip-linguas po
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	use prefix || EPREFIX=
+ 	unset PLATFORM #184564
+ 	export OPTIMIZER=${CFLAGS}
+@@ -51,8 +49,6 @@
+ 		$(use_enable nls gettext) \
+ 		--libexecdir="${EPREFIX}"/usr/$(get_libdir) \
+ 		--bindir="${EPREFIX}"/bin
+-
+-	emake || die
+ }
+ 
+ src_install() {

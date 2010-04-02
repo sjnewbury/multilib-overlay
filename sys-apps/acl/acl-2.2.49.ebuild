@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/acl/acl-2.2.49.ebuild,v 1.1 2010/01/09 03:02:04 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/acl/acl-2.2.49.ebuild,v 1.6 2010/04/01 13:13:22 jer Exp $
 
 EAPI="2"
 
@@ -13,20 +13,15 @@ SRC_URI="http://download.savannah.gnu.org/releases/${PN}/${P}.src.tar.gz
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-linux ~ia64-linux ~x86-linux"
+KEYWORDS="~alpha amd64 arm hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~amd64-linux ~ia64-linux ~x86-linux"
 IUSE="nfs nls"
 
 RDEPEND=">=sys-apps/attr-2.4[lib32?]
-	nfs? ( net-libs/libnfsidmap[lib32?] )"
+	nfs? ( net-libs/libnfsidmap )"
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext[lib32?] )"
 
-src_unpack() {
-	unpack ${P}.src.tar.gz
-}
-
 multilib-native_src_prepare_internal() {
-	cd "${S}"
 	if use nfs ; then
 		cp "${DISTDIR}"/acl-2.2.42-CITI_NFS4_ALL-2.dif . || die
 		sed -i \
@@ -47,15 +42,15 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
+	use prefix || EPREFIX=
 	unset PLATFORM #184564
 	export OPTIMIZER=${CFLAGS}
 	export DEBUG=-DNDEBUG
 
 	econf \
 		$(use_enable nls gettext) \
-		--libexecdir=/usr/$(get_libdir) \
-		--bindir=/bin \
-		|| die
+		--libexecdir="${EPREFIX}"/usr/$(get_libdir) \
+		--bindir="${EPREFIX}"/bin
 }
 
 multilib-native_src_install_internal() {
@@ -63,7 +58,5 @@ multilib-native_src_install_internal() {
 	prepalldocs
 
 	# move shared libs to /
-	dodir /$(get_libdir)
-	mv "${D}"/usr/$(get_libdir)/libacl.so* "${D}"/$(get_libdir)/ || die
-	gen_usr_ldscript libacl.so
+	gen_usr_ldscript -a acl
 }
