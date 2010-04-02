@@ -1,5 +1,5 @@
---- /usr/portage/sys-devel/libperl/libperl-5.8.8-r2.ebuild	2010-02-03 01:37:24.000000000 +0100
-+++ ./sys-devel/libperl/libperl-5.8.8-r2.ebuild	2010-03-15 00:03:07.000000000 +0100
+--- /usr/portage/sys-devel/libperl/libperl-5.8.8-r2.ebuild	2010-03-31 21:07:30.000000000 +0200
++++ ./sys-devel/libperl/libperl-5.8.8-r2.ebuild	2010-04-02 18:25:45.000000000 +0200
 @@ -106,10 +106,7 @@
  	fi
  }
@@ -37,7 +37,7 @@
  	declare -a myconf
  
  	# Perl has problems compiling with -Os in your flags
-@@ -280,10 +284,13 @@
+@@ -278,10 +282,13 @@
  		-Dcf_by="Gentoo" \
  		-Ud_csh \
  		"${myconf[@]}" || die "Unable to configure"
@@ -52,7 +52,7 @@
  }
  
  src_install() {
-@@ -292,7 +299,7 @@
+@@ -290,7 +297,7 @@
  
  	if [ "${PN}" = "libperl" ]
  	then
