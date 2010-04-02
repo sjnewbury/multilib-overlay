@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-plugins/adobe-flash/adobe-flash-10.0.45.2.ebuild,v 1.3 2010/03/04 14:11:50 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-plugins/adobe-flash/adobe-flash-10.0.45.2-r1.ebuild,v 1.1 2010/03/27 15:14:59 lack Exp $
 
 EAPI="2"
 inherit nsplugins rpm multilib toolchain-funcs
@@ -12,7 +12,7 @@ DESCRIPTION="Adobe Flash Player"
 SRC_URI="x86? ( ${MY_32B_URI} )
 amd64? (
 	multilib? (
-		32bit? ( ${MY_32B_URI} mirror://gentoo/flash-libcompat-0.2.tar.bz2 )
+		32bit? ( ${MY_32B_URI} )
 		64bit? ( ${MY_64B_URI} )
 	)
 	!multilib? ( ${MY_64B_URI} )
@@ -21,7 +21,7 @@ HOMEPAGE="http://www.adobe.com/"
 IUSE="multilib +32bit +64bit"
 SLOT="0"
 
-KEYWORDS="-* amd64 x86"
+KEYWORDS="-* ~amd64 ~x86"
 LICENSE="AdobeFlash-10"
 RESTRICT="strip mirror"
 
@@ -34,7 +34,7 @@ NATIVE_DEPS="x11-libs/gtk+:2
 	>=sys-libs/glibc-2.4
 	|| ( media-fonts/freefont-ttf media-fonts/corefonts )"
 
-EMUL_DEPS="app-emulation/emul-linux-x86-baselibs
+EMUL_DEPS=">=app-emulation/emul-linux-x86-baselibs-20100220
 	app-emulation/emul-linux-x86-gtklibs
 	app-emulation/emul-linux-x86-soundlibs
 	app-emulation/emul-linux-x86-xlibs"
@@ -49,15 +49,12 @@ RDEPEND="x86? ( $NATIVE_DEPS )
 	)
 	!www-plugins/libflashsupport"
 
-# Our new flash-libcompat suffers from the same EXESTACK problem as libcrypto
-# from app-text/acroread, so tell QA to ignore it.
-# Apparently the flash library itself also suffers from this issue
-QA_EXECSTACK="opt/flash-libcompat/libcrypto.so.0.9.7
-	opt/netscape/plugins32/libflashplayer.so
+# Ignore QA warnings in these binary closed-source libraries, since we can't fix
+# them:
+QA_EXECSTACK="opt/netscape/plugins32/libflashplayer.so
 	opt/netscape/plugins/libflashplayer.so"
 
-QA_DT_HASH="opt/flash-libcompat/lib.*
-	opt/netscape/plugins32/libflashplayer.so
+QA_DT_HASH="opt/netscape/plugins32/libflashplayer.so
 	opt/netscape/plugins/libflashplayer.so"
 
 pkg_setup() {
@@ -68,7 +65,8 @@ pkg_setup() {
 		if ! use multilib || use 64bit; then
 			export native_install=1
 			# 64bit flash requires the 'lahf' instruction (bug #268336)
-			if ! grep -q lahf_lm /proc/cpuinfo; then
+			# Also, check if *any* of the processors are affected (bug #286159)
+			if grep '^flags' /proc/cpuinfo | grep -qv 'lahf_lm'; then
 				export need_lahf_wrapper=1
 			else
 				unset need_lahf_wrapper
@@ -128,20 +126,6 @@ src_install() {
 			inst_plugin /opt/netscape/plugins32/libflashplayer.so
 			dodoc "${S}/usr/share/doc/flash-plugin-${PV}/readme.txt"
 		popd
-
-		# 32b library compatibility:
-		#
-		# libcurl and libnss are not currently available in any emul-linux-x86
-		# packages, so for amd64 we provide these snarfed out of other binary
-		# packages.  libcurl and its ssl dependencies come from
-		# app-text/acroread; libnss and its friends come from
-		# net-libs/xulrunner-bin
-		exeinto /opt/flash-libcompat
-		pushd "${WORKDIR}/flash-libcompat-0.2/"
-			doexe *
-		popd
-		echo 'LDPATH="/opt/flash-libcompat"' > 99flash-libcompat
-		doenvd 99flash-libcompat
 
 		ABI="${oldabi}"
 	fi
