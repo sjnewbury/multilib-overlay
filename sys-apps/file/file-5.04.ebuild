@@ -2,7 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-apps/file/file-5.04.ebuild,v 1.2 2010/02/04 18:25:47 arfrever Exp $
 
-EAPI="2"
 PYTHON_DEPEND="python? 2"
 SUPPORT_PYTHON_ABIS="1"
 
@@ -22,11 +21,10 @@ DEPEND=""
 RDEPEND=""
 RESTRICT_PYTHON_ABIS="3.*"
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${P}.tar.gz
-}
+	cd "${S}"
 
-multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-4.15-libtool.patch #99593
 
 	elibtoolize
@@ -41,14 +39,11 @@ multilib-native_src_prepare_internal() {
 #	sed -i '/^pkgdatadir/s:/@PACKAGE@::' $(find -name Makefile.in)
 }
 
-multilib-native_src_configure_internal() {
+multilib-native_src_compile_internal() {
 	# file uses things like strndup() and wcwidth()
 	append-flags -D_GNU_SOURCE
 
 	econf || die
-}
-
-multilib-native_src_compile_internal() {
 	emake || die
 
 	use python && cd python && distutils_src_compile
