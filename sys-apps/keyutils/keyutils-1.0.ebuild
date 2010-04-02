@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-apps/keyutils/keyutils-1.0.ebuild,v 1.1 2005/12/15 00:16:58 robbat2 Exp $
 
+inherit multilib-native
+
 DESCRIPTION="Linux Key Management Utilities"
 HOMEPAGE="http://www.kernel.org/"
 SRC_URI="http://people.redhat.com/~dhowells/${PN}/${P}.tar.bz2"
