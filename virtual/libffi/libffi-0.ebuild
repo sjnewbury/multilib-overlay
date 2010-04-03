@@ -1,17 +1,19 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/virtual/libffi/libffi-0.ebuild,v 1.15 2009/07/22 18:50:17 klausman Exp $
+# $Header: /var/cvsroot/gentoo-x86/virtual/libffi/libffi-0.ebuild,v 1.26 2010/01/11 11:19:25 ulm Exp $
 
-EAPI=2
+EAPI="2"
+
+inherit multilib-native
 
 DESCRIPTION="Virtual for dev-libs/libffi"
-HOMEPAGE="http://www.gentoo.org"
+HOMEPAGE=""
 SRC_URI=""
 
 LICENSE=""
 SLOT="0"
-KEYWORDS="alpha amd64 ~arm hppa ~ia64 ppc ~ppc64 ~s390 ~sh sparc x86"
-IUSE="static-libs lib32"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~ppc-aix ~sparc-fbsd ~x86-fbsd ~x86-freebsd ~hppa-hpux ~ia64-hpux ~x86-interix ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+IUSE=""
 
-RDEPEND="dev-libs/libffi[static-libs?,lib32?]"
+RDEPEND="dev-libs/libffi[lib32?]"
 DEPEND=""

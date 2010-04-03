@@ -310,7 +310,7 @@ sys-libs/zlib
 # virtual/acl
 # virtual/glu
 # virtual/glut
-# virtual/libffi
+virtual/libffi
 virtual/libusb
 virtual/mysql
 virtual/opengl
