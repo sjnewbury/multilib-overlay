@@ -1,14 +1,12 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/curl/curl-7.19.6.ebuild,v 1.7 2009/08/27 20:07:35 beandog Exp $
-
-# NOTE: If you bump this ebuild, make sure you bump dev-python/pycurl!
+# $Header: /var/cvsroot/gentoo-x86/net-misc/curl/curl-7.19.6.ebuild,v 1.9 2010/02/11 17:08:45 ulm Exp $
 
 EAPI="2"
 
-MULTILIB_EXT_SOURCE_BUILD="yes"
+# NOTE: If you bump this ebuild, make sure you bump dev-python/pycurl!
 
-inherit eutils multilib-native
+inherit multilib eutils multilib-native
 
 #MY_P=${P/_pre/-}
 DESCRIPTION="A Client that groks URLs"
@@ -17,9 +15,9 @@ HOMEPAGE="http://curl.haxx.se/ http://curl.planetmirror.com"
 #SRC_URI="http://curl.planetmirror.com/download/${P}.tar.bz2"
 SRC_URI="http://curl.haxx.se/download/${P}.tar.bz2"
 
-LICENSE="MIT X11"
+LICENSE="MIT"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ~ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 #IUSE="ssl ipv6 ldap ares gnutls nss idn kerberos test"
 IUSE="ssl ipv6 ldap ares gnutls libssh2 nss idn kerberos test"
 
@@ -41,7 +39,7 @@ RDEPEND="gnutls? ( net-libs/gnutls[lib32?] app-misc/ca-certificates )
 DEPEND="${RDEPEND}
 	test? (
 		sys-apps/diffutils
-		dev-lang/perl
+		dev-lang/perl[lib32?]
 	)"
 # used - but can do without in self test: net-misc/stunnel
 #S="${WORKDIR}"/${MY_P}
@@ -51,7 +49,6 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
-
 	myconf="$(use_enable ldap)
 		$(use_enable ldap ldaps)
 		$(use_with idn libidn)
@@ -100,7 +97,6 @@ multilib-native_src_install_internal() {
 	rm -rf "${D}"/etc/
 
 	# https://sourceforge.net/tracker/index.php?func=detail&aid=1705197&group_id=976&atid=350976
-	cd "${EMULTILIB_SOURCE}"
 	insinto /usr/share/aclocal
 	doins docs/libcurl/libcurl.m4
 
@@ -108,6 +104,7 @@ multilib-native_src_install_internal() {
 	dodoc docs/FEATURES docs/INTERNALS
 	dodoc docs/MANUAL docs/FAQ docs/BUGS docs/CONTRIBUTE
 
-	prep_ml_binaries /usr/bin/curl-config
 	prep_ml_includes /usr/include/curl
+
+	prep_ml_binaries /usr/bin/curl-config
 }

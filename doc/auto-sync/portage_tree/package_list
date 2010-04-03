@@ -257,7 +257,7 @@ net-libs/libsoup-gnome
 # net-libs/openslp
 # net-libs/webkit-gtk
 net-libs/xulrunner
-# net-misc/curl
+net-misc/curl
 net-misc/networkmanager
 net-misc/openssh
 net-nds/openldap

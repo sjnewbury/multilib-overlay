@@ -1,0 +1,36 @@
+--- /usr/portage/net-misc/curl/curl-7.20.0-r1.ebuild	2010-03-16 22:43:01.000000000 +0100
++++ ./net-misc/curl/curl-7.20.0-r1.ebuild	2010-04-03 22:57:17.000000000 +0200
+@@ -46,15 +46,12 @@
+ 	fi
+ }
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/${P}-strip-ldflags.patch
+ 	epatch "${FILESDIR}"/${PN}-7.19.7-test241.patch
+ }
+ 
+-src_compile() {
+-
++src_configure() {
+ 	myconf="$(use_enable ldap)
+ 		$(use_enable ldap ldaps)
+ 		$(use_with idn libidn)
+@@ -96,8 +93,6 @@
+ 	fi
+ 
+ 	econf ${myconf} || die 'configure failed'
+-
+-	emake || die "install failed for current version"
+ }
+ 
+ src_install() {
+@@ -111,4 +106,6 @@
+ 	dodoc CHANGES README
+ 	dodoc docs/FEATURES docs/INTERNALS
+ 	dodoc docs/MANUAL docs/FAQ docs/BUGS docs/CONTRIBUTE
++
++	prep_ml_includes /usr/include/curl
+ }

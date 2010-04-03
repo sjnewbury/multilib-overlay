@@ -1,0 +1,35 @@
+--- /usr/portage/net-misc/curl/curl-7.19.6.ebuild	2010-02-11 18:36:32.000000000 +0100
++++ ./net-misc/curl/curl-7.19.6.ebuild	2010-04-03 22:49:34.000000000 +0200
+@@ -42,14 +42,11 @@
+ # used - but can do without in self test: net-misc/stunnel
+ #S="${WORKDIR}"/${MY_P}
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/curl-7.17.0-strip-ldflags.patch
+ }
+ 
+-src_compile() {
+-
++src_configure() {
+ 	myconf="$(use_enable ldap)
+ 		$(use_enable ldap ldaps)
+ 		$(use_with idn libidn)
+@@ -91,8 +88,6 @@
+ 	fi
+ 
+ 	econf ${myconf} || die 'configure failed'
+-
+-	emake || die "install failed for current version"
+ }
+ 
+ src_install() {
+@@ -106,4 +101,6 @@
+ 	dodoc CHANGES README
+ 	dodoc docs/FEATURES docs/INTERNALS
+ 	dodoc docs/MANUAL docs/FAQ docs/BUGS docs/CONTRIBUTE
++
++	prep_ml_includes /usr/include/curl
+ }
