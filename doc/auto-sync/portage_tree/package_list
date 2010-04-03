@@ -308,7 +308,7 @@ sys-libs/talloc
 sys-libs/tdb
 sys-libs/zlib
 # virtual/acl
-# virtual/glu
+virtual/glu
 virtual/glut
 virtual/libffi
 virtual/libusb
