@@ -1,0 +1,59 @@
+--- /usr/portage/net-fs/samba/samba-3.0.37.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./net-fs/samba/samba-3.0.37.ebuild	2010-04-04 00:23:12.000000000 +0200
+@@ -46,10 +46,7 @@
+ 	confutils_use_depend_all ads ldap
+ }
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}/source"
+-
++src_prepare() {
+ 	# lazyldflags.patch: adds "-Wl,-z,now" to smb{mnt,umount}
+ 	# invalid-free-fix.patch: Bug #196015 (upstream: #5021)
+ 
+@@ -72,7 +69,7 @@
+ 
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	cd "${S}/source"
+ 
+ 	local myconf
+@@ -132,13 +129,6 @@
+ 		$(use_with winbind) \
+ 		${myconf} ${mylangs} ${mymod_shared}
+ 
+-	emake -j1 proto || die "emake proto failed"
+-	emake -j1 everything || die "emake everything failed"
+-
+-	if use python ; then
+-		emake -j1 python_ext || die "emake python_ext failed"
+-	fi
+-
+ 	if use oav ; then
+ 		# maintainer-info:
+ 		# - there are no known releases of mks or kavdc,
+@@ -153,6 +143,21 @@
+ 			--with-filetype \
+ 			--with-fileregexp \
+ 			$(use_enable debug)
++	fi
++}
++
++src_compile() {
++	cd "${S}/source"
++
++	emake -j1 proto || die "emake proto failed"
++	emake -j1 everything || die "emake everything failed"
++
++	if use python ; then
++		emake -j1 python_ext || die "emake python_ext failed"
++	fi
++
++	if use oav ; then
++		cd "${WORKDIR}/${VSCAN_P}"
+ 		emake -j1 || die "emake oav plugins failed"
+ 	fi
+ }

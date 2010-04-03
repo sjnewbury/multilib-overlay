@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools eutils pam python versionator confutils flag-o-matic multilib-native
+inherit autotools eutils pam python multilib versionator confutils multilib-native
 
 VSCAN_P="samba-vscan-0.3.6c-beta5"
 MY_P=${PN}-${PV/_/}
@@ -20,23 +20,21 @@ KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbs
 IUSE="acl ads async automount caps cups debug doc examples ipv6 kernel_linux ldap fam
 	pam python quotas readline selinux swat syslog winbind oav"
 
-RDEPEND="dev-libs/popt
+RDEPEND="dev-libs/popt[lib32?]
 	virtual/libiconv
-	acl?       ( sys-apps/acl )
+	acl?       ( virtual/acl[lib32?] )
 	cups?      ( net-print/cups[lib32?] )
 	ipv6?      ( sys-apps/xinetd )
 	ads?       ( virtual/krb5 )
 	ldap?      ( net-nds/openldap[lib32?] )
-	pam?       ( virtual/pam )
+	pam?       ( virtual/pam[lib32?] )
 	python?    ( dev-lang/python[lib32?] )
 	readline?  ( sys-libs/readline[lib32?] )
 	selinux?   ( sec-policy/selinux-samba )
 	swat?      ( sys-apps/xinetd )
 	syslog?    ( virtual/logger )
 	fam?       ( virtual/fam )
-	caps?      ( sys-libs/libcap[lib32?] )
-	lib32?     ( fam? ( dev-libs/libgamin[lib32] ) )
-	lib32?     ( pam? ( sys-libs/pam[lib32] ) )"
+	caps?      ( sys-libs/libcap[lib32?] )"
 DEPEND="${RDEPEND}"
 
 # Tests are broken now :-(
@@ -46,13 +44,11 @@ S=${WORKDIR}/${MY_P}
 CONFDIR=${FILESDIR}/config
 PRIVATE_DST=/var/lib/samba/private
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	confutils_use_depend_all ads ldap
 }
 
 multilib-native_src_prepare_internal() {
-	cd "${S}/source"
-
 	# lazyldflags.patch: adds "-Wl,-z,now" to smb{mnt,umount}
 	# invalid-free-fix.patch: Bug #196015 (upstream: #5021)
 
@@ -76,9 +72,6 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
-	# fails with that
-	filter-ldflags -m32 -m64
-	
 	cd "${S}/source"
 
 	local myconf
@@ -137,17 +130,6 @@ multilib-native_src_configure_internal() {
 		$(use_with syslog) \
 		$(use_with winbind) \
 		${myconf} ${mylangs} ${mymod_shared}
-}
-
-multilib-native_src_compile_internal() {
-	cd "${S}/source"
-
-	emake -j1 proto || die "emake proto failed"
-	emake -j1 everything || die "emake everything failed"
-
-	if use python ; then
-		emake -j1 python_ext || die "emake python_ext failed"
-	fi
 
 	if use oav ; then
 		# maintainer-info:
@@ -163,6 +145,21 @@ multilib-native_src_compile_internal() {
 			--with-filetype \
 			--with-fileregexp \
 			$(use_enable debug)
+	fi
+}
+
+multilib-native_src_compile_internal() {
+	cd "${S}/source"
+
+	emake -j1 proto || die "emake proto failed"
+	emake -j1 everything || die "emake everything failed"
+
+	if use python ; then
+		emake -j1 python_ext || die "emake python_ext failed"
+	fi
+
+	if use oav ; then
+		cd "${WORKDIR}/${VSCAN_P}"
 		emake -j1 || die "emake oav plugins failed"
 	fi
 }
@@ -304,7 +301,7 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	local PRIVATE_SRC=/etc/samba/private
 	if [[ ! -r "${ROOT}/${PRIVATE_DST}/secrets.tdb" \
 		&& -r "${ROOT}/${PRIVATE_SRC}/secrets.tdb" ]] ; then

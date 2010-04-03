@@ -4,12 +4,14 @@
 
 EAPI="2"
 
+inherit multilib-native
+
 DESCRIPTION="Meta package for samba-{libs,client,server}"
 HOMEPAGE="http://www.samba.org/"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
-IUSE="+client +server lib32"
+IUSE="+client +server"
 
 DEPEND=""
 RDEPEND="~net-fs/samba-libs-${PV}[lib32?]

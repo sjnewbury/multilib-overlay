@@ -21,24 +21,22 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~spa
 IUSE="${IUSE_LINGUAS} acl ads async automount caps cifsupcall cups doc examples ipv6 kernel_linux ldap fam
 	pam quotas readline selinux swat syslog winbind"
 
-RDEPEND="dev-libs/popt
-	dev-libs/iniparser
+RDEPEND="dev-libs/popt[lib32?]
+	dev-libs/iniparser[lib32?]
 	virtual/libiconv
-	acl? ( kernel_linux? ( virtual/acl ) )
-	cifsupcall? ( sys-apps/keyutils )
+	acl? ( virtual/acl[lib32?] )
+	cifsupcall? ( sys-apps/keyutils[lib32?] )
 	cups? ( net-print/cups[lib32?] )
 	ipv6? ( sys-apps/xinetd )
-	ads? ( virtual/krb5 sys-fs/e2fsprogs )
+	ads? ( virtual/krb5 sys-fs/e2fsprogs[lib32?] )
 	ldap? ( net-nds/openldap[lib32?] )
-	pam? ( virtual/pam )
+	pam? ( virtual/pam[lib32?] )
 	readline? ( sys-libs/readline[lib32?] )
 	selinux? ( sec-policy/selinux-samba )
 	swat? ( sys-apps/xinetd )
 	syslog? ( virtual/logger )
 	fam? ( virtual/fam )
-	caps? ( sys-libs/libcap[lib32?] )
-	lib32? ( fam? ( dev-libs/libgamin[lib32] ) )
-	lib32? ( pam? ( sys-libs/pam[lib32] ) )"
+	caps? ( sys-libs/libcap[lib32?] )"
 DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${MY_P}"
@@ -50,15 +48,12 @@ PRIVATE_DST=/var/lib/samba/private
 # which is wrong as well.
 RESTRICT="test"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	confutils_use_depend_all ads ldap
 	confutils_use_depend_all cifsupcall ads
 }
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}/source"
-
+multilib-native_src_prepare_internal() {
 	# Ok, agreed, this is ugly. But it avoids a patch we
 	# need for every samba version and we don't need autotools
 	sed -i \
@@ -74,9 +69,6 @@ src_unpack() {
 }
 
 multilib-native_src_configure_internal() {
-	# fails with that
-	filter-ldflags -m32 -m64
-	
 	cd "${S}/source"
 
 	local myconf
@@ -141,9 +133,10 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_compile_internal() {
+	cd "${S}/source"
+
 	emake -j1 proto || die "emake proto failed"
 	emake -j1 everything || die "emake everything failed"
-
 }
 
 src_test() {
@@ -257,7 +250,7 @@ multilib-native_src_install_internal() {
 
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	local PRIVATE_SRC=/etc/samba/private
 	if [[ ! -r "${ROOT}/${PRIVATE_DST}/secrets.tdb" \
 		&& -r "${ROOT}/${PRIVATE_SRC}/secrets.tdb" ]] ; then
