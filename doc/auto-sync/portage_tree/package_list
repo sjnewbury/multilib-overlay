@@ -311,7 +311,7 @@ sys-libs/zlib
 # virtual/glu
 # virtual/glut
 # virtual/libffi
-# virtual/libusb
+virtual/libusb
 virtual/mysql
 virtual/opengl
 # virtual/pam  not in portage
