@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba-libs/samba-libs-3.3.7.ebuild,v 1.1 2009/08/17 17:34:43 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba-libs/samba-libs-3.3.10.ebuild,v 1.1 2010/01/14 12:52:52 patrick Exp $
 
 EAPI="2"
 
@@ -13,20 +13,23 @@ HOMEPAGE="http://www.samba.org/"
 SRC_URI="mirror://samba/${MY_P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ppc ~ppc64 ~x86"
 IUSE="ads aio caps cluster cups debug examples ldap pam syslog winbind"
 
 DEPEND="dev-libs/popt[lib32?]
 	virtual/libiconv
-	ads? ( virtual/krb5[lib32?] sys-fs/e2fsprogs[lib32?] )
+	ads? ( virtual/krb5 sys-fs/e2fsprogs[lib32?] )
 	caps? ( sys-libs/libcap[lib32?] )
 	cluster? ( dev-db/ctdb )
 	cups? ( net-print/cups[lib32?] )
+	debug? ( dev-libs/dmalloc )
 	ldap? ( net-nds/openldap[lib32?] )
 	pam? ( virtual/pam[lib32?]
 		winbind? ( dev-libs/iniparser[lib32?] ) )
 	syslog? ( virtual/logger )
-	!<net-fs/samba-3.3"
+	!<net-fs/samba-3.3
+	!sys-libs/tdb
+	!sys-libs/talloc"
 RDEPEND="${DEPEND}"
 
 # Disable tests since we don't want to build that much here
@@ -131,8 +134,6 @@ multilib-native_src_install_internal() {
 	if use pam ; then
 		emake DESTDIR="${D}" installpammodules || die "emake installpammodules failed"
 	fi
-
-	rm -rf "${D}/usr/share/doc"
 
 	# Remove empty installation directories
 	rmdir \
