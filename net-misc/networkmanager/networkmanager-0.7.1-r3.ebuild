@@ -1,17 +1,14 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.7.2.ebuild,v 1.5 2010/01/22 19:19:21 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.7.1-r3.ebuild,v 1.4 2009/07/12 14:43:32 rbu Exp $
 
 EAPI="2"
 inherit eutils multilib-native
 # autotools
 
-#PATCH_VERSION="1b"
-
 # NetworkManager likes itself with capital letters
 MY_PN=${PN/networkmanager/NetworkManager}
 MY_P=${MY_PN}-${PV}
-#PATCHNAME="${MY_P}-gentoo-patches-${PATCH_VERSION}"
 
 DESCRIPTION="Network configuration and management in an easy way. Desktop environment independent."
 HOMEPAGE="http://www.gnome.org/projects/NetworkManager/"
@@ -19,7 +16,7 @@ SRC_URI="mirror://gnome/sources/NetworkManager/0.7/${MY_P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 ~arm ppc ppc64 x86"
+KEYWORDS="~arm ~amd64 ~ppc ~x86"
 IUSE="avahi doc nss gnutls dhclient dhcpcd resolvconf connection-sharing"
 # modemmanager"
 
@@ -28,7 +25,7 @@ RDEPEND=">=sys-apps/dbus-1.2[lib32?]
 	>=sys-apps/hal-0.5.10[lib32?]
 	>=net-wireless/wireless-tools-28_pre9
 	>=dev-libs/glib-2.16[lib32?]
-	sys-auth/policykit[lib32?]
+	<sys-auth/policykit-0.92[lib32?]
 	>=dev-libs/libnl-1.1[lib32?]
 	>=net-wireless/wpa_supplicant-0.5.10[dbus]
 	|| ( sys-libs/e2fsprogs-libs[lib32?] <sys-fs/e2fsprogs-1.41.0[lib32?] )
@@ -51,7 +48,6 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	dev-util/intltool
 	net-dialup/ppp
-	dev-util/gtk-doc-am
 	doc? ( >=dev-util/gtk-doc-1.8 )"
 
 #PDEPEND="modemmanager? ( >=net-misc/modemmanager-0.2 )"
@@ -63,13 +59,23 @@ multilib-native_src_prepare_internal() {
 	# Fix up the dbus conf file to use plugdev group
 	epatch "${FILESDIR}/${PN}-0.7.1-confchanges.patch"
 
+	# bug #266982
+	epatch "${FILESDIR}/${PN}-0.7.0-gentoo-dhclient.patch"
+
+	# bug #267349
+	epatch "${FILESDIR}/${PN}-0.7.1-bad-link.patch"
+
+#	EPATCH_SOURCE="${WORKDIR}/modem-manager-patchset-0.7.1"
+#	EPATCH_SUFFIX="patch"
+#	use modemmanager && epatch && eautoreconf
+
 }
 
 multilib-native_src_configure_internal() {
 	ECONF="--disable-more-warnings
 		--localstatedir=/var
 		--with-distro=gentoo
-		--with-dbus-sys-dir=/etc/dbus-1/system.d
+		--with-dbus-sys=/etc/dbus-1/system.d
 		$(use_enable doc gtk-doc)
 		$(use_with doc docs)
 		$(use_with resolvconf)"
@@ -121,6 +127,16 @@ multilib-native_src_install_internal() {
 }
 
 multilib-native_pkg_postinst_internal() {
+	elog "You need to be in the plugdev group in order to use NetworkManager"
+	elog "Problems with your hostname getting changed?"
+	elog ""
+	elog "Add the following to /etc/dhcp/dhclient.conf"
+	elog 'send host-name "YOURHOSTNAME";'
+	elog 'supersede host-name "YOURHOSTNAME";'
+	elog ""
+	elog "If you're using dhcpcd please remove"
+	elog "host_name option from /etc/dhcpcd.conf"
+	elog ""
 	elog "You will need to restart DBUS if this is your first time"
 	elog "installing NetworkManager."
 	elog ""

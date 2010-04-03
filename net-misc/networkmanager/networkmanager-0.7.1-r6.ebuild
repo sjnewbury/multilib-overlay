@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.7.1-r6.ebuild,v 1.4 2009/10/10 11:31:51 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.7.1-r6.ebuild,v 1.7 2010/01/06 21:44:06 ranger Exp $
 
 EAPI="2"
 inherit eutils autotools multilib-native
@@ -19,7 +19,7 @@ SRC_URI="mirror://gnome/sources/NetworkManager/0.7/${MY_P}.tar.bz2
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~arm amd64 ~ppc ~x86"
+KEYWORDS="amd64 ~arm ppc ~ppc64 x86"
 IUSE="avahi doc nss gnutls dhclient dhcpcd resolvconf connection-sharing"
 # modemmanager"
 
@@ -28,7 +28,7 @@ RDEPEND=">=sys-apps/dbus-1.2[lib32?]
 	>=sys-apps/hal-0.5.10[lib32?]
 	>=net-wireless/wireless-tools-28_pre9
 	>=dev-libs/glib-2.16[lib32?]
-	>=sys-auth/policykit-0.8[lib32?]
+	<sys-auth/policykit-0.92[lib32?]
 	>=dev-libs/libnl-1.1[lib32?]
 	>=net-wireless/wpa_supplicant-0.5.10[dbus]
 	|| ( sys-libs/e2fsprogs-libs[lib32?] <sys-fs/e2fsprogs-1.41.0[lib32?] )
@@ -131,7 +131,7 @@ multilib-native_src_install_internal() {
 	rm -rf "${D}"/lib/udev/rules.d
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "You will need to restart DBUS if this is your first time"
 	elog "installing NetworkManager."
 	elog ""

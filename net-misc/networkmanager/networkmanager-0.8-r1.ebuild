@@ -1,9 +1,10 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8.0_pre20090824.ebuild,v 1.1 2009/08/24 13:11:44 dagger Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8-r1.ebuild,v 1.1 2010/03/30 15:37:22 dang Exp $
 
 EAPI="2"
-inherit eutils multilib-native
+
+inherit gnome.org eutils multilib-native
 
 # NetworkManager likes itself with capital letters
 MY_PN=${PN/networkmanager/NetworkManager}
@@ -11,19 +12,19 @@ MY_P=${MY_PN}-${PV}
 
 DESCRIPTION="Network configuration and management in an easy way. Desktop environment independent."
 HOMEPAGE="http://www.gnome.org/projects/NetworkManager/"
-SRC_URI="http://dev.gentoo.org/~dagger/files/${MY_P}.tar.bz2"
+SRC_URI="${SRC_URI//${PN}/${MY_PN}}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
 IUSE="avahi bluetooth doc nss gnutls dhclient dhcpcd resolvconf connection-sharing"
 
 RDEPEND=">=sys-apps/dbus-1.2[lib32?]
 	>=dev-libs/dbus-glib-0.75[lib32?]
 	>=net-wireless/wireless-tools-28_pre9
 	>=sys-fs/udev-145[extras,lib32?]
-	>=dev-libs/glib-2.16[lib32?]
-	<sys-auth/policykit-0.92[lib32?]
+	>=dev-libs/glib-2.18[lib32?]
+	>=sys-auth/polkit-0.92[lib32?]
 	>=dev-libs/libnl-1.1[lib32?]
 	>=net-misc/modemmanager-0.2
 	>=net-wireless/wpa_supplicant-0.5.10[dbus]
@@ -53,10 +54,14 @@ DEPEND="${RDEPEND}
 S=${WORKDIR}/${MY_P}
 
 multilib-native_src_prepare_internal() {
-
 	# Fix up the dbus conf file to use plugdev group
-	epatch "${FILESDIR}/${PN}-0.7.1-confchanges.patch"
+	epatch "${FILESDIR}/${PN}-0.8-confchanges.patch"
 
+	# Hack keyfile plugin to read hostname file, fixes bug 176873
+	epatch "${FILESDIR}/${P}-read-hostname.patch"
+
+	# Clear NSCD cache rather then kill daemon bug 301720
+	epatch "${FILESDIR}/${P}-nscd-clear-cache.patch"
 }
 
 multilib-native_src_configure_internal() {
@@ -64,6 +69,8 @@ multilib-native_src_configure_internal() {
 		--localstatedir=/var
 		--with-distro=gentoo
 		--with-dbus-sys-dir=/etc/dbus-1/system.d
+		--with-udev-dir=/etc/udev
+		--with-iptables=/sbin/iptables
 		$(use_enable doc gtk-doc)
 		$(use_with doc docs)
 		$(use_with resolvconf)"
@@ -109,12 +116,9 @@ multilib-native_src_install_internal() {
 	insinto /etc/NetworkManager
 	newins "${FILESDIR}/nm-system-settings.conf" nm-system-settings.conf \
 		|| die "newins failed"
-	insinto /etc/udev/rules.d
-	newins callouts/77-nm-probe-modem-capabilities.rules 77-nm-probe-modem-capabilities.rules
-	rm -rf "${D}"/lib/udev/rules.d
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "You will need to restart DBUS if this is your first time"
 	elog "installing NetworkManager."
 	elog ""

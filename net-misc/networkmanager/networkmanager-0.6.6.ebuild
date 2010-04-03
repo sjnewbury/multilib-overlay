@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.6.6.ebuild,v 1.6 2009/04/22 13:30:43 rbu Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit gnome2 eutils multilib-native
 
@@ -53,14 +53,14 @@ G2CONF="${G2CONF} \
 
 S=${WORKDIR}/${MY_P}
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if built_with_use sys-apps/iproute2 minimal ; then
 		eerror "Please rebuild sys-apps/iproute2 without the minimal useflag."
 		die "Fix iproute2 first."
 	fi
 }
 
-src_prepare () {
+multilib-native_src_prepare_internal() {
 	# Use the kernel headers
 	epatch "${FILESDIR}/${PN}-use-kernel-headers.patch"
 	# Fix the resolv.conf permissions
@@ -75,7 +75,7 @@ multilib-native_src_install_internal() {
 	keepdir /var/run/NetworkManager
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	gnome2_icon_cache_update
 	elog "You need to be in the plugdev group in order to use NetworkManager"
 	elog "Problems with your hostname getting changed?"

@@ -125,7 +125,7 @@ multilib-native_src_install_internal() {
 	rm -rf "${D}"/lib/udev/rules.d
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "You will need to restart DBUS if this is your first time"
 	elog "installing NetworkManager."
 	elog ""
