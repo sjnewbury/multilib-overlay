@@ -248,7 +248,7 @@ media-sound/phonon
 # net-libs/adns
 # net-libs/gnutls
 # net-libs/gssdp
-# net-libs/gupnp
+net-libs/gupnp
 net-libs/libasyncns
 net-libs/libproxy
 net-libs/libsoup
