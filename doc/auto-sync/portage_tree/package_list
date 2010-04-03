@@ -242,7 +242,6 @@ media-sound/phonon
 # net-dns/c-ares
 # net-dns/libidn
 # net-fs/samba
-# net-fs/samba-client
 net-fs/samba-libs
 net-libs/adns
 net-libs/gnutls
