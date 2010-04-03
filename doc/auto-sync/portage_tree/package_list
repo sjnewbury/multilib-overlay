@@ -115,7 +115,7 @@ dev-python/dbus-python
 dev-util/cppunit
 # dev-util/pkgconfig
 # games-emulation/zsnes
-# gnome-base/gail
+gnome-base/gail
 # gnome-base/gconf
 # gnome-base/gnome-desktop
 # gnome-base/gnome-keyring
