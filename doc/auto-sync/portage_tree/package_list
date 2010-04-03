@@ -312,7 +312,7 @@ sys-libs/zlib
 # virtual/glut
 # virtual/libffi
 # virtual/libusb
-# virtual/mysql
+virtual/mysql
 virtual/opengl
 # virtual/pam  not in portage
 virtual/postgresql-base
