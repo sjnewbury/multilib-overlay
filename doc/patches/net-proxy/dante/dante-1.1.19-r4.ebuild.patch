@@ -1,0 +1,31 @@
+--- /usr/portage/net-proxy/dante/dante-1.1.19-r4.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./net-proxy/dante/dante-1.1.19-r4.ebuild	2010-04-03 19:45:21.000000000 +0200
+@@ -22,10 +22,7 @@
+ 	sys-devel/bison
+ 	>=sys-apps/sed-4"
+ 
+-src_unpack() {
+-	unpack ${A}
+-
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}/${P}-socksify.patch"
+ 	epatch "${FILESDIR}/${P}-libpam.patch"
+ 
+@@ -37,7 +34,7 @@
+ 	eautoreconf
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	econf \
+ 		`use_enable debug` \
+ 		`use_enable tcpd libwrap` \
+@@ -48,7 +45,6 @@
+ 	# the comments in the source say this is only useful for 2.0 kernels ...
+ 	# well it may fix 2.0 but it breaks with 2.6 :)
+ 	sed -i 's:if HAVE_LINUX_ECCENTRICITIES:if 0:' include/common.h
+-	emake || die "emake failed"
+ }
+ 
+ src_install() {
