@@ -313,7 +313,7 @@ sys-libs/zlib
 # virtual/libffi
 # virtual/libusb
 # virtual/mysql
-# virtual/opengl
+virtual/opengl
 # virtual/pam  not in portage
 virtual/postgresql-base
 # www-client/epiphany
