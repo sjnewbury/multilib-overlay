@@ -16,7 +16,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="gnome kde networkmanager python webkit xulrunner"
 
 RDEPEND="
-	gnome? ( 
+	gnome? (
 		x11-libs/libX11[lib32?]
 		x11-libs/libXmu[lib32?]
 		gnome-base/gconf[lib32?] )
@@ -87,13 +87,13 @@ multilib-native_src_install_internal() {
 	dodoc AUTHORS NEWS README ChangeLog || die "dodoc failed"
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	if use python; then
 		python_need_rebuild
 		python_mod_optimize "$(python_get_sitedir)/${PN}.py"
 	fi
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/${PN}.py
 }
