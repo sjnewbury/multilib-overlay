@@ -249,7 +249,7 @@ media-sound/phonon
 # net-libs/gnutls
 # net-libs/gssdp
 # net-libs/gupnp
-# net-libs/libasyncns
+net-libs/libasyncns
 net-libs/libproxy
 net-libs/libsoup
 net-libs/libsoup-gnome
