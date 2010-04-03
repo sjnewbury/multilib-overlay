@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.39-r1.ebuild,v 1.1 2009/09/05 11:59:29 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.39-r1.ebuild,v 1.3 2009/11/21 15:17:26 armin76 Exp $
 
 EAPI="2"
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://bluez.sourceforge.net/"
 SRC_URI="mirror://kernel/linux/bluetooth/${P}.tar.gz"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~hppa ~ppc ~ppc64 ~sh ~sparc ~x86"
+KEYWORDS="~amd64 ~arm ~hppa ~ppc ~ppc64 ~x86"
 
 IUSE="alsa cups debug doc gstreamer old-daemons test-programs usb"
 
@@ -28,7 +28,7 @@ CDEPEND="alsa? ( media-libs/alsa-lib[lib32?] )
 	>=dev-libs/libnl-1.1[lib32?]
 	!net-wireless/bluez-libs
 	!net-wireless/bluez-utils"
-DEPEND="sys-devel/flex
+DEPEND="sys-devel/flex[lib32?]
 	>=dev-util/pkgconfig-0.20[lib32?]
 	doc? ( dev-util/gtk-doc )
 	${CDEPEND}"
@@ -125,7 +125,7 @@ multilib-native_src_install_internal() {
 		network/network.conf
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	udevadm control --reload_rules && udevadm trigger
 
 	elog
@@ -133,8 +133,8 @@ pkg_postinst() {
 	elog ""
 	elog "Since 3.0 bluez has changed the passkey handling to use a dbus based"
 	elog "API so please remember to update your /etc/bluetooth/hcid.conf."
-	elog "For a password agent, there is for example net-wireless/bluez-gnome"
-	elog "for gnome and net-wireless/kdebluetooth for kde."
+	elog "For a password agent, there are for example net-wireless/bluez-gnome"
+	elog "and net-wireless/gnome-bluetooth:2 for GNOME. For KDE, see bug 246381"
 	elog ""
 	elog "Since 3.10.1 we don't install the old style daemons any more but rely"
 	elog "on the new service architechture:"

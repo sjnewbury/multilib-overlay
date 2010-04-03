@@ -1,8 +1,8 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.28.ebuild,v 1.1 2009/02/06 15:44:57 dev-zero Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.63.ebuild,v 1.1 2010/03/27 15:45:04 pacho Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit autotools multilib eutils multilib-native
 
@@ -11,11 +11,14 @@ HOMEPAGE="http://bluez.sourceforge.net/"
 SRC_URI="mirror://kernel/linux/bluetooth/${P}.tar.gz"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~hppa ~ppc ~ppc64 ~sh ~sparc ~x86"
+KEYWORDS="~amd64 ~x86"
 
-IUSE="alsa cups debug doc gstreamer old-daemons test-programs usb"
+IUSE="alsa caps +consolekit cups debug gstreamer old-daemons pcmcia test-programs usb"
 
-RDEPEND="alsa? ( media-libs/alsa-lib[lib32?] )
+CDEPEND="alsa? (
+		media-libs/alsa-lib[alsa_pcm_plugins_extplug,alsa_pcm_plugins_ioplug,lib32?]
+	)
+	caps? ( >=sys-libs/libcap-ng-0.6.2[lib32?] )
 	gstreamer? (
 		>=media-libs/gstreamer-0.10[lib32?]
 		>=media-libs/gst-plugins-base-0.10[lib32?] )
@@ -24,32 +27,44 @@ RDEPEND="alsa? ( media-libs/alsa-lib[lib32?] )
 	sys-fs/udev[lib32?]
 	dev-libs/glib[lib32?]
 	sys-apps/dbus[lib32?]
+	media-libs/libsndfile[lib32?]
+	>=dev-libs/libnl-1.1[lib32?]
 	!net-wireless/bluez-libs
 	!net-wireless/bluez-utils"
-DEPEND="!<dev-libs/libnl-1.1
-	sys-devel/flex
-	dev-util/pkgconfig[lib32?]
-	doc? ( dev-util/gtk-doc )
-	${RDEPEND}"
+DEPEND="sys-devel/flex[lib32?]
+	>=dev-util/pkgconfig-0.20[lib32?]
+	${CDEPEND}"
+RDEPEND="${CDEPEND}
+	consolekit? ( sys-auth/pambase[consolekit] )
+	test-programs? (
+		dev-python/dbus-python[lib32?]
+		dev-python/pygobject[lib32?] )"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
-	if use cups; then
-		epatch "${FILESDIR}/4.18/cups-location.patch"
-		eautoreconf
+multilib-native_pkg_setup_internal() {
+	if ! use consolekit; then
+		enewgroup plugdev
 	fi
 }
 
+multilib-native_src_prepare_internal() {
+	if ! use consolekit; then
+		# No consolekit for at_console etc, so we grant plugdev the rights
+		epatch	"${FILESDIR}/bluez-plugdev.patch"
+	fi
+
+	if use cups; then
+		epatch "${FILESDIR}/4.60/cups-location.patch"
+	fi
+
+	# Fix alsa files location
+	epatch "${FILESDIR}/${PN}-alsa_location.patch"
+
+	eautoreconf
+}
+
 multilib-native_src_configure_internal() {
-	# the order is the same as ./configure --help
-
-	# we don't need the other daemons either with the new
-	# service architechture
-
 	econf \
-		$(use_enable doc gtk-doc) \
+		$(use_enable caps capng) \
 		--enable-network \
 		--enable-serial \
 		--enable-input \
@@ -68,10 +83,9 @@ multilib-native_src_configure_internal() {
 		$(use_enable old-daemons dund) \
 		$(use_enable cups) \
 		$(use_enable test-programs test) \
-		--enable-manpages \
+		--enable-udevrules \
 		--enable-configfiles \
-		--disable-initscripts \
-		--disable-pcmciarules \
+		$(use_enable pcmcia) \
 		$(use_enable debug) \
 		--localstatedir=/var
 }
@@ -94,69 +108,62 @@ multilib-native_src_install_internal() {
 		cd "${S}"
 	fi
 
-	newinitd "${FILESDIR}/4.18/bluetooth-init.d" bluetooth || die
-	newconfd "${FILESDIR}/4.18/bluetooth-conf.d" bluetooth || die
-
 	if use old-daemons; then
 		newconfd "${FILESDIR}/4.18/conf.d-hidd" hidd || die
 		newinitd "${FILESDIR}/4.18/init.d-hidd" hidd || die
 	fi
 
-	# bug #84431
-	insinto /etc/udev/rules.d/
-	newins "${FILESDIR}/${PN}-4.18-udev.rules" 70-bluetooth.rules || die
-	newins "${S}/scripts/bluetooth.rules" 70-bluetooth-pcmcia.rules || die
-
-	exeinto /$(get_libdir)/udev/
-	newexe "${FILESDIR}/${PN}-4.18-udev.script" bluetooth.sh || die
-	doexe  "${S}/scripts/bluetooth_serial" || die
-
 	insinto /etc/bluetooth
 	doins \
 		input/input.conf \
 		audio/audio.conf \
-		network/network.conf
+		network/network.conf \
+		serial/serial.conf \
+		|| die
+
+	insinto /etc/udev/rules.d/
+	newins "${FILESDIR}/${PN}-4.18-udev.rules" 70-bluetooth.rules || die
+	exeinto /$(get_libdir)/udev/
+	newexe "${FILESDIR}/${PN}-4.18-udev.script" bluetooth.sh || die
+
+	newinitd "${FILESDIR}/4.60/bluetooth-init.d" bluetooth || die
+	newconfd "${FILESDIR}/4.60/bluetooth-conf.d" bluetooth || die
 }
 
-pkg_postinst() {
-	udevadm control --reload_rules && udevadm trigger
+multilib-native_pkg_postinst_internal() {
+	udevadm control --reload-rules && udevadm trigger --subsystem-match=bluetooth
 
 	elog
 	elog "To use dial up networking you must install net-dialup/ppp."
-	elog ""
-	elog "Since 3.0 bluez has changed the passkey handling to use a dbus based"
-	elog "API so please remember to update your /etc/bluetooth/hcid.conf."
+	elog
 	elog "For a password agent, there is for example net-wireless/bluez-gnome"
-	elog "for gnome and net-wireless/kdebluetooth for kde."
-	elog ""
-	elog "Since 3.10.1 we don't install the old style daemons any more but rely"
-	elog "on the new service architechture:"
-	elog "	http://wiki.bluez.org/wiki/Services"
-	elog ""
-	elog "3.15 adds support for the audio service. See"
-	elog "http://wiki.bluez.org/wiki/HOWTO/AudioDevices for configuration help."
-	elog ""
+	elog "for gnome and net-wireless/kdebluetooth for kde. You can also give a"
+	elog "try to net-wireless/blueman"
+	elog
 	elog "Use the old-daemons use flag to get the old daemons like hidd"
 	elog "installed. Please note that the init script doesn't stop the old"
 	elog "daemons after you update it so it's recommended to run:"
 	elog "  /etc/init.d/bluetooth stop"
 	elog "before updating your configuration files or you can manually kill"
 	elog "the extra daemons you previously enabled in /etc/conf.d/bluetooth."
-	elog ""
-	elog "If you want to use rfcomm as a normal user, you need to add the user"
-	elog "to the uucp group."
-	elog ""
+
+	if use consolekit; then
+		elog ""
+		elog "If you want to use rfcomm as a normal user, you need to add the user"
+		elog "to the uucp group."
+	else
+		elog ""
+		elog "Since you have the consolekit use flag disabled, you will only be able to run"
+		elog "bluetooth clients as root. If you want to be able to run bluetooth clientes as "
+		elog "a regular user, you need to enable the consolekit use flag for this package."
+	fi
+
 	if use old-daemons; then
+		elog ""
 		elog "The hidd init script was installed because you have the old-daemons"
 		elog "use flag on. It is not started by default via udev so please add it"
-		elog "to the required runleves using rc-update <runlevel> add hidd. If"
+		elog "to the required runlevels using rc-update <runlevel> add hidd. If"
 		elog "you need init scripts for the other daemons, please file requests"
 		elog "to https://bugs.gentoo.org."
-	else
-		elog "The bluetooth service should be started automatically by udev"
-		elog "when the required hardware is inserted next time."
 	fi
-	elog
-	ewarn "On first install you need to run /etc/init.d/dbus reload or hcid"
-	ewarn "will fail to start."
 }

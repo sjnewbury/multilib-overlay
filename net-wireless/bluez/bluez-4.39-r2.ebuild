@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.39-r2.ebuild,v 1.5 2009/10/24 11:09:03 nixnut Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.39-r2.ebuild,v 1.9 2010/02/01 20:18:32 pacho Exp $
 
 EAPI="2"
 
@@ -11,11 +11,13 @@ HOMEPAGE="http://bluez.sourceforge.net/"
 SRC_URI="mirror://kernel/linux/bluetooth/${P}.tar.gz"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 arm ~hppa ppc ~ppc64 ~sh ~sparc x86"
+KEYWORDS="amd64 arm hppa ppc ppc64 x86"
 
 IUSE="alsa +consolekit cups debug doc gstreamer old-daemons test-programs usb"
 
-CDEPEND="alsa? ( media-libs/alsa-lib[lib32?] )
+CDEPEND="alsa? (
+		media-libs/alsa-lib[alsa_pcm_plugins_extplug,alsa_pcm_plugins_ioplug,lib32?]
+	)
 	gstreamer? (
 		>=media-libs/gstreamer-0.10[lib32?]
 		>=media-libs/gst-plugins-base-0.10[lib32?] )
@@ -129,7 +131,7 @@ multilib-native_src_install_internal() {
 		network/network.conf
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	udevadm control --reload_rules && udevadm trigger
 
 	elog

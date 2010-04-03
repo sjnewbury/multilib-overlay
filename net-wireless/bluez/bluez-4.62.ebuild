@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.60.ebuild,v 1.1 2010/02/01 19:47:45 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.62.ebuild,v 1.2 2010/03/11 15:22:41 pacho Exp $
 
 EAPI="2"
 
@@ -31,7 +31,7 @@ CDEPEND="alsa? (
 	>=dev-libs/libnl-1.1[lib32?]
 	!net-wireless/bluez-libs
 	!net-wireless/bluez-utils"
-DEPEND="sys-devel/flex
+DEPEND="sys-devel/flex[lib32?]
 	>=dev-util/pkgconfig-0.20[lib32?]
 	${CDEPEND}"
 RDEPEND="${CDEPEND}
@@ -39,6 +39,12 @@ RDEPEND="${CDEPEND}
 	test-programs? (
 		dev-python/dbus-python[lib32?]
 		dev-python/pygobject[lib32?] )"
+
+multilib-native_pkg_setup_internal() {
+	if ! use consolekit; then
+		enewgroup plugdev
+	fi
+}
 
 multilib-native_src_prepare_internal() {
 	if ! use consolekit; then
@@ -50,7 +56,12 @@ multilib-native_src_prepare_internal() {
 		epatch "${FILESDIR}/4.60/cups-location.patch"
 	fi
 
-	# needed for both patches
+	# Fix alsa files location
+	epatch "${FILESDIR}/${PN}-alsa_location.patch"
+
+	# Upstream patch to fix ipctest build, bug 308081
+	epatch "${FILESDIR}/${P}-makefile_ipctest.patch"
+
 	eautoreconf
 }
 
@@ -122,7 +133,7 @@ multilib-native_src_install_internal() {
 	newconfd "${FILESDIR}/4.60/bluetooth-conf.d" bluetooth || die
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	udevadm control --reload-rules && udevadm trigger --subsystem-match=bluetooth
 
 	elog
