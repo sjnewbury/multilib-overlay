@@ -3,8 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/dev-util/cppunit/cppunit-1.12.1.ebuild,v 1.9 2010/01/08 19:35:29 armin76 Exp $
 
 EAPI=2
-
-inherit eutils autotools qt3 multilib-native
+inherit autotools eutils multilib-native
 
 DESCRIPTION="C++ port of the famous JUnit framework for unit testing"
 HOMEPAGE="http://cppunit.sourceforge.net/"
@@ -18,7 +17,7 @@ IUSE="doc examples"
 RDEPEND=""
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen
-	media-gfx/graphviz )"
+	media-gfx/graphviz[lib32?] )"
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${PN}-1.10.2-asneeded.patch" \

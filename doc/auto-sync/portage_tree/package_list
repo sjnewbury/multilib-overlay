@@ -112,7 +112,7 @@ dev-python/dbus-python
 # dev-python/pygtk
 # dev-python/pyorbit
 # dev-python/pyrex
-# dev-util/cppunit
+dev-util/cppunit
 # dev-util/pkgconfig
 # games-emulation/zsnes
 # gnome-base/gail
