@@ -37,6 +37,6 @@ multilib-native_src_install_internal() {
 	dohtml *.html
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	ewarn "$(<${FILESDIR}/README.security)"
 }

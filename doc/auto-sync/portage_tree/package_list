@@ -245,7 +245,7 @@ media-sound/phonon
 # net-fs/samba-client
 # net-fs/samba-libs
 # net-fs/samba-server
-# net-libs/adns
+net-libs/adns
 net-libs/gnutls
 net-libs/gssdp
 net-libs/gupnp
