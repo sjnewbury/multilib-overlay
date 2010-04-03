@@ -308,19 +308,14 @@ sys-libs/talloc
 sys-libs/tdb
 sys-libs/zlib
 # virtual/acl
-# virtual/ghostscript
 # virtual/glu
 # virtual/glut
 # virtual/libffi
 # virtual/libusb
 # virtual/mysql
 # virtual/opengl
-# virtual/pam
-# virtual/poppler
-# virtual/poppler-glib
-# virtual/postgresql-base
-# virtual/talloc
-# virtual/tdb
+# virtual/pam  not in portage
+virtual/postgresql-base
 # www-client/epiphany
 # www-client/epiphany-extensions
 www-client/mozilla-firefox
