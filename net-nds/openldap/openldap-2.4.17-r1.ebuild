@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-nds/openldap/openldap-2.4.17-r1.ebuild,v 1.4 2009/11/24 23:31:54 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-nds/openldap/openldap-2.4.17-r1.ebuild,v 1.5 2010/01/12 20:05:41 cardoe Exp $
 
 EAPI="2"
 inherit db-use eutils flag-o-matic multilib ssl-cert versionator toolchain-funcs multilib-native
@@ -30,14 +30,14 @@ RDEPEND="sys-libs/ncurses[lib32?]
 	sasl? ( dev-libs/cyrus-sasl[lib32?] )
 	!minimal? (
 		odbc? ( !iodbc? ( dev-db/unixODBC[lib32?] )
-			iodbc? ( dev-db/libiodbc[lib32?] ) )
+			iodbc? ( dev-db/libiodbc ) )
 		slp? ( net-libs/openslp[lib32?] )
 		perl? ( dev-lang/perl[-build,lib32?] )
 		samba? ( dev-libs/openssl[lib32?] )
 		berkdb? ( sys-libs/db[lib32?] )
 		smbkrb5passwd? (
 			dev-libs/openssl[lib32?]
-			app-crypt/heimdal )
+			app-crypt/heimdal[lib32?] )
 		kerberos? ( virtual/krb5 )
 		cxx? ( dev-libs/cyrus-sasl[lib32?] )
 	)
@@ -155,7 +155,7 @@ openldap_upgrade_howto() {
 	fi
 }
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if ! use sasl && use cxx ; then
 		die "To build the ldapc++ library you must emerge openldap with sasl support"
 	fi
@@ -503,12 +503,12 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	# keep old libs if any
-	preserve_old_lib usr/$(get_libdir)/{liblber,libldap,libldap_r}-2.3.so.0
+	preserve_old_lib usr/$(get_libdir)/{libldap,libldap_r,liblber}-2.3.so.0
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	if ! use minimal ; then
 		# You cannot build SSL certificates during src_install that will make
 		# binary packages containing your SSL key, which is both a security risk

@@ -1,0 +1,32 @@
+--- /usr/portage/net-nds/openldap/openldap-2.3.41-r1.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./net-nds/openldap/openldap-2.3.41-r1.ebuild	2010-04-03 21:53:24.000000000 +0200
+@@ -187,9 +187,7 @@
+ 	enewuser ldap 439 -1 /usr/$(get_libdir)/openldap ldap
+ }
+ 
+-src_unpack() {
+-	unpack ${A}
+-
++src_prepare() {
+ 	# According to MDK, the link order needs to be changed so that
+ 	# on systems w/ MD5 passwords the system crypt library is used
+ 	# (the net result is that "passwd" can be used to change ldap passwords w/
+@@ -234,7 +232,7 @@
+ 	epatch "${FILESDIR}/openldap-2.3.XY-gcc44.patch"
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	local myconf
+ 
+ 	#Fix for glibc-2.8 and ucred. Bug 228457.
+@@ -310,7 +308,9 @@
+ 		--enable-shared \
+ 		--libexecdir=/usr/$(get_libdir)/openldap \
+ 		${myconf} || die "configure failed"
++}
+ 
++src_compile() {
+ 	emake depend || die "make depend failed"
+ 	emake || die "make failed"
+ 

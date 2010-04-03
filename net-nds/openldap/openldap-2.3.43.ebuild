@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-nds/openldap/openldap-2.3.43.ebuild,v 1.12 2009/05/08 01:16:29 loki_val Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-nds/openldap/openldap-2.3.43.ebuild,v 1.13 2010/01/12 20:05:41 cardoe Exp $
 
 EAPI="2"
 
@@ -52,11 +52,10 @@ RDEPEND="sys-libs/ncurses[lib32?]
 		)
 		smbkrb5passwd? (
 			dev-libs/openssl[lib32?]
-			app-crypt/heimdal
+			app-crypt/heimdal[lib32?]
 		)
 	)
-	selinux? ( sec-policy/selinux-openldap )
-	sys-devel/libtool[lib32?]"
+	selinux? ( sec-policy/selinux-openldap )"
 DEPEND="${RDEPEND}"
 
 # for tracking versions
@@ -309,10 +308,6 @@ multilib-native_src_configure_internal() {
 		--enable-shared \
 		--libexecdir=/usr/$(get_libdir)/openldap \
 		${myconf} || die "configure failed"
-
-	#convert the output of perl -MExtUtils::Embed -e ldopts to reasonable values
-	[[ $(get_libdir) == lib32 ]] && sed -i '/^MOD_LIBS/ {s/lib64/lib32/g; s/x86_64/i686/g}' ./servers/slapd/back-perl/Makefile
-	[[ $(get_libdir) == lib32 ]] && sed -i '/^PERL_CPPFLAGS/ {s/lib64/lib32/g; s/x86_64/i686/g}' ./servers/slapd/back-perl/Makefile
 }
 
 multilib-native_src_compile_internal() {
@@ -487,7 +482,7 @@ multilib-native_pkg_preinst_internal() {
 	# keep old libs if any
 	LIBSUFFIXES=".so.2.0.130 -2.2.so.7"
 	for LIBSUFFIX in ${LIBSUFFIXES} ; do
-		for each in liblber libldap libldap_r ; do
+		for each in libldap libldap_r liblber ; do
 			preserve_old_lib "usr/$(get_libdir)/${each}${LIBSUFFIX}"
 		done
 	done

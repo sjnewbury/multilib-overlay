@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-nds/openldap/openldap-2.3.43-r1.ebuild,v 1.7 2010/01/12 20:05:41 cardoe Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-nds/openldap/openldap-2.3.41-r1.ebuild,v 1.5 2010/01/12 20:05:41 cardoe Exp $
 
 EAPI="2"
 
@@ -30,7 +30,7 @@ RDEPEND="sys-libs/ncurses[lib32?]
 	!minimal? (
 		odbc? ( dev-db/unixODBC[lib32?] )
 		slp? ( net-libs/openslp[lib32?] )
-		perl? ( dev-lang/perl[-build,lib32?] )
+		perl? ( dev-lang/perl[lib32?] )
 		samba? ( dev-libs/openssl[lib32?] )
 		kerberos? ( virtual/krb5 )
 		berkdb? (
@@ -208,10 +208,9 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-2.2.6-ntlm.patch
 
 	# bug #132263
-	epatch "${FILESDIR}"/${PN}-2.3.21-ppolicy.patch
-
-	# bug #189817
-	epatch "${FILESDIR}"/${PN}-2.3.37-libldap_r.patch
+	if use overlays ; then
+		epatch "${FILESDIR}"/${PN}-2.3.21-ppolicy.patch
+	fi
 
 	# fix up stuff for newer autoconf that simulates autoconf-2.13, but doesn't
 	# do it perfectly.
@@ -329,7 +328,6 @@ multilib-native_src_compile_internal() {
 			einfo "Building contributed pw-kerberos"
 			cd "${S}"/contrib/slapd-modules/passwd/ && \
 			${CC} -shared -I../../../include ${CFLAGS} -fPIC \
-			$(krb5-config --cflags) \
 			-DHAVE_KRB5 -o pw-kerberos.so kerberos.c || \
 			die "failed to compile kerberos password module"
 		fi
@@ -348,7 +346,7 @@ multilib-native_src_compile_internal() {
 			local mydef
 			local mykrb5inc
 			mydef="-DDO_SAMBA -DDO_KRB5"
-			mykrb5inc="$(krb5-config --cflags)"
+			mykrb5inc="-I/usr/include/heimdal/"
 			cd "${S}"/contrib/slapd-modules/smbk5pwd && \
 			libexecdir="/usr/$(get_libdir)/openldap" \
 			DEFS="${mydef}" KRB5_INC="${mykrb5inc}" emake || \
