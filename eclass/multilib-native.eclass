@@ -512,6 +512,11 @@ multilib-native_check_inherited_funcs() {
 		fi
 	fi
 
+	if [[ -z ${SRC_URI} && ( "${declared_func}" == "base_src_prepare" || "${declared_func}" == "base_src_install" ) ]]; then
+		# those functions do not work if we do not have sources
+		declared_func="return"
+	fi
+
 	einfo "Using ${declared_func} for ABI ${ABI} ..."
 	${declared_func}
 }
