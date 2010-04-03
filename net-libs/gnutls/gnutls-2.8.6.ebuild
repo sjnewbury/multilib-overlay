@@ -37,9 +37,9 @@ RDEPEND="dev-libs/libgpg-error[lib32?]
 	zlib? ( >=sys-libs/zlib-1.1[lib32?] )
 	!bindist? ( lzo? ( >=dev-libs/lzo-2 ) )"
 DEPEND="${RDEPEND}
-	sys-devel/libtool
+	sys-devel/libtool[lib32?]
 	doc? ( dev-util/gtk-doc )
-	nls? ( sys-devel/gettext )"
+	nls? ( sys-devel/gettext[lib32?] )"
 
 S="${WORKDIR}/${P%_pre*}"
 

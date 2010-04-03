@@ -24,19 +24,19 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="bindist +cxx doc guile lzo nls zlib"
 
-RDEPEND="dev-libs/libgpg-error
-	>=dev-libs/libgcrypt-1.4.0
-	>=dev-libs/libtasn1-0.3.4
+RDEPEND="dev-libs/libgpg-error[lib32?]
+	>=dev-libs/libgcrypt-1.4.0[lib32?]
+	>=dev-libs/libtasn1-0.3.4[lib32?]
 	nls? ( virtual/libintl )
 	guile? ( dev-scheme/guile[networking] )
-	zlib? ( >=sys-libs/zlib-1.1 )
+	zlib? ( >=sys-libs/zlib-1.1[lib32?] )
 	!bindist? ( lzo? ( >=dev-libs/lzo-2 ) )"
 DEPEND="${RDEPEND}
-	sys-devel/libtool
+	sys-devel/libtool[lib32?]
 	doc? ( dev-util/gtk-doc )
-	nls? ( sys-devel/gettext )"
+	nls? ( sys-devel/gettext[lib32?] )"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if use lzo && use bindist; then
 		ewarn "lzo support was disabled for binary distribution of gnutls"
 		ewarn "due to licensing issues. See Bug 202381 for details."
@@ -84,5 +84,5 @@ multilib-native_src_install_internal() {
 		dodoc doc/examples/*.c
 	fi
 
-	prep_ml_binaries /usr/bin/libgnutls-config /usr/bin/libgnutls-extra-config 
+	prep_ml_binaries /usr/bin/libgnutls-config /usr/bin/libgnutls-extra-config
 }

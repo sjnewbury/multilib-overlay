@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/gnutls/gnutls-2.8.5.ebuild,v 1.7 2010/01/01 14:48:44 klausman Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/gnutls/gnutls-2.8.5.ebuild,v 1.8 2010/01/30 17:34:22 armin76 Exp $
 
 EAPI="2"
 
@@ -26,24 +26,24 @@ fi
 # GPL-3 for the gnutls-extras library and LGPL for the gnutls library.
 LICENSE="LGPL-2.1 GPL-3"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="bindist +cxx doc examples guile lzo nls zlib"
 
-RDEPEND="dev-libs/libgpg-error
-	>=dev-libs/libgcrypt-1.4.0
-	>=dev-libs/libtasn1-0.3.4
+RDEPEND="dev-libs/libgpg-error[lib32?]
+	>=dev-libs/libgcrypt-1.4.0[lib32?]
+	>=dev-libs/libtasn1-0.3.4[lib32?]
 	nls? ( virtual/libintl )
 	guile? ( dev-scheme/guile[networking] )
-	zlib? ( >=sys-libs/zlib-1.1 )
+	zlib? ( >=sys-libs/zlib-1.1[lib32?] )
 	!bindist? ( lzo? ( >=dev-libs/lzo-2 ) )"
 DEPEND="${RDEPEND}
-	sys-devel/libtool
+	sys-devel/libtool[lib32?]
 	doc? ( dev-util/gtk-doc )
-	nls? ( sys-devel/gettext )"
+	nls? ( sys-devel/gettext[lib32?] )"
 
 S="${WORKDIR}/${P%_pre*}"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if use lzo && use bindist; then
 		ewarn "lzo support was disabled for binary distribution of gnutls"
 		ewarn "due to licensing issues. See Bug 202381 for details."
