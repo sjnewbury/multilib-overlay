@@ -22,15 +22,15 @@ COMMON_DEPEND="
 	dev-libs/libgcrypt[lib32?]
 	acl? (
 		kernel_linux? (
-			sys-apps/acl
-			sys-apps/attr
+			sys-apps/acl[lib32?]
+			sys-apps/attr[lib32?]
 		)
 	)
 	dbus? ( sys-apps/dbus[lib32?] )
 	gnutls? ( net-libs/gnutls[lib32?] )
 	java? ( >=virtual/jre-1.4 )
-	jpeg? ( >=media-libs/jpeg-6b[lib32?] )
-	kerberos? ( virtual/krb5[lib32?] )
+	jpeg? ( >=media-libs/jpeg-6b:0[lib32?] )
+	kerberos? ( virtual/krb5 )
 	ldap? ( net-nds/openldap[lib32?] )
 	pam? ( virtual/pam[lib32?] )
 	perl? ( dev-lang/perl[lib32?] )
@@ -53,8 +53,8 @@ RDEPEND="${COMMON_DEPEND}
 	X? ( x11-misc/xdg-utils )
 "
 PDEPEND="
-	app-text/ghostscript-gpl[cups]
-	>=app-text/poppler-0.12.3-r3[utils]
+	app-text/ghostscript-gpl[cups,lib32?]
+	>=app-text/poppler-0.12.3-r3[utils,lib32?]
 "
 
 PROVIDE="virtual/lpr"
@@ -188,7 +188,7 @@ multilib-native_src_install_internal() {
 	prep_ml_binaries /usr/bin/cups-config
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	echo
 	elog "For information about installing a printer and general cups setup"
 	elog "take a look at: http://www.gentoo.org/doc/en/printing-howto.xml"
