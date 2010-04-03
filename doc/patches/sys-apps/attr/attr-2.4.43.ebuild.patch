@@ -1,0 +1,30 @@
+--- /usr/portage/sys-apps/attr/attr-2.4.43.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./sys-apps/attr/attr-2.4.43.ebuild	2010-04-03 18:13:10.000000000 +0200
+@@ -19,9 +19,7 @@
+ 	sys-devel/autoconf"
+ RDEPEND=""
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/${PN}-2.4.39-gettext.patch
+ 	epatch "${FILESDIR}"/${PN}-2.4.43-linguas.patch #205948
+ 	epatch "${FILESDIR}"/${PN}-2.4.24-only-symlink-when-needed.patch
+@@ -37,7 +35,7 @@
+ 	strip-linguas po
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	unset PLATFORM #184564
+ 	export OPTIMIZER=${CFLAGS}
+ 	export DEBUG=-DNDEBUG
+@@ -47,7 +45,6 @@
+ 		--libexecdir=/usr/$(get_libdir) \
+ 		--bindir=/bin \
+ 		|| die
+-	emake || die
+ }
+ 
+ src_install() {
