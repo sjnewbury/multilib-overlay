@@ -307,7 +307,7 @@ sys-libs/slang
 sys-libs/talloc
 sys-libs/tdb
 sys-libs/zlib
-# virtual/acl
+virtual/acl
 virtual/glu
 virtual/glut
 virtual/libffi
