@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools eutils gnome2 multilib-native
+inherit eutils gnome2 multilib-native
 
 DESCRIPTION="GNOME cups library"
 HOMEPAGE="http://www.gnome.org/"

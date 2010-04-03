@@ -1,0 +1,12 @@
+--- /usr/portage/net-print/libgnomecups/libgnomecups-0.2.3.ebuild	2009-04-14 14:08:11.000000000 +0200
++++ ./net-print/libgnomecups/libgnomecups-0.2.3.ebuild	2010-04-03 19:48:53.000000000 +0200
+@@ -20,8 +20,6 @@
+ 
+ DOCS="AUTHORS ChangeLog NEWS"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/enablenet.patch
+ }

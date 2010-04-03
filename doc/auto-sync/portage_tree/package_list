@@ -262,7 +262,7 @@ net-libs/xulrunner
 net-misc/openssh
 # net-nds/openldap
 # net-print/cups
-# net-print/libgnomecups
+net-print/libgnomecups
 net-proxy/dante
 net-wireless/bluez
 sci-libs/djbfft
