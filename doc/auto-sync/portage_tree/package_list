@@ -265,7 +265,7 @@ net-misc/openssh
 # net-print/libgnomecups
 # net-proxy/dante
 # net-wireless/bluez
-# sci-libs/djbfft
+sci-libs/djbfft
 # sys-apps/abi-wrapper
 sys-apps/acl
 sys-apps/attr

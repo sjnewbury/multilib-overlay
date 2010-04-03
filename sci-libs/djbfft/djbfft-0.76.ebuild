@@ -2,8 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sci-libs/djbfft/djbfft-0.76.ebuild,v 1.10 2008/04/06 17:45:23 hollow Exp $
 
-EAPI="2"
-
 inherit eutils flag-o-matic toolchain-funcs multilib multilib-native
 
 DESCRIPTION="extremely fast library for floating-point convolution"
@@ -20,28 +18,25 @@ IUSE=""
 # this point of the installation.
 RESTRICT="test"
 
-pkg_setup() {
+multilib-native_src_unpack_internal() {
 	MY_PV="${PV:0:1}.${PV:2:1}.${PV:3:1}" # a.bc -> a.b.c
 	MY_D="${D}usr"
 
-	LIBPERMS="0755"
-	LIBDJBFFT="libdjbfft.so.${MY_PV}"
-}
-
-multilib-native_src_prepare_internal() {
 	# mask out everything, which is not suggested by the author (RTFM)!
-	ALLOWED_FLAGS="-fstack-protector -march -mcpu -pipe -mpreferred-stack-boundary -ffast-math -m32 -m64"
+	ALLOWED_FLAGS="-fstack-protector -march -mcpu -pipe -mpreferred-stack-boundary -ffast-math"
 	strip-flags
 
 	MY_CFLAGS="${CFLAGS} -O1 -fomit-frame-pointer"
 	use x86 && MY_CFLAGS="${MY_CFLAGS} -malign-double"
 
-	cd "${S}"
+	LIBPERMS="0755"
+	LIBDJBFFT="libdjbfft.so.${MY_PV}"
 
+	unpack ${A}
+	cd "${S}"
 	epatch "${FILESDIR}/${P}-gcc3.patch"
 	epatch "${FILESDIR}/${P}-shared.patch"
 
-	rm -f conf-cc conf-ld
 	sed -i -e "s:\"lib\":\"$(get_libdir)\":" hier.c
 	echo "$(tc-getCC) $MY_CFLAGS -fPIC -DPIC" > "conf-cc"
 	echo "$(tc-getCC) ${LDFLAGS}" > "conf-ld"
