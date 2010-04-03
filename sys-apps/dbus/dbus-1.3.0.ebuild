@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/dbus/dbus-1.3.0.ebuild,v 1.3 2009/08/05 20:47:45 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/dbus/dbus-1.3.0.ebuild,v 1.5 2009/08/08 20:45:16 flameeyes Exp $
 
 EAPI="2"
 
@@ -15,8 +15,8 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="debug doc selinux test X"
 
-RDEPEND="X? ( x11-libs/libXt x11-libs/libX11[lib32?] )
-	selinux? ( sys-libs/libselinux
+RDEPEND="X? ( x11-libs/libXt[lib32?] x11-libs/libX11[lib32?] )
+	selinux? ( sys-libs/libselinux[lib32?]
 				sec-policy/selinux-dbus )
 	>=dev-libs/expat-1.95.8[lib32?]
 	!<sys-apps/dbus-0.91"
@@ -30,6 +30,7 @@ multilib-native_src_prepare_internal() {
 	sed -e 's/.*bus_dispatch_test.*/printf ("Disabled due to excess noise\\n");/' \
 		-e '/"dispatch"/d' -i "${S}/bus/test-main.c"
 	epatch "${FILESDIR}"/${P}-asneeded.patch
+	epatch "${FILESDIR}"/${P}-no-cloexec.patch
 	# required for asneeded patch but also for bug 263909, cross-compile so
 	# don't remove eautoreconf
 	eautoreconf
@@ -101,12 +102,12 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	enewgroup messagebus
 	enewuser messagebus -1 "-1" -1 messagebus
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "To start the D-Bus system-wide messagebus by default"
 	elog "you should add it to the default runlevel :"
 	elog "\`rc-update add dbus default\`"

@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/dbus/dbus-1.3.0-r1.ebuild,v 1.2 2009/11/05 00:06:52 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/dbus/dbus-1.3.0-r1.ebuild,v 1.4 2010/03/26 09:41:28 ssuominen Exp $
 
 EAPI="2"
 
@@ -24,7 +24,13 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	doc? (
 		app-doc/doxygen
-		app-text/xmlto )"
+		app-text/xmlto
+		app-text/docbook-xml-dtd:4.1.2 )"
+
+multilib-native_pkg_setup_internal() {
+	enewgroup messagebus
+	enewuser messagebus -1 "-1" -1 messagebus
+}
 
 multilib-native_src_prepare_internal() {
 	# Remove CFLAGS that is not supported by all gcc, bug #274456
@@ -157,12 +163,7 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-pkg_preinst() {
-	enewgroup messagebus
-	enewuser messagebus -1 "-1" -1 messagebus
-}
-
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "To start the D-Bus system-wide messagebus by default"
 	elog "you should add it to the default runlevel :"
 	elog "\`rc-update add dbus default\`"

@@ -1,0 +1,30 @@
+--- /usr/portage/sys-apps/dbus/dbus-1.2.12.ebuild	2009-04-23 08:06:50.000000000 +0200
++++ ./sys-apps/dbus/dbus-1.2.12.ebuild	2010-04-03 17:47:11.000000000 +0200
+@@ -23,16 +23,13 @@
+ 	doc? (	app-doc/doxygen
+ 		app-text/xmlto )"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	# Tests were restricted because of this
+ 	sed -e 's/.*bus_dispatch_test.*/printf ("Disabled due to excess noise\\n");/' \
+ 		-e '/"dispatch"/d' -i "${S}/bus/test-main.c"
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	# so we can get backtraces from apps
+ 	append-flags -rdynamic
+ 
+@@ -61,8 +58,6 @@
+ 	# after the compile, it uses a selinuxfs interface to
+ 	# check if the SELinux policy has the right support
+ 	use selinux && addwrite /selinux/access
+-
+-	emake || die "make failed"
+ }
+ 
+ src_test() {

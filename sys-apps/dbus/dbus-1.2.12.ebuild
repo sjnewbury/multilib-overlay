@@ -15,8 +15,8 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="debug doc selinux test X"
 
-RDEPEND="X? ( x11-libs/libXt x11-libs/libX11[lib32?] )
-	selinux? ( sys-libs/libselinux
+RDEPEND="X? ( x11-libs/libXt[lib32?] x11-libs/libX11[lib32?] )
+	selinux? ( sys-libs/libselinux[lib32?]
 				sec-policy/selinux-dbus )
 	>=dev-libs/expat-1.95.8[lib32?]
 	!<sys-apps/dbus-0.91"
@@ -31,7 +31,7 @@ multilib-native_src_prepare_internal() {
 		-e '/"dispatch"/d' -i "${S}/bus/test-main.c"
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# so we can get backtraces from apps
 	append-flags -rdynamic
 
@@ -60,8 +60,6 @@ multilib-native_src_compile_internal() {
 	# after the compile, it uses a selinuxfs interface to
 	# check if the SELinux policy has the right support
 	use selinux && addwrite /selinux/access
-
-	emake || die "make failed"
 }
 
 src_test() {
@@ -99,12 +97,12 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	enewgroup messagebus
 	enewuser messagebus -1 "-1" -1 messagebus
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "To start the D-Bus system-wide messagebus by default"
 	elog "you should add it to the default runlevel :"
 	elog "\`rc-update add dbus default\`"

@@ -56,3 +56,4 @@ sys-libs/ncurses/files/ncurses-5.7-ldflags-multilib-overlay.patch # patch of mul
 sys-devel/libperl/files/libperl-5.8.8-lib32.patch # patch of multilib overlay
 media-libs/mesa/mesa-9999.ebuild # x11
 media-libs/fontconfig/fontconfig-9999.ebuild # x11
+sys-apps/dbus/dbus-9999.ebuild 

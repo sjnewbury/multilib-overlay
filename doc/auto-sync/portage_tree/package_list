@@ -269,7 +269,7 @@ net-misc/openssh
 # sys-apps/abi-wrapper
 sys-apps/acl
 # sys-apps/attr
-# sys-apps/dbus
+sys-apps/dbus
 sys-apps/file
 sys-apps/hal
 sys-apps/keyutils
