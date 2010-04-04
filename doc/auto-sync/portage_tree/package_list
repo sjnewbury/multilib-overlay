@@ -234,7 +234,7 @@ media-libs/tiff
 # media-sound/musepack-tools
 media-sound/phonon
 # media-sound/pulseaudio
-# media-sound/wavpack
+media-sound/wavpack
 media-video/dirac
 media-video/ffmpeg
 media-video/vcdimager
