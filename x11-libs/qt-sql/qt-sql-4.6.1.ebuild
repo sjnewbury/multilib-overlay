@@ -14,7 +14,7 @@ DEPEND="~x11-libs/qt-core-${PV}[aqua=,debug=,qt3support=,lib32?]
 	firebird? ( dev-db/firebird )
 	mysql? ( virtual/mysql[lib32?] )
 	odbc? ( dev-db/unixODBC[lib32?] )
-	postgres? ( virtual/postgresql-base )
+	postgres? ( virtual/postgresql-base[lib32?] )
 	sqlite? ( dev-db/sqlite:3[lib32?] )"
 RDEPEND="${DEPEND}"
 
