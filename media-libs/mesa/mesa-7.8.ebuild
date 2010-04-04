@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.8.ebuild,v 1.1 2010/03/29 14:57:56 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.8.ebuild,v 1.2 2010/04/03 17:15:50 chithanh Exp $
 
 EAPI=3
 
@@ -49,7 +49,7 @@ RDEPEND="
 	!<=x11-proto/xf86driproto-2.0.3
 	>=app-admin/eselect-opengl-1.1.1-r2
 	dev-libs/expat[lib32?]
-	>=x11-libs/libdrm-2.4.17[lib32?]
+	>=x11-libs/libdrm-2.4.19[lib32?]
 	x11-libs/libICE[lib32?]
 	x11-libs/libX11[xcb?,lib32?]
 	x11-libs/libXdamage[lib32?]
