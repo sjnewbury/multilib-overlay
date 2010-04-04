@@ -1,0 +1,68 @@
+# Copyright 1999-2010 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/talloc/talloc-2.0.1-r1.ebuild,v 1.1 2010/04/03 19:26:15 dev-zero Exp $
+
+EAPI="2"
+
+inherit eutils autotools multilib-native
+
+DESCRIPTION="Samba talloc library"
+HOMEPAGE="http://talloc.samba.org/"
+SRC_URI="http://samba.org/ftp/${PN}/${P}.tar.gz"
+
+LICENSE="GPL-3"
+SLOT="0"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
+IUSE="compat doc static-libs swig"
+
+RDEPEND=""
+DEPEND="doc? ( app-text/docbook-xml-dtd:4.2
+		dev-libs/libxslt[lib32?] )
+	swig? ( dev-lang/swig )
+	!<net-fs/samba-libs-3.4
+	!<net-fs/samba-3.3"
+
+multilib-native_src_prepare_internal() {
+	epatch "${FILESDIR}/${PN}-2.0.0-without-doc.patch"
+
+	eautoconf -Ilibreplace
+
+	sed -i \
+		-e 's:$(SHLD_FLAGS) :$(SHLD_FLAGS) $(LDFLAGS) :' \
+		Makefile.in
+}
+
+multilib-native_src_configure_internal() {
+	if ! use swig ; then
+		sed -i \
+			-e '/swig/d' \
+			talloc.mk || die "sed failed"
+	fi
+
+	if ! use static-libs ; then
+		sed -i \
+			-e 's|:: $(TALLOC_STLIB)|::|' \
+			-e '/$(TALLOC_STLIB) /d' \
+			-e '/libtalloc.a/d' \
+			talloc.mk Makefile.in || die "sed failed"
+	fi
+
+	econf \
+		--sysconfdir=/etc/samba \
+		--localstatedir=/var \
+		$(use_enable compat talloc-compat1) \
+		$(use_with doc)
+}
+
+multilib-native_src_compile_internal() {
+	emake shared-build || die "emake shared-build failed"
+}
+
+multilib-native_src_install_internal() {
+	emake DESTDIR="${D}" install || die "emake install failed"
+
+	use doc && dohtml *.html
+
+	# installs missing symlink
+	dolib.so sharedbuild/lib/libtalloc.so
+}
