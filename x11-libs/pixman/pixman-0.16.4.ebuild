@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/pixman/pixman-0.16.4.ebuild,v 1.1 2010/01/22 09:24:07 scarabeus Exp $
 
+EAPI="2"
+
 # Must be before x-modular eclass is inherited
 #SNAPSHOT="yes"
 

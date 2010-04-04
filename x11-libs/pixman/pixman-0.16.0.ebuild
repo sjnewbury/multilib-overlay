@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/pixman/pixman-0.16.0.ebuild,v 1.7 2009/12/15 16:24:24 armin76 Exp $
 
+EAPI="2"
+
 # Must be before x-modular eclass is inherited
 #SNAPSHOT="yes"
 
@@ -43,10 +45,7 @@ multilib-native_pkg_setup_internal() {
 	esac
 }
 
-multilib-native_src_unpack_internal() {
-	x-modular_src_unpack
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/pixman-0.12.0-sse.patch
 
 	eautoreconf
