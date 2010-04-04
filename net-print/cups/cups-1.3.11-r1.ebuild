@@ -55,8 +55,8 @@ RDEPEND="${COMMON_DEPEND}
 	X? ( x11-misc/xdg-utils )
 "
 PDEPEND="
-	app-text/ghostscript-gpl[lib32?]
-	>=app-text/poppler-0.12.3-r3[utils,lib32?]
+	app-text/ghostscript-gpl
+	>=app-text/poppler-0.12.3-r3[utils]
 	ppds? (
 		|| (
 			(
@@ -71,7 +71,7 @@ PDEPEND="
 			net-print/cups-pdf
 		)
 	)
-	samba? ( >=net-fs/samba-3.0.8[lib32?] )
+	samba? ( >=net-fs/samba-3.0.8 )
 "
 
 PROVIDE="virtual/lpr"

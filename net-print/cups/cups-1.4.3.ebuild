@@ -53,8 +53,8 @@ RDEPEND="${COMMON_DEPEND}
 	X? ( x11-misc/xdg-utils )
 "
 PDEPEND="
-	app-text/ghostscript-gpl[cups,lib32?]
-	>=app-text/poppler-0.12.3-r3[utils,lib32?]
+	app-text/ghostscript-gpl[cups]
+	>=app-text/poppler-0.12.3-r3[utils]
 "
 
 PROVIDE="virtual/lpr"
