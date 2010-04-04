@@ -19,7 +19,6 @@ RDEPEND=">=dev-libs/libdaemon-0.11-r1[lib32?]
 	dev-libs/expat[lib32?]
 	>=dev-libs/glib-2[lib32?]
 	gdbm? ( sys-libs/gdbm[lib32?] )
-	qt3? ( x11-libs/qt:3[lib32?] )
 	qt4? ( x11-libs/qt-core:4[lib32?] )
 	gtk? (
 		>=x11-libs/gtk+-2.4.0[lib32?]
@@ -48,19 +47,19 @@ RDEPEND=">=dev-libs/libdaemon-0.11-r1[lib32?]
 		gtk? ( >=dev-python/pygtk-2[lib32?] )
 	)
 	bookmarks? (
-		dev-python/twisted[lib32?]
-		dev-python/twisted-web[lib32?]
+		dev-python/twisted
+		dev-python/twisted-web
 	)
 	kernel_linux? ( sys-libs/libcap[lib32?] )"
 DEPEND="${RDEPEND}
-	>=dev-util/intltool-0.35
+	>=dev-util/intltool-0.40.5
 	>=dev-util/pkgconfig-0.9.0[lib32?]
 	doc? (
 		app-doc/doxygen
 		mono? ( >=virtual/monodoc-1.1.8 )
 	)"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if use python && ! built_with_use dev-lang/python gdbm
 	then
 		die "For python support you need dev-lang/python compiled with gdbm support!"
@@ -87,7 +86,7 @@ pkg_setup() {
 	fi
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	enewgroup netdev
 	enewgroup avahi
 	enewuser avahi -1 -1 -1 avahi
@@ -187,11 +186,11 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	use python && python_mod_cleanup
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	if use python; then
 		python_version
 		python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages/avahi

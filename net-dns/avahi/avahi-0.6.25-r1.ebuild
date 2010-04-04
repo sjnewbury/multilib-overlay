@@ -19,7 +19,6 @@ RDEPEND=">=dev-libs/libdaemon-0.11-r1[lib32?]
 	dev-libs/expat[lib32?]
 	>=dev-libs/glib-2[lib32?]
 	gdbm? ( sys-libs/gdbm[lib32?] )
-	qt3? ( x11-libs/qt:3[lib32?] )
 	qt4? ( x11-libs/qt-core:4[lib32?] )
 	gtk? (
 		>=x11-libs/gtk+-2.4.0[lib32?]
@@ -27,7 +26,7 @@ RDEPEND=">=dev-libs/libdaemon-0.11-r1[lib32?]
 	)
 	dbus? (
 		>=sys-apps/dbus-0.30[lib32?]
-		python? ( dev-python/dbus-python )
+		python? ( dev-python/dbus-python[lib32?] )
 	)
 	mono? (
 		>=dev-lang/mono-1.1.10
@@ -36,23 +35,23 @@ RDEPEND=">=dev-libs/libdaemon-0.11-r1[lib32?]
 	howl-compat? ( !net-misc/howl )
 	mdnsresponder-compat? ( !net-misc/mDNSResponder )
 	python? (
-		>=dev-lang/python-2.4[gdbm]
+		>=dev-lang/python-2.4[gdbm,lib32?]
 		gtk? ( >=dev-python/pygtk-2[lib32?] )
 	)
 	bookmarks? (
-		dev-python/twisted[lib32?]
-		dev-python/twisted-web[lib32?]
+		dev-python/twisted
+		dev-python/twisted-web
 	)
 	kernel_linux? ( sys-libs/libcap[lib32?] )"
 DEPEND="${RDEPEND}
-	>=dev-util/intltool-0.35
+	>=dev-util/intltool-0.40.5
 	>=dev-util/pkgconfig-0.9.0[lib32?]
 	doc? (
 		app-doc/doxygen
 		mono? ( >=virtual/monodoc-1.1.8 )
 	)"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if ( use mdnsresponder-compat || use howl-compat || use mono ) && ! use dbus
 	then
 		die "For *-compat or mono support you also need to enable the dbus USE flag!"
@@ -69,7 +68,7 @@ pkg_setup() {
 	fi
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	enewgroup netdev
 	enewgroup avahi
 	enewuser avahi -1 -1 -1 avahi
@@ -169,11 +168,11 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	use python && python_mod_cleanup
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	if use python; then
 		python_version
 		python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages/avahi

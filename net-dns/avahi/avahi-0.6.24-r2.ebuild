@@ -44,7 +44,7 @@ RDEPEND=">=dev-libs/libdaemon-0.11-r1[lib32?]
 	mdnsresponder-compat? ( !net-misc/mDNSResponder )
 	python? (
 		>=virtual/python-2.4
-		gtk? ( >=dev-python/pygtk-2 )
+		gtk? ( >=dev-python/pygtk-2[lib32?] )
 	)
 	bookmarks? (
 		dev-python/twisted
@@ -52,14 +52,14 @@ RDEPEND=">=dev-libs/libdaemon-0.11-r1[lib32?]
 	)
 	kernel_linux? ( sys-libs/libcap[lib32?] )"
 DEPEND="${RDEPEND}
-	>=dev-util/intltool-0.35
+	>=dev-util/intltool-0.40.5
 	>=dev-util/pkgconfig-0.9.0[lib32?]
 	doc? (
 		app-doc/doxygen
 		mono? ( >=virtual/monodoc-1.1.8 )
 	)"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if use python && ! built_with_use dev-lang/python gdbm
 	then
 		die "For python support you need dev-lang/python compiled with gdbm support!"
@@ -86,7 +86,7 @@ pkg_setup() {
 	fi
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	enewgroup netdev
 	enewgroup avahi
 	enewuser avahi -1 -1 -1 avahi
@@ -113,6 +113,8 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
+	use sh && replace-flags -O? -O0
+
 	local myconf=""
 
 	if use python
@@ -146,7 +148,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable dbus) \
 		$(use_enable python) \
 		$(use_enable gtk) \
-		$(use_enable qt3) \
+		--disable-qt3 \
 		$(use_enable qt4) \
 		$(use_enable gdbm) \
 		${myconf} \
@@ -154,7 +156,6 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_compile_internal() {
-	use sh && replace-flags -O? -O0
 	emake || die "emake failed"
 
 	use doc && emake avahi.devhelp
@@ -186,11 +187,11 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	use python && python_mod_cleanup
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	if use python; then
 		python_version
 		python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages/avahi

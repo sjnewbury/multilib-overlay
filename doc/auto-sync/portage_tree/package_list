@@ -238,7 +238,7 @@ media-sound/phonon
 # media-video/dirac
 # media-video/ffmpeg
 # media-video/vcdimager
-# net-dns/avahi
+net-dns/avahi
 net-dns/c-ares
 net-dns/libidn
 net-fs/samba
