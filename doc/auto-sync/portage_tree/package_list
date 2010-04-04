@@ -226,7 +226,7 @@ media-libs/tiff
 # media-libs/xine-lib
 # media-libs/xvid
 # media-plugins/alsa-plugins
-# media-sound/esound
+media-sound/esound
 media-sound/gsm
 media-sound/jack-audio-connection-kit
 media-sound/lame
