@@ -54,6 +54,8 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
+	cd "${S}/source"
+
 	# Ok, agreed, this is ugly. But it avoids a patch we
 	# need for every samba version and we don't need autotools
 	sed -i \

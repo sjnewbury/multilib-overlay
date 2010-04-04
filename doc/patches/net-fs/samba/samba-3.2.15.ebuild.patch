@@ -1,18 +1,16 @@
 --- /usr/portage/net-fs/samba/samba-3.2.15.ebuild	2009-10-02 15:54:19.000000000 +0200
-+++ ./net-fs/samba/samba-3.2.15.ebuild	2010-04-04 00:18:28.000000000 +0200
-@@ -51,10 +51,7 @@
++++ ./net-fs/samba/samba-3.2.15.ebuild	2010-04-04 14:20:22.000000000 +0200
+@@ -51,8 +51,7 @@
  	confutils_use_depend_all cifsupcall ads
  }
  
 -src_unpack() {
 -	unpack ${A}
--	cd "${S}/source"
--
 +src_prepare() {
+ 	cd "${S}/source"
+ 
  	# Ok, agreed, this is ugly. But it avoids a patch we
- 	# need for every samba version and we don't need autotools
- 	sed -i \
-@@ -69,7 +66,7 @@
+@@ -69,7 +68,7 @@
  		"${S}/source/script/tests/selftest.sh" || die "sed failed"
  }
  
@@ -21,7 +19,7 @@
  	cd "${S}/source"
  
  	local myconf
-@@ -131,10 +128,13 @@
+@@ -131,10 +130,13 @@
  		$(use_with syslog) \
  		$(use_with winbind) \
  		${myconf} ${mylangs} ${mymod_shared} || die "econf failed"

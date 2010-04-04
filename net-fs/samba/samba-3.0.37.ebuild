@@ -49,6 +49,8 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
+	cd "${S}/source"
+
 	# lazyldflags.patch: adds "-Wl,-z,now" to smb{mnt,umount}
 	# invalid-free-fix.patch: Bug #196015 (upstream: #5021)
 
