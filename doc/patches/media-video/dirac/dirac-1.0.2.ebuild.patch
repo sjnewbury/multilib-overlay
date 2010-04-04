@@ -1,0 +1,29 @@
+--- /usr/portage/media-video/dirac/dirac-1.0.2.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./media-video/dirac/dirac-1.0.2.ebuild	2010-04-04 14:45:23.000000000 +0200
+@@ -24,22 +24,21 @@
+ 		)"
+ RDEPEND=""
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	epatch "${FILESDIR}/${PN}-0.5.2-doc.patch"
+ 
+ 	AT_M4DIR="m4" eautoreconf
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	econf \
+ 		$(use_enable mmx) \
+ 		$(use_enable debug) \
+ 		$(use_enable doc) \
+ 		|| die "econf failed"
++}
+ 
++src_compile() {
+ 	VARTEXFONTS="${T}/fonts" emake || die "emake failed"
+ }
+ 
