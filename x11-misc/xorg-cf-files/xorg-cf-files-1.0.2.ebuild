@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-misc/xorg-cf-files/xorg-cf-files-1.0.2.ebuild,v 1.10 2009/05/05 17:42:16 ssuominen Exp $
 
+EAPI="2"
+
 # Must be before x-modular eclass is inherited
 # SNAPSHOT="yes"
 
