@@ -4,6 +4,8 @@
 
 EAPI=2
 
+inherit multilib-native
+
 DESCRIPTION="GNU VCDimager"
 HOMEPAGE="http://www.vcdimager.org/"
 SRC_URI="http://www.vcdimager.org/pub/vcdimager/vcdimager-0.7/${P}.tar.gz"
@@ -14,7 +16,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="xml minimal"
 
 RDEPEND=">=dev-libs/libcdio-0.71[-minimal,lib32?]
-	!minimal? ( dev-libs/popt )
+	!minimal? ( dev-libs/popt[lib32?] )
 	xml? ( >=dev-libs/libxml2-2.5.11[lib32?] )"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]"

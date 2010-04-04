@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/vcdimager/vcdimager-0.7.23.ebuild,v 1.16 2006/10/20 21:52:43 kloeri Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit eutils libtool multilib-native
 
