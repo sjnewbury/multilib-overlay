@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.19.ebuild,v 1.8 2009/12/10 23:02:03 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.19.ebuild,v 1.10 2010/01/16 13:43:05 klausman Exp $
 
 EAPI=2
 
@@ -18,7 +18,7 @@ S="${WORKDIR}/${P/_rc/-test}"
 
 LICENSE="LGPL-2 GPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ppc ppc64 ~sh ~sparc x86"
+KEYWORDS="alpha amd64 ~arm hppa ~ia64 ppc ppc64 ~sh ~sparc x86"
 IUSE="+alsa avahi +caps jack lirc oss tcpd X hal dbus libsamplerate gnome bluetooth +asyncns +glib test doc +udev ipv6"
 
 RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib32?] x11-libs/libXtst[lib32?] )
@@ -34,20 +34,20 @@ RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib
 	dbus? ( >=sys-apps/dbus-1.0.0[lib32?] )
 	gnome? ( >=gnome-base/gconf-2.4.0[lib32?] )
 	hal? (
-		>=sys-apps/hal-0.5.7[lib32?]
+		>=sys-apps/hal-0.5.11[lib32?]
 		>=sys-apps/dbus-1.0.0[lib32?]
 	)
 	app-admin/eselect-esd
 	bluetooth? (
 		|| ( >=net-wireless/bluez-4[lib32?]
-			 >=net-wireless/bluez-libs-3[lib32?] )
+			 >=net-wireless/bluez-libs-3 )
 		>=sys-apps/dbus-1.0.0[lib32?]
 	)
 	asyncns? ( net-libs/libasyncns[lib32?] )
 	udev? ( >=sys-fs/udev-143[extras,lib32?] )
 	>=media-libs/audiofile-0.2.6-r1[lib32?]
 	>=media-libs/speex-1.2_beta[lib32?]
-	>=media-libs/libsndfile-1.0.10[lib32?]
+	>=media-libs/libsndfile-1.0.20[lib32?]
 	>=dev-libs/liboil-0.3.6[lib32?]
 	sys-libs/gdbm[lib32?]
 	>=sys-devel/libtool-2.2.4[lib32?]" # it's a valid RDEPEND, libltdl.so is used
@@ -56,7 +56,7 @@ DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )
 	X? (
 		x11-proto/xproto
-		|| ( >=x11-libs/libXtst-1.0.99.2[lib32?] <x11-proto/xextproto-7.0.99[lib32?] )
+		|| ( >=x11-libs/libXtst-1.0.99.2[lib32?] <x11-proto/xextproto-7.0.99 )
 	)
 	dev-libs/libatomic_ops[lib32?]
 	dev-util/pkgconfig[lib32?]
@@ -156,7 +156,7 @@ multilib-native_src_install_internal() {
 	find "${D}" -name '*.la' -delete
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "If you want to make use of realtime capabilities of PulseAudio"
 	elog "you should follow the realtime guide to create and set up a realtime"
 	elog "user group: http://www.gentoo.org/proj/en/desktop/sound/realtime.xml"

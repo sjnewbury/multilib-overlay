@@ -22,7 +22,7 @@ KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86"
 IUSE="+alsa avahi +caps jack lirc oss tcpd X hal dbus libsamplerate gnome bluetooth +asyncns +glib test"
 
 RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib32?] x11-libs/libXtst[lib32?] )
-	caps? ( sys-libs/libcap[lib32] )
+	caps? ( sys-libs/libcap[lib32?] )
 	libsamplerate? ( >=media-libs/libsamplerate-0.1.1-r1[lib32?] )
 	alsa? ( >=media-libs/alsa-lib-1.0.19[lib32?] )
 	glib? ( >=dev-libs/glib-2.4.0[lib32?] )
@@ -40,7 +40,7 @@ RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib
 	app-admin/eselect-esd
 	bluetooth? (
 		|| ( >=net-wireless/bluez-4[lib32?]
-			 >=net-wireless/bluez-libs-3[lib32?] )
+			 >=net-wireless/bluez-libs-3 )
 		>=sys-apps/dbus-1.0.0[lib32?]
 	)
 	asyncns? ( net-libs/libasyncns[lib32?] )
@@ -60,7 +60,7 @@ DEPEND="${RDEPEND}
 RDEPEND="${RDEPEND}
 	gnome-extra/gnome-audio"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	enewgroup audio 18 # Just make sure it exists
 	enewgroup realtime
 	enewgroup pulse-access
@@ -130,7 +130,7 @@ multilib-native_src_install_internal() {
 	find "${D}" -name '*.la' -delete
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "If you want to make use of realtime capabilities of PulseAudio"
 	elog "you should follow the realtime guide to create and set up a realtime"
 	elog "user group: http://www.gentoo.org/proj/en/desktop/sound/realtime.xml"

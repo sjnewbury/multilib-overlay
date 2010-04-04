@@ -40,7 +40,7 @@ RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib
 	app-admin/eselect-esd
 	bluetooth? (
 		|| ( >=net-wireless/bluez-4[lib32?]
-			 >=net-wireless/bluez-libs-3[lib32?] )
+			 >=net-wireless/bluez-libs-3 )
 		>=sys-apps/dbus-1.0.0[lib32?]
 	)
 	asyncns? ( net-libs/libasyncns[lib32?] )
@@ -56,7 +56,7 @@ DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )
 	X? (
 		x11-proto/xproto
-		|| ( >=x11-libs/libXtst-1.0.99.2[lib32?] <x11-proto/xextproto-7.0.99[lib32?] )
+		|| ( >=x11-libs/libXtst-1.0.99.2[lib32?] <x11-proto/xextproto-7.0.99 )
 	)
 	dev-libs/libatomic_ops[lib32?]
 	dev-util/pkgconfig[lib32?]
@@ -157,7 +157,7 @@ multilib-native_src_install_internal() {
 	find "${D}" -name '*.la' -delete
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "If you want to make use of realtime capabilities of PulseAudio"
 	elog "you should follow the realtime guide to create and set up a realtime"
 	elog "user group: http://www.gentoo.org/proj/en/desktop/sound/realtime.xml"

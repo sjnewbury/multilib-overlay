@@ -1,14 +1,19 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.21-r50.ebuild,v 1.1 2009/11/23 12:27:28 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.21.2.ebuild,v 1.1 2010/03/07 17:15:27 flameeyes Exp $
 
 EAPI=2
 
-inherit eutils libtool flag-o-matic multilib-native
+inherit eutils libtool flag-o-matic versionator multilib-native
 
 DESCRIPTION="A networked sound server with an advanced plugin system"
 HOMEPAGE="http://www.pulseaudio.org/"
-if [[ ${PV/_rc/} == ${PV} ]]; then
+
+if [[ $(get_version_component_count) == 4 ]]; then
+	# Lennart does not produce point-releases, but I do so get them
+	# from my website instead.
+	SRC_URI="http://www.flameeyes.eu/gentoo-distfiles/${P}.tar.gz"
+elif [[ ${PV/_rc/} == ${PV} ]]; then
 	SRC_URI="http://0pointer.de/lennart/projects/${PN}/${P}.tar.gz"
 else
 	SRC_URI="http://0pointer.de/public/${P/_rc/-test}.tar.gz"
@@ -19,7 +24,7 @@ S="${WORKDIR}/${P/_rc/-test}"
 LICENSE="LGPL-2 GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
-IUSE="+alsa avahi +caps jack lirc oss tcpd +X hal dbus libsamplerate gnome bluetooth +asyncns +glib test doc +udev ipv6"
+IUSE="+alsa avahi +caps jack lirc oss tcpd +X hal dbus libsamplerate gnome bluetooth +asyncns +glib test doc +udev ipv6 system-wide"
 
 RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib32?] x11-libs/libXtst[lib32?] )
 	caps? ( sys-libs/libcap[lib32?] )
@@ -40,7 +45,7 @@ RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib
 	app-admin/eselect-esd
 	bluetooth? (
 		|| ( >=net-wireless/bluez-4[lib32?]
-			 >=net-wireless/bluez-libs-3[lib32?] )
+			 >=net-wireless/bluez-libs-3 )
 		>=sys-apps/dbus-1.0.0[lib32?]
 	)
 	asyncns? ( net-libs/libasyncns[lib32?] )
@@ -56,22 +61,24 @@ DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )
 	X? (
 		x11-proto/xproto
-		|| ( >=x11-libs/libXtst-1.0.99.2[lib32?] <x11-proto/xextproto-7.0.99[lib32?] )
+		|| ( >=x11-libs/libXtst-1.0.99.2[lib32?] <x11-proto/xextproto-7.0.99 )
 	)
 	dev-libs/libatomic_ops[lib32?]
 	dev-util/pkgconfig[lib32?]
-	|| ( dev-util/unifdef sys-freebsd/freebsd-ubin )
+	system-wide? ( || ( dev-util/unifdef sys-freebsd/freebsd-ubin ) )
 	dev-util/intltool"
 
 # alsa-utils dep is for the alsasound init.d script (see bug #155707)
 # bluez-utils dep is for the bluetooth init.d script
 RDEPEND="${RDEPEND}
-	sys-apps/openrc
 	gnome-extra/gnome-audio
-	alsa? ( media-sound/alsa-utils )
-	bluetooth? (
-	|| ( >=net-wireless/bluez-4
-		 >=net-wireless/bluez-utils-3 ) )"
+	system-wide? (
+		sys-apps/openrc
+		alsa? ( media-sound/alsa-utils )
+		bluetooth? (
+		|| ( >=net-wireless/bluez-4[lib32?]
+			 >=net-wireless/bluez-utils-3 ) )
+	)"
 
 multilib-native_pkg_setup_internal() {
 	enewgroup audio 18 # Just make sure it exists
@@ -143,23 +150,25 @@ multilib-native_src_install_internal() {
 	# Drop the script entirely if X is disabled
 	use X || rm "${D}"/usr/bin/start-pulseaudio-x11
 
-	newconfd "${FILESDIR}/pulseaudio.conf.d" pulseaudio
+	if use system-wide; then
+		newconfd "${FILESDIR}/pulseaudio.conf.d" pulseaudio
 
-	use_define() {
-		local define=${2:-$(echo $1 | tr '[:lower:]' '[:upper:]')}
+		use_define() {
+			local define=${2:-$(echo $1 | tr '[:lower:]' '[:upper:]')}
 
-		use "$1" && echo "-D$define" || echo "-U$define"
-	}
+			use "$1" && echo "-D$define" || echo "-U$define"
+		}
 
-	unifdef $(use_define hal) \
-		$(use_define avahi) \
-		$(use_define alsa) \
-		$(use_define bluetooth) \
-		$(use_define udev) \
-		"${FILESDIR}/pulseaudio.init.d-4" \
-		> "${T}/pulseaudio"
+		unifdef $(use_define hal) \
+			$(use_define avahi) \
+			$(use_define alsa) \
+			$(use_define bluetooth) \
+			$(use_define udev) \
+			"${FILESDIR}/pulseaudio.init.d-4" \
+			> "${T}/pulseaudio"
 
-	doinitd "${T}/pulseaudio"
+		doinitd "${T}/pulseaudio"
+	fi
 
 	use avahi && sed -i -e '/module-zeroconf-publish/s:^#::' "${D}/etc/pulse/default.pa"
 
@@ -182,27 +191,29 @@ multilib-native_src_install_internal() {
 	find "${D}" -name '*.la' -delete
 }
 
-pkg_postinst() {
-	elog "PulseAudio in Gentoo can use a system-wide pulseaudio daemon."
-	elog "This support is enabled by starting the pulseaudio init.d ."
-	elog "To be able to access that you need to be in the group pulse-access."
-	elog "If you choose to use this feature, please make sure that you"
-	elog "really want to run PulseAudio this way:"
-	elog "   http://pulseaudio.org/wiki/WhatIsWrongWithSystemMode"
-	elog "For more information about system-wide support, please refer to:"
-	elog "	 http://pulseaudio.org/wiki/SystemWideInstance"
-	if use gnome; then
+multilib-native_pkg_postinst_internal() {
+	if use system-wide; then
+		elog "PulseAudio in Gentoo can use a system-wide pulseaudio daemon."
+		elog "This support is enabled by starting the pulseaudio init.d ."
+		elog "To be able to access that you need to be in the group pulse-access."
+		elog "If you choose to use this feature, please make sure that you"
+		elog "really want to run PulseAudio this way:"
+		elog "   http://pulseaudio.org/wiki/WhatIsWrongWithSystemMode"
+		elog "For more information about system-wide support, please refer to:"
+		elog "	 http://pulseaudio.org/wiki/SystemWideInstance"
+		if use gnome ; then
+			elog
+			elog "By enabling gnome USE flag, you enabled gconf support. Please note"
+			elog "that you might need to remove the gnome USE flag or disable the"
+			elog "gconf module on /etc/pulse/system.pa to be able to use PulseAudio"
+			elog "with a system-wide instance."
+		fi
 		elog
-		elog "By enabling gnome USE flag, you enabled gconf support. Please note"
-		elog "that you might need to remove the gnome USE flag or disable the"
-		elog "gconf module on /etc/pulse/system.pa to be able to use PulseAudio"
-		elog "with a system-wide instance."
+		elog "To use the ESounD wrapper while using a system-wide daemon, you also"
+		elog "need to enable auth-anonymous for the esound-unix module, or to copy"
+		elog "/var/run/pulse/.esd_auth into each home directory."
+		elog
 	fi
-	elog
-	elog "To use the ESounD wrapper while using a system-wide daemon, you also"
-	elog "need to enable auth-anonymous for the esound-unix module, or to copy"
-	elog "/var/run/pulse/.esd_auth into each home directory."
-	elog
 	if use bluetooth; then
 		elog
 		elog "The BlueTooth proximity module is not enabled in the default"

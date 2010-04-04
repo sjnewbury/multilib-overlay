@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.21.1.ebuild,v 1.1 2010/01/18 01:59:33 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.21.1.ebuild,v 1.6 2010/03/09 21:34:49 ranger Exp $
 
 EAPI=2
 
@@ -23,7 +23,7 @@ S="${WORKDIR}/${P/_rc/-test}"
 
 LICENSE="LGPL-2 GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
+KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ppc ppc64 ~sh ~sparc x86"
 IUSE="+alsa avahi +caps jack lirc oss tcpd +X hal dbus libsamplerate gnome bluetooth +asyncns +glib test doc +udev ipv6 system-wide"
 
 RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib32?] x11-libs/libXtst[lib32?] )
@@ -45,7 +45,7 @@ RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib
 	app-admin/eselect-esd
 	bluetooth? (
 		|| ( >=net-wireless/bluez-4[lib32?]
-			 >=net-wireless/bluez-libs-3[lib32?] )
+			 >=net-wireless/bluez-libs-3 )
 		>=sys-apps/dbus-1.0.0[lib32?]
 	)
 	asyncns? ( net-libs/libasyncns[lib32?] )
@@ -65,7 +65,7 @@ DEPEND="${RDEPEND}
 	)
 	dev-libs/libatomic_ops[lib32?]
 	dev-util/pkgconfig[lib32?]
-	|| ( dev-util/unifdef sys-freebsd/freebsd-ubin )
+	system-wide? ( || ( dev-util/unifdef sys-freebsd/freebsd-ubin ) )
 	dev-util/intltool"
 
 # alsa-utils dep is for the alsasound init.d script (see bug #155707)
@@ -76,7 +76,7 @@ RDEPEND="${RDEPEND}
 		sys-apps/openrc
 		alsa? ( media-sound/alsa-utils )
 		bluetooth? (
-		|| ( >=net-wireless/bluez-4
+		|| ( >=net-wireless/bluez-4[lib32?]
 			 >=net-wireless/bluez-utils-3 ) )
 	)"
 
@@ -191,7 +191,7 @@ multilib-native_src_install_internal() {
 	find "${D}" -name '*.la' -delete
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	if use system-wide; then
 		elog "PulseAudio in Gentoo can use a system-wide pulseaudio daemon."
 		elog "This support is enabled by starting the pulseaudio init.d ."
