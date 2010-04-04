@@ -16,7 +16,7 @@ RDEPEND="sys-libs/zlib[lib32?]
 	!<x11-libs/qt-4.4.0:4"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]"
-PDEPEND="qt3support? ( ~x11-libs/qt-gui-${PV}[aqua=,qt3support,lib32?] )"
+PDEPEND="qt3support? ( ~x11-libs/qt-gui-${PV}[aqua=,qt3support] )"
 
 PATCHES=(
 	"${FILESDIR}/qt-4.6-nolibx11.patch"
