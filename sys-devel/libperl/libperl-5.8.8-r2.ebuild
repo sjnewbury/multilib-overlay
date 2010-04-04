@@ -90,7 +90,7 @@ RDEPEND="
 	berkdb? ( sys-libs/db[lib32?] )
 	gdbm? ( >=sys-libs/gdbm-1.8.0[lib32?] )"
 
-PDEPEND="~dev-lang/perl-${PV}[lib32?]"
+PDEPEND="~dev-lang/perl-${PV}"
 
 multilib-native_pkg_setup_internal() {
 	# I think this should rather be displayed if you *have* 'ithreads'
