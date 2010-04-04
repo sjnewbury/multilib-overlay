@@ -86,7 +86,7 @@ DEPEND="${RDEPEND}
 	x11-proto/xf86vidmodeproto
 "
 # glew depend on mesa and it is needed in runtime
-PDEPEND=">=media-libs/glew-1.5.1[lib32?]"
+PDEPEND=">=media-libs/glew-1.5.1"
 
 S="${WORKDIR}/${MY_P}"
 
