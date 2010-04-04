@@ -230,7 +230,7 @@ media-libs/tiff
 # media-sound/gsm
 # media-sound/jack-audio-connection-kit
 # media-sound/lame
-# media-sound/mpg123
+media-sound/mpg123
 media-sound/musepack-tools
 media-sound/phonon
 media-sound/pulseaudio
