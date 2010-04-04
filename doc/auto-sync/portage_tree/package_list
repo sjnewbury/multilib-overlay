@@ -114,7 +114,7 @@ dev-python/dbus-python
 # dev-python/pyrex
 dev-util/cppunit
 # dev-util/pkgconfig
-# games-emulation/zsnes
+# games-emulation/zsnes   32 bit programm
 gnome-base/gail
 # gnome-base/gconf
 # gnome-base/gnome-desktop
@@ -277,7 +277,7 @@ sys-apps/tcp-wrappers
 sys-apps/util-linux
 sys-auth/nss_ldap
 sys-auth/policykit
-# sys-auth/polkit
+sys-auth/polkit
 sys-devel/flex
 sys-devel/gettext
 sys-devel/libperl

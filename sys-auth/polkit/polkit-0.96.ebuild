@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-auth/polkit/polkit-0.96.ebuild,v 1.1 2010/01/23 17:53:44 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-auth/polkit/polkit-0.96.ebuild,v 1.6 2010/03/25 14:50:22 nirbheek Exp $
 
 EAPI="2"
 
@@ -8,33 +8,41 @@ inherit autotools eutils multilib pam multilib-native
 
 DESCRIPTION="Policy framework for controlling privileges for system-wide services"
 HOMEPAGE="http://hal.freedesktop.org/docs/PolicyKit"
-SRC_URI="http://hal.freedesktop.org/releases/${P}.tar.gz"
+SRC_URI="http://hal.freedesktop.org/releases/${P}.tar.gz
+!pam? ( mirror://gentoo/${P}-shadow-support.patch.bz2 )"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~hppa ~x86"
-IUSE="debug doc examples expat nls introspection"
-# building w/o pam is broken, bug 291116
-# pam
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+IUSE="debug doc examples expat nls pam introspection"
 
-# not mature enough
 RDEPEND=">=dev-libs/glib-2.21.4[lib32?]
 	>=dev-libs/eggdbus-0.6[lib32?]
-	virtual/pam[lib32?]
+	pam? ( virtual/pam[lib32?] )
 	expat? ( dev-libs/expat[lib32?] )
-	introspection? ( dev-libs/gobject-introspection )"
+	introspection? ( dev-libs/gobject-introspection[lib32?] )"
 DEPEND="${RDEPEND}
 	!!>=sys-auth/policykit-0.92
 	dev-libs/libxslt[lib32?]
 	app-text/docbook-xsl-stylesheets
 	>=dev-util/pkgconfig-0.18[lib32?]
 	>=dev-util/intltool-0.36
-	dev-util/gtk-doc-am
-	doc? ( >=dev-util/gtk-doc-1.10 )"
+	>=dev-util/gtk-doc-am-1.13
+	doc? ( >=dev-util/gtk-doc-1.13 )"
+PDEPEND=">=sys-auth/consolekit-0.4[policykit]"
+# gtk-doc-am-1.13 needed for eautoreconf
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	enewgroup polkituser
 	enewuser polkituser -1 "-1" /dev/null polkituser
+}
+
+multilib-native_src_prepare_internal() {
+	if ! use pam; then
+		# Experimental shadow support, bug 291116
+		epatch "${WORKDIR}/${P}-shadow-support.patch"
+		eautoreconf
+	fi
 }
 
 multilib-native_src_configure_internal() {
@@ -42,6 +50,13 @@ multilib-native_src_configure_internal() {
 
 	if use expat; then
 		conf="${conf} --with-expat=/usr"
+	fi
+
+	if use pam; then
+		conf="${conf} --with-authfw=pam
+			--with-pam-module-dir=$(getpam_mod_dir)"
+	else
+		conf="${conf} --with-authfw=shadow"
 	fi
 
 	# We define libexecdir due to fdo bug #22951
@@ -56,8 +71,6 @@ multilib-native_src_configure_internal() {
 		--with-os-type=gentoo \
 		--localstatedir=/var \
 		--libexecdir='${exec_prefix}/libexec/polkit-1' \
-		--with-authfw=pam \
-		--with-pam-module-dir=$(getpam_mod_dir) \
 		$(use_enable debug verbose-mode) \
 		$(use_enable doc gtk-doc) \
 		$(use_enable nls)

@@ -14,15 +14,13 @@ SRC_URI="http://hal.freedesktop.org/releases/${P}.tar.gz
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
-IUSE="debug doc examples expat nls pam"
-# introspection
+IUSE="debug doc examples expat nls pam introspection"
 
-# not mature enough
-#	introspection? ( dev-libs/gobject-introspection )
 RDEPEND=">=dev-libs/glib-2.21.4[lib32?]
 	>=dev-libs/eggdbus-0.6[lib32?]
-	pam? ( virtual/pam )
-	expat? ( dev-libs/expat[lib32?] )"
+	pam? ( virtual/pam[lib32?] )
+	expat? ( dev-libs/expat[lib32?] )
+	introspection? ( dev-libs/gobject-introspection[lib32?] )"
 DEPEND="${RDEPEND}
 	!!>=sys-auth/policykit-0.92
 	dev-libs/libxslt[lib32?]
@@ -34,12 +32,12 @@ DEPEND="${RDEPEND}
 PDEPEND=">=sys-auth/consolekit-0.4[policykit]"
 # gtk-doc-am-1.13 needed for eautoreconf
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	enewgroup polkituser
 	enewuser polkituser -1 "-1" /dev/null polkituser
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	if ! use pam; then
 		# Experimental shadow support, bug 291116
 		epatch "${WORKDIR}/${P}-r1-shadow-support.patch"
@@ -64,7 +62,6 @@ multilib-native_src_configure_internal() {
 	# We define libexecdir due to fdo bug #22951
 	# easier to maintain than patching everything
 	econf ${conf} \
-		--disable-introspection \
 		--disable-ansi \
 		--disable-examples \
 		--enable-fast-install \
@@ -77,7 +74,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable debug verbose-mode) \
 		$(use_enable doc gtk-doc) \
 		$(use_enable nls)
-		#$(use_enable introspection)
+		$(use_enable introspection)
 }
 
 multilib-native_src_install_internal() {
