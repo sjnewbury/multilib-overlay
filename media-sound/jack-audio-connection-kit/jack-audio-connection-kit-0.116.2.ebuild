@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit flag-o-matic eutils multilib-native
+inherit flag-o-matic eutils multilib multilib multilib-native
 
 DESCRIPTION="A low-latency audio server"
 HOMEPAGE="http://www.jackaudio.org"
@@ -12,11 +12,11 @@ SRC_URI="http://www.jackaudio.org/downloads/${P}.tar.gz"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc x86"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
 IUSE="3dnow altivec alsa coreaudio doc debug examples mmx oss sse cpudetection"
 
 RDEPEND=">=media-libs/libsndfile-1.0.0[lib32?]
-	sys-libs/ncurses
+	sys-libs/ncurses[lib32?]
 	alsa? ( >=media-libs/alsa-lib-0.9.1[lib32?] )
 	media-libs/libsamplerate[lib32?]
 	!media-sound/jack-cvs"
@@ -24,9 +24,7 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	doc? ( app-doc/doxygen )"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${PN}-sparc-cpuinfo.patch"
 }
 
@@ -38,12 +36,6 @@ multilib-native_src_configure_internal() {
 		einfo "Enabling cpudetection (dynsimd). Adding -mmmx, -msse, -m3dnow and -O2 to CFLAGS."
 		myconf="${myconf} --enable-dynsimd"
 		append-flags -mmmx -msse -m3dnow -O2
-	fi
-
-	# it's possible to load a 32bit jack client into 64bit jackd since 0.116,
-	# but let's install the 32bit binaries anyway ;)
-	if use lib32 && ([[ "${ABI}" == "x86" ]] || [[ "${ABI}" == "ppc" ]]); then
-		myconf="${myconf} --program-suffix=32"
 	fi
 
 	use doc || export ac_cv_prog_HAVE_DOXYGEN=false
@@ -70,4 +62,6 @@ multilib-native_src_install_internal() {
 		insinto /usr/share/doc/${PF}
 		doins -r "${S}/example-clients"
 	fi
+
+	prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
 }

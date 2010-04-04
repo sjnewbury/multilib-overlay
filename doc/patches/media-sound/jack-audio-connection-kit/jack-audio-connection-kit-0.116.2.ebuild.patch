@@ -1,0 +1,26 @@
+--- /usr/portage/media-sound/jack-audio-connection-kit/jack-audio-connection-kit-0.116.2.ebuild	2009-02-19 09:04:02.000000000 +0100
++++ ./media-sound/jack-audio-connection-kit/jack-audio-connection-kit-0.116.2.ebuild	2010-04-04 16:29:09.000000000 +0200
+@@ -22,13 +22,11 @@
+ 	dev-util/pkgconfig
+ 	doc? ( app-doc/doxygen )"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}/${PN}-sparc-cpuinfo.patch"
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	local myconf=""
+ 
+ 	# CPU Detection (dynsimd) uses asm routines which requires 3dnow, mmx and sse.
+@@ -52,7 +50,6 @@
+ 		--with-html-dir=/usr/share/doc/${PF} \
+ 		--disable-dependency-tracking \
+ 		${myconf} || die "configure failed"
+-	emake || die "compilation failed"
+ }
+ 
+ src_install() {
