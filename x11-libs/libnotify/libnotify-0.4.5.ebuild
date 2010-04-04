@@ -20,7 +20,7 @@ RDEPEND=">=x11-libs/gtk+-2.6:2[lib32?]
 	>=dev-libs/dbus-glib-0.76[lib32?]"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]"
-PDEPEND="|| ( x11-misc/notification-daemon[lib32?]
+PDEPEND="|| ( x11-misc/notification-daemon
 	xfce-extra/xfce4-notifyd )"
 
 multilib-native_src_configure_internal() {
