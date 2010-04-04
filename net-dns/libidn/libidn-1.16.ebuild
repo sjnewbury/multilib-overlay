@@ -26,7 +26,7 @@ RDEPEND="${COMMON_DEPEND}
 
 SITEFILE=50${PN}-gentoo.el
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	# bundled, with wrong bytecode
 	rm "${S}/java/${P}.jar" || die
@@ -78,10 +78,10 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	use emacs && elisp-site-regen
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	use emacs && elisp-site-regen
 }

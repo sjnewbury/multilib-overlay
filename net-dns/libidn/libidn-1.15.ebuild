@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-dns/libidn/libidn-1.15.ebuild,v 1.3 2009/06/30 20:19:22 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-dns/libidn/libidn-1.15.ebuild,v 1.9 2009/10/31 14:29:59 ranger Exp $
 
 EAPI="2"
 
@@ -12,7 +12,7 @@ SRC_URI="mirror://gnu/libidn/${P}.tar.gz"
 
 LICENSE="LGPL-2.1 GPL-3"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="doc emacs java mono nls"
 
 COMMON_DEPEND="emacs? ( virtual/emacs )
@@ -26,7 +26,7 @@ RDEPEND="${COMMON_DEPEND}
 
 SITEFILE=50${PN}-gentoo.el
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	# bundled, with wrong bytecode
 	rm "${S}/java/${P}.jar" || die
@@ -78,10 +78,10 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	use emacs && elisp-site-regen
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	use emacs && elisp-site-regen
 }

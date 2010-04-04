@@ -240,7 +240,7 @@ media-sound/phonon
 # media-video/vcdimager
 # net-dns/avahi
 # net-dns/c-ares
-# net-dns/libidn
+net-dns/libidn
 net-fs/samba
 net-fs/samba-libs
 net-libs/adns
