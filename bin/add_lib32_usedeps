@@ -129,8 +129,8 @@ sed -i "
 /${DEPEND_REG_EXP}=\"/,/\"/ { 
 	:process_line
 	s@${REGEXP}@&[lib32?]@g
-	#move the \" to the end of the line
-	s/\"\(\[.*\)/\1\"/ 
+	#move the \" behind the usedep
+	s/\"\(\[.*\]\)/\1\"/ 
 	#append space to every usedep
 	s/\(\]\)\(.\)/\1 \2/g 
 	#remove multiple spaces after usedeps
