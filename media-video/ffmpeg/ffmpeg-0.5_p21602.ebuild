@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-0.5_p21602.ebuild,v 1.2 2010/02/04 19:54:28 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-0.5_p21602.ebuild,v 1.3 2010/03/13 14:33:52 lu_zero Exp $
 
 EAPI=2
 SCM=""
@@ -45,8 +45,7 @@ RDEPEND="sdl? ( >=media-libs/libsdl-1.2.10[lib32?] )
 		vorbis? ( media-libs/libvorbis[lib32?] media-libs/libogg[lib32?] )
 		theora? ( >=media-libs/libtheora-1.1.1[encode,lib32?] media-libs/libogg[lib32?] )
 		x264? ( >=media-libs/x264-0.0.20100118[lib32?] )
-		xvid? ( >=media-libs/xvid-1.1.0[lib32?] )
-	)
+		xvid? ( >=media-libs/xvid-1.1.0[lib32?] ) )
 	faad? ( >=media-libs/faad2-2.6.1[lib32?] )
 	zlib? ( sys-libs/zlib[lib32?] )
 	ieee1394? ( media-libs/libdc1394[lib32?]
@@ -54,17 +53,19 @@ RDEPEND="sdl? ( >=media-libs/libsdl-1.2.10[lib32?] )
 	dirac? ( media-video/dirac[lib32?] )
 	gsm? ( >=media-sound/gsm-1.0.12-r1[lib32?] )
 	jpeg2k? ( >=media-libs/openjpeg-1.3-r2[lib32?] )
-	opencore-amr? ( media-libs/opencore-amr[lib32?] )
+	opencore-amr? ( media-libs/opencore-amr )
 	schroedinger? ( media-libs/schroedinger[lib32?] )
 	speex? ( >=media-libs/speex-1.2_beta3[lib32?] )
 	jack? ( media-sound/jack-audio-connection-kit[lib32?] )
 	X? ( x11-libs/libX11[lib32?] x11-libs/libXext[lib32?] )
 	video_cards_nvidia? (
-		vdpau? ( x11-libs/libvdpau[lib32?] )
+		vdpau? ( x11-libs/libvdpau )
 	)"
 
 DEPEND="${RDEPEND}
 	>=sys-devel/make-3.81
+	dirac? ( dev-util/pkgconfig[lib32?] )
+	schroedinger? ( dev-util/pkgconfig[lib32?] )
 	mmx? ( dev-lang/yasm )
 	doc? ( app-text/texi2html )
 	test? ( net-misc/wget )
@@ -88,7 +89,6 @@ multilib-native_src_configure_internal() {
 	use debug || myconf="${myconf} --disable-debug"
 	use zlib || myconf="${myconf} --disable-zlib"
 	use sdl || myconf="${myconf} --disable-ffplay"
-
 	use network || myconf="${myconf} --disable-network"
 
 	use custom-cflags && myconf="${myconf} --disable-optimizations"
@@ -170,6 +170,7 @@ multilib-native_src_configure_internal() {
 	# If they contain an unknown CPU it will not hurt since ffmpeg's configure
 	# will just ignore it.
 	for i in $(get-flag march) $(get-flag mcpu) $(get-flag mtune) ; do
+		[ "${i}" = "native" ] && i="host" # bug #273421
 		[[ ${i} = *-sse3 ]] && i="${i%-sse3}" # bug 283968
 		myconf="${myconf} --cpu=$i"
 		break

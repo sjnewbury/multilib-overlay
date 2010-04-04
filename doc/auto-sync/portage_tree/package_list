@@ -236,7 +236,7 @@ media-sound/phonon
 # media-sound/pulseaudio
 # media-sound/wavpack
 # media-video/dirac
-# media-video/ffmpeg
+media-video/ffmpeg
 media-video/vcdimager
 net-dns/avahi
 net-dns/c-ares

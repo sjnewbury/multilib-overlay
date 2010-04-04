@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-0.5_p20373.ebuild,v 1.4 2009/12/24 02:07:58 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-0.5_p20373.ebuild,v 1.11 2010/03/13 14:33:52 lu_zero Exp $
 
 EAPI=2
 SCM=""
@@ -24,7 +24,7 @@ FFMPEG_REVISION="${PV#*_p}"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="+3dnow +3dnowext alsa altivec cpudetection custom-cflags debug dirac
 	  doc ieee1394 +encode faac faad gsm ipv6 jack +mmx +mmxext vorbis test
 	  theora threads x264 xvid network zlib sdl X mp3 opencore-amr
@@ -45,8 +45,7 @@ RDEPEND="sdl? ( >=media-libs/libsdl-1.2.10[lib32?] )
 		vorbis? ( media-libs/libvorbis[lib32?] media-libs/libogg[lib32?] )
 		theora? ( media-libs/libtheora[encode,lib32?] media-libs/libogg[lib32?] )
 		x264? ( >=media-libs/x264-0.0.20091021[lib32?] )
-		xvid? ( >=media-libs/xvid-1.1.0[lib32?] )
-	)
+		xvid? ( >=media-libs/xvid-1.1.0[lib32?] ) )
 	faad? ( >=media-libs/faad2-2.6.1[lib32?] )
 	zlib? ( sys-libs/zlib[lib32?] )
 	ieee1394? ( media-libs/libdc1394[lib32?]
@@ -54,17 +53,19 @@ RDEPEND="sdl? ( >=media-libs/libsdl-1.2.10[lib32?] )
 	dirac? ( media-video/dirac[lib32?] )
 	gsm? ( >=media-sound/gsm-1.0.12-r1[lib32?] )
 	jpeg2k? ( >=media-libs/openjpeg-1.3-r2[lib32?] )
-	opencore-amr? ( media-libs/opencore-amr[lib32?] )
+	opencore-amr? ( media-libs/opencore-amr )
 	schroedinger? ( media-libs/schroedinger[lib32?] )
 	speex? ( >=media-libs/speex-1.2_beta3[lib32?] )
 	jack? ( media-sound/jack-audio-connection-kit[lib32?] )
 	X? ( x11-libs/libX11[lib32?] x11-libs/libXext[lib32?] )
 	video_cards_nvidia? (
-		vdpau? ( >=x11-drivers/nvidia-drivers-180.29[lib32?] )
+		vdpau? ( >=x11-drivers/nvidia-drivers-180.29 )
 	)"
 
 DEPEND="${RDEPEND}
 	>=sys-devel/make-3.81
+	dirac? ( dev-util/pkgconfig[lib32?] )
+	schroedinger? ( dev-util/pkgconfig[lib32?] )
 	mmx? ( dev-lang/yasm )
 	doc? ( app-text/texi2html )
 	test? ( net-misc/wget )

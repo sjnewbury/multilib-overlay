@@ -37,10 +37,9 @@ RDEPEND="vhook? ( >=media-libs/imlib2-1.4.0[lib32?] >=media-libs/freetype-2[lib3
 			)
 		)
 		vorbis? ( media-libs/libvorbis[lib32?] media-libs/libogg[lib32?] )
-		theora? ( media-libs/libtheora[lib32?] media-libs/libogg[lib32?] )
-		x264? ( >=media-libs/x264-0.0.20081006[lib32?] )
-		xvid? ( >=media-libs/xvid-1.1.0[lib32?] )
-	)
+		theora? ( media-libs/libtheora[encode,lib32?] media-libs/libogg[lib32?] )
+		x264? ( >=media-libs/x264-0.0.20081006[lib32?] <media-libs/x264-0.0.20090923[lib32?] )
+		xvid? ( >=media-libs/xvid-1.1.0[lib32?] ) )
 	faad? ( >=media-libs/faad2-2.6.1[lib32?] )
 	zlib? ( sys-libs/zlib[lib32?] )
 	ieee1394? ( media-libs/libdc1394[lib32?]

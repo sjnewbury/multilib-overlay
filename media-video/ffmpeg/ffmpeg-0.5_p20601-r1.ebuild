@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-0.5_p20601-r1.ebuild,v 1.2 2009/11/26 04:55:11 beandog Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-0.5_p20601-r1.ebuild,v 1.5 2010/03/13 14:33:52 lu_zero Exp $
 
 EAPI=2
 SCM=""
@@ -45,8 +45,7 @@ RDEPEND="sdl? ( >=media-libs/libsdl-1.2.10[lib32?] )
 		vorbis? ( media-libs/libvorbis[lib32?] media-libs/libogg[lib32?] )
 		theora? ( media-libs/libtheora[encode,lib32?] media-libs/libogg[lib32?] )
 		x264? ( >=media-libs/x264-0.0.20091124[lib32?] )
-		xvid? ( >=media-libs/xvid-1.1.0[lib32?] )
-	)
+		xvid? ( >=media-libs/xvid-1.1.0[lib32?] ) )
 	faad? ( >=media-libs/faad2-2.6.1[lib32?] )
 	zlib? ( sys-libs/zlib[lib32?] )
 	ieee1394? ( media-libs/libdc1394[lib32?]
@@ -54,17 +53,19 @@ RDEPEND="sdl? ( >=media-libs/libsdl-1.2.10[lib32?] )
 	dirac? ( media-video/dirac[lib32?] )
 	gsm? ( >=media-sound/gsm-1.0.12-r1[lib32?] )
 	jpeg2k? ( >=media-libs/openjpeg-1.3-r2[lib32?] )
-	opencore-amr? ( media-libs/opencore-amr[lib32?] )
+	opencore-amr? ( media-libs/opencore-amr )
 	schroedinger? ( media-libs/schroedinger[lib32?] )
 	speex? ( >=media-libs/speex-1.2_beta3[lib32?] )
 	jack? ( media-sound/jack-audio-connection-kit[lib32?] )
 	X? ( x11-libs/libX11[lib32?] x11-libs/libXext[lib32?] )
 	video_cards_nvidia? (
-		vdpau? ( >=x11-drivers/nvidia-drivers-180.29[lib32?] )
+		vdpau? ( x11-libs/libvdpau )
 	)"
 
 DEPEND="${RDEPEND}
 	>=sys-devel/make-3.81
+	dirac? ( dev-util/pkgconfig[lib32?] )
+	schroedinger? ( dev-util/pkgconfig[lib32?] )
 	mmx? ( dev-lang/yasm )
 	doc? ( app-text/texi2html )
 	test? ( net-misc/wget )
@@ -110,6 +111,13 @@ multilib-native_src_configure_internal() {
 		use theora && myconf="${myconf} --enable-libtheora"
 		use x264 && myconf="${myconf} --enable-libx264"
 		use xvid && myconf="${myconf} --enable-libxvid"
+		if use bindist
+		then
+			use faac && ewarn "faac is nonfree and cannot be distributed;
+			disabling faac support."
+		else
+			use faac && myconf="${myconf} --enable-libfaac --enable-nonfree"
+		fi
 	else
 		myconf="${myconf} --disable-encoders"
 	fi
@@ -140,14 +148,6 @@ multilib-native_src_configure_internal() {
 		myconf="${myconf} --enable-libgsm"
 		# Crappy detection or our installation is weird, pick one (FIXME)
 		append-flags -I/usr/include/gsm
-	fi
-	if use bindist
-	then
-		use faac && ewarn "faac is nonfree and cannot be distributed; disabling
-		faac support."
-	else
-		use faac && myconf="${myconf} --enable-libfaac"
-		{ use faac ; } && myconf="${myconf} --enable-nonfree"
 	fi
 
 	#for i in h264_vdpau mpeg1_vdpau mpeg_vdpau vc1_vdpau wmv3_vdpau; do
@@ -180,6 +180,7 @@ multilib-native_src_configure_internal() {
 	# will just ignore it.
 	for i in $(get-flag march) $(get-flag mcpu) $(get-flag mtune) ; do
 		[ "${i}" = "native" ] && i="host" # bug #273421
+		[[ ${i} = *-sse3 ]] && i="${i%-sse3}" # bug 283968
 		myconf="${myconf} --cpu=$i"
 		break
 	done
@@ -207,6 +208,7 @@ multilib-native_src_configure_internal() {
 
 	# Misc stuff
 	use hardcoded-tables && myconf="${myconf} --enable-hardcoded-tables"
+	use doc || myconf="${myconf} --disable-doc"
 
 	# Specific workarounds for too-few-registers arch...
 	if [[ $(tc-arch) == "x86" ]]; then
@@ -240,7 +242,7 @@ multilib-native_src_compile_internal() {
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${D}" install || die "Install Failed"
+	emake DESTDIR="${D}" install install-man || die "Install Failed"
 
 	dodoc Changelog README INSTALL
 	dodoc doc/*
