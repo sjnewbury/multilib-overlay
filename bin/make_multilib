@@ -20,7 +20,19 @@ make_multilib() {
 	sed -i "s/\(src_\(unpack\|prepare\|compile\|configure\|install\)\) \{0,1\}\((\)/multilib-native_\1_internal\3/" $1
 	sed -i "s/\(pkg_\(setup\|preinst\|postinst\|postrm\)\) \{0,1\}\((\)/multilib-native_\1_internal\3/" $1
 	bash bin/add_lib32_usedeps $1
+	NEED_EAPI2=""
+	for eclass in $(grep "^inherit" $1 | cut -d " " -f 2-);
+	do
+		if [[ -f eclass/${eclass}.eclass ]]; then		
+			if [[ "" != "$(grep lib32? eclass/${eclass}.eclass)" ]]; then
+				NEED_EAPI2=1
+			fi
+		fi
+	done
 	if [[ "" != "$(grep lib32? $1)" ]]; then
+		NEED_EAPI2=1
+	fi
+	if [[ -n $NEED_EAPI2 ]]; then
 		check $1
 		if [[ "" == "$(grep EAPI $1)" ]]; then
 			sed -i "/^# \\\$Header/ { 
