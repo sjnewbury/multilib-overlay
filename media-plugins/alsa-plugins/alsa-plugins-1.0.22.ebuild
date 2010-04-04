@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-plugins/alsa-plugins/alsa-plugins-1.0.19.ebuild,v 1.11 2009/07/02 19:16:09 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-plugins/alsa-plugins/alsa-plugins-1.0.22.ebuild,v 1.1 2010/01/07 17:22:18 beandog Exp $
 
 EAPI=2
 
@@ -14,19 +14,19 @@ SRC_URI="mirror://alsaproject/plugins/${MY_P}.tar.bz2"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="alpha amd64 ~arm hppa ~ia64 ~ppc ppc64 ~sh sparc x86"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
 IUSE="debug ffmpeg jack libsamplerate pulseaudio speex"
 
-RDEPEND=">=media-libs/alsa-lib-${PV}
-	ffmpeg? ( media-video/ffmpeg
-		media-libs/alsa-lib[alsa_pcm_plugins_rate] )
+RDEPEND=">=media-libs/alsa-lib-${PV}[alsa_pcm_plugins_ioplug,lib32?]
+	ffmpeg? ( media-video/ffmpeg[lib32?]
+		media-libs/alsa-lib[alsa_pcm_plugins_rate,alsa_pcm_plugins_plug,lib32?] )
 	jack? ( >=media-sound/jack-audio-connection-kit-0.98[lib32?] )
 	libsamplerate? (
 		media-libs/libsamplerate[lib32?]
-		media-libs/alsa-lib[alsa_pcm_plugins_rate] )
-	pulseaudio? ( media-sound/pulseaudio )
+		media-libs/alsa-lib[alsa_pcm_plugins_rate,alsa_pcm_plugins_plug,lib32?] )
+	pulseaudio? ( media-sound/pulseaudio[lib32?] )
 	speex? ( media-libs/speex[lib32?]
-		media-libs/alsa-lib[alsa_pcm_plugins_rate] )
+		media-libs/alsa-lib[alsa_pcm_plugins_rate,alsa_pcm_plugins_plug,lib32?] )
 	!media-plugins/alsa-jack"
 
 DEPEND="${RDEPEND}
@@ -42,9 +42,10 @@ multilib-native_src_prepare_internal() {
 		"${S}/pulse/Makefile.am"
 
 	# Bug #256119
-	epatch "${FILESDIR}/${P}-missing-avutil.patch"
-	# Bug 272682, fixed upstream
-	use speex && epatch "${FILESDIR}/${P}-speex.patch"
+	epatch "${FILESDIR}"/${PN}-1.0.19-missing-avutil.patch
+
+	# Bug #278352
+	epatch "${FILESDIR}"/${P}-automagic.patch
 
 	eautoreconf
 }
@@ -52,14 +53,21 @@ multilib-native_src_prepare_internal() {
 multilib-native_src_configure_internal() {
 	use debug || append-flags -DNDEBUG
 
+	local myspeex
+
+	if use speex; then
+		myspeex=lib
+	else
+		myspeex=no
+	fi
+
 	econf \
+		--disable-dependency-tracking \
 		$(use_enable ffmpeg avcodec) \
 		$(use_enable jack) \
 		$(use_enable libsamplerate samplerate) \
 		$(use_enable pulseaudio) \
-		$(use_with speex speex lib) \
-		--disable-dependency-tracking \
-		|| die "econf failed"
+		--with-speex=${myspeex}
 }
 
 multilib-native_src_install_internal() {

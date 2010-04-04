@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-plugins/alsa-plugins/alsa-plugins-1.0.20.ebuild,v 1.9 2009/08/29 18:41:14 nixnut Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-plugins/alsa-plugins/alsa-plugins-1.0.20.ebuild,v 1.11 2009/09/19 13:55:50 maekke Exp $
 
 EAPI=2
 
@@ -14,19 +14,19 @@ SRC_URI="mirror://alsaproject/plugins/${MY_P}.tar.bz2"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ppc ~ppc64 ~sh ~sparc x86"
+KEYWORDS="~alpha amd64 arm hppa ~ia64 ppc ppc64 ~sh ~sparc x86"
 IUSE="debug ffmpeg jack libsamplerate pulseaudio speex"
 
 RDEPEND=">=media-libs/alsa-lib-${PV}[alsa_pcm_plugins_ioplug,lib32?]
 	ffmpeg? ( media-video/ffmpeg[lib32?]
-		media-libs/alsa-lib[alsa_pcm_plugins_rate,alsa_pcm_plugins_plug] )
+		media-libs/alsa-lib[alsa_pcm_plugins_rate,alsa_pcm_plugins_plug,lib32?] )
 	jack? ( >=media-sound/jack-audio-connection-kit-0.98[lib32?] )
 	libsamplerate? (
 		media-libs/libsamplerate[lib32?]
-		media-libs/alsa-lib[alsa_pcm_plugins_rate,alsa_pcm_plugins_plug] )
+		media-libs/alsa-lib[alsa_pcm_plugins_rate,alsa_pcm_plugins_plug,lib32?] )
 	pulseaudio? ( media-sound/pulseaudio[lib32?] )
 	speex? ( media-libs/speex[lib32?]
-		media-libs/alsa-lib[alsa_pcm_plugins_rate,alsa_pcm_plugins_plug] )
+		media-libs/alsa-lib[alsa_pcm_plugins_rate,alsa_pcm_plugins_plug,lib32?] )
 	!media-plugins/alsa-jack"
 
 DEPEND="${RDEPEND}
