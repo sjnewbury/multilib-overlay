@@ -45,6 +45,7 @@ REGEXP="\(${BEGIN}\)\(${PREFIX}\)\(${PACKAGE}\)\(${VERSION}\)\(${SLOT}\)\(${USED
 DEPEND_REG_EXP="\([A-Za-z_][A-Za-z_0-9]*\)\?DEPEND[A-Za-z_0-9]*"
 
 PACKAGE_LIST="$(cat $* | sed -n "
+/PDEPEND/ d
 /${DEPEND_REG_EXP}=\".*\"/ b process_line
 /${DEPEND_REG_EXP}=\"/,/\"/ { 
 	:process_line
@@ -120,6 +121,10 @@ debug "PACKAGE: \"${PACKAGE}\""
 REGEXP="\(${BEGIN}\)\(${PREFIX}\)\(${PACKAGE}\)\(${VERSION}\)\(${SLOT}\)\(${USEDEP}\)\(${END}\)"
 
 sed -i "
+/PDEPEND/ {
+	p
+	d
+}
 /${DEPEND_REG_EXP}=\".*\"/ b process_line
 /${DEPEND_REG_EXP}=\"/,/\"/ { 
 	:process_line
