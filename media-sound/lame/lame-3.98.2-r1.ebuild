@@ -17,18 +17,15 @@ SRC_URI="mirror://sourceforge/${PN}/${PN}-${MY_PV}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
-IUSE="debug mmx mp3rtp sndfile gtk"
+IUSE="debug mmx mp3rtp sndfile"
 
 RDEPEND=">=sys-libs/ncurses-5.2[lib32?]
-	sndfile? ( >=media-libs/libsndfile-1.0.2[lib32?] )
-	gtk? ( =x11-libs/gtk+-1.2*[lib32?] )"
+	sndfile? ( >=media-libs/libsndfile-1.0.2[lib32?] )"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	mmx? ( dev-lang/nasm )"
 
 multilib-native_src_prepare_internal() {
-	cd "${S}"
-
 	# The frontened tries to link staticly, but we prefer shared libs
 	epatch "${FILESDIR}"/${PN}-3.98-shared-frontend.patch
 
@@ -64,7 +61,6 @@ multilib-native_src_configure_internal() {
 		--disable-mp3x \
 		$(use_enable mmx nasm) \
 		$(use_enable mp3rtp) \
-		$(use_enable gtk gtktest) \
 		${myconf} || die "econf failed"
 }
 
@@ -77,7 +73,7 @@ multilib-native_src_install_internal() {
 	dobin "${S}"/misc/mlame || die
 }
 
-pkg_postinst(){
+multilib-native_pkg_postinst_internal(){
 	if use mp3rtp ; then
 	    ewarn "Warning, support for the encode-to-RTP program, 'mp3rtp'"
 	    ewarn "is broken as of August 2001."

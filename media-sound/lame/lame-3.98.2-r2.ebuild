@@ -26,8 +26,6 @@ DEPEND="${RDEPEND}
 	mmx? ( dev-lang/nasm )"
 
 multilib-native_src_prepare_internal() {
-	cd "${S}"
-
 	# The frontened tries to link staticly, but we prefer shared libs
 	epatch "${FILESDIR}"/${PN}-3.98-shared-frontend.patch
 
@@ -78,7 +76,7 @@ multilib-native_src_install_internal() {
 	dobin "${S}"/misc/mlame || die
 }
 
-pkg_postinst(){
+multilib-native_pkg_postinst_internal(){
 	if use mp3rtp ; then
 	    ewarn "Warning, support for the encode-to-RTP program, 'mp3rtp'"
 	    ewarn "is broken as of August 2001."
