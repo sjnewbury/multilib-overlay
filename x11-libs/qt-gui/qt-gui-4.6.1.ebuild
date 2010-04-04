@@ -39,7 +39,7 @@ DEPEND="${RDEPEND}
 		x11-proto/inputproto
 	)
 	xinerama? ( x11-proto/xineramaproto )"
-PDEPEND="qt3support? ( ~x11-libs/qt-qt3support-${PV}[aqua=,debug=,lib32?] )"
+PDEPEND="qt3support? ( ~x11-libs/qt-qt3support-${PV}[aqua=,debug=] )"
 
 multilib-native_pkg_setup_internal() {
 	if ! use qt3support; then

@@ -35,7 +35,7 @@ DEPEND="${RDEPEND}
 	xinerama? ( x11-proto/xineramaproto )
 	x11-proto/xextproto
 	x11-proto/inputproto"
-PDEPEND="qt3support? ( ~x11-libs/qt-qt3support-${PV}[debug=,lib32?] )"
+PDEPEND="qt3support? ( ~x11-libs/qt-qt3support-${PV}[debug=] )"
 
 QT4_TARGET_DIRECTORIES="
 src/gui
