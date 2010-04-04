@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-crypt/mit-krb5/mit-krb5-1.6.3-r6.ebuild,v 1.3 2009/04/08 17:53:57 keytoaster Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-crypt/mit-krb5/mit-krb5-1.6.3-r6.ebuild,v 1.4 2010/01/12 09:32:42 mueli Exp $
 
 EAPI="2"
 
@@ -17,11 +17,10 @@ SRC_URI="http://web.mit.edu/kerberos/dist/krb5/${P_DIR}/${MY_P}-signed.tar
 LICENSE="as-is"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
-IUSE="krb4 doc lib32"
+IUSE="krb4 doc"
 
 RDEPEND="!virtual/krb5
 	>=sys-libs/e2fsprogs-libs-1.41.0[lib32?]"
-
 DEPEND="${RDEPEND}
 	doc? ( virtual/latex-base )"
 
@@ -29,11 +28,13 @@ S=${WORKDIR}/${MY_P}/src
 
 PROVIDE="virtual/krb5"
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	unpack ./${MY_P}.tar.gz
-	cd "${S}"
-	EPATCH_SUFFIX="patch" epatch "${PATCHDIR}"
+}
+
+multilib-native_src_prepare_internal() {
+	EPATCH_SOURCE="${WORKDIR}/patch" EPATCH_SUFFIX="patch" epatch
 	epatch "${FILESDIR}/CVE-2009-0844+CVE-2009-0847.patch"
 	epatch "${FILESDIR}/CVE-2009-0846.patch"
 	einfo "Regenerating configure scripts (be patient)"
@@ -110,6 +111,6 @@ multilib-native_src_install_internal() {
 	prep_ml_binaries /usr/bin/krb5-config
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "See /usr/share/doc/${PF}/html/krb5-admin.html for documentation."
 }

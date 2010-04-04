@@ -7,7 +7,7 @@ app-admin/gamin
 # app-arch/xz-utils
 app-crypt/gnupg
 # app-crypt/heimdal
-# app-crypt/mit-krb5
+app-crypt/mit-krb5
 # app-emulation/emul-linux-x86-baselibs
 # app-emulation/emul-linux-x86-gtklibs
 # app-emulation/emul-linux-x86-medialibs

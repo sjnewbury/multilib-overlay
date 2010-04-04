@@ -1,0 +1,32 @@
+--- /usr/portage/app-crypt/mit-krb5/mit-krb5-1.7-r2.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./app-crypt/mit-krb5/mit-krb5-1.7-r2.ebuild	2010-04-04 02:17:37.000000000 +0200
+@@ -29,7 +29,9 @@
+ src_unpack() {
+ 	unpack ${A}
+ 	unpack ./${MY_P}.tar.gz
+-	cd "${S}"
++}
++
++src_prepare() {
+ 	epatch "${FILESDIR}/1.7-CVE-2009-4212.patch"
+ 	EPATCH_SOURCE="${WORKDIR}/patch" \
+ 		EPATCH_EXCLUDE="0001_all_lazyldflags.patch" \
+@@ -46,7 +48,7 @@
+ 	done
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	append-flags "-I/usr/include/et"
+ 	econf \
+ 		--without-krb4 \
+@@ -54,6 +56,9 @@
+ 		--with-system-et --with-system-ss \
+ 		--enable-dns-for-realm \
+ 		--enable-kdc-replay-cache || die
++}
++
++src_compile() {
+ 	emake -j1 || die
+ 
+ 	if use doc ; then

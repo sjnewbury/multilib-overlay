@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-crypt/mit-krb5/mit-krb5-1.7-r2.ebuild,v 1.1 2010/01/14 09:12:31 mueli Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit eutils flag-o-matic versionator autotools multilib-native
 
@@ -28,7 +28,7 @@ S=${WORKDIR}/${MY_P}/src
 
 PROVIDE="virtual/krb5"
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	unpack ./${MY_P}.tar.gz
 }
