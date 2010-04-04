@@ -2,8 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-dns/c-ares/c-ares-1.4.0.ebuild,v 1.11 2008/03/06 03:48:15 wolf31o2 Exp $
 
-EAPI="2"
-
 inherit multilib-native
 
 DESCRIPTION="C library that resolves names asynchronously"
@@ -17,12 +15,14 @@ IUSE=""
 
 DEPEND=""
 
-multilib-native_src_configure_internal() {
+multilib-native_src_compile_internal() {
 	econf --enable-shared || die
+	emake || die
 }
 
 multilib-native_src_install_internal() {
 	make DESTDIR="${D}" install || die
 	dodoc CHANGES NEWS README*
+
 	prep_ml_includes
 }

@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-dns/c-ares/c-ares-1.7.0.ebuild,v 1.1 2009/12/12 04:12:24 dragonheart Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-dns/c-ares/c-ares-1.7.0.ebuild,v 1.2 2010/01/07 15:27:09 fauli Exp $
 
 EAPI="2"
 
@@ -12,7 +12,7 @@ SRC_URI="http://daniel.haxx.se/projects/c-ares/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc64-solaris"
 IUSE=""
 
 DEPEND=""
@@ -25,5 +25,6 @@ multilib-native_src_configure_internal() {
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
 	dodoc RELEASE-NOTES CHANGES NEWS README*
+
 	prep_ml_includes
 }

@@ -239,7 +239,7 @@ media-sound/phonon
 # media-video/ffmpeg
 # media-video/vcdimager
 # net-dns/avahi
-# net-dns/c-ares
+net-dns/c-ares
 net-dns/libidn
 net-fs/samba
 net-fs/samba-libs

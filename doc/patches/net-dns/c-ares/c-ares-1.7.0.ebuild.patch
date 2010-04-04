@@ -1,0 +1,9 @@
+--- /usr/portage/net-dns/c-ares/c-ares-1.7.0.ebuild	2010-01-07 16:36:24.000000000 +0100
++++ ./net-dns/c-ares/c-ares-1.7.0.ebuild	2010-04-04 02:57:13.000000000 +0200
+@@ -23,4 +23,6 @@
+ src_install() {
+ 	emake DESTDIR="${D}" install || die
+ 	dodoc RELEASE-NOTES CHANGES NEWS README*
++
++	prep_ml_includes
+ }
