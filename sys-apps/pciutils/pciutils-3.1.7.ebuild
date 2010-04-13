@@ -1,10 +1,10 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/pciutils/pciutils-3.0.0.ebuild,v 1.12 2009/01/26 03:28:41 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/pciutils/pciutils-3.1.7.ebuild,v 1.2 2010/04/11 19:32:33 vapier Exp $
 
 EAPI="2"
 
-inherit eutils flag-o-matic toolchain-funcs multilib multilib-native
+inherit eutils multilib toolchain-funcs multilib-native
 
 DESCRIPTION="Various utilities dealing with the PCI bus"
 HOMEPAGE="http://atrey.karlin.mff.cuni.cz/~mj/pciutils.html"
@@ -12,23 +12,23 @@ SRC_URI="ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="network-cron zlib"
 
 DEPEND="zlib? ( sys-libs/zlib[lib32?] )"
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}"/${PN}-3.0.0-build.patch #233314
-	epatch "${FILESDIR}"/${PN}-3.0.0-resolv.patch #218555
-	epatch "${FILESDIR}"/pcimodules-${PN}-3.0.0.patch
+	epatch "${FILESDIR}"/${P}-install-lib.patch #273489
+	epatch "${FILESDIR}"/${P}-fbsd.patch #262321
 	epatch "${FILESDIR}"/${PN}-2.2.7-update-pciids-both-forms.patch
-	cp "${FILESDIR}"/pcimodules.c . || die
-	sed -i -e "/^LIBDIR=/s:/lib:/$(get_libdir):" Makefile
 }
 
 uyesno() { use $1 && echo yes || echo no ; }
 pemake() {
 	emake \
+		HOST="${CHOST}" \
+		CROSS_COMPILE="${CHOST}-" \
+		CC="$(tc-getCC)" \
 		DNS="yes" \
 		IDSDIR="/usr/share/misc" \
 		MANDIR="/usr/share/man" \
@@ -36,18 +36,17 @@ pemake() {
 		SHARED="yes" \
 		STRIP="" \
 		ZLIB=$(uyesno zlib) \
+		LIBDIR="\${PREFIX}/$(get_libdir)" \
 		"$@"
 }
 
 multilib-native_src_compile_internal() {
-	tc-export AR CC RANLIB
-	pemake OPT="${CFLAGS}" all pcimodules || die "emake failed"
+	pemake OPT="${CFLAGS}" all || die
 }
 
 multilib-native_src_install_internal() {
 	pemake DESTDIR="${D}" install install-lib || die
-	dosbin pcimodules || die
-	doman "${FILESDIR}"/pcimodules.8
+	dodoc ChangeLog README TODO
 
 	if use network-cron ; then
 		exeinto /etc/cron.monthly
@@ -61,4 +60,11 @@ multilib-native_src_install_internal() {
 		elog "Providing a backwards compatibility non-compressed pci.ids"
 		gzip -d <"${sharedir}"/pci.ids.gz >"${sharedir}"/pci.ids
 	fi
+
+	newinitd "${FILESDIR}"/init.d-pciparm pciparm
+	newconfd "${FILESDIR}"/conf.d-pciparm pciparm
+}
+
+multilib-native_pkg_postinst_internal() {
+	elog "The 'pcimodules' program has been replaced by 'lspci -k'"
 }
