@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/fontconfig/fontconfig-2.8.0.ebuild,v 1.7 2010/03/31 16:40:22 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/fontconfig/fontconfig-2.8.0.ebuild,v 1.8 2010/04/11 01:00:59 dirtyepic Exp $
 
 EAPI="2"
 
-inherit eutils libtool toolchain-funcs flag-o-matic multilib-native
+inherit autotools eutils libtool toolchain-funcs flag-o-matic multilib-native
 
 DESCRIPTION="A library for configuring and customizing font access"
 HOMEPAGE="http://fontconfig.org/"
@@ -29,8 +29,10 @@ DEPEND="${RDEPEND}
 PDEPEND="app-admin/eselect-fontconfig"
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}"/${PN}-2.7.1-latin-reorder.patch	#130466
-	epunt_cxx	#74077
+	epatch "${FILESDIR}"/${PN}-2.7.1-latin-reorder.patch	# 130466
+	epatch "${FILESDIR}"/${PN}-2.3.2-docbook.patch			# 310157
+
+	eautoreconf
 
 	# Needed to get a sane .so versioning on fbsd, please dont drop
 	# If you have to run eautoreconf, you can also leave the elibtoolize call as
@@ -45,7 +47,9 @@ multilib-native_src_configure_internal() {
 		replace-flags -mtune=* -DMTUNE_CENSORED
 		replace-flags -march=* -DMARCH_CENSORED
 	fi
-	econf $(use_enable doc docs) \
+	econf \
+		$(use_enable doc docs) \
+		$(use_enable doc docbook) \
 		--localstatedir=/var \
 		--with-default-fonts=/usr/share/fonts \
 		--with-add-fonts=/usr/local/share/fonts \

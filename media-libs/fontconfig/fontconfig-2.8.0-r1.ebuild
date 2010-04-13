@@ -1,10 +1,10 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/fontconfig/fontconfig-2.7.1-r1.ebuild,v 1.2 2009/12/14 10:02:29 remi Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/fontconfig/fontconfig-2.8.0-r1.ebuild,v 1.1 2010/04/11 02:12:48 dirtyepic Exp $
 
 EAPI="2"
 
-inherit eutils libtool toolchain-funcs flag-o-matic multilib-native
+inherit autotools eutils libtool toolchain-funcs flag-o-matic multilib-native
 
 DESCRIPTION="A library for configuring and customizing font access"
 HOMEPAGE="http://fontconfig.org/"
@@ -15,12 +15,8 @@ SLOT="1.0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="doc"
 
-# Purposefully dropped the xml USE flag and libxml2 support. Having this is
-# silly since expat is the preferred way to go per upstream and libxml2 support
-# simply exists as a fallback when expat isn't around. expat support is the main
-# way to go and every other distro uses it. By using the xml USE flag to enable
-# libxml2 support, this confuses users and results in most people getting the
-# non-standard behavior of libxml2 usage since most profiles have USE=xml
+# Purposefully dropped the xml USE flag and libxml2 support.  Expat is the
+# default and used by every distro.  See bug #283191.
 
 RDEPEND=">=media-libs/freetype-2.2.1[lib32?]
 	>=dev-libs/expat-1.95.3[lib32?]"
@@ -30,11 +26,15 @@ DEPEND="${RDEPEND}
 		app-text/docbook-sgml-utils[jadetex]
 		=app-text/docbook-sgml-dtd-3.1*
 	)"
-PDEPEND="app-admin/eselect-fontconfig"
+PDEPEND="app-admin/eselect-fontconfig
+	virtual/ttf-fonts"
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}"/${P}-latin-reorder.patch	#130466
-	epunt_cxx	#74077
+	epatch "${FILESDIR}"/${PN}-2.7.1-latin-reorder.patch	# 130466
+	epatch "${FILESDIR}"/${PN}-2.3.2-docbook.patch			# 310157
+	epatch "${FILESDIR}"/${PN}-2.8.0-urw-aliases.patch		# 303591
+
+	eautoreconf
 
 	# Needed to get a sane .so versioning on fbsd, please dont drop
 	# If you have to run eautoreconf, you can also leave the elibtoolize call as
@@ -49,16 +49,18 @@ multilib-native_src_configure_internal() {
 		replace-flags -mtune=* -DMTUNE_CENSORED
 		replace-flags -march=* -DMARCH_CENSORED
 	fi
-	econf $(use_enable doc docs) \
+	econf \
+		$(use_enable doc docs) \
+		$(use_enable doc docbook) \
 		--localstatedir=/var \
-		--with-docdir=/usr/share/doc/${PF} \
 		--with-default-fonts=/usr/share/fonts \
 		--with-add-fonts=/usr/local/share/fonts \
 		${myconf} || die
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${D}" install || die
+	emake DESTDIR="${D}" install || die "emake install"
+	emake DESTDIR="${D}" -C doc install-man || die "emake install-man"
 
 	#fc-lang directory contains language coverage datafiles
 	#which are needed to test the coverage of fonts.
@@ -68,17 +70,13 @@ multilib-native_src_install_internal() {
 	insinto /etc/fonts
 	doins "${S}"/fonts.conf
 
-	doman $(find "${S}" -type f -name *.1 -print)
-	newman doc/fonts-conf.5 fonts.conf.5
 	dodoc doc/fontconfig-user.{txt,pdf}
+	dodoc AUTHORS ChangeLog README
 
-	if use doc; then
-		doman doc/Fc*.3
-		dohtml doc/fontconfig-devel.html
-		dodoc doc/fontconfig-devel.{txt,pdf}
+	if [[ -e ${D}usr/share/doc/fontconfig/ ]];  then
+		mv "${D}"usr/share/doc/fontconfig/* "${D}"/usr/share/doc/${P}
+		rm -rf "${D}"usr/share/doc/fontconfig
 	fi
-
-	dodoc AUTHORS ChangeLog README || die
 
 	# Changes should be made to /etc/fonts/local.conf, and as we had
 	# too much problems with broken fonts.conf, we force update it ...
@@ -97,7 +95,6 @@ multilib-native_pkg_preinst_internal() {
 	# Bug #193476
 	# /etc/fonts/conf.d/ contains symlinks to ../conf.avail/ to include various
 	# config files.  If we install as-is, we'll blow away user settings.
-
 	ebegin "Syncing fontconfig configuration to system"
 	if [[ -e ${ROOT}/etc/fonts/conf.d ]]; then
 		for file in "${ROOT}"/etc/fonts/conf.avail/*; do
@@ -128,7 +125,7 @@ multilib-native_pkg_postinst_internal() {
 
 	if [[ ${ROOT} = / ]]; then
 		ebegin "Creating global font cache"
-		/usr/bin/fc-cache -sr
+		/usr/bin/fc-cache -srf
 		eend $?
 	fi
 }
