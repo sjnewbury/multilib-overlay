@@ -1,5 +1,5 @@
---- /usr/portage/dev-libs/openssl/openssl-0.9.8n.ebuild	2010-03-30 00:05:36.000000000 +0200
-+++ ./dev-libs/openssl/openssl-0.9.8n.ebuild	2010-04-02 18:53:02.000000000 +0200
+--- /usr/portage/dev-libs/openssl/openssl-0.9.8n.ebuild	2010-04-11 22:06:12.000000000 +0200
++++ ./dev-libs/openssl/openssl-0.9.8n.ebuild	2010-04-13 22:26:55.000000000 +0200
 @@ -22,10 +22,7 @@
  	test? ( sys-devel/bc )"
  PDEPEND="app-misc/ca-certificates"
@@ -19,9 +19,9 @@
 -src_compile() {
 +src_configure() {
  	unset APPS #197996
+ 	unset SCRIPTS #312551
  
- 	tc-export CC AR RANLIB
-@@ -112,7 +109,9 @@
+@@ -113,7 +110,9 @@
  		-e "/^CFLAG/s:=.*:=${CFLAG} ${CFLAGS}:" \
  		-e "/^SHARED_LDFLAGS=/s:$: ${LDFLAGS}:" \
  		Makefile || die
