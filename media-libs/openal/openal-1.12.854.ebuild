@@ -1,8 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/openal/openal-1.10.622.ebuild,v 1.2 2010/01/15 09:38:36 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/openal/openal-1.12.854.ebuild,v 1.1 2010/04/12 15:16:10 ssuominen Exp $
 
-EAPI=2
+EAPI=3
 inherit cmake-utils multilib-native
 
 MY_P=${PN}-soft-${PV}
@@ -25,10 +25,12 @@ S=${WORKDIR}/${MY_P}
 DOCS="alsoftrc.sample"
 
 multilib-native_src_configure_internal() {
-	mycmakeargs="${mycmakeargs}
+	mycmakeargs=(
 		$(cmake-utils_use alsa ALSA)
 		$(cmake-utils_use oss OSS)
 		$(cmake-utils_use portaudio PORTAUDIO)
-		$(cmake-utils_use pulseaudio PULSEAUDIO)"
+		$(cmake-utils_use pulseaudio PULSEAUDIO)
+		)
+
 	cmake-utils_src_configure
 }
