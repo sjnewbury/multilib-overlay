@@ -44,7 +44,7 @@ dev-db/sqlite
 # dev-java/java-config
 # dev-lang/lua
 # dev-lang/perl
-# dev-lang/python
+# dev-lang/python   has missing bzip2 dependency
 # dev-lang/ruby
 # dev-lang/tcl
 # dev-lang/tk
@@ -109,7 +109,7 @@ dev-python/dbus-python
 # dev-python/numpy
 # dev-python/pycairo
 # dev-python/pygobject
-# dev-python/pygtk
+dev-python/pygtk
 # dev-python/pyorbit
 # dev-python/pyrex
 dev-util/cppunit

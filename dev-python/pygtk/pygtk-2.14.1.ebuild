@@ -25,7 +25,7 @@ RDEPEND=">=dev-libs/glib-2.8.0[lib32?]
 	!arm? ( dev-python/numeric[lib32?] )"
 
 DEPEND="${RDEPEND}
-	doc? ( dev-libs/libxslt >=app-text/docbook-xsl-stylesheets-1.70.1 )
+	doc? ( dev-libs/libxslt[lib32?] >=app-text/docbook-xsl-stylesheets-1.70.1 )
 	>=dev-util/pkgconfig-0.9[lib32?]"
 
 multilib-native_src_prepare_internal() {
@@ -37,11 +37,9 @@ multilib-native_src_prepare_internal() {
 	ln -s $(type -P true) "${S}"/py-compile
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	use hppa && append-flags -ffunction-sections
 	econf $(use_enable doc docs) --enable-thread
-
-	emake || die "emake failed"
 }
 
 multilib-native_src_install_internal() {

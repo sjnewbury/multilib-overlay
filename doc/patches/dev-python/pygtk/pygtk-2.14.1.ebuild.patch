@@ -1,0 +1,27 @@
+--- /usr/portage/dev-python/pygtk/pygtk-2.14.1.ebuild	2010-02-14 20:06:25.000000000 +0100
++++ ./dev-python/pygtk/pygtk-2.14.1.ebuild	2010-04-13 23:48:38.000000000 +0200
+@@ -26,10 +26,7 @@
+ 	doc? ( dev-libs/libxslt >=app-text/docbook-xsl-stylesheets-1.70.1 )
+ 	>=dev-util/pkgconfig-0.9"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	# Fix declaration of codegen in .pc
+ 	epatch "${FILESDIR}/${PN}-2.13.0-fix-codegen-location.patch"
+ 
+@@ -38,11 +35,9 @@
+ 	ln -s $(type -P true) "${S}"/py-compile
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	use hppa && append-flags -ffunction-sections
+ 	econf $(use_enable doc docs) --enable-thread
+-
+-	emake || die "emake failed"
+ }
+ 
+ src_install() {

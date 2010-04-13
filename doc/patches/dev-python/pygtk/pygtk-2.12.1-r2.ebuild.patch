@@ -1,0 +1,28 @@
+--- /usr/portage/dev-python/pygtk/pygtk-2.12.1-r2.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./dev-python/pygtk/pygtk-2.12.1-r2.ebuild	2010-04-13 23:47:43.000000000 +0200
+@@ -26,10 +26,7 @@
+ 	doc? ( dev-libs/libxslt >=app-text/docbook-xsl-stylesheets-1.70.1 )
+ 	>=dev-util/pkgconfig-0.9"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	# fix for bug #209531
+ 	epatch "${FILESDIR}/${PN}-2.12.1-fix-amd64.patch"
+ 
+@@ -43,12 +40,9 @@
+ 	ln -s $(type -P true) "${S}"/py-compile
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	use hppa && append-flags -ffunction-sections
+ 	econf $(use_enable doc docs) --enable-thread
+-	# possible problems with parallel builds (#45776)
+-	#emake -j1 || die
+-	emake || die "emake failed"
+ }
+ 
+ src_install() {
