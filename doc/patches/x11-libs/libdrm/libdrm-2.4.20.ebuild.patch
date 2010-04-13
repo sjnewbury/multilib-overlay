@@ -1,7 +1,7 @@
---- /usr/portage/x11-libs/libdrm/libdrm-2.4.20.ebuild	2010-02-17 19:22:20.000000000 +0100
-+++ ./x11-libs/libdrm/libdrm-2.4.20.ebuild	2010-03-10 00:49:20.000000000 +0100
+--- /usr/portage/x11-libs/libdrm/libdrm-2.4.20.ebuild	2010-04-13 12:37:27.000000000 +0200
++++ ./x11-libs/libdrm/libdrm-2.4.20.ebuild	2010-04-13 23:32:17.000000000 +0200
 @@ -18,7 +18,8 @@
- IUSE=""
+ IUSE="kernel_linux"
  RESTRICT="test" # see bug #236845
  
 -RDEPEND="dev-libs/libpthread-stubs"
