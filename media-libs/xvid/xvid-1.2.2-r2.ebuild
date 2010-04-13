@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/xvid/xvid-1.2.2-r2.ebuild,v 1.1 2010/02/21 10:15:36 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/xvid/xvid-1.2.2-r2.ebuild,v 1.2 2010/04/13 07:50:50 ssuominen Exp $
 
 EAPI=2
 inherit eutils multilib multilib-native
@@ -31,6 +31,10 @@ S=${WORKDIR}/${MY_PN}/build/generic
 multilib-native_src_prepare_internal() {
 	cd "${WORKDIR}"
 	epatch "${FILESDIR}"/${P}-noexecstack.patch
+
+	sed -i \
+		-e '/^minimum_yasm_minor_version/s:=.*:=0:' \
+		"${S}"/configure || die
 }
 
 multilib-native_src_configure_internal() {
