@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2-r5.ebuild,v 1.1 2010/03/21 14:58:49 anarchy Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.3-r1.ebuild,v 1.2 2010/04/11 21:13:09 anarchy Exp $
 
 EAPI="2"
 WANT_AUTOCONF="2.1"
@@ -25,7 +25,7 @@ IUSE="+alsa debug libnotify system-sqlite wifi"
 RDEPEND="java? ( >=virtual/jre-1.4 )
 	>=dev-lang/python-2.3[threads,lib32?]
 	>=sys-devel/binutils-2.16.1
-	>=dev-libs/nss-3.12.4[lib32?]
+	>=dev-libs/nss-3.12.6[lib32?]
 	>=dev-libs/nspr-4.8[lib32?]
 	system-sqlite? ( >=dev-db/sqlite-3.6.22-r2[fts3,secure-delete,lib32?] )
 	alsa? ( media-libs/alsa-lib[lib32?] )
@@ -70,6 +70,9 @@ multilib-native_src_prepare_internal() {
 
 	# Fix broken alignment
 	epatch "${FILESDIR}/1000_fix_alignment.patch"
+
+	# Ensure we find myspell dict.
+	epatch "${FILESDIR}/1002_fix-system-hunspell-dict-detections.patch"
 
 	# Same as in config/autoconf.mk.in
 	MOZLIBDIR="/usr/$(get_libdir)/${PN}-${MAJ_PV}"
@@ -199,6 +202,7 @@ multilib-native_src_install_internal() {
 
 	if use java ; then
 		java-pkg_regjar "${D}/${MOZLIBDIR}/javaxpcom.jar"
+		java-pkg_regso "${D}/${MOZLIBDIR}/libjavaxpcomglue.so"
 		java-pkg_regjar "${D}/${SDKDIR}/lib/MozillaGlue.jar"
 		java-pkg_regjar "${D}/${SDKDIR}/lib/MozillaInterfaces.jar"
 	fi
