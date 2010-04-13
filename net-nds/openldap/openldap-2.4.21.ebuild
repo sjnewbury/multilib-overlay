@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-nds/openldap/openldap-2.4.19.ebuild,v 1.12 2010/01/12 20:05:41 cardoe Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-nds/openldap/openldap-2.4.21.ebuild,v 1.1 2010/04/11 15:14:48 jokey Exp $
 
 EAPI="2"
 inherit db-use eutils flag-o-matic multilib ssl-cert versionator toolchain-funcs multilib-native
@@ -11,7 +11,7 @@ SRC_URI="mirror://openldap/openldap-release/${P}.tgz"
 
 LICENSE="OPENLDAP"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 
 IUSE_DAEMON="crypt icu samba slp tcpd experimental minimal"
 IUSE_BACKEND="+berkdb"
@@ -48,6 +48,11 @@ DEPEND="${RDEPEND}"
 OPENLDAP_VERSIONTAG=".version-tag"
 OPENLDAP_DEFAULTDIR_VERSIONTAG="/var/lib/openldap-data"
 
+openldap_filecount() {
+	local dir="$1"
+	find "${dir}" -type f ! -name '.*' ! -name 'DB_CONFIG.example' | wc -l
+}
+
 openldap_find_versiontags() {
 	# scan for all datadirs
 	openldap_datadirs=""
@@ -64,6 +69,7 @@ openldap_find_versiontags() {
 
 	# scan datadirs if we have a version tag
 	openldap_found_tag=0
+	have_files=0
 	for each in ${openldap_datadirs}; do
 		CURRENT_TAGDIR=${ROOT}`echo ${each} | sed "s:\/::"`
 		CURRENT_TAG=${CURRENT_TAGDIR}/${OPENLDAP_VERSIONTAG}
@@ -82,10 +88,12 @@ openldap_find_versiontags() {
 
 				OLD_MAJOR=`get_version_component_range 2-3 ${OLDPF}`
 
+				[ $(openldap_filecount ${CURRENT_TAGDIR}) -gt 0 ] && have_files=1
+
 				# are we on the same branch?
 				if [ "${OLD_MAJOR}" != "${PV:0:3}" ] ; then
 					ewarn "   Versiontag doesn't match current major release!"
-					if [[ `ls -a ${CURRENT_TAGDIR} | wc -l` -gt 5 ]] ; then
+					if [[ "${have_files}" == "1" ]] ; then
 						eerror "   Versiontag says other major and you (probably) have datafiles!"
 						echo
 						openldap_upgrade_howto
@@ -97,7 +105,8 @@ openldap_find_versiontags() {
 				fi
 			else
 				einfo "   Non-tagged dir ${each}"
-				if [[ `ls -a ${each} | wc -l` > 5 ]] ; then
+				[ $(openldap_filecount ${each}) -gt 0 ] && have_files=1
+				if [[ "${have_files}" == "1" ]] ; then
 					einfo "   EEK! Non-empty non-tagged datadir, counting `ls -a ${each} | wc -l` files"
 					echo
 
@@ -117,6 +126,40 @@ openldap_find_versiontags() {
 			einfo
 		fi
 	done
+	[ "${have_files}" == "1" ] && einfo "DB files present" || einfo "No DB files present"
+
+	# Now we must check for the major version of sys-libs/db linked against.
+	SLAPD_PATH=${ROOT}/usr/$(get_libdir)/openldap/slapd
+	if [ "${have_files}" == "1" -a -f "${SLAPD_PATH}" ]; then
+		OLDVER="$(/usr/bin/ldd ${SLAPD_PATH} \
+			| awk '/libdb-/{gsub("^libdb-","",$1);gsub(".so$","",$1);print $1}')"
+		NEWVER="$(use berkdb && db_findver sys-libs/db)"
+		local fail=0
+		if [ -z "${OLDVER}" -a -z "${NEWVER}" ]; then
+			:
+			# Nothing wrong here.
+		elif [ -z "${OLDVER}" -a -n "${NEWVER}" ]; then
+			eerror "	Your existing version of OpenLDAP was not built against"
+			eerror "	any version of sys-libs/db, but the new one will build"
+			eerror "	against	${NEWVER} and your database may be inaccessible."
+			echo
+			fail=1
+		elif [ -n "${OLDVER}" -a -z "${NEWVER}" ]; then
+			eerror "	Your existing version of OpenLDAP was built against"
+			eerror "	sys-libs/db:${OLDVER}, but the new one will not be"
+			eerror "	built against any version and your database may be"
+			eerror "	inaccessible."
+			echo
+			fail=1
+		elif [ "${OLDVER}" != "${NEWVER}" ]; then
+			eerror "	Your existing version of OpenLDAP was built against"
+			eerror "	sys-libs/db:${OLDVER}, but the new one will build against"
+			eerror "	${NEWVER} and your database would be inaccessible."
+			echo
+			fail=1
+		fi
+		[ "${fail}" == "1" ] && openldap_upgrade_howto
+	fi
 
 	echo
 	einfo
@@ -131,6 +174,9 @@ openldap_upgrade_howto() {
 	eerror
 	eerror "As major version upgrades can corrupt your database,"
 	eerror "you need to dump your database and re-create it afterwards."
+	eerror
+	eerror "Additionally, rebuilding against different major versions of the"
+	eerror "sys-libs/db libraries will cause your database to be inaccessible."
 	eerror ""
 	d="$(date -u +%s)"
 	l="/root/ldapdump.${d}"
@@ -208,8 +254,11 @@ build_contrib_module() {
 	# <dir> <sources> <outputname>
 	cd "${S}/contrib/slapd-modules/$1"
 	einfo "Compiling contrib-module: $3"
+	# Make sure it's uppercase
+	local define_name="$(echo "SLAPD_OVER_${1}" | LC_ALL=C tr '[:lower:]' '[:upper:]')"
 	"${lt}" --mode=compile --tag=CC \
 		"${CC}" \
+		-D${define_name}=SLAPD_MOD_DYNAMIC \
 		-I../../../include -I../../../servers/slapd ${CFLAGS} \
 		-o ${2%.c}.lo -c $2 || die "compiling $3 failed"
 	einfo "Linking contrib-module: $3"
@@ -233,6 +282,10 @@ multilib-native_src_configure_internal() {
 	export ac_cv_header_unicode_utypes_h="$(use icu && echo yes || echo no)"
 
 	if ! use minimal ; then
+		# re-enable serverside overlay chains per bug #296567
+		# see ldap docs chaper 12.3.1 for details
+		myconf="${myconf} --enable-ldap"
+
 		# backends
 		myconf="${myconf} --enable-slapd"
 		if use berkdb ; then
@@ -256,7 +309,10 @@ multilib-native_src_configure_internal() {
 		myconf="${myconf} $(use_enable odbc sql mod)"
 		if use odbc ; then
 			local odbc_lib="unixodbc"
-			use iodbc && odbc_lib="iodbc"
+			if use iodbc ; then
+				odbc_lib="iodbc"
+				append-cppflags -I/usr/include/iodbc
+			fi
 			myconf="${myconf} --with-odbc=${odbc_lib}"
 		fi
 
@@ -302,8 +358,13 @@ multilib-native_src_configure_internal() {
 	STRIP=/bin/true \
 	econf \
 		--libexecdir=/usr/$(get_libdir)/openldap \
-		${myconf}
+		${myconf} || die "econf failed"
+}
 
+src_configure_cxx() {
+	# This needs the libraries built by the first build run.
+	# So we have to run it AFTER the main build, not just after the main
+	# configure.
 	if ! use minimal ; then
 		 if use cxx ; then
 		 	local myconf_ldapcpp
@@ -319,6 +380,7 @@ multilib-native_src_configure_internal() {
 		 		CXX="${CXX}" \
 		 		|| die "econf ldapc++ failed"
 		 	CPPFLAGS="$OLD_CPPFLAGS"
+			LDFLAGS="${OLD_LDFLAGS}"
 		 fi
 	fi
 }
@@ -332,6 +394,7 @@ multilib-native_src_compile_internal() {
 	if ! use minimal ; then
 		 if use cxx ; then
 		 	einfo "Building contrib library: ldapc++"
+			src_configure_cxx
 		 	cd "${S}/contrib/ldapc++"
 		 	emake \
 		 		CC="${CC}" CXX="${CXX}" \
@@ -460,7 +523,7 @@ multilib-native_src_install_internal() {
 		eend
 
 		# install our own init scripts
-		newinitd "${FILESDIR}"/slapd-initd slapd
+		newinitd "${FILESDIR}"/slapd-initd2 slapd
 		newconfd "${FILESDIR}"/slapd-confd slapd
 		if [ $(get_libdir) != lib ]; then
 			sed -e "s,/usr/lib/,/usr/$(get_libdir)/," -i "${D}"etc/init.d/slapd
