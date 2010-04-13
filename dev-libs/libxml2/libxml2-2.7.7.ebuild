@@ -1,8 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libxml2/libxml2-2.7.7.ebuild,v 1.1 2010/03/18 12:59:10 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libxml2/libxml2-2.7.7.ebuild,v 1.3 2010/04/07 21:16:18 arfrever Exp $
 
 EAPI="2"
+SUPPORT_PYTHON_ABIS="1"
+RESTRICT_PYTHON_ABIS="3.*"
 
 inherit libtool flag-o-matic eutils python multilib-native
 
@@ -52,6 +54,9 @@ multilib-native_src_prepare_internal() {
 	# Please do not remove, as else we get references to PORTAGE_TMPDIR
 	# in /usr/lib/python?.?/site-packages/libxml2mod.la among things.
 	elibtoolize
+
+	# Python bindings are built/tested/installed manually.
+	sed -e "s/@PYTHON_SUBDIR@//" -i Makefile.in || die "sed failed"
 }
 
 multilib-native_src_configure_internal() {
@@ -71,21 +76,55 @@ multilib-native_src_configure_internal() {
 		$(use_with python)
 		$(use_with readline)
 		$(use_with readline history)
-		$(use_enable ipv6)
-		PYTHON_SITE_PACKAGES=$(python_get_sitedir)"
+		$(use_enable ipv6)"
 
 	# filter seemingly problematic CFLAGS (#26320)
 	filter-flags -fprefetch-loop-arrays -funroll-loops
 
-	econf ${myconf}
+	python_execute_function -f -q econf ${myconf}
+}
+
+multilib-native_src_compile_internal() {
+	default
+
+	if use python; then
+		python_copy_sources python
+		building() {
+			emake PYTHON_INCLUDES="$(python_get_includedir)" \
+				PYTHON_SITE_PACKAGES="$(python_get_sitedir)"
+		}
+		python_execute_function -s --source-dir python building
+	fi
+}
+
+src_test() {
+	default
+
+	if use python; then
+		testing() {
+			emake test
+		}
+		python_execute_function -s --source-dir python testing
+	fi
 }
 
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" \
 		EXAMPLES_DIR=/usr/share/doc/${PF}/examples \
-		docsdir=/usr/share/doc/${PF}/python \
-		exampledir=/usr/share/doc/${PF}/python/examples \
 		install || die "Installation failed"
+
+	if use python; then
+		installation() {
+			emake DESTDIR="${D}" \
+				PYTHON_SITE_PACKAGES="$(python_get_sitedir)" \
+				docsdir=/usr/share/doc/${PF}/python \
+				exampledir=/usr/share/doc/${PF}/python/examples \
+				install
+		}
+		python_execute_function -s --source-dir python installation
+
+		python_clean_sitedirs
+	fi
 
 	rm -rf "${D}"/usr/share/doc/${P}
 	dodoc AUTHORS ChangeLog Copyright NEWS README* TODO* || die "dodoc failed"
@@ -110,8 +149,7 @@ multilib-native_src_install_internal() {
 
 multilib-native_pkg_postinst_internal() {
 	if use python; then
-		python_need_rebuild
-		python_mod_optimize $(python_get_sitedir)
+		python_mod_optimize drv_libxml2.py libxml2.py
 	fi
 
 	# We don't want to do the xmlcatalog during stage1, as xmlcatalog will not
@@ -135,5 +173,7 @@ multilib-native_pkg_postinst_internal() {
 }
 
 multilib-native_pkg_postrm_internal() {
-	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages
+	if use python; then
+		python_mod_cleanup drv_libxml2.py libxml2.py
+	fi
 }
