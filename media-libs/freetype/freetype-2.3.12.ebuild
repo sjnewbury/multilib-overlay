@@ -17,7 +17,7 @@ SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
 IUSE="X bindist debug doc utils fontforge"
 
-DEPEND="sys-libs/zlib
+DEPEND="sys-libs/zlib[lib32?]
 	X?	( x11-libs/libX11[lib32?]
 		  x11-libs/libXau[lib32?]
 		  x11-libs/libXdmcp[lib32?] )"
@@ -118,7 +118,7 @@ multilib-native_src_install_internal() {
 	prep_ml_binaries /usr/bin/freetype-config
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	echo
 	elog "The utilities and demos previously bundled with freetype are now"
 	elog "optional.  Enable the utils USE flag if you would like them"

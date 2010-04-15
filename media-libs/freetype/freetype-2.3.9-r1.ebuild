@@ -119,7 +119,7 @@ multilib-native_src_install_internal() {
 	prep_ml_binaries /usr/bin/freetype-config
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	echo
 	elog "The utilities and demos previously bundled with freetype are now"
 	elog "optional.  Enable the utils USE flag if you would like them"
