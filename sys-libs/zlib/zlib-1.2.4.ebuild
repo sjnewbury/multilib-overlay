@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/zlib/zlib-1.2.4.ebuild,v 1.3 2010/03/19 19:09:37 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/zlib/zlib-1.2.4.ebuild,v 1.4 2010/04/14 02:23:25 vapier Exp $
 
 inherit eutils toolchain-funcs multilib-native
 
@@ -27,7 +27,7 @@ multilib-native_src_unpack_internal() {
 	# trust exit status of the compiler rather than stderr #55434
 	# -if test "`(...) 2>&1`" = ""; then
 	# +if (...) 2>/dev/null; then
-	sed -i 's|if test "`\(.*\) 2>&1`" = ""; then|if \1 2>/dev/null; then|' configure || die
+	sed -i 's|\<test "`\([^"]*\) 2>&1`" = ""|\1 2>/dev/null|' configure || die
 	sed -i -e '/ldconfig/d' Makefile* || die
 }
 
