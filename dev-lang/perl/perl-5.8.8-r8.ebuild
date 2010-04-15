@@ -412,7 +412,7 @@ EOF
 		src_remove_extra_files
 	fi
 
-	prep_ml_binaries /usr/bin/perl
+	prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
 }
 
 multilib-native_pkg_postinst_internal() {
