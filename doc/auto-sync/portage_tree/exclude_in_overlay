@@ -59,3 +59,4 @@ media-libs/fontconfig/fontconfig-9999.ebuild # x11
 sys-apps/dbus/dbus-9999.ebuild 
 net-misc/networkmanager/networkmanager-9999.ebuild
 media-sound/musepack-tools/files/musepack-tools-458-CFLAGS.patch # patch of multilib overlay look into the commit msg for further info
+dev-libs/dbus-glib/dbus-glib-9999.ebuild

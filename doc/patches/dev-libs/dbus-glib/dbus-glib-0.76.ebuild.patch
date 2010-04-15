@@ -1,0 +1,27 @@
+--- /usr/portage/dev-libs/dbus-glib/dbus-glib-0.76.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./dev-libs/dbus-glib/dbus-glib-0.76.ebuild	2010-04-15 22:54:39.000000000 +0200
+@@ -22,13 +22,11 @@
+ 	dev-util/pkgconfig
+ 	doc? ( app-doc/doxygen app-text/xmlto )"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/${PN}-introspection.patch
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	local myconf=""
+ 
+ 	econf \
+@@ -50,8 +48,6 @@
+ 	# after the compile, it uses a selinuxfs interface to
+ 	# check if the SELinux policy has the right support
+ 	use selinux && addwrite /selinux/access
+-
+-	emake || die "make failed"
+ }
+ 
+ src_install() {

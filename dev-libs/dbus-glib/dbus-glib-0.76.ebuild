@@ -17,16 +17,14 @@ IUSE="doc selinux debug"
 
 RDEPEND=">=sys-apps/dbus-1.1.0[lib32?]
 	>=dev-libs/glib-2.6[lib32?]
-	selinux? ( sys-libs/libselinux )
+	selinux? ( sys-libs/libselinux[lib32?] )
 	>=dev-libs/libxml2-2.6.21[lib32?]"
 	# expat code now sucks.. libxml2 is the default
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	doc? ( app-doc/doxygen app-text/xmlto )"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-introspection.patch
 }
 

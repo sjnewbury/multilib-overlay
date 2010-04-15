@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/dbus-glib/dbus-glib-0.86.ebuild,v 1.1 2010/03/31 22:17:21 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/dbus-glib/dbus-glib-0.86.ebuild,v 1.2 2010/04/07 04:22:40 darkside Exp $
 
 EAPI="2"
 
@@ -19,8 +19,8 @@ RDEPEND=">=sys-apps/dbus-1.1[lib32?]
 	>=dev-libs/glib-2.10[lib32?]
 	>=dev-libs/expat-1.95.8[lib32?]"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
-	sys-devel/gettext
+	dev-util/pkgconfig[lib32?]
+	sys-devel/gettext[lib32?]
 	doc? (
 		app-doc/doxygen
 		app-text/xmlto
@@ -31,7 +31,7 @@ BD=${WORKDIR}/${P}-build
 # out of sources build dir for make check
 TBD=${WORKDIR}/${P}-tests-build
 
-BASH_COMPLETION_NAME="dbus"
+BASHCOMPLETION_NAME="dbus"
 
 multilib-native_src_configure_internal() {
 	local my_conf

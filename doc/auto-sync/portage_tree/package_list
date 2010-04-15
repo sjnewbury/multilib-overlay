@@ -52,7 +52,7 @@ dev-db/sqlite
 dev-libs/atk
 # dev-libs/check
 # dev-libs/cyrus-sasl
-# dev-libs/dbus-glib
+dev-libs/dbus-glib
 # dev-libs/DirectFB
 # dev-libs/eggdbus
 dev-libs/expat
