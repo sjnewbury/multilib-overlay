@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/imagemagick/imagemagick-6.6.0.10.ebuild,v 1.1 2010/03/31 10:02:31 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/imagemagick/imagemagick-6.6.1.2.ebuild,v 1.1 2010/04/14 15:05:20 ssuominen Exp $
 
 EAPI=3
 inherit multilib toolchain-funcs versionator multilib-native
