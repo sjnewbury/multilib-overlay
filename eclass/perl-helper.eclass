@@ -11,7 +11,6 @@ perlinfo() {
 
 perl_set_version() {
 	debug-print-function $FUNCNAME "$@"
-	debug-print "$FUNCNAME: perlinfo_done=${perlinfo_done}"
 
 	local f version install{{site,vendor}{arch,lib},archlib}
 	eval "$(perl -V:{version,install{{site,vendor}{arch,lib},archlib}} )"
