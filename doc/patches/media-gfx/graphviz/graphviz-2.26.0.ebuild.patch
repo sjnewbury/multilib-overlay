@@ -1,20 +1,10 @@
---- ./media-gfx/graphviz/graphviz-2.26.0.ebuild.orig	2010-02-28 17:40:35.000000000 +0100
-+++ ./media-gfx/graphviz/graphviz-2.26.0.ebuild	2010-02-28 17:40:53.000000000 +0100
-@@ -104,6 +104,17 @@
- 			| xargs sed -i -e '/html_DATA/d' -e '/pdf_DATA/d' || die
- 	fi
- 
-+	local pf="$(get_libdir)"
-+	pf="${pf#lib}"
-+
-+	sed -i -e \
-+		's:LIBPOSTFIX=.*:LIBPOSTFIX='"${pf}"':' \
-+		configure.ac || die "sed fix EXPAT_LIBS failed"
-+	
-+	sed -i -e \
-+		's:AC_CHECK_PROG(PERL,perl,perl):AC_CHECK_PROG(PERL,perl-'"$ABI"',perl-'"$ABI"'):' \
-+		configure.ac || die "sed fix perl config failed"
-+
- 	# This is an old version of libtool
- 	rm -rf libltdl
- 	sed -i -e '/libltdl/d' configure.ac || die
+--- /usr/portage/media-gfx/graphviz/graphviz-2.26.0.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./media-gfx/graphviz/graphviz-2.26.0.ebuild	2010-04-17 13:05:41.000000000 +0200
+@@ -26,6 +26,7 @@
+ 	>=media-libs/jpeg-6b
+ 	>=media-libs/libpng-1.2.10
+ 	virtual/libiconv
++	gnome-base/librsvg
+ 	cairo?	(
+ 		x11-libs/libXaw
+ 		>=x11-libs/pango-1.12

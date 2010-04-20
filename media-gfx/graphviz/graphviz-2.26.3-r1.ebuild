@@ -26,6 +26,7 @@ RDEPEND="
 	>=media-libs/jpeg-6b[lib32?]
 	>=media-libs/libpng-1.2.10[lib32?]
 	virtual/libiconv
+	gnome-base/librsvg[lib32?]
 	cairo?	(
 		x11-libs/libXaw[lib32?]
 		>=x11-libs/pango-1.12[lib32?]
