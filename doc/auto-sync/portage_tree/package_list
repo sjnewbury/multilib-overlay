@@ -100,6 +100,7 @@ dev-libs/openssl
 # dev-libs/poppler-glib
 # dev-libs/popt
 # dev-libs/pth
+dev-perl/XML-Parser
 dev-python/dbus-python
 # dev-python/gnome-vfs-python
 # dev-python/libbonobo-python
