@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.4.0.ebuild,v 1.1 2010/03/16 11:02:56 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.4.0.ebuild,v 1.2 2010/04/18 12:41:42 reavertm Exp $
 
 EAPI="2"
 
@@ -64,7 +64,7 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
-	mycmakeargs="${mycmakeargs}
+	mycmakeargs=(
 		$(cmake-utils_use_with alsa)
 		$(cmake-utils_use_build aqua PHONON_QT7)
 		$(cmake-utils_use_with gstreamer GStreamer)
@@ -73,7 +73,7 @@ multilib-native_src_configure_internal() {
 		$(cmake-utils_use_with pulseaudio GLib2)
 		$(cmake-utils_use_with xine)
 		$(cmake-utils_use_with xcb)
-	"
+	)
 
 	cmake-utils_src_configure
 }
