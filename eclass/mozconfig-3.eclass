@@ -1,6 +1,6 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/mozconfig-3.eclass,v 1.8 2010/01/27 12:06:22 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/mozconfig-3.eclass,v 1.9 2010/04/18 20:46:32 anarchy Exp $
 #
 # mozconfig.eclass: the new mozilla.eclass
 
@@ -27,9 +27,6 @@ RDEPEND="x11-libs/libXrender[lib32?]
 	startup-notification? ( >=x11-libs/startup-notification-0.8[lib32?] )
 	!<x11-base/xorg-x11-6.7.0-r2
 	>=x11-libs/cairo-1.6.0[lib32?]"
-	#According to bugs #18573, #204520, and couple of others in Mozilla's
-	#bugzilla. libmng and mng support has been removed in 2003.
-
 
 DEPEND="${RDEPEND}"
 
@@ -40,9 +37,7 @@ mozconfig_config() {
 	    mozconfig_annotate -thebes --enable-default-toolkit=gtk2
 	fi
 
-	if ! use dbus; then
-		mozconfig_annotate '' --disable-dbus
-	fi
+	mozconfig_use_enable dbus
 	mozconfig_use_enable startup-notification
 
 #	if use debug; then
@@ -64,8 +59,6 @@ mozconfig_config() {
 	fi
 #	fi
 
-	if ! use gnome; then
-		mozconfig_annotate -gnome --disable-gnomevfs
-		mozconfig_annotate -gnome --disable-gnomeui
-	fi
+	mozconfig_use_enable gnome gnomevfs
+	mozconfig_use_enable gnome gnomeui
 }
