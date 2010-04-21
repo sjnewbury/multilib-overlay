@@ -1,6 +1,6 @@
 # Copyright 1999-2004 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/linux-mod.eclass,v 1.98 2010/01/17 04:00:07 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/linux-mod.eclass,v 1.99 2010/03/31 19:33:16 robbat2 Exp $
 
 # Author(s): John Mylchreest <johnm@gentoo.org>,
 #            Stefan Schweizer <genstef@gentoo.org>
@@ -608,11 +608,10 @@ linux-mod_pkg_setup() {
 linux-mod_pkg_setup_binary() {
 	debug-print-function ${FUNCNAME} $*
 	local new_CONFIG_CHECK
+	# ~ needs always to be quoted, else bash expands it.	
 	for config in $CONFIG_CHECK ; do
-		case ${config:0:1} in
-			~) optional="" ;;
-			*) optional="~" ;;
-		esac
+		optional='~'
+		[[ ${config:0:1} == "~" ]] && optional=''
 		new_CONFIG_CHECK="${new_CONFIG_CHECK} ${optional}${config}"
 	done
 	export CONFIG_CHECK="${new_CONFIG_CHECK}"
