@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-vfs/gnome-vfs-2.24.3.ebuild,v 1.2 2010/04/14 19:27:55 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-vfs/gnome-vfs-2.24.3-r1.ebuild,v 1.1 2010/04/18 12:55:31 pacho Exp $
 
 EAPI="2"
 
