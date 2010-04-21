@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/dbus/dbus-1.2.3-r1.ebuild,v 1.10 2009/02/05 19:03:24 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/dbus/dbus-1.2.3-r1.ebuild,v 1.11 2010/04/20 11:36:30 ssuominen Exp $
 
 EAPI="2"
 
@@ -111,9 +111,6 @@ multilib-native_pkg_postinst_internal() {
 	elog
 	elog "Some applications require a session bus in addition to the system"
 	elog "bus. Please see \`man dbus-launch\` for more information."
-	elog
-	elog
-	ewarn "You MUST run 'revdep-rebuild' after emerging this package"
 	elog
 	ewarn "If you are currently running X with the hal useflag enabled"
 	ewarn "restarting the dbus service WILL restart X as well"
