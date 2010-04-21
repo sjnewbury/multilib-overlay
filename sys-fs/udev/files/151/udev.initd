@@ -23,7 +23,7 @@ depend()
 		before checkfs fsck
 
 		# udev does not work inside vservers
-		keyword novserver
+		keyword novserver nolxc noopenvz
 	fi
 }
 
