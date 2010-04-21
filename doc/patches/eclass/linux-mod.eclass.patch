@@ -1,5 +1,5 @@
---- /usr/portage/eclass/linux-mod.eclass	2010-01-17 05:11:37.000000000 +0100
-+++ ./eclass/linux-mod.eclass	2010-03-27 22:15:57.000000000 +0100
+--- /usr/portage/eclass/linux-mod.eclass	2010-03-31 21:35:43.000000000 +0200
++++ ./eclass/linux-mod.eclass	2010-04-22 00:47:44.000000000 +0200
 @@ -131,8 +131,14 @@
  # See http://bugs.gentoo.org/show_bug.cgi?id=127506
  
@@ -17,7 +17,7 @@
  IUSE="kernel_linux"
  SLOT="0"
  DESCRIPTION="Based on the $ECLASS eclass"
-@@ -622,6 +628,57 @@
+@@ -621,6 +627,57 @@
  	done
  }
  
@@ -75,7 +75,7 @@
  # @FUNCTION: linux-mod_src_compile
  # @DESCRIPTION:
  # It compiles all the modules specified in MODULE_NAMES. For each module the econf command is
-@@ -657,7 +714,8 @@
+@@ -656,7 +713,8 @@
  			cd "${srcdir}"
  			ln -s "${S}"/Module.symvers Module.symvers
  			einfo "Preparing ${modulename} module"
@@ -85,7 +85,7 @@
  			then
  				econf ${ECONF_PARAMS} || \
  				die "Unable to run econf ${ECONF_PARAMS}"
-@@ -669,12 +727,12 @@
+@@ -668,12 +726,12 @@
  			# inside the variables gets used as targets for Make, which then
  			# fails.
  			eval "emake HOSTCC=\"$(tc-getBUILD_CC)\" \
