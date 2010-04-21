@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/mozilla-firefox/mozilla-firefox-3.6.3.ebuild,v 1.1 2010/04/05 05:09:23 anarchy Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/mozilla-firefox/mozilla-firefox-3.6.3.ebuild,v 1.4 2010/04/20 09:37:08 fauli Exp $
 EAPI="2"
 WANT_AUTOCONF="2.1"
 
@@ -22,7 +22,7 @@ PATCH="${PN}-3.6-patches-0.6"
 DESCRIPTION="Firefox Web Browser"
 HOMEPAGE="http://www.mozilla.com/firefox"
 
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc x86"
 SLOT="0"
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 IUSE="+alsa bindist java libnotify system-sqlite wifi"
@@ -133,6 +133,9 @@ multilib-native_src_prepare_internal() {
 
 	# Fix broken alignment
 	epatch "${FILESDIR}/1000_fix_alignment.patch"
+
+	# Allow user to apply additional patches without modifing ebuild
+	epatch_user
 
 	eautoreconf
 
