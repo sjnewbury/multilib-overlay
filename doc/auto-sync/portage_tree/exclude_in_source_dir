@@ -27,12 +27,6 @@ net-misc/openssh/openssh-5.1_p1-r2.ebuild
 net-misc/openssh/openssh-5.2_p1-r3.ebuild
 dev-libs/libgcrypt/libgcrypt-1.4.0-r1.ebuild
 dev-libs/libgcrypt/libgcrypt-1.4.3-r1.ebuild
-dev-db/sqlite/sqlite-3.6.19.ebuild
-dev-db/sqlite/sqlite-3.6.20.ebuild
-dev-db/sqlite/sqlite-3.6.20-r1.ebuild
-dev-db/sqlite/sqlite-3.6.21.ebuild
-dev-db/sqlite/sqlite-3.6.22.ebuild
-dev-db/sqlite/sqlite-3.6.22-r1.ebuild
 dev-cpp/gtkmm/gtkmm-1.2.9-r2.ebuild
 dev-cpp/gtkmm/gtkmm-2.2.12.ebuild
 dev-cpp/glibmm/glibmm-2.8.4.ebuild
