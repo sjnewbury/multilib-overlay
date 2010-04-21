@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/libraw1394/libraw1394-2.0.4.ebuild,v 1.6 2010/04/11 18:29:06 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/libraw1394/libraw1394-2.0.4.ebuild,v 1.7 2010/04/16 09:54:55 pacho Exp $
 
 inherit multilib-native
 
@@ -10,7 +10,7 @@ SRC_URI="http://www.linux1394.org/dl/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="alpha ~amd64 arm hppa ia64 ppc ppc64 sh sparc x86"
+KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86"
 IUSE=""
 
 DEPEND="!<media-libs/libdc1394-1.2.2"
