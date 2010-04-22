@@ -36,14 +36,11 @@ multilib-native_src_prepare_internal() {
 	# Respect LDFLAGS
 	sed -i -e 's/\$(MKSHLIB) -o/\$(MKSHLIB) \$(LDFLAGS) -o/g' rules.mk
 
-	# do not always append -m64/-m32 on 64bit since it breaks multilib build
-	sed -i -e '/ARCHFLAG.*=/s:^:# :' Linux.mk
-
 	# Ensure we stay multilib aware
 	sed -i -e "s:gentoo\/nss:$(get_libdir):" "${S}"/mozilla/security/nss/config/Makefile || die "Failed to fix for multilib"
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	strip-flags
 
 	echo > "${T}"/test.c
@@ -64,7 +61,9 @@ multilib-native_src_compile_internal() {
 	export NSS_ENABLE_ECC=1
 	export XCFLAGS="${CFLAGS}"
 	export FREEBL_NO_DEPEND=1
+}
 
+multilib-native_src_compile_internal() {
 	cd "${S}"/mozilla/security/coreconf
 	emake -j1 CC="$(tc-getCC)" || die "coreconf make failed"
 	cd "${S}"/mozilla/security/dbm
@@ -107,10 +106,10 @@ multilib-native_src_install_internal() {
 		done
 	fi
 
-	prep_ml_binaries /usr/bin/nss-config 
+	prep_ml_binaries /usr/bin/nss-config
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "We have reverted back to using upstreams soname."
 	elog "Please run revdep-rebuild --library libnss3.so.12 , this"
 	elog "will correct most issues. If you find a binary that does"

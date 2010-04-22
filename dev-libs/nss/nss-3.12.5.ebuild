@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/nss/nss-3.12.5.ebuild,v 1.2 2009/12/15 22:59:34 anarchy Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/nss/nss-3.12.5.ebuild,v 1.10 2010/02/09 11:43:21 pacho Exp $
 
 EAPI="2"
 
@@ -36,14 +36,11 @@ multilib-native_src_prepare_internal() {
 	# Respect LDFLAGS
 	sed -i -e 's/\$(MKSHLIB) -o/\$(MKSHLIB) \$(LDFLAGS) -o/g' rules.mk
 
-	# do not always append -m64/-m32 on 64bit since it breaks multilib build
-	sed -i -e '/ARCHFLAG.*=/s:^:# :' Linux.mk
-
 	# Ensure we stay multilib aware
 	sed -i -e "s:gentoo:$(get_libdir):" "${S}"/mozilla/security/nss/config/Makefile || die "Failed to fix for multilib"
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	strip-flags
 
 	echo > "${T}"/test.c
@@ -66,7 +63,9 @@ multilib-native_src_compile_internal() {
 	export FREEBL_NO_DEPEND=1
 	export PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
 	export PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
+}
 
+multilib-native_src_compile_internal() {
 	cd "${S}"/mozilla/security/coreconf
 	emake -j1 CC="$(tc-getCC)" || die "coreconf make failed"
 	cd "${S}"/mozilla/security/dbm
@@ -105,7 +104,7 @@ multilib-native_src_install_internal() {
 	# coping with nss being in a different path. We move up priority to
 	# ensure that nss/nspr are used specifically before searching elsewhere.
 	dodir /etc/env.d
-	echo "LDPATH=/usr/$(get_libdir)/nss" > "${D}/etc/env.d/08nss-${ABI}"
+	echo "LDPATH=/usr/$(get_libdir)/nss" > "${D}"/etc/env.d/08nss-${ABI}
 
 	if use utils; then
 		cd "${S}"/mozilla/security/dist/*/bin/
@@ -114,10 +113,10 @@ multilib-native_src_install_internal() {
 		done
 	fi
 
-	prep_ml_binaries /usr/bin/nss-config 
+	prep_ml_binaries /usr/bin/nss-config
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "We have reverted back to using upstreams soname."
 	elog "Please run revdep-rebuild --library libnss3.so.12 , this"
 	elog "will correct most issues. If you find a binary that does"
