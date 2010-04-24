@@ -109,7 +109,7 @@ dev-python/dbus-python
 # dev-python/numeric
 # dev-python/numpy
 # dev-python/pycairo
-# dev-python/pygobject
+dev-python/pygobject
 dev-python/pygtk
 # dev-python/pyorbit
 # dev-python/pyrex
