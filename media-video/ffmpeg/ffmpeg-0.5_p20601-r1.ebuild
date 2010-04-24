@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-0.5_p20601-r1.ebuild,v 1.5 2010/03/13 14:33:52 lu_zero Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-0.5_p20601-r1.ebuild,v 1.6 2010/04/23 12:53:48 ssuominen Exp $
 
 EAPI=2
 SCM=""
@@ -27,7 +27,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="+3dnow +3dnowext alsa altivec cpudetection custom-cflags debug dirac
 	  doc ieee1394 +encode faac faad gsm ipv6 jack +mmx +mmxext vorbis test
-	  theora threads x264 xvid network zlib sdl X mp3 opencore-amr
+	  theora threads x264 xvid network zlib sdl X mp3 amr
 	  oss pic schroedinger +hardcoded-tables bindist v4l v4l2
 	  speex +ssse3 jpeg2k vdpau"
 
@@ -53,7 +53,7 @@ RDEPEND="sdl? ( >=media-libs/libsdl-1.2.10[lib32?] )
 	dirac? ( media-video/dirac[lib32?] )
 	gsm? ( >=media-sound/gsm-1.0.12-r1[lib32?] )
 	jpeg2k? ( >=media-libs/openjpeg-1.3-r2[lib32?] )
-	opencore-amr? ( media-libs/opencore-amr )
+	amr? ( media-libs/opencore-amr )
 	schroedinger? ( media-libs/schroedinger[lib32?] )
 	speex? ( >=media-libs/speex-1.2_beta3[lib32?] )
 	jack? ( media-sound/jack-audio-connection-kit[lib32?] )
@@ -138,7 +138,7 @@ multilib-native_src_configure_internal() {
 	use threads && myconf="${myconf} --enable-pthreads"
 
 	# Decoders
-	use opencore-amr && myconf="${myconf} --enable-libopencore-amrwb
+	use amr && myconf="${myconf} --enable-libopencore-amrwb
 		--enable-libopencore-amrnb"
 	for i in faad dirac schroedinger speex; do
 		use $i && myconf="${myconf} --enable-lib$i"
