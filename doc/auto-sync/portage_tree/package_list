@@ -214,7 +214,7 @@ media-libs/mesa
 # media-libs/nas
 media-libs/openal
 # media-libs/openexr
-# media-libs/openjpeg
+media-libs/openjpeg
 # media-libs/schroedinger
 media-libs/sdl-image
 # media-libs/sdl-mixer
