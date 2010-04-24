@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/gnome-doc-utils/gnome-doc-utils-0.18.1.ebuild,v 1.7 2010/04/18 18:37:40 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/gnome-doc-utils/gnome-doc-utils-0.18.0.ebuild,v 1.2 2009/12/09 22:12:55 eva Exp $
 
 EAPI="2"
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE=""
 
 RDEPEND=">=dev-libs/libxml2-2.6.12[python,lib32?]
@@ -30,20 +30,12 @@ DOCS="AUTHORS ChangeLog NEWS README"
 # FIXME: Highly broken with parallel make, see bug #286889
 MAKEOPTS="${MAKEOPTS} -j1"
 
-# If there is a need to reintroduce eautomake or eautoreconf, make sure
-# to AT_M4DIR="tools m4", bug #224609 (m4 removes glib build time dep)
-
 multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF} --disable-scrollkeeper"
 }
 
-multilib-native_src_prepare_internal() {
-	gnome2_src_prepare
-
-	# disable pyc compiling
-	mv py-compile py-compile.orig
-	ln -s $(type -P true) py-compile
-}
+# If there is a need to reintroduce eautomake or eautoreconf, make sure
+# to AT_M4DIR="tools m4", bug #224609 (m4 removes glib build time dep)
 
 multilib-native_pkg_postinst_internal() {
 	python_need_rebuild

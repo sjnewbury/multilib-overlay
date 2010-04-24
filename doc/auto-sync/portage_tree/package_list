@@ -25,7 +25,7 @@ app-crypt/mit-krb5
 # app-text/djvu
 # app-text/enchant
 # app-text/ghostscript-gpl
-# app-text/gnome-doc-utils
+app-text/gnome-doc-utils
 # app-text/hunspell
 # app-text/libpaper
 # app-text/opensp
