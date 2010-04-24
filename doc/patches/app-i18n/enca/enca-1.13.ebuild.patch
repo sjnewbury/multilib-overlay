@@ -1,0 +1,8 @@
+--- /usr/portage/app-i18n/enca/enca-1.13.ebuild	2010-02-25 12:35:32.000000000 +0100
++++ ./app-i18n/enca/enca-1.13.ebuild	2010-04-24 13:09:32.000000000 +0200
+@@ -36,4 +36,5 @@
+ 
+ src_install() {
+ 	emake DESTDIR="${D}" install || die "emake install failed"
++	is_final_abi || rm "${D}"/usr/bin/enconv "${D}"/usr/share/man/man1/enconv.1
+ }

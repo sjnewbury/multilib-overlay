@@ -16,7 +16,7 @@ app-crypt/mit-krb5
 # app-emulation/emul-linux-x86-soundlibs
 # app-emulation/emul-linux-x86-xlibs
 # app-emulation/wine
-# app-i18n/enca
+app-i18n/enca
 # app-misc/lirc
 # app-misc/tracker
 # app-pda/gnome-pilot
