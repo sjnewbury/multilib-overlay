@@ -3,9 +3,6 @@ x11-libs/libXxf86dga/libXxf86dga-1.0.1.ebuild
 x11-libs/libview/libview-0.5.6-r1.ebuild
 x11-libs/libview/libview-0.6.1.ebuild
 x11-libs/libdrm/libdrm-2.4.18_pre20100211.ebuild
-x11-libs/libdrm/libdrm-2.4.18_pre20100211-r1.ebuild
-x11-libs/gtk+/gtk+-2.12.11.ebuild
-x11-libs/gtk+/gtk+-2.12.12.ebuild
 sys-fs/udev/udev-114.ebuild
 sys-fs/udev/udev-115-r1.ebuild
 sys-fs/udev/udev-119.ebuild
@@ -20,19 +17,13 @@ sys-fs/udev/udev-145-r3.ebuild
 sys-fs/udev/udev-146.ebuild
 sys-fs/udev/udev-146-r1.ebuild
 sys-fs/udev/udev-146-r2.ebuild
+sys-fs/udev/udev-146-r3.ebuild
 sys-fs/udev/udev-147-r1.ebuild
 sys-fs/udev/udev-9999.ebuild
 sys-devel/gettext/gettext-0.16.1-r1.ebuild
-net-misc/openssh/openssh-5.1_p1-r2.ebuild
 net-misc/openssh/openssh-5.2_p1-r3.ebuild
 dev-libs/libgcrypt/libgcrypt-1.4.0-r1.ebuild
 dev-libs/libgcrypt/libgcrypt-1.4.3-r1.ebuild
-dev-db/sqlite/sqlite-3.6.19.ebuild
-dev-db/sqlite/sqlite-3.6.20.ebuild
-dev-db/sqlite/sqlite-3.6.20-r1.ebuild
-dev-db/sqlite/sqlite-3.6.21.ebuild
-dev-db/sqlite/sqlite-3.6.22.ebuild
-dev-db/sqlite/sqlite-3.6.22-r1.ebuild
 dev-cpp/gtkmm/gtkmm-1.2.9-r2.ebuild
 dev-cpp/gtkmm/gtkmm-2.2.12.ebuild
 dev-cpp/glibmm/glibmm-2.8.4.ebuild
@@ -87,3 +78,5 @@ sys-fs/device-mapper/device-mapper-1.02.22-r4.ebuild
 sys-fs/device-mapper/device-mapper-1.02.22-r5.ebuild
 sys-fs/device-mapper/device-mapper-1.02.24.ebuild
 net-wireless/bluez/bluez-4.28.ebuild
+app-text/gnome-doc-utils/gnome-doc-utils-0.12.2-r1.ebuild
+app-text/gnome-doc-utils/gnome-doc-utils-0.14.2.ebuild

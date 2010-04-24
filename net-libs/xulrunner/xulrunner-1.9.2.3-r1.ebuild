@@ -1,11 +1,11 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.3-r1.ebuild,v 1.2 2010/04/11 21:13:09 anarchy Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.3-r1.ebuild,v 1.6 2010/04/20 20:11:46 arfrever Exp $
 
 EAPI="2"
 WANT_AUTOCONF="2.1"
 
-inherit flag-o-matic toolchain-funcs eutils mozconfig-3 makeedit multilib java-pkg-opt-2 autotools multilib-native
+inherit flag-o-matic toolchain-funcs eutils mozconfig-3 makeedit multilib java-pkg-opt-2 autotools python multilib-native
 
 MY_PV="${PV/_rc/rc}" # Handle beta
 MY_PV="${MY_PV/1.9.2/3.6}"
@@ -17,13 +17,12 @@ HOMEPAGE="http://developer.mozilla.org/en/docs/XULRunner"
 SRC_URI="http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${MY_PV}/source/firefox-${MY_PV}.source.tar.bz2
 	http://dev.gentoo.org/~anarchy/dist/${PATCH}.tar.bz2"
 
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc x86"
 SLOT="1.9"
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 IUSE="+alsa debug libnotify system-sqlite wifi"
 
 RDEPEND="java? ( >=virtual/jre-1.4 )
-	>=dev-lang/python-2.3[threads,lib32?]
 	>=sys-devel/binutils-2.16.1
 	>=dev-libs/nss-3.12.6[lib32?]
 	>=dev-libs/nspr-4.8[lib32?]
@@ -39,6 +38,7 @@ RDEPEND="java? ( >=virtual/jre-1.4 )
 
 DEPEND="java? ( >=virtual/jdk-1.4 )
 	${RDEPEND}
+	=dev-lang/python-2*[threads,lib32?]
 	dev-util/pkgconfig[lib32?]"
 
 S="${WORKDIR}/mozilla-${MAJ_PV}"
@@ -51,6 +51,8 @@ multilib-native_pkg_setup_internal() {
 	export LC_CTYPE="C"
 
 	java-pkg-opt-2_pkg_setup
+
+	python_set_active_version 2
 }
 
 multilib-native_src_prepare_internal() {
@@ -73,6 +75,9 @@ multilib-native_src_prepare_internal() {
 
 	# Ensure we find myspell dict.
 	epatch "${FILESDIR}/1002_fix-system-hunspell-dict-detections.patch"
+
+	# Allow user to apply additional patches without modifing ebuild
+	epatch_user
 
 	# Same as in config/autoconf.mk.in
 	MOZLIBDIR="/usr/$(get_libdir)/${PN}-${MAJ_PV}"
@@ -177,7 +182,7 @@ multilib-native_src_configure_internal() {
 	sed -i -e "s:/usr/lib/mozilla/plugins:/usr/$(get_libdir)/nsbrowser/plugins:" \
 		"${S}"/xpcom/io/nsAppFileLocationProvider.cpp || die "sed failed to replace plugin path!"
 
-	CC="$(tc-getCC)" CXX="$(tc-getCXX)" LD="$(tc-getLD)" econf
+	CC="$(tc-getCC)" CXX="$(tc-getCXX)" LD="$(tc-getLD)" PYTHON="$(PYTHON)" econf
 }
 
 multilib-native_src_install_internal() {

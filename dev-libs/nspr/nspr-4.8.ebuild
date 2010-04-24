@@ -1,10 +1,10 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.8.ebuild,v 1.8 2009/09/23 17:06:18 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.8.ebuild,v 1.9 2009/11/12 15:07:36 josejx Exp $
 
 EAPI="2"
 
-inherit eutils multilib toolchain-funcs multilib-native versionator
+inherit eutils multilib toolchain-funcs versionator multilib-native
 
 MIN_PV="$(get_version_component_range 2)"
 
@@ -14,14 +14,13 @@ SRC_URI="ftp://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v${PV}/src/${P}.tar
 
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ~ppc64 sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="ipv6 debug"
 
 DEPEND=">=dev-db/sqlite-3.5[lib32?]"
 RDEPEND="${DEPEND}"
 
 multilib-native_src_prepare_internal() {
-	cd "${S}"
 	mkdir build inst
 	epatch "${FILESDIR}"/${PN}-4.6.1-config.patch
 	epatch "${FILESDIR}"/${PN}-4.6.1-config-1.patch
@@ -45,16 +44,16 @@ multilib-native_src_configure_internal() {
 	esac
 
 	myconf="${myconf} --libdir=/usr/$(get_libdir)/nspr \
-		--enable-system-sqlite  --with-mozilla --with-pthreads"
+		--enable-system-sqlite 	--with-mozilla --with-pthreads"
 
 	ECONF_SOURCE="../mozilla/nsprpub" econf \
-		$(use_enable debug) \
 		$(use_enable ipv6) \
+		$(use_enable debug) \
 		${myconf} || die "econf failed"
 }
 
 multilib-native_src_compile_internal() {
-	cd ${S}/build
+	cd "${S}"/build
 	make CC="$(tc-getCC)" CXX="$(tc-getCXX)" || die
 }
 

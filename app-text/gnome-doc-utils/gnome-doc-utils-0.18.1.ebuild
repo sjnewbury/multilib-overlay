@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/gnome-doc-utils/gnome-doc-utils-0.18.1.ebuild,v 1.4 2010/01/02 12:14:09 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/gnome-doc-utils/gnome-doc-utils-0.18.1.ebuild,v 1.7 2010/04/18 18:37:40 pacho Exp $
 
 EAPI="2"
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 IUSE=""
 
 RDEPEND=">=dev-libs/libxml2-2.6.12[python,lib32?]
@@ -45,13 +45,13 @@ multilib-native_src_prepare_internal() {
 	ln -s $(type -P true) py-compile
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	python_need_rebuild
 	python_mod_optimize $(python_get_sitedir)/xml2po
 	gnome2_pkg_postinst
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/xml2po
 	gnome2_pkg_postrm
 }

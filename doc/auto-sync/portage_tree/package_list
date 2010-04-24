@@ -16,7 +16,7 @@ app-crypt/mit-krb5
 # app-emulation/emul-linux-x86-soundlibs
 # app-emulation/emul-linux-x86-xlibs
 # app-emulation/wine
-# app-i18n/enca
+app-i18n/enca
 # app-misc/lirc
 # app-misc/tracker
 # app-pda/gnome-pilot
@@ -25,7 +25,7 @@ app-crypt/mit-krb5
 # app-text/djvu
 # app-text/enchant
 # app-text/ghostscript-gpl
-# app-text/gnome-doc-utils
+app-text/gnome-doc-utils
 # app-text/hunspell
 # app-text/libpaper
 # app-text/opensp
@@ -89,8 +89,8 @@ dev-libs/libtasn1
 # dev-libs/libusb
 dev-libs/libxml2
 # dev-libs/libxslt
-# dev-libs/nspr
-# dev-libs/nss
+dev-libs/nspr
+dev-libs/nss
 # dev-libs/oniguruma
 # dev-libs/openct
 # dev-libs/opensc
@@ -100,6 +100,7 @@ dev-libs/openssl
 # dev-libs/poppler-glib
 # dev-libs/popt
 # dev-libs/pth
+dev-perl/XML-Parser
 dev-python/dbus-python
 # dev-python/gnome-vfs-python
 # dev-python/libbonobo-python
@@ -108,7 +109,7 @@ dev-python/dbus-python
 # dev-python/numeric
 # dev-python/numpy
 # dev-python/pycairo
-# dev-python/pygobject
+dev-python/pygobject
 dev-python/pygtk
 # dev-python/pyorbit
 # dev-python/pyrex
@@ -213,7 +214,7 @@ media-libs/mesa
 # media-libs/nas
 media-libs/openal
 # media-libs/openexr
-# media-libs/openjpeg
+media-libs/openjpeg
 # media-libs/schroedinger
 media-libs/sdl-image
 # media-libs/sdl-mixer

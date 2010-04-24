@@ -1,5 +1,5 @@
---- /usr/portage/./eclass/toolchain.eclass	2010-03-07 06:08:49.000000000 +0100
-+++ ./eclass/toolchain.eclass	2010-03-27 23:18:36.000000000 +0100
+--- /usr/portage/eclass/toolchain.eclass	2010-04-20 20:05:49.000000000 +0200
++++ ./eclass/toolchain.eclass	2010-04-22 00:53:54.000000000 +0200
 @@ -157,6 +157,7 @@
  			tc_version_is_at_least "4.0" && IUSE="${IUSE} objc-gc mudflap"
  			tc_version_is_at_least "4.1" && IUSE="${IUSE} objc++"
@@ -33,7 +33,7 @@
  	fi
  
  	case $(tc-arch) in
-@@ -1935,10 +1943,24 @@
+@@ -1941,10 +1949,24 @@
  		mv -f "${D}"${PREFIX}/lib/libgcj.spec "${D}"${LIBPATH}/libgcj.spec
  
  	# SLOT up libgcj.pc (and let gcc-config worry about links)

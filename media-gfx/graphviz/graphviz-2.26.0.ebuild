@@ -26,6 +26,7 @@ RDEPEND="
 	>=media-libs/jpeg-6b[lib32?]
 	>=media-libs/libpng-1.2.10[lib32?]
 	virtual/libiconv
+	gnome-base/librsvg[lib32?]
 	cairo?	(
 		x11-libs/libXaw[lib32?]
 		>=x11-libs/pango-1.12[lib32?]
@@ -103,17 +104,6 @@ multilib-native_src_prepare_internal() {
 		find . -iname Makefile.am \
 			| xargs sed -i -e '/html_DATA/d' -e '/pdf_DATA/d' || die
 	fi
-
-	local pf="$(get_libdir)"
-	pf="${pf#lib}"
-
-	sed -i -e \
-		's:LIBPOSTFIX=.*:LIBPOSTFIX='"${pf}"':' \
-		configure.ac || die "sed fix EXPAT_LIBS failed"
-	
-	sed -i -e \
-		's:AC_CHECK_PROG(PERL,perl,perl):AC_CHECK_PROG(PERL,perl-'"$ABI"',perl-'"$ABI"'):' \
-		configure.ac || die "sed fix perl config failed"
 
 	# This is an old version of libtool
 	rm -rf libltdl

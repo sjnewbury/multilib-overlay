@@ -1,0 +1,13 @@
+--- /usr/portage/media-libs/openjpeg/openjpeg-1.3.ebuild	2009-02-27 16:06:15.000000000 +0100
++++ ./media-libs/openjpeg/openjpeg-1.3.ebuild	2010-04-24 11:37:19.000000000 +0200
+@@ -17,9 +17,7 @@
+ 
+ S="${WORKDIR}/OpenJPEG_v1_3"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/${PN}-1.2-Makefile.patch
+ 	cp "${FILESDIR}"/${P}-codec-Makefile "${S}"/codec/Makefile
+ }

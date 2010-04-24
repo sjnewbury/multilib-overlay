@@ -40,13 +40,13 @@ multilib-native_src_prepare_internal() {
 	# to AT_M4DIR="tools m4", bug #224609 (m4 removes glib build time dep)
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	python_need_rebuild
 	python_mod_optimize $(python_get_sitedir)/xml2po
 	gnome2_pkg_postinst
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/xml2po
 	gnome2_pkg_postrm
 }

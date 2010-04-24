@@ -1,0 +1,13 @@
+--- /usr/portage/dev-perl/XML-Parser/XML-Parser-2.36.ebuild	2009-05-06 21:35:57.000000000 +0200
++++ ./dev-perl/XML-Parser/XML-Parser-2.36.ebuild	2010-04-20 23:12:58.000000000 +0200
+@@ -16,9 +18,7 @@
+ DEPEND=">=dev-libs/expat-1.95.1-r1
+ 	dev-lang/perl"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	sed -i \
+ 		-e "s:^\$expat_libpath.*:\$expat_libpath = '/usr/$(get_libdir)';:" \
+ 		Makefile.PL || die "sed failed"

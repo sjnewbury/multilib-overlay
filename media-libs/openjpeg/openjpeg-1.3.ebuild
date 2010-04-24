@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/openjpeg/openjpeg-1.3.ebuild,v 1.12 2009/02/27 14:39:20 armin76 Exp $
 
-EAPI="1"
+EAPI="2"
 
 inherit eutils toolchain-funcs multilib multilib-native
 
@@ -19,9 +19,7 @@ RDEPEND=${DEPEND}
 
 S="${WORKDIR}/OpenJPEG_v1_3"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-1.2-Makefile.patch
 	cp "${FILESDIR}"/${P}-codec-Makefile "${S}"/codec/Makefile
 }

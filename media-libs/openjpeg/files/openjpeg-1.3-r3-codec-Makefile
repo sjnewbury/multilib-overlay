@@ -1,0 +1,22 @@
+# Makefile for the main OpenJPEG codecs: j2k_to_image and image_to_j2k
+
+CPPFLAGS += -I../libopenjpeg
+LDLIBS += -lopenjpeg -ltiff
+LDFLAGS += -L..
+
+PREFIX = /usr
+INSTALL_BINDIR = $(PREFIX)/bin
+
+all: j2k_to_image image_to_j2k
+
+common = index.o convert.o #compat/getopt.o
+
+j2k_to_image: j2k_to_image.o ${common}
+image_to_j2k: image_to_j2k.o ${common}
+
+clean:
+	rm -f *.o j2k_to_image image_to_j2k
+
+install: all
+	install -d '$(DESTDIR)$(INSTALL_BINDIR)'
+	install -m 755 j2k_to_image image_to_j2k '$(DESTDIR)$(INSTALL_BINDIR)'

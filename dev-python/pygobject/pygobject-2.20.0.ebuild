@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pygobject/pygobject-2.20.0.ebuild,v 1.4 2010/01/11 16:56:25 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pygobject/pygobject-2.20.0.ebuild,v 1.8 2010/04/18 17:26:42 nixnut Exp $
 
 EAPI="2"
 SUPPORT_PYTHON_ABIS="1"
@@ -12,16 +12,16 @@ HOMEPAGE="http://www.pygtk.org/"
 
 LICENSE="LGPL-2.1"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ppc ~ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 IUSE="doc examples libffi test"
 
 # FIXME: add introspection support
 RDEPEND=">=dev-lang/python-2.4.4-r5[lib32?]
-	>=dev-libs/glib-2.16[lib32?]
-	!<dev-python/pygtk-2.13[lib32?]
+	>=dev-libs/glib-2.20[lib32?]
+	!<dev-python/pygtk-2.13
 	libffi? ( virtual/libffi[lib32?] )"
 DEPEND="${RDEPEND}
-	doc? ( dev-libs/libxslt >=app-text/docbook-xsl-stylesheets-1.70.1 )
+	doc? ( dev-libs/libxslt[lib32?] >=app-text/docbook-xsl-stylesheets-1.70.1 )
 	test? ( media-fonts/font-cursor-misc media-fonts/font-misc-misc )
 	>=dev-util/pkgconfig-0.12.0[lib32?]"
 
@@ -47,6 +47,9 @@ multilib-native_src_prepare_internal() {
 
 	# Support installation for multiple Python versions
 	epatch "${FILESDIR}/${PN}-2.18.0-support_multiple_python_versions.patch"
+
+	# Fix compilation with distcc, bug #299680
+	epatch "${FILESDIR}/${PN}-2.20.0-tmpdir-makefile.patch"
 
 	# needed to build on a libtool-1 system, bug #255542
 	rm m4/lt* m4/libtool.m4 ltmain.sh
@@ -97,7 +100,7 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	create_symlinks() {
 		alternatives_auto_makesym $(python_get_sitedir)/pygtk.py pygtk.py-[0-9].[0-9]
 		alternatives_auto_makesym $(python_get_sitedir)/pygtk.pth pygtk.pth-[0-9].[0-9]
@@ -107,7 +110,7 @@ pkg_postinst() {
 	python_mod_optimize gtk-2.0 pygtk.py
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	python_mod_cleanup
 
 	create_symlinks() {
