@@ -172,7 +172,7 @@ media-libs/gst-plugins-base
 media-libs/gstreamer
 # media-libs/id3lib
 # media-libs/ilmbase
-# media-libs/imlib2
+media-libs/imlib2
 # media-libs/jasper
 # media-libs/jbigkit
 media-libs/jpeg

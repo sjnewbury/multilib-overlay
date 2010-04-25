@@ -1,15 +1,16 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/imlib2/imlib2-1.4.2-r1.ebuild,v 1.10 2010/03/08 15:00:32 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/imlib2/imlib2-1.4.3.ebuild,v 1.1 2010/04/13 22:29:17 vapier Exp $
 
-EAPI=2
-inherit enlightenment toolchain-funcs eutils multilib-native
+EAPI="2"
+
+inherit enlightenment toolchain-funcs multilib-native
 
 MY_P=${P/_/-}
 DESCRIPTION="Version 2 of an advanced replacement library for libraries like libXpm"
 HOMEPAGE="http://www.enlightenment.org/"
 
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="X bzip2 gif jpeg mmx mp3 png tiff zlib"
 
 DEPEND="=media-libs/freetype-2*[lib32?]
@@ -22,13 +23,7 @@ DEPEND="=media-libs/freetype-2*[lib32?]
 	X? ( x11-libs/libXext[lib32?] x11-proto/xextproto )
 	mp3? ( media-libs/libid3tag[lib32?] )"
 
-multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}"/${P}-libpng14.patch
-	epatch "${FILESDIR}"/${P}-CVE-2008-5187.patch #248057
-	sed -i '/bumpmap_la_LIBADD/s:$: -lm:' src/modules/filters/Makefile.in #276285
-}
-
-multilib-native_src_configure_internal() {
+multilib-native_src_compile_internal() {
 	# imlib2 has diff configure options for x86/amd64 mmx
 	local myconf=""
 	if [[ $(tc-arch) == "amd64" ]] ; then
@@ -50,7 +45,7 @@ multilib-native_src_configure_internal() {
 		$(use_with mp3 id3) \
 		${myconf} \
 	"
-	enlightenment_src_configure
+	enlightenment_src_compile
 }
 
 multilib-native_src_install_internal() {
