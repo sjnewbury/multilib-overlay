@@ -1,9 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/libxcb/libxcb-1.6.ebuild,v 1.1 2010/04/20 21:06:05 chithanh Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/libxcb/libxcb-1.6.ebuild,v 1.2 2010/04/25 14:56:02 chithanh Exp $
 
 EAPI=3
-inherit xorg-2 multilib-native
+
+inherit python xorg-2 multilib-native
 
 DESCRIPTION="X C-language Bindings library"
 HOMEPAGE="http://xcb.freedesktop.org/"
@@ -21,9 +22,10 @@ DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )
 	dev-libs/libxslt[lib32?]
 	>=x11-proto/xcb-proto-1.6
-	>=dev-lang/python-2.5[xml,lib32?]"
+	=dev-lang/python-2*[xml,lib32?]"
 
 multilib-native_pkg_setup_internal() {
+	python_set_active_version 2
 	xorg-2_pkg_setup
 	CONFIGURE_OPTIONS="$(use_enable doc build-docs)
 		$(use_enable selinux)
