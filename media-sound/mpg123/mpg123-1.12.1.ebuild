@@ -1,10 +1,9 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/mpg123/mpg123-1.12.1.ebuild,v 1.3 2010/04/24 17:24:02 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/mpg123/mpg123-1.12.1.ebuild,v 1.4 2010/04/25 13:33:06 ssuominen Exp $
 
 EAPI=2
-
-inherit multilib-native
+inherit toolchain-funcs multilib-native
 
 DESCRIPTION="a realtime MPEG 1.0/2.0/2.5 audio player for layers 1, 2 and 3"
 HOMEPAGE="http://www.mpg123.org/"
@@ -15,7 +14,6 @@ LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="3dnow 3dnowext alsa altivec ipv6 jack mmx nas oss portaudio pulseaudio sdl sse"
-# +network
 
 RDEPEND="alsa? ( media-libs/alsa-lib[lib32?] )
 	jack? ( media-sound/jack-audio-connection-kit[lib32?] )
@@ -31,7 +29,6 @@ multilib-native_src_configure_internal() {
 	local _audio=dummy
 	local _output=dummy
 	local _cpu=generic_fpu
-	local _ipv6=disable
 
 	for flag in nas portaudio sdl oss jack alsa pulseaudio; do
 		if use ${flag}; then
@@ -42,12 +39,9 @@ multilib-native_src_configure_internal() {
 
 	use altivec && _cpu=altivec
 
-	if [[ ${ABI} = amd64 ]] && use sse; then
-		_cpu=x86-64
-	fi
-
-	if [[ ${ABI} = x86 ]]; then
-		_cpu=i586
+	if [[ $(tc-arch) == amd64 ]]; then
+		use sse && _cpu=x86-64
+	else
 		use mmx && _cpu=mmx
 		use 3dnow && _cpu=3dnow
 		use sse && _cpu=x86
