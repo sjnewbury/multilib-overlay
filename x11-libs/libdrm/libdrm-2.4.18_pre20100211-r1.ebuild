@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/libdrm/libdrm-2.4.18_pre20100211-r1.ebuild,v 1.5 2010/04/18 20:51:36 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/libdrm/libdrm-2.4.18_pre20100211-r1.ebuild,v 1.6 2010/04/24 16:47:30 chithanh Exp $
 
 EAPI=2
 SNAPSHOT="yes"
@@ -31,8 +31,10 @@ PATCHES=(
 	)
 
 multilib-native_pkg_setup_internal() {
-	# Fails to build on ARM if dev-libs/libatomic_ops is installed, bug 297630
-	CONFIGURE_OPTIONS="--enable-udev --enable-nouveau-experimental-api $(use_enable !arm intel) $(use_enable !arm radeon)"
+	# libdrm_intel fails to build on some arches if dev-libs/libatomic_ops is
+	# installed, bugs 297630, bug 316421 and bug 316541, and is presently only
+	# useful on amd64 and x86.
+	CONFIGURE_OPTIONS="--enable-udev --enable-nouveau-experimental-api $(! use amd64 && ! use x86 && ! use x86-fbsd && echo "--disable-intel")"
 }
 
 multilib-native_pkg_postinst_internal() {
