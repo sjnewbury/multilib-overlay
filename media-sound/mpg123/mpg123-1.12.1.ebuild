@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/mpg123/mpg123-1.12.1.ebuild,v 1.1 2010/04/12 16:48:58 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/mpg123/mpg123-1.12.1.ebuild,v 1.3 2010/04/24 17:24:02 ssuominen Exp $
 
 EAPI=2
 
@@ -14,7 +14,8 @@ SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="3dnow 3dnowext alsa altivec ipv6 jack mmx nas +network oss portaudio pulseaudio sdl sse"
+IUSE="3dnow 3dnowext alsa altivec ipv6 jack mmx nas oss portaudio pulseaudio sdl sse"
+# +network
 
 RDEPEND="alsa? ( media-libs/alsa-lib[lib32?] )
 	jack? ( media-sound/jack-audio-connection-kit[lib32?] )
@@ -53,18 +54,14 @@ multilib-native_src_configure_internal() {
 		use 3dnowext && _cpu=x86
 	fi
 
-	if use network && use ipv6; then
-		_ipv6=enable
-	fi
-
 	econf \
 		--disable-dependency-tracking \
 		--with-optimization=0 \
 		--with-audio="${_audio}" \
 		--with-default-audio=${_output} \
 		--with-cpu=${_cpu} \
-		$(use_enable network) \
-		--${_ipv6}-ipv6
+		--enable-network \
+		$(use_enable ipv6)
 }
 
 multilib-native_src_install_internal() {
