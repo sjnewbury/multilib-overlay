@@ -1,11 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/xine-lib/xine-lib-1.1.18.ebuild,v 1.3 2010/02/24 21:09:32 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/xine-lib/xine-lib-1.1.18.ebuild,v 1.5 2010/03/01 16:49:04 ssuominen Exp $
 
 EAPI=3
-
-MULTILIB_EXT_SOURCE_BUILD=1
-
 inherit eutils flag-o-matic toolchain-funcs multilib multilib-native
 
 # This should normally be empty string, unless a release has a suffix.
@@ -19,7 +16,9 @@ else
 	SRC_URI="mirror://sourceforge/xine/${MY_P}.tar.xz"
 fi
 
-SRC_URI="${SRC_URI} mirror://gentoo/${PN}-1.1.15-textrel-fix.patch"
+SRC_URI="${SRC_URI}
+	mirror://gentoo/${PN}-1.1.15-textrel-fix.patch
+	mirror://gentoo/${P}-compat.c.tbz2"
 
 DESCRIPTION="Core libraries for Xine movie player"
 HOMEPAGE="http://xine.sourceforge.net"
@@ -48,7 +47,7 @@ RDEPEND="X? ( x11-libs/libXext[lib32?]
 	gnome? ( >=gnome-base/gnome-vfs-2.0[lib32?] )
 	flac? ( >=media-libs/flac-1.1.2[lib32?] )
 	sdl? ( >=media-libs/libsdl-1.1.5[lib32?] )
-	dxr3? ( >=media-libs/libfame-0.9.0[lib32?] )
+	dxr3? ( >=media-libs/libfame-0.9.0 )
 	vorbis? ( media-libs/libogg[lib32?] media-libs/libvorbis[lib32?] )
 	theora? ( media-libs/libogg[lib32?] media-libs/libvorbis[lib32?] >=media-libs/libtheora-1.0_alpha6[lib32?] )
 	speex? ( media-libs/libogg[lib32?] media-libs/libvorbis[lib32?] media-libs/speex[lib32?] )
@@ -76,9 +75,9 @@ RDEPEND="X? ( x11-libs/libXext[lib32?]
 		x86? ( media-libs/win32codecs )
 		x86-fbsd? ( media-libs/win32codecs )
 		amd64? ( media-libs/amd64codecs ) )
-	v4l? ( media-libs/libv4l )"
+	v4l? ( media-libs/libv4l[lib32?] )"
 DEPEND="${RDEPEND}
-	app-arch/xz-utils
+	app-arch/xz-utils[lib32?]
 	X? ( x11-libs/libXt[lib32?]
 		 x11-proto/xproto
 		 x11-proto/videoproto
@@ -91,7 +90,7 @@ DEPEND="${RDEPEND}
 
 multilib-native_src_prepare_internal() {
 	epatch "${DISTDIR}"/${PN}-1.1.15-textrel-fix.patch
-	epatch "${FILESDIR}"/${PN}-1.1.17-xxmc.patch
+	cp -f "${WORKDIR}"/compat.c src/dxr3/ || die
 }
 
 multilib-native_src_configure_internal() {
@@ -116,10 +115,9 @@ multilib-native_src_configure_internal() {
 
 	# Too many file names are the same (xine_decoder.c), change the builddir
 	# So that the relative path is used to identify them.
-	#mkdir "${WORKDIR}/build"
-	# (Using multilib-native external build directory support)
+	mkdir "${WORKDIR}/build"
 
-	 econf \
+	ECONF_SOURCE="${S}" econf \
 		$(use_enable gnome gnomevfs) \
 		$(use_enable nls) \
 		$(use_enable ipv6) \
@@ -180,7 +178,6 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" \
 		docdir="/usr/share/doc/${PF}" htmldir="/usr/share/doc/${PF}/html" \
 		install || die
-	cd "${EMULTILIB_SOURCE}"
 	dodoc ChangeLog
 
 	prep_ml_binaries /usr/bin/xine-config

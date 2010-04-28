@@ -225,7 +225,7 @@ media-libs/sdl-image
 # media-libs/speex
 media-libs/tiff
 # media-libs/x264
-# media-libs/xine-lib
+media-libs/xine-lib
 media-libs/xvid
 media-plugins/alsa-plugins
 media-sound/esound
