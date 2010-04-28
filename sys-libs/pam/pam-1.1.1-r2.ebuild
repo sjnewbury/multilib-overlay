@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/pam/pam-1.1.1-r2.ebuild,v 1.1 2010/04/06 05:39:37 abcd Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/pam/pam-1.1.1-r2.ebuild,v 1.2 2010/04/26 12:04:09 flameeyes Exp $
 
 EAPI="3"
 
@@ -94,6 +94,10 @@ multilib-native_src_prepare_internal() {
 	# library suffix but no suffix on the ELF symbols).
 	epatch "${FILESDIR}/${MY_PN}-1.1.1-gentoodb.patch"
 
+	# make it possible to skip libxcrypt detection if header is not
+	# found
+	epatch "${FILESDIR}/${MY_PN}-1.1.1-xcrypt.patch"
+
 	# Remove libtool-2 libtool macros, see bug 261167
 	rm m4/libtool.m4 m4/lt*.m4 || die "rm libtool macros failed."
 
@@ -108,6 +112,11 @@ multilib-native_src_configure_internal() {
 	if use hppa || use elibc_FreeBSD; then
 		myconf="${myconf} --disable-pie"
 	fi
+
+	# Disable automatic detection of libxcrypt; we _don't_ want the
+	# user to link libxcrypt in by default, since we won't track the
+	# dependency and allow to break PAM this way.
+	export ac_cv_header_xcrypt_h=no
 
 	econf \
 		--libdir="${EPREFIX}"/usr/$(get_libdir) \
@@ -129,6 +138,11 @@ multilib-native_src_configure_internal() {
 
 multilib-native_src_compile_internal() {
 	emake sepermitlockdir="${EPREFIX}/var/run/sepermit" || die "emake failed"
+}
+
+src_test() {
+	# explicitly allow parallel-build during testing
+	emake sepermitlockdir="${EPREFIX}/var/run/sepermit" check || die "emake check failed"
 }
 
 multilib-native_src_install_internal() {
