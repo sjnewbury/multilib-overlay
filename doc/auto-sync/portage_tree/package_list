@@ -213,6 +213,7 @@ media-libs/libtheora
 media-libs/mesa
 # media-libs/nas
 media-libs/openal
+media-libs/opencore-amr
 # media-libs/openexr
 media-libs/openjpeg
 # media-libs/schroedinger
