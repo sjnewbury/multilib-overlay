@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/x264/x264-0.0.20091021.ebuild,v 1.7 2010/01/31 17:30:38 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/x264/x264-0.0.20100423.ebuild,v 1.1 2010/04/24 15:46:48 aballier Exp $
 
 EAPI=2
 inherit eutils multilib toolchain-funcs versionator multilib-native
@@ -13,7 +13,7 @@ SRC_URI="ftp://ftp.videolan.org/pub/videolan/x264/snapshots/${MY_P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="debug +threads pic"
 
 RDEPEND=""
@@ -41,7 +41,8 @@ multilib-native_src_configure_internal() {
 	./configure \
 		--prefix=/usr \
 		--libdir=/usr/$(get_libdir) \
-		--disable-avis-input \
+		--disable-avs-input \
+		--disable-lavf-input \
 		--disable-mp4-output \
 		$(use_enable threads pthread) \
 		--enable-pic \

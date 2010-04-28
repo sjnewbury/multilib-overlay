@@ -22,7 +22,7 @@ DEPEND="amd64? ( >=dev-lang/yasm-0.6.2 )
 
 S="${WORKDIR}/${MY_P}"
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 	epatch "${FILESDIR}/${PN}-nostrip.patch"
@@ -51,7 +51,7 @@ multilib-native_src_install_internal() {
 	dodoc AUTHORS doc/*.txt
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "Please note that this package now only installs"
 	elog "${PN} libraries. In order to have the encoder,"
 	elog "please emerge media-video/x264-encoder."
