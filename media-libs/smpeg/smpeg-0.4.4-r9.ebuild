@@ -1,9 +1,7 @@
 # Copyright 1999-2007 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/smpeg/smpeg-0.4.4-r9.ebuild,v 1.10 2007/08/25 03:04:15 josejx Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/smpeg/smpeg-0.4.4-r9.ebuild,v 1.11 2009/08/21 20:18:22 ssuominen Exp $
 
-WANT_AUTOCONF="latest"
-WANT_AUTOMAKE="latest"
 EAPI="2"
 
 inherit eutils toolchain-funcs autotools multilib-native
@@ -18,21 +16,17 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="X debug mmx opengl"
 
-DEPEND=">=media-libs/libsdl-1.2.0
+DEPEND=">=media-libs/libsdl-1.2.0[lib32?]
 	opengl? (
-		virtual/opengl
-		virtual/glu )
+		virtual/opengl[lib32?]
+		virtual/glu[lib32?] )
 	X? (
-		x11-libs/libXext
-		x11-libs/libXi
-		x11-libs/libX11
+		x11-libs/libXext[lib32?]
+		x11-libs/libXi[lib32?]
+		x11-libs/libX11[lib32?]
 	)"
 
-src_unpack() {
-	unpack ${A}
-}
-
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-m4.patch \
 		"${FILESDIR}"/${P}-gnu-stack.patch \
 		"${FILESDIR}"/${P}-config.patch \

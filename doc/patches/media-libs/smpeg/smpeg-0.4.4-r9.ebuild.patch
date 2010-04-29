@@ -1,0 +1,31 @@
+--- /usr/portage/media-libs/smpeg/smpeg-0.4.4-r9.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./media-libs/smpeg/smpeg-0.4.4-r9.ebuild	2010-04-29 21:19:50.000000000 +0200
+@@ -24,9 +24,7 @@
+ 		x11-libs/libX11
+ 	)"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/${P}-m4.patch \
+ 		"${FILESDIR}"/${P}-gnu-stack.patch \
+ 		"${FILESDIR}"/${P}-config.patch \
+@@ -46,7 +44,7 @@
+ 	AT_M4DIR="${S}/m4" eautoreconf
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	tc-export CC CXX RANLIB AR
+ 
+ 	# the debug option is bogus ... all it does is add extra
+@@ -59,8 +57,6 @@
+ 		$(use_enable opengl opengl-player) \
+ 		$(use_enable mmx) \
+ 		|| die
+-
+-	emake || die "emake failed"
+ }
+ 
+ src_install() {
