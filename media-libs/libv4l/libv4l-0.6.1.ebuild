@@ -1,8 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libv4l/libv4l-0.6.1.ebuild,v 1.1 2009/09/06 09:12:02 aballier Exp $
-
-EAPI="2"
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libv4l/libv4l-0.6.1.ebuild,v 1.6 2010/03/23 20:51:17 ranger Exp $
 
 inherit multilib toolchain-funcs multilib-native
 
@@ -13,7 +11,7 @@ SRC_URI="http://people.atrpms.net/~hdegoede/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ppc ~ppc64 ~x86"
+KEYWORDS="~alpha amd64 ~arm ~hppa ppc ppc64 ~sparc x86"
 IUSE=""
 
 multilib-native_src_compile_internal() {
@@ -28,7 +26,7 @@ multilib-native_src_install_internal() {
 	dodoc ChangeLog README* TODO
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog
 	elog "libv4l includes wrapper libraries for compatibility and pixel format"
 	elog "conversion, which are especially useful for users of the gspca usb"

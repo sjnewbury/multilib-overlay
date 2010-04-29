@@ -2,8 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libv4l/libv4l-0.6.4.ebuild,v 1.1 2010/02/25 08:07:47 ssuominen Exp $
 
-EAPI="2"
-
+EAPI=2
 inherit multilib toolchain-funcs multilib-native
 
 DESCRIPTION="Collection of video4linux userspace libraries"
@@ -12,7 +11,7 @@ SRC_URI="http://people.fedoraproject.org/~jwrdegoede/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ppc ~ppc64 ~x86"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ppc ~ppc64 ~sparc ~x86"
 IUSE=""
 
 multilib-native_src_compile_internal() {
@@ -26,7 +25,7 @@ multilib-native_src_install_internal() {
 	dodoc ChangeLog README* TODO
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog
 	elog "libv4l includes wrapper libraries for compatibility and pixel format"
 	elog "conversion, which are especially useful for users of the gspca usb"
