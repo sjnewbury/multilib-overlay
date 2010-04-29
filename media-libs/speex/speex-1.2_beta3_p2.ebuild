@@ -17,14 +17,12 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="ogg sse"
 
-RDEPEND="ogg? ( media-libs/libogg )"
+RDEPEND="ogg? ( media-libs/libogg[lib32?] )"
 DEPEND="${RDEPEND}"
 
 S=${WORKDIR}/${MY_P}
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-1.2_beta3-configure.patch
 
 	sed -i -e 's:noinst_PROGRAMS:check_PROGRAMS:' \

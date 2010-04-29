@@ -222,7 +222,7 @@ media-libs/sdl-image
 # media-libs/sdl-net
 # media-libs/sdl-ttf
 # media-libs/smpeg
-# media-libs/speex
+media-libs/speex
 media-libs/tiff
 media-libs/x264
 media-libs/xine-lib
