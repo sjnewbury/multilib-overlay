@@ -208,7 +208,7 @@ media-libs/libmikmod
 # media-libs/libsndfile
 media-libs/libtheora
 # media-libs/libv4l
-# media-libs/libvorbis
+media-libs/libvorbis
 media-libs/libwmf
 media-libs/mesa
 media-libs/nas
