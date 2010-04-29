@@ -45,3 +45,5 @@ dev-lang/python prep_ml_binaries usr/bin/python${SLOT} usr/bin/python-config-${S
 dev-lang/perl prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
 media-libs/fontconfig prep_ml_binaries /usr/bin/fc-cache
 media-sound/jack-audio-connection-kit prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
+media-libs/libwmf prep_ml_binaries /usr/bin/libwmf-config
+
