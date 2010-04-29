@@ -218,7 +218,7 @@ media-libs/opencore-amr
 media-libs/openjpeg
 # media-libs/schroedinger
 media-libs/sdl-image
-# media-libs/sdl-mixer
+media-libs/sdl-mixer
 media-libs/sdl-net
 media-libs/sdl-ttf
 media-libs/smpeg
