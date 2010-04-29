@@ -211,7 +211,7 @@ media-libs/libtheora
 # media-libs/libvorbis
 # media-libs/libwmf
 media-libs/mesa
-# media-libs/nas
+media-libs/nas
 media-libs/openal
 media-libs/opencore-amr
 media-libs/openexr

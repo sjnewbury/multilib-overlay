@@ -1,18 +1,18 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/nas/nas-1.9.2.ebuild,v 1.1 2009/07/16 11:41:06 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/nas/nas-1.9.2.ebuild,v 1.9 2010/04/16 17:35:39 ranger Exp $
 
-EAPI=2
+EAPI="2"
 
-inherit toolchain-funcs multilib-native
+inherit eutils toolchain-funcs multilib-native
 
 DESCRIPTION="Network Audio System"
 HOMEPAGE="http://radscan.com/nas.html"
 SRC_URI="mirror://sourceforge/${PN}/${P}.src.tar.gz"
 
-LICENSE="X11"
+LICENSE="MIT as-is"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="doc"
 
 RDEPEND="x11-libs/libXt[lib32?]
@@ -28,9 +28,16 @@ DEPEND="${RDEPEND}
 	app-text/rman
 	x11-proto/xproto"
 
-multilib-native_src_compile_internal() {
+multilib-native_src_prepare_internal() {
+	epatch "${FILESDIR}"/${P}-asneeded.patch
+}
+
+multilib-native_src_configure_internal() {
 	xmkmf || die "xmkmf failed"
 	touch doc/man/lib/tmp.{_man,man}
+}
+
+multilib-native_src_compile_internal() {
 	emake \
 		LIBDIR="/usr/$(get_libdir)/X11" \
 		MAKE="${MAKE:-gmake}" \
@@ -61,7 +68,7 @@ multilib-native_src_install_internal() {
 	newinitd "${FILESDIR}"/nas.init.d nas
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "To enable NAS on boot you will have to add it to the"
 	elog "default profile, issue the following command as root:"
 	elog "# rc-update add nas default"
