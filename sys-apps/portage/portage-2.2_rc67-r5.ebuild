@@ -172,7 +172,7 @@ src_install() {
 		fi
 	done
 
-	for x in $(find "$S"/pym -type d) ; do
+	for x in $(find "$S"/pym/* -type d) ; do
 		x=${x#$S/}
 		insinto $portage_base/$x || die "insinto failed"
 		cd "$S"/$x || die "cd failed"
