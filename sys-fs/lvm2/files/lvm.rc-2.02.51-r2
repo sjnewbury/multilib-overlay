@@ -1,7 +1,7 @@
 #!/sbin/runscript
 # Copyright 1999-2007 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/lvm2/files/lvm.rc-2.02.51-r2,v 1.1 2009/10/27 15:34:08 zzam Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/lvm2/files/lvm.rc-2.02.51-r2,v 1.2 2010/05/01 21:26:33 robbat2 Exp $
 
 depend() {
 	if [ -f /etc/init.d/sysfs ]; then
@@ -10,6 +10,8 @@ depend() {
 		before checkfs fsck
 		after modules device-mapper
 	fi
+	use dmeventd
+	after dmeventd
 }
 
 run_addon() {
