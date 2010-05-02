@@ -34,12 +34,12 @@ RDEPEND="audio? ( >=media-libs/audiofile-0.1.9[lib32?] )
 	)
 	directfb? ( >=dev-libs/DirectFB-0.9.19[lib32?] )
 	ggi? ( >=media-libs/libggi-2.0_beta3[lib32?] )
-	svga? ( >=media-libs/svgalib-1.4.2[lib32?] )
+	svga? ( >=media-libs/svgalib-1.4.2 )
 	aalib? ( media-libs/aalib[lib32?] )
 	libcaca? ( >=media-libs/libcaca-0.9-r1[lib32?] )
 	opengl? ( virtual/opengl[lib32?] virtual/glu[lib32?] )
 	ppc64? ( ps3? ( sys-libs/libspe2 ) )
-	tslib? ( x11-libs/tslib[lib32?] )
+	tslib? ( x11-libs/tslib )
 	pulseaudio? ( media-sound/pulseaudio[lib32?] )"
 DEPEND="${RDEPEND}
 	nas? (
@@ -129,7 +129,6 @@ multilib-native_src_configure_internal() {
 		$(use_enable xv video-x11-xv) \
 		$(use_enable xinerama video-x11-xinerama) \
 		$(use_enable X video-x11-xrandr) \
-		$(use_enable X video-x11-vm=no) \
 		$(use_enable dga video-dga) \
 		$(use_enable fbcon video-fbcon) \
 		$(use_enable ggi video-ggi) \

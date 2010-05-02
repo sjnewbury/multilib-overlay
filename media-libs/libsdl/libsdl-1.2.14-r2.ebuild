@@ -1,9 +1,9 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libsdl/libsdl-1.2.14.ebuild,v 1.5 2009/11/14 07:55:24 mr_bones_ Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libsdl/libsdl-1.2.14-r2.ebuild,v 1.1 2010/04/08 20:25:47 mr_bones_ Exp $
 
 EAPI=2
-inherit flag-o-matic toolchain-funcs eutils libtool multilib-native
+inherit flag-o-matic multilib toolchain-funcs eutils libtool multilib-native
 
 DESCRIPTION="Simple Direct Media Layer"
 HOMEPAGE="http://www.libsdl.org/"
@@ -16,7 +16,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-
 # if you disable the audio, video, joystick use flags or turn on the custom-cflags use flag
 # in USE and something breaks, you pick up the pieces.  Be prepared for
 # bug reports to be marked INVALID.
-IUSE="oss alsa nas X dga xv xinerama fbcon directfb ggi svga tslib aalib opengl libcaca +audio +video +joystick custom-cflags pulseaudio ps3"
+IUSE="oss alsa nas X dga xv xinerama fbcon directfb ggi svga tslib aalib opengl libcaca +audio +video +joystick custom-cflags pulseaudio ps3 static-libs"
 
 RDEPEND="audio? ( >=media-libs/audiofile-0.1.9[lib32?] )
 	alsa? ( media-libs/alsa-lib[lib32?] )
@@ -71,7 +71,9 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}"/${PN}-1.2.13-sdl-config.patch
+	epatch \
+		"${FILESDIR}"/${PN}-1.2.13-sdl-config.patch \
+		"${FILESDIR}"/${P}-click.patch
 
 	elibtoolize
 }
@@ -113,6 +115,13 @@ multilib-native_src_configure_internal() {
 		--enable-timers \
 		--enable-file \
 		--enable-cpuinfo \
+		--disable-alsa-shared \
+		--disable-esd-shared \
+		--disable-pulseaudio-shared \
+		--disable-arts-shared \
+		--disable-nas-shared \
+		--disable-x11-shared \
+		--disable-osmesa-shared \
 		$(use_enable oss) \
 		$(use_enable alsa) \
 		$(use_enable pulseaudio) \
@@ -132,12 +141,14 @@ multilib-native_src_configure_internal() {
 		$(use_enable ps3 video-ps3) \
 		$(use_enable tslib input-tslib) \
 		$(use_with X x) \
+		$(use_enable static-libs static) \
 		--disable-video-x11-xme \
 		${myconf}
 }
 
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
+	use static-libs || rm -f "${D}"/usr/$(get_libdir)/lib*.la
 	dodoc BUGS CREDITS README README-SDL.txt README.CVS TODO WhatsNew
 	dohtml -r ./
 

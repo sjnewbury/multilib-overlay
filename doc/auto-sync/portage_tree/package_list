@@ -204,7 +204,7 @@ media-libs/libmikmod
 # media-libs/libpng
 # media-libs/libreplaygain
 # media-libs/libsamplerate
-# media-libs/libsdl
+media-libs/libsdl
 media-libs/libsndfile
 media-libs/libtheora
 media-libs/libv4l
