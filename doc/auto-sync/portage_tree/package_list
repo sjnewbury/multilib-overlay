@@ -183,7 +183,7 @@ media-libs/lcms
 # media-libs/libcanberra
 # media-libs/libcddb
 # media-libs/libcuefile
-# media-libs/libdc1394
+media-libs/libdc1394
 media-libs/libdca
 media-libs/libdv
 media-libs/libdvdcss

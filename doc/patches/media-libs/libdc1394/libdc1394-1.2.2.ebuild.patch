@@ -1,0 +1,26 @@
+--- /usr/portage/media-libs/libdc1394/libdc1394-1.2.2.ebuild	2010-04-16 21:06:09.000000000 +0200
++++ ./media-libs/libdc1394/libdc1394-1.2.2.ebuild	2010-05-02 20:25:13.000000000 +0200
+@@ -18,21 +18,19 @@
+ DEPEND="${RDEPEND}
+ 	sys-devel/libtool"
+ 
+-src_unpack() {
+-	unpack ${A}; cd "${S}"
++src_prepare() {
+ 	if ! use X; then
+ 		epatch "${FILESDIR}"/${PN}-1.2.1-nox11.patch
+ 	fi
+ 	epatch "${FILESDIR}"/${PN}-disable-raw-capture.patch
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	if has_version '>=sys-libs/glibc-2.4' ; then
+ 		append-flags "-DCLK_TCK=CLOCKS_PER_SEC"
+ 	fi
+ 
+ 	econf || die
+-	emake || die
+ }
+ 
+ src_install() {

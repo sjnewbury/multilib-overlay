@@ -1,0 +1,21 @@
+--- /usr/portage/media-libs/libdc1394/libdc1394-2.1.0.ebuild	2009-06-18 00:07:22.000000000 +0200
++++ ./media-libs/libdc1394/libdc1394-2.1.0.ebuild	2010-05-02 20:27:36.000000000 +0200
+@@ -18,7 +18,7 @@
+ DEPEND="${RDEPEND}
+ 	doc? ( app-doc/doxygen )"
+ 
+-src_compile() {
++src_configure() {
+ 	local myconf=""
+ 
+ 	econf \
+@@ -27,6 +27,9 @@
+ 		$(use_enable doc doxygen-html) \
+ 		${myconf} \
+ 		|| die "econf failed"
++}
++
++src_compile() {
+ 	emake || die "emake failed"
+ 	if use doc ; then
+ 		emake doc || die "emake doc failed"
