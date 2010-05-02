@@ -196,7 +196,7 @@ media-libs/lcms
 # media-libs/libiptcdata
 # media-libs/libmad
 media-libs/libmikmod
-# media-libs/libmng
+media-libs/libmng
 media-libs/libmodplug
 media-libs/libmp4v2
 media-libs/libogg
