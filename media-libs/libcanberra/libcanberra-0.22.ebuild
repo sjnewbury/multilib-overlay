@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libcanberra/libcanberra-0.22.ebuild,v 1.1 2009/11/04 22:39:49 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libcanberra/libcanberra-0.22.ebuild,v 1.7 2010/04/11 14:13:39 armin76 Exp $
 
 EAPI="2"
 
@@ -12,10 +12,10 @@ SRC_URI="http://0pointer.de/lennart/projects/${PN}/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm ~hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="alsa doc gstreamer +gtk oss pulseaudio"
 
-RDEPEND="media-libs/libvorbis
+RDEPEND="media-libs/libvorbis[lib32?]
 	sys-devel/libtool[lib32?]
 	alsa? ( media-libs/alsa-lib[lib32?] )
 	pulseaudio? ( >=media-sound/pulseaudio-0.9.11[lib32?] )
@@ -56,7 +56,8 @@ multilib-native_src_configure_internal() {
 		$(use_enable pulseaudio pulse) \
 		$(use_enable doc gtk-doc) \
 		--disable-tdb \
-		--disable-lynx
+		--disable-lynx \
+		--with-html-dir=/usr/share/doc/${PF}/html
 	# tdb support would need a split-out from samba before we can use it
 }
 
@@ -69,11 +70,11 @@ multilib-native_src_install_internal() {
 	#unset GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	gnome2_gconf_savelist
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	gnome2_gconf_install
 }
 

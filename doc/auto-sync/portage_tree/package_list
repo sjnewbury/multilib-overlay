@@ -180,7 +180,7 @@ media-libs/jpeg
 media-libs/lcms
 # media-libs/libart_lgpl
 # media-libs/libcaca
-# media-libs/libcanberra
+media-libs/libcanberra
 media-libs/libcddb
 media-libs/libcuefile
 media-libs/libdc1394
