@@ -202,7 +202,7 @@ media-libs/libmikmod
 # media-libs/libmpcdecsv7
 # media-libs/libogg
 # media-libs/libpng
-# media-libs/libreplaygain
+media-libs/libreplaygain
 media-libs/libsamplerate
 media-libs/libsdl
 media-libs/libsndfile
