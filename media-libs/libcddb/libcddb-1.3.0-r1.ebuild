@@ -18,7 +18,7 @@ RESTRICT="test"
 RDEPEND=""
 DEPEND="doc? ( app-doc/doxygen )"
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 	epatch "${FILESDIR}/${P}-asneeded-nonglibc.patch"
