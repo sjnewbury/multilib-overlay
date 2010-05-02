@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libfpx/libfpx-1.2.0.9.ebuild,v 1.20 2006/08/06 16:58:47 vapier Exp $
 
+inherit multilib-native
+
 ### uncomment the right variables depending on if we have a patchlevel or not
 #MY_P=${PN}-${PV%.*}-${PV#*.*.*.}
 #MY_P2=${PN}-${PV%.*}
