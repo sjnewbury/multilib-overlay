@@ -15,7 +15,7 @@ IUSE="oss debug"
 
 RDEPEND="!media-libs/libdts"
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 	epatch "${FILESDIR}"/${P}-cflags.patch
