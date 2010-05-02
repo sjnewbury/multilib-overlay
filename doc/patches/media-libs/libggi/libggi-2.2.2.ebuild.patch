@@ -1,0 +1,19 @@
+--- /usr/portage/media-libs/libggi/libggi-2.2.2.ebuild	2009-09-30 12:06:34.000000000 +0200
++++ ./media-libs/libggi/libggi-2.2.2.ebuild	2010-05-02 19:49:06.000000000 +0200
+@@ -23,7 +23,7 @@
+ 		x11-proto/xf86vidmodeproto
+ 		x11-proto/xextproto )"
+ 
+-src_compile() {
++src_configure() {
+ 	local myconf=""
+ 
+ 	use svga || myconf="${myconf} --disable-svga --disable-vgagl"
+@@ -50,7 +50,6 @@
+ 		$(use_with X x) \
+ 		$(use_enable X x) \
+ 		${myconf}
+-	emake || die
+ }
+ 
+ src_install () {

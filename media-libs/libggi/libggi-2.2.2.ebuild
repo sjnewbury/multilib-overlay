@@ -1,6 +1,6 @@
-# Copyright 1999-2007 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libggi/libggi-2.2.2.ebuild,v 1.11 2007/07/27 11:22:45 uberlord Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libggi/libggi-2.2.2.ebuild,v 1.13 2009/09/30 09:37:39 ssuominen Exp $
 
 EAPI="2"
 
@@ -20,7 +20,7 @@ RDEPEND=">=media-libs/libgii-1.0.2[lib32?]
 		x11-libs/libXxf86dga[lib32?]
 		x11-libs/libXxf86vm[lib32?]
 		x11-libs/libXt[lib32?] )
-	svga? ( >=media-libs/svgalib-1.4.2[lib32?] )
+	svga? ( >=media-libs/svgalib-1.4.2 )
 	aalib? ( >=media-libs/aalib-1.2-r1[lib32?] )"
 DEPEND="${RDEPEND}
 	X? ( x11-proto/xf86dgaproto
@@ -57,16 +57,9 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR=${D} install || die "emake install failed."
+	emake DESTDIR="${D}" install || die
 
 	dodoc ChangeLog* FAQ NEWS README
 	docinto txt
 	dodoc doc/*.txt
-}
-
-pkg_postinst() {
-	elog
-	elog "Be noted that API has been changed, and you need to run"
-	elog "revdep-rebuild from gentoolkit to correct deps."
-	elog
 }
