@@ -2,7 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libpng/libpng-1.2.42.ebuild,v 1.1 2010/01/24 20:24:02 vapier Exp $
 
-inherit libtool multilib eutils multilib-native
+EAPI="2"
+
+inherit libtool multilib-native
 
 DESCRIPTION="Portable Network Graphics library"
 HOMEPAGE="http://www.libpng.org/"
@@ -13,7 +15,7 @@ SLOT="1.2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE=""
 
-RDEPEND="sys-libs/zlib"
+RDEPEND="sys-libs/zlib[lib32?]"
 DEPEND="${RDEPEND}"
 
 multilib-native_src_unpack_internal() {
