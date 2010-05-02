@@ -1,0 +1,31 @@
+--- /usr/portage/media-libs/libsndfile/libsndfile-1.0.18-r1.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./media-libs/libsndfile/libsndfile-1.0.18-r1.ebuild	2010-05-02 17:17:22.000000000 +0200
+@@ -29,10 +29,7 @@
+ 
+ S=${WORKDIR}/${MY_P}
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	sed -i -e "s/noinst_PROGRAMS/check_PROGRAMS/" "${S}/tests/Makefile.am" \
+ 	"${S}/examples/Makefile.am" || die "failed to remove forced build of test and example programs"
+ 	epatch "${FILESDIR}/${PN}-1.0.17-regtests-need-sqlite.patch"
+@@ -44,7 +41,7 @@
+ 	epunt_cxx
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	econf $(use_enable sqlite) \
+ 		$(use_enable alsa) \
+ 		$(use_enable !minimal external-libs) \
+@@ -52,7 +49,6 @@
+ 		--disable-gcc-werror \
+ 		--disable-gcc-pipe \
+ 		--disable-dependency-tracking
+-	emake || die "emake failed."
+ }
+ 
+ src_install() {

@@ -1,0 +1,30 @@
+--- /usr/portage/media-libs/libsndfile/libsndfile-1.0.19.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./media-libs/libsndfile/libsndfile-1.0.19.ebuild	2010-05-02 17:18:26.000000000 +0200
+@@ -30,9 +30,7 @@
+ 
+ S=${WORKDIR}/${MY_P}
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	sed -i -e "s/noinst_PROGRAMS/check_PROGRAMS/" "${S}/tests/Makefile.am" \
+ 		"${S}/examples/Makefile.am" || die "sed failed"
+ 
+@@ -46,7 +44,7 @@
+ 	epunt_cxx
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	econf $(use_enable sqlite) \
+ 		$(use_enable alsa) \
+ 		$(use_enable jack) \
+@@ -55,7 +53,6 @@
+ 		--disable-gcc-werror \
+ 		--disable-gcc-pipe \
+ 		--disable-dependency-tracking
+-	emake || die "emake failed"
+ }
+ 
+ src_install() {

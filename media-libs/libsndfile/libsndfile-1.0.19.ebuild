@@ -40,9 +40,6 @@ multilib-native_src_prepare_internal() {
 		"${FILESDIR}"/${PN}-1.0.18-less_strict_tests.patch \
 		"${FILESDIR}"/${P}-automagic_jack.patch
 
-	# cheap fix for multilib
-	use lib32 && epatch "${FILESDIR}/${P}-no-jack-revdep.patch"
-	
 	rm M4/libtool.m4 M4/lt*.m4 || die "rm failed"
 
 	AT_M4DIR=M4 eautoreconf
@@ -58,7 +55,6 @@ multilib-native_src_configure_internal() {
 		--disable-gcc-werror \
 		--disable-gcc-pipe \
 		--disable-dependency-tracking
-	emake || die "emake failed"
 }
 
 multilib-native_src_install_internal() {

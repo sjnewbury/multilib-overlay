@@ -51,7 +51,6 @@ multilib-native_src_configure_internal() {
 		--disable-gcc-werror \
 		--disable-gcc-pipe \
 		--disable-dependency-tracking
-	emake || die "emake failed"
 }
 
 multilib-native_src_install_internal() {
