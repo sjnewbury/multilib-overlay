@@ -16,7 +16,7 @@ IUSE="doc"
 DEPEND="doc? ( app-doc/doxygen )"
 RDEPEND=""
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	# these could cause problems if they exist from
 	# earlier builds
 	for x in libdvdcss.so.0 libdvdcss.so.1 libdvdcss.0.dylib libdvdcss.1.dylib ; do
@@ -26,7 +26,7 @@ pkg_preinst() {
 	done
 }
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 
