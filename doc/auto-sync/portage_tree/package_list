@@ -190,7 +190,7 @@ media-libs/lcms
 # media-libs/libexif
 # media-libs/libfpx
 # media-libs/libggi
-# media-libs/libgii
+media-libs/libgii
 media-libs/libgphoto2
 media-libs/libid3tag
 media-libs/libiptcdata

@@ -1,0 +1,24 @@
+--- /usr/portage/media-libs/libgii/libgii-1.0.2.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./media-libs/libgii/libgii-1.0.2.ebuild	2010-05-02 19:45:29.000000000 +0200
+@@ -17,9 +17,7 @@
+ DEPEND="${RDEPEND}
+ 	kernel_linux? ( >=sys-kernel/linux-headers-2.6.11 )"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/${PN}-0.9.0-linux26-headers.patch \
+ 		"${FILESDIR}"/${P}-configure-cpuid-pic.patch \
+ 		"${FILESDIR}"/${P}-libtool_1.5_compat.patch
+@@ -27,9 +25,8 @@
+ 	AT_M4DIR=m4 eautoreconf
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	econf $(use_with X x) $(use_enable X x) || die
+-	emake || die
+ }
+ 
+ src_install() {
