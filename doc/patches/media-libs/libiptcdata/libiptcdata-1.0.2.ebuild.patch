@@ -1,0 +1,15 @@
+--- /usr/portage/media-libs/libiptcdata/libiptcdata-1.0.2.ebuild	2010-01-01 14:07:58.000000000 +0100
++++ ./media-libs/libiptcdata/libiptcdata-1.0.2.ebuild	2010-05-02 18:37:20.000000000 +0200
+@@ -20,11 +20,10 @@
+ 	nls? ( sys-devel/gettext )
+ 	doc? ( >=dev-util/gtk-doc-1 )"
+ 
+-src_compile () {
++src_configure () {
+ 	econf $(use_enable nls) \
+ 		$(use_enable python) \
+ 		$(use_enable doc gtk-doc)
+-	emake || die "emake failed."
+ }
+ 
+ src_install () {

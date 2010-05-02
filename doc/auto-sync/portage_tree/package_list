@@ -193,7 +193,7 @@ media-libs/lcms
 # media-libs/libgii
 # media-libs/libgphoto2
 # media-libs/libid3tag
-# media-libs/libiptcdata
+media-libs/libiptcdata
 media-libs/libmad
 media-libs/libmikmod
 media-libs/libmng
