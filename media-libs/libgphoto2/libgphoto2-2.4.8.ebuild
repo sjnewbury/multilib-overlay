@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libgphoto2/libgphoto2-2.4.8.ebuild,v 1.1 2010/01/24 19:35:30 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libgphoto2/libgphoto2-2.4.8.ebuild,v 1.6 2010/04/05 14:57:39 armin76 Exp $
 
 # TODO
 # 1. Track upstream bug --disable-docs does not work.
@@ -16,7 +16,7 @@ SRC_URI="mirror://sourceforge/gphoto/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="alpha amd64 ~hppa ia64 ppc ppc64 sparc x86"
 IUSE="bonjour doc examples exif hal nls kernel_linux"
 
 # ???
@@ -43,10 +43,10 @@ for camera in ${IUSE_CAMERAS}; do
 done
 
 # libgphoto2 actually links to libtool
-RDEPEND="virtual/libusb:0
+RDEPEND="virtual/libusb:0[lib32?]
 	bonjour? ( || (
 		net-dns/avahi[mdnsresponder-compat,lib32?]
-		net-misc/mDNSResponder[lib32?] ) )
+		net-misc/mDNSResponder ) )
 	exif? ( >=media-libs/libexif-0.5.9[lib32?] )
 	hal? (
 		>=sys-apps/hal-0.5[lib32?]
@@ -193,7 +193,7 @@ multilib-native_src_install_internal() {
 
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "Don't forget to add yourself to the plugdev group "
 	elog "if you want to be able to access your camera."
 	local OLD_UDEV_RULES="${ROOT}"etc/udev/rules.d/99-libgphoto2.rules

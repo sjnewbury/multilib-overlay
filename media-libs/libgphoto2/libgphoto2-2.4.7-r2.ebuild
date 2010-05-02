@@ -46,7 +46,7 @@ done
 RDEPEND="virtual/libusb:0[lib32?]
 	bonjour? ( || (
 		net-dns/avahi[mdnsresponder-compat,lib32?]
-		net-misc/mDNSResponder[lib32?] ) )
+		net-misc/mDNSResponder ) )
 	exif? ( >=media-libs/libexif-0.5.9[lib32?] )
 	hal? (
 		>=sys-apps/hal-0.5[lib32?]
@@ -196,7 +196,7 @@ multilib-native_src_install_internal() {
 
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "Don't forget to add yourself to the plugdev group "
 	elog "if you want to be able to access your camera."
 	local OLD_UDEV_RULES="${ROOT}"etc/udev/rules.d/99-libgphoto2.rules
