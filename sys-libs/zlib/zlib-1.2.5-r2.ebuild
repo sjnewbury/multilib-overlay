@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/zlib/zlib-1.2.5-r2.ebuild,v 1.1 2010/04/29 17:49:03 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/zlib/zlib-1.2.5-r2.ebuild,v 1.2 2010/05/01 11:02:10 aballier Exp $
 
 inherit eutils toolchain-funcs multilib-native
 
@@ -27,6 +27,8 @@ multilib-native_src_unpack_internal() {
 
 	# bug #316377
 	epatch "${FILESDIR}"/${P}-lfs-decls.patch
+	# bug #316841
+	epatch "${FILESDIR}"/${P}-fbsd_chosts.patch
 }
 
 multilib-native_src_compile_internal() {
