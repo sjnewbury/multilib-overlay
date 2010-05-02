@@ -20,9 +20,7 @@ DEPEND="dev-util/gperf"
 RDEPEND="${DEPEND}
 	>=sys-libs/zlib-1.1.3[lib32?]"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epunt_cxx #74489
 
 	epatch "${FILESDIR}/${PV}"/*.patch
@@ -30,10 +28,6 @@ src_unpack() {
 
 multilib-native_src_configure_internal() {
 	econf $(use_enable debug debugging) || die "configure failed"
-}
-
-multilib-native_src_compile_internal() {
-	emake || die "make failed"
 }
 
 multilib-native_src_install_internal() {
