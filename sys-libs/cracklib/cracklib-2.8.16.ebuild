@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/cracklib/cracklib-2.8.13.ebuild,v 1.13 2010/03/08 22:35:46 zmedico Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/cracklib/cracklib-2.8.16.ebuild,v 1.1 2010/04/30 13:02:14 vapier Exp $
 
 EAPI="2"
 
@@ -11,9 +11,9 @@ DESCRIPTION="Password Checking Library"
 HOMEPAGE="http://sourceforge.net/projects/cracklib"
 SRC_URI="mirror://sourceforge/cracklib/${MY_P}.tar.gz"
 
-LICENSE="CRACKLIB"
+LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="nls python"
 
 DEPEND="python? ( <dev-lang/python-3[lib32?] )"
@@ -30,7 +30,8 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}"/${P}-python-linkage.patch #246747
+	epatch "${FILESDIR}"/${PN}-2.8.13-python-linkage.patch #246747
+	sed -i '/PYTHON/s:\(print\) \([^"]*\):\1(\2):' configure #302908
 	elibtoolize #269003
 }
 
@@ -46,10 +47,10 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	rm -r "${D}"/usr/share/cracklib
 
+	find "${D}" -name '_cracklibmodule.*a' -exec rm {} + #316495
+
 	# move shared libs to /
-	dodir /$(get_libdir)
-	mv "${D}"/usr/$(get_libdir)/*.so* "${D}"/$(get_libdir)/ || die "could not move shared"
-	gen_usr_ldscript libcrack.so
+	gen_usr_ldscript -a crack
 
 	insinto /usr/share/dict
 	doins dicts/cracklib-small || die "word dict"
