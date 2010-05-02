@@ -2,8 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libmad/libmad-0.15.1b-r3.ebuild,v 1.3 2007/08/06 20:26:40 dirtyepic Exp $
 
-EAPI="2"
-
 inherit eutils autotools libtool flag-o-matic multilib-native
 
 DESCRIPTION="\"M\"peg \"A\"udio \"D\"ecoder library"
@@ -17,7 +15,7 @@ IUSE="debug"
 
 DEPEND=""
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 
@@ -30,7 +28,7 @@ src_unpack() {
 	epunt_cxx #74490
 }
 
-multilib-native_src_configure_internal() {
+multilib-native_src_compile_internal() {
 	use ppc && append-flags -fno-strict-aliasing
 
 	local myconf="--enable-accuracy"
@@ -50,6 +48,7 @@ multilib-native_src_configure_internal() {
 	econf \
 		$(use_enable debug debugging) \
 		${myconf} || die "configure failed"
+	emake || die "make failed"
 }
 
 multilib-native_src_install_internal() {

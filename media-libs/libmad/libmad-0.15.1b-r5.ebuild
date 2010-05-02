@@ -2,8 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libmad/libmad-0.15.1b-r5.ebuild,v 1.1 2008/04/18 21:14:50 flameeyes Exp $
 
-EAPI="2"
-
 inherit eutils autotools libtool flag-o-matic multilib-native
 
 DESCRIPTION="\"M\"peg \"A\"udio \"D\"ecoder library"
@@ -17,7 +15,7 @@ IUSE="debug"
 
 DEPEND=""
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 
@@ -30,7 +28,7 @@ src_unpack() {
 	epunt_cxx #74490
 }
 
-multilib-native_src_configure_internal() {
+multilib-native_src_compile_internal() {
 	local myconf="--enable-accuracy"
 	# --enable-speed		 optimize for speed over accuracy
 	# --enable-accuracy		 optimize for accuracy over speed

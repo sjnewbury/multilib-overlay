@@ -1,6 +1,6 @@
-# Copyright 1999-2007 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libmad/libmad-0.15.1b-r4.ebuild,v 1.1 2007/08/06 20:26:40 dirtyepic Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libmad/libmad-0.15.1b-r6.ebuild,v 1.1 2010/04/30 08:21:51 ssuominen Exp $
 
 inherit eutils autotools libtool flag-o-matic multilib-native
 
@@ -19,8 +19,9 @@ multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 
-	epatch "${FILESDIR}/libmad-0.15.1b-cflags.patch"
-	epatch "${FILESDIR}/libmad-0.15.1b-cflags-O2.patch"
+	epatch "${FILESDIR}"/libmad-0.15.1b-cflags.patch
+	epatch "${FILESDIR}"/libmad-0.15.1b-cflags-O2.patch
+	epatch "${FILESDIR}"/libmad-0.15.1b-gcc44-mips-h-constraint-removal.patch
 
 	eautoreconf
 
@@ -62,4 +63,6 @@ multilib-native_src_install_internal() {
 	# Use correct libdir in pkgconfig file
 	dosed "s:^libdir.*:libdir=/usr/$(get_libdir):" \
 		/usr/$(get_libdir)/pkgconfig/mad.pc
+
+	find "${D}" -name '*.la' -delete
 }
