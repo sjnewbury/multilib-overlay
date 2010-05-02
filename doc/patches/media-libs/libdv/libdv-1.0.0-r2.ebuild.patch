@@ -1,0 +1,28 @@
+--- /usr/portage/media-libs/libdv/libdv-1.0.0-r2.ebuild	2009-04-05 12:37:41.000000000 +0200
++++ ./media-libs/libdv/libdv-1.0.0-r2.ebuild	2010-05-02 19:58:31.000000000 +0200
+@@ -20,23 +20,20 @@
+ DEPEND="${RDEPEND}
+ 	dev-util/pkgconfig"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/${PN}-0.99-2.6.patch
+ 	epatch "${WORKDIR}"/${PN}-1.0.0-pic.patch
+ 	elibtoolize
+ 	epunt_cxx #74497
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	econf \
+ 		$(use_with debug) \
+ 		--disable-gtk --disable-gtktest \
+ 		$(use_enable sdl) \
+ 		$(use_enable xv) \
+ 		|| die "econf failed."
+-	emake || die "emake failed."
+ }
+ 
+ src_install() {

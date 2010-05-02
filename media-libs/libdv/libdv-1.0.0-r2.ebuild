@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="debug sdl xv"
 
-RDEPEND="dev-libs/popt
+RDEPEND="dev-libs/popt[lib32?]
 	sdl? ( >=media-libs/libsdl-1.2.5[lib32?] )
 	xv? ( x11-libs/libXv[lib32?] )"
 DEPEND="${RDEPEND}
