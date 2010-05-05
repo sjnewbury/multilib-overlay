@@ -16,13 +16,12 @@ IUSE="doc esd"
 
 RDEPEND=">=gnome-base/gconf-2[lib32?]
 	>=dev-libs/glib-2.16[lib32?]
-	gnome-base/gvfs
 	>=gnome-base/gnome-vfs-2.5.3[lib32?]
 	>=gnome-base/libbonobo-2.13[lib32?]
 	>=dev-libs/popt-1.7[lib32?]
 	esd? (
-		>=media-sound/esound-0.2.26
-		>=media-libs/audiofile-0.2.3 )"
+		>=media-sound/esound-0.2.26[lib32?]
+		>=media-libs/audiofile-0.2.3[lib32?] )"
 
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
@@ -33,6 +32,6 @@ PDEPEND="gnome-base/gvfs"
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF} --disable-schemas-install $(use_enable esd)"
 }
