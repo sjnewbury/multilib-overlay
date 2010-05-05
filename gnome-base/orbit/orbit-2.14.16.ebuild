@@ -28,8 +28,8 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README* TODO"
 
-src_unpack() {
-	gnome2_src_unpack
+multilib-native_src_prepare_internal() {
+	gnome2_src_prepare
 
 	# Filter out G_DISABLE_DEPRECATED to be future-proof, related to bug 213434
 	sed -i -e '/DISABLE_DEPRECATED/d' \
