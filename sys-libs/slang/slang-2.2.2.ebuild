@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/slang/slang-2.2.2.ebuild,v 1.1 2009/12/08 12:13:30 matsuu Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/slang/slang-2.2.2.ebuild,v 1.2 2010/05/03 18:13:50 ssuominen Exp $
 
 EAPI=2
 inherit eutils multilib-native
@@ -25,6 +25,10 @@ DEPEND="${RDEPEND}"
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-2.1.2-slsh-libs.patch \
 		"${FILESDIR}"/${PN}-2.1.3-uclibc.patch
+
+	sed -i \
+		-e '/^TERMCAP=/s:=.*:=:' \
+		configure || die
 }
 
 multilib-native_src_configure_internal() {
