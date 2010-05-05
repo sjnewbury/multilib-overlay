@@ -116,7 +116,7 @@ dev-python/pygtk
 dev-util/cppunit
 # dev-util/pkgconfig
 # games-emulation/zsnes   32 bit programm
-# gnome-base/gconf
+gnome-base/gconf
 # gnome-base/gnome-desktop
 gnome-base/gnome-keyring
 # gnome-base/gnome-menus

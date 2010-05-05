@@ -1,0 +1,13 @@
+--- /usr/portage/gnome-base/gconf/gconf-2.24.0.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./gnome-base/gconf/gconf-2.24.0.ebuild	2010-05-06 00:17:53.000000000 +0200
+@@ -48,8 +48,8 @@
+ 	export EXTRA_EMAKE="${EXTRA_EMAKE} ORBIT_IDL=/usr/bin/orbit-idl-2"
+ }
+ 
+-src_unpack() {
+-	gnome2_src_unpack
++src_prepare() {
++	gnome2_src_prepare
+ 
+ 	# fix bug #193442, GNOME bug #498934
+ 	epatch "${FILESDIR}/${P}-automagic-ldap.patch"

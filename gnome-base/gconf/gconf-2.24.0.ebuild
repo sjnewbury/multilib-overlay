@@ -3,6 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gconf/gconf-2.24.0.ebuild,v 1.11 2009/05/01 11:39:25 eva Exp $
 
 EAPI="2"
+
 inherit autotools eutils gnome2 multilib-native
 
 MY_PN=GConf
@@ -25,7 +26,7 @@ RDEPEND=">=dev-libs/glib-2.14[lib32?]
 	>=sys-apps/dbus-1[lib32?]
 	>=gnome-base/orbit-2.4[lib32?]
 	>=dev-libs/libxml2-2[lib32?]
-	ldap? ( net-nds/openldap )"
+	ldap? ( net-nds/openldap[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9[lib32?]
@@ -36,7 +37,7 @@ DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 S="${WORKDIR}/${MY_P}"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		--enable-gtk
 		--disable-defaults-service
@@ -49,8 +50,8 @@ pkg_setup() {
 	export EXTRA_EMAKE="${EXTRA_EMAKE} ORBIT_IDL=/usr/bin/orbit-idl-2"
 }
 
-src_unpack() {
-	gnome2_src_unpack
+multilib-native_src_prepare_internal() {
+	gnome2_src_prepare
 
 	# fix bug #193442, GNOME bug #498934
 	epatch "${FILESDIR}/${P}-automagic-ldap.patch"
@@ -78,11 +79,11 @@ multilib-native_src_install_internal() {
 	dodir /root/.gconfd
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	kill_gconf
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	kill_gconf
 
 	#change the permissions to avoid some gconf bugs
