@@ -1,5 +1,5 @@
---- /usr/portage/sys-libs/db/db-4.5.20_p2-r1.ebuild	2009-09-20 22:06:37.000000000 +0200
-+++ ./sys-libs/db/db-4.5.20_p2-r1.ebuild	2010-03-14 18:09:03.000000000 +0100
+--- /usr/portage/sys-libs/db/db-4.5.20_p2-r1.ebuild	2010-05-04 01:37:25.000000000 +0200
++++ ./sys-libs/db/db-4.5.20_p2-r1.ebuild	2010-05-05 21:53:46.000000000 +0200
 @@ -35,9 +35,8 @@
  RDEPEND="tcl? ( dev-lang/tcl )
  	java? ( >=virtual/jre-1.4 )"
@@ -34,7 +34,7 @@
  
 @@ -140,8 +139,6 @@
  
- 	sed -e "s,\(^STRIP *=\).*,\1\"none\"," Makefile > Makefile.cpy \
+ 	sed -e "s,\(^STRIP *=\).*,\1\"true\"," Makefile > Makefile.cpy \
  	    && mv Makefile.cpy Makefile
 -
 -	emake || die "make failed"

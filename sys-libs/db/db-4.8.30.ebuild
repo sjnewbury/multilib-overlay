@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/db/db-4.5.20_p2-r1.ebuild,v 1.15 2010/05/03 23:21:52 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/db/db-4.8.30.ebuild,v 1.1 2010/05/03 21:59:12 robbat2 Exp $
 
 EAPI="2"
 
@@ -27,15 +27,17 @@ for (( i=1 ; i<=${PATCHNO} ; i++ )) ; do
 done
 
 LICENSE="OracleDB"
-SLOT="4.5"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
-IUSE="tcl java doc nocxx"
+SLOT="4.8"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+IUSE="doc java nocxx tcl test"
 
+# the entire testsuite needs the TCL functionality
 DEPEND="tcl? ( >=dev-lang/tcl-8.4[lib32?] )
-	java? ( >=virtual/jdk-1.4 )
+	test? ( >=dev-lang/tcl-8.4[lib32?] )
+	java? ( >=virtual/jdk-1.5 )
 	>=sys-devel/binutils-2.16.1"
 RDEPEND="tcl? ( dev-lang/tcl[lib32?] )
-	java? ( >=virtual/jre-1.4 )"
+	java? ( >=virtual/jre-1.5 )"
 
 multilib-native_src_prepare_internal() {
 	cd "${S}"/..
@@ -43,11 +45,12 @@ multilib-native_src_prepare_internal() {
 	do
 		epatch "${DISTDIR}"/patch."${MY_PV}"."${i}"
 	done
-	epatch "${FILESDIR}"/"${PN}"-"${SLOT}"-libtool.patch
+	epatch "${FILESDIR}"/${PN}-4.8-libtool.patch
+	epatch "${FILESDIR}"/${PN}-4.8.24-java-manifest-location.patch
 
 	# use the includes from the prefix
-	epatch "${FILESDIR}"/"${PN}"-4.3-jni-check-prefix-first.patch
-	epatch "${FILESDIR}"/"${PN}"-4.3-listen-to-java-options.patch
+	epatch "${FILESDIR}"/${PN}-4.6-jni-check-prefix-first.patch
+	epatch "${FILESDIR}"/${PN}-4.3-listen-to-java-options.patch
 
 	sed -e "/^DB_RELEASE_DATE=/s/%B %e, %Y/%Y-%m-%d/" -i dist/RELEASE
 
@@ -57,15 +60,8 @@ multilib-native_src_prepare_internal() {
 		-e '/jarfile=.*\.jar$/s,(.jar$),-$(LIBVERSION)\1,g' \
 		"${S}"/../dist/Makefile.in
 
-	# START of 4.5+earlier specific
-	# Upstream sucks, they normally concat these
-	cd "${S}"/../dist/aclocal
-	for i in *; do ln -s $i ${i%.ac}.m4 ; done ;
-	cd "${S}"/../dist/aclocal_java
-	for i in *; do ln -s $i ${i%.ac}.m4 ; done ;
-	# END of 4.5+earlier specific
 	cd "${S}"/../dist
-	rm -f aclocal/libtool.{m4,ac} aclocal.m4
+	rm -f aclocal/libtool.m4
 	sed -i \
 		-e '/AC_PROG_LIBTOOL$/aLT_OUTPUT' \
 		configure.ac
@@ -85,66 +81,55 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
+	local myconf=''
+
 	# compilation with -O0 fails on amd64, see bug #171231
 	if use amd64 && [ ${ABI} = "amd64" ]; then
 		replace-flags -O0 -O2
 		is-flagq -O[s123] || append-flags -O2
 	fi
 
-	local myconf=""
-
-	use amd64 && [ ${ABI} = "amd64" ] && myconf="${myconf} --with-mutex=x86/gcc-assembly"
-
-	myconf="${myconf} $(use_enable !nocxx cxx)"
-
-	use tcl \
-		&& myconf="${myconf} --enable-tcl --with-tcl=/usr/$(get_libdir)" \
-		|| myconf="${myconf} --disable-tcl"
-
-	myconf="${myconf} $(use_enable java)"
-	if use java; then
-		myconf="${myconf} --with-java-prefix=${JAVA_HOME}"
-		# Can't get this working any other way, since it returns spaces, and
-		# bash doesn't seem to want to pass correctly in any way i try
-		local javaconf="-with-javac-flags=$(java-pkg_javac-args)"
-	fi
-
-	[[ -n ${CBUILD} ]] && myconf="${myconf} --build=${CBUILD}"
-
-	# the entire testsuite needs the TCL functionality
-	if use tcl && use test ; then
-		myconf="${myconf} --enable-test"
-	else
-		myconf="${myconf} --disable-test"
+	# use `set` here since the java opts will contain whitespace
+	set --
+	if use java ; then
+		set -- "$@" \
+			--with-java-prefix="${JAVA_HOME}" \
+			--with-javac-flags="$(java-pkg_javac-args)"
 	fi
 
 	# Add linker versions to the symbols. Easier to do, and safer than header file
 	# mumbo jumbo.
-	if use userland_GNU; then
+	if use userland_GNU ; then
 		append-ldflags -Wl,--default-symver
 	fi
 
-	cd "${S}" && ECONF_SOURCE="${S}"/../dist econf \
-		--prefix=/usr \
-		--mandir=/usr/share/man \
-		--infodir=/usr/share/info \
-		--datadir=/usr/share \
-		--sysconfdir=/etc \
-		--localstatedir=/var/lib \
-		--libdir=/usr/"$(get_libdir)" \
+	# Bug #270851: test needs TCL support
+	if use tcl || use test ; then
+		myconf="${myconf} --enable-tcl"
+		myconf="${myconf} --with-tcl=/usr/$(get_libdir)"
+	else
+		myconf="${myconf} --disable-tcl"
+	fi
+
+	cd "${S}"
+	ECONF_SOURCE="${S}"/../dist \
+	STRIP="true" \
+	econf \
 		--enable-compat185 \
 		--enable-o_direct \
 		--without-uniquename \
-		--enable-rpc \
-		--host="${CHOST}" \
-		${myconf}  "${javaconf}" || die "configure failed"
-
-	sed -e "s,\(^STRIP *=\).*,\1\"true\"," Makefile > Makefile.cpy \
-	    && mv Makefile.cpy Makefile
+		$(use arm && echo --with-mutex=ARM/gcc-assembly) \
+		$(use amd64 && echo --with-mutex=x86/gcc-assembly) \
+		$(use_enable !nocxx cxx) \
+		$(use_enable !nocxx stl) \
+		$(use_enable java) \
+		${myconf} \
+		$(use_enable test) \
+		"$@"
 }
 
 multilib-native_src_install_internal() {
-	einstall libdir="${D}/usr/$(get_libdir)" STRIP="true" || die
+	emake install DESTDIR="${D}" || die
 
 	db_src_install_usrbinslot
 
