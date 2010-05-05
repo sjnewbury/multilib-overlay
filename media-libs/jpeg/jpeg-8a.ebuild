@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/jpeg/jpeg-8a.ebuild,v 1.7 2010/04/04 18:29:41 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/jpeg/jpeg-8a.ebuild,v 1.8 2010/05/03 20:05:23 ssuominen Exp $
 
 EAPI="2"
 
@@ -45,12 +45,4 @@ multilib-native_src_configure_internal() {
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
 	dodoc change.log example.c README *.txt
-}
-
-multilib-native_pkg_preinst_internal() {
-	preserve_old_lib /usr/$(get_libdir)/libjpeg.so.7
-}
-
-multilib-native_pkg_postinst_internal() {
-	preserve_old_lib_notify /usr/$(get_libdir)/libjpeg.so.7
 }
