@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libcaca/libcaca-0.99_beta16.ebuild,v 1.8 2009/07/11 00:23:06 chainsaw Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libcaca/libcaca-0.99_beta16.ebuild,v 1.10 2009/08/24 19:54:11 arfrever Exp $
 
 EAPI="2"
 
@@ -14,14 +14,14 @@ SRC_URI="http://libcaca.zoy.org/files/${PN}/${MY_P}.tar.gz"
 
 LICENSE="WTFPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ~ppc ppc64 sh sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="doc imlib mono ncurses nocxx opengl ruby slang X"
 
 RDEPEND="ncurses? ( >=sys-libs/ncurses-5.3[lib32?] )
 	slang? ( >=sys-libs/slang-1.4[lib32?] )
 	imlib? ( media-libs/imlib2[lib32?] )
 	X? ( x11-libs/libX11[lib32?] x11-libs/libXt[lib32?] )
-	opengl? ( virtual/opengl[lib32?] media-libs/freeglut[lib32?] media-libs/ftgl[lib32?] )
+	opengl? ( virtual/opengl[lib32?] media-libs/freeglut[lib32?] )
 	mono? ( dev-lang/mono )
 	ruby? ( virtual/ruby )"
 DEPEND="${RDEPEND}
@@ -32,20 +32,15 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${PN}-0.99_beta14-deoptimise.patch"
+	epatch "${FILESDIR}/${P}-freeglut-2.6.patch"
 
 	eautoreconf
 	elibtoolize
 }
 
-multilib-native_src_compile_internal() {
-	# temp font fix #44128
-	export VARTEXFONTS="${T}/fonts"
-
+multilib-native_src_configure_internal() {
 	econf \
 		$(use_enable doc) \
 		$(use_enable ncurses) \
@@ -57,8 +52,6 @@ multilib-native_src_compile_internal() {
 		$(use_enable mono csharp) \
 		$(use_enable ruby) \
 		|| die "econf failed"
-	emake || die "emake failed"
-	unset VARTEXFONTS
 }
 
 multilib-native_src_install_internal() {

@@ -21,7 +21,7 @@ RDEPEND="ncurses? ( >=sys-libs/ncurses-5.3[lib32?] )
 	slang? ( >=sys-libs/slang-1.4[lib32?] )
 	imlib? ( media-libs/imlib2[lib32?] )
 	X? ( x11-libs/libX11[lib32?] x11-libs/libXt[lib32?] )
-	opengl? ( virtual/opengl[lib32?] media-libs/freeglut[lib32?] media-libs/ftgl[lib32?] )
+	opengl? ( virtual/opengl[lib32?] media-libs/freeglut[lib32?] )
 	mono? ( dev-lang/mono )
 	ruby? ( virtual/ruby )"
 DEPEND="${RDEPEND}
@@ -41,9 +41,6 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
-	# temp font fix #44128
-	export VARTEXFONTS="${T}/fonts"
-
 	econf \
 		$(use_enable doc) \
 		$(use_enable ncurses) \
@@ -58,7 +55,6 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_install_internal() {
-	unset VARTEXFONTS
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS ChangeLog NEWS NOTES README
 
