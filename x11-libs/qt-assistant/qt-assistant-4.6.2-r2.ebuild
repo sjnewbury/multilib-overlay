@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-assistant/qt-assistant-4.6.2-r1.ebuild,v 1.1 2010/05/01 18:21:41 hwoarang Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-assistant/qt-assistant-4.6.2-r2.ebuild,v 1.1 2010/05/04 13:49:28 hwoarang Exp $
 
 EAPI="2"
 inherit qt4-build multilib-native
@@ -23,7 +23,7 @@ QT4_TARGET_DIRECTORIES="
 tools/assistant
 tools/pixeltool
 tools/qdoc3"
-QT4_EXTRACT_DIRECTORIES="${QT4_TARGET_DIRECTORIES}
+QT4_EXTRACT_DIRECTORIES="
 tools/
 demos/
 examples/
@@ -32,8 +32,9 @@ include/
 doc/"
 
 multilib-native_pkg_setup_internal() {
-	use trace && QT4_TARGET_DIRECTORIES="tools/qttracereplay"
-	QT4_EXTRACT_DIRECTORIES="${QT4_TARGET_DIRECTORIES}
+	use trace && QT4_TARGET_DIRECTORIES="${QT4_TARGET_DIRECTORIES}
+		tools/qttracereplay"
+	QT4_EXTRACT_DIRECTORIES="${QT4_TARGET_DIRECTORIES} \
 		${QT4_EXTRACT_DIRECTORIES}"
 	qt4-build_pkg_setup
 }
