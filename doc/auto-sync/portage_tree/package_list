@@ -136,7 +136,7 @@ gnome-base/libgnomeui
 # gnome-extra/bug-buddy
 # gnome-extra/evolution-data-server
 # gnome-extra/gtkhtml
-# gnome-extra/libgsf
+gnome-extra/libgsf
 # kde-base/automoc
 # mail-client/evolution
 # media-gfx/gimp
