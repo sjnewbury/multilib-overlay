@@ -1,14 +1,13 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libpng/libpng-1.4.1.ebuild,v 1.1 2010/03/06 23:43:10 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libpng/libpng-1.4.2_rc5.ebuild,v 1.1 2010/05/03 20:29:29 ssuominen Exp $
 
-EAPI="2"
-
+EAPI=3
 inherit libtool multilib-native
 
 DESCRIPTION="Portable Network Graphics library"
 HOMEPAGE="http://www.libpng.org/"
-SRC_URI="mirror://sourceforge/libpng/${P}.tar.bz2"
+SRC_URI="mirror://sourceforge/libpng/${P/_rc/rc0}.tar.xz"
 
 LICENSE="as-is"
 SLOT="1.2"
@@ -16,13 +15,13 @@ SLOT="1.2"
 IUSE=""
 
 RDEPEND="sys-libs/zlib[lib32?]"
-DEPEND="${RDEPEND}"
+DEPEND="${RDEPEND}
+	app-arch/xz-utils[lib32?]"
 
-multilib-native_src_unpack_internal() {
-	unpack ${A}
-	cd "${S}"
-	# So we get sane .so versioning on FreeBSD
-	elibtoolize
+S=${WORKDIR}/${P/_rc/rc0}
+
+multilib-native_src_prepare_internal() {
+	elibtoolize # fbsd
 }
 
 multilib-native_src_install_internal() {
