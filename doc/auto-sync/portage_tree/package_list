@@ -122,7 +122,7 @@ dev-util/cppunit
 # gnome-base/gnome-menus
 # gnome-base/gnome-panel
 gnome-base/gnome-vfs
-# gnome-base/gvfs
+gnome-base/gvfs
 gnome-base/libbonobo
 gnome-base/libbonoboui
 # gnome-base/libglade

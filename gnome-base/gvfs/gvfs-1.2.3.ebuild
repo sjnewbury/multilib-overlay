@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gvfs/gvfs-1.2.3.ebuild,v 1.5 2009/10/08 03:12:03 tester Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gvfs/gvfs-1.2.3.ebuild,v 1.12 2010/01/16 17:16:54 armin76 Exp $
 
 EAPI="2"
 
@@ -11,14 +11,14 @@ HOMEPAGE="http://www.gnome.org"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="archive avahi bluetooth cdda doc fuse gnome gnome-keyring gphoto2 hal samba"
 
 RDEPEND=">=dev-libs/glib-2.19[lib32?]
 	>=sys-apps/dbus-1.0[lib32?]
 	>=net-libs/libsoup-2.25.1[gnome,lib32?]
 	dev-libs/libxml2[lib32?]
-	net-misc/openssh
+	net-misc/openssh[lib32?]
 	archive? ( app-arch/libarchive[lib32?] )
 	avahi? ( >=net-dns/avahi-0.6[lib32?] )
 	bluetooth? (
@@ -78,7 +78,7 @@ multilib-native_src_install_internal() {
 		dobashcompletion programs/gvfs-bash-completion.sh ${PN}
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	gnome2_pkg_postinst
 	use bash-completion && bash-completion_pkg_postinst
 }
