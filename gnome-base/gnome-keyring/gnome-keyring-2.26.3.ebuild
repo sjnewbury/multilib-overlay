@@ -1,17 +1,17 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.26.3.ebuild,v 1.4 2009/10/08 03:09:27 tester Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.26.3.ebuild,v 1.11 2010/01/17 23:27:16 jer Exp $
 
 EAPI="2"
 
-inherit gnome2 pam virtualx eutils multilib-native
+inherit gnome2 pam virtualx eutils autotools multilib-native
 
 DESCRIPTION="Password and keyring managing daemon"
 HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="debug doc hal pam test"
 # USE=valgrind is probably not a good idea for the tree
 
@@ -20,8 +20,7 @@ RDEPEND=">=dev-libs/glib-2.16[lib32?]
 	gnome-base/gconf[lib32?]
 	>=sys-apps/dbus-1.0[lib32?]
 	hal? ( >=sys-apps/hal-0.5.7[lib32?] )
-	pam? ( virtual/pam )
-	pam? ( sys-libs/pam[lib32?] )
+	pam? ( virtual/pam[lib32?] )
 	>=dev-libs/libgcrypt-1.2.2[lib32?]
 	>=dev-libs/libtasn1-1[lib32?]"
 #	valgrind? ( dev-util/valgrind )"

@@ -19,12 +19,11 @@ RDEPEND=">=dev-libs/glib-2.8[lib32?]
 	 gnome-base/gconf[lib32?]
 	 >=sys-apps/dbus-1.0[lib32?]
 	 hal? ( >=sys-apps/hal-0.5.7[lib32?] )
-	 pam? ( virtual/pam )
+	 pam? ( virtual/pam[lib32?] )
 	 >=dev-libs/libgcrypt-1.2.2[lib32?]
-	 >=dev-libs/libtasn1-0.3.4[lib32?]
-	 lib32? ( pam? ( sys-libs/pam[lib32] ) )"
+	 >=dev-libs/libtasn1-1[lib32?]"
 DEPEND="${RDEPEND}
-	sys-devel/gettext
+	sys-devel/gettext[lib32?]
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9[lib32?]
 	dev-util/gtk-doc-am
@@ -42,8 +41,8 @@ multilib-native_pkg_setup_internal() {
 		--with-root-certs=/usr/share/ca-certificates/"
 }
 
-src_unpack() {
-	gnome2_src_unpack
+multilib-native_src_prepare_internal() {
+	gnome2_src_prepare
 
 	# Backport from trunk for fixing upstream bug #511285, bug #238098
 	epatch "${FILESDIR}/${P}-warnings.patch"
