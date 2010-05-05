@@ -19,8 +19,8 @@ RDEPEND=""
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
-src_unpack() {
-	gnome2_src_unpack
+multilib-native_src_prepare_internal() {
+	gnome2_src_prepare
 
 	# Fix crosscompiling; bug #185684
 	epatch "${FILESDIR}"/${PN}-2.3.19-crosscompile.patch

@@ -116,7 +116,6 @@ dev-python/pygtk
 dev-util/cppunit
 # dev-util/pkgconfig
 # games-emulation/zsnes   32 bit programm
-gnome-base/gail
 # gnome-base/gconf
 # gnome-base/gnome-desktop
 # gnome-base/gnome-keyring
@@ -178,8 +177,8 @@ media-libs/imlib2
 media-libs/jpeg
 # media-libs/lasi
 media-libs/lcms
-# media-libs/libart_lgpl
-# media-libs/libcaca
+media-libs/libart_lgpl
+media-libs/libcaca
 media-libs/libcanberra
 media-libs/libcddb
 media-libs/libcuefile

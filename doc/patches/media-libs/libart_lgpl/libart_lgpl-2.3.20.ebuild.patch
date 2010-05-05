@@ -1,0 +1,13 @@
+--- /usr/portage/media-libs/libart_lgpl/libart_lgpl-2.3.20.ebuild	2009-04-05 10:08:24.000000000 +0200
++++ ./media-libs/libart_lgpl/libart_lgpl-2.3.20.ebuild	2010-05-05 23:09:06.000000000 +0200
+@@ -17,8 +17,8 @@
+ 
+ DOCS="AUTHORS ChangeLog NEWS README"
+ 
+-src_unpack() {
+-	gnome2_src_unpack
++src_prepare() {
++	gnome2_src_prepare
+ 
+ 	# Fix crosscompiling; bug #185684
+ 	epatch "${FILESDIR}"/${PN}-2.3.19-crosscompile.patch
