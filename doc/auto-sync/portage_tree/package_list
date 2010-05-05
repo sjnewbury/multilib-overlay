@@ -130,7 +130,7 @@ gnome-base/libbonoboui
 # gnome-base/libgnomecanvas
 gnome-base/libgnomeui
 # gnome-base/libgtop
-# gnome-base/librsvg
+gnome-base/librsvg
 # gnome-base/nautilus
 gnome-base/orbit
 # gnome-extra/bug-buddy

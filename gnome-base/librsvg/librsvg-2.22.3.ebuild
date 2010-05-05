@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/librsvg/librsvg-2.22.3.ebuild,v 1.10 2009/04/28 10:55:32 armin76 Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit gnome2 multilib multilib-native
 
@@ -53,12 +53,12 @@ multilib-native_src_install_internal() {
 	rm -fr "${D}/etc"
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	set_gtk_confdir
 	gdk-pixbuf-query-loaders > "${GTK2_CONFDIR}/gdk-pixbuf.loaders"
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	set_gtk_confdir
 	gdk-pixbuf-query-loaders > "${GTK2_CONFDIR}/gdk-pixbuf.loaders"
 }

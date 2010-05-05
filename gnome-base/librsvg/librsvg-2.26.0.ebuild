@@ -1,8 +1,8 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/librsvg/librsvg-2.26.0.ebuild,v 1.3 2009/10/08 03:17:19 tester Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/librsvg/librsvg-2.26.0.ebuild,v 1.10 2010/01/16 17:21:43 armin76 Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit eutils gnome2 multilib multilib-native
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://librsvg.sourceforge.net/"
 
 LICENSE="LGPL-2"
 SLOT="2"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="doc zlib"
 
 RDEPEND=">=media-libs/fontconfig-1.0.1[lib32?]
@@ -62,12 +62,12 @@ multilib-native_src_install_internal() {
 	rm -rf "${D}/usr/$(get_libdir)/mozilla"
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	set_gtk_confdir
 	gdk-pixbuf-query-loaders > "${GTK2_CONFDIR}/gdk-pixbuf.loaders"
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	set_gtk_confdir
 	gdk-pixbuf-query-loaders > "${GTK2_CONFDIR}/gdk-pixbuf.loaders"
 }

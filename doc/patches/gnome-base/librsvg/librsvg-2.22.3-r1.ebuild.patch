@@ -1,0 +1,13 @@
+--- /usr/portage/gnome-base/librsvg/librsvg-2.22.3-r1.ebuild	2009-05-03 13:06:56.000000000 +0200
++++ ./gnome-base/librsvg/librsvg-2.22.3-r1.ebuild	2010-05-05 23:50:11.000000000 +0200
+@@ -46,8 +46,8 @@
+ 	GTK2_CONFDIR="${GTK2_CONFDIR:-/etc/gtk-2.0}"
+ }
+ 
+-src_unpack() {
+-	gnome2_src_unpack
++src_prepare() {
++	gnome2_src_prepare
+ 
+ 	# gcc-4.3.2-r3 related segfault with various apps like firefox -- bug 239992
+ 	epatch "${FILESDIR}/${P}-fix-segfault-with-firefox.patch"
