@@ -1,0 +1,28 @@
+--- /usr/portage/media-libs/jasper/jasper-1.900.1-r3.ebuild	2010-02-21 08:05:48.000000000 +0100
++++ ./media-libs/jasper/jasper-1.900.1-r3.ebuild	2010-05-06 22:24:18.000000000 +0200
+@@ -19,20 +19,21 @@
+ DEPEND="${RDEPEND}
+ 		app-arch/unzip"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${WORKDIR}"/${P}-fixes-20081208.patch
+ 
+ 	elibtoolize
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	econf \
+ 		$(use_enable jpeg libjpeg) \
+ 		$(use_enable opengl) \
+ 		--enable-shared \
+ 		|| die
++}
++
++src_compile() {
+ 	emake || die "If you got undefined references to OpenGL related libraries,please try 'eselect opengl set xorg-x11' before emerging. See bug #133609."
+ }
+ 
