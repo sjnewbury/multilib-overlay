@@ -2,7 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/jbigkit/jbigkit-2.0-r1.ebuild,v 1.1 2010/03/15 19:55:42 grobian Exp $
 
-EAPI="2"
+EAPI="3"
+
 inherit eutils multilib toolchain-funcs multilib-native
 
 DESCRIPTION="data compression algorithm for bi-level high-resolution images"
@@ -37,5 +38,5 @@ multilib-native_src_install_internal() {
 	doins libjbig/*.h || die
 	dolib libjbig/libjbig{,85}{.a,$(get_libname)} || die
 
-	dodoc ANNOUNCE CHANGES INSTALL TODO
+	dodoc ANNOUNCE CHANGES TODO libjbig/*.txt
 }

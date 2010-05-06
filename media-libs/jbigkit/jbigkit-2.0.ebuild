@@ -37,5 +37,5 @@ multilib-native_src_install_internal() {
 	doins libjbig/*.h || die
 	dolib libjbig/libjbig{,85}{.a,$(get_libname)} || die
 
-	dodoc ANNOUNCE CHANGES INSTALL TODO
+	dodoc ANNOUNCE CHANGES TODO libjbig/*.txt
 }
