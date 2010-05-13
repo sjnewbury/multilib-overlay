@@ -2,7 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/id3lib/id3lib-3.8.3-r7.ebuild,v 1.2 2009/07/16 19:18:11 ssuominen Exp $
 
-EAPI=2
+EAPI="2"
+
 inherit eutils autotools multilib-native
 
 MY_P=${P/_}
@@ -19,7 +20,7 @@ IUSE="doc"
 
 RESTRICT="test"
 
-RDEPEND="sys-libs/zlib"
+RDEPEND="sys-libs/zlib[lib32?]"
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )"
 

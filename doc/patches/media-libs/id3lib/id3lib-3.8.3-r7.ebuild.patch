@@ -1,0 +1,22 @@
+--- /usr/portage/media-libs/id3lib/id3lib-3.8.3-r7.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./media-libs/id3lib/id3lib-3.8.3-r7.ebuild	2010-05-13 15:35:44.000000000 +0200
+@@ -22,10 +22,7 @@
+ DEPEND="${RDEPEND}
+ 	doc? ( app-doc/doxygen )"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	epatch "${FILESDIR}"/${P}-zlib.patch
+ 	epatch "${FILESDIR}"/${P}-test_io.patch
+ 	epatch "${FILESDIR}"/${P}-autoconf259.patch
+@@ -40,7 +37,6 @@
+ }
+ 
+ src_compile() {
+-	econf || die "econf failed."
+ 	emake || die "emake failed."
+ 
+ 	if use doc; then
