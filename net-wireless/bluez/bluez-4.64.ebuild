@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.62.ebuild,v 1.2 2010/03/11 15:22:41 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.64.ebuild,v 1.1 2010/05/08 11:04:39 pacho Exp $
 
 EAPI="2"
 
@@ -25,7 +25,7 @@ CDEPEND="alsa? (
 	usb? ( dev-libs/libusb[lib32?] )
 	cups? ( net-print/cups[lib32?] )
 	sys-fs/udev[lib32?]
-	dev-libs/glib[lib32?]
+	>=dev-libs/glib-2.14[lib32?]
 	sys-apps/dbus[lib32?]
 	media-libs/libsndfile[lib32?]
 	>=dev-libs/libnl-1.1[lib32?]
@@ -58,9 +58,6 @@ multilib-native_src_prepare_internal() {
 
 	# Fix alsa files location
 	epatch "${FILESDIR}/${PN}-alsa_location.patch"
-
-	# Upstream patch to fix ipctest build, bug 308081
-	epatch "${FILESDIR}/${P}-makefile_ipctest.patch"
 
 	eautoreconf
 }
