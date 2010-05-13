@@ -1,0 +1,32 @@
+--- /usr/portage/sys-fs/udev/udev-154.ebuild	2010-05-12 23:44:09.000000000 +0200
++++ ./sys-fs/udev/udev-154.ebuild	2010-05-13 15:07:02.000000000 +0200
+@@ -138,9 +138,9 @@
+ 			mv "${WORKDIR}"/test/sys "${S}"/test/
+ 		fi
+ 	fi
++}
+ 
+-	cd "${S}"
+-
++src_prepare() {
+ 	# patches go here...
+ 
+ 	# backport some patches
+@@ -180,7 +180,7 @@
+ 	fi
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	filter-flags -fprefetch-loop-arrays
+ 
+ 	econf \
+@@ -196,8 +196,6 @@
+ 		$(use_enable extras) \
+ 		--disable-introspection
+ 	# we don't have gobject-introspection in portage tree
+-
+-	emake || die "compiling udev failed"
+ }
+ 
+ src_install() {
