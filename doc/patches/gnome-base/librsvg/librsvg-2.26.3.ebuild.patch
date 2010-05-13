@@ -1,0 +1,13 @@
+--- /usr/portage/gnome-base/librsvg/librsvg-2.26.3.ebuild	2010-05-08 17:00:05.000000000 +0200
++++ ./gnome-base/librsvg/librsvg-2.26.3.ebuild	2010-05-13 14:04:11.000000000 +0200
+@@ -37,8 +37,8 @@
+ 		--enable-gtk-theme"
+ }
+ 
+-src_unpack() {
+-	gnome2_src_unpack
++src_prepare() {
++	gnome2_src_prepare
+ 
+ 	# gcc-4.3.2-r3 related segfault with various apps like firefox -- bug 239992
+ 	epatch "${FILESDIR}/${PN}-2.22.3-fix-segfault-with-firefox.patch"
