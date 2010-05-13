@@ -1,6 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libv4l/libv4l-0.5.3.ebuild,v 1.8 2010/02/24 19:30:19 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libv4l/libv4l-0.5.3.ebuild,v 1.9 2010/05/10 15:07:28 ssuominen Exp $
+
+# this version is marked as obsolete, delete asap
 
 inherit multilib toolchain-funcs multilib-native
 
@@ -11,7 +13,7 @@ SRC_URI="http://people.atrpms.net/~hdegoede/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="alpha amd64 hppa ppc ppc64 ~sparc x86"
+KEYWORDS="alpha hppa"
 IUSE=""
 
 multilib-native_src_compile_internal() {
