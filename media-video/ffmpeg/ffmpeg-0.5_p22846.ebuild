@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-0.5_p22846.ebuild,v 1.2 2010/04/23 12:53:48 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-0.5_p22846.ebuild,v 1.3 2010/05/11 09:50:42 aballier Exp $
 
 EAPI=2
 SCM=""
@@ -142,6 +142,7 @@ multilib-native_src_configure_internal() {
 	#done
 	use video_cards_nvidia || myconf="${myconf} --disable-vdpau"
 	use vdpau || myconf="${myconf} --disable-vdpau"
+	myconf="${myconf} --disable-vaapi"
 
 	# CPU features
 	for i in mmx ssse3 altivec ; do

@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999-r1.ebuild,v 1.32 2010/04/23 12:49:27 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999-r1.ebuild,v 1.33 2010/05/11 10:18:21 aballier Exp $
 
 EAPI=2
 SCM=""
@@ -29,7 +29,7 @@ IUSE="+3dnow +3dnowext alsa altivec cpudetection custom-cflags debug dirac
 	  doc ieee1394 +encode faac faad gsm jack +mmx +mmxext vorbis test
 	  theora threads x264 xvid network zlib sdl X mp3 amr
 	  oss pic schroedinger +hardcoded-tables bindist v4l v4l2
-	  speex +ssse3 jpeg2k vdpau"
+	  speex +ssse3 jpeg2k vaapi vdpau"
 
 VIDEO_CARDS="nvidia"
 
@@ -58,6 +58,7 @@ RDEPEND="sdl? ( >=media-libs/libsdl-1.2.10[lib32?] )
 	speex? ( >=media-libs/speex-1.2_beta3[lib32?] )
 	jack? ( media-sound/jack-audio-connection-kit[lib32?] )
 	X? ( x11-libs/libX11[lib32?] x11-libs/libXext[lib32?] )
+	vaapi? ( x11-libs/libva )
 	video_cards_nvidia? (
 		vdpau? ( x11-libs/libvdpau )
 	)"
@@ -142,6 +143,7 @@ multilib-native_src_configure_internal() {
 	#done
 	use video_cards_nvidia || myconf="${myconf} --disable-vdpau"
 	use vdpau || myconf="${myconf} --disable-vdpau"
+	use vaapi || myconf="${myconf} --disable-vaapi"
 
 	# CPU features
 	for i in mmx ssse3 altivec ; do
