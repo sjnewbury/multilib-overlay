@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.5.2.ebuild,v 1.2 2010/04/08 10:05:23 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.4.8.ebuild,v 1.2 2010/05/11 11:27:47 patrick Exp $
 
 EAPI="2"
 
@@ -57,7 +57,7 @@ if use server ; then
 
 	use swat && SBINPROGS="${SBINPROGS} bin/swat"
 	use winbind && SBINPROGS="${SBINPROGS} bin/winbindd"
-	use ads && use winbind && SBINPROGS="${SBINPROGS} bin/winbind_krb5_locator"
+	use ads && use winbind && SBIN_PROGS="${SBINPROGS} bin/winbind_krb5_locator"
 fi
 
 if use client ; then
@@ -148,7 +148,6 @@ multilib-native_src_configure_internal() {
 		$(use_with ads dnsupdate) \
 		--without-automount \
 		$(use_with client cifsmount) \
-		$(use_with client cifsumount) \
 		$(use_with pam) \
 		$(use_with pam pam_smbpass) \
 		$(use_with syslog) \
@@ -271,7 +270,7 @@ multilib-native_src_install_internal() {
 		dosbin ${prog} || die "installing ${prog} failed"
 		doman ../docs/manpages/${prog/bin\/}* || die "doman failed"
 	done
-	dobin ${BINPROGS} || die "installing binaries failed"
+
 	for prog in ${BINPROGS} ; do
 		dobin ${prog} || die "installing ${prog} failed"
 		doman ../docs/manpages/${prog/bin\/}* || die "doman failed"

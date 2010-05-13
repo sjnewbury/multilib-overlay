@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.4.6.ebuild,v 1.3 2010/05/11 11:27:47 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.5.2-r1.ebuild,v 1.2 2010/05/11 11:27:47 patrick Exp $
 
 EAPI="2"
 
-inherit pam confutils versionator multilib multilib-native
+inherit pam confutils versionator multilib eutils multilib-native
 
 MY_PV=${PV/_/}
 MY_P="${PN}-${MY_PV}"
@@ -14,7 +14,7 @@ HOMEPAGE="http://www.samba.org/"
 SRC_URI="mirror://samba/${P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 IUSE="acl addns ads aio avahi caps +client cluster cups debug doc examples fam
 	ldap ldb +netapi pam quota +readline +server +smbclient smbsharemodes swat
 	syslog winbind "
@@ -57,7 +57,7 @@ if use server ; then
 
 	use swat && SBINPROGS="${SBINPROGS} bin/swat"
 	use winbind && SBINPROGS="${SBINPROGS} bin/winbindd"
-	use ads && use winbind && SBIN_PROGS="${SBINPROGS} bin/winbind_krb5_locator"
+	use ads && use winbind && SBINPROGS="${SBINPROGS} bin/winbind_krb5_locator"
 fi
 
 if use client ; then
@@ -93,6 +93,8 @@ multilib-native_src_prepare_internal() {
 	sed -i \
 		-e 's|LDSHFLAGS="|LDSHFLAGS="\\${LDFLAGS} |g' \
 		configure || die "sed failed"
+
+	cd "${S}/../" && epatch "${FILESDIR}"/${PV}-backport-fix-*
 }
 
 multilib-native_src_configure_internal() {
@@ -148,6 +150,7 @@ multilib-native_src_configure_internal() {
 		$(use_with ads dnsupdate) \
 		--without-automount \
 		$(use_with client cifsmount) \
+		$(use_with client cifsumount) \
 		$(use_with pam) \
 		$(use_with pam pam_smbpass) \
 		$(use_with syslog) \
