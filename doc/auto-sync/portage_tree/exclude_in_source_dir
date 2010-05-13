@@ -77,6 +77,5 @@ sys-fs/device-mapper/device-mapper-1.02.22-r3.ebuild
 sys-fs/device-mapper/device-mapper-1.02.22-r4.ebuild
 sys-fs/device-mapper/device-mapper-1.02.22-r5.ebuild
 sys-fs/device-mapper/device-mapper-1.02.24.ebuild
-net-wireless/bluez/bluez-4.28.ebuild
 app-text/gnome-doc-utils/gnome-doc-utils-0.12.2-r1.ebuild
 app-text/gnome-doc-utils/gnome-doc-utils-0.14.2.ebuild

@@ -1,12 +1,12 @@
-# Copyright 1999-2007 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/ilmbase/ilmbase-1.0.0.ebuild,v 1.8 2007/10/24 11:57:17 uberlord Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/ilmbase/ilmbase-1.0.0.ebuild,v 1.9 2010/03/10 02:55:29 sping Exp $
 
 inherit libtool eutils multilib-native
 
 DESCRIPTION="OpenEXR ILM Base libraries"
 HOMEPAGE="http://openexr.com/"
-SRC_URI="http://download.savannah.nongnu.org/releases/openexr/${P}.tar.gz"
+SRC_URI="http://download.savannah.gnu.org/releases/openexr/${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
