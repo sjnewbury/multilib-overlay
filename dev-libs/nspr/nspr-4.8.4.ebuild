@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.8.4.ebuild,v 1.3 2010/04/20 09:20:51 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.8.4.ebuild,v 1.4 2010/05/09 16:50:39 armin76 Exp $
 
 inherit eutils multilib toolchain-funcs versionator multilib-native
 
@@ -12,7 +12,7 @@ SRC_URI="ftp://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v${PV}/src/${P}.tar
 
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm ~hppa ia64 ~mips ~ppc ~ppc64 sparc x86 ~x86-fbsd"
 IUSE="debug"
 
 multilib-native_src_unpack_internal() {
