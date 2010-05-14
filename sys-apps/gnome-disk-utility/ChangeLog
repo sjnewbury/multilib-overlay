@@ -1,0 +1,28 @@
+# ChangeLog for sys-apps/gnome-disk-utility
+# Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/gnome-disk-utility/ChangeLog,v 1.4 2010/05/04 16:14:27 tester Exp $
+
+  03 May 2010; Olivier Crête <tester@gentoo.org>
+  gnome-disk-utility-2.28.1.ebuild:
+  amd64 stable, bug #314899
+
+  19 Apr 2010; Pacho Ramos <pacho@gentoo.org>
+  -gnome-disk-utility-2.28.0.ebuild, gnome-disk-utility-2.28.1.ebuild,
+  +files/gnome-disk-utility-2.28.1-fix-potfiles_skip.patch:
+  Drop encoding set from POTFILES.skip since it doesn't need it and causes
+  'intltool-update -m' to fail (see bug #313351 , thanks to Diego for
+  reporting). Removing old testing version.
+
+*gnome-disk-utility-2.28.1 (04 Nov 2009)
+
+  04 Nov 2009; Gilles Dartiguelongue <eva@gentoo.org>
+  +gnome-disk-utility-2.28.1.ebuild:
+  Version bump. Add missing gnome-doc-utils and libnotify dependency, bug
+  #291880. Fix a crash in nautilus extension. Translation updates.
+
+*gnome-disk-utility-2.28.0 (29 Oct 2009)
+
+  29 Oct 2009; Gilles Dartiguelongue <eva@gentoo.org>
+  +gnome-disk-utility-2.28.0.ebuild, +metadata.xml:
+  Initial ebuild for GNOME 2.28.
+

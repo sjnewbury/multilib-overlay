@@ -1,0 +1,9 @@
+Gentoo bug 313351
+GNOME #616019
+--- po/POTFILES.skip~	2009-09-11 17:48:29.000000000 +0200
++++ po/POTFILES.skip	2010-04-19 19:54:00.000000000 +0200
+@@ -1,4 +1,3 @@
+-[encoding: UTF-8]
+ # List of files where to skip translations.
+ # Please keep this file sorted alphabetically.
+ data/gdu-notification-daemon.desktop.in
