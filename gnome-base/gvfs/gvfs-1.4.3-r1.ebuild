@@ -29,7 +29,7 @@ RDEPEND=">=dev-libs/glib-2.21.2[lib32?]
 		net-wireless/bluez[lib32?]
 		dev-libs/expat[lib32?] )
 	fuse? ( sys-fs/fuse[lib32?] )
-	gdu? ( >=sys-apps/gnome-disk-utility-2.28 )
+	gdu? ( >=sys-apps/gnome-disk-utility-2.28[lib32?] )
 	gnome? ( >=gnome-base/gconf-2.0[lib32?] )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-1.0[lib32?] )
 	gphoto2? ( >=media-libs/libgphoto2-2.4.7[lib32?] )
