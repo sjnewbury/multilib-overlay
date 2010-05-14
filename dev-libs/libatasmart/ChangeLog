@@ -1,0 +1,31 @@
+# ChangeLog for dev-libs/libatasmart
+# Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libatasmart/ChangeLog,v 1.6 2010/05/13 17:28:49 josejx Exp $
+
+  13 May 2010; Joseph Jezak <josejx@gentoo.org> libatasmart-0.16.ebuild,
+  libatasmart-0.17.ebuild:
+  Marked ~ppc64 for bug #316277.
+
+  13 May 2010; Joseph Jezak <josejx@gentoo.org> libatasmart-0.16.ebuild,
+  libatasmart-0.17.ebuild:
+  Marked ~ppc for bug #309779.
+
+  03 May 2010; Olivier Crête <tester@gentoo.org> libatasmart-0.17.ebuild:
+  amd64 stable, bug #314899
+
+  03 Apr 2010; Raúl Porcel <armin76@gentoo.org> libatasmart-0.16.ebuild,
+  libatasmart-0.17.ebuild:
+  Add ~arm
+
+*libatasmart-0.17 (04 Nov 2009)
+
+  04 Nov 2009; Gilles Dartiguelongue <eva@gentoo.org>
+  +libatasmart-0.17.ebuild:
+  Version bump.
+
+*libatasmart-0.16 (29 Oct 2009)
+
+  29 Oct 2009; Gilles Dartiguelongue <eva@gentoo.org>
+  +libatasmart-0.16.ebuild, +metadata.xml:
+  Initial ebuild for GNOME 2.28.
+
