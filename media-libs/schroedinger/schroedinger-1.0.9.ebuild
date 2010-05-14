@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x86-solaris"
 IUSE=""
 
-RDEPEND=">=dev-lang/orc-0.4.3"
+RDEPEND=">=dev-lang/orc-0.4.3[lib32?]"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	dev-util/gtk-doc-am"
