@@ -1,0 +1,49 @@
+diff -Naur iniparser3.0b.orig/Makefile iniparser3.0b/Makefile
+--- iniparser3.0b.orig/Makefile	2010-04-07 08:02:48.771242264 +0200
++++ iniparser3.0b/Makefile	2010-04-07 08:10:51.403895732 +0200
+@@ -3,16 +3,16 @@
+ #
+ 
+ # Compiler settings
+-CC      = gcc
+-CFLAGS  = -O2 -fPIC -Wall -ansi -pedantic
++CC      ?= gcc
++CFLAGS  += -fPIC -Wall -ansi -pedantic
+ 
+ # Ar settings to build the library
+-AR	    = ar
++AR	    ?= ar
+ ARFLAGS = rcv
+ 
+ SHLD = ${CC} ${CFLAGS}
+-LDSHFLAGS = -shared -Wl,-Bsymbolic  -Wl,-rpath -Wl,/usr/lib -Wl,-rpath,/usr/lib
+-LDFLAGS = -Wl,-rpath -Wl,/usr/lib -Wl,-rpath,/usr/lib
++LDSHFLAGS = -shared -Wl,-Bsymbolic
++LDFLAGS += -Wl,-rpath -Wl,/usr/lib -Wl,-rpath,/usr/lib
+ 
+ # Set RANLIB to ranlib on systems that require it (Sun OS < 4, Mac OSX)
+ # RANLIB  = ranlib
+@@ -28,7 +28,7 @@
+ COMPILE.c=$(CC) $(CFLAGS) -c
+ .c.o:
+ 	@(echo "compiling $< ...")
+-	@($(COMPILE.c) -o $@ $<)
++	$(COMPILE.c) -o $@ $<
+ 
+ 
+ SRCS = src/iniparser.c \
+@@ -40,11 +40,11 @@
+ default:	libiniparser.a libiniparser.so
+ 
+ libiniparser.a:	$(OBJS)
+-	@($(AR) $(ARFLAGS) libiniparser.a $(OBJS))
+-	@($(RANLIB) libiniparser.a)
++	$(AR) $(ARFLAGS) libiniparser.a $(OBJS)
++	$(RANLIB) libiniparser.a
+ 
+ libiniparser.so:	$(OBJS)
+-	@$(SHLD) $(LDSHFLAGS) -o $@.0 $(OBJS) $(LDFLAGS) \
++	$(SHLD) $(LDSHFLAGS) $(LDFLAGS) -o $@.0 $(OBJS) \
+ 		-Wl,-soname=`basename $@`.0
+ 
+ clean:
