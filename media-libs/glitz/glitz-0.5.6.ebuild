@@ -15,11 +15,7 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm ia64 ppc ppc64 sh x86 ~x86-fbsd"
 IUSE=""
 
-DEPEND="virtual/opengl"
-
-multilib-native_src_configure_internal() {
-	econf --x-libraries="/usr/$(get_libdir)" || die
-}
+DEPEND="virtual/opengl[lib32?]"
 
 multilib-native_src_install_internal() {
 	make DESTDIR="${D}" install || die

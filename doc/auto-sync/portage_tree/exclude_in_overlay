@@ -61,3 +61,4 @@ net-misc/networkmanager/networkmanager-9999.ebuild
 media-sound/musepack-tools/files/musepack-tools-458-CFLAGS.patch # patch of multilib overlay look into the commit msg for further info
 dev-libs/dbus-glib/dbus-glib-9999.ebuild
 dev-python/pygobject/pygobject-2.21.1.ebuild
+media-libs/glitz/glitz-9999.ebuild # x11
