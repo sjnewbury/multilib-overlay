@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libxml2/libxml2-2.7.7.ebuild,v 1.7 2010/05/11 21:26:13 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libxml2/libxml2-2.7.7.ebuild,v 1.8 2010/05/14 03:59:59 robbat2 Exp $
 
 EAPI="2"
 SUPPORT_PYTHON_ABIS="1"
@@ -81,7 +81,15 @@ multilib-native_src_configure_internal() {
 	# filter seemingly problematic CFLAGS (#26320)
 	filter-flags -fprefetch-loop-arrays -funroll-loops
 
-	python_execute_function -f -q econf ${myconf}
+	# This ebuild is critical during preparation of a stage1 build.
+	# If the Python binary is not present in $ROOT, python_execute_function
+	# returns successfully but silently, WITHOUT running the command (with
+	# disasterous side-effects).
+	if use python; then
+		python_execute_function -f -q econf ${myconf}
+	else
+		econf ${myconf}
+	fi
 }
 
 multilib-native_src_compile_internal() {
