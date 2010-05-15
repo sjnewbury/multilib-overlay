@@ -1,0 +1,29 @@
+--- /usr/portage/media-libs/giflib/giflib-4.1.6-r1.ebuild	2009-04-05 10:08:24.000000000 +0200
++++ ./media-libs/giflib/giflib-4.1.6-r1.ebuild	2010-05-16 01:10:04.000000000 +0200
+@@ -22,16 +22,14 @@
+ 	)
+ 	rle? ( media-libs/urt )"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/${P}-gif2rle.patch
+ 	epatch "${FILESDIR}"/${P}-giffix-null-Extension-fix.patch
+ 	elibtoolize
+ 	epunt_cxx
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	local myconf="--disable-gl $(use_enable X x11)"
+ 	# prevent circular depend #111455
+ 	if has_version media-libs/urt ; then
+@@ -40,7 +38,6 @@
+ 		myconf="${myconf} --disable-rle"
+ 	fi
+ 	econf ${myconf}
+-	emake || die "emake failed"
+ }
+ 
+ src_install() {

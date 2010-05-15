@@ -13,7 +13,7 @@ SRC_URI="mirror://sourceforge/giflib/${P}.tar.bz2"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
-IUSE="doc rle X"
+IUSE="rle X"
 
 DEPEND="!media-libs/libungif
 	X? (
@@ -24,9 +24,7 @@ DEPEND="!media-libs/libungif
 	)
 	rle? ( media-libs/urt )"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-gif2rle.patch
 	epatch "${FILESDIR}"/${P}-giffix-null-Extension-fix.patch
 	elibtoolize
@@ -34,7 +32,7 @@ src_unpack() {
 }
 
 multilib-native_src_configure_internal() {
-	local myconf="--disable-gl $(use_enable X x11) --x-libraries=/usr/$(get_libdir)"
+	local myconf="--disable-gl $(use_enable X x11)"
 	# prevent circular depend #111455
 	if has_version media-libs/urt ; then
 		myconf="${myconf} $(use_enable rle)"
@@ -47,5 +45,5 @@ multilib-native_src_configure_internal() {
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc AUTHORS BUGS ChangeLog NEWS ONEWS README TODO doc/*.txt
-	use doc && dohtml -r doc
+	dohtml -r doc
 }
