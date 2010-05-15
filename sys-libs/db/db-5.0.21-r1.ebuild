@@ -1,9 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/db/db-5.0.21.ebuild,v 1.1 2010/05/11 08:01:45 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/db/db-5.0.21-r1.ebuild,v 1.2 2010/05/14 10:56:44 robbat2 Exp $
 
-EAPI="2"
-
+EAPI=2
 inherit eutils db flag-o-matic java-pkg-opt-2 autotools libtool multilib-native
 
 #Number of official patches
@@ -40,8 +39,12 @@ DEPEND="tcl? ( >=dev-lang/tcl-8.4[lib32?] )
 RDEPEND="tcl? ( dev-lang/tcl[lib32?] )
 	java? ( >=virtual/jre-1.5 )"
 
+multilib-native_src_unpack_internal() {
+	unpack "${MY_P}".tar.gz
+}
+
 multilib-native_src_prepare_internal() {
-	cd "${S}"/..
+	cd "${WORKDIR}"/"${MY_P}"
 	for (( i=1 ; i<=${PATCHNO} ; i++ ))
 	do
 		epatch "${DISTDIR}"/patch."${MY_PV}"."${i}"
@@ -52,6 +55,9 @@ multilib-native_src_prepare_internal() {
 	# use the includes from the prefix
 	epatch "${FILESDIR}"/${PN}-4.6-jni-check-prefix-first.patch
 	epatch "${FILESDIR}"/${PN}-4.3-listen-to-java-options.patch
+
+	# upstream autoconf fails to build DBM when it's supposed to
+	epatch "${FILESDIR}"/${PN}-5.0.21-enable-dbm-autoconf.patch
 
 	# Upstream release script grabs the dates when the script was run, so lets
 	# end-run them to keep the date the same.
@@ -93,7 +99,7 @@ multilib-native_src_configure_internal() {
 	local myconf=''
 
 	# compilation with -O0 fails on amd64, see bug #171231
-	if use amd64 && [ ${ABI} = "amd64" ]; then
+	if use amd64; then
 		replace-flags -O0 -O2
 		is-flagq -O[s123] || append-flags -O2
 	fi
@@ -143,6 +149,10 @@ multilib-native_src_configure_internal() {
 		"$@"
 }
 
+multilib-native_src_compile_internal() {
+	emake || die "make failed"
+}
+
 multilib-native_src_install_internal() {
 	emake install DESTDIR="${D}" || die
 
@@ -178,12 +188,13 @@ src_test() {
 	# db_repsite is impossible to build, as upstream strips those sources.
 	# db_repsite is used directly in the setup_site_prog,
 	# setup_site_prog is called from open_site_prog
-	# which is called only from tests
-	egrep -ril \
-		'open_site_prog|setup_site_prog|db_repsite' \
-		"${S_BASE}/test" \
-		| xargs egrep -l '^# TEST ' \
-		| xargs rename .tcl .tcl.DISABLED
+	# which is called only from tests in the multi_repmgr group.
+	#sed -ri \
+	#	-e '/set subs/s,multi_repmgr,,g' \
+	#	"${S_BASE}/test/testparams.tcl"
+	sed -ri \
+		-e '/multi_repmgr/d' \
+		"${S_BASE}/test/test.tcl"
 
 	db_src_test
 }
