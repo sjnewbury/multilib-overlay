@@ -21,14 +21,14 @@ DEPEND="x11-libs/libXmu[lib32?]
 	x11-libs/libXext[lib32?]
 	x11-libs/libX11[lib32?]"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	sed -i \
 		-e '/INSTALL/s:-s::' \
 		-e '/$(CC) $(CFLAGS) -o/s:$(CFLAGS):$(CFLAGS) $(LDFLAGS):' \
 		Makefile || die
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_compile_internal(){
 	emake AR="$(tc-getAR)" STRIP=true CC="$(tc-getCC)" \
 		LD="$(tc-getCC) ${LDFLAGS}" POPT="${CFLAGS}" M_ARCH="" || die
 }
