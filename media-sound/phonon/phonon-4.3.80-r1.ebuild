@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.3.80-r1.ebuild,v 1.9 2010/04/18 12:41:42 reavertm Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.3.80-r1.ebuild,v 1.10 2010/05/15 13:50:18 reavertm Exp $
 
 EAPI="2"
 
