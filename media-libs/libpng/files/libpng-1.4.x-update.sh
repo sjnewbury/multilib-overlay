@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Try revdep-rebuild or lafilefixer first."
+echo "Try revdep-rebuild first."
 echo "This script will rename -lpng12 and libpng12.la to -lpng14 and libpng14.la"
 echo "in your system libdir libtool .la files without asking permission."
 

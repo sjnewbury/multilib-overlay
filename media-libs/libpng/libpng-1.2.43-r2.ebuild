@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libpng/libpng-1.2.43-r2.ebuild,v 1.9 2010/05/12 18:28:17 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libpng/libpng-1.2.43-r2.ebuild,v 1.10 2010/05/13 20:05:17 ssuominen Exp $
 
 EAPI=3
 inherit libtool multilib-native
@@ -15,7 +15,8 @@ KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~spar
 IUSE=""
 
 RDEPEND="sys-libs/zlib[lib32?]
-	!<media-libs/libpng-1.2.43-r2"
+	!<media-libs/libpng-1.2.43-r2
+	!media-libs/libpng:1.2"
 DEPEND="${RDEPEND}
 	app-arch/xz-utils[lib32?]"
 
