@@ -1,10 +1,11 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/librsvg/librsvg-2.26.3.ebuild,v 1.1 2010/05/08 15:00:05 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/librsvg/librsvg-2.26.3.ebuild,v 1.2 2010/05/14 20:47:01 eva Exp $
 
 EAPI="2"
+GCONF_DEBUG="no"
 
-inherit eutils gnome2 multilib multilib-native
+inherit gnome2 multilib multilib-native
 
 DESCRIPTION="Scalable Vector Graphics (SVG) rendering library"
 HOMEPAGE="http://librsvg.sourceforge.net/"
@@ -26,24 +27,19 @@ RDEPEND=">=media-libs/fontconfig-1.0.1[lib32?]
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.12[lib32?]
 	doc? ( >=dev-util/gtk-doc-1 )"
+# >=dev-util/gtk-doc-am-1.13 needed by eautoreconf, feel free to drop it when not run it
 
 DOCS="AUTHORS ChangeLog README NEWS TODO"
 
 multilib-native_pkg_setup_internal() {
 	# croco is forced on to respect SVG specification
 	G2CONF="${G2CONF}
+		--disable-static
 		$(use_enable tools)
 		$(use_with zlib svgz)
 		--with-croco
 		--enable-pixbuf-loader
 		--enable-gtk-theme"
-}
-
-multilib-native_src_prepare_internal() {
-	gnome2_src_prepare
-
-	# gcc-4.3.2-r3 related segfault with various apps like firefox -- bug 239992
-	epatch "${FILESDIR}/${PN}-2.22.3-fix-segfault-with-firefox.patch"
 }
 
 set_gtk_confdir() {
