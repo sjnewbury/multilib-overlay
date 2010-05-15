@@ -34,7 +34,7 @@ RDEPEND="
 	)
 "
 DEPEND="${RDEPEND}
-	>=kde-base/automoc-0.9.87[lib32?]
+	>=dev-util/automoc-0.9.87[lib32?]
 "
 
 S="${WORKDIR}/${MY_P}"

@@ -113,6 +113,7 @@ dev-python/pygobject
 dev-python/pygtk
 # dev-python/pyorbit
 # dev-python/pyrex
+# dev-util/automoc
 dev-util/cppunit
 # dev-util/pkgconfig
 # games-emulation/zsnes   32 bit programm
@@ -137,7 +138,6 @@ gnome-base/orbit
 # gnome-extra/evolution-data-server
 # gnome-extra/gtkhtml
 gnome-extra/libgsf
-# kde-base/automoc
 # mail-client/evolution
 # media-gfx/gimp
 media-gfx/graphviz
