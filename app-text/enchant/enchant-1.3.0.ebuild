@@ -19,14 +19,14 @@ IUSE=""
 # The || is meant to make sure there is a a default spell lib to work with
 # 25 Aug 2003; foser <foser@gentoo.org>
 
-RDEPEND=">=dev-libs/glib-2
-	|| ( virtual/aspell-dict app-text/ispell app-text/hunspell )"
+RDEPEND=">=dev-libs/glib-2[lib32?]
+	|| ( virtual/aspell-dict app-text/ispell app-text/hunspell[lib32?] )"
 
 # libtool is needed for the install-sh to work
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]"
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 

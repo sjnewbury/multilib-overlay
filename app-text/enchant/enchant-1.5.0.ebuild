@@ -1,9 +1,8 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-text/enchant/enchant-1.5.0.ebuild,v 1.8 2010/04/26 07:46:34 phajdan.jr Exp $
 
 EAPI="3"
-
 inherit libtool confutils autotools multilib-native
 
 DESCRIPTION="Spellchecker wrapping library"
@@ -15,10 +14,10 @@ SLOT="0"
 KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ppc ppc64 ~sh ~sparc x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-macos ~x86-solaris"
 IUSE="aspell +hunspell zemberek"
 
-COMMON_DEPENDS=">=dev-libs/glib-2
+COMMON_DEPENDS=">=dev-libs/glib-2[lib32?]
 	aspell? ( virtual/aspell-dict )
-	hunspell? ( >=app-text/hunspell-1.2.1 )
-	zemberek? ( dev-libs/dbus-glib )"
+	hunspell? ( >=app-text/hunspell-1.2.1[lib32?] )
+	zemberek? ( dev-libs/dbus-glib[lib32?] )"
 
 RDEPEND="${COMMON_DEPENDS}
 	zemberek? ( app-text/zemberek-server )"
@@ -27,11 +26,11 @@ RDEPEND="${COMMON_DEPENDS}
 DEPEND="${COMMON_DEPENDS}
 	dev-util/pkgconfig[lib32?]"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	confutils_require_any aspell hunspell zemberek
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	# Fix for upstream bug #12305
 	# http://bugzilla.abisource.com/show_bug.cgi?id=12305
 	epatch "${FILESDIR}"/${P}-zemberek.patch
