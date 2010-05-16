@@ -162,7 +162,7 @@ media-libs/fontconfig
 # media-libs/freeglut
 media-libs/freetype
 # media-libs/ftgl
-# media-libs/gd
+media-libs/gd
 media-libs/gegl
 media-libs/giflib
 media-libs/glew
