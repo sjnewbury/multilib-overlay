@@ -12,4 +12,7 @@
     <name>Stefan Schweizer</name>
     <description>Feel free to change what you want</description>
   </maintainer>
+  <use>
+    <flag name="qt-bundled">Use bundled Qt4 libraries instead of system ones. Recommended only for troubleshooting.</flag>
+  </use>
 </pkgmetadata>

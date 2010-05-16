@@ -1,6 +1,83 @@
-# ChangeLog for x11-misc/googleearth
-# Copyright 1999-2009 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/x11-misc/googleearth/ChangeLog,v 1.46 2009/06/22 21:47:37 caster Exp $
+# ChangeLog for sci-geosciences/googleearth
+# Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
+# $Header: /var/cvsroot/gentoo-x86/sci-geosciences/googleearth/ChangeLog,v 1.3 2010/04/26 19:06:59 maekke Exp $
+
+  26 Apr 2010; Markus Meier <maekke@gentoo.org>
+  googleearth-5.1.3533.1731-r1.ebuild:
+  amd64/x86 stable, bug #307535
+
+  26 Mar 2010; Dror Levin <spatz@gentoo.org>
+  googleearth-4.2.205.5730.ebuild, googleearth-4.3.7284.3916.ebuild,
+  googleearth-5.0.11733.9347.ebuild, googleearth-5.1.3533.1731-r1.ebuild:
+  Convert font deps to virtual/ttf-fonts wrt bug 282754.
+
+  16 Mar 2010; Vlastimil Babka <caster@gentoo.org>
+  +googleearth-4.2.205.5730.ebuild, +googleearth-4.3.7284.3916.ebuild,
+  +googleearth-5.0.11733.9347.ebuild, +googleearth-5.1.3533.1731-r1.ebuild,
+  +files/decimal-separator.patch, +files/mime-magic.patch, +metadata.xml:
+  Package move from x11-misc/googleearth.
+
+  19 Feb 2010; Vlastimil Babka <caster@gentoo.org>
+  -googleearth-5.1.3509.4636_beta.ebuild, -googleearth-5.1.3533.1731.ebuild,
+  googleearth-5.1.3533.1731-r1.ebuild:
+  Fix bug #303789 properly by depending on a fixed version of emul qtlibs.
+
+  19 Feb 2010; Vlastimil Babka <caster@gentoo.org>
+  googleearth-5.1.3533.1731-r1.ebuild:
+  Add dependency on qt-core also for amd64 - workaround for bug #303789
+  until #305825 is solved.
+
+  11 Feb 2010; Ulrich Mueller <ulm@gentoo.org>
+  googleearth-4.2.205.5730.ebuild, googleearth-4.3.7284.3916.ebuild,
+  googleearth-5.0.11733.9347.ebuild, googleearth-5.1.3509.4636_beta.ebuild,
+  googleearth-5.1.3533.1731.ebuild, googleearth-5.1.3533.1731-r1.ebuild:
+  Replace license X11 by MIT, bug 298556.
+
+  31 Jan 2010; Vlastimil Babka <caster@gentoo.org>
+  googleearth-5.1.3533.1731-r1.ebuild, metadata.xml:
+  Add qt-bundled USE flag. If disabled (default), remove bundled Qt4
+  libraries and depend on system ones. Should fix font problems mentioned in
+  bugs #262780 and #252419. Unbundling libs tracked in #212373.
+
+  22 Nov 2009; Vlastimil Babka <caster@gentoo.org>
+  googleearth-5.1.3533.1731-r1.ebuild:
+  Add dejavu font alternative as suggested in bug #262780.
+
+*googleearth-5.1.3533.1731-r1 (22 Nov 2009)
+
+  22 Nov 2009; Vlastimil Babka <caster@gentoo.org>
+  +googleearth-5.1.3533.1731-r1.ebuild, +files/decimal-separator.patch:
+  Revbump with patch to prevent locales with comma decimal separator from
+  killing the saved places. Thanks to András <cucaracha@loco.hu> in bug
+  #262780.
+
+*googleearth-5.1.3533.1731 (18 Nov 2009)
+
+  18 Nov 2009; Vlastimil Babka <caster@gentoo.org>
+  +googleearth-5.1.3533.1731.ebuild:
+  Version bump.
+
+  07 Oct 2009; Vlastimil Babka <caster@gentoo.org>
+  googleearth-5.0.11733.9347.ebuild:
+  Found a stable (?) link for 5.0
+
+  07 Oct 2009; Vlastimil Babka <caster@gentoo.org>
+  googleearth-5.1.3509.4636_beta.ebuild:
+  Depend on gcc-4.2+ and check that it's active in pkg_setup, ewarn
+  otherwise.
+
+*googleearth-5.1.3509.4636_beta (03 Oct 2009)
+
+  03 Oct 2009; Vlastimil Babka <caster@gentoo.org>
+  -googleearth-5.1.3506.3999_beta.ebuild,
+  +googleearth-5.1.3509.4636_beta.ebuild:
+  Version bump, bug #287385.
+
+*googleearth-5.1.3506.3999_beta (11 Sep 2009)
+
+  11 Sep 2009; Vlastimil Babka <caster@gentoo.org>
+  +googleearth-5.1.3506.3999_beta.ebuild:
+  Version bump. Fixes bug #284466 and uses QA_DT_HASH, bug #275140.
 
   22 Jun 2009; Vlastimil Babka <caster@gentoo.org>
   googleearth-5.0.11733.9347.ebuild, metadata.xml:
