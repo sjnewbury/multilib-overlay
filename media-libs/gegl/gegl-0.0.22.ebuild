@@ -1,22 +1,22 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/gegl/gegl-0.1.0-r1.ebuild,v 1.1 2009/09/18 01:45:39 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/gegl/gegl-0.0.22.ebuild,v 1.13 2009/12/20 16:15:33 ranger Exp $
 
 EAPI="2"
 
-inherit autotools eutils multilib-native
+inherit eutils multilib-native
 
 DESCRIPTION="A graph based image processing framework"
 HOMEPAGE="http://www.gegl.org/"
-SRC_URI="ftp://ftp.gimp.org/pub/${PN}/${PV:0:3}/${P}.tar.bz2"
+SRC_URI="ftp://ftp.gimp.org/pub/${PN}/0.0/${P}.tar.bz2"
 
 LICENSE="|| ( GPL-3 LGPL-3 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="alpha amd64 hppa ia64 ppc ppc64 sparc x86"
 
 IUSE="cairo debug doc ffmpeg jpeg mmx openexr png raw sdl sse svg v4l"
 
-DEPEND=">=media-libs/babl-0.1.0[lib32?]
+DEPEND=">=media-libs/babl-0.0.20[lib32?]
 	>=dev-libs/glib-2.18.0[lib32?]
 	media-libs/libpng[lib32?]
 	>=x11-libs/gtk+-2.14.0[lib32?]
@@ -27,7 +27,7 @@ DEPEND=">=media-libs/babl-0.1.0[lib32?]
 		>=dev-lang/lua-5.1.0[lib32?]
 		app-text/enscript
 		media-gfx/graphviz[lib32?]
-		media-gfx/imagemagick[png,lib32?] )
+		media-gfx/imagemagick[lib32?] )
 	ffmpeg? ( >=media-video/ffmpeg-0.4.9_p20080326[lib32?] )
 	jpeg? ( media-libs/jpeg[lib32?] )
 	openexr? ( media-libs/openexr[lib32?] )
@@ -36,10 +36,16 @@ DEPEND=">=media-libs/babl-0.1.0[lib32?]
 	svg? ( >=gnome-base/librsvg-2.14.0[lib32?] )"
 RDEPEND="${DEPEND}"
 
+multilib-native_pkg_setup_internal() {
+	if use doc && ! built_with_use 'media-gfx/imagemagick' 'png'; then
+		eerror "You must build imagemagick with png support"
+		die "media-gfx/imagemagick built without png"
+	fi
+}
+
 multilib-native_src_prepare_internal() {
-	# Fix operations/workshop/external CFLAGS, bug #283444
-	epatch "${FILESDIR}/${P}-GLIB_CFLAGS.patch"
-	eautoreconf
+	epatch "${FILESDIR}/${P}-locale_h.diff"
+	epatch "${FILESDIR}/replace-imgconvert-by-swsscale.patch"
 }
 
 multilib-native_src_configure_internal() {
@@ -60,11 +66,19 @@ multilib-native_src_configure_internal() {
 		$(use_with raw libopenraw) \
 		$(use_with sdl) \
 		$(use_with svg librsvg) \
-		$(use_enable sse)
+		$(use_enable sse) \
+		|| die "econf failed"
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${D}" install || die "emake install failed"
+	# emake install doesn't install anything
+	einstall || die "einstall failed"
 	find "${D}" -name '*.la' -delete
 	dodoc ChangeLog INSTALL README NEWS || die "dodoc failed"
+
+	# don't know why einstall omits this?!
+	insinto "/usr/include/${PN}-0.0/${PN}/buffer/"
+	doins "${WORKDIR}/${P}/${PN}"/buffer/*.h || die "doins buffer failed"
+	insinto "/usr/include/${PN}-0.0/${PN}/module/"
+	doins "${WORKDIR}/${P}/${PN}"/module/*.h || die "doins module failed"
 }

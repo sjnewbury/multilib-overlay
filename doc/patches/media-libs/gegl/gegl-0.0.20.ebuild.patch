@@ -1,0 +1,33 @@
+--- /usr/portage/media-libs/gegl/gegl-0.0.20.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./media-libs/gegl/gegl-0.0.20.ebuild	2010-05-16 01:24:42.000000000 +0200
+@@ -42,10 +42,7 @@
+ 	fi
+ }
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	#HACK!GACK!HACK!
+ 	#Interface name changed, we change with it.
+ 	if has_version '>=media-video/ffmpeg-0.4.9_p20081014'
+@@ -61,7 +58,7 @@
+ 	eautoreconf
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	econf --enable-gtk --enable-pango --enable-gdkpixbuf \
+ 		$(use_enable debug) \
+ 		$(use_with cairo) \
+@@ -84,6 +81,9 @@
+ 		$(use_with svg librsvg) \
+ 		$(use_enable sse) \
+ 		|| die "econf failed"
++}
++
++src_compile() {
+ 	env GEGL_SWAP="${WORKDIR}" emake || die "emake failed"
+ }
+ 

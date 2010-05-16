@@ -1,0 +1,27 @@
+--- /usr/portage/media-libs/gegl/gegl-0.0.22.ebuild	2009-12-20 17:38:59.000000000 +0100
++++ ./media-libs/gegl/gegl-0.0.22.ebuild	2010-05-16 01:25:33.000000000 +0200
+@@ -41,14 +41,12 @@
+ 	fi
+ }
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}/${P}-locale_h.diff"
+ 	epatch "${FILESDIR}/replace-imgconvert-by-swsscale.patch"
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	econf --with-gtk --with-pango --with-gdk-pixbuf \
+ 		$(use_enable debug) \
+ 		$(use_with cairo) \
+@@ -68,7 +66,6 @@
+ 		$(use_with svg librsvg) \
+ 		$(use_enable sse) \
+ 		|| die "econf failed"
+-	emake || die "emake failed"
+ }
+ 
+ src_install() {

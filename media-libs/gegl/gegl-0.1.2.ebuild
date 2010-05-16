@@ -23,7 +23,7 @@ DEPEND=">=media-libs/babl-0.1.2[lib32?]
 	x11-libs/pango[lib32?]
 	cairo? ( x11-libs/cairo[lib32?] )
 	doc? ( app-text/asciidoc
-		dev-lang/ruby
+		dev-lang/ruby[lib32?]
 		>=dev-lang/lua-5.1.0[lib32?]
 		app-text/enscript
 		media-gfx/graphviz[lib32?]
@@ -31,7 +31,7 @@ DEPEND=">=media-libs/babl-0.1.2[lib32?]
 	ffmpeg? ( >=media-video/ffmpeg-0.4.9_p20080326[lib32?] )
 	jpeg? ( media-libs/jpeg[lib32?] )
 	openexr? ( media-libs/openexr[lib32?] )
-	raw? ( >=media-libs/libopenraw-0.0.5[lib32?] )
+	raw? ( >=media-libs/libopenraw-0.0.5 )
 	sdl? ( media-libs/libsdl[lib32?] )
 	svg? ( >=gnome-base/librsvg-2.14.0[lib32?] )"
 RDEPEND="${DEPEND}"
@@ -58,9 +58,7 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_install_internal() {
-	# emake install doesn't install anything
-	einstall || die "einstall failed"
-
+	emake DESTDIR="${D}" install || die "emake install failed"
 	find "${D}" -name '*.la' -delete
 	dodoc ChangeLog INSTALL README NEWS || die "dodoc failed"
 }
