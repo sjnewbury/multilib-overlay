@@ -23,8 +23,8 @@ RDEPEND="
 	media-libs/fontconfig[lib32]
 	media-libs/freetype[lib32]
 	opengl? ( media-libs/mesa[lib32]
-		media-libs/freeglut[lib32] )
-	x11-libs/libdrm[lib32]
+		media-libs/freeglut[lib32]
+		x11-libs/libdrm[lib32] )
 	x11-libs/libICE[lib32]
 	x11-libs/libSM[lib32]
 	x11-libs/libX11[lib32]
