@@ -28,7 +28,7 @@ multilib-native_src_install_internal() {
 	dodoc ANNOUNCE CHANGES README TODO || die
 	dosbin "${FILESDIR}"/libpng-1.4.x-update.sh || die
 
-	prep_ml_binaries /usr/bin/libpng-config /usr/bin/libpng12-config
+	prep_ml_binaries /usr/bin/libpng-config /usr/bin/libpng14-config
 }
 
 multilib-native_pkg_postinst_internal() {
