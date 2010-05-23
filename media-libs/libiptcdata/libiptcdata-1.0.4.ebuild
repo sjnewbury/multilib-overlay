@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libiptcdata/libiptcdata-1.0.4.ebuild,v 1.3 2010/04/21 23:26:36 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libiptcdata/libiptcdata-1.0.4.ebuild,v 1.4 2010/05/17 18:28:43 arfrever Exp $
 
 EAPI="3"
 SUPPORT_PYTHON_ABIS="1"
@@ -68,7 +68,7 @@ multilib-native_src_install_internal() {
 			emake DESTDIR="${D}" pyexecdir=$(python_get_sitedir) install
 		}
 		python_execute_function -s --source-dir python installation
-		python_clean_sitedirs
+		python_clean_installation_image
 	fi
 
 	dodoc AUTHORS ChangeLog NEWS README TODO || die "dodoc failed."
