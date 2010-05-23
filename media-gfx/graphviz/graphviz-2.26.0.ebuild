@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/graphviz/graphviz-2.26.0.ebuild,v 1.6 2010/02/14 10:22:45 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/graphviz/graphviz-2.26.0.ebuild,v 1.7 2010/05/22 19:26:13 arfrever Exp $
 
 EAPI=2
 inherit eutils autotools multilib python multilib-native
@@ -203,12 +203,12 @@ multilib-native_pkg_postinst_internal() {
 	# to configure
 	dot -c
 	if use python ; then
-		python_mod_optimize
+		python_mod_optimize $(python_get_sitedir)/gv.py
 	fi
 }
 
 multilib-native_pkg_postrm_internal() {
 	if use python ; then
-		python_mod_cleanup
+		python_mod_cleanup $(python_get_sitedir)/gv.py
 	fi
 }
