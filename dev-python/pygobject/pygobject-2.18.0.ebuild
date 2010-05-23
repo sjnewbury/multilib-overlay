@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pygobject/pygobject-2.18.0.ebuild,v 1.15 2010/04/02 21:29:10 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pygobject/pygobject-2.18.0.ebuild,v 1.17 2010/05/22 18:10:10 arfrever Exp $
 
 EAPI="2"
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.pygtk.org/"
 
 LICENSE="LGPL-2.1"
 SLOT="2"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="doc examples libffi test"
 
 RDEPEND=">=dev-lang/python-2.4.4-r5[lib32?]
@@ -59,6 +59,7 @@ src_test() {
 
 multilib-native_src_install_internal() {
 	gnome2_src_install
+	python_clean_installation_image
 
 	if use examples; then
 		insinto /usr/share/doc/${P}
@@ -70,13 +71,12 @@ multilib-native_src_install_internal() {
 }
 
 multilib-native_pkg_postinst_internal() {
-	python_mod_optimize $(python_get_sitedir)/gtk-2.0
+	python_mod_optimize $(python_get_sitedir)/gtk-2.0 $(python_get_sitedir)/pygtk.py
 	alternatives_auto_makesym $(python_get_sitedir)/pygtk.py pygtk.py-[0-9].[0-9]
 	alternatives_auto_makesym $(python_get_sitedir)/pygtk.pth pygtk.pth-[0-9].[0-9]
-	python_mod_compile $(python_get_sitedir)/pygtk.py
 	python_need_rebuild
 }
 
 multilib-native_pkg_postrm_internal() {
-	python_mod_cleanup
+	python_mod_cleanup $(python_get_sitedir)/gtk-2.0 $(python_get_sitedir)/pygtk.py
 }
