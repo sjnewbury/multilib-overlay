@@ -1,10 +1,11 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pygtk/pygtk-2.16.0-r1.ebuild,v 1.7 2010/04/18 17:28:04 nixnut Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pygtk/pygtk-2.16.0-r1.ebuild,v 1.9 2010/05/22 20:13:01 arfrever Exp $
 
 EAPI="2"
 PYTHON_DEPEND="2"
 SUPPORT_PYTHON_ABIS="1"
+PYTHON_EXPORT_PHASE_FUNCTIONS="1"
 
 inherit alternatives autotools eutils flag-o-matic gnome.org python virtualx multilib-native
 
@@ -13,7 +14,7 @@ HOMEPAGE="http://www.pygtk.org/"
 
 LICENSE="LGPL-2.1"
 SLOT="2"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="alpha amd64 arm ~hppa ia64 ~mips ppc ~ppc64 sh sparc x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 IUSE="doc examples"
 
 RDEPEND=">=dev-libs/glib-2.8.0[lib32?]
@@ -49,26 +50,8 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
-	configuration() {
-		use hppa && append-flags -ffunction-sections
-		econf $(use_enable doc docs) --enable-thread
-	}
-	python_execute_function -s configuration
-}
-
-multilib-native_src_compile_internal() {
-	python_execute_function -d -s
-}
-
-multilib-native_src_install_internal() {
-	python_execute_function -d -s
-	dodoc AUTHORS ChangeLog INSTALL MAPPING NEWS README THREADS TODO
-
-	if use examples; then
-		rm examples/Makefile*
-		insinto /usr/share/doc/${PF}
-		doins -r examples
-	fi
+	use hppa && append-flags -ffunction-sections
+	python_src_configure $(use_enable doc docs) --enable-thread
 }
 
 src_test() {
@@ -84,6 +67,18 @@ src_test() {
 		Xemake check-local
 	}
 	python_execute_function -s testing
+}
+
+multilib-native_src_install_internal() {
+	python_src_install
+	python_clean_installation_image
+	dodoc AUTHORS ChangeLog INSTALL MAPPING NEWS README THREADS TODO
+
+	if use examples; then
+		rm examples/Makefile*
+		insinto /usr/share/doc/${PF}
+		doins -r examples
+	fi
 }
 
 multilib-native_pkg_postinst_internal() {

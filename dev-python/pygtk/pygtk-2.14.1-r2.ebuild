@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pygtk/pygtk-2.14.1-r2.ebuild,v 1.2 2010/01/11 16:59:58 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pygtk/pygtk-2.14.1-r2.ebuild,v 1.3 2010/05/22 20:13:01 arfrever Exp $
 
 EAPI="2"
 SUPPORT_PYTHON_ABIS="1"
@@ -71,6 +71,7 @@ multilib-native_src_compile_internal() {
 
 multilib-native_src_install_internal() {
 	python_execute_function -d -s
+	python_clean_installation_image
 	dodoc AUTHORS ChangeLog INSTALL MAPPING NEWS README THREADS TODO
 
 	if use examples; then

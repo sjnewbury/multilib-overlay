@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pygtk/pygtk-2.14.1-r1.ebuild,v 1.8 2009/09/06 20:57:05 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pygtk/pygtk-2.14.1-r1.ebuild,v 1.9 2010/05/22 20:13:01 arfrever Exp $
 
 EAPI="2"
 
@@ -59,6 +59,7 @@ multilib-native_src_configure_internal() {
 
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
+	python_clean_installation_image
 	dodoc AUTHORS ChangeLog INSTALL MAPPING NEWS README THREADS TODO
 
 	if use examples; then
