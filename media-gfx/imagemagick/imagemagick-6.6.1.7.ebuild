@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/imagemagick/imagemagick-6.6.1.7.ebuild,v 1.1 2010/05/10 18:51:11 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/imagemagick/imagemagick-6.6.1.7.ebuild,v 1.3 2010/05/23 11:53:36 ssuominen Exp $
 
 EAPI=3
 inherit multilib toolchain-funcs versionator multilib-native
@@ -13,7 +13,7 @@ SRC_URI="mirror://${PN}/${MY_P}.tar.xz"
 
 LICENSE="imagemagick"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~ppc-aix ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 IUSE="autotrace bzip2 cxx djvu fftw fontconfig fpx graphviz gs hdri jbig jpeg
 jpeg2k lcms lqr openexr openmp perl png q32 q8 raw static-libs svg tiff
 truetype wmf X xml zlib"
@@ -73,11 +73,8 @@ multilib-native_src_configure_internal() {
 
 	local openmp=disable
 
-	# openmp support only works with >=sys-devel/gcc-4.3, bug #223825
-	if use openmp && version_is_at_least 4.3 $(gcc-version) ; then
-		if has_version =sys-devel/gcc-$(gcc-version)*[openmp] ; then
-			openmp=enable
-		fi
+	if use openmp && tc-has-openmp; then
+		openmp=enable
 	fi
 
 	econf \
@@ -135,8 +132,8 @@ multilib-native_src_install_internal() {
 	dodoc AUTHORS.txt ChangeLog NEWS.txt README.txt
 
 	if use perl; then
-		find "${D}" -type f -name perllocal.pod -delete
-		find "${D}" -depth -mindepth 1 -type d -empty -delete
+		find "${ED}" -type f -name perllocal.pod -delete
+		find "${ED}" -depth -mindepth 1 -type d -empty -delete
 	fi
 
 	prep_ml_binaries /usr/bin/Magick++-config /usr/bin/Magick-config /usr/bin/MagickCore-config /usr/bin/MagickWand-config /usr/bin/Wand-config
