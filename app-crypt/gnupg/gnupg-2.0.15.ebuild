@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-crypt/gnupg/gnupg-2.0.15.ebuild,v 1.2 2010/04/01 21:28:21 abcd Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-crypt/gnupg/gnupg-2.0.15.ebuild,v 1.3 2010/05/19 11:04:52 arfrever Exp $
 
 EAPI="3"
 
@@ -18,9 +18,10 @@ IUSE="adns bzip2 caps doc ldap nls openct pcsc-lite static selinux smartcard"
 
 COMMON_DEPEND_LIBS="
 	>=dev-libs/pth-1.3.7[lib32?]
+	>=dev-libs/libassuan-2[lib32?]
 	>=dev-libs/libgcrypt-1.4[lib32?]
-	>=dev-libs/libksba-1.0.2[lib32?]
 	>=dev-libs/libgpg-error-1.7[lib32?]
+	>=dev-libs/libksba-1.0.2[lib32?]
 	>=net-misc/curl-7.10[lib32?]
 	adns? ( >=net-libs/adns-1.4[lib32?] )
 	bzip2? ( app-arch/bzip2[lib32?] )
@@ -33,7 +34,7 @@ COMMON_DEPEND_BINS="app-crypt/pinentry"
 # existence of bins are checked during configure
 DEPEND="${COMMON_DEPEND_LIBS}
 	${COMMON_DEPEND_BINS}
-	>=dev-libs/libassuan-2[lib32?]
+	static? ( >=dev-libs/libassuan-2[static-libs,lib32?] )
 	nls? ( sys-devel/gettext[lib32?] )
 	doc? ( sys-apps/texinfo )"
 
