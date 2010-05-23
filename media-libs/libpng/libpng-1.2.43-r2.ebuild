@@ -27,5 +27,5 @@ multilib-native_src_prepare_internal() {
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
 
-	prep_ml_binaries /usr/bin/libpng-config /usr/bin/libpng12-config
+	prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
 }

@@ -1,14 +1,16 @@
 #!/bin/bash
 
-echo "Try revdep-rebuild first."
-echo "This script will rename -lpng12 and libpng12.la to -lpng14 and libpng14.la"
-echo "in your system libdir libtool .la files without asking permission."
+. /etc/init.d/functions.sh
 
-[[ -d /usr/lib64 ]] && lib_suffix=64
+if ! type -p qfile >/dev/null; then
+	einfo "Please install app-portage/portage-utils."
+	exit 1
+fi
 
-libdir=/usr/lib${lib_suffix}
-
-find ${libdir} -name '*.la' | xargs sed -i -e '/^dependency_libs/s:-lpng12:-lpng14:'
-find ${libdir} -name '*.la' | xargs sed -i -e '/^dependency_libs/s:libpng12.la:libpng14.la:'
-
-# WTFPL-2
+einfo "Fixing broken libtool archives (.la)"
+for i in $(qlist -a | grep "\.la$"); do
+	sed -i \
+		-e '/^dependency_libs/s:-lpng12:-lpng14:g' \
+		-e '/^dependency_libs/s:libpng12.la:libpng14.la:g' \
+                "${i}" 2>/dev/null
+done

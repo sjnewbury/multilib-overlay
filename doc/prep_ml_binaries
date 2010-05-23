@@ -25,7 +25,7 @@ media-libs/imlib2 prep_ml_binaries /usr/bin/imlib2-config
 media-libs/libart_lgpl prep_ml_binaries /usr/bin/libart2-config
 media-libs/libcaca prep_ml_binaries /usr/bin/caca-config
 media-libs/libmikmod prep_ml_binaries /usr/bin/libmikmod-config
-media-libs/libpng prep_ml_binaries /usr/bin/libpng-config /usr/bin/libpng12-config
+media-libs/libpng prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
 media-libs/libsdl prep_ml_binaries /usr/bin/sdl-config
 media-libs/smpeg prep_ml_binaries /usr/bin/smpeg-config
 media-libs/xine-lib prep_ml_binaries /usr/bin/xine-config
