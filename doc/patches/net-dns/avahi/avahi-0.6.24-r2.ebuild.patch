@@ -1,6 +1,6 @@
---- /usr/portage/net-dns/avahi/avahi-0.6.24-r2.ebuild	2010-03-31 04:36:03.000000000 +0200
-+++ ./net-dns/avahi/avahi-0.6.24-r2.ebuild	2010-04-04 03:11:22.000000000 +0200
-@@ -98,10 +98,7 @@
+--- /usr/portage/net-dns/avahi/avahi-0.6.24-r2.ebuild	2010-05-19 21:36:43.000000000 +0200
++++ ./net-dns/avahi/avahi-0.6.24-r2.ebuild	2010-05-23 18:31:02.000000000 +0200
+@@ -103,10 +103,7 @@
  	fi
  }
  
@@ -12,7 +12,7 @@
  	use ipv6 && sed -i -e s/use-ipv6=no/use-ipv6=yes/ avahi-daemon/avahi-daemon.conf
  
  	sed -i -e "s:\\.\\./\\.\\./\\.\\./doc/avahi-docs/html/:../../../doc/${PF}/html/:" doxygen_to_devhelp.xsl
-@@ -115,7 +112,7 @@
+@@ -120,7 +117,7 @@
  	eautoreconf
  }
  
@@ -21,10 +21,10 @@
  	use sh && replace-flags -O? -O0
  
  	local myconf=""
-@@ -156,6 +153,9 @@
+@@ -160,6 +157,9 @@
+ 		$(use_enable qt4) \
  		$(use_enable gdbm) \
- 		${myconf} \
- 		|| die "econf failed"
+ 		${myconf}
 +}
 +
 +src_compile() {

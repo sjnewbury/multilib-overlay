@@ -1,8 +1,9 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-dns/avahi/avahi-0.6.25.ebuild,v 1.5 2010/01/03 15:23:37 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-dns/avahi/avahi-0.6.25.ebuild,v 1.6 2010/05/19 19:14:47 arfrever Exp $
 
 EAPI="2"
+PYTHON_DEPEND="python? 2"
 
 inherit eutils mono python multilib autotools flag-o-matic multilib-native
 
@@ -43,7 +44,6 @@ RDEPEND=">=dev-libs/libdaemon-0.11-r1[lib32?]
 	howl-compat? ( !net-misc/howl )
 	mdnsresponder-compat? ( !net-misc/mDNSResponder )
 	python? (
-		>=virtual/python-2.4
 		gtk? ( >=dev-python/pygtk-2[lib32?] )
 	)
 	bookmarks? (
@@ -60,7 +60,12 @@ DEPEND="${RDEPEND}
 	)"
 
 multilib-native_pkg_setup_internal() {
-	if use python && ! built_with_use dev-lang/python gdbm
+	if use python
+	then
+		python_set_active_version 2
+	fi
+
+	if use python && ! built_with_use "=dev-lang/python-2*" gdbm
 	then
 		die "For python support you need dev-lang/python compiled with gdbm support!"
 	fi
@@ -150,8 +155,7 @@ multilib-native_src_configure_internal() {
 		--disable-qt3 \
 		$(use_enable qt4) \
 		$(use_enable gdbm) \
-		${myconf} \
-		|| die "econf failed"
+		${myconf}
 }
 
 multilib-native_src_compile_internal() {
@@ -187,13 +191,14 @@ multilib-native_src_install_internal() {
 }
 
 multilib-native_pkg_postrm_internal() {
-	use python && python_mod_cleanup
+	if use python; then
+		python_mod_cleanup $(python_get_sitedir)/avahi $(python_get_sitedir)/avahi_discover
+	fi
 }
 
 multilib-native_pkg_postinst_internal() {
 	if use python; then
-		python_version
-		python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages/avahi
+		python_mod_optimize $(python_get_sitedir)/avahi $(python_get_sitedir)/avahi_discover
 	fi
 
 	if use autoipd
