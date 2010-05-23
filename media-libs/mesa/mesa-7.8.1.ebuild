@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.8.1.ebuild,v 1.1 2010/04/06 08:43:11 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.8.1.ebuild,v 1.2 2010/05/17 19:37:19 scarabeus Exp $
 
 EAPI=3
 
@@ -11,7 +11,7 @@ if [[ ${PV} = 9999* ]]; then
 	EXPERIMENTAL="true"
 fi
 
-inherit autotools multilib flag-o-matic ${GIT_ECLASS} portability multilib-native
+inherit autotools multilib flag-o-matic toolchain-funcs ${GIT_ECLASS} portability multilib-native
 
 OPENGL_DIR="xorg-x11"
 
@@ -104,6 +104,14 @@ multilib-native_src_prepare_internal() {
 	[[ ${CHOST} == *-freebsd6.* ]] && \
 		sed -i -e "s/-DHAVE_POSIX_MEMALIGN//" configure.ac
 
+	# In order for mesa to complete it's build process we need to use a tool
+	# that it compiles. When we cross compile this clearly does not work
+	# so we require mesa to be built on the host system first. -solar
+	if tc-is-cross-compiler; then
+		sed -i -e "s#^GLSL_CL = .*\$#GLSL_CL = glsl-compile#g" \
+			"${S}"/src/mesa/shader/slang/library/Makefile || die
+	fi
+
 	eautoreconf
 }
 
@@ -169,6 +177,12 @@ multilib-native_src_configure_internal() {
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "Installation failed"
 
+	# Save the glsl-compiler for later use
+	if ! tc-is-cross-compiler; then
+		dodir /usr/bin/
+		cp "${S}"/src/glsl/apps/compile "${D}"/usr/bin/glsl-compile \
+			|| die "failed to copy the glsl compiler."
+	fi
 	# Remove redundant headers
 	# GLUT thing
 	rm -f "${D}"/usr/include/GL/glut*.h || die "Removing glut include failed."
