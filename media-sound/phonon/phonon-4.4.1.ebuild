@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.4.0.ebuild,v 1.3 2010/05/15 13:50:18 reavertm Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.4.1.ebuild,v 1.2 2010/05/23 12:09:36 spatz Exp $
 
 EAPI="2"
 
@@ -8,7 +8,7 @@ inherit cmake-utils multilib-native
 
 DESCRIPTION="KDE multimedia API"
 HOMEPAGE="http://phonon.kde.org"
-SRC_URI="mirror://kde/stable/phonon/${PV}/${P}.tgz"
+SRC_URI="mirror://kde/stable/phonon/${PV}/${P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
@@ -39,6 +39,11 @@ DEPEND="${RDEPEND}
 	>=dev-util/automoc-0.9.87[lib32?]
 "
 
+PATCHES=(
+	"${FILESDIR}/${P}-xine-volume.patch"
+	"${FILESDIR}/${P}-pulseaudio-connect.patch"
+)
+
 S=${WORKDIR}/${P/.0}
 
 multilib-native_pkg_setup_internal() {
@@ -61,6 +66,8 @@ multilib-native_src_prepare_internal() {
 			-i CMakeLists.txt \
 			|| die "failed to enable GStreamer backend"
 	fi
+
+	base_src_prepare
 }
 
 multilib-native_src_configure_internal() {
