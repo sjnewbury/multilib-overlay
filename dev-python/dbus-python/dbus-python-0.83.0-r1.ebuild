@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/dbus-python/dbus-python-0.83.0-r1.ebuild,v 1.18 2010/03/08 22:43:55 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/dbus-python/dbus-python-0.83.0-r1.ebuild,v 1.19 2010/05/22 11:16:15 armin76 Exp $
 
 EAPI="2"
 PYTHON_DEPEND="2"
@@ -16,7 +16,7 @@ SRC_URI="http://dbus.freedesktop.org/releases/${PN}/${P}.tar.gz"
 
 SLOT="0"
 LICENSE="MIT"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd ~amd64-linux ~x86-linux"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd ~amd64-linux ~x86-linux"
 IUSE="doc examples test"
 
 RDEPEND="

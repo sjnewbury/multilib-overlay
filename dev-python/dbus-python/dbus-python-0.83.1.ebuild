@@ -1,8 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/dbus-python/dbus-python-0.83.1.ebuild,v 1.3 2010/03/08 22:43:55 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/dbus-python/dbus-python-0.83.1.ebuild,v 1.5 2010/05/22 11:16:15 armin76 Exp $
 
-EAPI="2"
+EAPI="3"
 PYTHON_DEPEND="2"
 PYTHON_EXPORT_PHASE_FUNCTIONS="1"
 SUPPORT_PYTHON_ABIS="1"
@@ -16,7 +16,7 @@ SRC_URI="http://dbus.freedesktop.org/releases/${PN}/${P}.tar.gz"
 
 SLOT="0"
 LICENSE="MIT"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux"
 IUSE="doc examples test"
 
 RDEPEND="
@@ -40,8 +40,6 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
-	use prefix || EPREFIX=
-
 	configuration() {
 		econf \
 			--docdir="${EPREFIX}/usr/share/doc/${PF}" \
@@ -70,13 +68,13 @@ multilib-native_src_install_internal() {
 		doins -r examples || die
 	fi
 
-	find "${D}" -name "*.la" -delete || die "removing *.la files failed"
+	python_clean_installation_image
 }
 
 multilib-native_pkg_postinst_internal() {
-	python_mod_optimize dbus
+	python_mod_optimize dbus dbus_bindings.py
 }
 
 multilib-native_pkg_postrm_internal() {
-	python_mod_cleanup dbus
+	python_mod_cleanup dbus dbus_bindings.py
 }
