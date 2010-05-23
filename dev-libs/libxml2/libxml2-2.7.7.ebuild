@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libxml2/libxml2-2.7.7.ebuild,v 1.8 2010/05/14 03:59:59 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libxml2/libxml2-2.7.7.ebuild,v 1.10 2010/05/17 20:19:40 jer Exp $
 
 EAPI="2"
 SUPPORT_PYTHON_ABIS="1"
@@ -13,7 +13,7 @@ HOMEPAGE="http://www.xmlsoft.org/"
 
 LICENSE="MIT"
 SLOT="2"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="debug doc examples ipv6 python readline test"
 
 XSTS_HOME="http://www.w3.org/XML/2004/xml-schema-test-suite"
@@ -33,6 +33,12 @@ RDEPEND="sys-libs/zlib[lib32?]
 
 DEPEND="${RDEPEND}
 	hppa? ( >=sys-devel/binutils-2.15.92.0.2 )"
+
+multilib-native_pkg_setup_internal() {
+	if use python; then
+		python_pkg_setup
+	fi
+}
 
 multilib-native_src_unpack_internal() {
 	# ${A} isn't used to avoid unpacking of test tarballs into $WORKDIR,
@@ -81,15 +87,7 @@ multilib-native_src_configure_internal() {
 	# filter seemingly problematic CFLAGS (#26320)
 	filter-flags -fprefetch-loop-arrays -funroll-loops
 
-	# This ebuild is critical during preparation of a stage1 build.
-	# If the Python binary is not present in $ROOT, python_execute_function
-	# returns successfully but silently, WITHOUT running the command (with
-	# disasterous side-effects).
-	if use python; then
-		python_execute_function -f -q econf ${myconf}
-	else
-		econf ${myconf}
-	fi
+	econf ${myconf}
 }
 
 multilib-native_src_compile_internal() {
@@ -131,7 +129,7 @@ multilib-native_src_install_internal() {
 		}
 		python_execute_function -s --source-dir python installation
 
-		python_clean_sitedirs
+		python_clean_installation_image
 	fi
 
 	rm -rf "${D}"/usr/share/doc/${P}
