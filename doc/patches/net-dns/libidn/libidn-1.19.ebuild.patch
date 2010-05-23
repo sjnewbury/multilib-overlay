@@ -1,0 +1,21 @@
+--- /usr/portage/net-dns/libidn/libidn-1.19.ebuild	2010-05-22 16:03:47.000000000 +0200
++++ ./net-dns/libidn/libidn-1.19.ebuild	2010-05-23 18:38:23.000000000 +0200
+@@ -30,7 +30,7 @@
+ 	rm "${S}/java/${P}.jar" || die
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	econf \
+ 		$(use_enable nls) \
+ 		$(use_enable java) \
+@@ -40,7 +40,9 @@
+ 		--with-packager-version="r${PR}" \
+ 		--with-packager-bug-reports="https://bugs.gentoo.org" \
+ 		|| die
++}
+ 
++src_compile() {
+ 	emake || die
+ 
+ 	if use emacs; then
