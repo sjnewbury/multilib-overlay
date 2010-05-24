@@ -1,0 +1,14 @@
+--- /usr/portage/sys-devel/libtool/libtool-2.2.7b.ebuild	2010-05-21 10:43:33.000000000 +0200
++++ ./sys-devel/libtool/libtool-2.2.7b.ebuild	2010-05-24 02:45:25.000000000 +0200
+@@ -31,10 +31,7 @@
+ 	fi
+ }
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	if ! use vanilla ; then
+ 		epunt_cxx
+ 		cd libltdl/m4
