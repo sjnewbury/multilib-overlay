@@ -1,11 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.4-r1.ebuild,v 1.7 2010/03/07 12:20:05 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.4-r1.ebuild,v 1.11 2010/05/20 21:14:09 arfrever Exp $
 
 EAPI="2"
 
 inherit autotools eutils flag-o-matic multilib pax-utils python toolchain-funcs multilib-native
-MULTILIB_IN_SOURCE_BUILD="yes"
 
 MY_P="Python-${PV}"
 S="${WORKDIR}/${MY_P}"
@@ -19,8 +18,7 @@ SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
 
 LICENSE="PSF-2.2"
 SLOT="2.6"
-PYTHON_ABI="${SLOT}"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ~ppc ~ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="-berkdb build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite +ssl +threads tk +wide-unicode wininst +xml"
 
 # NOTE: dev-python/{elementtree,celementtree,pysqlite,ctypes}
@@ -41,13 +39,16 @@ RDEPEND=">=app-admin/eselect-python-20091230
 			) )
 			doc? ( dev-python/python-docs:${SLOT} )
 			gdbm? ( sys-libs/gdbm[lib32?] )
-			ncurses? ( >=sys-libs/ncurses-5.2[lib32?]
-						readline? ( >=sys-libs/readline-4.1[lib32?] ) )
+			ncurses? (
+				>=sys-libs/ncurses-5.2[lib32?]
+				readline? ( >=sys-libs/readline-4.1[lib32?] )
+			)
 			sqlite? ( >=dev-db/sqlite-3[lib32?] )
 			ssl? ( dev-libs/openssl[lib32?] )
 			tk? ( >=dev-lang/tk-8.0[lib32?] )
 			xml? ( >=dev-libs/expat-2[lib32?] )
-		)"
+		)
+		app-arch/bzip2[lib32?]"
 DEPEND="${RDEPEND}
 		dev-util/pkgconfig[lib32?]
 		!sys-devel/gcc[libffi]"
@@ -56,7 +57,10 @@ PDEPEND="app-admin/python-updater"
 
 PROVIDE="virtual/python"
 
-multilib-native_pkg-setup_internal() {
+multilib-native_pkg_setup_internal() {
+	python_set_active_version ${SLOT}
+	# python_pkg_setup
+
 	if use berkdb; then
 		ewarn "\"bsddb\" module is out-of-date and no longer maintained inside dev-lang/python. It has"
 		ewarn "been additionally removed in Python 3. You should use external, still maintained \"bsddb3\""
@@ -135,6 +139,10 @@ multilib-native_src_configure_internal() {
 		einfo "Disabled modules: ${PYTHON_DISABLE_MODULES}"
 	fi
 
+	if [[ "$(gcc-major-version)" -ge 4 ]]; then
+		append-flags -fwrapv
+	fi
+
 	export OPT="${CFLAGS}"
 
 	filter-flags -malign-double
@@ -180,7 +188,7 @@ multilib-native_src_configure_internal() {
 		--with-system-ffi
 }
 
-multilib-native_src_test_internal() {
+src_test() {
 	# Tests won't work when cross compiling.
 	if tc-is-cross-compiler; then
 		elog "Disabling tests due to crosscompiling."
@@ -238,7 +246,7 @@ multilib-native_src_install_internal() {
 	sed -e "s:^OPT=.*:OPT=\t\t-DNDEBUG:" -i "${D}$(python_get_libdir)/config/Makefile"
 
 	if use build; then
-		rm -fr "${D}usr/bin/idle${SLOT}" "${D}$(python_get_libdir)/"{bsddb,email,idlelib,lib-tk,sqlite3,test}
+		rm -fr "${D}usr/bin/idle${SLOT}" "${D}$(python_get_libdir)/"{bsddb,idlelib,lib-tk,sqlite3,test}
 	else
 		use elibc_uclibc && rm -fr "${D}$(python_get_libdir)/"{bsddb/test,test}
 		use berkdb || rm -fr "${D}$(python_get_libdir)/"{bsddb,test/test_bsddb*}

@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-3.1.2-r3.ebuild,v 1.4 2010/05/10 18:44:05 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-3.1.2-r3.ebuild,v 1.8 2010/05/23 20:13:15 arfrever Exp $
 
 EAPI="3"
 
@@ -18,13 +18,12 @@ SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
 
 LICENSE="PSF-2.2"
 SLOT="3.1"
-PYTHON_ABI="${SLOT}"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
-IUSE="build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite ssl +threads tk +wide-unicode wininst +xml"
+IUSE="build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite +ssl +threads tk +wide-unicode wininst +xml"
 
-RDEPEND=">=app-admin/eselect-python-20090606
+RDEPEND=">=app-admin/eselect-python-20091230
 		>=sys-libs/zlib-1.1.3[lib32?]
-		virtual/libffi
+		virtual/libffi[lib32?]
 		virtual/libintl
 		!build? (
 			doc? ( dev-python/python-docs:${SLOT} )
@@ -37,15 +36,24 @@ RDEPEND=">=app-admin/eselect-python-20090606
 			ssl? ( dev-libs/openssl[lib32?] )
 			tk? ( >=dev-lang/tk-8.0[lib32?] )
 			xml? ( >=dev-libs/expat-2[lib32?] )
-		)"
+		)
+		app-arch/bzip2[lib32?]"
 DEPEND="${RDEPEND}
-		dev-util/pkgconfig
+		dev-util/pkgconfig[lib32?]
 		!sys-devel/gcc[libffi]"
 RDEPEND+=" !build? ( app-misc/mime-types )"
-PDEPEND="app-admin/python-updater
-		|| ( dev-lang/python:2.7 dev-lang/python:2.6 )"
+PDEPEND=">=app-admin/python-updater-0.8
+		|| (
+			dev-lang/python:2.7[gdbm?,ipv6?,ncurses?,readline?,sqlite?,ssl?,threads?,tk?,xml?]
+			dev-lang/python:2.6[gdbm?,ipv6?,ncurses?,readline?,sqlite?,ssl?,threads?,tk?,xml?]
+		)"
 
 PROVIDE="virtual/python"
+
+multilib-native_pkg_setup_internal() {
+	python_set_active_version ${SLOT}
+	# python_pkg_setup
+}
 
 multilib-native_src_prepare_internal() {
 	# Ensure that internal copies of expat, libffi and zlib are not used.
@@ -111,6 +119,10 @@ multilib-native_src_configure_internal() {
 		einfo "Disabled modules: ${PYTHON_DISABLE_MODULES}"
 	fi
 
+	if [[ "$(gcc-major-version)" -ge 4 ]]; then
+		append-flags -fwrapv
+	fi
+
 	filter-flags -malign-double
 
 	[[ "${ARCH}" == "alpha" ]] && append-flags -fPIC
@@ -153,15 +165,15 @@ multilib-native_src_configure_internal() {
 		$(use_enable ipv6) \
 		$(use_with threads) \
 		$(use_with wide-unicode) \
-		--infodir='${prefix}'/share/info \
-		--mandir='${prefix}'/share/man \
+		--infodir='${prefix}/share/info' \
+		--mandir='${prefix}/share/man' \
 		--with-computed-gotos \
-		--with-dbmliborder=${dbmliborder} \
-		--with-libc='' \
+		--with-dbmliborder="${dbmliborder}" \
+		--with-libc="" \
 		--with-system-ffi
 }
 
-multilib-native_src_test_internal() {
+src_test() {
 	# Tests will not work when cross compiling.
 	if tc-is-cross-compiler; then
 		elog "Disabling tests due to crosscompiling."
@@ -184,7 +196,8 @@ multilib-native_src_test_internal() {
 	done
 
 	# Rerun failed tests in verbose mode (regrtest -w).
-	EXTRATESTOPTS="-w" make test || die "make test failed"
+	EXTRATESTOPTS="-w" emake test
+	local result="$?"
 
 	for test in ${skip_tests}; do
 		mv "${T}/test_${test}.py" "${S}/Lib/test/test_${test}.py"
@@ -200,10 +213,15 @@ multilib-native_src_test_internal() {
 	elog "and run the tests separately."
 
 	python_disable_pyc
+
+	if [[ "${result}" -ne 0 ]]; then
+		die "emake test failed"
+	fi
 }
 
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" altinstall || die "emake altinstall failed"
+	python_clean_installation_image -q
 
 	mv "${ED}usr/bin/python${SLOT}-config" "${ED}usr/bin/python-config-${SLOT}"
 
@@ -245,19 +263,19 @@ multilib-native_pkg_preinst_internal() {
 }
 
 eselect_python_update() {
-	local ignored_python_slots_options=
-	[[ "$(eselect python show)" == "python2."* ]] && ignored_python_slots_options="--ignore 3.0 --ignore 3.1 --ignore 3.2"
+	local eselect_python_options
+	[[ "$(eselect python show)" == "python2."* ]] && eselect_python_options="--python2"
 
 	# Create python3 symlink.
-	eselect python update > /dev/null
+	eselect python update --python3 > /dev/null
 
-	eselect python update ${ignored_python_slots_options}
+	eselect python update ${eselect_python_options}
 }
 
 multilib-native_pkg_postinst_internal() {
 	eselect_python_update
 
-	python_mod_optimize -x "(site-packages|test)" $(python_get_libdir)
+	python_mod_optimize -x "/(site-packages|test|tests)/" $(python_get_libdir)
 
 	if [[ "$(eselect python show)" == "python2."* ]]; then
 		ewarn
@@ -268,7 +286,6 @@ multilib-native_pkg_postinst_internal() {
 		ewarn "It is recommended to currently have Python wrapper configured to use Python 2."
 		ewarn "Having Python wrapper configured to use Python 3 is unsupported."
 		ewarn
-		ebeep 6
 	fi
 
 	if [[ "${python_updater_warning}" == "1" ]]; then
@@ -289,7 +306,7 @@ multilib-native_pkg_postinst_internal() {
 	fi
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	eselect_python_update
 
 	python_mod_cleanup $(python_get_libdir)

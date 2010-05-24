@@ -1,10 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.5.4-r4.ebuild,v 1.13 2010/02/21 13:51:13 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.5.4-r4.ebuild,v 1.20 2010/05/23 20:13:15 arfrever Exp $
 
 EAPI="2"
-
-MULTILIB_IN_SOURCE_BUILD="yes"
 
 inherit autotools eutils flag-o-matic multilib pax-utils python toolchain-funcs multilib-native
 
@@ -20,11 +18,10 @@ SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
 
 LICENSE="PSF-2.2"
 SLOT="2.5"
-PYTHON_ABI="${SLOT}"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="-berkdb build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite +ssl +threads tk +wide-unicode wininst +xml"
 
-# NOTE: dev-python/{elementtree,celementtree,pysqlite,ctypes}
+# NOTE: dev-python/{elementtree,celementtree,pysqlite}
 #       do not conflict with the ones in python proper. - liquidx
 
 RDEPEND=">=app-admin/eselect-python-20091230
@@ -42,13 +39,14 @@ RDEPEND=">=app-admin/eselect-python-20091230
 			gdbm? ( sys-libs/gdbm[lib32?] )
 			ncurses? (
 				>=sys-libs/ncurses-5.2[lib32?]
-				readline? ( >=sys-libs/readline-4.1[lib32?] ) 
+				readline? ( >=sys-libs/readline-4.1[lib32?] )
 			)
 			sqlite? ( >=dev-db/sqlite-3[lib32?] )
 			ssl? ( dev-libs/openssl[lib32?] )
 			tk? ( >=dev-lang/tk-8.0[lib32?] )
 			xml? ( >=dev-libs/expat-2[lib32?] )
-		)"
+		)
+		app-arch/bzip2[lib32?]"
 DEPEND="${RDEPEND}
 		dev-util/pkgconfig[lib32?]"
 RDEPEND+=" !build? ( app-misc/mime-types )"
@@ -57,6 +55,9 @@ PDEPEND="app-admin/python-updater"
 PROVIDE="virtual/python"
 
 multilib-native_pkg_setup_internal() {
+	python_set_active_version ${SLOT}
+	# python_pkg_setup
+
 	if use berkdb; then
 		ewarn "\"bsddb\" module is out-of-date and no longer maintained inside dev-lang/python. It has"
 		ewarn "been additionally removed in Python 3. You should use external, still maintained \"bsddb3\""
@@ -69,10 +70,10 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
-
-	# Ensure that internal copies of expat and libffi aren't used.
+	# Ensure that internal copies of expat, libffi and zlib are not used.
 	rm -fr Modules/expat
 	rm -fr Modules/_ctypes/libffi*
+	rm -fr Modules/zlib
 
 	if tc-is-cross-compiler; then
 		epatch "${FILESDIR}/python-2.5-cross-printf.patch"
@@ -134,6 +135,10 @@ multilib-native_src_configure_internal() {
 		einfo "Disabled modules: ${PYTHON_DISABLE_MODULES}"
 	fi
 
+	if [[ "$(gcc-major-version)" -ge 4 ]]; then
+		append-flags -fwrapv
+	fi
+
 	export OPT="${CFLAGS}"
 
 	filter-flags -malign-double
@@ -141,8 +146,8 @@ multilib-native_src_configure_internal() {
 	[[ "${ARCH}" == "alpha" ]] && append-flags -fPIC
 
 	# https://bugs.gentoo.org/show_bug.cgi?id=50309
-	if is-flag -O3; then
-		is-flag -fstack-protector-all && replace-flags -O3 -O2
+	if is-flagq -O3; then
+		is-flagq -fstack-protector-all && replace-flags -O3 -O2
 		use hardened && replace-flags -O3 -O2
 	fi
 
@@ -173,14 +178,14 @@ multilib-native_src_configure_internal() {
 		$(use_enable ipv6) \
 		$(use_with threads) \
 		$(use wide-unicode && echo "--enable-unicode=ucs4" || echo "--enable-unicode=ucs2") \
-		--infodir='${prefix}'/share/info' \
+		--infodir='${prefix}/share/info' \
 		--mandir='${prefix}/share/man' \
 		--with-libc="" \
 		--with-system-ffi
 }
 
-multilib-native_src_test_internal() {
-	# Tests won't work when cross compiling.
+src_test() {
+	# Tests will not work when cross compiling.
 	if tc-is-cross-compiler; then
 		elog "Disabling tests due to crosscompiling."
 		return
@@ -203,7 +208,8 @@ multilib-native_src_test_internal() {
 
 	# Redirect stdin from /dev/tty as a workaround for bug #248081.
 	# Rerun failed tests in verbose mode (regrtest -w).
-	EXTRATESTOPTS="-w" make test < /dev/tty || die "make test failed"
+	EXTRATESTOPTS="-w" emake test < /dev/tty
+	local result="$?"
 
 	for test in ${skip_tests}; do
 		mv "${T}/test_${test}.py" "${S}/Lib/test/test_${test}.py"
@@ -214,58 +220,67 @@ multilib-native_src_test_internal() {
 		elog "test_${test}.py"
 	done
 
-	elog "If you'd like to run them, you may:"
-	elog "cd $(python_get_libdir)/test"
+	elog "If you would like to run them, you may:"
+	elog "cd '${EPREFIX}$(python_get_libdir)/test'"
 	elog "and run the tests separately."
 
 	python_disable_pyc
+
+	if [[ "${result}" -ne 0 ]]; then
+		die "emake test failed"
+	fi
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${D}" altinstall maninstall || die "emake altinstall maninstall failed"
+	[[ -z "${ED}" ]] && ED="${D%/}${EPREFIX}/"
 
-	mv "${D}usr/bin/python${SLOT}-config" "${D}usr/bin/python-config-${SLOT}"
+	emake DESTDIR="${D}" altinstall maninstall || die "emake altinstall maninstall failed"
+	python_clean_installation_image -q
+
+	mv "${ED}usr/bin/python${SLOT}-config" "${ED}usr/bin/python-config-${SLOT}"
 
 	# Fix collisions between different slots of Python.
-	mv "${D}usr/bin/pydoc" "${D}usr/bin/pydoc${SLOT}"
-	mv "${D}usr/bin/idle" "${D}usr/bin/idle${SLOT}"
-	mv "${D}usr/share/man/man1/python.1" "${D}usr/share/man/man1/python${SLOT}.1"
-	rm -f "${D}usr/bin/smtpd.py"
+	mv "${ED}usr/bin/pydoc" "${ED}usr/bin/pydoc${SLOT}"
+	mv "${ED}usr/bin/idle" "${ED}usr/bin/idle${SLOT}"
+	mv "${ED}usr/share/man/man1/python.1" "${ED}usr/share/man/man1/python${SLOT}.1"
+	rm -f "${ED}usr/bin/smtpd.py"
 
 	# Fix the OPT variable so that it doesn't have any flags listed in it.
 	# Prevents the problem with compiling things with conflicting flags later.
-	sed -e "s:^OPT=.*:OPT=\t\t-DNDEBUG:" -i "${D}$(python_get_libdir)/config/Makefile"
+	sed -e "s:^OPT=.*:OPT=\t\t-DNDEBUG:" -i "${ED}$(python_get_libdir)/config/Makefile"
 
 	if use build; then
-		rm -fr "${D}usr/bin/idle${SLOT}" "${D}$(python_get_libdir)/"{bsddb,email,idlelib,lib-tk,sqlite3,test}
+		rm -fr "${ED}usr/bin/idle${SLOT}" "${ED}$(python_get_libdir)/"{bsddb,idlelib,lib-tk,sqlite3,test}
 	else
-		use elibc_uclibc && rm -fr "${D}$(python_get_libdir)/"{bsddb/test,test}
-		use berkdb || rm -fr "${D}$(python_get_libdir)/"{bsddb,test/test_bsddb*}
-		use sqlite || rm -fr "${D}$(python_get_libdir)/"{sqlite3,test/test_sqlite*}
-		use tk || rm -fr "${D}usr/bin/idle${SLOT}" "${D}$(python_get_libdir)/"{idlelib,lib-tk}
+		use elibc_uclibc && rm -fr "${ED}$(python_get_libdir)/"{bsddb/test,test}
+		use berkdb || rm -fr "${ED}$(python_get_libdir)/"{bsddb,test/test_bsddb*}
+		use sqlite || rm -fr "${ED}$(python_get_libdir)/"{sqlite3,test/test_sqlite*}
+		use tk || rm -fr "${ED}usr/bin/idle${SLOT}" "${ED}$(python_get_libdir)/"{idlelib,lib-tk}
 	fi
 
 	prep_ml_includes $(python_get_includedir)
+
+	dodoc Misc/{ACKS,HISTORY,NEWS} || die "dodoc failed"
 
 	if use examples; then
 		insinto /usr/share/doc/${PF}/examples
 		doins -r "${S}/Tools" || die "doins failed"
 	fi
 
-	newinitd "${FILESDIR}/pydoc.init" pydoc-${SLOT}
-	newconfd "${FILESDIR}/pydoc.conf" pydoc-${SLOT}
+	newinitd "${FILESDIR}/pydoc.init" pydoc-${SLOT} || die "newinitd failed"
+	newconfd "${FILESDIR}/pydoc.conf" pydoc-${SLOT} || die "newconfd failed"
 
 	prep_ml_binaries usr/bin/python${SLOT} usr/bin/python-config-${SLOT}
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	if has_version "<${CATEGORY}/${PN}-${SLOT}" && ! has_version ">=${CATEGORY}/${PN}-${SLOT}_alpha"; then
 		python_updater_warning="1"
 	fi
 }
 
 eselect_python_update() {
-	local eselect_python_options=
+	local eselect_python_options
 	[[ "$(eselect python show)" == "python2."* ]] && eselect_python_options="--python2"
 
 	# Create python2 symlink.
@@ -274,10 +289,10 @@ eselect_python_update() {
 	eselect python update ${eselect_python_options}
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	eselect_python_update
 
-	python_mod_optimize -x "(site-packages|test)" $(python_get_libdir)
+	python_mod_optimize -x "/(site-packages|test|tests)/" $(python_get_libdir)
 
 	if [[ "${python_updater_warning}" == "1" ]]; then
 		ewarn
@@ -292,7 +307,7 @@ pkg_postinst() {
 	fi
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	eselect_python_update
 
 	python_mod_cleanup $(python_get_libdir)

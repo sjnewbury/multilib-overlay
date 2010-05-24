@@ -1,11 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.5-r2.ebuild,v 1.4 2010/05/10 18:44:05 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.5-r2.ebuild,v 1.9 2010/05/23 20:13:15 arfrever Exp $
 
 EAPI="2"
 
 inherit autotools eutils flag-o-matic multilib pax-utils python toolchain-funcs multilib-native
-MULTILIB_IN_SOURCE_BUILD="yes"
 
 MY_P="Python-${PV}"
 S="${WORKDIR}/${MY_P}"
@@ -19,8 +18,7 @@ SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
 
 LICENSE="PSF-2.2"
 SLOT="2.6"
-PYTHON_ABI="${SLOT}"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="-berkdb build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite +ssl +threads tk +wide-unicode wininst +xml"
 
 # NOTE: dev-python/{elementtree,celementtree,pysqlite}
@@ -41,13 +39,16 @@ RDEPEND=">=app-admin/eselect-python-20091230
 			) )
 			doc? ( dev-python/python-docs:${SLOT} )
 			gdbm? ( sys-libs/gdbm[lib32?] )
-			ncurses? ( >=sys-libs/ncurses-5.2[lib32?]
-						readline? ( >=sys-libs/readline-4.1[lib32?] ) )
+			ncurses? (
+				>=sys-libs/ncurses-5.2[lib32?]
+				readline? ( >=sys-libs/readline-4.1[lib32?] )
+			)
 			sqlite? ( >=dev-db/sqlite-3[lib32?] )
 			ssl? ( dev-libs/openssl[lib32?] )
 			tk? ( >=dev-lang/tk-8.0[lib32?] )
 			xml? ( >=dev-libs/expat-2[lib32?] )
-		)"
+		)
+		app-arch/bzip2[lib32?]"
 DEPEND="${RDEPEND}
 		dev-util/pkgconfig[lib32?]
 		!sys-devel/gcc[libffi]"
@@ -56,7 +57,10 @@ PDEPEND="app-admin/python-updater"
 
 PROVIDE="virtual/python"
 
-multilib-native_pkg-setup_internal() {
+multilib-native_pkg_setup_internal() {
+	python_set_active_version ${SLOT}
+	# python_pkg_setup
+
 	if use berkdb; then
 		ewarn "\"bsddb\" module is out-of-date and no longer maintained inside dev-lang/python. It has"
 		ewarn "been additionally removed in Python 3. You should use external, still maintained \"bsddb3\""
@@ -132,6 +136,10 @@ multilib-native_src_configure_internal() {
 		einfo "Disabled modules: ${PYTHON_DISABLE_MODULES}"
 	fi
 
+	if [[ "$(gcc-major-version)" -ge 4 ]]; then
+		append-flags -fwrapv
+	fi
+
 	filter-flags -malign-double
 
 	[[ "${ARCH}" == "alpha" ]] && append-flags -fPIC
@@ -139,7 +147,7 @@ multilib-native_src_configure_internal() {
 	# https://bugs.gentoo.org/show_bug.cgi?id=50309
 	if is-flagq -O3; then
 		is-flagq -fstack-protector-all && replace-flags -O3 -O2
-			use hardened && replace-flags -O3 -O2
+		use hardened && replace-flags -O3 -O2
 	fi
 
 	if tc-is-cross-compiler; then
@@ -175,7 +183,7 @@ multilib-native_src_configure_internal() {
 		--with-system-ffi
 }
 
-multilib-native_src_test_internal() {
+src_test() {
 	# Tests will not work when cross compiling.
 	if tc-is-cross-compiler; then
 		elog "Disabling tests due to crosscompiling."
@@ -198,7 +206,8 @@ multilib-native_src_test_internal() {
 	done
 
 	# Rerun failed tests in verbose mode (regrtest -w).
-	EXTRATESTOPTS="-w" make test || die "make test failed"
+	EXTRATESTOPTS="-w" emake test
+	local result="$?"
 
 	for test in ${skip_tests}; do
 		mv "${T}/test_${test}.py" "${S}/Lib/test/test_${test}.py"
@@ -214,12 +223,17 @@ multilib-native_src_test_internal() {
 	elog "and run the tests separately."
 
 	python_disable_pyc
+
+	if [[ "${result}" -ne 0 ]]; then
+		die "emake test failed"
+	fi
 }
 
 multilib-native_src_install_internal() {
 	[[ -z "${ED}" ]] && ED="${D%/}${EPREFIX}/"
 
 	emake DESTDIR="${D}" altinstall maninstall || die "emake altinstall maninstall failed"
+	python_clean_installation_image -q
 
 	mv "${ED}usr/bin/python${SLOT}-config" "${ED}usr/bin/python-config-${SLOT}"
 
@@ -266,7 +280,7 @@ multilib-native_pkg_preinst_internal() {
 }
 
 eselect_python_update() {
-	local eselect_python_options=
+	local eselect_python_options
 	[[ "$(eselect python show)" == "python2."* ]] && eselect_python_options="--python2"
 
 	# Create python2 symlink.
@@ -278,7 +292,7 @@ eselect_python_update() {
 multilib-native_pkg_postinst_internal() {
 	eselect_python_update
 
-	python_mod_optimize -x "(site-packages|test)" $(python_get_libdir)
+	python_mod_optimize -x "/(site-packages|test|tests)/" $(python_get_libdir)
 
 	if [[ "${python_updater_warning}" == "1" ]]; then
 		ewarn

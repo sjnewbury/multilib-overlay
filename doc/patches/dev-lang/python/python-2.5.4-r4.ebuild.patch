@@ -1,0 +1,36 @@
+--- /usr/portage/dev-lang/python/python-2.5.4-r4.ebuild	2010-05-23 22:35:35.000000000 +0200
++++ ./dev-lang/python/python-2.5.4-r4.ebuild	2010-05-24 16:38:33.000000000 +0200
+@@ -45,7 +45,8 @@
+ 			ssl? ( dev-libs/openssl )
+ 			tk? ( >=dev-lang/tk-8.0 )
+ 			xml? ( >=dev-libs/expat-2 )
+-		)"
++		)
++		app-arch/bzip2"
+ DEPEND="${RDEPEND}
+ 		dev-util/pkgconfig"
+ RDEPEND+=" !build? ( app-misc/mime-types )"
+@@ -68,10 +69,7 @@
+ 	fi
+ }
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	# Ensure that internal copies of expat, libffi and zlib are not used.
+ 	rm -fr Modules/expat
+ 	rm -fr Modules/_ctypes/libffi*
+@@ -186,11 +184,6 @@
+ 		--with-system-ffi
+ }
+ 
+-src_compile() {
+-	src_configure
+-	emake || die "emake failed"
+-}
+-
+ src_test() {
+ 	# Tests will not work when cross compiling.
+ 	if tc-is-cross-compiler; then
