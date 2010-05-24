@@ -18,7 +18,7 @@ RDEPEND=">=gnome-base/gconf-2[lib32?]
 	>=dev-libs/glib-2.9.3[lib32?]
 	>=dev-libs/libxml2-2.6[lib32?]
 	app-arch/bzip2[lib32?]
-	fam? ( virtual/fam )
+	fam? ( virtual/fam[lib32?] )
 	gnome-base/gnome-mime-data
 	>=x11-misc/shared-mime-info-0.14
 	>=dev-libs/dbus-glib-0.71[lib32?]
