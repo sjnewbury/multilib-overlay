@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/parted/parted-2.2.ebuild,v 1.1 2010/02/26 15:46:20 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/parted/parted-2.2.ebuild,v 1.6 2010/05/20 17:17:13 jer Exp $
 
 EAPI="2"
 
@@ -37,6 +37,14 @@ multilib-native_src_configure_internal() {
 		$(use_enable device-mapper) \
 		--disable-rpath \
 		--disable-Werror || die "Configure failed"
+}
+
+src_test() {
+	if use debug; then
+		emake check || die "emake check failed"
+	else
+		ewarn "Skipping tests because USE=-debug is set."
+	fi
 }
 
 multilib-native_src_install_internal() {
