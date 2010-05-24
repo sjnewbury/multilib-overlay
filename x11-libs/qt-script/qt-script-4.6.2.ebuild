@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-script/qt-script-4.6.2.ebuild,v 1.4 2010/04/18 13:02:01 nixnut Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-script/qt-script-4.6.2.ebuild,v 1.5 2010/05/22 09:31:49 armin76 Exp $
 
 EAPI="2"
 inherit qt4-build multilib-native
@@ -24,6 +24,7 @@ src/3rdparty/javascriptcore/
 
 PATCHES=(
 	"${FILESDIR}/qt-4.6-nolibx11.patch"
+	"${FILESDIR}/qt-script-4.6.2-alpha.patch"
 )
 
 multilib-native_src_configure_internal() {
