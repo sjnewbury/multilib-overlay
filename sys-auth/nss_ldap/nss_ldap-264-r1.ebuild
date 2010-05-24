@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-auth/nss_ldap/nss_ldap-264-r1.ebuild,v 1.6 2010/04/18 14:39:42 nixnut Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-auth/nss_ldap/nss_ldap-264-r1.ebuild,v 1.7 2010/05/24 06:43:04 pva Exp $
 
 EAPI=2
 inherit fixheadtails eutils multilib autotools multilib-native
@@ -13,7 +13,7 @@ SRC_URI="http://www.padl.com/download/${P}.tar.gz"
 
 SLOT="0"
 LICENSE="LGPL-2"
-KEYWORDS="alpha ~amd64 ~hppa ia64 ~mips ppc ~ppc64 sparc x86"
+KEYWORDS="alpha amd64 ~hppa ia64 ~mips ppc ~ppc64 sparc x86"
 
 DEPEND=">=net-nds/openldap-2.1.30-r5[lib32?]
 		sasl? ( dev-libs/cyrus-sasl[lib32?] )
