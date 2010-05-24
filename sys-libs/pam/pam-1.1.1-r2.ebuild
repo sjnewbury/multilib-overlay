@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/pam/pam-1.1.1-r2.ebuild,v 1.2 2010/04/26 12:04:09 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/pam/pam-1.1.1-r2.ebuild,v 1.4 2010/05/22 09:09:08 jlec Exp $
 
 EAPI="3"
 
@@ -52,7 +52,6 @@ check_old_modules() {
 		eerror "following the PAM Upgrade guide at the following URL"
 		eerror "  http://www.gentoo.org/proj/en/base/pam/upgrade-0.99.xml"
 		eerror ""
-		ebeep 15
 
 		retval=1
 	fi
@@ -68,7 +67,6 @@ check_old_modules() {
 		eerror "Please also make sure to read the PAM Upgrade guide at the following URL:"
 		eerror "  http://www.gentoo.org/proj/en/base/pam/upgrade-0.99.xml"
 		eerror ""
-		ebeep 10
 
 		retval=1
 	fi
@@ -97,6 +95,10 @@ multilib-native_src_prepare_internal() {
 	# make it possible to skip libxcrypt detection if header is not
 	# found
 	epatch "${FILESDIR}/${MY_PN}-1.1.1-xcrypt.patch"
+
+	# fix building with Berkeley DB 5.0 and later; now defining
+	# DB_DBM_HSEARCH is not enough; bug #319831
+	epatch "${FILESDIR}/${MY_PN}-1.1.1+berkdb-5.patch"
 
 	# Remove libtool-2 libtool macros, see bug 261167
 	rm m4/libtool.m4 m4/lt*.m4 || die "rm libtool macros failed."
