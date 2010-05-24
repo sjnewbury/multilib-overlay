@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-crypt/mit-krb5/mit-krb5-1.8.1-r1.ebuild,v 1.1 2010/05/23 04:10:42 darkside Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-crypt/mit-krb5/mit-krb5-1.8.1-r1.ebuild,v 1.2 2010/05/24 12:35:37 darkside Exp $
 
 EAPI="2"
 
@@ -96,7 +96,7 @@ multilib-native_src_install_internal() {
 
 	if use ldap ; then
 		insinto /etc/openldap/schema
-		newins "${S}/plugins/kdb/ldap/libkdb/ldap/kerberos_schema" \
+		newins "${S}/plugins/kdb/ldap/libkdb_ldap/kerberos.schema" \
 		kerberos.schema
 	fi
 
