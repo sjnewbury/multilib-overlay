@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.4.6.ebuild,v 1.3 2010/05/11 11:27:47 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.4.6.ebuild,v 1.6 2010/05/20 00:04:21 jer Exp $
 
 EAPI="2"
 
@@ -14,7 +14,7 @@ HOMEPAGE="http://www.samba.org/"
 SRC_URI="mirror://samba/${P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
+KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc x86"
 IUSE="acl addns ads aio avahi caps +client cluster cups debug doc examples fam
 	ldap ldb +netapi pam quota +readline +server +smbclient smbsharemodes swat
 	syslog winbind "
@@ -35,7 +35,7 @@ DEPEND="dev-libs/popt[lib32?]
 	cluster? ( dev-db/ctdb )
 	cups? ( net-print/cups[lib32?] )
 	debug? ( dev-libs/dmalloc )
-	fam? ( dev-libs/libgamin[lib32?] )
+	fam? ( virtual/fam[lib32?] )
 	ldap? ( net-nds/openldap[lib32?] )
 	pam? ( virtual/pam[lib32?]
 		winbind? ( dev-libs/iniparser[lib32?] ) )

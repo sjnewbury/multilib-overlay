@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.5.0.ebuild,v 1.1 2010/03/01 16:19:57 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.5.0.ebuild,v 1.2 2010/05/19 17:16:15 jer Exp $
 
 EAPI="2"
 
@@ -35,7 +35,7 @@ DEPEND="dev-libs/popt[lib32?]
 	cluster? ( dev-db/ctdb )
 	cups? ( net-print/cups[lib32?] )
 	debug? ( dev-libs/dmalloc )
-	fam? ( dev-libs/libgamin[lib32?] )
+	fam? ( virtual/fam[lib32?] )
 	ldap? ( net-nds/openldap[lib32?] )
 	pam? ( virtual/pam[lib32?]
 		winbind? ( dev-libs/iniparser[lib32?] ) )

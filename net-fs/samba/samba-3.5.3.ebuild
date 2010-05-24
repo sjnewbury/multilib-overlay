@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.4.8.ebuild,v 1.3 2010/05/19 17:16:15 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.5.3.ebuild,v 1.3 2010/05/21 17:31:08 vostorga Exp $
 
 EAPI="2"
 
-inherit pam confutils versionator multilib multilib-native
+inherit pam confutils versionator multilib eutils multilib-native
 
 MY_PV=${PV/_/}
 MY_P="${PN}-${MY_PV}"
@@ -49,6 +49,8 @@ RESTRICT="test"
 
 SBINPROGS=""
 BINPROGS=""
+KRBPLUGIN=""
+PLUGINEXT=".so"
 
 if use server ; then
 	SBINPROGS="${SBINPROGS} bin/smbd bin/nmbd"
@@ -57,7 +59,7 @@ if use server ; then
 
 	use swat && SBINPROGS="${SBINPROGS} bin/swat"
 	use winbind && SBINPROGS="${SBINPROGS} bin/winbindd"
-	use ads && use winbind && SBIN_PROGS="${SBINPROGS} bin/winbind_krb5_locator"
+	use ads && use winbind && KRBPLUGIN="${KRBPLUGIN} bin/winbind_krb5_locator"
 fi
 
 if use client ; then
@@ -148,6 +150,7 @@ multilib-native_src_configure_internal() {
 		$(use_with ads dnsupdate) \
 		--without-automount \
 		$(use_with client cifsmount) \
+		$(use_with client cifsumount) \
 		$(use_with pam) \
 		$(use_with pam pam_smbpass) \
 		$(use_with syslog) \
@@ -213,6 +216,11 @@ multilib-native_src_compile_internal() {
 		emake ${SBINPROGS} || die "emake sbinprogs failed";
 	fi
 
+	if [ -n "${KRBPLUGIN}" ] ; then
+		einfo "make krbplugin"
+		emake ${KRBPLUGIN}${PLUGINEXT} || die "emake krbplugin failed";
+	fi
+
 	if use client ; then
 		einfo "make {,u}mount.cifs"
 		emake bin/{,u}mount.cifs || die "emake {,u}mount.cifs failed"
@@ -273,6 +281,21 @@ multilib-native_src_install_internal() {
 
 	for prog in ${BINPROGS} ; do
 		dobin ${prog} || die "installing ${prog} failed"
+		doman ../docs/manpages/${prog/bin\/}* || die "doman failed"
+	done
+
+	# install krbplugin
+	if has_version app-crypt/mit-krb5 ; then
+		insinto /usr/$(get_libdir)/krb5/plugins/libkrb5
+		doins ${KRBPLUGIN}${PLUGINEXT} || die "installing
+		${KRBPLUGIN}${PLUGINEXT} failed"
+	elif has_version app-crypt/heimdal ; then
+		insinto /usr/$(get_libdir)/plugin/krb5
+		doins ${KRBPLUGIN}${PLUGINEXT} || die "installing
+		${KRBPLUGIN}${PLUGINEXT} failed"
+	fi
+	insinto /usr
+	for prog in ${KRBPLUGIN} ; do
 		doman ../docs/manpages/${prog/bin\/}* || die "doman failed"
 	done
 

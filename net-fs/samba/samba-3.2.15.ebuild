@@ -35,7 +35,7 @@ RDEPEND="dev-libs/popt[lib32?]
 	selinux? ( sec-policy/selinux-samba )
 	swat? ( sys-apps/xinetd )
 	syslog? ( virtual/logger )
-	fam? ( virtual/fam )
+	fam? ( virtual/fam[lib32?] )
 	caps? ( sys-libs/libcap[lib32?] )"
 DEPEND="${RDEPEND}"
 
