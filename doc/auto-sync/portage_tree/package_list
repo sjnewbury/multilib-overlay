@@ -310,11 +310,12 @@ sys-libs/zlib
 virtual/acl
 virtual/glu
 virtual/glut
+# virtual/fam not in portage but needed to get lib32 deps
 virtual/libffi
 virtual/libusb
 virtual/mysql
 virtual/opengl
-# virtual/pam  not in portage
+# virtual/pam not in portage but needed to get lib32 deps
 virtual/postgresql-base
 # www-client/epiphany
 # www-client/epiphany-extensions
