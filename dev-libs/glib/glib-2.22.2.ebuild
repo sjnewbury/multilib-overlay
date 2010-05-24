@@ -16,7 +16,7 @@ IUSE="debug doc fam hardened selinux xattr"
 
 RDEPEND="virtual/libiconv
 	xattr? ( sys-apps/attr[lib32?] )
-	fam? ( virtual/fam )"
+	fam? ( virtual/fam[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.16[lib32?]
 	>=sys-devel/gettext-0.11[lib32?]
