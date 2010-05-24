@@ -1,8 +1,0 @@
---- FTGL/unix/ftgl.pc.in.old	2003-08-24 23:18:22.000000000 -0500
-+++ FTGL/unix/ftgl.pc.in	2004-09-07 13:47:35.429653782 -0500
-@@ -8,4 +8,4 @@
- Version: @PACKAGE_VERSION@
- Requires: 
- Libs: @GL_LIBS@ @FT2_LIBS@ -L${libdir} -lftgl
--Cflags: -I${includedir} @GL_CFLAGS@ @FT2_CFLAGS@
-+Cflags: -I${includedir}/FTGL @GL_CFLAGS@ @FT2_CFLAGS@

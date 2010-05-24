@@ -1,0 +1,32 @@
+--- /usr/portage/media-libs/ftgl/ftgl-2.1.3_rc5.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./media-libs/ftgl/ftgl-2.1.3_rc5.ebuild	2010-05-24 17:11:26.000000000 +0200
+@@ -21,21 +21,23 @@
+ DEPEND=">=media-libs/freetype-2.0.9
+ 	virtual/opengl
+ 	virtual/glu
+-	virtual/glut"
++	virtual/glut
++	dev-util/cppunit"
+ 
+ S=${WORKDIR}/${MY_P2}
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++pkg_setup() {
++	use lib32 && stupid_build_script_requires_lib32_for dev-util/cppunit
++}
++
++src_prepare() {
+ 	epatch "${FILESDIR}"/${P}-gentoo.patch
+ 	AT_M4DIR=m4 eautoreconf
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	strip-flags # ftgl is sensitive - bug #112820
+ 	econf
+-	emake || die "emake failed"
+ }
+ 
+ src_install() {

@@ -161,7 +161,7 @@ media-libs/fontconfig
 # media-libs/freealut
 # media-libs/freeglut
 media-libs/freetype
-# media-libs/ftgl
+media-libs/ftgl
 media-libs/gd
 media-libs/gegl
 media-libs/giflib
