@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-core/qt-core-4.6.2-r1.ebuild,v 1.4 2010/04/18 13:06:56 nixnut Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-core/qt-core-4.6.2-r1.ebuild,v 1.5 2010/05/22 09:26:00 armin76 Exp $
 
 EAPI="2"
 inherit qt4-build multilib-native
@@ -21,6 +21,7 @@ PDEPEND="qt3support? ( ~x11-libs/qt-gui-${PV}[aqua=,qt3support] )"
 PATCHES=(
 	"${FILESDIR}/qt-4.6-nolibx11.patch"
 	"${FILESDIR}/qt-4.6-nox11r6.patch"
+	"${FILESDIR}/qt-4.6.2-alpha.patch"
 )
 
 multilib-native_pkg_setup_internal() {
