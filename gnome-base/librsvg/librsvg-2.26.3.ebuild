@@ -1,8 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/librsvg/librsvg-2.26.3.ebuild,v 1.2 2010/05/14 20:47:01 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/librsvg/librsvg-2.26.3.ebuild,v 1.3 2010/05/24 23:07:59 abcd Exp $
 
-EAPI="2"
+EAPI="3"
 GCONF_DEBUG="no"
 
 inherit gnome2 multilib multilib-native
@@ -12,7 +12,7 @@ HOMEPAGE="http://librsvg.sourceforge.net/"
 
 LICENSE="LGPL-2"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 IUSE="doc tools zlib"
 
 RDEPEND=">=media-libs/fontconfig-1.0.1[lib32?]
@@ -44,15 +44,15 @@ multilib-native_pkg_setup_internal() {
 
 set_gtk_confdir() {
 	# An arch specific config directory is used on multilib systems
-	has_multilib_profile && GTK2_CONFDIR="${ROOT}etc/gtk-2.0/${CHOST}"
-	GTK2_CONFDIR="${GTK2_CONFDIR:-/etc/gtk-2.0}"
+	has_multilib_profile && GTK2_CONFDIR="${EROOT}etc/gtk-2.0/${CHOST}"
+	GTK2_CONFDIR="${GTK2_CONFDIR:-${EROOT}etc/gtk-2.0}"
 }
 
 multilib-native_src_install_internal() {
 	gnome2_src_install
 
 	# remove gdk-pixbuf loaders (#47766)
-	rm -fr "${D}/etc"
+	rm -fr "${ED}etc"
 }
 
 multilib-native_pkg_postinst_internal() {
