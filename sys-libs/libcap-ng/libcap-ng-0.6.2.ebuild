@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/libcap-ng/libcap-ng-0.6.2.ebuild,v 1.8 2010/05/09 13:51:49 phajdan.jr Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/libcap-ng/libcap-ng-0.6.2.ebuild,v 1.9 2010/05/24 14:30:25 armin76 Exp $
 
 EAPI="2"
 
@@ -12,7 +12,7 @@ SRC_URI="http://people.redhat.com/sgrubb/libcap-ng/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 ~arm ~hppa ~ppc ~ppc64 ~sparc x86"
+KEYWORDS="amd64 arm ~hppa ~ppc ~ppc64 sparc x86"
 IUSE="python"
 
 RDEPEND="sys-apps/attr[lib32?]
