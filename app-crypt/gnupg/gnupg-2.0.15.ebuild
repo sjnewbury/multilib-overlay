@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-crypt/gnupg/gnupg-2.0.15.ebuild,v 1.3 2010/05/19 11:04:52 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-crypt/gnupg/gnupg-2.0.15.ebuild,v 1.5 2010/05/26 15:41:04 hwoarang Exp $
 
 EAPI="3"
 
@@ -13,7 +13,7 @@ SRC_URI="ftp://ftp.gnupg.org/gcrypt/${PN}/${P}.tar.bz2"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd ~x64-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd ~x64-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x64-solaris ~x86-solaris"
 IUSE="adns bzip2 caps doc ldap nls openct pcsc-lite static selinux smartcard"
 
 COMMON_DEPEND_LIBS="
