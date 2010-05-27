@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libiptcdata/libiptcdata-1.0.4.ebuild,v 1.4 2010/05/17 18:28:43 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libiptcdata/libiptcdata-1.0.4.ebuild,v 1.5 2010/05/25 16:37:05 arfrever Exp $
 
 EAPI="3"
 SUPPORT_PYTHON_ABIS="1"
@@ -24,13 +24,19 @@ DEPEND="${RDEPEND}
 	nls? ( >=sys-devel/gettext-0.13.1[lib32?] )
 	doc? ( >=dev-util/gtk-doc-1 )"
 
+multilib-native_pkg_setup_internal() {
+	if use python; then
+		python_pkg_setup
+	fi
+}
+
 multilib-native_src_prepare_internal() {
 	# Python bindings are built/tested/installed manually.
 	sed -e '/SUBDIRS =/s/$(MAYBE_PYTHONLIB)//' -i Makefile.in || die "sed failed"
 }
 
 multilib-native_src_configure_internal() {
-	python_execute_function -f -q econf \
+	econf \
 		$(use_enable nls) \
 		$(use_enable python) \
 		$(use_enable doc gtk-doc)
