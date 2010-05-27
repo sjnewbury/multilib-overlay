@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.5.3.ebuild,v 1.3 2010/05/21 17:31:08 vostorga Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.5.3.ebuild,v 1.4 2010/05/24 21:56:45 vostorga Exp $
 
 EAPI="2"
 
@@ -285,19 +285,21 @@ multilib-native_src_install_internal() {
 	done
 
 	# install krbplugin
-	if has_version app-crypt/mit-krb5 ; then
-		insinto /usr/$(get_libdir)/krb5/plugins/libkrb5
-		doins ${KRBPLUGIN}${PLUGINEXT} || die "installing
-		${KRBPLUGIN}${PLUGINEXT} failed"
-	elif has_version app-crypt/heimdal ; then
-		insinto /usr/$(get_libdir)/plugin/krb5
-		doins ${KRBPLUGIN}${PLUGINEXT} || die "installing
-		${KRBPLUGIN}${PLUGINEXT} failed"
+	if [ -n "${KRBPLUGIN}" ] ; then
+		if has_version app-crypt/mit-krb5 ; then
+			insinto /usr/$(get_libdir)/krb5/plugins/libkrb5
+			doins ${KRBPLUGIN}${PLUGINEXT} || die "installing
+			${KRBPLUGIN}${PLUGINEXT} failed"
+		elif has_version app-crypt/heimdal ; then
+			insinto /usr/$(get_libdir)/plugin/krb5
+			doins ${KRBPLUGIN}${PLUGINEXT} || die "installing
+			${KRBPLUGIN}${PLUGINEXT} failed"
+		fi
+		insinto /usr
+		for prog in ${KRBPLUGIN} ; do
+			doman ../docs/manpages/${prog/bin\/}* || die "doman failed"
+		done
 	fi
-	insinto /usr
-	for prog in ${KRBPLUGIN} ; do
-		doman ../docs/manpages/${prog/bin\/}* || die "doman failed"
-	done
 
 	# install server components
 	if use server ; then
@@ -344,7 +346,9 @@ multilib-native_src_install_internal() {
 	fi
 
 	# install the spooler to cups
-	use cups && dosym /usr/bin/smbspool $(cups-config --serverbin)/backend/smb
+	if use cups ; then
+		dosym /usr/bin/smbspool $(cups-config --serverbin)/backend/smb
+	fi
 
 	# install misc files
 	insinto /etc/samba
@@ -362,7 +366,6 @@ multilib-native_src_install_internal() {
 
 	# install examples
 	if use examples ; then
-		einfo "install examples"
 		insinto /usr/share/doc/${PF}/examples
 
 		if use smbclient ; then
@@ -374,9 +377,10 @@ multilib-native_src_install_internal() {
 		fi
 
 		if use server ; then
-			doins -r \
-				auth autofs dce-dfs LDAP logon misc pdb perfcounter \
-				printer-accounting printing scripts tridge validchars VFS
+			cd ../examples
+			doins -r auth autofs dce-dfs LDAP logon misc pdb \
+			perfcounter printer-accounting printing scripts tridge \
+			validchars VFS
 		fi
 	fi
 
