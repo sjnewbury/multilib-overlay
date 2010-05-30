@@ -22,7 +22,6 @@ DEPEND="readline? ( sys-libs/readline[lib32?] )
 RDEPEND="${DEPEND}"
 
 multilib-native_src_prepare_internal() {
-	cd "${S}"
 	sed -i -e 's:tail +:tail -n +:' "${S}"/tests/test.sh ||\
 		die "Failed to fix-up tail for POSIX compliance"
 	# Upstream package creates executables 'example', 'munch'
@@ -67,7 +66,7 @@ multilib-native_src_install_internal() {
 	ln -s libhunspell-1.1.so.0.0.0 libhunspell.so
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "To use this package you will also need a dictionary."
 	elog "Hunspell uses myspell format dictionaries; find them"
 	elog "in the app-dicts category as myspell-<LANG>."

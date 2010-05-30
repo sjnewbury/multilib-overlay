@@ -25,8 +25,6 @@ RDEPEND="${DEPEND}"
 S=${WORKDIR}/${MY_P}
 
 multilib-native_src_prepare_internal() {
-	cd "${S}"
-
 	# Upstream package creates some executables which names are too generic
 	# to be placed in /usr/bin - this patch prefixes them with 'hunspell-'.
 	# It modifies a Makefile.am file, hence eautoreconf.
@@ -52,7 +50,7 @@ multilib-native_src_install_internal() {
 	dodoc AUTHORS.myspell README.myspell license.myspell || die "installing myspell docs failed"
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "To use this package you will also need a dictionary."
 	elog "Hunspell uses myspell format dictionaries; find them"
 	elog "in the app-dicts category as myspell-<LANG>."
