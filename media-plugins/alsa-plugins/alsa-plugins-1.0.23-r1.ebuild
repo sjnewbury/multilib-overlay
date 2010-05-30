@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-plugins/alsa-plugins/alsa-plugins-1.0.23.ebuild,v 1.1 2010/04/16 22:44:22 chainsaw Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-plugins/alsa-plugins/alsa-plugins-1.0.23-r1.ebuild,v 1.2 2010/05/28 18:47:05 lxnay Exp $
 
 EAPI=2
 
@@ -77,6 +77,14 @@ multilib-native_src_install_internal() {
 	dodoc upmix.txt vdownmix.txt README-pcm-oss
 	use jack && dodoc README-jack
 	use libsamplerate && dodoc samplerate.txt
-	use pulseaudio && dodoc README-pulse
 	use ffmpeg && dodoc lavcrate.txt a52.txt
+
+	if use pulseaudio; then
+		dodoc README-pulse
+		# install ALSA configuration files
+		# making PA to be used by alsa clients
+		insinto /usr/share/alsa
+		doins "${FILESDIR}"/pulse*.conf
+	fi
+
 }
