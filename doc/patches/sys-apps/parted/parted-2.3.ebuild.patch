@@ -1,0 +1,12 @@
+--- /usr/portage/sys-apps/parted/parted-2.3.ebuild	2010-05-29 18:18:05.000000000 +0200
++++ ./sys-apps/parted/parted-2.3.ebuild	2010-05-30 02:47:13.000000000 +0200
+@@ -25,7 +25,8 @@
+ 	device-mapper? ( || (
+ 		>=sys-fs/lvm2-2.02.45
+ 		sys-fs/device-mapper )
+-	)"
++	)
++	dev-libs/check"
+ 
+ src_prepare() {
+ 	# The symlink test should SKIP instead of FAIL
