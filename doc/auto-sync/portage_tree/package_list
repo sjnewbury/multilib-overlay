@@ -158,7 +158,7 @@ media-gfx/imagemagick
 # media-libs/faad2
 # media-libs/flac
 media-libs/fontconfig
-# media-libs/freealut
+media-libs/freealut
 media-libs/freeglut
 media-libs/freetype
 media-libs/ftgl
