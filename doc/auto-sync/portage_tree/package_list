@@ -155,7 +155,7 @@ media-gfx/imagemagick
 # media-libs/capseo
 # media-libs/exempi
 # media-libs/faac
-# media-libs/faad2
+media-libs/faad2
 media-libs/flac
 media-libs/fontconfig
 media-libs/freealut
