@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/liboil/liboil-0.3.16.ebuild,v 1.5 2009/09/29 17:18:39 klausman Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/liboil/liboil-0.3.16.ebuild,v 1.9 2009/11/13 00:41:54 josejx Exp $
 
 EAPI="2"
 
@@ -12,10 +12,10 @@ SRC_URI="http://liboil.freedesktop.org/download/${P}.tar.gz"
 
 LICENSE="BSD-2"
 SLOT="0.3"
-KEYWORDS="alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="doc +examples test"
 
-RDEPEND="examples? ( =dev-libs/glib-2*[lib32?] )"
+RDEPEND="examples? ( dev-libs/glib:2[lib32?] )"
 DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1 )"
 
@@ -45,7 +45,7 @@ multilib-native_src_install_internal() {
 	dodoc AUTHORS BUG-REPORTING HACKING NEWS README || die "dodoc failed."
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	if ! use examples; then
 		ewarn "You have disabled examples USE flag. Beware that upstream might"
 		ewarn "want the output of some utilities that are only built with"

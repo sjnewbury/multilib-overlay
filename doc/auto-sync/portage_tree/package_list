@@ -80,7 +80,7 @@ dev-libs/libgcrypt
 # dev-libs/libIDL
 # dev-libs/libksba
 # dev-libs/libnl
-# dev-libs/liboil
+dev-libs/liboil
 # dev-libs/libpcre
 dev-libs/libpthread-stubs
 # dev-libs/libsigc++
