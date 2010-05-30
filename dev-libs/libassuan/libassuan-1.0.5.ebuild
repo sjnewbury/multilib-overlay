@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/libassuan/libassuan-1.0.5.ebuild,v 1.5 2009/04/03 20:56:08 tcunha Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit flag-o-matic eutils multilib-native
 

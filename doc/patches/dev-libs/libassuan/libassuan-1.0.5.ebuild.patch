@@ -1,0 +1,24 @@
+--- /usr/portage/dev-libs/libassuan/libassuan-1.0.5.ebuild	2009-04-03 23:05:48.000000000 +0200
++++ ./dev-libs/libassuan/libassuan-1.0.5.ebuild	2010-05-30 18:53:48.000000000 +0200
+@@ -17,19 +17,17 @@
+ 	>=dev-libs/libgpg-error-1.4"
+ RDEPEND="${DEPEND}"
+ 
+-src_unpack()
++src_prepare()
+ {
+-	unpack ${A}
+ 	epatch "${FILESDIR}"/libassuan-1.0.5-qa.patch
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	# https://bugs.g10code.com/gnupg/issue817
+ 	append-flags "-fpic -fPIC"
+ 	append-ldflags "-fpic -fPIC"
+ 
+ 	econf || die
+-	emake || die
+ }
+ 
+ src_install() {

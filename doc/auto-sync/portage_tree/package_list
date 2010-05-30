@@ -63,7 +63,7 @@ dev-libs/glib
 # dev-libs/gobject-introspection
 # dev-libs/icu
 # dev-libs/iniparser
-# dev-libs/libassuan
+dev-libs/libassuan
 # dev-libs/libatomic_ops
 # dev-libs/libbeagle
 # dev-libs/libcdio
@@ -159,7 +159,7 @@ media-gfx/imagemagick
 # media-libs/flac
 media-libs/fontconfig
 # media-libs/freealut
-# media-libs/freeglut
+media-libs/freeglut
 media-libs/freetype
 media-libs/ftgl
 media-libs/gd
