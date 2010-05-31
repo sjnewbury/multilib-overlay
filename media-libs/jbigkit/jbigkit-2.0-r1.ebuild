@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/jbigkit/jbigkit-2.0-r1.ebuild,v 1.1 2010/03/15 19:55:42 grobian Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/jbigkit/jbigkit-2.0-r1.ebuild,v 1.2 2010/05/31 04:48:17 nerdboy Exp $
 
 EAPI="3"
 
@@ -27,7 +27,7 @@ multilib-native_src_compile_internal() {
 }
 
 src_test() {
-	LD_LIBRARY_PATH=${S}/libjbig make test || die
+	LD_LIBRARY_PATH=${S}/libjbig make -j1 test || die
 }
 
 multilib-native_src_install_internal() {
