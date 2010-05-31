@@ -2,8 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/audiofile/audiofile-0.2.6-r3.ebuild,v 1.12 2007/09/22 04:54:01 tgall Exp $
 
-EAPI="2"
-
 inherit libtool eutils multilib-native
 
 DESCRIPTION="An elegant API for accessing audio files"
@@ -15,7 +13,7 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE=""
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"/sfcommands
 	epatch "${FILESDIR}"/sfconvert-eradicator.patch
@@ -29,8 +27,9 @@ src_unpack() {
 	elibtoolize
 }
 
-multilib-native_src_configure_internal() {
+multilib-native_src_compile_internal() {
 	econf --enable-largefile || die
+	emake || die
 }
 
 multilib-native_src_install_internal() {

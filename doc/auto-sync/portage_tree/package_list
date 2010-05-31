@@ -150,7 +150,7 @@ media-gfx/imagemagick
 # media-libs/alsa-lib
 # media-libs/amrnb
 # media-libs/amrwb
-# media-libs/audiofile
+media-libs/audiofile
 media-libs/babl
 media-libs/capseo
 media-libs/exempi
