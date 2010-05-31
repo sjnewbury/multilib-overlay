@@ -151,7 +151,7 @@ media-gfx/imagemagick
 # media-libs/amrnb
 # media-libs/amrwb
 # media-libs/audiofile
-# media-libs/babl
+media-libs/babl
 media-libs/capseo
 media-libs/exempi
 media-libs/faac
