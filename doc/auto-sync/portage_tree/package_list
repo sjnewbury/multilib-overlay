@@ -148,8 +148,6 @@ media-gfx/imagemagick
 # media-libs/a52dec
 # media-libs/aalib
 # media-libs/alsa-lib
-# media-libs/amrnb
-# media-libs/amrwb
 media-libs/audiofile
 media-libs/babl
 media-libs/capseo
