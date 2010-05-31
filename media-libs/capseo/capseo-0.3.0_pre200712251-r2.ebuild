@@ -2,9 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/capseo/capseo-0.3.0_pre200712251-r2.ebuild,v 1.3 2009/03/24 03:13:07 jer Exp $
 
-EAPI=2
-
-MULTILIB_EXT_SOURCE_BUILD=yes
+EAPI="2"
 
 inherit flag-o-matic multilib multilib-native
 
@@ -21,14 +19,11 @@ RDEPEND=">=media-libs/libtheora-1.0_alpha6-r1[lib32?]"
 DEPEND="${RDEPEND}
 	x86? ( >=dev-lang/yasm-0.4.0 )
 	amd64? ( >=dev-lang/yasm-0.4.0 )
-	dev-util/pkgconfig"
+	dev-util/pkgconfig[lib32?]"
 
 S="${WORKDIR}/captury-${PV}/${PN}"
 
-EMULTILIB_PKG="true"
-
 multilib-native_src_prepare_internal() {
-	cd "${S}"
 	einfo "pwd: $(pwd)"
 	epatch "${FILESDIR}/no-cpsplay.diff"
 
@@ -47,30 +42,20 @@ multilib-native_src_configure_internal() {
 			;;
 	esac
 
-	if is_final_abi; then
-		myconf="${myconf} $(use_enable theora)"
-	else
-		# drop unnecessary theora dependency for secondary ABIs (as theora is
-		# only used for the cpsrecode tool anyway).
-		# see bug 200093.
-		myconf="${myconf} --disable-theora"
-	fi
+	myconf="${myconf} $(use_enable theora)"
 
-	econf ${myconf} \
-		|| die "econf failed"
+	econf ${myconf} || die "econf failed"
 }
 
 multilib-native_src_install_internal() {
-	make install DESTDIR="${D}" || die "make install failed."
+	emake install DESTDIR="${D}" || die "emake install failed."
 
 	rm "${D}/usr/bin/cpsplay" # currently unsupported
-
-	cd "${ECONF_SOURCE}"
 
 	dodoc AUTHORS ChangeLog* NEWS README* TODO
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	einfo "Use the following command to re-encode your screen captures to a"
 	einfo "file format current media players do understand:"
 	einfo

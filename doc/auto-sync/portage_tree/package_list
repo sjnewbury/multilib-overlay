@@ -152,7 +152,7 @@ media-gfx/imagemagick
 # media-libs/amrwb
 # media-libs/audiofile
 # media-libs/babl
-# media-libs/capseo
+media-libs/capseo
 media-libs/exempi
 media-libs/faac
 media-libs/faad2
