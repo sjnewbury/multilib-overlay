@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.3-r1.ebuild,v 1.7 2010/05/09 16:53:12 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.3-r1.ebuild,v 1.8 2010/05/31 19:24:28 josejx Exp $
 
 EAPI="2"
 WANT_AUTOCONF="2.1"
@@ -17,7 +17,7 @@ HOMEPAGE="http://developer.mozilla.org/en/docs/XULRunner"
 SRC_URI="http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${MY_PV}/source/firefox-${MY_PV}.source.tar.bz2
 	http://dev.gentoo.org/~anarchy/dist/${PATCH}.tar.bz2"
 
-KEYWORDS="alpha amd64 arm ~hppa ia64 ~ppc ~ppc64 sparc x86"
+KEYWORDS="alpha amd64 arm ~hppa ia64 ppc ppc64 sparc x86"
 SLOT="1.9"
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 IUSE="+alsa debug libnotify system-sqlite wifi"
