@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.4.6.ebuild,v 1.6 2010/05/20 00:04:21 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.4.6.ebuild,v 1.7 2010/06/01 14:04:59 vostorga Exp $
 
 EAPI="2"
 
@@ -82,6 +82,17 @@ S="${WORKDIR}/${MY_P}/source3"
 CONFDIR="${FILESDIR}/$(get_version_component_range 1-2)"
 
 multilib-native_pkg_setup_internal() {
+
+	if use winbind &&
+		[[ $(tc-getCC)$ == *gcc* ]] &&
+		[[ $(gcc-major-version)$(gcc-minor-version) -lt 43 ]]
+	then
+		eerror "It is a known issue that ${P} will not build with "
+		eerror "winbind use flag enabled when using gcc < 4.3 ."
+		eerror "Please use at least the latest stable gcc version."
+		die "Using sys-devel/gcc < 4.3 with winbind use flag."
+	fi
+
 	confutils_use_depend_all ads ldap
 	confutils_use_depend_all swat server
 }
@@ -364,4 +375,16 @@ multilib-native_src_install_internal() {
 		"${D}/usr/share"/{man,locale,} \
 		"${D}/var"/{run,lib/samba/private,lib/samba,lib,cache/samba,cache,} \
 	#	|| die "tried to remove non-empty dirs, this seems like a bug in the ebuild"
+}
+
+multilib-native_pkg_postinst_internal() {
+	elog "The default passdb backend has been changed to 'tdbsam' in samba 3.4!"
+	elog "That breaks existing setups using the 'smbpasswd' backend without"
+	elog "explicit declaration!"
+	elog "Please use 'passdb backend = smbpasswd' if you would like to stick to the"
+	elog "'smbpasswd' backend or convert your smbpasswd entries using e.g. "
+	elog "'pdbedit -i smbpasswd -e tdbsam'."
+	elog "For further information make sure to read the release notes at"
+	elog "http://samba.org/samba/history/${P}.html and "
+	elog "http://samba.org/samba/history/${PN}-3.4.0.html"
 }

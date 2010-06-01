@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.5.3.ebuild,v 1.4 2010/05/24 21:56:45 vostorga Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.5.3.ebuild,v 1.5 2010/06/01 14:04:59 vostorga Exp $
 
 EAPI="2"
 
@@ -84,6 +84,16 @@ S="${WORKDIR}/${MY_P}/source3"
 CONFDIR="${FILESDIR}/$(get_version_component_range 1-2)"
 
 multilib-native_pkg_setup_internal() {
+	if use winbind &&
+		[[ $(tc-getCC)$ == *gcc* ]] &&
+		[[ $(gcc-major-version)$(gcc-minor-version) -lt 43 ]]
+	then
+		eerror "It is a known issue that ${P} will not build with "
+		eerror "winbind use flag enabled when using gcc < 4.3 ."
+		eerror "Please use at least the latest stable gcc version."
+		die "Using sys-devel/gcc < 4.3 with winbind use flag."
+	fi
+
 	confutils_use_depend_all ads ldap
 	confutils_use_depend_all swat server
 }
@@ -391,4 +401,19 @@ multilib-native_src_install_internal() {
 		"${D}/usr/share"/{man,locale,} \
 		"${D}/var"/{run,lib/samba/private,lib/samba,lib,cache/samba,cache,} \
 	#	|| die "tried to remove non-empty dirs, this seems like a bug in the ebuild"
+}
+
+multilib-native_pkg_postinst_internal() {
+	elog "The default value of 'wide links' has been changed to 'no' in samba 3.5"
+	elog "to avoid an insecure default configuration"
+	elog "('wide links = yes' and 'unix extensions = yes'). For more details,"
+	elog "please see http://www.samba.org/samba/news/symlink_attack.html ."
+	elog ""
+	elog "An EXPERIMENTAL implementation of the SMB2 protocol has been added."
+	elog "SMB2 can be enabled by setting 'max protocol = smb2'. SMB2 is a new "
+	elog "implementation of the SMB protocol used by Windows Vista and higher"
+	elog ""
+	elog "For further information make sure to read the release notes at"
+	elog "http://samba.org/samba/history/${P}.html and "
+	elog "http://samba.org/samba/history/${PN}-3.5.0.html"
 }
