@@ -1,8 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.18.9.ebuild,v 1.3 2010/05/12 09:50:21 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.18.9.ebuild,v 1.4 2010/06/03 11:10:27 grobian Exp $
 
-EAPI="2"
+EAPI="3"
 
 inherit gnome.org flag-o-matic eutils libtool virtualx multilib-native
 
@@ -69,10 +69,6 @@ set_gtk2_confdir() {
 	# An arch specific config directory is used on multilib systems
 	has_multilib_profile && GTK2_CONFDIR="/etc/gtk-2.0/${CHOST}"
 	GTK2_CONFDIR=${GTK2_CONFDIR:=/etc/gtk-2.0}
-}
-
-multilib-native_pkg_setup_internal() {
-	use prefix || EPREFIX=
 }
 
 multilib-native_src_prepare_internal() {
@@ -159,11 +155,11 @@ multilib-native_src_install_internal() {
 
 	# This has to be removed, because it's multilib specific; generated in
 	# postinst
-	rm "${D%/}${EPREFIX}/etc/gtk-2.0/gtk.immodules"
+	rm "${ED%/}/etc/gtk-2.0/gtk.immodules"
 
 	# add -framework Carbon to the .pc files
 	use aqua && for i in gtk+-2.0.pc gtk+-quartz-2.0.pc gtk+-unix-print-2.0.pc; do
-		sed -i -e "s:Libs\: :Libs\: -framework Carbon :" "${D%/}${EPREFIX}"/usr/lib/pkgconfig/$i || die "sed failed"
+		sed -i -e "s:Libs\: :Libs\: -framework Carbon :" "${ED%/}"/usr/lib/pkgconfig/$i || die "sed failed"
 	done
 
 	prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
@@ -172,20 +168,20 @@ multilib-native_src_install_internal() {
 multilib-native_pkg_postinst_internal() {
 	set_gtk2_confdir
 
-	if [ -d "${ROOT%/}${EPREFIX}${GTK2_CONFDIR}" ]; then
-		gtk-query-immodules-2.0  > "${ROOT%/}${EPREFIX}${GTK2_CONFDIR}/gtk.immodules"
-		gdk-pixbuf-query-loaders > "${ROOT%/}${EPREFIX}${GTK2_CONFDIR}/gdk-pixbuf.loaders"
+	if [ -d "${EROOT%/}${GTK2_CONFDIR}" ]; then
+		gtk-query-immodules-2.0  > "${EROOT%/}${GTK2_CONFDIR}/gtk.immodules"
+		gdk-pixbuf-query-loaders > "${EROOT%/}${GTK2_CONFDIR}/gdk-pixbuf.loaders"
 	else
-		ewarn "The destination path ${ROOT%/}${EPREFIX}${GTK2_CONFDIR} doesn't exist;"
+		ewarn "The destination path ${EROOT%/}${GTK2_CONFDIR} doesn't exist;"
 		ewarn "to complete the installation of GTK+, please create the"
 		ewarn "directory and then manually run:"
-		ewarn "  cd ${ROOT%/}${EPREFIX}${GTK2_CONFDIR}"
+		ewarn "  cd ${EROOT%/}${GTK2_CONFDIR}"
 		ewarn "  gtk-query-immodules-2.0  > gtk.immodules"
 		ewarn "  gdk-pixbuf-query-loaders > gdk-pixbuf.loaders"
 	fi
 
-	if [ -e "${ROOT%/}${EPREFIX}"/usr/lib/gtk-2.0/2.[^1]* ]; then
-		elog "You need to rebuild ebuilds that installed into" "${ROOT%/}${EPREFIX}"/usr/lib/gtk-2.0/2.[^1]*
+	if [ -e "${EROOT%/}"/usr/lib/gtk-2.0/2.[^1]* ]; then
+		elog "You need to rebuild ebuilds that installed into" "${EROOT%/}"/usr/lib/gtk-2.0/2.[^1]*
 		elog "to do that you can use qfile from portage-utils:"
 		elog "emerge -va1 \$(qfile -qC ${EPREFIX}/usr/lib/gtk-2.0/2.[^1]*)"
 	fi
