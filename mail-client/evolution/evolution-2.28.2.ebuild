@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.28.2.ebuild,v 1.1 2009/12/24 00:50:16 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.28.2.ebuild,v 1.2 2010/03/22 09:14:23 ssuominen Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -46,12 +46,12 @@ RDEPEND=">=dev-libs/glib-2.20[lib32?]
 		>=dev-libs/nss-3.11[lib32?] )
 	networkmanager? ( >=net-misc/networkmanager-0.7[lib32?] )
 	>=net-libs/libsoup-2.4[lib32?]
-	kerberos? ( virtual/krb5[lib32?] )
+	kerberos? ( virtual/krb5 )
 	krb4? ( app-crypt/mit-krb5[krb4,lib32?] )
 	>=gnome-base/orbit-2.9.8[lib32?]
 	crypt? ( || (
 				  ( >=app-crypt/gnupg-2.0.1-r2[lib32?]
-					|| ( app-crypt/pinentry[gtk] app-crypt/pinentry[qt3] ) )
+					app-crypt/pinentry[gtk] )
 				  =app-crypt/gnupg-1.4*[lib32?] ) )
 	ldap? ( >=net-nds/openldap-2[lib32?] )
 	mono? ( >=dev-lang/mono-1 )
@@ -69,7 +69,7 @@ DEPEND="${RDEPEND}
 	sys-devel/bison
 	app-text/scrollkeeper
 	>=gnome-base/gnome-common-2.12.0
-	>=app-text/gnome-doc-utils-0.9.1"
+	>=app-text/gnome-doc-utils-0.9.1[lib32?]"
 
 PDEPEND="exchange? ( >=gnome-extra/evolution-exchange-2.26.1 )"
 
@@ -83,6 +83,7 @@ multilib-native_pkg_setup_internal() {
 		--with-weather
 		$(use_enable ssl nss)
 		$(use_enable ssl smime)
+		$(use_enable mono)
 		$(use_enable nntp)
 		$(use_enable networkmanager nm)
 		$(use_enable dbus)
@@ -95,9 +96,6 @@ multilib-native_pkg_setup_internal() {
 		$(use_with ldap openldap)
 		$(use_with kerberos krb5 /usr)
 		$(use_with krb4 krb4 /usr)"
-
-	is_final_abi && G2CONF="${G2CONF} $(use_enable mono)"
-
 
 	# dang - I've changed this to do --enable-plugins=experimental.  This will
 	# autodetect new-mail-notify and exchange, but that cannot be helped for the
@@ -139,7 +137,7 @@ multilib-native_src_prepare_internal() {
 	replace-flags -O3 -O2
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	gnome2_pkg_postinst
 
 	elog "To change the default browser if you are not using GNOME, do:"

@@ -1,8 +1,9 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.26.3.ebuild,v 1.13 2010/03/22 09:14:23 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.28.3.1-r1.ebuild,v 1.1 2010/05/19 19:30:59 lack Exp $
 
 EAPI="2"
+GCONF_DEBUG="no"
 
 inherit autotools gnome2 flag-o-matic python multilib-native
 
@@ -11,28 +12,29 @@ HOMEPAGE="http://www.gnome.org/projects/evolution/"
 
 LICENSE="GPL-2 FDL-1.1"
 SLOT="2.0"
-KEYWORDS="alpha amd64 hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="crypt dbus hal kerberos krb4 ldap mono networkmanager nntp pda profile python ssl gstreamer exchange"
 # pst
 
 # Pango dependency required to avoid font rendering problems
 # We need a graphical pinentry frontend to be able to ask for the GPG
 # password from inside evolution, bug 160302
-RDEPEND=">=dev-libs/glib-2.18[lib32?]
-	>=x11-libs/gtk+-2.14[lib32?]
-	>=gnome-extra/evolution-data-server-2.26.3[lib32?]
+RDEPEND=">=dev-libs/glib-2.20[lib32?]
+	>=x11-libs/gtk+-2.16[lib32?]
+	>=gnome-extra/evolution-data-server-${PV}[lib32?]
 	>=x11-themes/gnome-icon-theme-2.20
 	>=gnome-base/libbonobo-2.20.3[lib32?]
 	>=gnome-base/libbonoboui-2.4.2[lib32?]
-	>=gnome-extra/gtkhtml-3.25.4[lib32?]
+	>=gnome-extra/gtkhtml-3.27.90[lib32?]
 	>=gnome-base/gconf-2[lib32?]
 	>=gnome-base/libglade-2[lib32?]
 	>=gnome-base/libgnomecanvas-2[lib32?]
 	>=gnome-base/libgnomeui-2[lib32?]
-	>=dev-libs/libxml2-2[lib32?]
+	>=dev-libs/libxml2-2.7.3[lib32?]
 	>=dev-libs/libgweather-2.25.3[lib32?]
 	>=x11-misc/shared-mime-info-0.22
-	dbus? ( dev-libs/dbus-glib[lib32?] )
+	>=gnome-base/gnome-desktop-2.26.0[lib32?]
+	dbus? ( >=dev-libs/dbus-glib-0.74[lib32?] )
 	hal? ( >=sys-apps/hal-0.5.4[lib32?] )
 	x11-libs/libnotify[lib32?]
 	pda? (
@@ -42,7 +44,9 @@ RDEPEND=">=dev-libs/glib-2.18[lib32?]
 	ssl? (
 		>=dev-libs/nspr-4.6.1[lib32?]
 		>=dev-libs/nss-3.11[lib32?] )
-	networkmanager? ( net-misc/networkmanager[lib32?] )
+	networkmanager? (
+		>=net-misc/networkmanager-0.7[lib32?]
+		>=dev-libs/dbus-glib-0.74[lib32?] )
 	>=net-libs/libsoup-2.4[lib32?]
 	kerberos? ( virtual/krb5 )
 	krb4? ( app-crypt/mit-krb5[krb4,lib32?] )
@@ -58,7 +62,7 @@ RDEPEND=">=dev-libs/glib-2.18[lib32?]
 		>=media-libs/gstreamer-0.10[lib32?]
 		>=media-libs/gst-plugins-base-0.10[lib32?] )"
 # Disabled until API stabilizes
-#	pst? ( >=net-mail/libpst-0.6 )
+#	pst? ( >=net-mail/libpst-0.6.41 )
 
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.16[lib32?]
@@ -73,7 +77,6 @@ PDEPEND="exchange? ( >=gnome-extra/evolution-exchange-2.26.1 )"
 
 DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS* README"
 ELTCONF="--reverse-deps"
-GCONF_DEBUG="no"
 
 multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
@@ -84,6 +87,7 @@ multilib-native_pkg_setup_internal() {
 		$(use_enable ssl smime)
 		$(use_enable mono)
 		$(use_enable nntp)
+		$(use_enable networkmanager nm)
 		$(use_enable dbus)
 		$(use_enable gstreamer audio-inline)
 		$(use_enable exchange)
@@ -95,6 +99,9 @@ multilib-native_pkg_setup_internal() {
 		$(use_with kerberos krb5 /usr)
 		$(use_with krb4 krb4 /usr)"
 
+	# DBUS is required for NetworkManager support (Bug #317841)
+	use networkmanager && G2CONF="${G2CONF} --enable-dbus"
+
 	# dang - I've changed this to do --enable-plugins=experimental.  This will
 	# autodetect new-mail-notify and exchange, but that cannot be helped for the
 	# moment.  They should be changed to depend on a --enable-<foo> like mono
@@ -105,13 +112,26 @@ multilib-native_src_prepare_internal() {
 	gnome2_src_prepare
 
 	# Fix timezone offsets on fbsd.  bug #183708
-	epatch "${FILESDIR}/${PN}-2.21.3-fbsd.patch"
+	# FIXME: bsd needs to be more active at pushing stuff upstream
+	#epatch "${FILESDIR}/${PN}-2.21.3-fbsd.patch"
 
-	# Fix delete keyboard shortcut
-	epatch "${FILESDIR}/${PN}-2.23.3.1-delete-key.patch"
+	# Fix delete keyboard shortcut, bug #????
+	epatch "${FILESDIR}/${PN}-2.28.0-delete-key.patch"
 
 	# Fix multiple automagic plugins, bug #204300 & bug #271451
-	epatch "${FILESDIR}/${PN}-2.26.3-automagic-plugins.patch"
+	epatch "${FILESDIR}/${PN}-2.28.0-automagic-plugins.patch"
+
+	# Apply all current 2.28.3.1 upstream fixes:
+	epatch "${FILESDIR}/${P}-attachment-bar-RTL.patch"
+	epatch "${FILESDIR}/${P}-unknown-attachment-size.patch"
+	# Bug #317765
+	epatch "${FILESDIR}/${P}-allow-setting-alarms_1.patch"
+	epatch "${FILESDIR}/${P}-allow-setting-alarms_2.patch"
+	epatch "${FILESDIR}/${P}-allow-setting-alarms_3.patch"
+
+	# FIXME: Fix compilation flags crazyness
+	sed 's/CFLAGS="$CFLAGS $WARNING_FLAGS"//' \
+		-i configure.ac configure || die "sed 1 failed"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
