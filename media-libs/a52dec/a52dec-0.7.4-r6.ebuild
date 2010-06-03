@@ -1,13 +1,9 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/a52dec/a52dec-0.7.4-r6.ebuild,v 1.8 2009/06/11 15:04:47 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/a52dec/a52dec-0.7.4-r6.ebuild,v 1.12 2010/01/14 23:23:28 abcd Exp $
 
-EAPI="2"
-
-WANT_AUTOCONF=latest
-WANT_AUTOMAKE=latest
-
-inherit eutils flag-o-matic libtool autotools multilib-native
+EAPI=2
+inherit autotools eutils flag-o-matic multilib-native
 
 DESCRIPTION="library for decoding ATSC A/52 streams used in DVD"
 HOMEPAGE="http://liba52.sourceforge.net/"
@@ -15,17 +11,16 @@ SRC_URI="http://liba52.sourceforge.net/files/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ~ppc64 sh sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x86-solaris"
 IUSE="oss djbfft"
 
 RDEPEND="djbfft? ( sci-libs/djbfft[lib32?] )"
 DEPEND="${RDEPEND}"
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}/${P}-build.patch"
-	epatch "${FILESDIR}/${P}-freebsd.patch"
-	epatch "${FILESDIR}/${P}-tests-optional.patch"
-
+	epatch "${FILESDIR}"/${P}-build.patch \
+		"${FILESDIR}"/${P}-freebsd.patch \
+		"${FILESDIR}"/${P}-tests-optional.patch
 	eautoreconf
 	epunt_cxx
 }
@@ -37,7 +32,7 @@ multilib-native_src_configure_internal() {
 	use oss || myconf="${myconf} --disable-oss"
 	econf \
 		$(use_enable djbfft) \
-		${myconf} || die
+		${myconf}
 }
 
 multilib-native_src_compile_internal() {
@@ -50,7 +45,7 @@ src_test() {
 }
 
 multilib-native_src_install_internal() {
-	make DESTDIR="${D}" docdir=/usr/share/doc/${PF}/html install || die
+	emake DESTDIR="${D}" install || die "emake install failed"
 
 	insinto /usr/include/a52dec
 	doins "${S}"/liba52/a52_internal.h
