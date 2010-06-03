@@ -77,9 +77,9 @@ multilib-native_src_unpack_internal() {
 	if use usb; then
 		unpack ${BROTHERMFCDRIVER}.bz2
 	fi
+}
 
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	#compile errors when using NDEBUG otherwise
 	sed -i -e 's:function_name:__FUNCTION__:g' backend/artec_eplus48u.c \
 		|| die "function_name fix failed"
@@ -89,7 +89,6 @@ multilib-native_src_unpack_internal() {
 		sed -e 's/bh canon/bh brother canon/' -i configure || \
 			die "could not add 'brother' to backend list"
 	fi
-
 }
 
 multilib-native_src_configure_internal() {

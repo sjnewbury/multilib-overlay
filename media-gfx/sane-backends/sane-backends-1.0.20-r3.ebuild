@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/sane-backends/sane-backends-1.0.20.ebuild,v 1.4 2009/07/19 10:47:47 phosphan Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/sane-backends/sane-backends-1.0.20-r3.ebuild,v 1.4 2010/04/02 22:15:15 phosphan Exp $
 
 EAPI="2"
 
@@ -100,31 +100,18 @@ RDEPEND="
 	sane_backends_dc240? ( >=media-libs/jpeg-6b[lib32?] )
 	sane_backends_dell1600n_net? ( >=media-libs/jpeg-6b[lib32?] )
 	avahi? ( >=net-dns/avahi-0.6.24[lib32?] )
-	x86? (
-		sane_backends_canon_pp? ( sys-libs/libieee1284[lib32?] )
-		sane_backends_hpsj5s? ( sys-libs/libieee1284[lib32?] )
-		sane_backends_mustek_pp? ( sys-libs/libieee1284[lib32?] )
-		)
-	amd64? (
-		sane_backends_canon_pp? ( sys-libs/libieee1284[lib32?] )
-		sane_backends_hpsj5s? ( sys-libs/libieee1284[lib32?] )
-		sane_backends_mustek_pp? ( sys-libs/libieee1284[lib32?] )
-		)
-		usb? ( dev-libs/libusb[lib32?] )
+	sane_backends_canon_pp? ( sys-libs/libieee1284[lib32?] )
+	sane_backends_hpsj5s? ( sys-libs/libieee1284[lib32?] )
+	sane_backends_mustek_pp? ( sys-libs/libieee1284[lib32?] )
+	usb? ( virtual/libusb:0[lib32?] )
 	gphoto2? (
 				media-libs/libgphoto2[lib32?]
 				>=media-libs/jpeg-6b[lib32?]
 			)
-	v4l? ( sys-kernel/linux-headers
-			arm? ( media-libs/libv4l[lib32?] )
-			alpha? ( media-libs/libv4l[lib32?] )
-			amd64? ( media-libs/libv4l[lib32?] )
-			ppc? ( media-libs/libv4l[lib32?] )
-			ppc64? ( media-libs/libv4l[lib32?] )
-			x86? ( media-libs/libv4l[lib32?] )
-			)"
+	v4l? ( media-libs/libv4l[lib32?] )"
 
 DEPEND="${RDEPEND}
+	v4l? ( sys-kernel/linux-headers )
 	doc? (
 		virtual/latex-base
 		|| ( dev-texlive/texlive-latexextra app-text/tetex app-text/ptex )
@@ -147,7 +134,6 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 BACKENDS=" "
 
 multilib-native_pkg_setup_internal() {
-
 	enewgroup scanner
 
 	use gphoto2 && BACKENDS="gphoto2"
@@ -157,18 +143,9 @@ multilib-native_pkg_setup_internal() {
 			BACKENDS="${BACKENDS} ${backend}"
 		fi
 	done
-	IEEE1284_BACKENDS="canon_pp hpsj5s mustek_pp"
-	if ! use x86 && ! use amd64; then
-		tmp="${IUSE_SANE_BACKENDS}"
-		for backend in ${IEEE1284_BACKENDS}; do
-			if [[ "${tmp/$backend/}" != "${IUSE_SANE_BACKENDS}" ]]; then
-				ewarn "You selected a backend which is disabled because it's not usable in your arch."
-			fi
-		done
-	fi
 }
 
-multilib-native_src_unpack_internal() {
+multilib-native_src_prepare_internal() {
 	unpack ${A}
 	cd "${S}"
 
@@ -176,21 +153,23 @@ multilib-native_src_unpack_internal() {
 	# Add support for the HP-specific backend.  Needs net-print/hplip installed.
 	hpaio
 	EOF
+	epatch "${FILESDIR}/${PV}-unbreak-udev.diff"
+	epatch "${FILESDIR}/udev-rule-6.patch"
+	epatch "${FILESDIR}/genesys_io.patch"
 }
 
 multilib-native_src_configure_internal() {
 	append-flags -fno-strict-aliasing
 
-	if use usb && has_version "=dev-libs/libusb-1*"; then
-		myconf="--enable-libusb_1_0 --disable-libusb"
-	else
-		myconf=$(use_enable usb libusb)
-	fi
+	myconf=$(use_enable usb libusb)
 	if ! use doc; then
 		myconf="${myconf} --disable-latex"
 	fi
 	if use sane_backends_mustek_pp; then
 		myconf="${myconf} --enable-parport-directio"
+	fi
+	if ! ( use sane_backends_canon_pp || use sane_backends_hpsj5s || use sane_backends_mustek_pp ); then
+		myconf="${myconf} sane_cv_use_libieee1284=no"
 	fi
 	SANEI_JPEG="sanei_jpeg.o" SANEI_JPEG_LO="sanei_jpeg.lo" \
 	BACKENDS="${BACKENDS}" econf \

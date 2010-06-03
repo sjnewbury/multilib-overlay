@@ -1,0 +1,30 @@
+--- /usr/portage/media-gfx/sane-backends/sane-backends-1.0.20-r3.ebuild	2010-04-03 00:37:30.000000000 +0200
++++ ./media-gfx/sane-backends/sane-backends-1.0.20-r3.ebuild	2010-06-03 18:30:26.000000000 +0200
+@@ -145,7 +145,7 @@
+ 	done
+ }
+ 
+-src_unpack() {
++src_prepare() {
+ 	unpack ${A}
+ 	cd "${S}"
+ 
+@@ -158,7 +158,7 @@
+ 	epatch "${FILESDIR}/genesys_io.patch"
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	append-flags -fno-strict-aliasing
+ 
+ 	myconf=$(use_enable usb libusb)
+@@ -177,7 +177,9 @@
+ 		$(use_enable ipv6) \
+ 		$(use_enable avahi) \
+ 		${myconf} || die "econf failed"
++}
+ 
++src_compile() {
+ 	emake VARTEXFONTS="${T}/fonts" || die
+ 
+ 	if use usb; then

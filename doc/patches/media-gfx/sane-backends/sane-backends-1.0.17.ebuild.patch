@@ -1,0 +1,36 @@
+--- /usr/portage/media-gfx/sane-backends/sane-backends-1.0.17.ebuild	2009-06-18 22:08:16.000000000 +0200
++++ ./media-gfx/sane-backends/sane-backends-1.0.17.ebuild	2010-06-03 18:26:37.000000000 +0200
+@@ -77,9 +77,9 @@
+ 	if use usb; then
+ 		unpack ${BROTHERMFCDRIVER}.bz2
+ 	fi
++}
+ 
+-	cd "${S}"
+-
++src_prepare() {
+ 	#compile errors when using NDEBUG otherwise
+ 	sed -i -e 's:function_name:__FUNCTION__:g' backend/artec_eplus48u.c \
+ 		|| die "function_name fix failed"
+@@ -89,10 +89,9 @@
+ 		sed -e 's/bh canon/bh brother canon/' -i configure || \
+ 			die "could not add 'brother' to backend list"
+ 	fi
+-
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	append-flags -fno-strict-aliasing
+ 
+ 	SANEI_JPEG="sanei_jpeg.o" SANEI_JPEG_LO="sanei_jpeg.lo" \
+@@ -102,7 +101,9 @@
+ 		$(use_with gphoto2) \
+ 		$(use_enable ipv6) \
+ 		${myconf} || die "econf failed"
++}
+ 
++src_compile() {
+ 	emake VARTEXFONTS="${T}/fonts" || die
+ 
+ 	if use usb; then

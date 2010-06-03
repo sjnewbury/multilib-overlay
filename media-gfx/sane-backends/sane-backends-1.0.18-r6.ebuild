@@ -87,9 +87,9 @@ multilib-native_src_unpack_internal() {
 	if use usb; then
 		unpack ${BROTHERMFCDRIVER}.bz2
 	fi
+}
 
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	if ! use doc; then
 		sed -i -e 's:@USE_LATEX@:no:' doc/Makefile.in
 	fi

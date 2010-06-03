@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/sane-backends/sane-backends-1.0.20-r1.ebuild,v 1.2 2009/07/19 10:47:47 phosphan Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/sane-backends/sane-backends-1.0.21.ebuild,v 1.2 2010/05/11 20:31:16 phosphan Exp $
 
 EAPI="2"
 
@@ -8,6 +8,9 @@ inherit eutils flag-o-matic multilib-native
 
 # gphoto and v4l are handled by their usual USE flags.
 # The pint backend was disabled because I could not get it to compile.
+# The mustek_usb2 backend would force us to use --enable-pthreads which is off
+# by default for linux. Let's keep this one out until we find a way how to
+# handle this cleanly.
 IUSE_SANE_BACKENDS="
 	abaton
 	agfafocus
@@ -46,6 +49,8 @@ IUSE_SANE_BACKENDS="
 	hpljm1005
 	hs2p
 	ibm
+	kodak
+	kvs1025
 	leo
 	lexmark
 	ma1509
@@ -55,10 +60,10 @@ IUSE_SANE_BACKENDS="
 	mustek
 	mustek_pp
 	mustek_usb
-	mustek_usb2
 	nec
 	net
 	niash
+	p5
 	pie
 	pixma
 	plustek
@@ -100,31 +105,18 @@ RDEPEND="
 	sane_backends_dc240? ( >=media-libs/jpeg-6b[lib32?] )
 	sane_backends_dell1600n_net? ( >=media-libs/jpeg-6b[lib32?] )
 	avahi? ( >=net-dns/avahi-0.6.24[lib32?] )
-	x86? (
-		sane_backends_canon_pp? ( sys-libs/libieee1284[lib32?] )
-		sane_backends_hpsj5s? ( sys-libs/libieee1284[lib32?] )
-		sane_backends_mustek_pp? ( sys-libs/libieee1284[lib32?] )
-		)
-	amd64? (
-		sane_backends_canon_pp? ( sys-libs/libieee1284[lib32?] )
-		sane_backends_hpsj5s? ( sys-libs/libieee1284[lib32?] )
-		sane_backends_mustek_pp? ( sys-libs/libieee1284[lib32?] )
-		)
-		usb? ( virtual/libusb:0[lib32?] )
+	sane_backends_canon_pp? ( sys-libs/libieee1284[lib32?] )
+	sane_backends_hpsj5s? ( sys-libs/libieee1284[lib32?] )
+	sane_backends_mustek_pp? ( sys-libs/libieee1284[lib32?] )
+	usb? ( virtual/libusb:0[lib32?] )
 	gphoto2? (
 				media-libs/libgphoto2[lib32?]
 				>=media-libs/jpeg-6b[lib32?]
 			)
-	v4l? ( sys-kernel/linux-headers
-			arm? ( media-libs/libv4l[lib32?] )
-			alpha? ( media-libs/libv4l[lib32?] )
-			amd64? ( media-libs/libv4l[lib32?] )
-			ppc? ( media-libs/libv4l[lib32?] )
-			ppc64? ( media-libs/libv4l[lib32?] )
-			x86? ( media-libs/libv4l[lib32?] )
-			)"
+	v4l? ( media-libs/libv4l[lib32?] )"
 
 DEPEND="${RDEPEND}
+	v4l? ( sys-kernel/linux-headers )
 	doc? (
 		virtual/latex-base
 		|| ( dev-texlive/texlive-latexextra app-text/tetex app-text/ptex )
@@ -136,9 +128,10 @@ RDEPEND="${RDEPEND}
 	!<sys-fs/udev-114"
 
 # Could not access via ftp on 2006-07-20
-SRC_URI="http://alioth.debian.org/frs/download.php/2318/${P}.tar.gz
+SRC_URI="http://alioth.debian.org/frs/download.php/3258/${P}.tar.gz
 	ftp://ftp.sane-project.org/pub/sane/${P}/${P}.tar.gz
-	ftp://ftp.sane-project.org/pub/sane/old-versions/${P}/${P}.tar.gz"
+	ftp://ftp.sane-project.org/pub/sane/old-versions/${P}/${P}.tar.gz
+	ftp://ftp.sane-project.org/pub/sane/${P}/${P}-i18n.patch"
 SLOT="0"
 LICENSE="GPL-2 public-domain"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
@@ -147,7 +140,6 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 BACKENDS=" "
 
 multilib-native_pkg_setup_internal() {
-
 	enewgroup scanner
 
 	use gphoto2 && BACKENDS="gphoto2"
@@ -157,26 +149,14 @@ multilib-native_pkg_setup_internal() {
 			BACKENDS="${BACKENDS} ${backend}"
 		fi
 	done
-	IEEE1284_BACKENDS="canon_pp hpsj5s mustek_pp"
-	if ! use x86 && ! use amd64; then
-		tmp="${IUSE_SANE_BACKENDS}"
-		for backend in ${IEEE1284_BACKENDS}; do
-			if [[ "${tmp/$backend/}" != "${IUSE_SANE_BACKENDS}" ]]; then
-				ewarn "You selected a backend which is disabled because it's not usable in your arch."
-			fi
-		done
-	fi
 }
 
-multilib-native_src_unpack_internal() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	cat >> backend/dll.conf.in <<-EOF
 	# Add support for the HP-specific backend.  Needs net-print/hplip installed.
 	hpaio
 	EOF
-	epatch "${FILESDIR}/${PV}-unbreak-udev.diff"
+	epatch "${DISTDIR}/${P}-i18n.patch"
 }
 
 multilib-native_src_configure_internal() {
@@ -188,6 +168,9 @@ multilib-native_src_configure_internal() {
 	fi
 	if use sane_backends_mustek_pp; then
 		myconf="${myconf} --enable-parport-directio"
+	fi
+	if ! ( use sane_backends_canon_pp || use sane_backends_hpsj5s || use sane_backends_mustek_pp ); then
+		myconf="${myconf} sane_cv_use_libieee1284=no"
 	fi
 	SANEI_JPEG="sanei_jpeg.o" SANEI_JPEG_LO="sanei_jpeg.lo" \
 	BACKENDS="${BACKENDS}" econf \
@@ -227,7 +210,7 @@ multilib-native_src_install_internal() {
 	cd tools/udev
 	dodir /etc/udev/rules.d
 	insinto /etc/udev/rules.d
-	newins libsane.rules 70-libsane.rules
+	newins libsane.rules 39-libsane.rules
 	cd ../..
 	dodoc NEWS AUTHORS ChangeLog* README README.linux
 	echo "SANE_CONFIG_DIR=/etc/sane.d" >> "${D}"/etc/env.d/30sane

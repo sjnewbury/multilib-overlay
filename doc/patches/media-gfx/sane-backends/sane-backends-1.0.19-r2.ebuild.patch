@@ -1,0 +1,33 @@
+--- /usr/portage/media-gfx/sane-backends/sane-backends-1.0.19-r2.ebuild	2010-04-03 00:37:30.000000000 +0200
++++ ./media-gfx/sane-backends/sane-backends-1.0.19-r2.ebuild	2010-06-03 18:29:09.000000000 +0200
+@@ -84,9 +84,9 @@
+ 	if use usb; then
+ 		unpack ${BROTHERMFCDRIVER}.bz2
+ 	fi
++}
+ 
+-	cd "${S}"
+-
++src_prepare() {
+ 	if ! use doc; then
+ 		sed -i -e 's:@USE_LATEX@:no:' doc/Makefile.in
+ 	fi
+@@ -106,7 +106,7 @@
+ 	EOF
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	append-flags -fno-strict-aliasing
+ 
+ 	SANEI_JPEG="sanei_jpeg.o" SANEI_JPEG_LO="sanei_jpeg.lo" \
+@@ -116,7 +116,9 @@
+ 		$(use_with gphoto2) \
+ 		$(use_enable ipv6) \
+ 		${myconf} || die "econf failed"
++}
+ 
++src_compile() {
+ 	emake VARTEXFONTS="${T}/fonts" || die
+ 
+ 	if use usb; then
