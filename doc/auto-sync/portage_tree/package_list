@@ -139,7 +139,7 @@ gnome-base/orbit
 # gnome-extra/gtkhtml
 gnome-extra/libgsf
 # mail-client/evolution
-# media-gfx/gimp
+media-gfx/gimp
 media-gfx/graphviz
 media-gfx/gtkimageview
 media-gfx/imagemagick

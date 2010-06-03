@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/gimp/gimp-2.6.8.ebuild,v 1.3 2009/12/20 18:23:01 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/gimp/gimp-2.6.8.ebuild,v 1.10 2010/02/15 00:09:05 hanno Exp $
 
 EAPI=2
 
@@ -12,7 +12,7 @@ SRC_URI="mirror://gimp/v2.6/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="2"
-KEYWORDS="~alpha amd64 ~hppa ~ia64 ~ppc ppc64 ~sparc ~x86"
+KEYWORDS="alpha amd64 hppa ia64 ppc ppc64 sparc x86"
 
 IUSE="alsa aalib altivec curl dbus debug doc exif gnome hal jpeg lcms mmx mng pdf png python smp sse svg tiff webkit wmf"
 
@@ -34,11 +34,11 @@ RDEPEND=">=dev-libs/glib-2.18.1[lib32?]
 	hal? ( sys-apps/hal[lib32?] )
 	gnome? ( gnome-base/gvfs[lib32?] )
 	webkit? ( net-libs/webkit-gtk[lib32?] )
-	jpeg? ( >=media-libs/jpeg-6b-r2[lib32?] )
+	jpeg? ( >=media-libs/jpeg-6b-r2:0[lib32?] )
 	exif? ( >=media-libs/libexif-0.6.15[lib32?] )
 	lcms? ( media-libs/lcms[lib32?] )
 	mng? ( media-libs/libmng[lib32?] )
-	pdf? ( >=virtual/poppler-glib-0.3.1[cairo,lib32?] )
+	pdf? ( >=app-text/poppler-0.12.3-r3[cairo,lib32?] )
 	png? ( >=media-libs/libpng-1.2.2[lib32?] )
 	python?	( >=dev-lang/python-2.5.0[lib32?]
 		>=dev-python/pygtk-2.10.4[lib32?] )
@@ -52,6 +52,10 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1 )"
 
 DOCS="AUTHORS ChangeLog* HACKING NEWS README*"
+
+multilib-native_src_prepare_internal() {
+	epatch "${FILESDIR}/${P}-libpng-1.4.patch"
+}
 
 multilib-native_pkg_setup_internal() {
 	G2CONF="--enable-default-binary \
@@ -80,14 +84,14 @@ multilib-native_pkg_setup_internal() {
 		$(use_with wmf)"
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	gnome2_pkg_postinst
 
 	python_mod_optimize /usr/$(get_libdir)/gimp/2.0/python \
 		/usr/$(get_libdir)/gimp/2.0/plug-ins
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	gnome2_pkg_postrm
 	python_mod_cleanup /usr/$(get_libdir)/gimp/2.0/python \
 		/usr/$(get_libdir)/gimp/2.0/plug-ins
