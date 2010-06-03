@@ -48,7 +48,7 @@ RDEPEND=">=dev-libs/glib-2.20[lib32?]
 		>=net-misc/networkmanager-0.7[lib32?]
 		>=dev-libs/dbus-glib-0.74[lib32?] )
 	>=net-libs/libsoup-2.4[lib32?]
-	kerberos? ( virtual/krb5 )
+	kerberos? ( virtual/krb5[lib32?] )
 	krb4? ( app-crypt/mit-krb5[krb4,lib32?] )
 	>=gnome-base/orbit-2.9.8[lib32?]
 	crypt? ( || (
