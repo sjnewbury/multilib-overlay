@@ -1,11 +1,8 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/aalib/aalib-1.4_rc5.ebuild,v 1.24 2008/12/14 10:43:30 grobian Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/aalib/aalib-1.4_rc5.ebuild,v 1.25 2009/08/21 20:16:38 ssuominen Exp $
 
-EAPI=2
-
-WANT_AUTOCONF=latest
-WANT_AUTOMAKE=latest
+EAPI="2"
 
 inherit eutils libtool toolchain-funcs autotools multilib-native
 
@@ -22,16 +19,13 @@ KEYWORDS="alpha amd64 arm hppa ia64 mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="X slang gpm"
 
 RDEPEND="X? ( x11-libs/libX11[lib32?] )
-	slang? ( >=sys-libs/slang-1.4.2 )"
-
+	slang? ( >=sys-libs/slang-1.4.2[lib32?] )"
 DEPEND="${RDEPEND}
 	>=sys-libs/ncurses-5.1[lib32?]
 	X? ( x11-proto/xproto )
 	gpm? ( sys-libs/gpm[lib32?] )"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-1.4_rc4-gentoo.patch
 	epatch "${FILESDIR}"/${PN}-1.4_rc4-m4.patch
 
@@ -51,13 +45,8 @@ multilib-native_src_configure_internal() {
 		|| die
 }
 
-# Is this really necessary?
-#multilib-native_src_compile_internal() {
-#	emake CC="$(tc-getCC)" || die
-#}
-
 multilib-native_src_install_internal() {
-	make DESTDIR="${D}" install || die
+	emake DESTDIR="${D}" install || die
 	dodoc ANNOUNCE AUTHORS ChangeLog NEWS README*
 
 	prep_ml_binaries /usr/bin/aalib-config

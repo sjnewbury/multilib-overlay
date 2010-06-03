@@ -1,0 +1,27 @@
+--- /usr/portage/media-libs/aalib/aalib-1.4_rc5.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./media-libs/aalib/aalib-1.4_rc5.ebuild	2010-06-03 18:07:01.000000000 +0200
+@@ -23,9 +23,7 @@
+ 	X? ( x11-proto/xproto )
+ 	gpm? ( sys-libs/gpm )"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/${PN}-1.4_rc4-gentoo.patch
+ 	epatch "${FILESDIR}"/${PN}-1.4_rc4-m4.patch
+ 
+@@ -38,12 +36,11 @@
+ 	eautoreconf
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	econf \
+ 		$(use_with slang slang-driver) \
+ 		$(use_with X x11-driver) \
+ 		|| die
+-	emake CC="$(tc-getCC)" || die
+ }
+ 
+ src_install() {
