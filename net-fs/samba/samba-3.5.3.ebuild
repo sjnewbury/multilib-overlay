@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.5.3.ebuild,v 1.5 2010/06/01 14:04:59 vostorga Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.5.3.ebuild,v 1.6 2010/06/02 16:03:31 vostorga Exp $
 
 EAPI="2"
 
@@ -51,6 +51,7 @@ SBINPROGS=""
 BINPROGS=""
 KRBPLUGIN=""
 PLUGINEXT=".so"
+SHAREDMODS=""
 
 if use server ; then
 	SBINPROGS="${SBINPROGS} bin/smbd bin/nmbd"
@@ -72,7 +73,13 @@ fi
 
 use cups && BINPROGS="${BINPROGS} bin/smbspool"
 use ldb && BINPROGS="${BINPROGS} bin/ldbedit bin/ldbsearch bin/ldbadd bin/ldbdel bin/ldbmodify bin/ldbrename";
-use winbind && BINPROGS="${BINPROGS} bin/wbinfo"
+
+if use winbind ; then
+	BINPROGS="${BINPROGS} bin/wbinfo"
+	SHAREDMODS="${SHAREDMODS}idmap_rid"
+	use ads && SHAREDMODS="${SHAREDMODS},idmap_ad"
+	use ldap && SHAREDMODS="${SHAREDMODS},idmap_ldap"
+fi
 
 S="${WORKDIR}/${MY_P}/source3"
 
@@ -178,6 +185,7 @@ multilib-native_src_configure_internal() {
 		$(use_with aio aio-support) \
 		--with-sendfile-support \
 		$(use_with winbind) \
+		--with-shared-modules=${SHAREDMODS} \
 		--without-included-popt \
 		--without-included-iniparser
 }
