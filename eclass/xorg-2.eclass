@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/xorg-2.eclass,v 1.2 2010/03/17 14:29:20 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/xorg-2.eclass,v 1.3 2010/04/22 18:27:43 scarabeus Exp $
 #
 # @ECLASS: xorg-2.eclass
 # @MAINTAINER:
@@ -200,7 +200,6 @@ xorg-2_patch_source() {
 
 	[[ -d "${EPATCH_SOURCE}" ]] && epatch
 	base_src_prepare
-	epatch_user
 }
 
 # @FUNCTION: xorg-2_reconf_source

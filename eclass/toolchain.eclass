@@ -1,6 +1,6 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.422 2010/04/20 17:47:09 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.427 2010/06/02 21:31:12 vapier Exp $
 #
 # Maintainer: Toolchain Ninjas <toolchain@gentoo.org>
 
@@ -160,6 +160,7 @@ else
 			tc_version_is_at_least "4.2" && IUSE="${IUSE} nsplugin"
 			tc_version_is_at_least "4.3" && IUSE="${IUSE} fixed-point"
 			tc_version_is_at_least "4.4" && IUSE="${IUSE} graphite"
+			tc_version_is_at_least "4.5" && IUSE="${IUSE} lto"
 		fi
 	fi
 
@@ -1216,6 +1217,14 @@ gcc-compiler-configure() {
 
 		# Stick the python scripts in their own slotted directory
 		# bug #279252
+		#
+		#  --with-python-dir=DIR
+		#    Specifies where to install the Python modules used for aot-compile. DIR
+		#  should not include the prefix used in installation. For example, if the 
+		#  Python modules are to be installed in /usr/lib/python2.5/site-packages, 
+		#  then –with-python-dir=/lib/python2.5/site-packages should be passed.
+		#
+		# This should translate into "/share/gcc-data/${CTARGET}/${GCC_CONFIG_VER}/python"
 		if tc_version_is_at_least "4.4" ; then
 			confgcc="${confgcc} --with-python-dir=${DATAPATH/$PREFIX/}/python"
 		fi
@@ -1249,9 +1258,9 @@ gcc-compiler-configure() {
 				[[ ${arm_arch} == *eb ]] && arm_arch=${arm_arch%eb}
 				confgcc="${confgcc} --with-arch=${arm_arch}"
 			fi
-	
+
 			# Enable hardvfp
-			if [[ ${CTARGET##*-} == *eabi ]] && [[ $(tc-is-softfloat) == no ]] && \
+			if [[ ${CTARGET##*-} == *eabi ]] && [[ $(tc-is-hardfloat) == yes ]] && \
 			    tc_version_is_at_least "4.5" ; then
 			        confgcc="${confgcc} --with-float=hard"
 			fi
@@ -1359,8 +1368,14 @@ gcc_do_configure() {
 	tc_version_is_at_least "4.4" && \
 		confgcc="${confgcc} $(use_with graphite ppl) $(use_with graphite cloog)"
 
+	# lto support was added in 4.5, which depends upon elfutils.  This allows
+	# users to enable that option, and pull in the additional library
+	tc_version_is_at_least "4.5" && \
+		confgcc="${confgcc} $(use_enable lto)"
+
 
 	[[ $(tc-is-softfloat) == "yes" ]] && confgcc="${confgcc} --with-float=soft"
+	[[ $(tc-is-hardfloat) == "yes" ]] && confgcc="${confgcc} --with-float=hard"
 
 	# Native Language Support
 	if use nls ; then
@@ -1414,10 +1429,20 @@ gcc_do_configure() {
 		if [[ ${GCCMAJOR}.${GCCMINOR} > 4.1 ]] ; then
 			confgcc="${confgcc} --disable-bootstrap --disable-libgomp"
 		fi
-	elif [[ ${CHOST} == mingw* ]] || [[ ${CHOST} == *-mingw* ]] || [[ ${CHOST} == *-cygwin ]] ; then
-		confgcc="${confgcc} --enable-shared --enable-threads=win32"
 	else
-		confgcc="${confgcc} --enable-shared --enable-threads=posix"
+		if tc-is-static-only ; then
+			confgcc="${confgcc} --disable-shared"
+		else
+			confgcc="${confgcc} --enable-shared"
+		fi
+		case ${CHOST} in
+			mingw*|*-mingw*|*-cygwin)
+				confgcc="${confgcc} --enable-threads=win32" ;;
+			*-mint*)
+				confgcc="${confgcc} --disable-threads" ;;
+			*)
+				confgcc="${confgcc} --enable-threads=posix" ;;
+		esac
 	fi
 	[[ ${CTARGET} == *-elf ]] && confgcc="${confgcc} --with-newlib"
 	# __cxa_atexit is "essential for fully standards-compliant handling of
@@ -1921,6 +1946,15 @@ gcc-compiler_src_install() {
 
 	# Cpoy the needed minispec for hardened gcc 4
 	copy_minispecs_gcc_specs
+
+	# Move pretty-printers to gdb datadir to shut ldconfig up
+	gdbdir=/usr/share/gdb/auto-load
+	for module in $(find "${D}" -iname "*-gdb.py" -print); do
+		insinto ${gdbdir}/$(dirname "${module/${D}/}" | \
+				sed -e "s:/lib/:/$(get_libdir)/:g")
+		doins "${module}"
+		rm "${module}"
+	done
 }
 
 gcc_slot_java() {
@@ -2547,8 +2581,8 @@ is_multilib() {
 	case ${CTARGET} in
 		mips64*|powerpc64*|s390x*|sparc*|x86_64*)
 			has_multilib_profile || use multilib ;;
-		*-*-solaris*) use multilib ;;
-		*-apple-darwin*) use multilib ;;
+		*-*-solaris*|*-apple-darwin*|*-mint*)
+			use multilib ;;
 		*)	false ;;
 	esac
 }

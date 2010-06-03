@@ -6,7 +6,7 @@
 #
 # Licensed under the GNU General Public License, v2
 #
-# $Header: /var/cvsroot/gentoo-x86/eclass/java-utils-2.eclass,v 1.134 2010/04/01 22:29:28 caster Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/java-utils-2.eclass,v 1.135 2010/04/28 19:40:40 caster Exp $
 
 # -----------------------------------------------------------------------------
 # @eclass-begin
@@ -72,11 +72,7 @@ hasq "${EAPI}" 0 1 && JAVA_PKG_PORTAGE_DEP=">=sys-apps/portage-2.1.2.7"
 # the version of java-config we want to use. Usually the latest stable version
 # so that ebuilds can use new features without depending on specific versions.
 # -----------------------------------------------------------------------------
-if [[ "${EAPI}" < "2" ]]; then
-	JAVA_PKG_E_DEPEND=">=dev-java/java-config-2.1.9-r1 ${JAVA_PKG_PORTAGE_DEP}"
-else
-	JAVA_PKG_E_DEPEND=">=dev-java/java-config-2.1.9-r1[lib32?] ${JAVA_PKG_PORTAGE_DEP}"
-fi
+JAVA_PKG_E_DEPEND=">=dev-java/java-config-2.1.9-r1[lib32?] ${JAVA_PKG_PORTAGE_DEP}"
 hasq source ${JAVA_PKG_IUSE} && JAVA_PKG_E_DEPEND="${JAVA_PKG_E_DEPEND} source? ( app-arch/zip )"
 
 # -----------------------------------------------------------------------------
@@ -3399,8 +3395,9 @@ java-pkg_ensure-dep() {
 	local target_pkg="${2}"
 	local dev_error=""
 
+    # remove the version specification, which may include globbing (* and [123])
 	local stripped_pkg=$(echo "${target_pkg}" | sed \
-		's/-[0-9]*\(\.[0-9]\)*$//')
+		's/-\([0-9*]*\(\[[0-9]*\]\)*\)*\(\.\([0-9*]*\(\[[0-9]*\]\)*\)*\)*$//')
 
 	debug-print "Matching against: ${stripped_pkg}"
 

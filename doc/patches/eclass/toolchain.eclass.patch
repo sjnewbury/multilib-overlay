@@ -1,5 +1,5 @@
---- /usr/portage/eclass/toolchain.eclass	2010-04-20 20:05:49.000000000 +0200
-+++ ./eclass/toolchain.eclass	2010-04-22 00:53:54.000000000 +0200
+--- /usr/portage/eclass/toolchain.eclass	2010-06-02 23:35:48.000000000 +0200
++++ ./eclass/toolchain.eclass	2010-06-03 14:12:51.000000000 +0200
 @@ -157,6 +157,7 @@
  			tc_version_is_at_least "4.0" && IUSE="${IUSE} objc-gc mudflap"
  			tc_version_is_at_least "4.1" && IUSE="${IUSE} objc++"
@@ -7,8 +7,8 @@
 +			tc_version_is_at_least "4.2" && IUSE="${IUSE} nsplugin"
  			tc_version_is_at_least "4.3" && IUSE="${IUSE} fixed-point"
  			tc_version_is_at_least "4.4" && IUSE="${IUSE} graphite"
- 		fi
-@@ -1168,7 +1169,7 @@
+ 			tc_version_is_at_least "4.5" && IUSE="${IUSE} lto"
+@@ -1169,7 +1170,7 @@
  			done
  	fi
  
@@ -17,7 +17,7 @@
  }
  
  gcc-library-configure() {
-@@ -1226,7 +1227,14 @@
+@@ -1235,7 +1236,14 @@
  	if ! is_gcj ; then
  		confgcc="${confgcc} --disable-libgcj"
  	elif use gtk ; then
@@ -33,7 +33,7 @@
  	fi
  
  	case $(tc-arch) in
-@@ -1941,10 +1949,24 @@
+@@ -1975,10 +1983,24 @@
  		mv -f "${D}"${PREFIX}/lib/libgcj.spec "${D}"${LIBPATH}/libgcj.spec
  
  	# SLOT up libgcj.pc (and let gcc-config worry about links)

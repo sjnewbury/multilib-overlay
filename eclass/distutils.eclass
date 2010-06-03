@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/distutils.eclass,v 1.74 2010/03/04 17:49:03 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/distutils.eclass,v 1.75 2010/05/25 15:07:04 arfrever Exp $
 
 # @ECLASS: distutils.eclass
 # @MAINTAINER:
@@ -224,6 +224,10 @@ _distutils_src_test_hook() {
 # In ebuilds of packages supporting installation for multiple versions of Python, this function
 # calls distutils_src_test_pre_hook() and distutils_src_test_post_hook(), if they are defined.
 distutils_src_test() {
+	if [[ "${EBUILD_PHASE}" != "test" ]]; then
+		die "${FUNCNAME}() can be used only in src_test() phase"
+	fi
+
 	_python_set_color_variables
 
 	if [[ "${DISTUTILS_SRC_TEST}" == "setup.py" ]]; then
@@ -378,7 +382,7 @@ distutils_pkg_postinst() {
 	_python_initialize_prefix_variables
 
 	local pylibdir pymod
-	if [[ -z "${PYTHON_MODNAME}" ]]; then
+	if [[ -z "$(declare -p PYTHON_MODNAME 2> /dev/null)" ]]; then
 		for pylibdir in "${EROOT}"usr/$(get_libdir)/python* "${EROOT}"/usr/share/jython-*/Lib; do
 			if [[ -d "${pylibdir}/site-packages/${PN}" ]]; then
 				PYTHON_MODNAME="${PN}"
@@ -407,12 +411,14 @@ distutils_pkg_postinst() {
 		python="die"
 	fi
 	einfo Using ${python}
-	if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
-		python_mod_optimize ${PYTHON_MODNAME}
-	else
-		for pymod in ${PYTHON_MODNAME}; do
-			python_mod_optimize "$(python_get_sitedir)/${pymod}"
-		done
+	if [[ -n "${PYTHON_MODNAME}" ]]; then
+		if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
+			python_mod_optimize ${PYTHON_MODNAME}
+		else
+			for pymod in ${PYTHON_MODNAME}; do
+				python_mod_optimize "$(python_get_sitedir)/${pymod}"
+			done
+		fi
 	fi
 }
 
@@ -430,7 +436,7 @@ distutils_pkg_postrm() {
 	_python_initialize_prefix_variables
 
 	local pylibdir pymod
-	if [[ -z "${PYTHON_MODNAME}" ]]; then
+	if [[ -z "$(declare -p PYTHON_MODNAME 2> /dev/null)" ]]; then
 		for pylibdir in "${EROOT}"usr/$(get_libdir)/python* "${EROOT}"/usr/share/jython-*/Lib; do
 			if [[ -d "${pylibdir}/site-packages/${PN}" ]]; then
 				PYTHON_MODNAME="${PN}"
@@ -450,8 +456,6 @@ distutils_pkg_postrm() {
 				done
 			done
 		fi
-	else
-		python_mod_cleanup
 	fi
 }
 
