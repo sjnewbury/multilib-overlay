@@ -32,7 +32,7 @@ RDEPEND=">=gnome-base/gconf-2[lib32?]
 			!gnome-extra/gnome-vfs-sftp ) )
 	hal? ( >=sys-apps/hal-0.5.7[lib32?] )
 	avahi? ( >=net-dns/avahi-0.6[lib32?] )
-	kerberos? ( virtual/krb5 )
+	kerberos? ( virtual/krb5[lib32?] )
 	acl? (
 		sys-apps/acl[lib32?]
 		sys-apps/attr[lib32?] )"
