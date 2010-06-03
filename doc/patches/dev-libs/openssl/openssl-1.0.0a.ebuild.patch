@@ -1,5 +1,5 @@
---- /usr/portage/dev-libs/openssl/openssl-0.9.8l-r2.ebuild	2010-02-15 08:05:28.000000000 +0100
-+++ ./dev-libs/openssl/openssl-0.9.8l-r2.ebuild	2010-04-02 18:50:38.000000000 +0200
+--- /usr/portage/dev-libs/openssl/openssl-1.0.0a.ebuild	2010-06-03 04:28:34.000000000 +0200
++++ ./dev-libs/openssl/openssl-1.0.0a.ebuild	2010-06-03 14:45:05.000000000 +0200
 @@ -22,10 +22,7 @@
  	test? ( sys-devel/bc )"
  PDEPEND="app-misc/ca-certificates"
@@ -10,18 +10,18 @@
 -
 +src_prepare() {
  	epatch "${FILESDIR}"/${PN}-0.9.7e-gentoo.patch
- 	epatch "${FILESDIR}"/${PN}-0.9.8j-parallel-build.patch
- 	epatch "${FILESDIR}"/${PN}-0.9.8-make-engines-dir.patch
-@@ -75,7 +72,7 @@
+ 	#epatch "${FILESDIR}"/${PN}-0.9.8j-parallel-build.patch
+ 	#epatch "${FILESDIR}"/${PN}-0.9.8b-doc-updates.patch
+@@ -59,7 +56,7 @@
  	./config --test-sanity || die "I AM NOT SANE"
  }
  
 -src_compile() {
 +src_configure() {
  	unset APPS #197996
+ 	unset SCRIPTS #312551
  
- 	tc-export CC AR RANLIB
-@@ -127,7 +124,9 @@
+@@ -114,7 +111,9 @@
  		-e "/^CFLAG/s:=.*:=${CFLAG} ${CFLAGS}:" \
  		-e "/^SHARED_LDFLAGS=/s:$: ${LDFLAGS}:" \
  		Makefile || die

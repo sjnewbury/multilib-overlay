@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-0.9.8m-r1.ebuild,v 1.1 2010/03/09 13:25:30 lxnay Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-0.9.8o.ebuild,v 1.1 2010/06/03 02:29:08 vapier Exp $
 
 EAPI="2"
 
@@ -26,11 +26,9 @@ PDEPEND="app-misc/ca-certificates"
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-0.9.7e-gentoo.patch
-	epatch "${FILESDIR}"/${PN}-0.9.8b-doc-updates.patch
 	epatch "${FILESDIR}"/${PN}-0.9.8e-bsd-sparc64.patch
 	epatch "${FILESDIR}"/${PN}-0.9.8h-ldflags.patch #181438
 	epatch "${FILESDIR}"/${PN}-0.9.8m-binutils.patch #289130
-	epatch "${FILESDIR}"/${PN}-0.9.8m-cfb.patch #308123
 
 	# disable fips in the build
 	# make sure the man pages are suffixed #302165
@@ -54,12 +52,6 @@ multilib-native_src_prepare_internal() {
 	append-flags -fno-strict-aliasing
 	append-flags -Wa,--noexecstack
 
-	# using a library directory other than lib requires some magic
-#	sed -i \
-#		-e "s+\(\$(INSTALL_PREFIX)\$(INSTALLTOP)\)/lib+\1/$(get_libdir)+g" \
-#		-e "s+libdir=\$\${exec_prefix}/lib+libdir=\$\${exec_prefix}/$(get_libdir)+g" \
-#		Makefile.org engines/Makefile \
-#		|| die "sed failed"
 	sed -i '1s,^:$,#!/usr/bin/perl,' Configure #141906
 	sed -i '/^"debug-steve/d' Configure # 0.9.8k shipped broken
 	./config --test-sanity || die "I AM NOT SANE"
@@ -67,6 +59,7 @@ multilib-native_src_prepare_internal() {
 
 multilib-native_src_configure_internal() {
 	unset APPS #197996
+	unset SCRIPTS #312551
 
 	tc-export CC AR RANLIB
 
