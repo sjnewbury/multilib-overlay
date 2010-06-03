@@ -18,7 +18,7 @@ KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86"
 
 DEPEND=">=net-nds/openldap-2.1.30-r5[lib32?]
 		sasl? ( dev-libs/cyrus-sasl[lib32?] )
-		kerberos? ( virtual/krb5 )"
+		kerberos? ( virtual/krb5[lib32?] )"
 RDEPEND="${DEPEND}
 		!<net-fs/autofs-4.1.3"
 
