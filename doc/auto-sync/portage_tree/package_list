@@ -306,9 +306,10 @@ sys-libs/talloc
 sys-libs/tdb
 sys-libs/zlib
 virtual/acl
+# virtual/fam not in portage but needed to get lib32 deps
 virtual/glu
 virtual/glut
-# virtual/fam not in portage but needed to get lib32 deps
+# virtual/krb5 not in portage but needed to get lib32 deps
 virtual/libffi
 virtual/libusb
 virtual/mysql
