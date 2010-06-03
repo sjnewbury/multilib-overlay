@@ -32,7 +32,7 @@ RDEPEND="sys-libs/ncurses[lib32?]
 		slp? ( net-libs/openslp[lib32?] )
 		perl? ( dev-lang/perl[-build,lib32?] )
 		samba? ( dev-libs/openssl[lib32?] )
-		kerberos? ( virtual/krb5 )
+		kerberos? ( virtual/krb5[lib32?] )
 		berkdb? (
 			|| ( 	sys-libs/db:4.5[lib32?]
 				sys-libs/db:4.4[lib32?]

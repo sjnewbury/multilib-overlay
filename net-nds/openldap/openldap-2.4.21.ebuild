@@ -38,7 +38,7 @@ RDEPEND="sys-libs/ncurses[lib32?]
 		smbkrb5passwd? (
 			dev-libs/openssl[lib32?]
 			app-crypt/heimdal[lib32?] )
-		kerberos? ( virtual/krb5 )
+		kerberos? ( virtual/krb5[lib32?] )
 		cxx? ( dev-libs/cyrus-sasl[lib32?] )
 	)
 	selinux? ( sec-policy/selinux-openldap )"
