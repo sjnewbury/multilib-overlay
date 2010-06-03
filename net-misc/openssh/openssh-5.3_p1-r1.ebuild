@@ -29,7 +29,7 @@ KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~spar
 IUSE="hpn kerberos ldap libedit pam pkcs11 selinux skey smartcard static tcpd X X509"
 
 RDEPEND="pam? ( virtual/pam[lib32?] )
-	kerberos? ( virtual/krb5 )
+	kerberos? ( virtual/krb5[lib32?] )
 	selinux? ( >=sys-libs/libselinux-1.28[lib32?] )
 	skey? ( >=sys-auth/skey-1.1.5-r1 )
 	ldap? ( net-nds/openldap[lib32?] )
