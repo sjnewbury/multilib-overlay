@@ -30,7 +30,7 @@ COMMON_DEPEND="
 	gnutls? ( net-libs/gnutls[lib32?] )
 	java? ( >=virtual/jre-1.4 )
 	jpeg? ( >=media-libs/jpeg-6b:0[lib32?] )
-	kerberos? ( virtual/krb5 )
+	kerberos? ( virtual/krb5[lib32?] )
 	ldap? ( net-nds/openldap[lib32?] )
 	pam? ( virtual/pam[lib32?] )
 	perl? ( dev-lang/perl[lib32?] )
