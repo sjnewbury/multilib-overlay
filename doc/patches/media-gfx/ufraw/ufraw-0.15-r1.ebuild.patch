@@ -1,0 +1,28 @@
+--- /usr/portage/media-gfx/ufraw/ufraw-0.15-r1.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./media-gfx/ufraw/ufraw-0.15-r1.ebuild	2010-06-03 18:21:39.000000000 +0200
+@@ -24,15 +24,13 @@
+ DEPEND="${RDEPEND}
+ 	dev-util/pkgconfig"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/${P}-configure.patch
+ 	epatch "${FILESDIR}"/${P}-glibc-2.10.patch
+ 	eautoreconf
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	econf \
+ 		--without-cinepaint \
+ 		--without-gtkimageview \
+@@ -43,7 +41,6 @@
+ 		$(use_enable gnome mime) \
+ 		$(use_enable openmp) \
+ 		$(use_enable timezone dst-correction)
+-	emake || die "emake failed"
+ }
+ 
+ src_install() {

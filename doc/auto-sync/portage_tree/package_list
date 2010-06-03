@@ -144,7 +144,7 @@ media-gfx/graphviz
 # media-gfx/gtkimageview
 media-gfx/imagemagick
 # media-gfx/sane-backends
-# media-gfx/ufraw
+media-gfx/ufraw
 media-libs/a52dec
 media-libs/aalib
 media-libs/alsa-lib

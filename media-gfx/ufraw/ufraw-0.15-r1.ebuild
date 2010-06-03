@@ -20,7 +20,7 @@ RDEPEND="media-libs/jpeg[lib32?]
 	media-libs/tiff[lib32?]
 	>=x11-libs/gtk+-2.4.0[lib32?]
 	exif? ( >=media-libs/libexif-0.6.13[lib32?]
-	        media-gfx/exiv2[lib32?] )
+	        media-gfx/exiv2 )
 	gimp? ( >=media-gfx/gimp-2.0[lib32?] )
 	gnome? ( gnome-base/gconf[lib32?] )"
 DEPEND="${RDEPEND}
@@ -50,7 +50,7 @@ multilib-native_src_install_internal() {
 	dodoc README TODO || die "doc installation failed"
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	if use gnome ; then
 		fdo-mime_mime_database_update
 		gnome2_gconf_install
