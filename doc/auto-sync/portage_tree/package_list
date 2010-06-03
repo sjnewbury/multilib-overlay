@@ -136,7 +136,7 @@ gnome-base/librsvg
 gnome-base/orbit
 # gnome-extra/bug-buddy
 # gnome-extra/evolution-data-server
-# gnome-extra/gtkhtml
+gnome-extra/gtkhtml
 gnome-extra/libgsf
 # mail-client/evolution
 media-gfx/gimp

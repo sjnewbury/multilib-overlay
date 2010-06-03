@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/gtkhtml/gtkhtml-3.26.3.ebuild,v 1.10 2010/01/18 00:06:05 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-extra/gtkhtml/gtkhtml-3.26.3.ebuild,v 1.11 2010/05/03 22:15:21 ssuominen Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -18,14 +18,13 @@ IUSE="glade"
 # We keep bonobo until we can make sure no apps in tree uses
 # the old composer code.
 RDEPEND=">=x11-libs/gtk+-2.14[lib32?]
-	>=gnome-base/gail-1.1[lib32?]
 	>=x11-themes/gnome-icon-theme-2.22.0
 	>=gnome-base/libbonobo-2.20.3[lib32?]
 	>=gnome-base/libbonoboui-2.2.4[lib32?]
 	>=gnome-base/orbit-2[lib32?]
 	>=gnome-base/libglade-2[lib32?]
 	>=gnome-base/libgnomeui-2[lib32?]
-	>=app-text/enchant-1.1.7
+	>=app-text/enchant-1.1.7[lib32?]
 	gnome-base/gconf:2[lib32?]
 	>=app-text/iso-codes-0.49
 	net-libs/libsoup:2.4[lib32?]

@@ -1,0 +1,13 @@
+--- /usr/portage/gnome-extra/gtkhtml/gtkhtml-2.11.1.ebuild	2010-05-04 00:35:53.000000000 +0200
++++ ./gnome-extra/gtkhtml/gtkhtml-2.11.1.ebuild	2010-06-03 18:38:28.000000000 +0200
+@@ -33,8 +33,8 @@
+ 	G2CONF="${G2CONF} $(use_enable accessibility)"
+ }
+ 
+-src_unpack() {
+-	gnome2_src_unpack
++src_prepare() {
++	gnome2_src_prepare
+ 
+ 	if use alpha; then
+ 		epatch "${FILESDIR}/${MY_PN}-2.2.0-alpha.patch"
