@@ -28,7 +28,7 @@ RDEPEND="dev-libs/popt[lib32?]
 	cifsupcall? ( sys-apps/keyutils[lib32?] )
 	cups? ( net-print/cups[lib32?] )
 	ipv6? ( sys-apps/xinetd )
-	ads? ( virtual/krb5 sys-fs/e2fsprogs[lib32?] )
+	ads? ( virtual/krb5[lib32?] sys-fs/e2fsprogs[lib32?] )
 	ldap? ( net-nds/openldap[lib32?] )
 	pam? ( virtual/pam[lib32?] )
 	readline? ( sys-libs/readline[lib32?] )

@@ -25,7 +25,7 @@ RDEPEND="dev-libs/popt[lib32?]
 	acl?       ( virtual/acl[lib32?] )
 	cups?      ( net-print/cups[lib32?] )
 	ipv6?      ( sys-apps/xinetd )
-	ads?       ( virtual/krb5 )
+	ads?       ( virtual/krb5[lib32?] )
 	ldap?      ( net-nds/openldap[lib32?] )
 	pam?       ( virtual/pam[lib32?] )
 	python?    ( dev-lang/python[lib32?] )

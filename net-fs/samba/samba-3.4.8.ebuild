@@ -26,7 +26,7 @@ DEPEND="dev-libs/popt[lib32?]
 	sys-libs/talloc[lib32?]
 	sys-libs/tdb[lib32?]
 	virtual/libiconv
-	ads? ( virtual/krb5 sys-fs/e2fsprogs[lib32?]
+	ads? ( virtual/krb5[lib32?] sys-fs/e2fsprogs[lib32?]
 		client? ( sys-apps/keyutils[lib32?] ) )
 	avahi? ( net-dns/avahi[lib32?] )
 	caps? ( sys-libs/libcap[lib32?] )
