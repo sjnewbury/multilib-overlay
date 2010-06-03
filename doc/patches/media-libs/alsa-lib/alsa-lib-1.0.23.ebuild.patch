@@ -1,0 +1,30 @@
+--- /usr/portage/media-libs/alsa-lib/alsa-lib-1.0.23.ebuild	2010-04-19 18:36:10.000000000 +0200
++++ ./media-libs/alsa-lib/alsa-lib-1.0.23.ebuild	2010-06-01 00:46:37.000000000 +0200
+@@ -43,15 +43,12 @@
+ 	fi
+ }
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	elibtoolize
+ 	epunt_cxx
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	local myconf
+ 	use elibc_uclibc && myconf="--without-versioned"
+ 
+@@ -68,7 +65,9 @@
+ 		--with-pcm-plugins="${ALSA_PCM_PLUGINS}" \
+ 		--disable-dependency-tracking \
+ 		${myconf}
++}
+ 
++src_compile() {
+ 	emake || die "make failed"
+ 
+ 	if use doc; then

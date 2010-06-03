@@ -50,9 +50,6 @@ multilib-native_src_configure_internal() {
 	local myconf
 	use elibc_uclibc && myconf="--without-versioned"
 
-	# needed to avoid gcc looping internaly
-	use hppa && export CFLAGS="-O1 -pipe"
-
 	econf \
 		--enable-static \
 		--enable-shared \

@@ -40,10 +40,7 @@ multilib-native_pkg_setup_internal() {
 	fi
 }
 
-multilib-native_src_unpack_internal() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	elibtoolize
 	epunt_cxx
 }
@@ -51,10 +48,6 @@ multilib-native_src_unpack_internal() {
 multilib-native_src_configure_internal() {
 	local myconf
 	use elibc_uclibc && myconf="--without-versioned"
-
-	if use lib32 && ! is_final_abi; then
-		myconf="${myconf} --disable-python"
-	fi
 
 	econf \
 		--enable-static \

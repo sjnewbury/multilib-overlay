@@ -1,0 +1,31 @@
+--- /usr/portage/media-libs/alsa-lib/alsa-lib-1.0.22-r1.ebuild	2010-02-12 17:10:20.000000000 +0100
++++ ./media-libs/alsa-lib/alsa-lib-1.0.22-r1.ebuild	2010-06-01 00:45:57.000000000 +0200
+@@ -38,16 +38,13 @@
+ 	fi
+ }
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	epatch "${FILESDIR}/${P}-fd-leak.patch"
+ 	elibtoolize
+ 	epunt_cxx
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	local myconf
+ 	use elibc_uclibc && myconf="--without-versioned"
+ 
+@@ -65,7 +62,9 @@
+ 		--disable-dependency-tracking \
+ 		${myconf} \
+ 		|| die "configure failed"
++}
+ 
++src_compile() {
+ 	emake || die "make failed"
+ 
+ 	if use doc; then
