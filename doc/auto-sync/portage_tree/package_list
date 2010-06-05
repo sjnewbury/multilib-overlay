@@ -71,7 +71,7 @@ dev-libs/libassuan
 # dev-libs/libdaemon
 # dev-libs/libedit
 dev-libs/libffi
-# dev-libs/libgamin
+dev-libs/libgamin
 dev-libs/libgcrypt
 dev-libs/libgee
 dev-libs/libgpg-error
