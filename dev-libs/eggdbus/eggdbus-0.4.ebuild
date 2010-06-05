@@ -19,7 +19,7 @@ RDEPEND=">=dev-libs/dbus-glib-0.73[lib32?]
 	>=dev-libs/glib-2.19:2[lib32?]
 	>=sys-apps/dbus-1.0[lib32?]"
 DEPEND="${DEPEND}
-	doc? ( dev-libs/libxslt
+	doc? ( dev-libs/libxslt[lib32?]
 		>=dev-util/gtk-doc-1.3 )
 	dev-util/pkgconfig[lib32?]"
 

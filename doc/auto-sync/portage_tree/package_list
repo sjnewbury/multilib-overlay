@@ -54,9 +54,8 @@ dev-libs/atk
 # dev-libs/cyrus-sasl
 dev-libs/dbus-glib
 # dev-libs/DirectFB
-# dev-libs/eggdbus
+dev-libs/eggdbus
 dev-libs/expat
-# dev-libs/foo
 dev-libs/fribidi
 # dev-libs/gir-repository  we have only packages from a overlay
 dev-libs/glib

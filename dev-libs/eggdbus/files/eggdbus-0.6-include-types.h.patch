@@ -1,0 +1,19 @@
+commit 7078a3a186b06b59418df9d5d8972f34a29dd29b
+Author: Alexis Ballier <aballier@gentoo.org>
+Date:   Mon Mar 15 08:32:39 2010 +0100
+
+    Include sys/types.h.
+    This is needed to build on FreeBSD to have the uid_t type defined.
+
+diff --git a/src/eggdbus/Makefile.am b/src/eggdbus/Makefile.am
+index aebb984..c312543 100644
+--- a/src/eggdbus/Makefile.am
++++ b/src/eggdbus/Makefile.am
+@@ -135,6 +135,7 @@ eggdbus-built-sources.stamp : eggdbus-binding-tool Makefile.am org.freedesktop.D
+ 		--dbus-namespace org.freedesktop.DBus							\
+ 		--interfaces-only									\
+ 		--no-types-header									\
++		--include-header "sys/types.h"								\
+ 		--include-header "eggdbus/eggdbustypes.h"						\
+ 		--include-header "eggdbus/eggdbusinterface.h"						\
+ 		--include-header "eggdbus/eggdbusinterfaceproxy.h"					\
