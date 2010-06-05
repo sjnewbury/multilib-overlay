@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/libcdio/libcdio-0.80-r1.ebuild,v 1.1 2009/08/28 17:51:10 pva Exp $
 
-EAPI="2"
+EAPI=2
 
 inherit eutils libtool multilib autotools multilib-native
 
@@ -18,7 +18,7 @@ IUSE="cddb minimal +cxx"
 RDEPEND="cddb? ( >=media-libs/libcddb-1.0.1[lib32?] )
 	virtual/libintl"
 DEPEND="${RDEPEND}
-	sys-devel/gettext
+	sys-devel/gettext[lib32?]
 	dev-util/pkgconfig[lib32?]"
 
 multilib-native_src_prepare_internal() {
@@ -65,7 +65,7 @@ multilib-native_src_install_internal() {
 	dodoc AUTHORS ChangeLog NEWS README THANKS
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	ewarn "If you've upgraded from a previous version of ${PN}, you may need to re-emerge"
 	ewarn "packages that linked against ${PN} (vlc, vcdimager and more) by running:"
 	ewarn "\trevdep-rebuild"

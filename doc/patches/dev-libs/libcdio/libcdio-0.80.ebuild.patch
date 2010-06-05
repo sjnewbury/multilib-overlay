@@ -1,0 +1,31 @@
+--- /usr/portage/dev-libs/libcdio/libcdio-0.80.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./dev-libs/libcdio/libcdio-0.80.ebuild	2010-06-05 22:54:03.000000000 +0200
+@@ -21,10 +21,7 @@
+ 	sys-devel/gettext
+ 	dev-util/pkgconfig"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	epatch "${FILESDIR}"/${P}-minimal.patch
+ 	epatch "${FILESDIR}"/${P}-fix-pkgconfig.patch
+ 	epatch "${FILESDIR}"/${P}-fbsd.patch
+@@ -44,7 +41,7 @@
+ 	elibtoolize
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	econf \
+ 		$(use_enable cddb) \
+ 		$(use_with !minimal cd-drive) \
+@@ -60,7 +57,6 @@
+ 		--disable-vcd-info \
+ 		--disable-dependency-tracking \
+ 		--disable-maintainer-mode || die "configure failed"
+-	emake || die "make failed"
+ }
+ 
+ src_install() {
