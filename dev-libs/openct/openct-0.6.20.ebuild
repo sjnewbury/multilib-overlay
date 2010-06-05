@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/openct/openct-0.6.19.ebuild,v 1.1 2010/01/07 18:32:10 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/openct/openct-0.6.20.ebuild,v 1.6 2010/05/20 01:50:06 jer Exp $
 
 EAPI="2"
 
@@ -10,15 +10,15 @@ DESCRIPTION="library for accessing smart card terminals"
 HOMEPAGE="http://www.opensc-project.org/openct/"
 
 SRC_URI="http://www.opensc-project.org/files/${PN}/${P}.tar.gz"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
 IUSE="doc pcsc-lite usb"
 
-RDEPEND="pcsc-lite? ( sys-apps/pcsc-lite[lib32?] )
+RDEPEND="pcsc-lite? ( sys-apps/pcsc-lite )
 		usb? ( virtual/libusb:0[lib32?] )
-		>=sys-fs/udev-096"
+		>=sys-fs/udev-096[lib32?]"
 
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )"
@@ -55,7 +55,7 @@ multilib-native_src_install_internal() {
 	newinitd "${FILESDIR}"/openct.rc openct
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog
 	elog "You need to edit /etc/openct.conf to enable serial readers."
 	elog
