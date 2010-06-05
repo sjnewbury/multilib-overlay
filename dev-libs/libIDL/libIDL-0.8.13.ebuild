@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libIDL/libIDL-0.8.13.ebuild,v 1.2 2009/10/04 21:07:58 mrpouet Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libIDL/libIDL-0.8.13.ebuild,v 1.9 2010/01/17 23:31:38 jer Exp $
 
 EAPI="2"
 
@@ -11,18 +11,18 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE=""
 
 RDEPEND=">=dev-libs/glib-2.4[lib32?]"
 DEPEND="${RDEPEND}
-	sys-devel/flex
+	sys-devel/flex[lib32?]
 	sys-devel/bison
 	dev-util/pkgconfig[lib32?]"
 
 DOCS="AUTHORS BUGS ChangeLog HACKING MAINTAINERS NEWS README"
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	gnome2_src_unpack
 	epunt_cxx
 }
