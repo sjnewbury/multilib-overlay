@@ -74,7 +74,7 @@ dev-libs/libffi
 # dev-libs/libgamin
 dev-libs/libgcrypt
 # dev-libs/libgee
-# dev-libs/libgpg-error
+dev-libs/libgpg-error
 dev-libs/libgweather
 dev-libs/libical
 dev-libs/libIDL
