@@ -67,7 +67,7 @@ dev-libs/libassuan
 # dev-libs/libatomic_ops
 # dev-libs/libbeagle
 # dev-libs/libcdio
-# dev-libs/libcroco
+dev-libs/libcroco
 dev-libs/libdaemon
 dev-libs/libedit
 dev-libs/libffi

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/libcroco/libcroco-0.6.2.ebuild,v 1.8 2009/04/14 11:39:30 armin76 Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit gnome2 multilib-native
 
