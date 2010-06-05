@@ -126,7 +126,7 @@ gnome-base/gnome-vfs
 gnome-base/gvfs
 gnome-base/libbonobo
 gnome-base/libbonoboui
-# gnome-base/libglade
+gnome-base/libglade
 gnome-base/libgnome
 gnome-base/libgnomecanvas
 gnome-base/libgnomeui

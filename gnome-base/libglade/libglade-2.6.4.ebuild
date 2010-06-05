@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/libglade/libglade-2.6.4.ebuild,v 1.4 2009/08/29 18:56:27 nixnut Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/libglade/libglade-2.6.4.ebuild,v 1.7 2009/10/09 18:25:07 armin76 Exp $
 
 EAPI="2"
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="LGPL-2"
 SLOT="2.0"
-KEYWORDS="alpha amd64 ~arm ~hppa ~ia64 ~mips ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="doc"
 
 RDEPEND=">=dev-libs/glib-2.10[lib32?]
@@ -39,7 +39,7 @@ multilib-native_src_install_internal() {
 	gnome2_src_install
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	echo ">>> Updating XML catalog"
 	/usr/bin/xmlcatalog --noout --add "system" \
 		"http://glade.gnome.org/glade-2.0.dtd" \
@@ -47,7 +47,7 @@ pkg_postinst() {
 	gnome2_pkg_postinst
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	gnome2_pkg_postrm
 	echo ">>> removing entries from the XML catalog"
 	/usr/bin/xmlcatalog --noout --del \
