@@ -121,7 +121,7 @@ gnome-base/gconf
 # gnome-base/gnome-desktop
 gnome-base/gnome-keyring
 # gnome-base/gnome-menus
-# gnome-base/gnome-panel
+gnome-base/gnome-panel
 gnome-base/gnome-vfs
 gnome-base/gvfs
 gnome-base/libbonobo

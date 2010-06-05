@@ -33,7 +33,7 @@ RDEPEND=">=gnome-base/gnome-desktop-2.26.0[lib32?]
 	>=gnome-base/orbit-2.4[lib32?]
 	>=x11-libs/libwnck-2.19.5[lib32?]
 	>=gnome-base/gconf-2.6.1[lib32?]
-	>=gnome-base/gnome-menus-2.11.1
+	>=gnome-base/gnome-menus-2.11.1[lib32?]
 	>=gnome-base/libbonobo-2.20.4[lib32?]
 	gnome-base/librsvg[lib32?]
 	>=dev-libs/dbus-glib-0.71[lib32?]
@@ -44,7 +44,7 @@ RDEPEND=">=gnome-base/gnome-desktop-2.26.0[lib32?]
 	networkmanager? ( >=net-misc/networkmanager-0.6[lib32?] )
 	policykit? (
 		>=sys-auth/policykit-0.7[lib32?]
-		>=gnome-extra/policykit-gnome-0.7[lib32?] )"
+		>=gnome-extra/policykit-gnome-0.7 )"
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5[lib32?]
 	gnome-base/gnome-common
@@ -99,7 +99,7 @@ multilib-native_src_prepare_internal() {
 	AT_M4DIR="m4" eautoreconf
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	local entries="${ROOT}etc/gconf/schemas/panel-default-setup.entries"
 	local gconftool="${ROOT}usr/bin/gconftool-2"
 
