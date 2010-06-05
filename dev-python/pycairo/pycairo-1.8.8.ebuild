@@ -7,7 +7,7 @@ EAPI="2"
 NEED_PYTHON="2.6"
 SUPPORT_PYTHON_ABIS="1"
 
-inherit eutils distutils multilib-native
+inherit eutils distutils multilib multilib-native
 
 DESCRIPTION="Python wrapper for cairo vector graphics library"
 HOMEPAGE="http://cairographics.org/pycairo/ http://pypi.python.org/pypi/pycairo"
@@ -20,7 +20,7 @@ IUSE="doc examples svg"
 
 RDEPEND=">=x11-libs/cairo-1.8.8[svg?,lib32?]"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	dev-util/pkgconfig[lib32?]
 	doc? ( >=dev-python/sphinx-0.6 )"
 RESTRICT_PYTHON_ABIS="2.4 2.5 3.*"
 

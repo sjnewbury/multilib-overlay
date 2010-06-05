@@ -1,0 +1,14 @@
+--- /usr/portage/dev-python/pycairo/pycairo-1.8.2.ebuild	2010-02-14 20:06:25.000000000 +0100
++++ ./dev-python/pycairo/pycairo-1.8.2.ebuild	2010-06-05 21:51:21.000000000 +0200
+@@ -22,10 +22,7 @@
+ PYTHON_MODNAME="cairo"
+ DOCS="AUTHORS doc/*"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	# don't run py-compile
+ 	sed -i \
+ 		-e '/if test -n "$$dlist"; then/,/else :; fi/d' \

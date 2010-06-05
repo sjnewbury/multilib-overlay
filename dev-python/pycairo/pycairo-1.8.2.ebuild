@@ -2,7 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-python/pycairo/pycairo-1.8.2.ebuild,v 1.7 2009/05/01 16:44:06 armin76 Exp $
 
-EAPI=2
+EAPI="2"
+
 NEED_PYTHON=2.5
 
 inherit distutils multilib-native
