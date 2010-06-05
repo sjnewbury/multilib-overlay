@@ -14,30 +14,30 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="beagle doc gnome tracker xmp"
 
-RDEPEND=">=gnome-base/libbonobo-2.1
+RDEPEND=">=gnome-base/libbonobo-2.1[lib32?]
 	>=gnome-base/eel-2.24.0
-	>=dev-libs/glib-2.17.5
-	>=gnome-base/gnome-desktop-2.10
-	>=gnome-base/libgnome-2.14
-	>=gnome-base/libgnomeui-2.6
-	>=gnome-base/orbit-2.4
-	>=x11-libs/pango-1.1.2
-	>=x11-libs/gtk+-2.13.0
-	>=gnome-base/librsvg-2.0.1
-	>=dev-libs/libxml2-2.4.7
-	>=x11-libs/startup-notification-0.8
-	>=media-libs/libexif-0.5.12
-	>=gnome-base/gconf-2.0
-	>=gnome-base/gvfs-0.1.2
+	>=dev-libs/glib-2.17.5[lib32?]
+	>=gnome-base/gnome-desktop-2.10[lib32?]
+	>=gnome-base/libgnome-2.14[lib32?]
+	>=gnome-base/libgnomeui-2.6[lib32?]
+	>=gnome-base/orbit-2.4[lib32?]
+	>=x11-libs/pango-1.1.2[lib32?]
+	>=x11-libs/gtk+-2.13.0[lib32?]
+	>=gnome-base/librsvg-2.0.1[lib32?]
+	>=dev-libs/libxml2-2.4.7[lib32?]
+	>=x11-libs/startup-notification-0.8[lib32?]
+	>=media-libs/libexif-0.5.12[lib32?]
+	>=gnome-base/gconf-2.0[lib32?]
+	>=gnome-base/gvfs-0.1.2[lib32?]
 	beagle? ( || (
-		dev-libs/libbeagle
+		dev-libs/libbeagle[lib32?]
 		=app-misc/beagle-0.2* ) )
 	tracker? ( >=app-misc/tracker-0.6.4[lib32?] )
-	xmp? ( >=media-libs/exempi-2 )"
+	xmp? ( >=media-libs/exempi-2[lib32?] )"
 
 DEPEND="${RDEPEND}
-	sys-devel/gettext
-	>=dev-util/pkgconfig-0.9
+	sys-devel/gettext[lib32?]
+	>=dev-util/pkgconfig-0.9[lib32?]
 	>=dev-util/intltool-0.35
 	doc? ( >=dev-util/gtk-doc-1.4 )"
 
@@ -75,7 +75,7 @@ src_test() {
 	Xemake check || die "Test phase failed"
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	gnome2_pkg_postinst
 
 	elog "nautilus can use gstreamer to preview audio files. Just make sure"

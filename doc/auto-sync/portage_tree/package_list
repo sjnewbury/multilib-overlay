@@ -132,7 +132,7 @@ gnome-base/libgnome
 gnome-base/libgnomeui
 # gnome-base/libgtop
 gnome-base/librsvg
-# gnome-base/nautilus
+gnome-base/nautilus
 gnome-base/orbit
 gnome-extra/bug-buddy
 gnome-extra/evolution-data-server

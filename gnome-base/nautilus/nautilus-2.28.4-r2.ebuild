@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/nautilus/nautilus-2.28.4-r2.ebuild,v 1.1 2010/04/16 18:33:26 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/nautilus/nautilus-2.28.4-r2.ebuild,v 1.2 2010/05/29 17:46:25 armin76 Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -12,7 +12,7 @@ HOMEPAGE="http://www.gnome.org/projects/nautilus/"
 
 LICENSE="GPL-2 LGPL-2 FDL-1.1"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~hppa ~sh ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
 IUSE="beagle doc gnome tracker xmp"
 
 # not adding gnome-base/gail because it is in >=gtk+-2.13
@@ -23,7 +23,6 @@ RDEPEND=">=dev-libs/glib-2.21.3[lib32?]
 	>=dev-libs/libxml2-2.4.7[lib32?]
 	>=media-libs/libexif-0.5.12[lib32?]
 	>=gnome-base/gconf-2.0[lib32?]
-	>=gnome-base/gvfs-0.1.2[lib32?]
 	dev-libs/libunique[lib32?]
 	dev-libs/dbus-glib[lib32?]
 	x11-libs/libXft[lib32?]
@@ -44,7 +43,8 @@ DEPEND="${RDEPEND}
 #	gnome-base/gnome-common
 #	dev-util/gtk-doc-am"
 
-PDEPEND="gnome? ( >=x11-themes/gnome-icon-theme-1.1.91 )"
+PDEPEND="gnome? ( >=x11-themes/gnome-icon-theme-1.1.91 )
+	>=gnome-base/gvfs-0.1.2"
 
 DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS README THANKS TODO"
 
@@ -94,7 +94,7 @@ multilib-native_src_install_internal() {
 	find "${D}" -name "*.la" -delete || die "remove of la files failed"
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	gnome2_pkg_postinst
 
 	elog "nautilus can use gstreamer to preview audio files. Just make sure"

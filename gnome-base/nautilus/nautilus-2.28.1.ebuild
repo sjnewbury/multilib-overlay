@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/nautilus/nautilus-2.28.4.ebuild,v 1.2 2010/01/16 00:36:28 abcd Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/nautilus/nautilus-2.28.1.ebuild,v 1.3 2009/12/13 22:32:39 eva Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -12,8 +12,8 @@ HOMEPAGE="http://www.gnome.org/projects/nautilus/"
 
 LICENSE="GPL-2 LGPL-2 FDL-1.1"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~hppa ~sh ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
-IUSE="beagle doc gnome tracker xmp"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+IUSE="beagle doc gnome xmp"
 
 # not adding gnome-base/gail because it is in >=gtk+-2.13
 RDEPEND=">=dev-libs/glib-2.21.3[lib32?]
@@ -31,7 +31,6 @@ RDEPEND=">=dev-libs/glib-2.21.3[lib32?]
 	beagle? ( || (
 		dev-libs/libbeagle[lib32?]
 		=app-misc/beagle-0.2* ) )
-	tracker? ( >=app-misc/tracker-0.7[lib32?] )
 	xmp? ( >=media-libs/exempi-2[lib32?] )"
 
 DEPEND="${RDEPEND}
@@ -52,8 +51,8 @@ multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		--disable-update-mimedb
 		--disable-packagekit
+		--disable-tracker
 		$(use_enable beagle)
-		$(use_enable tracker)
 		$(use_enable xmp)"
 }
 
@@ -94,7 +93,7 @@ multilib-native_src_install_internal() {
 	find "${D}" -name "*.la" -delete || die "remove of la files failed"
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	gnome2_pkg_postinst
 
 	elog "nautilus can use gstreamer to preview audio files. Just make sure"
