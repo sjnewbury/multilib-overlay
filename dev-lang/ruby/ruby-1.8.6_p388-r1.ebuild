@@ -1,69 +1,50 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/ruby/ruby-1.9.1_p243.ebuild,v 1.2 2009/10/12 23:07:03 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/ruby/ruby-1.8.6_p388-r1.ebuild,v 1.3 2010/05/19 19:42:23 a3li Exp $
 
 EAPI=2
 
 inherit autotools eutils flag-o-matic multilib versionator multilib-native
 
-# Add patchlevel
-MY_P="${P/_/-}"
+MY_P="${PN}-$(replace_version_separator 3 '-')"
+S=${WORKDIR}/${MY_P}
 
-# 1.9.1.0 -> 1.9
 SLOT=$(get_version_component_range 1-2)
-
-# 1.9.1.0 -> 1.9.1 (used in libdirs)
-RUBYVERSION=$(get_version_component_range 1-3)
-
-# 1.9 -> 19
 MY_SUFFIX=$(delete_version_separator 1 ${SLOT})
+# 1.8 and 1.9 series disagree on this
+RUBYVERSION=$(get_version_component_range 1-2)
 
 DESCRIPTION="An object-oriented scripting language"
 HOMEPAGE="http://www.ruby-lang.org/"
-SRC_URI="mirror://ruby/${MY_P}.tar.bz2
-		http://dev.a3li.info/gentoo/distfiles/${PN}-patches-${PVR}.tar.bz2"
+SRC_URI="mirror://ruby/${SLOT}/${MY_P}.tar.bz2
+		 http://dev.gentoo.org/~flameeyes/ruby-team/${PN}-patches-${PVR}.tar.bz2"
 
 LICENSE="|| ( Ruby GPL-2 )"
-KEYWORDS="~amd64 ~hppa ~x86 ~x86-fbsd"
-IUSE="berkdb debug doc emacs examples gdbm ipv6 rubytests socks5 ssl tk xemacs"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+IUSE="+berkdb debug doc examples +gdbm ipv6 rubytests socks5 ssl threads tk xemacs ncurses +readline libedit"
 
 RDEPEND="
 	berkdb? ( sys-libs/db[lib32?] )
 	gdbm? ( sys-libs/gdbm[lib32?] )
-	ssl? ( dev-libs/openssl[lib32?] )
+	ssl? ( >=dev-libs/openssl-0.9.8m[lib32?] )
 	socks5? ( >=net-proxy/dante-1.1.13[lib32?] )
-	tk? ( dev-lang/tk[threads,lib32?] )
-	>=app-admin/eselect-ruby-20080921
+	tk? ( dev-lang/tk[threads=,lib32?] )
+	ncurses? ( sys-libs/ncurses[lib32?] )
+	libedit? ( dev-libs/libedit[lib32?] )
+	!libedit? ( readline? ( sys-libs/readline[lib32?] ) )
+	sys-libs/zlib[lib32?]
+	>=app-admin/eselect-ruby-20091225
 	!=dev-lang/ruby-cvs-${SLOT}*
 	!<dev-ruby/rdoc-2
 	!dev-ruby/rexml"
 DEPEND="${RDEPEND}"
-PDEPEND="
-	emacs? ( app-emacs/ruby-mode )
-	xemacs? ( app-xemacs/ruby-modes )"
+PDEPEND="xemacs? ( app-xemacs/ruby-modes )"
 
 PROVIDE="virtual/ruby"
 
-S="${WORKDIR}/${MY_P}"
-
-multilib-native_pkg_setup_internal() {
-	ewarn
-	ewarn "It is highly recommended to install >=dev-ruby/rubygems-1.3.1-r30"
-	ewarn "if you have Ruby 1.8 on this system installed, too."
-	ewarn
-	epause 5
-}
-
 multilib-native_src_prepare_internal() {
-	cd "${S}"
-
 	EPATCH_FORCE="yes" EPATCH_SUFFIX="patch" \
-	epatch "${WORKDIR}/patches-${PVR}"
-
-	# Strip rake
-	rm "bin/rake"
-	rm "lib/rake.rb"
-	rm -rf "lib/rake"
+		epatch "${WORKDIR}/patches"
 
 	# Fix a hardcoded lib path in configure script
 	sed -i -e "s:\(RUBY_LIB_PREFIX=\"\${prefix}/\)lib:\1$(get_libdir):" \
@@ -73,6 +54,8 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
+	local myconf=
+
 	# -fomit-frame-pointer makes ruby segfault, see bug #150413.
 	filter-flags -fomit-frame-pointer
 	# In many places aliasing rules are broken; play it safe
@@ -93,18 +76,33 @@ multilib-native_src_configure_internal() {
 	fi
 
 	# ipv6 hack, bug 168939. Needs --enable-ipv6.
-	use ipv6 || myconf="--with-lookup-order-hack=INET"
+	use ipv6 || myconf="${myconf} --with-lookup-order-hack=INET"
 
-	econf --program-suffix=${MY_SUFFIX} --enable-shared --enable-pthread \
+	if use libedit; then
+		einfo "Using libedit to provide readline extension"
+		myconf="${myconf} --enable-libedit --with-readline"
+	elif use readline; then
+		einfo "Using readline to provide readline extension"
+		myconf="${myconf} --with-readline"
+	else
+		myconf="${myconf} --without-readline"
+	fi
+
+	econf \
+		--program-suffix="${MY_SUFFIX}" \
+		--enable-shared \
 		$(use_enable socks5 socks) \
 		$(use_enable doc install-doc) \
+		$(use_enable threads pthread) \
 		--enable-ipv6 \
 		$(use_enable debug) \
 		$(use_with berkdb dbm) \
 		$(use_with gdbm) \
 		$(use_with ssl openssl) \
 		$(use_with tk) \
+		$(use_with ncurses curses) \
 		${myconf} \
+		--with-sitedir=/usr/$(get_libdir)/ruby/site_ruby \
 		--enable-option-checking=no \
 		|| die "econf failed"
 }
@@ -114,18 +112,18 @@ multilib-native_src_compile_internal() {
 }
 
 src_test() {
-	emake test || die "make test failed"
+	emake -j1 test || die "make test failed"
 
 	elog "Ruby's make test has been run. Ruby also ships with a make check"
 	elog "that cannot be run until after ruby has been installed."
 	elog
 	if use rubytests; then
 		elog "You have enabled rubytests, so they will be installed to"
-		elog "/usr/share/${PN}-${RUBYVERSION}/test. To run them you must be a user other"
+		elog "/usr/share/${PN}-${SLOT}/test. To run them you must be a user other"
 		elog "than root, and you must place them into a writeable directory."
 		elog "Then call: "
 		elog
-		elog "ruby19 -C /location/of/tests runner.rb"
+		elog "ruby${MY_SUFFIX} -C /location/of/tests runner.rb"
 	else
 		elog "Enable the rubytests USE flag to install the make check tests"
 	fi
@@ -135,12 +133,7 @@ multilib-native_src_install_internal() {
 	# Ruby is involved in the install process, we don't want interference here.
 	unset RUBYOPT
 
-	# Creating the rubygems directories, bug #230163 once more.
 	local MINIRUBY=$(echo -e 'include Makefile\ngetminiruby:\n\t@echo $(MINIRUBY)'|make -f - getminiruby)
-	keepdir /usr/$(get_libdir)/ruby${MY_SUFFIX}/gems/${RUBYVERSION}/{doc,gems,cache,specifications}
-
-	export GEM_HOME="${D}/usr/$(get_libdir)/ruby${MY_SUFFIX}/gems/${RUBYVERSION}"
-	export GEM_PATH="${GEM_HOME}/"
 
 	LD_LIBRARY_PATH="${D}/usr/$(get_libdir)${LD_LIBRARY_PATH+:}${LD_LIBRARY_PATH}"
 	RUBYLIB="${S}:${D}/usr/$(get_libdir)/ruby/${RUBYVERSION}"
@@ -159,8 +152,8 @@ multilib-native_src_install_internal() {
 	fi
 
 	if use examples; then
-		dodir /usr/share/doc/${PF}
-		cp -pPR sample "${D}/usr/share/doc/${PF}"
+		insinto /usr/share/doc/${PF}
+		doins -r sample
 	fi
 
 	dosym "libruby${MY_SUFFIX}$(get_libname ${PV%_*})" \
@@ -168,20 +161,19 @@ multilib-native_src_install_internal() {
 	dosym "libruby${MY_SUFFIX}$(get_libname ${PV%_*})" \
 		"/usr/$(get_libdir)/libruby$(get_libname ${PV%_*})"
 
-	dodoc ChangeLog NEWS doc/NEWS-1.8.7 README* ToDo
+	dodoc ChangeLog NEWS README* ToDo || die
 
 	if use rubytests; then
-		dodir /usr/share/${PN}-${RUBYVERSION}
-		cp -pPR test "${D}/usr/share/${PN}-${RUBYVERSION}"
+		pushd test
+		insinto /usr/share/${PN}-${SLOT}
+		doins -r .
+		popd
 	fi
 
-	insinto /usr/$(get_libdir)/ruby${MY_SUFFIX}/vendor_ruby/${RUBYVERSION}/
-	newins "${FILESDIR}/auto_gem.rb" auto_gem.rb
-
-	prep_ml_binaries /usr/bin/ruby${MY_SUFFIX}
+	prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	if [[ ! -n $(readlink "${ROOT}"usr/bin/ruby) ]] ; then
 		eselect ruby set ruby${MY_SUFFIX}
 	fi
@@ -192,6 +184,6 @@ pkg_postinst() {
 	elog
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	eselect ruby cleanup
 }
