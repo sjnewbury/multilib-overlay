@@ -65,7 +65,7 @@ dev-libs/glib
 # dev-libs/iniparser
 dev-libs/libassuan
 # dev-libs/libatomic_ops
-# dev-libs/libbeagle
+dev-libs/libbeagle
 dev-libs/libcdio
 dev-libs/libcroco
 dev-libs/libdaemon

@@ -22,7 +22,7 @@ RDEPEND=">=dev-libs/glib-2.6[lib32?]
 DEPEND="${RDEPEND}
 	doc? ( dev-util/gtk-doc )"
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	econf	--disable-dependency-tracking \
 		$(use_enable python) \
 		$(use_enable doc gtk-doc) \
