@@ -1,0 +1,15 @@
+--- /usr/portage/dev-libs/libedit/libedit-20090923.3.0.ebuild	2010-01-14 22:35:30.000000000 +0100
++++ ./dev-libs/libedit/libedit-20090923.3.0.ebuild	2010-06-05 22:51:05.000000000 +0200
+@@ -23,11 +23,7 @@
+ 
+ S="${WORKDIR}/${MY_P}"
+ 
+-src_unpack() {
+-	unpack ${A}
+-
+-	cd "${S}"
+-
++src_prepare() {
+ 	epatch "${FILESDIR}"/${PN}-20090111-3.0-weak_reference.patch
+ }
+ 

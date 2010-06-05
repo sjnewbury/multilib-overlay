@@ -1,0 +1,13 @@
+--- /usr/portage/dev-libs/libedit/libedit-20050930.ebuild	2009-04-05 10:08:24.000000000 +0200
++++ ./dev-libs/libedit/libedit-20050930.ebuild	2010-06-05 22:50:15.000000000 +0200
+@@ -18,9 +18,7 @@
+ 
+ S=${WORKDIR}/netbsd-cvs
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	mv "${WORKDIR}"/glibc-*/*.c .
+ 	epatch "${FILESDIR}"/${PN}-20050531-debian-to-gentoo.patch
+ }

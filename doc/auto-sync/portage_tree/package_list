@@ -69,7 +69,7 @@ dev-libs/libassuan
 # dev-libs/libcdio
 # dev-libs/libcroco
 # dev-libs/libdaemon
-# dev-libs/libedit
+dev-libs/libedit
 dev-libs/libffi
 dev-libs/libgamin
 dev-libs/libgcrypt

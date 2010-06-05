@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/libedit/libedit-20061103-r2.ebuild,v 1.2 2009/01/04 22:15:44 angelos Exp $
 
+EAPI="2"
+
 inherit eutils toolchain-funcs multilib-native
 
 DESCRIPTION="BSD replacement for libreadline"
@@ -13,15 +15,12 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
 IUSE="elibc_glibc"
 
-DEPEND="sys-libs/ncurses
+DEPEND="sys-libs/ncurses[lib32?]
 	!<=sys-freebsd/freebsd-lib-6.2_rc1"
 
 S=${WORKDIR}/netbsd-cvs
 
-multilib-native_src_unpack_internal() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-20061103-debian-to-gentoo.patch
 
 	if use elibc_glibc; then

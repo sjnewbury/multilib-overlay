@@ -1,0 +1,14 @@
+--- /usr/portage/dev-libs/libedit/libedit-20061103-r2.ebuild	2009-01-04 23:35:40.000000000 +0100
++++ ./dev-libs/libedit/libedit-20061103-r2.ebuild	2010-06-05 22:50:40.000000000 +0200
+@@ -18,10 +18,7 @@
+ 
+ S=${WORKDIR}/netbsd-cvs
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	epatch "${FILESDIR}"/${PN}-20061103-debian-to-gentoo.patch
+ 
+ 	if use elibc_glibc; then
