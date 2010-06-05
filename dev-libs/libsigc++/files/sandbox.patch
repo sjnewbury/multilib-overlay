@@ -1,0 +1,50 @@
+diff -urN libsigc++-1.0.4.orig/sigc++/Makefile libsigc++-1.0.4/sigc++/Makefile
+--- libsigc++-1.0.4.orig/sigc++/Makefile	2006-07-13 01:08:00.000000000 +0200
++++ libsigc++-1.0.4/sigc++/Makefile	2006-07-13 01:11:49.000000000 +0200
+@@ -494,13 +494,11 @@
+ 	  echo ;\
+ 	  echo "  \"$(includedir)/sigc++\"" ;\
+ 	  echo ;\
+-	  echo "The entire directory will be removed now." ;\
+ 	  echo "To allow parallel installation of sigc++-1.0 and sigc++-1.2," ;\
+ 	  echo "the header files are now installed in a version specific subdirectory:" ;\
+ 	  echo ;\
+ 	  echo "  \"$(libsigcincludedir)\"" ;\
+ 	  echo ;\
+-	  rm -rf "$(includedir)/sigc++" ;\
+ 	fi
+ 
+ #---------------------------------------
+diff -urN libsigc++-1.0.4.orig/sigc++/Makefile.am libsigc++-1.0.4/sigc++/Makefile.am
+--- libsigc++-1.0.4.orig/sigc++/Makefile.am	2006-07-13 01:08:00.000000000 +0200
++++ libsigc++-1.0.4/sigc++/Makefile.am	2006-07-13 01:11:41.000000000 +0200
+@@ -46,7 +46,6 @@
+ 	  echo ;\
+ 	  echo "  \"$(libsigcincludedir)\"" ;\
+ 	  echo ;\
+-	  rm -rf "$(includedir)/sigc++" ;\
+ 	fi
+ 
+ 
+diff -urN libsigc++-1.0.4.orig/sigc++/config/Makefile libsigc++-1.0.4/sigc++/config/Makefile
+--- libsigc++-1.0.4.orig/sigc++/config/Makefile	2006-07-13 01:08:00.000000000 +0200
++++ libsigc++-1.0.4/sigc++/config/Makefile	2006-07-13 01:11:32.000000000 +0200
+@@ -275,8 +275,7 @@
+ 	  echo "The entire directory will be removed now." ;\
+ 	  echo "To allow parallel installation of sigc++-1.0 and sigc++-1.2," ;\
+ 	  echo "the header files are now installed in a version specific subdirectory." ;\
+	  echo ; \
+-	  rm -rf "$(libdir)/sigc++" ;\
+ 	fi
+ 
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+diff -urN libsigc++-1.0.4.orig/sigc++/config/Makefile.am libsigc++-1.0.4/sigc++/config/Makefile.am
+--- libsigc++-1.0.4.orig/sigc++/config/Makefile.am	2006-07-13 01:08:00.000000000 +0200
++++ libsigc++-1.0.4/sigc++/config/Makefile.am	2006-07-13 01:11:15.000000000 +0200
+@@ -16,6 +16,5 @@
+ 	  echo "To allow parallel installation of sigc++-1.0 and sigc++-1.2," ;\
+ 	  echo "the header files are now installed in a version specific subdirectory." ;\
+ 	  echo ; \
+-	  rm -rf "$(libdir)/sigc++" ;\
+ 	fi
+ 

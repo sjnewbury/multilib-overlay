@@ -1,0 +1,10 @@
+--- a/tests/signals/convert_slot_test.cc
++++ b/tests/signals/convert_slot_test.cc
+@@ -2,6 +2,7 @@
+ #include <iostream>
+ #include <sigc++/signal_system.h>
+ #include <sigc++/convert.h>
++#include <cstring>
+ 
+ /*
+ Copyright 1999, Karl Nelson
