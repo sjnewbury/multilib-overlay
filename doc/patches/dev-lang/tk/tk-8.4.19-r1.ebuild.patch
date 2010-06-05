@@ -1,0 +1,31 @@
+--- /usr/portage/dev-lang/tk/tk-8.4.19-r1.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./dev-lang/tk/tk-8.4.19-r1.ebuild	2010-06-06 01:13:44.000000000 +0200
+@@ -37,9 +37,7 @@
+ 	fi
+ }
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/remove-control-v-8.4.9.diff
+ 	epatch "${FILESDIR}"/${PN}-8.4.9-man.patch
+ 	epatch "${FILESDIR}"/${PN}-8.4.11-multilib.patch
+@@ -61,7 +59,7 @@
+ 	eautoreconf
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	tc-export CC
+ 	cd "${S}"/unix
+ 
+@@ -71,8 +69,6 @@
+ 		--with-tcl=/usr/${mylibdir} \
+ 		$(use_enable threads) \
+ 		$(use_enable debug symbols) || die
+-
+-	emake || die
+ }
+ 
+ src_install() {

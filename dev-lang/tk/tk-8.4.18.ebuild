@@ -26,7 +26,7 @@ DEPEND="${RDEPEND}
 
 S=${WORKDIR}/${PN}${PV}
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if use threads ; then
 		ewarn ""
 		ewarn "PLEASE NOTE: You are compiling ${P} with"
@@ -40,7 +40,6 @@ pkg_setup() {
 }
 
 multilib-native_src_prepare_internal() {
-	cd "${S}"
 	epatch "${FILESDIR}"/remove-control-v-8.4.9.diff
 	epatch "${FILESDIR}"/${PN}-8.4.9-man.patch
 	epatch "${FILESDIR}"/${PN}-8.4.11-multilib.patch

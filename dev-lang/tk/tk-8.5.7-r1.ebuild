@@ -28,7 +28,7 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if use threads ; then
 		ewarn ""
 		ewarn "PLEASE NOTE: You are compiling ${P} with"
