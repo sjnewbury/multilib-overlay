@@ -112,8 +112,8 @@ dev-python/dbus-python
 dev-python/pygobject
 dev-python/pygtk
 # dev-python/pyorbit
-# dev-python/pyrex
-# dev-util/automoc
+dev-python/pyrex
+dev-util/automoc
 dev-util/cppunit
 dev-util/pkgconfig
 # games-emulation/zsnes   32 bit programm
