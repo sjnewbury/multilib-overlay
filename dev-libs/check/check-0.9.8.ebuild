@@ -16,7 +16,7 @@ IUSE=""
 RDEPEND=""
 DEPEND=""
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 	epatch "${FILESDIR}"/${PN}-0.9.6-AM_PATH_CHECK.patch

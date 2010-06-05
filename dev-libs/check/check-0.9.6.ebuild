@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/check/check-0.9.6.ebuild,v 1.1 2009/06/09 03:15:00 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/check/check-0.9.6.ebuild,v 1.2 2009/06/09 10:54:33 flameeyes Exp $
 
 inherit eutils autotools multilib-native
 
@@ -15,7 +15,7 @@ IUSE=""
 
 DEPEND=""
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 	epatch "${FILESDIR}"/${P}-AM_PATH_CHECK.patch
