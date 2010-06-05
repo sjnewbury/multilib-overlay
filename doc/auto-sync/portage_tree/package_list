@@ -78,7 +78,7 @@ dev-libs/libgcrypt
 # dev-libs/libgweather  has maybe missing net-libs/libsoup-gnome dep
 # dev-libs/libical
 # dev-libs/libIDL
-# dev-libs/libksba
+dev-libs/libksba
 dev-libs/libnl
 dev-libs/liboil
 dev-libs/libpcre
