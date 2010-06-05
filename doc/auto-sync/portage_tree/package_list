@@ -95,7 +95,7 @@ dev-libs/nss
 # dev-libs/openct
 # dev-libs/opensc
 dev-libs/openssl
-# dev-libs/pkcs11-helper
+dev-libs/pkcs11-helper
 dev-libs/popt
 dev-libs/pth
 dev-perl/XML-Parser

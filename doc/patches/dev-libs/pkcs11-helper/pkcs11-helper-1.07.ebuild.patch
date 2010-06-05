@@ -1,0 +1,17 @@
+--- /usr/portage/dev-libs/pkcs11-helper/pkcs11-helper-1.07.ebuild	2009-06-09 04:36:05.000000000 +0200
++++ ./dev-libs/pkcs11-helper/pkcs11-helper-1.07.ebuild	2010-06-05 22:15:08.000000000 +0200
+@@ -19,13 +19,12 @@
+ 	dev-util/pkgconfig
+ 	doc? ( >=app-doc/doxygen-1.4.7 )"
+ 
+-src_compile() {
++src_configure() {
+ 	econf \
+ 		--docdir="/usr/share/doc/${PF}" \
+ 		$(use_enable doc) \
+ 		$(use_enable gnutls crypto-engine-gnutls) \
+ 		$(use_enable nss crypto-engine-nss)
+-	emake || die "emake failed"
+ }
+ 
+ src_install() {

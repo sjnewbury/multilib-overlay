@@ -1,0 +1,18 @@
+--- /usr/portage/dev-libs/pkcs11-helper/pkcs11-helper-1.05.ebuild	2008-12-07 13:35:58.000000000 +0100
++++ ./dev-libs/pkcs11-helper/pkcs11-helper-1.05.ebuild	2010-06-05 22:14:05.000000000 +0200
+@@ -19,14 +19,13 @@
+ 	gnutls? ( >=net-libs/gnutls-1.4.4 )
+ 	nss? ( dev-libs/nss )"
+ 
+-src_compile() {
++src_configure() {
+ 	econf \
+ 		--docdir="/usr/share/doc/${PF}" \
+ 		$(use_enable doc) \
+ 		$(use_enable gnutls crypto-engine-gnutls) \
+ 		$(use_enable nss crypto-engine-nss) \
+ 		|| die
+-	emake || die
+ }
+ 
+ src_install() {
