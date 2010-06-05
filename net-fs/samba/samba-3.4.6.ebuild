@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.4.6.ebuild,v 1.7 2010/06/01 14:04:59 vostorga Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.4.6.ebuild,v 1.8 2010/06/03 19:30:29 vostorga Exp $
 
 EAPI="2"
 
@@ -95,6 +95,7 @@ multilib-native_pkg_setup_internal() {
 
 	confutils_use_depend_all ads ldap
 	confutils_use_depend_all swat server
+	confutils_use_depend_all client netapi
 }
 
 multilib-native_src_prepare_internal() {
