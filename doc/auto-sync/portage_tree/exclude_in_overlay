@@ -62,3 +62,4 @@ media-sound/musepack-tools/files/musepack-tools-458-CFLAGS.patch # patch of mult
 dev-libs/dbus-glib/dbus-glib-9999.ebuild
 dev-python/pygobject/pygobject-2.21.1.ebuild
 media-libs/glitz/glitz-9999.ebuild # x11
+dev-libs/libunique/libunique-1.1.6.ebuild

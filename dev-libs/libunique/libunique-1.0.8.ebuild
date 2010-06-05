@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libunique/libunique-1.0.8.ebuild,v 1.18 2010/01/16 08:30:40 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libunique/libunique-1.0.8.ebuild,v 1.19 2010/02/28 06:52:50 nirbheek Exp $
 
 EAPI="2"
 
@@ -42,6 +42,7 @@ src_test() {
 
 	# Force Xemake to use Xvfb, bug 279840
 	unset XAUTHORITY
+	unset DISPLAY
 
 	cp "${FILESDIR}/run-tests" . || die "Unable to cp \${FILESDIR}/run-tests"
 	Xemake -f run-tests || die "Tests failed"
