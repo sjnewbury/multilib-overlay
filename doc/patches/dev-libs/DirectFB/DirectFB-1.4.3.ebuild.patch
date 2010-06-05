@@ -1,0 +1,30 @@
+--- /usr/portage/dev-libs/DirectFB/DirectFB-1.4.3.ebuild	2010-05-23 23:35:47.000000000 +0200
++++ ./dev-libs/DirectFB/DirectFB-1.4.3.ebuild	2010-06-05 23:14:08.000000000 +0200
+@@ -45,9 +45,7 @@
+ DEPEND="${RDEPEND}
+ 	X? ( x11-proto/xextproto x11-proto/xproto )"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/${PN}-1.2.7-CFLAGS.patch
+ 	epatch "${FILESDIR}"/${PN}-1.2.0-headers.patch
+ 	epatch "${FILESDIR}"/${PN}-1.1.1-pkgconfig.patch
+@@ -87,7 +85,7 @@
+ 	echo ${devs:-none}
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	local sdlconf="--disable-sdl"
+ 	if use sdl ; then
+ 		# since SDL can link against DirectFB and trigger a
+@@ -120,7 +118,6 @@
+ 		--with-inputdrivers="$(driver_list input_devices ${IUSE_INPUT_DEVICES})" \
+ 		--disable-vnc \
+ 		|| die
+-	emake || die
+ }
+ 
+ src_install() {

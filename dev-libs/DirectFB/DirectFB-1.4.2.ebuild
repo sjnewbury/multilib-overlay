@@ -1,23 +1,39 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/DirectFB/DirectFB-1.2.7.ebuild,v 1.7 2009/04/30 12:28:31 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/DirectFB/DirectFB-1.4.2.ebuild,v 1.11 2010/01/15 08:19:18 vapier Exp $
 
 EAPI="2"
 
 inherit eutils toolchain-funcs multilib-native
 
-IUSE_VIDEO_CARDS="ati128 cle266 cyber5k i810 i830 mach64 matrox neomagic none nsc nvidia radeon savage sis315 tdfx unichrome"
-IUSE_INPUT_DEVICES="dbox2remote elo-input gunze h3600_ts joystick keyboard dreamboxremote linuxinput lirc mutouch none permount ps2mouse serialmouse sonypijogdial wm97xx"
+# Map Gentoo IUSE expand vars to DirectFB drivers
+# echo `sed -n '/Possible gfxdrivers are:/,/^$/{/Possible/d;s:\[ *::;s:\].*::;s:,::g;p}' configure.in`
+I_TO_D_intel="i810,i830"
+I_TO_D_mga="matrox"
+I_TO_D_r128="ati128"
+I_TO_D_s3="unichrome"
+I_TO_D_sis="sis315"
+I_TO_D_via="cle266"
+# cyber5k davinci ep9x gl omap pxa3xx sh772x
+IUSE_VIDEO_CARDS=" intel mach64 mga neomagic nsc nvidia r128 radeon s3 savage sis tdfx via vmware"
+IUV=${IUSE_VIDEO_CARDS// / video_cards_}
+# echo `sed -n '/Possible inputdrivers are:/,/^$/{/\(Possible\|^input\)/d;s:\[ *::;s:\].*::;s:,::g;p}' configure.in`
+I_TO_D_elo2300="elo-input"
+I_TO_D_evdev="linuxinput"
+I_TO_D_mouse="ps2mouse serialmouse"
+# dbox2remote dreamboxremote gunze h3600_ts penmount sonypijogdial ucb1x00 wm97xx zytronic
+IUSE_INPUT_DEVICES=" dynapro elo2300 evdev joystick keyboard lirc mouse mutouch tslib"
+IUD=${IUSE_INPUT_DEVICES// / input_devices_}
 
 DESCRIPTION="Thin library on top of the Linux framebuffer devices"
 HOMEPAGE="http://www.directfb.org/"
-SRC_URI="http://directfb.org/downloads/Core/${P}.tar.gz
+SRC_URI="http://directfb.org/downloads/Core/${PN}-${PV:0:3}/${P}.tar.gz
 	http://directfb.org/downloads/Old/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 -mips ppc ppc64 sh -sparc x86"
-IUSE="debug fbcon fusion gif jpeg mmx png sdl sse sysfs truetype v4l v4l2 X zlib"
+IUSE="debug fbcon fusion gif jpeg mmx png sdl sse sysfs truetype v4l v4l2 X zlib ${IUV} ${IUD}"
 
 #	fusion? ( >=dev-libs/linux-fusion-8.0.0 )
 RDEPEND="sdl? ( media-libs/libsdl[lib32?] )
@@ -27,28 +43,11 @@ RDEPEND="sdl? ( media-libs/libsdl[lib32?] )
 	sysfs? ( sys-fs/sysfsutils[lib32?] )
 	zlib? ( sys-libs/zlib[lib32?] )
 	truetype? ( >=media-libs/freetype-2.0.1[lib32?] )
-	X? ( x11-libs/libXext x11-libs/libX11 )"
+	X? ( x11-libs/libXext[lib32?] x11-libs/libX11[lib32?] )"
 DEPEND="${RDEPEND}
 	X? ( x11-proto/xextproto x11-proto/xproto )"
 
-pkg_setup() {
-	if [[ -z ${VIDEO_CARDS} ]] ; then
-		ewarn "All video drivers will be built since you did not specify"
-		ewarn "via the VIDEO_CARDS variable what video card you use."
-		ewarn "DirectFB supports: ${IUSE_VIDEO_CARDS} all none"
-		echo
-	fi
-	if [[ -z ${INPUT_DEVICES} ]] ; then
-		ewarn "All input drivers will be built since you did not specify"
-		ewarn "via the INPUT_DEVICES variable which input drivers to use."
-		ewarn "DirectFB supports: ${IUSE_INPUT_DEVICES} all none"
-		echo
-	fi
-}
-
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-1.2.7-CFLAGS.patch
 	epatch "${FILESDIR}"/${PN}-1.2.0-headers.patch
 	epatch "${FILESDIR}"/${PN}-1.1.1-pkgconfig.patch
@@ -67,31 +66,19 @@ src_unpack() {
 		configure
 }
 
-multilib-native_src_configure_internal() {
-	local vidcards card input inputdrivers
-	if [[ ${VIDEO_CARDS+set} == "set" ]] ; then
-		for card in ${VIDEO_CARDS} ; do
-			has ${card} ${IUSE_VIDEO_CARDS} && vidcards="${vidcards},${card}"
-			#use video_cards_${card} && vidcards="${vidcards},${card}"
-		done
-		[[ -z ${vidcards} ]] \
-			&& vidcards="none" \
-			|| vidcards=${vidcards:1}
-	else
-		vidcards="all"
-	fi
-	if [[ ${INPUT_DEVICES+set} == "set" ]] ; then
-		for input in ${INPUT_DEVICES} ; do
-			has ${input} ${IUSE_INPUT_DEVICES} && inputdrivers="${inputdrivers},${input}"
-			#use input_devics_${input} && inputdrivers="${inputdrivers},${input}"
-		done
-		[[ -z ${inputdrivers} ]] \
-			&& inputdrivers="none" \
-			|| inputdrivers=${inputdrivers:1}
-	else
-		inputdrivers="all"
-	fi
+driver_list() {
+	local pfx=$1
+	local dev devs map
+	shift
+	for dev in "$@" ; do
+		use ${pfx}_${dev} || continue
+		map="I_TO_D_${dev}"
+		devs=${devs:+${devs},}${!map:-${dev}}
+	done
+	echo ${devs:-none}
+}
 
+multilib-native_src_configure_internal() {
 	local sdlconf="--disable-sdl"
 	if use sdl ; then
 		# since SDL can link against DirectFB and trigger a
@@ -120,8 +107,8 @@ multilib-native_src_configure_internal() {
 		$(use_enable v4l video4linux) \
 		$(use_enable v4l2 video4linux2) \
 		${sdlconf} \
-		--with-gfxdrivers="${vidcards}" \
-		--with-inputdrivers="${inputdrivers}" \
+		--with-gfxdrivers="$(driver_list video_cards ${IUSE_VIDEO_CARDS})" \
+		--with-inputdrivers="$(driver_list input_devices ${IUSE_INPUT_DEVICES})" \
 		--disable-vnc \
 		|| die
 }
@@ -132,7 +119,7 @@ multilib-native_src_install_internal() {
 	dohtml -r docs/html/*
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	ewarn "Each DirectFB update in the 0.9.xx series"
 	ewarn "breaks DirectFB related applications."
 	ewarn "Please run \"revdep-rebuild\" which can be"
