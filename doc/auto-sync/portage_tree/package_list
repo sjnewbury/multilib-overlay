@@ -93,7 +93,7 @@ dev-libs/nspr
 dev-libs/nss
 # dev-libs/oniguruma
 # dev-libs/openct
-# dev-libs/opensc
+dev-libs/opensc
 dev-libs/openssl
 dev-libs/pkcs11-helper
 dev-libs/popt
