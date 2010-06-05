@@ -68,7 +68,7 @@ dev-libs/libassuan
 # dev-libs/libbeagle
 # dev-libs/libcdio
 # dev-libs/libcroco
-# dev-libs/libdaemon
+dev-libs/libdaemon
 dev-libs/libedit
 dev-libs/libffi
 dev-libs/libgamin
