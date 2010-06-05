@@ -1,6 +1,5 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-
 # $Header: /var/cvsroot/gentoo-x86/dev-lang/tcl/tcl-8.5.8.ebuild,v 1.1 2010/01/07 14:20:04 patrick Exp $
 
 WANT_AUTOCONF=latest
@@ -22,7 +21,7 @@ DEPEND=""
 
 S="${WORKDIR}/${MY_P}"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if use threads ; then
 		ewarn ""
 		ewarn "PLEASE NOTE: You are compiling ${P} with"
@@ -101,7 +100,7 @@ multilib-native_src_install_internal() {
 	dodoc ChangeLog* README changes
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	ewarn
 	ewarn "If you're upgrading from <dev-lang/tcl-8.5, you must recompile the other"
 	ewarn "packages on your system that link with tcl after the upgrade"

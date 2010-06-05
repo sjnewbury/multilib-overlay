@@ -1,25 +1,24 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2007 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/tcl/tcl-8.5.7.ebuild,v 1.11 2009/10/06 17:33:00 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/tcl/tcl-8.4.15.ebuild,v 1.8 2007/08/25 22:58:14 vapier Exp $
 
 WANT_AUTOCONF=latest
 WANT_AUTOMAKE=latest
 
-inherit autotools eutils flag-o-matic multilib toolchain-funcs multilib-native
+inherit autotools eutils multilib toolchain-funcs multilib-native
 
-MY_P="${PN}${PV/_beta/b}"
 DESCRIPTION="Tool Command Language"
 HOMEPAGE="http://www.tcl.tk/"
-SRC_URI="mirror://sourceforge/tcl/${MY_P}-src.tar.gz"
+SRC_URI="mirror://sourceforge/tcl/${PN}${PV}-src.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="debug threads"
 
 DEPEND=""
 
-S="${WORKDIR}/${MY_P}"
+S=${WORKDIR}/${PN}${PV}
 
 multilib-native_pkg_setup_internal() {
 	if use threads ; then
@@ -37,22 +36,29 @@ multilib-native_pkg_setup_internal() {
 multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
-	epatch "${FILESDIR}"/${PN}-8.5_alpha6-multilib.patch
+	epatch "${FILESDIR}"/${PN}-8.4.11-multilib.patch
 
 	# Bug 125971
-	epatch "${FILESDIR}"/${PN}-8.5_alpha6-tclm4-soname.patch
+	epatch "${FILESDIR}"/${P}-tclm4-soname.patch
+
+	local d
+	for d in */configure ; do
+		cd "${S}"/${d%%/*}
+		EPATCH_SINGLE_MSG="Patching nls cruft in ${d}" \
+		epatch "${FILESDIR}"/tcl-configure-LANG.patch
+	done
 
 	cd "${S}"/unix
 	eautoreconf
 }
 
 multilib-native_src_compile_internal() {
-	# workaround stack check issues, bug #280934
-	if use hppa; then
-		append-cflags "-DTCL_NO_STACK_CHECK=1"
-	fi
-
 	tc-export CC
+	local local_config_use=""
+
+	if use threads ; then
+		local_config_use="--enable-threads"
+	fi
 
 	cd "${S}"/unix
 	econf \
@@ -91,6 +97,10 @@ multilib-native_src_install_internal() {
 	rm -f "${D}"/usr/${mylibdir}/tcl${v1}/include/generic/tclPlatDecls.h
 
 	# install symlink for libraries
+	if use debug ; then
+		dosym libtcl${v1}g.so /usr/${mylibdir}/libtcl${v1}.so
+		dosym libtclstub${v1}g.a /usr/${mylibdir}/libtclstub${v1}.a
+	fi
 	dosym libtcl${v1}.so /usr/${mylibdir}/libtcl.so
 	dosym libtclstub${v1}.a /usr/${mylibdir}/libtclstub.a
 
@@ -102,7 +112,7 @@ multilib-native_src_install_internal() {
 
 multilib-native_pkg_postinst_internal() {
 	ewarn
-	ewarn "If you're upgrading from <dev-lang/tcl-8.5, you must recompile the other"
+	ewarn "If you're upgrading from tcl-8.3, you must recompile the other"
 	ewarn "packages on your system that link with tcl after the upgrade"
 	ewarn "completes.  To perform this action, please run revdep-rebuild"
 	ewarn "in package app-portage/gentoolkit."

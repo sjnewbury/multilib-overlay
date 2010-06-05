@@ -2,8 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-lang/tcl/tcl-8.4.18.ebuild,v 1.9 2008/11/04 03:29:09 vapier Exp $
 
-EAPI=2
-
 WANT_AUTOCONF=latest
 WANT_AUTOMAKE=latest
 
@@ -22,7 +20,7 @@ DEPEND=""
 
 S="${WORKDIR}/${PN}${PV}"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if use threads ; then
 		ewarn ""
 		ewarn "PLEASE NOTE: You are compiling ${PF} with"
@@ -35,7 +33,7 @@ pkg_setup() {
 	fi
 }
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 	epatch "${FILESDIR}"/${PN}-8.4.16-multilib.patch
@@ -56,7 +54,7 @@ src_unpack() {
 	eautoreconf
 }
 
-multilib-native_src_configure_internal() {
+multilib-native_src_compile_internal() {
 	tc-export CC
 	local local_config_use=""
 
@@ -68,6 +66,7 @@ multilib-native_src_configure_internal() {
 	econf \
 		$(use_enable threads) \
 		$(use_enable debug symbols) || die
+	emake || die
 }
 
 multilib-native_src_install_internal() {
@@ -113,7 +112,7 @@ multilib-native_src_install_internal() {
 	dodoc ChangeLog* README changes
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	ewarn
 	ewarn "If you're upgrading from tcl-8.3, you must recompile the other"
 	ewarn "packages on your system that link with tcl after the upgrade"

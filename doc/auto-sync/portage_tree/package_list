@@ -46,7 +46,7 @@ dev-db/sqlite
 # dev-lang/perl
 dev-lang/python
 # dev-lang/ruby
-# dev-lang/tcl
+dev-lang/tcl
 dev-lang/tk
 dev-lang/vala
 dev-libs/atk
