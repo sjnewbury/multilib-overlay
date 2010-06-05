@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-libs/libical/libical-0.44.ebuild,v 1.1 2009/11/12 10:45:38 pva Exp $
 
-inherit multilib-native
-
 EAPI="2"
+
+inherit multilib-native
 
 DESCRIPTION="An implementation of basic iCAL protocols from citadel, previously known as aurore"
 HOMEPAGE="http://freeassociation.sourceforge.net"

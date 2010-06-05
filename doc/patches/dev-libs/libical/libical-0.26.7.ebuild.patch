@@ -1,0 +1,14 @@
+--- /usr/portage/dev-libs/libical/libical-0.26.7.ebuild	2007-10-06 07:05:45.000000000 +0200
++++ ./dev-libs/libical/libical-0.26.7.ebuild	2010-06-05 22:34:14.000000000 +0200
+@@ -23,10 +23,9 @@
+ 
+ S="${WORKDIR}"/libical-${PV%.*}
+ 
+-src_compile() {
++src_configure() {
+ 	# Fix 66377
+ 	LDFLAGS="${LDFLAGS} -lpthread" econf || die "Configuration failed"
+-	emake || die "Compilation failed"
+ }
+ 
+ src_install () {
