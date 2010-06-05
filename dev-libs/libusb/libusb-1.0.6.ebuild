@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libusb/libusb-1.0.6.ebuild,v 1.1 2009/12/26 01:22:46 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libusb/libusb-1.0.6.ebuild,v 1.2 2010/02/21 03:42:38 abcd Exp $
 
 EAPI="2"
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://libusb.org/"
 SRC_URI="mirror://sourceforge/libusb/${P}.tar.bz2"
 LICENSE="LGPL-2.1"
 SLOT="1"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 -x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 -x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos"
 IUSE="debug doc"
 
 DEPEND="doc? ( app-doc/doxygen )"

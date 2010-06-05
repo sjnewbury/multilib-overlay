@@ -1,0 +1,24 @@
+--- /usr/portage/dev-libs/libusb/libusb-0.1.11.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./dev-libs/libusb/libusb-0.1.11.ebuild	2010-06-05 22:20:53.000000000 +0200
+@@ -20,19 +20,16 @@
+ 		app-text/docbook-sgml-utils
+ 		~app-text/docbook-sgml-dtd-4.2 )"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd ${S}
++src_prepare() {
+ 	sed -i -e 's:-Werror::' Makefile.am
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	elibtoolize
+ 	econf \
+ 		$(use_enable debug debug all) \
+ 		$(use_enable doc build-docs) \
+ 		|| die "econf failed"
+-	emake || die "emake failed"
+ }
+ 
+ src_install() {

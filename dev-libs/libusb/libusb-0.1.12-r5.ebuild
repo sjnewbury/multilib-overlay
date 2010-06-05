@@ -21,7 +21,7 @@ DEPEND="${RDEPEND}
 	app-text/docbook-sgml-utils
 	~app-text/docbook-sgml-dtd-4.2 )"
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 	sed -i -e 's:-Werror::' Makefile.am

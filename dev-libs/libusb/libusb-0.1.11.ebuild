@@ -17,14 +17,12 @@ IUSE="debug doc"
 
 RDEPEND="!dev-libs/libusb-compat"
 DEPEND="${RDEPEND}
-	sys-devel/libtool
+	sys-devel/libtool[lib32?]
 	doc? ( app-text/openjade
 		app-text/docbook-sgml-utils
 		~app-text/docbook-sgml-dtd-4.2 )"
 
-src_unpack() {
-	unpack ${A}
-	cd ${S}
+multilib-native_src_prepare_internal() {
 	sed -i -e 's:-Werror::' Makefile.am
 }
 
