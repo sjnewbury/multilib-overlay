@@ -4,7 +4,7 @@
 
 EAPI="3"
 
-inherit eutils flag-o-matic versionator multilib-native
+inherit flag-o-matic versionator multilib-native
 
 MAJOR_MINOR_VERSION="$(get_version_component_range 1-2)"
 
@@ -31,7 +31,7 @@ S="${WORKDIR}/${PN}/source"
 
 QA_DT_NEEDED="/usr/lib.*/libicudata.so.${MAJOR_MINOR_VERSION/./}.0"
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack "${SRC_ARCHIVE}"
 	if use doc; then
 		mkdir docs
@@ -57,7 +57,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable examples samples)
 }
 
-multilib-native_src_test_internal() {
+src_test() {
 	emake check || die "emake check failed"
 }
 

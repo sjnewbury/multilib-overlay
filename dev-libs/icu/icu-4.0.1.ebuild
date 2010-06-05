@@ -31,7 +31,7 @@ RDEPEND=""
 
 S="${WORKDIR}/${PN}/source"
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${SRCPKG}
 	if use doc ; then
 		mkdir userguide
@@ -56,7 +56,7 @@ multilib-native_src_prepare_internal() {
 
 	# Bug 258377
 	sed -i -e 's:^#elif$:#else:g' ${S}/layoutex/ParagraphLayout.cpp || die 'elif sed failed'
-	
+
 	epatch "${FILESDIR}/${P}-fix_parallel_building.patch"
 	epatch "${FILESDIR}/${P}-TestDisplayNamesMeta.patch"
 }

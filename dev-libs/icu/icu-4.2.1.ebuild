@@ -1,10 +1,10 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/icu/icu-4.2.1.ebuild,v 1.6 2009/08/29 19:05:38 nixnut Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/icu/icu-4.2.1.ebuild,v 1.12 2009/12/14 18:33:14 armin76 Exp $
 
 EAPI="2"
 
-inherit eutils versionator multilib-native
+inherit eutils flag-o-matic versionator multilib-native
 
 DESCRIPTION="International Components for Unicode"
 HOMEPAGE="http://www.icu-project.org/ http://ibm.com/software/globalization/icu/"
@@ -21,7 +21,7 @@ SRC_URI="${BASEURI}/${SRCPKG}
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="alpha amd64 ~arm ~hppa ~ia64 ~mips ppc ~ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="debug doc examples"
 
 DEPEND="doc? ( app-arch/unzip )"
@@ -29,7 +29,14 @@ RDEPEND=""
 
 S="${WORKDIR}/${PN}/source"
 
-src_unpack() {
+multilib-native_pkg_setup_internal() {
+	# ICU fails to build with enabled optimizations (bug #296901).
+	if use arm || use ia64 || use sparc; then
+		filter-flags -O*
+	fi
+}
+
+multilib-native_src_unpack_internal() {
 	unpack ${SRCPKG}
 	if use doc; then
 		mkdir apidocs
@@ -47,8 +54,9 @@ multilib-native_src_prepare_internal() {
 		sed -i -e "/^${x} =.*/s:@${x}@::" "config/Makefile.inc.in" || die "sed failed"
 	done
 
-	epatch "${FILESDIR}/${P}-pkgdata.patch"
 	epatch "${FILESDIR}/${P}-fix_misoptimizations.patch"
+	epatch "${FILESDIR}/${P}-pkgdata.patch"
+	epatch "${FILESDIR}/${P}-pkgdata-build_data_without_assembly.patch"
 }
 
 multilib-native_src_configure_internal() {
@@ -58,7 +66,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable examples samples)
 }
 
-multilib-native_src_test_internal() {
+src_test() {
 	emake check || die "emake check failed"
 }
 

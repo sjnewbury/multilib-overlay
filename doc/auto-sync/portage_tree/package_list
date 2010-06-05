@@ -61,7 +61,7 @@ dev-libs/expat
 # dev-libs/gir-repository
 dev-libs/glib
 # dev-libs/gobject-introspection
-# dev-libs/icu
+dev-libs/icu
 dev-libs/iniparser
 dev-libs/libassuan
 dev-libs/libatomic_ops
