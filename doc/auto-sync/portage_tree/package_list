@@ -75,7 +75,7 @@ dev-libs/libffi
 dev-libs/libgcrypt
 # dev-libs/libgee
 # dev-libs/libgpg-error
-# dev-libs/libgweather  has maybe missing net-libs/libsoup-gnome dep
+dev-libs/libgweather
 dev-libs/libical
 dev-libs/libIDL
 dev-libs/libksba
