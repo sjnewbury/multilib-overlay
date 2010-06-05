@@ -32,11 +32,11 @@ RDEPEND=">=dev-libs/glib-2.16.1[lib32?]
 	sys-libs/zlib[lib32?]
 	=sys-libs/db-4*[lib32?]
 	ldap? ( >=net-nds/openldap-2.0[lib32?] )
-	kerberos? ( virtual/krb5 )
+	kerberos? ( virtual/krb5[lib32?] )
 	krb4? ( app-crypt/mit-krb5[krb4,lib32?] )"
 
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.9
+	>=dev-util/pkgconfig-0.9[lib32?]
 	>=dev-util/intltool-0.35.5
 	>=gnome-base/gnome-common-2
 	>=dev-util/gtk-doc-am-1.9
@@ -48,7 +48,9 @@ multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		$(use_with ldap openldap)
 		$(use_with krb4 krb4 /usr)
+		$(use_with krb4 krb4-libs /usr/$(get_libdir) )
 		$(use_with kerberos krb5 /usr)
+		$(use_with kerberos krb5-libs /usr/$(get_libdir) )
 		$(use_enable ssl nss)
 		$(use_enable ssl smime)
 		$(use_enable ipv6)
@@ -113,7 +115,7 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	gnome2_pkg_postinst
 
 	if use ldap; then

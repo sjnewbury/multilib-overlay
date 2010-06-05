@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/evolution-data-server/evolution-data-server-2.26.3.ebuild,v 1.4 2009/10/08 03:16:59 tester Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-extra/evolution-data-server/evolution-data-server-2.26.3.ebuild,v 1.11 2010/01/18 00:03:14 jer Exp $
 
 EAPI="2"
 
@@ -9,9 +9,9 @@ inherit db-use eutils flag-o-matic gnome2 autotools versionator multilib-native
 DESCRIPTION="Evolution groupware backend"
 HOMEPAGE="http://www.gnome.org/projects/evolution/"
 
-LICENSE="LGPL-2 Sleepycat"
+LICENSE="LGPL-2 BSD DB"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sparc x86 ~x86-fbsd"
 IUSE="doc ipv6 kerberos gnome-keyring krb4 ldap ssl"
 
 RDEPEND=">=dev-libs/glib-2.16.1[lib32?]
@@ -34,11 +34,11 @@ RDEPEND=">=dev-libs/glib-2.16.1[lib32?]
 	sys-libs/zlib[lib32?]
 	=sys-libs/db-4*[lib32?]
 	ldap? ( >=net-nds/openldap-2.0[lib32?] )
-	kerberos? ( virtual/krb5 )
+	kerberos? ( virtual/krb5[lib32?] )
 	krb4? ( app-crypt/mit-krb5[krb4,lib32?] )"
 
 DEPEND="${RDEPEND}
-	>=dev-util/pkgconfig-0.9
+	>=dev-util/pkgconfig-0.9[lib32?]
 	>=dev-util/intltool-0.35.5
 	>=gnome-base/gnome-common-2
 	>=dev-util/gtk-doc-am-1.9
@@ -51,7 +51,8 @@ multilib-native_pkg_setup_internal() {
 		$(use_with ldap openldap)
 		$(use_with krb4 krb4 /usr)
 		$(use_with krb4 krb4-libs /usr/$(get_libdir) )
-		$(use_enable kerberos krb5)
+		$(use_with kerberos krb5 /usr)
+		$(use_with kerberos krb5-libs /usr/$(get_libdir) )
 		$(use_enable ssl nss)
 		$(use_enable ssl smime)
 		$(use_enable ipv6)
@@ -78,9 +79,6 @@ multilib-native_src_prepare_internal() {
 
 	# Fix hang while updating search folders, bug #277864, upstream bug #583507
 	epatch "${FILESDIR}/${PN}-2.26.3-camel-vee-folder.patch"
-
-	# Use krb5-config to autolocate kerberos5-libs
-	epatch "${FILESDIR}"/${PN}-2.26.3-kerberos5-test.patch
 
 	if use doc; then
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
@@ -120,7 +118,7 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	gnome2_pkg_postinst
 
 	if use ldap; then
