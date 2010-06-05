@@ -98,7 +98,7 @@ _parse_PYTHON_DEPEND() {
 					accepted_version="1"
 				fi
 				if [[ "${accepted_version}" == "1" ]]; then
-					_PYTHON_ATOMS+=("=dev-lang/python-${python_versions[${i}]}*[lib32?]")
+					_PYTHON_ATOMS+=("=dev-lang/python-${python_versions[${i}]}*")
 				fi
 				if [[ "${python_versions[${i}]}" == "${python_minimal_version}" ]]; then
 					accepted_version="0"
@@ -108,7 +108,7 @@ _parse_PYTHON_DEPEND() {
 
 		if [[ "${python_all}" == "1" ]]; then
 			if [[ -z "${python_minimal_version}" && -z "${python_maximal_version}" ]]; then
-				_PYTHON_ATOMS+=("dev-lang/python[lib32?]")
+				_PYTHON_ATOMS+=("dev-lang/python")
 			else
 				python_versions=("${_CPYTHON2_SUPPORTED_ABIS[@]}" "${_CPYTHON3_SUPPORTED_ABIS[@]}")
 				python_minimal_version="${python_minimal_version:-${python_versions[0]}}"
@@ -118,7 +118,7 @@ _parse_PYTHON_DEPEND() {
 		else
 			if [[ "${python3}" == "1" ]]; then
 				if [[ -z "${python3_minimal_version}" && -z "${python3_maximal_version}" ]]; then
-					_PYTHON_ATOMS+=("=dev-lang/python-3*[lib32?]")
+					_PYTHON_ATOMS+=("=dev-lang/python-3*")
 				else
 					python_versions=("${_CPYTHON3_SUPPORTED_ABIS[@]}")
 					python_minimal_version="${python3_minimal_version:-${python_versions[0]}}"
@@ -128,7 +128,7 @@ _parse_PYTHON_DEPEND() {
 			fi
 			if [[ "${python2}" == "1" ]]; then
 				if [[ -z "${python2_minimal_version}" && -z "${python2_maximal_version}" ]]; then
-					_PYTHON_ATOMS+=("=dev-lang/python-2*[lib32?]")
+					_PYTHON_ATOMS+=("=dev-lang/python-2*")
 				else
 					python_versions=("${_CPYTHON2_SUPPORTED_ABIS[@]}")
 					python_minimal_version="${python2_minimal_version:-${python_versions[0]}}"
@@ -164,11 +164,11 @@ elif [[ -n "${NEED_PYTHON}" ]]; then
 		eerror "Use PYTHON_DEPEND instead of NEED_PYTHON."
 		die "NEED_PYTHON cannot be used in this EAPI"
 	fi
-	_PYTHON_ATOMS=(">=dev-lang/python-${NEED_PYTHON}[lib32?]")
+	_PYTHON_ATOMS=(">=dev-lang/python-${NEED_PYTHON}")
 	DEPEND+="${DEPEND:+ }${_PYTHON_ATOMS[@]}"
 	RDEPEND+="${RDEPEND:+ }${_PYTHON_ATOMS[@]}"
 else
-	_PYTHON_ATOMS=("dev-lang/python[lib32?]")
+	_PYTHON_ATOMS=("dev-lang/python")
 fi
 
 # @ECLASS-VARIABLE: PYTHON_USE_WITH
@@ -183,6 +183,9 @@ fi
 # @DESCRIPTION:
 # Set this to a name of a USE flag if you need to make either PYTHON_USE_WITH or
 # PYTHON_USE_WITH_OR atoms conditional under a USE flag.
+
+#add lib32? to PYTHON_USE_WITH to ensure that 32bit python is build if needed
+PYTHON_USE_WITH+="${PYTHON_USE_WITH:+ }lib32?"
 
 if ! has "${EAPI:-0}" 0 1 && [[ -n ${PYTHON_USE_WITH} || -n ${PYTHON_USE_WITH_OR} ]]; then
 	_PYTHON_USE_WITH_ATOMS_ARRAY=()
