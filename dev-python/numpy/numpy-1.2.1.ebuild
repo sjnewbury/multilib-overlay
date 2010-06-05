@@ -1,63 +1,67 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.3.0-r1.ebuild,v 1.10 2010/01/06 21:11:02 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.2.1.ebuild,v 1.15 2009/08/09 16:45:48 armin76 Exp $
 
 EAPI="2"
 
-NEED_PYTHON="2.4"
-SUPPORT_PYTHON_ABIS="1"
+NEED_PYTHON=2.4
 
-inherit distutils eutils flag-o-matic toolchain-funcs multilib-native
+inherit distutils eutils flag-o-matic fortran multilib-native
 
 DESCRIPTION="Fast array and numerical python library"
 SRC_URI="mirror://sourceforge/numpy/${P}.tar.gz"
-HOMEPAGE="http://numpy.scipy.org/"
+HOMEPAGE="http://numeric.scipy.org/"
 
-RDEPEND="dev-python/setuptools
-	lapack? ( virtual/cblas virtual/lapack )"
+RDEPEND="lapack? ( virtual/cblas virtual/lapack )"
 DEPEND="${RDEPEND}
-	lapack? ( dev-util/pkgconfig[lib32?] )
-	test? ( >=dev-python/nose-0.10 )"
+	test? ( >=dev-python/nose-0.10 )
+	lapack? ( dev-util/pkgconfig[lib32?] )"
 
 IUSE="lapack test"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 s390 sh sparc x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x64-solaris ~x86-solaris"
+KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 LICENSE="BSD"
 
-RESTRICT_PYTHON_ABIS="3*"
+# whatever LDFLAGS set will break linking
+# see progress in http://projects.scipy.org/scipy/numpy/ticket/573
+if [ -n "${LDFLAGS}" ]; then
+	append-ldflags -shared
+else
+	LDFLAGS="-shared"
+fi
 
 multilib-native_pkg_setup_internal() {
-	# whatever LDFLAGS set will break linking
-	# see progress in http://projects.scipy.org/scipy/numpy/ticket/573
-	# with the subtle difference that we don't want to break Darwin where
-	# -shared is not a valid linker argument
-	if [[ ${CHOST} != *-darwin* ]] ; then
-		if [[ -n "${LDFLAGS}" ]]; then
-			append-ldflags -shared
-		else
-			LDFLAGS="-shared"
-		fi
-	fi
-
 	# only one fortran to link with:
 	# linking with cblas and lapack library will force
 	# autodetecting and linking to all available fortran compilers
 	use lapack || return
-	[[ -z ${FC} ]] && FC=$(tc-getFC)
+	FORTRAN="gfortran g77 ifc"
+	fortran_pkg_setup
+	local fc=
+	case ${FORTRANC} in
+		gfortran) fc=gnu95 ;;
+		g77) fc=gnu ;;
+		ifc|ifort)
+			if use ia64; then
+				fc=intele
+			elif use amd64; then
+				fc=intelem
+			else
+				fc=intel
+			fi
+			;;
+		*) eerror "Unknown fortran compiler: ${FORTRANC}"
+		   die "numpy_fortran_setup failed" ;;
+	esac
+
 	# when fortran flags are set, pic is removed.
-	FFLAGS="${FFLAGS} -fPIC"
-	export NUMPY_FCONFIG="config_fc --noopt --noarch"
+	use amd64 && FFLAGS="${FFLAGS} -fPIC"
+	export NUMPY_FCONFIG="config_fc --fcompiler=${fc} --noopt --noarch"
 }
 
 multilib-native_src_prepare_internal() {
 	# Fix some paths and docs in f2py
 	epatch "${FILESDIR}"/${PN}-1.1.0-f2py.patch
-
-	epatch "${FILESDIR}/${P}-parisc.patch" # bug 277438
-	epatch "${FILESDIR}/${P}-alpha.patch" # bug 277438
-	epatch "${FILESDIR}/${P}-arm-sh.patch"
-
-	epatch "${FILESDIR}"/${P}-fenv-freebsd.patch # bug 279487
 
 	# Gentoo patch for ATLAS library names
 	sed -i \
@@ -77,7 +81,7 @@ multilib-native_src_prepare_internal() {
 				cblas | sed -e 's/^-I//' -e 's/ -I/:/g')
 			library_dirs = $(pkg-config --libs-only-L \
 				cblas blas lapack | sed -e \
-				's/^-L//' -e 's/ -L/:/g' -e 's/ //g'):"${EPREFIX}"/usr/$(get_libdir)
+				's/^-L//' -e 's/ -L/:/g' -e 's/ //g'):/usr/$(get_libdir)
 			atlas_libs = $(pkg-config --libs-only-l \
 				cblas blas | sed -e 's/^-l//' -e 's/ -l/, /g' -e 's/,.pthread//g')
 			lapack_libs = $(pkg-config --libs-only-l \
@@ -87,13 +91,13 @@ multilib-native_src_prepare_internal() {
 				cblas | sed -e 's/^-I//' -e 's/ -I/:/g')
 			library_dirs = $(pkg-config --libs-only-L \
 				cblas blas | sed -e 's/^-L//' -e 's/ -L/:/g' \
-				-e 's/ //g'):"${EPREFIX}"/usr/$(get_libdir)
+				-e 's/ //g'):/usr/$(get_libdir)
 			libraries = $(pkg-config --libs-only-l \
 				cblas blas | sed -e 's/^-l//' -e 's/ -l/, /g' -e 's/,.pthread//g')
 			[lapack_opt]
 			library_dirs = $(pkg-config --libs-only-L \
 				lapack | sed -e 's/^-L//' -e 's/ -L/:/g' \
-				-e 's/ //g'):"${EPREFIX}"/usr/$(get_libdir)
+				-e 's/ //g'):/usr/$(get_libdir)
 			libraries = $(pkg-config --libs-only-l \
 				lapack | sed -e 's/^-l//' -e 's/ -l/, /g' -e 's/,.pthread//g')
 		EOF
@@ -103,28 +107,37 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_compile_internal() {
+	# when fortran flags are set, pic is removed but unfortunately needed
 	distutils_src_compile ${NUMPY_FCONFIG}
 }
 
 src_test() {
-	testing() {
-		"$(PYTHON)" setup.py ${NUMPY_FCONFIG} build -b "build-${PYTHON_ABI}" install \
-			--home="${S}/test-${PYTHON_ABI}" --no-compile || die "install test failed"
-		pushd "${S}/test-${PYTHON_ABI}/"lib* > /dev/null
-		PYTHONPATH=python "$(PYTHON)" -c "import numpy; numpy.test()" 2>&1 | tee test.log
-		grep -q '^ERROR' test.log && die "test failed"
-		popd > /dev/null
-		rm -fr test-${PYTHON_ABI}
-	}
-	python_execute_function testing
+	"${python}" setup.py ${NUMPY_FCONFIG} install \
+		--home="${S}"/test \
+		--no-compile \
+		|| die "install test failed"
+	pushd "${S}"/test/lib*
+	PYTHONPATH=python "${python}" -c "import numpy; numpy.test()" 2>&1 | tee test.log
+	grep -q '^ERROR' test.log && die "test failed"
+	popd
+	rm -rf test
 }
 
 multilib-native_src_install_internal() {
-	[[ -z ${ED} ]] && local ED=${D}
 	distutils_src_install ${NUMPY_FCONFIG}
 	dodoc THANKS.txt DEV_README.txt COMPATIBILITY
-	rm -f "${ED}"/usr/lib/python*/site-packages/numpy/*.txt || die
+	rm -f "${D}"/usr/lib/python*/site-packages/numpy/*.txt
 	docinto f2py
 	dodoc numpy/f2py/docs/*.txt || die "dodoc f2py failed"
 	doman numpy/f2py/f2py.1 || die "doman failed"
+}
+
+multilib-native_pkg_postinst_internal() {
+	if  ! built_with_use sys-devel/gcc fortran &&
+		! has_version dev-lang/ifc
+	then
+		ewarn "To use numpy's f2py you need a fortran compiler."
+		ewarn "You can either set USE=fortran flag and re-install gcc,"
+		ewarn "or install dev-lang/ifc"
+	fi
 }

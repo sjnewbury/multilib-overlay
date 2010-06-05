@@ -5,7 +5,7 @@
 EAPI="2"
 SUPPORT_PYTHON_ABIS="1"
 
-inherit eutils distutils flag-o-matic toolchain-funcs versionator multilib-native
+inherit distutils eutils flag-o-matic toolchain-funcs versionator multilib-native
 
 NP="${PN}-1.3"
 
@@ -26,7 +26,7 @@ IUSE="doc lapack test"
 RDEPEND="dev-python/setuptools
 	lapack? ( virtual/cblas virtual/lapack )"
 DEPEND="${RDEPEND}
-	lapack? ( dev-util/pkgconfig )
+	lapack? ( dev-util/pkgconfig[lib32?] )
 	test? ( >=dev-python/nose-0.10 )
 	doc? ( app-arch/unzip )"
 RESTRICT_PYTHON_ABIS="3.*"
