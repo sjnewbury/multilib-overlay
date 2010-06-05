@@ -1,0 +1,22 @@
+--- /usr/portage/dev-lang/perl/perl-5.8.8-r8.ebuild	2010-03-31 21:05:57.000000000 +0200
++++ ./dev-lang/perl/perl-5.8.8-r8.ebuild	2010-06-06 01:38:42.000000000 +0200
+@@ -73,9 +73,7 @@
+ 	dual_scripts
+ }
+ 
+-src_unpack() {
+-	unpack ${A}
+-
++src_prepare() {
+ 	# Get -lpthread linked before -lc.  This is needed
+ 	# when using glibc >= 2.3, or else runtime signal
+ 	# handling breaks.  Fixes bug #14380.
+@@ -312,8 +310,6 @@
+ 	# would like to bracket this with a test for the existence of a
+ 	# dotfile, but can't clean it automatically now.
+ 
+-	src_configure
+-
+ 	emake -j1 || die "Unable to make"
+ }
+ 

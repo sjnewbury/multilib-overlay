@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.10.1.ebuild,v 1.18 2010/02/13 12:01:07 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.10.1.ebuild,v 1.21 2010/03/31 18:49:57 armin76 Exp $
 
 EAPI=2
 
@@ -24,16 +24,16 @@ HOMEPAGE="http://www.perl.org/"
 
 LICENSE="|| ( Artistic GPL-1 GPL-2 GPL-3 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 #KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="berkdb build debug doc gdbm ithreads"
 
-COMMON_DEPEND="berkdb? ( sys-libs/db )
-	gdbm? ( >=sys-libs/gdbm-1.8.3 )
+COMMON_DEPEND="berkdb? ( sys-libs/db[lib32?] )
+	gdbm? ( >=sys-libs/gdbm-1.8.3[lib32?] )
 	>=sys-devel/libperl-5.10.1[lib32?]
-	!!<sys-devel/libperl-5.10.1
-	app-arch/bzip2
-	sys-libs/zlib"
+	!!<sys-devel/libperl-5.10.1[lib32?]
+	app-arch/bzip2[lib32?]
+	sys-libs/zlib[lib32?]"
 DEPEND="${COMMON_DEPEND}
 	elibc_FreeBSD? ( sys-freebsd/freebsd-mk-defs )"
 RDEPEND="${COMMON_DEPEND}"
@@ -64,9 +64,13 @@ multilib-native_pkg_setup_internal() {
 		ewarn "that compile against perl. You use threading at "
 		ewarn "your own discretion. "
 		echo
-		epause 5
 	fi
-	if has_version dev-lang/perl ; then
+	if has_version "~dev-lang/perl-5.8.8" ; then
+		ewarn "UPDATE THE PERL MODULES:"
+		ewarn "After updating dev-lang/perl you must reinstall"
+		ewarn "the installed perl modules."
+		ewarn "Use: perl-cleaner --all"
+	elif has_version dev-lang/perl ; then
 		# doesnot work
 		#if ! has_version dev-lang/perl[ithreads=,debug=] ; then
 		#if ! has_version dev-lang/perl[ithreads=] || ! has_version dev-lang/perl[debug=] ; then
@@ -78,7 +82,6 @@ multilib-native_pkg_setup_internal() {
 			ewarn "You changed one of the use-flags ithreads or debug."
 			ewarn "You must rebuild all perl-modules installed."
 			ewarn "Use: perl-cleaner --modules ; perl-cleaner --force --libperl"
-			epause
 		fi
 	fi
 	dual_scripts
@@ -100,34 +103,11 @@ myconf() {
 	myconf=( "${myconf[@]}" "$@" )
 }
 
-myperlarch() {
-	# multilib: needs to be called in both src_configure and src_install
-	case ${CHOST} in
-		*-freebsd*)   osname="freebsd" ;;
-		*-dragonfly*) osname="dragonfly" ;;
-		*-netbsd*)    osname="netbsd" ;;
-		*-openbsd*)   osname="openbsd" ;;
-		*-darwin*)    osname="darwin" ;;
-		*)            osname="linux" ;;
-	esac
-
-	if use ithreads ; then
-		mythreading="-multi"
-		myarch=${CHOST}
-		myarch="${myarch%%-*}-${osname}-thread"
-	else
-		myarch=${CHOST}
-		myarch="${myarch%%-*}-${osname}"
-	fi
-}
-
 multilib-native_src_configure_internal() {
 	declare -a myconf
 
 	# some arches and -O do not mix :)
-	use arm && replace-flags -O? -O1
 	use ppc && replace-flags -O? -O1
-	use ia64 && replace-flags -O? -O1
 	# Perl has problems compiling with -Os in your flags with glibc
 	use elibc_uclibc || replace-flags "-Os" "-O2"
 	# This flag makes compiling crash in interesting ways
@@ -159,11 +139,23 @@ multilib-native_src_configure_internal() {
 		GZIP_OS_CODE = AUTO_DETECT
 	EOF
 
-	# set myarch
-	myperlarch
+	case ${CHOST} in
+		*-freebsd*)   osname="freebsd" ;;
+		*-dragonfly*) osname="dragonfly" ;;
+		*-netbsd*)    osname="netbsd" ;;
+		*-openbsd*)   osname="openbsd" ;;
+		*-darwin*)    osname="darwin" ;;
+		*)            osname="linux" ;;
+	esac
 
 	if use ithreads ; then
+		mythreading="-multi"
 		myconf -Dusethreads
+		myarch=${CHOST}
+		myarch="${myarch%%-*}-${osname}-thread"
+	else
+		myarch=${CHOST}
+		myarch="${myarch%%-*}-${osname}"
 	fi
 	if use debug ; then
 		myarch="${myarch}-debug"
@@ -249,9 +241,6 @@ src_test() {
 }
 
 multilib-native_src_install_internal() {
-	# set myarch again, if needed
-	use lib32 && myperlarch
-
 	export LC_ALL="C"
 	local i
 	local coredir="/usr/$(get_libdir)/perl5/${MY_PV}/${myarch}${mythreading}/CORE"
@@ -341,7 +330,7 @@ multilib-native_src_install_internal() {
 	prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	local INC DIR file
 
 	dual_scripts
@@ -381,7 +370,7 @@ pkg_postinst() {
 	fi
 }
 
-pkg_postrm(){
+multilib-native_pkg_postrm_internal(){
 	${IS_PERL} && dual_scripts
 }
 

@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.8.8-r8.ebuild,v 1.10 2010/02/03 00:18:06 hanno Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.8.8-r8.ebuild,v 1.11 2010/03/31 18:49:57 armin76 Exp $
 
 EAPI="2"
 
@@ -24,17 +24,17 @@ KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~spar
 IUSE="berkdb debug doc gdbm ithreads perlsuid build elibc_FreeBSD"
 PERL_OLDVERSEN="5.8.0 5.8.2 5.8.4 5.8.5 5.8.6 5.8.7"
 
-DEPEND="berkdb? ( sys-libs/db )
-	gdbm? ( >=sys-libs/gdbm-1.8.3 )
-	>=sys-devel/libperl-${PV}-r1[lib32?]
+DEPEND="berkdb? ( sys-libs/db[lib32?] )
+	gdbm? ( >=sys-libs/gdbm-1.8.3[lib32?] )
+	>=sys-devel/libperl-${PV}-r1
 	elibc_FreeBSD? ( sys-freebsd/freebsd-mk-defs )
 	<sys-devel/libperl-5.9[lib32?]
 	!<perl-core/File-Spec-0.87
 	!<perl-core/Test-Simple-0.47-r1"
 
-RDEPEND="~sys-devel/libperl-${PV}
-	berkdb? ( sys-libs/db )
-	gdbm? ( >=sys-libs/gdbm-1.8.3 )
+RDEPEND="~sys-devel/libperl-${PV}[lib32?]
+	berkdb? ( sys-libs/db[lib32?] )
+	gdbm? ( >=sys-libs/gdbm-1.8.3[lib32?] )
 	build? (
 		!perl-core/Test-Harness
 		!perl-core/PodParser
@@ -76,7 +76,6 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
-
 	# Get -lpthread linked before -lc.  This is needed
 	# when using glibc >= 2.3, or else runtime signal
 	# handling breaks.  Fixes bug #14380.
@@ -184,9 +183,7 @@ multilib-native_src_configure_internal() {
 	declare -a myconf
 
 	# some arches and -O do not mix :)
-	use arm && replace-flags -O? -O1
 	use ppc && replace-flags -O? -O1
-	use ia64 && replace-flags -O? -O1
 	# Perl has problems compiling with -Os in your flags with glibc
 	use elibc_uclibc || replace-flags "-Os" "-O2"
 	( gcc-specs-ssp && use ia64 ) && append-flags -fno-stack-protector
@@ -318,7 +315,7 @@ multilib-native_src_compile_internal() {
 	emake -j1 || die "Unable to make"
 }
 
-multilib-native_src_test_internal() {
+src_test() {
 	use elibc_uclibc && export MAKEOPTS="${MAKEOPTS} -j1"
 	emake -i test CCDLFLAGS= || die "test failed"
 }
@@ -455,7 +452,7 @@ multilib-native_pkg_postinst_internal() {
 	fi
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	dual_scripts
 }
 
@@ -514,7 +511,7 @@ src_remove_extra_files() {
 	local bindir="${prefix}/bin"
 	local perlroot="${prefix}/$(get_libdir)/perl5" # perl installs per-arch dirs
 	local prV="${perlroot}/${MY_PV}"
-	# myarch and mythreading are defined inside src_configure()
+	# myarch and mythreading are defined inside multilib-native_src_configure_internal()
 	local prVA="${prV}/${myarch}${mythreading}"
 
 	# I made this list from the Mandr*, Debian and ex-Connectiva perl-base list
