@@ -103,7 +103,7 @@ dev-libs/openssl
 dev-perl/XML-Parser
 dev-python/dbus-python
 # dev-python/gnome-vfs-python
-# dev-python/libbonobo-python
+dev-python/libbonobo-python
 dev-python/libgnomecanvas-python
 dev-python/libgnome-python
 dev-python/numpy
