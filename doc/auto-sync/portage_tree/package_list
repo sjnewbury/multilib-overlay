@@ -75,7 +75,7 @@ dev-libs/libffi
 dev-libs/libgcrypt
 # dev-libs/libgee
 # dev-libs/libgpg-error
-# dev-libs/libgweather
+# dev-libs/libgweather  has maybe missing net-libs/libsoup-gnome dep
 # dev-libs/libical
 # dev-libs/libIDL
 # dev-libs/libksba
@@ -135,7 +135,7 @@ gnome-base/librsvg
 # gnome-base/nautilus
 gnome-base/orbit
 # gnome-extra/bug-buddy
-# gnome-extra/evolution-data-server
+gnome-extra/evolution-data-server
 gnome-extra/gtkhtml
 gnome-extra/libgsf
 mail-client/evolution
