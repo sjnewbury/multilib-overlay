@@ -98,7 +98,7 @@ dev-libs/openssl
 # dev-libs/pkcs11-helper
 # dev-libs/poppler
 # dev-libs/poppler-glib
-# dev-libs/popt
+dev-libs/popt
 dev-libs/pth
 dev-perl/XML-Parser
 dev-python/dbus-python
