@@ -115,7 +115,7 @@ dev-python/pygtk
 # dev-python/pyrex
 # dev-util/automoc
 dev-util/cppunit
-# dev-util/pkgconfig
+dev-util/pkgconfig
 # games-emulation/zsnes   32 bit programm
 gnome-base/gconf
 gnome-base/gnome-desktop
