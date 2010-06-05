@@ -111,7 +111,7 @@ dev-python/dbus-python
 # dev-python/pycairo
 dev-python/pygobject
 dev-python/pygtk
-# dev-python/pyorbit
+dev-python/pyorbit
 dev-python/pyrex
 dev-util/automoc
 dev-util/cppunit
