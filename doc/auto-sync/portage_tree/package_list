@@ -105,7 +105,7 @@ dev-python/dbus-python
 # dev-python/gnome-vfs-python
 # dev-python/libbonobo-python
 # dev-python/libgnomecanvas-python
-# dev-python/libgnome-python
+dev-python/libgnome-python
 dev-python/numeric
 dev-python/numpy
 dev-python/pycairo

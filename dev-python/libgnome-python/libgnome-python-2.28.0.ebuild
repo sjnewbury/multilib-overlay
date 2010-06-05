@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/libgnome-python/libgnome-python-2.28.0.ebuild,v 1.1 2009/10/29 23:25:02 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/libgnome-python/libgnome-python-2.28.0.ebuild,v 1.3 2010/05/24 13:52:16 nixnut Exp $
 
 EAPI="2"
 
@@ -14,7 +14,7 @@ inherit gnome-python-common multilib-native
 DESCRIPTION="Python bindings for essential GNOME libraries"
 LICENSE="LGPL-2.1"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~x86-solaris"
 IUSE="examples"
 
 RDEPEND=">=gnome-base/libgnome-2.24.1[lib32?]
