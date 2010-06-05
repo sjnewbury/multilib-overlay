@@ -1,0 +1,42 @@
+***************
+*** 27,47 ****
+  	fi
+  }
+  
+- src_unpack() {
+- 	unpack ${A}
+- 	cd "${S}"
+  	epatch "${FILESDIR}"/${PN}-2.8.13-python-linkage.patch #246747
+  	sed -i '/PYTHON/s:\(print\) \([^"]*\):\1(\2):' configure #302908
+  	elibtoolize #269003
+  }
+  
+- src_compile() {
+  	econf \
+  		--with-default-dict='$(libdir)/cracklib_dict' \
+  		$(use_enable nls) \
+  		$(use_with python) \
+  		|| die
+- 	emake || die
+  }
+  
+  src_install() {
+--- 27,44 ----
+  	fi
+  }
+  
++ src_prepare() {
+  	epatch "${FILESDIR}"/${PN}-2.8.13-python-linkage.patch #246747
+  	sed -i '/PYTHON/s:\(print\) \([^"]*\):\1(\2):' configure #302908
+  	elibtoolize #269003
+  }
+  
++ src_configure() {
+  	econf \
+  		--with-default-dict='$(libdir)/cracklib_dict' \
+  		$(use_enable nls) \
+  		$(use_with python) \
+  		|| die
+  }
+  
+  src_install() {

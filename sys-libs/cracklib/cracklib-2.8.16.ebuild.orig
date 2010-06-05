@@ -7,7 +7,7 @@ PYTHON_DEPEND="python? 2"
 SUPPORT_PYTHON_ABIS="1"
 RESTRICT_PYTHON_ABIS="3.*"
 
-inherit distutils libtool toolchain-funcs multilib-native
+inherit distutils libtool toolchain-funcs
 
 MY_P=${P/_}
 DESCRIPTION="Password Checking Library"
@@ -19,7 +19,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="nls python"
 
-RDEPEND="sys-libs/zlib[lib32?]"
+RDEPEND="sys-libs/zlib"
 DEPEND="${RDEPEND}
 	python? ( dev-python/setuptools )"
 
@@ -27,7 +27,7 @@ S=${WORKDIR}/${MY_P}
 
 PYTHON_MODNAME="cracklib.py"
 
-multilib-native_pkg_setup_internal() {
+pkg_setup() {
 	# workaround #195017
 	if has unmerge-orphans ${FEATURES} && has_version "<${CATEGORY}/${PN}-2.8.10" ; then
 		eerror "Upgrade path is broken with FEATURES=unmerge-orphans"
@@ -38,7 +38,7 @@ multilib-native_pkg_setup_internal() {
 	use python && python_pkg_setup
 }
 
-multilib-native_src_prepare_internal() {
+src_prepare() {
 	elibtoolize #269003
 
 	if use python; then
@@ -48,14 +48,14 @@ multilib-native_src_prepare_internal() {
 	fi
 }
 
-multilib-native_src_configure_internal() {
+src_configure() {
 	econf \
 		--with-default-dict='$(libdir)/cracklib_dict' \
 		--without-python \
 		$(use_enable nls)
 }
 
-multilib-native_src_compile_internal() {
+src_compile() {
 	default
 
 	if use python; then
@@ -65,7 +65,7 @@ multilib-native_src_compile_internal() {
 	fi
 }
 
-multilib-native_src_install_internal() {
+src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	rm -r "${ED}"/usr/share/cracklib
 
@@ -84,7 +84,7 @@ multilib-native_src_install_internal() {
 	dodoc AUTHORS ChangeLog NEWS README*
 }
 
-multilib-native_pkg_postinst_internal() {
+pkg_postinst() {
 	if [[ ${ROOT} == "/" ]] ; then
 		ebegin "Regenerating cracklib dictionary"
 		create-cracklib-dict /usr/share/dict/* > /dev/null
@@ -94,6 +94,6 @@ multilib-native_pkg_postinst_internal() {
 	use python && distutils_pkg_postinst
 }
 
-multilib-native_pkg_postrm_internal() {
+pkg_postrm() {
 	use python && distutils_pkg_postrm
 }
