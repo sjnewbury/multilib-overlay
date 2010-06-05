@@ -21,8 +21,11 @@ SLOT="3"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
 IUSE="bzip2 +cxx unicode zlib static-libs"
 
-DEPEND="dev-util/pkgconfig[lib32?]"
-RDEPEND=""
+RDEPEND="bzip2? ( app-arch/bzip2[lib32?] )
+	zlib? ( sys-libs/zlib[lib32?] )"
+DEPEND="${RDEPEND}
+	dev-util/pkgconfig[lib32?]
+	userland_GNU? ( >=sys-apps/findutils-4.4.0 )"
 
 S=${WORKDIR}/${MY_P}
 
@@ -52,7 +55,7 @@ multilib-native_src_install_internal() {
 	prep_ml_binaries /usr/bin/pcre-config
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "This version of ${PN} has stopped installing .la files. This may"
 	elog "cause compilation failures in other packages. To fix this problem,"
 	elog "install dev-util/lafilefixer and run:"

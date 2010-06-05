@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libpcre/libpcre-7.9-r1.ebuild,v 1.9 2009/06/11 20:14:06 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libpcre/libpcre-7.9-r1.ebuild,v 1.12 2009/10/21 08:56:24 loki_val Exp $
 
 EAPI=2
 
@@ -18,11 +18,14 @@ else
 fi
 LICENSE="BSD"
 SLOT="3"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ~ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="bzip2 +cxx doc unicode zlib static-libs"
 
-DEPEND="dev-util/pkgconfig[lib32?]"
-RDEPEND=""
+RDEPEND="bzip2? ( app-arch/bzip2[lib32?] )
+	zlib? ( sys-libs/zlib[lib32?] )"
+DEPEND="${RDEPEND}
+	dev-util/pkgconfig[lib32?]
+	userland_GNU? ( >=sys-apps/findutils-4.4.0 )"
 
 S=${WORKDIR}/${MY_P}
 
@@ -60,7 +63,7 @@ multilib-native_src_install_internal() {
 	prep_ml_binaries /usr/bin/pcre-config
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "This version of ${PN} has stopped installing .la files. This may"
 	elog "cause compilation failures in other packages. To fix this problem,"
 	elog "install dev-util/lafilefixer and run:"
