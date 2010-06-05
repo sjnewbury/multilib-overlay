@@ -30,7 +30,7 @@ DEPEND="${RDEPEND}
 	app-text/scrollkeeper
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.9[lib32?]
-	>=app-text/gnome-doc-utils-0.3.2
+	>=app-text/gnome-doc-utils-0.3.2[lib32?]
 	doc? ( >=dev-util/gtk-doc-1.4 )
 	~app-text/docbook-xml-dtd-4.1.2
 	x11-proto/xproto
@@ -42,12 +42,12 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF} --with-gnome-distributor=Gentoo --disable-scrollkeeper"
 }
 
-src_unpack() {
-	gnome2_src_unpack
+multilib-native_src_prepare_internal() {
+	gnome2_src_prepare
 
 	# Do not load background if not needed, bug #251350
 	epatch "${FILESDIR}/${PN}-2.24.2-background.patch"
@@ -57,7 +57,7 @@ src_unpack() {
 	eautomake
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	ewarn
 	ewarn "If you are upgrading from <gnome-base/gnome-desktop-2.24, please"
 	ewarn "make sure you run revdep-rebuild at the end of the upgrade."

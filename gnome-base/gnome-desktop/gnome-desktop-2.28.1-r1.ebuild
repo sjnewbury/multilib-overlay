@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-desktop/gnome-desktop-2.28.1-r1.ebuild,v 1.1 2009/10/31 15:32:08 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-desktop/gnome-desktop-2.28.1-r1.ebuild,v 1.2 2009/11/01 10:09:04 nirbheek Exp $
 
 EAPI="2"
 
@@ -22,14 +22,13 @@ RDEPEND=">=x11-libs/gtk+-2.14.0[lib32?]
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.9[lib32?]
-	>=app-text/gnome-doc-utils-0.3.2
+	>=app-text/gnome-doc-utils-0.3.2[lib32?]
 	doc? ( >=dev-util/gtk-doc-1.4 )
 	~app-text/docbook-xml-dtd-4.1.2
 	x11-proto/xproto
 	>=x11-proto/randrproto-1.2"
 PDEPEND=">=dev-python/pygtk-2.8
-	>=dev-python/pygobject-2.14
-	>=dev-python/libgnome-python-2.22"
+	>=dev-python/pygobject-2.14"
 
 # Includes X11/Xatom.h in libgnome-desktop/gnome-bg.c which comes from xproto
 # Includes X11/extensions/Xrandr.h that includes randr.h from randrproto (and
@@ -37,7 +36,7 @@ PDEPEND=">=dev-python/pygtk-2.8
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		--with-gnome-distributor=Gentoo
 		--disable-scrollkeeper

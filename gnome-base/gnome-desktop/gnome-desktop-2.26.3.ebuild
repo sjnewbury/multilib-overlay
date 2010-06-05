@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-desktop/gnome-desktop-2.26.3.ebuild,v 1.3 2009/10/08 03:07:41 tester Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-desktop/gnome-desktop-2.26.3.ebuild,v 1.10 2010/01/16 17:13:01 armin76 Exp $
 
 EAPI="2"
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 FDL-1.1 LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="doc"
 
 RDEPEND=">=x11-libs/gtk+-2.14.0[lib32?]
@@ -22,7 +22,7 @@ RDEPEND=">=x11-libs/gtk+-2.14.0[lib32?]
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.9[lib32?]
-	>=app-text/gnome-doc-utils-0.3.2
+	>=app-text/gnome-doc-utils-0.3.2[lib32?]
 	doc? ( >=dev-util/gtk-doc-1.4 )
 	~app-text/docbook-xml-dtd-4.1.2
 	x11-proto/xproto
@@ -37,19 +37,19 @@ PDEPEND=">=dev-python/pygtk-2.8
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		--with-gnome-distributor=Gentoo
 		--disable-scrollkeeper
 		--disable-static"
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	gnome2_pkg_preinst
 	preserve_old_lib /usr/$(get_libdir)/libgnome-desktop-2.so.7
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	gnome2_pkg_postinst
 	preserve_old_lib_notify /usr/$(get_libdir)/libgnome-desktop-2.so.7
 	ewarn
