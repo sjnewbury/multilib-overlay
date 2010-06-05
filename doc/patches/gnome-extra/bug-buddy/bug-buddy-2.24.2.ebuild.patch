@@ -1,0 +1,11 @@
+--- /usr/portage/gnome-extra/bug-buddy/bug-buddy-2.24.2.ebuild	2009-04-28 16:36:09.000000000 +0200
++++ ./gnome-extra/bug-buddy/bug-buddy-2.24.2.ebuild	2010-06-05 21:10:54.000000000 +0200
+@@ -27,7 +27,7 @@
+ 	|| ( dev-libs/elfutils dev-libs/libelf )
+ 	>=sys-devel/gdb-5.1"
+ 
+-DEPEND=${RDEPEND}"
++DEPEND="${RDEPEND}
+ 	>=app-text/scrollkeeper-0.3.9
+ 	>=app-text/gnome-doc-utils-0.3.2
+ 	>=dev-util/pkgconfig-0.9

@@ -24,19 +24,19 @@ RDEPEND=">=gnome-base/libbonobo-2[lib32?]
 	>=x11-libs/gtk+-2.14[lib32?]
 	>=net-libs/libsoup-2.4[lib32?]
 	>=gnome-base/libgtop-2.13.3[lib32?]
-	eds? ( >=gnome-extra/evolution-data-server-1.3 )
+	eds? ( >=gnome-extra/evolution-data-server-1.3[lib32?] )
 	>=gnome-base/gconf-2[lib32?]
 	|| ( dev-libs/elfutils dev-libs/libelf )
 	>=sys-devel/gdb-5.1"
 
-DEPEND=${RDEPEND}"
+DEPEND="${RDEPEND}
 	>=app-text/scrollkeeper-0.3.9
-	>=app-text/gnome-doc-utils-0.3.2
+	>=app-text/gnome-doc-utils-0.3.2[lib32?]
 	>=dev-util/pkgconfig-0.9[lib32?]
 	>=dev-util/intltool-0.40"
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF} $(use_enable eds) --disable-scrollkeeper"
 }
