@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8.ebuild,v 1.3 2010/04/13 18:13:22 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8.ebuild,v 1.4 2010/06/04 10:44:43 dagger Exp $
 
 EAPI="2"
 
@@ -122,7 +122,4 @@ multilib-native_pkg_postinst_internal() {
 	elog "You will need to restart DBUS if this is your first time"
 	elog "installing NetworkManager."
 	elog ""
-	elog "To save system-wide settings as a user, that user needs to have the"
-	elog "right policykit privileges. You can add them by running:"
-	elog 'polkit-auth --grant org.freedesktop.network-manager-settings.system.modify --user "USERNAME"'
 }
