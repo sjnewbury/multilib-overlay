@@ -16,11 +16,11 @@ IUSE="debug python kernel_linux"
 
 RDEPEND=">=dev-libs/glib-2.6[lib32?]
 	python? (
-		>=dev-lang/python-2.4.4-r5
-		dev-python/pygtk
+		>=dev-lang/python-2.4.4-r5[lib32?]
+		dev-python/pygtk[lib32?]
 	)"
 DEPEND="${RDEPEND}
-	sys-devel/gettext
+	sys-devel/gettext[lib32?]
 	>=dev-util/pkgconfig-0.9[lib32?]
 	>=dev-util/intltool-0.35"
 
@@ -38,8 +38,8 @@ multilib-native_pkg_setup_internal() {
 		$(use_enable python)"
 }
 
-src_unpack() {
-	gnome2_src_unpack
+multilib-native_src_prepare_internal() {
+	gnome2_src_prepare
 
 	# Don't show KDE standalone settings desktop files in GNOME others menu
 	epatch "${FILESDIR}/${PN}-2.18.3-ignore_kde_standalone.patch"
