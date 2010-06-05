@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.28.3.1.ebuild,v 1.3 2010/05/04 16:23:57 tester Exp $
+# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.28.3.1.ebuild,v 1.4 2010/06/04 20:51:24 maekke Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -12,7 +12,7 @@ HOMEPAGE="http://www.gnome.org/projects/evolution/"
 
 LICENSE="GPL-2 FDL-1.1"
 SLOT="2.0"
-KEYWORDS="~alpha amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc x86 ~x86-fbsd"
 IUSE="crypt dbus hal kerberos krb4 ldap mono networkmanager nntp pda profile python ssl gstreamer exchange"
 # pst
 
