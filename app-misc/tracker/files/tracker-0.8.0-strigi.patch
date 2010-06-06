@@ -1,0 +1,24 @@
+diff -Naur tracker-0.8.0.orig/src/tracker-extract/tracker-extract.c tracker-0.8.0/src/tracker-extract/tracker-extract.c
+--- tracker-0.8.0.orig/src/tracker-extract/tracker-extract.c	2010-04-02 11:56:16.643135323 +0200
++++ tracker-0.8.0/src/tracker-extract/tracker-extract.c	2010-04-02 14:22:51.650857844 +0200
+@@ -150,7 +150,7 @@
+ 	                                   TRUE,
+ 	                                   sizeof (ModuleData));
+ 
+-#ifdef HAVE_LIBSTREAMANALYZER
++#if 0 /* disabling entirely since force_internal_extractors is not available here */
+ 	if (!force_internal_extractors) {
+ 		g_message ("Adding extractor for libstreamanalyzer");
+ 		g_message ("  Generic  match for ALL (tried first before our module)");
+diff -Naur tracker-0.8.0.orig/src/tracker-extract/tracker-topanalyzer.cpp tracker-0.8.0/src/tracker-extract/tracker-topanalyzer.cpp
+--- tracker-0.8.0.orig/src/tracker-extract/tracker-topanalyzer.cpp	2010-04-02 11:56:16.642114293 +0200
++++ tracker-0.8.0/src/tracker-extract/tracker-topanalyzer.cpp	2010-04-02 11:57:14.835861696 +0200
+@@ -39,7 +39,7 @@
+ 
+ #include <libtracker-common/tracker-type-utils.h>
+ #include <libtracker-common/tracker-os-dependant.h>
+-#include <libtracker-common/tracker-sparql-builder.h>
++#include <libtracker-client/tracker-sparql-builder.h>
+ #include <libtracker-common/tracker-ontologies.h>
+ 
+ #include <libtracker-extract/tracker-utils.h>
