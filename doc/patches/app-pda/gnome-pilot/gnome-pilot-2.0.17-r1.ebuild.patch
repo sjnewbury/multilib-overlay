@@ -1,0 +1,13 @@
+--- /usr/portage/app-pda/gnome-pilot/gnome-pilot-2.0.17-r1.ebuild	2010-03-31 04:36:03.000000000 +0200
++++ ./app-pda/gnome-pilot/gnome-pilot-2.0.17-r1.ebuild	2010-06-06 03:07:17.000000000 +0200
+@@ -43,8 +43,8 @@
+ 		$(use_with hal)"
+ }
+ 
+-src_unpack() {
+-	gnome2_src_unpack
++src_prepare() {
++	gnome2_src_prepare
+ 
+ 	echo "libgpilotdCM/gnome-pilot-conduit-management.c" >> po/POTFILES.in
+ 

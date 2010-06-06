@@ -46,6 +46,8 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
+	gnome2_src_prepare
+
 	echo "libgpilotdCM/gnome-pilot-conduit-management.c" >> po/POTFILES.in
 
 	# Fix --as-needed
@@ -60,7 +62,7 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	if ! built_with_use --missing false app-pda/pilot-link bluetooth; then
 		elog "if you want bluetooth support, please rebuild app-pda/pilot-link"
 		elog "echo 'app-pda/pilot-link bluetooth >> /etc/portage/package.use"
