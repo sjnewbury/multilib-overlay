@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-db/mysql/mysql-3.23.58-r1.ebuild,v 1.27 2008/01/25 23:23:49 opfer Exp $
 
+EAPI="2"
+
 inherit flag-o-matic eutils multilib-native
 
 SVER=${PV%.*}
@@ -21,20 +23,17 @@ SLOT="0"
 KEYWORDS="alpha hppa ppc sparc x86"
 IUSE="berkdb debug innodb perl readline ssl static tcpd"
 
-DEPEND="readline? ( >=sys-libs/readline-4.1 )
+DEPEND="readline? ( >=sys-libs/readline-4.1[lib32?] )
 	berkdb? ( sys-apps/ed )
-	tcpd? ( >=sys-apps/tcp-wrappers-7.6 )
-	ssl? ( >=dev-libs/openssl-0.9.6d )
-	>=sys-libs/zlib-1.2.3
-	dev-lang/perl
+	tcpd? ( >=sys-apps/tcp-wrappers-7.6[lib32?] )
+	ssl? ( >=dev-libs/openssl-0.9.6d[lib32?] )
+	>=sys-libs/zlib-1.2.3[lib32?]
+	dev-lang/perl[lib32?]
 	sys-process/procps"
 PDEPEND="perl? ( dev-perl/DBI dev-perl/DBD-mysql )"
 
-src_unpack() {
+multilib-native_src_prepare_internal() {
 	use innodb || ewarn "InnoDB support is not selected to be compiled in."
-	unpack ${A} || die
-	cd "${S}" || die
-
 	local MY_PATCH_SOURCE="${WORKDIR}/mysql-extras"
 
 	# required for qmail-mysql
@@ -66,7 +65,7 @@ src_unpack() {
 
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# bug #11681; get b0rked code when using -march=k6 with this package.
 	replace-cpu-flags k6 k6-2 k6-3 i586
 
@@ -119,8 +118,6 @@ multilib-native_src_compile_internal() {
 		--with-comment="Gentoo Linux ${PF}" \
 		--with-unix-socket-path=/var/run/mysqld/mysqld.sock \
 		${myconf} || die "bad ./configure"
-
-	make || die "compile problem"
 }
 
 multilib-native_src_install_internal() {
@@ -180,7 +177,7 @@ pkg_config() {
 	fi
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	if ! groupmod mysql; then
 		groupadd -g 60 mysql || die "problem adding group mysql"
 	fi
@@ -191,7 +188,7 @@ pkg_preinst() {
 	fi
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	# empty dirs...
 	install -d -m0755 -o mysql -g mysql "${ROOT}"/var/lib/mysql
 	install -d -m0755 -o mysql -g mysql "${ROOT}"/var/run/mysqld

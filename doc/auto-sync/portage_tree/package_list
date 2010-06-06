@@ -34,7 +34,7 @@ app-text/hunspell
 dev-cpp/glibmm
 dev-cpp/gtkmm
 dev-cpp/pangomm
-# dev-db/mysql
+dev-db/mysql
 dev-db/postgresql-base
 dev-db/sqlite
 dev-db/unixODBC

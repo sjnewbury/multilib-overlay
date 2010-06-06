@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/mysql/mysql-5.0.84.ebuild,v 1.1 2009/09/04 10:48:36 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/mysql/mysql-5.0.84.ebuild,v 1.9 2010/03/24 03:32:52 robbat2 Exp $
 
 MY_EXTRAS_VER="20090904-0939Z"
 EAPI=2
@@ -10,17 +10,20 @@ inherit toolchain-funcs mysql multilib-native
 IUSE="$IUSE"
 
 # REMEMBER: also update eclass/mysql*.eclass before committing!
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm  ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 
 # When MY_EXTRAS is bumped, the index should be revised to exclude these.
 EPATCH_EXCLUDE=''
+
+DEPEND="|| ( >=sys-devel/gcc-4.3 >=sys-devel/gcc-apple-4.2 )"
+RDEPEND=""
 
 # Please do not add a naive src_unpack to this ebuild
 # If you want to add a single patch, copy the ebuild to an overlay
 # and create your own mysql-extras tarball, looking at 000_index.txt
 
 # Official test instructions:
-# USE='berkdb cluster embedded extraengine' \
+# USE='berkdb -cluster embedded extraengine' \
 # FEATURES='test userpriv -usersandbox' \
 # ebuild mysql-X.X.XX.ebuild \
 # digest clean package
@@ -109,6 +112,32 @@ src_test() {
 					mysql_disable_test \
 						"$t" \
 						"OpenSSL tests broken in 5.0.76 due to expired certificates"
+				done
+			;;
+		esac
+
+		# The entire 5.0 series has pre-generated SSL certificates, they have
+		# mostly expired now. ${S}/mysql-tests/std-data/*.pem
+		# The certs really SHOULD be generated for the tests, so that they are
+		# not expiring like this. We cannot do so ourselves as the tests look
+		# closely as the cert path data, and we do not have the CA key to regen
+		# ourselves. Alternatively, upstream should generate them with at least
+		# 50-year validity.
+		#
+		# Known expiry points:
+		# 4.1.*, 5.0.0-5.0.22, 5.1.7: Expires 2013/09/09
+		# 5.0.23-5.0.77, 5.1.7-5.1.22?: Expires 2009/01/27
+		# 5.0.78-5.0.90, 5.1.??-5.1.42: Expires 2010/01/28
+		#
+		# mysql-test/std_data/untrusted-cacert.pem is MEANT to be
+		# expired/invalid.
+		case ${PV} in
+			5.0.*|5.1.*)
+				for t in openssl_1 rpl_openssl rpl_ssl ssl ssl_8k_key \
+					ssl_compress ssl_connect ; do \
+					mysql_disable_test \
+						"$t" \
+						"These OpenSSL tests break due to expired certificates"
 				done
 			;;
 		esac

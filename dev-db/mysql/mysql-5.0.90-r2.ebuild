@@ -1,8 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/mysql/mysql-5.0.90-r1.ebuild,v 1.6 2010/04/01 20:41:21 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/mysql/mysql-5.0.90-r2.ebuild,v 1.15 2010/04/04 17:43:07 armin76 Exp $
 
-MY_EXTRAS_VER="20100131-0616Z"
+MY_EXTRAS_VER="20100324-0329Z"
 EAPI=2
 
 inherit toolchain-funcs mysql multilib-native
@@ -13,7 +13,7 @@ IUSE="$IUSE"
 EGIT_REPO_URI="git://git.overlays.gentoo.org/proj/mysql-extras.git"
 
 # REMEMBER: also update eclass/mysql*.eclass before committing!
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 ~arm hppa ia64 ppc ~ppc64 ~s390 ~sh sparc x86 ~sparc-fbsd ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x64-solaris"
 
 # When MY_EXTRAS is bumped, the index should be revised to exclude these.
 EPATCH_EXCLUDE=''
@@ -123,7 +123,7 @@ src_test() {
 		# expired/invalid.
 		case ${PV} in
 			5.0.*|5.1.*)
-				for t in openssl_1 rpl_openssl rpl_ssl ssl ssl_8k_key \
+				for t in openssl_1 rpl_openssl rpl.rpl_ssl rpl.rpl_ssl1 ssl ssl_8k_key \
 					ssl_compress ssl_connect ; do \
 					mysql_disable_test \
 						"$t" \
@@ -132,16 +132,32 @@ src_test() {
 			;;
 		esac
 
+		# These are also failing in MySQL 5.0 for now, and are believed to be
+		# false positives:
+		#
+		# main.mysql_comment, main.mysql_upgrade:
+		# fails due to USE=-latin1 / utf8 default
+		#
+		# main.mysql_client_test:
+		# segfaults at random under Portage only, suspect resource limits.
+		case ${PV} in
+			5.0.*)
+			for t in main.mysql_client_test main.mysql_comments main.mysql_upgrade; do
+				mysql_disable_test  "$t" "False positives in Gentoo"
+			done
+			;;
+		esac
+
 		# create directories because mysqladmin might right out of order
 		mkdir -p "${S}"/mysql-test/var-{ps,ns}{,/log}
 
 		# We run the test protocols seperately
-		make -j1 test-ns force="--force --vardir=${S}/mysql-test/var-ns"
+		make test-ns force="--force --vardir=${S}/mysql-test/var-ns"
 		retstatus1=$?
 		[[ $retstatus1 -eq 0 ]] || eerror "test-ns failed"
 		has usersandbox $FEATURES && eerror "Some tests may fail with FEATURES=usersandbox"
 
-		make -j1 test-ps force="--force --vardir=${S}/mysql-test/var-ps"
+		make test-ps force="--force --vardir=${S}/mysql-test/var-ps"
 		retstatus2=$?
 		[[ $retstatus2 -eq 0 ]] || eerror "test-ps failed"
 		has usersandbox $FEATURES && eerror "Some tests may fail with FEATURES=usersandbox"

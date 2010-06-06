@@ -1,24 +1,35 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/mysql/mysql-5.0.70.ebuild,v 1.12 2008/11/29 02:32:17 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/mysql/mysql-5.0.90.ebuild,v 1.6 2010/04/01 20:41:21 robbat2 Exp $
 
-MY_EXTRAS_VER="20080601"
-SERVER_URI="http://mirror.provenscaling.com/mysql/enterprise/source/5.0/${P}.tar.gz"
+MY_EXTRAS_VER="20100131-0301Z"
+EAPI=2
 
 inherit toolchain-funcs mysql multilib-native
 # only to make repoman happy. it is really set in the eclass
 IUSE="$IUSE"
 
+# Define the mysql-extras source
+EGIT_REPO_URI="git://git.overlays.gentoo.org/proj/mysql-extras.git"
+
 # REMEMBER: also update eclass/mysql*.eclass before committing!
-KEYWORDS="alpha amd64 ~arm hppa ia64 ppc ppc64 ~s390 ~sh sparc ~sparc-fbsd x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 
 # When MY_EXTRAS is bumped, the index should be revised to exclude these.
 EPATCH_EXCLUDE=''
+
+DEPEND="|| ( >=sys-devel/gcc-3.4.6 >=sys-devel/gcc-apple-4.0 )"
+RDEPEND=""
 
 # Please do not add a naive src_unpack to this ebuild
 # If you want to add a single patch, copy the ebuild to an overlay
 # and create your own mysql-extras tarball, looking at 000_index.txt
 
+# Official test instructions:
+# USE='berkdb -cluster embedded extraengine perl ssl community' \
+# FEATURES='test userpriv -usersandbox' \
+# ebuild mysql-X.X.XX.ebuild \
+# digest clean package
 src_test() {
 	# Bug #213475 - MySQL _will_ object strenously if your machine is named
 	# localhost. Also causes weird failures.
@@ -47,11 +58,11 @@ src_test() {
 			mysql_disable_test "archive_gis" "Totally broken in 5.0.42"
 			;;
 
-			5.0.4[3-9]|5.0.[56]*|5.0.70)
+			5.0.4[3-9]|5.0.[56]*|5.0.70|5.0.87)
 			[ "$(tc-endian)" == "big" ] && \
 			mysql_disable_test \
 				"archive_gis" \
-				"Broken in 5.0.43-70 on big-endian boxes only"
+				"Broken in 5.0.43-70 and 5.0.87 on big-endian boxes only"
 			;;
 		esac
 
@@ -86,6 +97,40 @@ src_test() {
 					"$t" \
 					"OpenSSL tests broken on 5.0.56"
 			done
+
+		# New test was broken in first time
+		# Upstream bug 41066
+		# http://bugs.mysql.com/bug.php?id=41066
+		[ "${PV}" == "5.0.72" ] && \
+			mysql_disable_test \
+				"status2" \
+				"Broken in 5.0.72, new test is broken, upstream bug #41066"
+
+		# The entire 5.0 series has pre-generated SSL certificates, they have
+		# mostly expired now. ${S}/mysql-tests/std-data/*.pem
+		# The certs really SHOULD be generated for the tests, so that they are
+		# not expiring like this. We cannot do so ourselves as the tests look
+		# closely as the cert path data, and we do not have the CA key to regen
+		# ourselves. Alternatively, upstream should generate them with at least
+		# 50-year validity.
+		#
+		# Known expiry points:
+		# 4.1.*, 5.0.0-5.0.22, 5.1.7: Expires 2013/09/09
+		# 5.0.23-5.0.77, 5.1.7-5.1.22?: Expires 2009/01/27
+		# 5.0.78-5.0.90, 5.1.??-5.1.42: Expires 2010/01/28
+		#
+		# mysql-test/std_data/untrusted-cacert.pem is MEANT to be
+		# expired/invalid.
+		case ${PV} in
+			5.0.*|5.1.*)
+				for t in openssl_1 rpl_openssl rpl_ssl ssl ssl_8k_key \
+					ssl_compress ssl_connect ; do \
+					mysql_disable_test \
+						"$t" \
+						"These OpenSSL tests break due to expired certificates"
+				done
+			;;
+		esac
 
 		# create directories because mysqladmin might right out of order
 		mkdir -p "${S}"/mysql-test/var-{ps,ns}{,/log}

@@ -1,0 +1,33 @@
+--- /usr/portage/dev-db/mysql/mysql-3.23.58-r1.ebuild	2009-04-05 12:37:41.000000000 +0200
++++ ./dev-db/mysql/mysql-3.23.58-r1.ebuild	2010-06-06 02:30:58.000000000 +0200
+@@ -30,11 +30,8 @@
+ 	sys-process/procps"
+ PDEPEND="perl? ( dev-perl/DBI dev-perl/DBD-mysql )"
+ 
+-src_unpack() {
++src_prepare() {
+ 	use innodb || ewarn "InnoDB support is not selected to be compiled in."
+-	unpack ${A} || die
+-	cd "${S}" || die
+-
+ 	local MY_PATCH_SOURCE="${WORKDIR}/mysql-extras"
+ 
+ 	# required for qmail-mysql
+@@ -66,7 +63,7 @@
+ 
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	# bug #11681; get b0rked code when using -march=k6 with this package.
+ 	replace-cpu-flags k6 k6-2 k6-3 i586
+ 
+@@ -119,8 +116,6 @@
+ 		--with-comment="Gentoo Linux ${PF}" \
+ 		--with-unix-socket-path=/var/run/mysqld/mysqld.sock \
+ 		${myconf} || die "bad ./configure"
+-
+-	make || die "compile problem"
+ }
+ 
+ src_install() {

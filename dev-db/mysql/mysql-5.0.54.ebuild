@@ -1,6 +1,6 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/mysql/mysql-5.0.54.ebuild,v 1.13 2008/11/14 09:42:28 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/mysql/mysql-5.0.54.ebuild,v 1.15 2010/02/01 00:55:52 mr_bones_ Exp $
 
 MY_EXTRAS_VER="20080124"
 SERVER_URI="http://mirror.provenscaling.com/mysql/enterprise/source/5.0/${P}.tar.gz"
@@ -55,6 +55,32 @@ src_test() {
 			mysql_disable_test \
 				"subselect" \
 				"Testcase needs tuning on x86 for oom condition"
+
+		# The entire 5.0 series has pre-generated SSL certificates, they have
+		# mostly expired now. ${S}/mysql-tests/std-data/*.pem
+		# The certs really SHOULD be generated for the tests, so that they are
+		# not expiring like this. We cannot do so ourselves as the tests look
+		# closely as the cert path data, and we do not have the CA key to regen
+		# ourselves. Alternatively, upstream should generate them with at least
+		# 50-year validity.
+		#
+		# Known expiry points:
+		# 4.1.*, 5.0.0-5.0.22, 5.1.7: Expires 2013/09/09
+		# 5.0.23-5.0.77, 5.1.7-5.1.22?: Expires 2009/01/27
+		# 5.0.78-5.0.90, 5.1.??-5.1.42: Expires 2010/01/28
+		#
+		# mysql-test/std_data/untrusted-cacert.pem is MEANT to be
+		# expired/invalid.
+		case ${PV} in
+			5.0.*|5.1.*)
+				for t in openssl_1 rpl_openssl rpl_ssl ssl ssl_8k_key \
+					ssl_compress ssl_connect ; do \
+					mysql_disable_test \
+						"$t" \
+						"These OpenSSL tests break due to expired certificates"
+				done
+			;;
+		esac
 
 		# We run the test protocols seperately
 		make -j1 test-ns force=--force
