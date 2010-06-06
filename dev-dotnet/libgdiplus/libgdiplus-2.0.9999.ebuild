@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-dotnet/libgdiplus/libgdiplus-9999.ebuild,v 1.4 2010/03/30 11:50:46 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-dotnet/libgdiplus/libgdiplus-2.0.9999.ebuild,v 1.4 2010/03/30 11:50:46 ssuominen Exp $
 
 EAPI=2
 
@@ -37,6 +37,10 @@ DEPEND="${RDEPEND}"
 RESTRICT="test"
 
 multilib-native_src_prepare_internal() {
+	sed -i \
+		-e 's/FONTCONFIG-CONFIG/FONTCONFIG_CONFIG/' \
+		-e 's/FREETYPE-CONFIG/FREETYPE_CONFIG/' \
+		configure.in || die 'configure.in not found'
 	rm -rf cairo pixman
 	go-mono_src_prepare
 	sed -i -e 's:ungif:gif:g' configure || die
