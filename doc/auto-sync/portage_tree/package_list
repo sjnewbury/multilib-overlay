@@ -37,7 +37,7 @@ dev-cpp/pangomm
 # dev-db/mysql
 # dev-db/postgresql-base
 dev-db/sqlite
-# dev-db/unixODBC
+dev-db/unixODBC
 dev-dotnet/libgdiplus
 # dev-java/eclipse-ecj  has no lib32 useflag
 # dev-java/gcj-jdk     from where is this package???

@@ -1,31 +1,28 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/unixODBC/unixODBC-2.2.12.ebuild,v 1.15 2008/06/15 17:33:57 hoffie Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/unixODBC/unixODBC-2.2.12.ebuild,v 1.16 2010/03/22 08:35:49 ssuominen Exp $
 
 EAPI="2"
 
-WANT_AUTOCONF="latest"
-WANT_AUTOMAKE="latest"
 PATCH_VERSION="2.2.12-r0"
 PATCH_P="${PN}-${PATCH_VERSION}-patches"
 
 inherit eutils multilib autotools gnuconfig libtool multilib-native
 
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
-
 DESCRIPTION="ODBC Interface for Linux."
 HOMEPAGE="http://www.unixodbc.org/"
 SRC_URI="http://www.unixodbc.org/${P}.tar.gz
 		mirror://gentoo/${PATCH_P}.tar.bz2"
+
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="qt3 gnome"
+IUSE="gnome"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 
 RDEPEND=">=sys-libs/readline-4.1[lib32?]
-		>=sys-libs/ncurses-5.2[lib32?]
-		qt3? ( =x11-libs/qt-3*[lib32?] )
-		gnome? ( gnome-base/libgnomeui[lib32?] )
-		sys-devel/libtool"
+	>=sys-libs/ncurses-5.2[lib32?]
+	gnome? ( gnome-base/libgnomeui[lib32?] )
+	sys-devel/libtool[lib32?]"
 DEPEND="${RDEPEND}
 	gnome? ( dev-util/cvs )" # see Bug 173256
 
@@ -49,16 +46,7 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
-	local myconf
-
-	if use qt3 && ! use mips ; then
-		myconf="--enable-gui=yes --x-libraries=/usr/$(get_libdir)
-			--with-qt-libraries=/usr/qt/3/$(get_libdir)"
-		[[ -d "/usr/qt/3/include/gentoo-multilib" ]] && \
-			myconf="${myconf} --with-qt-includes=/usr/qt/3/include/gentoo-multilib/${ABI}"
-	else
-		myconf="--enable-gui=no"
-	fi
+	local myconf="--enable-gui=no"
 
 	econf --host=${CHOST} \
 		--prefix=/usr \
@@ -83,7 +71,6 @@ multilib-native_src_configure_internal() {
 			--sysconfdir=/etc/${PN} || die "econf gODBCConfig failed"
 		ln -s ../depcomp .
 		ln -s ../libtool .
-
 		cd ..
 	fi
 }
@@ -93,9 +80,7 @@ multilib-native_src_compile_internal() {
 
 	if use gnome; then
 		cd gODBCConfig
-
 		emake || die "emake gODBCConfig failed"
-
 		cd ..
 	fi
 }
