@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-text/ghostscript-gpl/ghostscript-gpl-8.70-r1.ebuild,v 1.1 2009/08/07 02:22:05 tgurr Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit autotools eutils versionator flag-o-matic multilib-native
 
@@ -52,15 +52,6 @@ for X in ${LANGS} ; do
 	IUSE="${IUSE} linguas_${X}"
 done
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
-	if ! use bindist && use djvu ; then
-		unpack gsdjvu-${GSDJVU_PV}.tar.gz
-	fi
-}
-
 multilib-native_src_prepare_internal() {
 	# remove internal copies of expat, jasper, jpeg, libpng and zlib
 	rm -rf "${S}/expat"
@@ -92,6 +83,7 @@ multilib-native_src_prepare_internal() {
 	fi
 
 	if ! use bindist && use djvu ; then
+		unpack gsdjvu-${GSDJVU_PV}.tar.gz
 		cp gsdjvu-${GSDJVU_PV}/gsdjvu "${S}"
 		cp gsdjvu-${GSDJVU_PV}/gdevdjvu.c "${S}/base"
 		epatch "${WORKDIR}/patches/${PN}-8.64-gsdjvu-1.3.patch"

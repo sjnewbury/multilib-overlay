@@ -69,7 +69,9 @@ multilib-native_src_unpack_internal() {
 	rm -rf "${S}/zlib"
 	# remove internal urw-fonts
 	rm -rf "${S}/Resource/Font"
+}
 
+multilib-native_src_prepare_internal() {
 	# Fedora patches
 	# http://cvs.fedora.redhat.com/viewcvs/devel/ghostscript/
 	epatch "${WORKDIR}/patches/${PN}-8.64-fPIC.patch"
@@ -123,9 +125,6 @@ multilib-native_src_unpack_internal() {
 		-e "s:GS_DOCDIR=.*:GS_DOCDIR=/usr/share/doc/${PF}/html:" \
 		base/Makefile.in base/*.mak || die "sed failed"
 
-}
-
-multilib-native_src_prepare_internal() {
 	cd "${S}"
 	eautoreconf
 
@@ -151,13 +150,15 @@ multilib-native_src_configure_internal() {
 	if ! use bindist && use djvu ; then
 		sed -i -e 's!$(DD)bbox.dev!& $(DD)djvumask.dev $(DD)djvusep.dev!g' Makefile
 	fi
+
+	cd "${S}/ijs"
+	econf || die "ijs econf failed"
 }
 
 multilib-native_src_compile_internal() {
 	emake -j1 so all || die "emake failed"
 
 	cd "${S}/ijs"
-	econf || die "ijs econf failed"
 	emake || die "ijs emake failed"
 }
 

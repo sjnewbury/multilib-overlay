@@ -3,7 +3,6 @@
 # $Header: /var/cvsroot/gentoo-x86/app-text/ghostscript-gpl/ghostscript-gpl-8.71-r4.ebuild,v 1.1 2010/04/15 12:43:56 spatz Exp $
 
 EAPI=2
-
 inherit autotools eutils versionator flag-o-matic multilib-native
 
 DESCRIPTION="GPL Ghostscript - the most current Ghostscript, AFPL, relicensed."
@@ -52,7 +51,7 @@ for X in ${LANGS} ; do
 	IUSE="${IUSE} linguas_${X}"
 done
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	local p="/usr/share/fonts/default/ghostscript"
 	# die if path exists and is not a symbolic link so that
 	# installation of symbolic link doesn't fail, bug 311923

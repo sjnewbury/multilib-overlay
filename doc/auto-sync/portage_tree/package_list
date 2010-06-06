@@ -24,7 +24,7 @@ app-i18n/enca
 # app-pda/pilot-link
 # app-text/djvu
 app-text/enchant
-# app-text/ghostscript-gpl
+app-text/ghostscript-gpl
 app-text/gnome-doc-utils
 app-text/hunspell
 app-text/libpaper
