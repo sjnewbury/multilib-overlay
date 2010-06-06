@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-pda/pilot-link/pilot-link-0.12.3-r2.ebuild,v 1.5 2009/07/01 09:42:08 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-pda/pilot-link/pilot-link-0.12.3-r2.ebuild,v 1.9 2010/05/25 21:08:19 pacho Exp $
 
 EAPI=2
 
@@ -12,7 +12,7 @@ SRC_URI="http://pilot-link.org/source/${P}.tar.bz2"
 
 LICENSE="|| ( GPL-2 LGPL-2 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~hppa ~ia64 ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux"
 
 IUSE="perl java python png readline threads bluetooth usb debug"
 
@@ -21,10 +21,10 @@ BOTH_DEPEND="virtual/libiconv
 	>=dev-libs/popt-1.10.7[lib32?]
 	perl? ( >=dev-lang/perl-5.8.8-r2[lib32?] )
 	python? ( >=dev-lang/python-2.4.4-r4[lib32?] )
-	png? ( >=media-libs/libpng-1.2.18-r1[lib32?] )
+	png? ( >=media-libs/libpng-1.2.40[lib32?] )
 	readline? ( >=sys-libs/readline-5.2_p4[lib32?] )
 	usb? ( virtual/libusb:0[lib32?] )
-	bluetooth? ( || ( >=net-wireless/bluez-libs-3.10[lib32?] net-wireless/bluez[lib32?] ) )"
+	bluetooth? ( || ( >=net-wireless/bluez-libs-3.10 net-wireless/bluez[lib32?] ) )"
 
 DEPEND="${BOTH_DEPEND}
 	java? ( >=virtual/jdk-1.4 )"
@@ -36,7 +36,8 @@ multilib-native_src_prepare_internal() {
 	# Fixing some broken configure switches and automagic deps.
 	epatch "${FILESDIR}/${PN}-0.12.2-readline.patch"
 	epatch "${FILESDIR}/${PN}-0.12.2-threads.patch"
-	epatch "${FILESDIR}/${P}-png.patch"
+	epatch "${FILESDIR}"/${P}-png.patch \
+		"${FILESDIR}"/${P}-libpng14.patch
 
 	# Upstream's check for Werror was wrong. Fixes bug 194921.
 	epatch "${FILESDIR}/${PN}-0.12.2-werror_194921.patch"
@@ -65,9 +66,10 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
+	use prefix || EPREFIX=
 	# tcl/tk support is disabled as per upstream request.
 	econf \
-		--includedir=/usr/include/libpisock \
+		--includedir="${EPREFIX}"/usr/include/libpisock \
 		--enable-conduits \
 		--with-tcl=no \
 		--without-included-popt \
@@ -75,13 +77,12 @@ multilib-native_src_configure_internal() {
 		$(use_enable threads) \
 		$(use_enable usb libusb) \
 		$(use_enable debug) \
-		$(use_with png libpng $(libpng-config --prefix)) \
+		$(use_with png libpng "${EPREFIX}"/usr) \
 		$(use_with bluetooth bluez) \
 		$(use_with readline) \
 		$(use_with perl) \
 		$(use_with java) \
-		$(use_with python) \
-		|| die "econf failed"
+		$(use_with python)
 }
 
 multilib-native_src_compile_internal() {
@@ -111,7 +112,7 @@ multilib-native_src_install_internal() {
 		java-pkg_doso libjpisock.so
 	fi
 
-	if use perl && ! is_final_abi; then
+	if use perl ; then
 		cd "${S}/bindings/Perl"
 		perl-module_src_install
 	fi
@@ -122,18 +123,18 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	perl-module_pkg_preinst
 	java-pkg-opt-2_pkg_preinst
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	if use python; then
 		python_version
 		python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages
 	fi
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	use python && distutils_pkg_postrm
 }

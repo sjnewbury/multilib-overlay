@@ -24,7 +24,7 @@ BOTH_DEPEND="virtual/libiconv
 	png? ( >=media-libs/libpng-1.2.18-r1[lib32?] )
 	readline? ( >=sys-libs/readline-5.2_p4[lib32?] )
 	usb? ( virtual/libusb:0[lib32?] )
-	bluetooth? ( || ( >=net-wireless/bluez-libs-3.10[lib32?] net-wireless/bluez[lib32?] ) )"
+	bluetooth? ( || ( >=net-wireless/bluez-libs-3.10 net-wireless/bluez[lib32?] ) )"
 
 DEPEND="${BOTH_DEPEND}
 	java? ( >=virtual/jdk-1.4 )"
@@ -119,18 +119,18 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-pkg_preinst() {
+multilib-native_pkg_preinst_internal() {
 	perl-module_pkg_preinst
 	java-pkg-opt-2_pkg_preinst
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	if use python; then
 		python_version
 		python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages
 	fi
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	use python && distutils_pkg_postrm
 }

@@ -1,0 +1,33 @@
+--- /usr/portage/app-pda/pilot-link/pilot-link-0.11.8-r1.ebuild	2009-04-05 10:08:24.000000000 +0200
++++ ./app-pda/pilot-link/pilot-link-0.11.8-r1.ebuild	2010-06-06 03:02:45.000000000 +0200
+@@ -21,10 +21,7 @@
+ 	png? ( media-libs/libpng )
+ 	readline? ( sys-libs/readline )"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	epatch "${FILESDIR}/${P}-java_fPIC_fix.patch"
+ 
+ 	if use java; then
+@@ -49,7 +46,7 @@
+ 	cd "${S}/libpisock"; epatch "${FILESDIR}/${P}-netsync.patch"
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	local myconf="--includedir=/usr/include/libpisock"
+ 
+ 	use java \
+@@ -75,6 +72,9 @@
+ 		|| myconf="${myconf} --with-readline=no"
+ 
+ 	econf ${myconf} || die
++}
++
++src_compile() {
+ 	# java fails w/emake
+ 	make || die
+ 

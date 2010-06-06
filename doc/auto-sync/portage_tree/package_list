@@ -21,7 +21,7 @@ app-i18n/enca
 # app-misc/tracker
 # app-pda/gnome-pilot
 # app-pda/gnome-pilot-conduits
-# app-pda/pilot-link
+app-pda/pilot-link
 app-text/djvu
 app-text/enchant
 app-text/ghostscript-gpl
