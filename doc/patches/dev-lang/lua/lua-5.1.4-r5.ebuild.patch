@@ -1,0 +1,15 @@
+--- /usr/portage/dev-lang/lua/lua-5.1.4-r5.ebuild	2010-03-05 21:05:30.000000000 +0100
++++ ./dev-lang/lua/lua-5.1.4-r5.ebuild	2010-06-06 01:58:33.000000000 +0200
+@@ -19,11 +19,8 @@
+ RDEPEND="${DEPEND}"
+ PDEPEND="emacs? ( app-emacs/lua-mode )"
+ 
+-src_unpack() {
++src_prepare() {
+ 	local PATCH_PV=$(get_version_component_range 1-2)
+-	unpack ${A}
+-	cd "${S}"
+-
+ 	epatch "${FILESDIR}"/${PN}-${PATCH_PV}-make-r1.patch
+ 	epatch "${FILESDIR}"/${PN}-${PATCH_PV}-module_paths.patch
+ 

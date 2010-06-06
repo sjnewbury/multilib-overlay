@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/lua/lua-5.1.4-r5.ebuild,v 1.1 2010/02/23 12:19:34 mabi Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/lua/lua-5.1.4-r5.ebuild,v 1.2 2010/03/05 19:58:21 mabi Exp $
 
 EAPI="2"
 
@@ -21,7 +21,6 @@ PDEPEND="emacs? ( app-emacs/lua-mode )"
 
 multilib-native_src_prepare_internal() {
 	local PATCH_PV=$(get_version_component_range 1-2)
-
 	epatch "${FILESDIR}"/${PN}-${PATCH_PV}-make-r1.patch
 	epatch "${FILESDIR}"/${PN}-${PATCH_PV}-module_paths.patch
 
@@ -58,8 +57,8 @@ multilib-native_src_prepare_internal() {
 		etc/lua.pc
 }
 
-multilib-native_src_configure_internal() {
-	[[ -z ${EMULTILIB_PKG} ]] && tc-export CC
+multilib-native_src_compile_internal() {
+	tc-export CC
 	myflags=
 	# what to link to liblua
 	liblibs="-lm"
@@ -70,9 +69,7 @@ multilib-native_src_configure_internal() {
 	if use readline; then
 		mylibs="-lreadline"
 	fi
-}
 
-multilib-native_src_compile_internal() {
 	cd src
 	emake CC="${CC}" CFLAGS="-DLUA_USE_LINUX ${CFLAGS}" \
 			RPATH="${ROOT}/usr/$(get_libdir)/" \
@@ -90,7 +87,7 @@ multilib-native_src_install_internal() {
 	|| die "emake install gentoo_install failed"
 
 	dodoc HISTORY README
-	dohtml doc/*.html doc/*.gif
+	dohtml doc/*.html doc/*.png doc/*.css doc/*.gif
 
 	insinto /usr/share/pixmaps
 	doins etc/lua.ico

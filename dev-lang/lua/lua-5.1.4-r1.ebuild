@@ -19,7 +19,6 @@ DEPEND="readline? ( sys-libs/readline[lib32?] )"
 
 multilib-native_src_prepare_internal() {
 	local PATCH_PV=$(get_version_component_range 1-2)
-
 	epatch "${FILESDIR}"/${PN}-${PATCH_PV}-make-r1.patch
 	epatch "${FILESDIR}"/${PN}-${PATCH_PV}-module_paths.patch
 
@@ -53,8 +52,8 @@ multilib-native_src_prepare_internal() {
 	sed -i -e 's:/usr/local:/usr:' etc/lua.pc
 }
 
-multilib-native_src_configure_internal() {
-	[[ -z ${EMULTILIB_PKG} ]] && tc-export CC
+multilib-native_src_compile_internal() {
+	tc-export CC
 	myflags=
 	# what to link to liblua
 	liblibs="-lm"
@@ -65,9 +64,7 @@ multilib-native_src_configure_internal() {
 	if use readline; then
 		mylibs="-lreadline"
 	fi
-}
 
-multilib-native_src_compile_internal() {
 	cd src
 	emake CC="${CC}" CFLAGS="-DLUA_USE_LINUX ${CFLAGS}" \
 			RPATH="${ROOT}/usr/$(get_libdir)/" \

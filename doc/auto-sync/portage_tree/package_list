@@ -42,7 +42,7 @@ dev-db/sqlite
 # dev-java/eclipse-ecj
 # dev-java/gcj-jdk
 # dev-java/java-config
-# dev-lang/lua
+dev-lang/lua
 dev-lang/perl
 dev-lang/python
 dev-lang/ruby

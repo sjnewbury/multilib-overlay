@@ -1,0 +1,15 @@
+--- /usr/portage/dev-lang/lua/lua-5.1.4-r1.ebuild	2009-04-05 10:08:24.000000000 +0200
++++ ./dev-lang/lua/lua-5.1.4-r1.ebuild	2010-06-06 01:56:31.000000000 +0200
+@@ -17,11 +17,8 @@
+ 
+ DEPEND="readline? ( sys-libs/readline )"
+ 
+-src_unpack() {
++src_prepare() {
+ 	local PATCH_PV=$(get_version_component_range 1-2)
+-	unpack ${A}
+-	cd "${S}"
+-
+ 	epatch "${FILESDIR}"/${PN}-${PATCH_PV}-make-r1.patch
+ 	epatch "${FILESDIR}"/${PN}-${PATCH_PV}-module_paths.patch
+ 
