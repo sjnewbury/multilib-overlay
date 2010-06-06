@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/djvu/djvu-3.5.22-r1.ebuild,v 1.1 2010/02/01 07:27:39 pva Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/djvu/djvu-3.5.22-r1.ebuild,v 1.4 2010/05/30 18:23:58 armin76 Exp $
 
 EAPI="2"
 inherit fdo-mime autotools flag-o-matic multilib-native
@@ -13,7 +13,7 @@ SRC_URI="mirror://sourceforge/djvu/${MY_P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm ~hppa ia64 ~mips ~ppc ~ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="debug doc jpeg nls tiff xml"
 
 RDEPEND="jpeg? ( >=media-libs/jpeg-6b-r2:0[lib32?] )
@@ -78,11 +78,11 @@ multilib-native_src_install_internal() {
 	insinto	/usr/share/mime/packages && doins djvulibre-mime.xml || die
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	fdo-mime_mime_database_update
 	elog "For djviewer or browser plugin, emerge app-text/djview4."
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	fdo-mime_mime_database_update
 }

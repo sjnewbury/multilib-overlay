@@ -22,7 +22,7 @@ app-i18n/enca
 # app-pda/gnome-pilot
 # app-pda/gnome-pilot-conduits
 # app-pda/pilot-link
-# app-text/djvu
+app-text/djvu
 app-text/enchant
 app-text/ghostscript-gpl
 app-text/gnome-doc-utils
