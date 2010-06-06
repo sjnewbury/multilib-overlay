@@ -1,0 +1,25 @@
+--- /usr/portage/dev-cpp/cairomm/cairomm-1.6.0.ebuild	2009-04-10 16:05:41.000000000 +0200
++++ ./dev-cpp/cairomm/cairomm-1.6.0.ebuild	2010-06-06 02:34:33.000000000 +0200
+@@ -17,10 +17,7 @@
+ DEPEND="${RDEPEND}
+ 		doc? ( app-doc/doxygen )"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	# don't waste time building examples because they are marked as "noinst"
+ 	sed -i 's/^\(SUBDIRS =.*\)examples\(.*\)$/\1\2/' Makefile.in || die "sed failed"
+ 
+@@ -29,9 +26,8 @@
+ 	sed -i 's/^\(SUBDIRS =.*\)tests\(.*\)$/\1\2/' Makefile.in || die "sed failed"
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	econf $(use_enable doc docs) || die "econf failed"
+-	emake || die "emake failed"
+ }
+ 
+ src_install() {

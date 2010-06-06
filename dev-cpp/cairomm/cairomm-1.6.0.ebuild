@@ -19,10 +19,7 @@ RDEPEND=">=x11-libs/cairo-1.5.14[lib32?]"
 DEPEND="${RDEPEND}
 		doc? ( app-doc/doxygen )"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	# don't waste time building examples because they are marked as "noinst"
 	sed -i 's/^\(SUBDIRS =.*\)examples\(.*\)$/\1\2/' Makefile.in || die "sed failed"
 
