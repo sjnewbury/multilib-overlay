@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/postgresql-base/postgresql-base-8.4.2-r1.ebuild,v 1.4 2010/01/07 16:56:52 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/postgresql-base/postgresql-base-8.4.2-r1.ebuild,v 1.6 2010/05/12 15:36:44 ranger Exp $
 
 EAPI="2"
 
@@ -9,7 +9,7 @@ WANT_AUTOMAKE="none"
 
 inherit eutils multilib toolchain-funcs versionator autotools multilib-native
 
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm ~hppa ia64 ~mips ~ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 
 DESCRIPTION="PostgreSQL libraries and clients"
 HOMEPAGE="http://www.postgresql.org/"
@@ -43,9 +43,9 @@ RDEPEND="kerberos? ( virtual/krb5[lib32?] )
 	!dev-db/postgresql
 	ldap? ( net-nds/openldap[lib32?] )"
 DEPEND="${RDEPEND}
-	sys-devel/flex
+	sys-devel/flex[lib32?]
 	>=sys-devel/bison-1.875
-	nls? ( sys-devel/gettext )"
+	nls? ( sys-devel/gettext[lib32?] )"
 PDEPEND="doc? ( dev-db/postgresql-docs:${SLOT} )"
 
 S="${WORKDIR}/postgresql-${PV}"
@@ -136,12 +136,12 @@ __EOF__
 	keepdir /etc/postgresql-${SLOT}
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	eselect postgresql update
 	[[ "$(eselect postgresql show)" = "(none)" ]] && eselect postgresql set ${SLOT}
 	elog "If you need a global psqlrc-file, you can place it in '${ROOT}/etc/postgresql-${SLOT}/'."
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	eselect postgresql update
 }

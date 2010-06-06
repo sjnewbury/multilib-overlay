@@ -1,19 +1,22 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/postgresql-base/postgresql-base-8.4.1.ebuild,v 1.8 2010/04/25 20:10:06 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/postgresql-base/postgresql-base-9.0_beta1-r1.ebuild,v 1.1 2010/06/02 17:21:28 patrick Exp $
 
 EAPI="2"
 
-WANT_AUTOCONF="latest"
 WANT_AUTOMAKE="none"
 
-inherit eutils multilib toolchain-funcs versionator autotools multilib-native
+inherit eutils multilib versionator autotools multilib-native
 
-KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 
 DESCRIPTION="PostgreSQL libraries and clients"
 HOMEPAGE="http://www.postgresql.org/"
-SRC_URI="mirror://postgresql/source/v${PV}/postgresql-${PV}.tar.bz2"
+
+MY_PV=${PV/_/}
+SRC_URI="mirror://postgresql/source/${MY_PV}/postgresql-${MY_PV}.tar.bz2"
+S=${WORKDIR}/postgresql-${MY_PV}
+
 LICENSE="POSTGRESQL"
 SLOT="$(get_version_component_range 1-2)"
 IUSE_LINGUAS="
@@ -21,7 +24,7 @@ IUSE_LINGUAS="
 	linguas_hr linguas_hu linguas_it linguas_ko linguas_nb linguas_pl
 	linguas_pt_BR linguas_ro linguas_ru linguas_sk linguas_sl linguas_sv
 	linguas_tr linguas_zh_CN linguas_zh_TW"
-IUSE="doc kerberos nls pam pg-intdatetime readline ssl threads zlib ldap ${IUSE_LINGUAS}"
+IUSE="doc kerberos nls pam readline ssl threads zlib ldap pg_legacytimestamp ${IUSE_LINGUAS}"
 RESTRICT="test"
 
 wanted_languages() {
@@ -37,33 +40,33 @@ RDEPEND="kerberos? ( virtual/krb5[lib32?] )
 	zlib? ( >=sys-libs/zlib-1.1.3[lib32?] )
 	>=app-admin/eselect-postgresql-0.3
 	virtual/libintl
-	!dev-db/postgresql-libs
-	!dev-db/postgresql-client
-	!dev-db/libpq
-	!dev-db/postgresql
+	!!dev-db/postgresql-libs
+	!!dev-db/postgresql-client
+	!!dev-db/libpq
+	!!dev-db/postgresql
 	ldap? ( net-nds/openldap[lib32?] )"
 DEPEND="${RDEPEND}
 	sys-devel/flex[lib32?]
 	>=sys-devel/bison-1.875
 	nls? ( sys-devel/gettext[lib32?] )"
-PDEPEND="doc? ( dev-db/postgresql-docs:${SLOT} )"
-
-S="${WORKDIR}/postgresql-${PV}"
+PDEPEND="doc? ( ~dev-db/postgresql-docs-${PV} )"
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/postgresql-${SLOT}-common.patch" \
-		"${FILESDIR}/postgresql-${SLOT}-base.patch"
+		"${FILESDIR}/postgresql-${SLOT}-base.patch" \
+		"${FILESDIR}/postgresql-base-8.4-9.0-heimdal_strlcpy.patch"
 
 	# to avoid collision - it only should be installed by server
 	rm "${S}/src/backend/nls.mk"
 
 	# because psql/help.c includes the file
 	ln -s "${S}/src/include/libpq/pqsignal.h" "${S}/src/bin/psql/"
-
+	cd "${S}"
 	eautoconf
 }
 
 multilib-native_src_configure_internal() {
+	export LDFLAGS_SL="${LDFLAGS}"
 	econf --prefix=/usr/$(get_libdir)/postgresql-${SLOT} \
 		--datadir=/usr/share/postgresql-${SLOT} \
 		--docdir=/usr/share/doc/postgresql-${SLOT} \
@@ -79,21 +82,19 @@ multilib-native_src_configure_internal() {
 		$(use_with kerberos gssapi) \
 		"$(use_enable nls nls "$(wanted_languages)")" \
 		$(use_with pam) \
-		$(use_enable pg-intdatetime integer-datetimes ) \
+		$(use_enable !pg_legacytimestamp integer-datetimes ) \
 		$(use_with ssl openssl) \
 		$(use_enable threads thread-safety) \
-		$(use_enable threads thread-safety-force) \
 		$(use_with zlib) \
 		$(use_with ldap) \
-		${myconf} \
 		|| die "configure failed"
 }
-
 multilib-native_src_compile_internal() {
-	emake LD="$(tc-getLD) $(get_abi_LDFLAGS)" || die "emake failed"
+
+	emake || die "emake failed"
 
 	cd "${S}/contrib"
-	emake LD="$(tc-getLD) $(get_abi_LDFLAGS)" || die "emake failed"
+	emake || die "emake failed"
 }
 
 multilib-native_src_install_internal() {
@@ -122,6 +123,7 @@ postgres_bindir=/usr/$(get_libdir)/postgresql-${SLOT}/bin
 postgres_symlinks=(
 	${IDIR} /usr/include/postgresql
 	${IDIR}/libpq-fe.h /usr/include/libpq-fe.h
+	${IDIR}/pg_config_manual.h /usr/include/pg_config_manual.h
 	${IDIR}/libpq /usr/include/libpq
 	${IDIR}/postgres_ext.h /usr/include/postgres_ext.h
 )
