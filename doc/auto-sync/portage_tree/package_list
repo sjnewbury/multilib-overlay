@@ -29,7 +29,7 @@ app-text/gnome-doc-utils
 app-text/hunspell
 # app-text/libpaper
 # app-text/opensp
-# app-text/poppler
+app-text/poppler
 dev-cpp/cairomm
 dev-cpp/glibmm
 dev-cpp/gtkmm

@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/poppler/poppler-0.12.3-r3.ebuild,v 1.9 2010/02/08 18:17:23 nixnut Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/poppler/poppler-0.12.3-r3.ebuild,v 1.14 2010/03/11 22:07:20 yngwin Exp $
 
 EAPI="2"
 
@@ -12,7 +12,7 @@ SRC_URI="http://poppler.freedesktop.org/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd ~x64-freebsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd ~x64-freebsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 IUSE="+abiword cairo cjk debug doc exceptions jpeg jpeg2k +lcms png qt4 +utils +xpdf-headers"
 
 COMMON_DEPEND=">=media-libs/fontconfig-2.6.0[lib32?]
@@ -24,6 +24,7 @@ COMMON_DEPEND=">=media-libs/fontconfig-2.6.0[lib32?]
 			 >=x11-libs/gtk+-2.14.0:2[lib32?] )
 	jpeg? ( >=media-libs/jpeg-7:0[lib32?] )
 	jpeg2k? ( media-libs/openjpeg[lib32?] )
+	lcms? ( media-libs/lcms[lib32?] )
 	png? ( media-libs/libpng[lib32?] )
 	qt4? ( x11-libs/qt-core:4[lib32?]
 		   x11-libs/qt-gui:4[lib32?] )"
@@ -37,12 +38,15 @@ RDEPEND="${COMMON_DEPEND}
 	!app-text/poppler-utils
 	cjk? ( >=app-text/poppler-data-0.2.1 )"
 
+DOCS="AUTHORS ChangeLog NEWS README README-XPDF TODO"
+
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}/${P}-cmake-disable-tests.patch"
-	epatch "${FILESDIR}/${P}-fix-headers-installation.patch"
-	epatch "${FILESDIR}/${P}-gdk.patch"
+	epatch "${FILESDIR}"/${P}-cmake-disable-tests.patch
+	epatch "${FILESDIR}"/${P}-fix-headers-installation.patch
+	epatch "${FILESDIR}"/${P}-gdk.patch
 	epatch "${FILESDIR}"/${P}-darwin-gtk-link.patch
-	epatch "${FILESDIR}/${P}-cmake-cflags.patch"
+	epatch "${FILESDIR}"/${P}-config.patch  #304407
+	epatch "${FILESDIR}"/${P}-cmake-cflags.patch
 }
 
 multilib-native_src_configure_internal() {
@@ -76,4 +80,10 @@ multilib-native_src_install_internal() {
 		insinto /usr/share/gtk-doc/html/poppler
 		doins -r "${S}"/glib/reference/html/* || die 'failed to install API documentation'
 	fi
+}
+
+multilib-native_pkg_postinst_internal() {
+	ewarn 'After upgrading app-text/poppler you may need to reinstall packages'
+	ewarn 'depending on it. If you have gentoolkit installed, you can find those'
+	ewarn 'with `equery d poppler`.'
 }

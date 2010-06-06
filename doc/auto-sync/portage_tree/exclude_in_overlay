@@ -63,3 +63,4 @@ dev-libs/dbus-glib/dbus-glib-9999.ebuild
 dev-python/pygobject/pygobject-2.21.1.ebuild
 media-libs/glitz/glitz-9999.ebuild # x11
 dev-libs/libunique/libunique-1.1.6.ebuild
+app-text/poppler/files/poppler-0.12.3-cmake-cflags.patch # patch of multilib overlay 
