@@ -39,13 +39,13 @@ multilib-native_src_install_internal() {
 	newins config/jdk-defaults-${ARCH}.conf jdk-defaults.conf || die "arch config not found"
 }
 
-pkg_postrm() {
+multilib-native_pkg_postrm_internal() {
 	distutils_pkg_postrm
 	fdo-mime_desktop_database_update
 	gnome2_icon_cache_update
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	distutils_pkg_postinst
 	fdo-mime_desktop_database_update
 	gnome2_icon_cache_update

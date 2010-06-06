@@ -41,7 +41,7 @@ dev-db/sqlite
 # dev-dotnet/libgdiplus
 # dev-java/eclipse-ecj
 # dev-java/gcj-jdk
-# dev-java/java-config
+dev-java/java-config
 dev-lang/lua
 dev-lang/perl
 dev-lang/python
