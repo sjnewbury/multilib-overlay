@@ -28,7 +28,7 @@ app-text/enchant
 app-text/gnome-doc-utils
 app-text/hunspell
 # app-text/libpaper
-# app-text/opensp
+app-text/opensp
 app-text/poppler
 dev-cpp/cairomm
 dev-cpp/glibmm

@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-text/opensp/opensp-1.5.1.ebuild,v 1.16 2007/07/12 04:37:47 mr_bones_ Exp $
 
+EAPI="2"
+
 inherit eutils flag-o-matic multilib-native
 
 MY_P=${P/opensp/OpenSP}
@@ -15,17 +17,14 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="nls"
 
-DEPEND="nls? ( sys-devel/gettext )"
+DEPEND="nls? ( sys-devel/gettext[lib32?] )"
 
-src_unpack() {
-	unpack "${A}"
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-1.5-gcc34.patch
 	epatch "${FILESDIR}"/opensp-1.5.1-gcc41.patch
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	#
 	# The following filters are taken from openjade's ebuild. See bug #100828.
 	#
@@ -45,6 +44,9 @@ multilib-native_src_compile_internal() {
 	myconf="${myconf} --enable-default-search-path=/usr/share/sgml"
 	myconf="${myconf} --datadir=/usr/share/sgml/${P}"
 	econf ${myconf} $(use_enable nls) || die "econf failed"
+}
+
+multilib-native_src_compile_internal() {
 	emake pkgdocdir=/usr/share/doc/${PF} || die "parallel make failed"
 }
 

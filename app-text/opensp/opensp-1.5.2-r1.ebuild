@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-text/opensp/opensp-1.5.2-r1.ebuild,v 1.11 2007/07/12 04:37:47 mr_bones_ Exp $
 
+EAPI="2"
+
 inherit eutils flag-o-matic multilib-native
 
 MY_P=${P/opensp/OpenSP}
@@ -15,20 +17,18 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="doc nls"
 
-DEPEND="nls? ( >=sys-devel/gettext-0.14.5 )
+DEPEND="nls? ( >=sys-devel/gettext-0.14.5[lib32?] )
 	doc? (
 		app-text/xmlto
 		~app-text/docbook-xml-dtd-4.1.2
 	)"
 RDEPEND=""
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-1.5-gcc34.patch
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	#
 	# The following filters are taken from openjade's ebuild. See bug #100828.
 	#
@@ -51,6 +51,9 @@ multilib-native_src_compile_internal() {
 		$(use_enable doc doc-build)"
 
 	econf ${myconf} || die "econf failed"
+}
+
+multilib-native_src_compile_internal() {
 	emake pkgdocdir=/usr/share/doc/${PF} || die "Compilation failed"
 }
 
@@ -68,7 +71,7 @@ multilib-native_src_install_internal() {
 	dodoc AUTHORS BUGS ChangeLog NEWS README
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	ewarn "Please note that the soname of the library changed."
 	ewarn "If you are upgrading from a previous version you need"
 	ewarn "to fix dynamic linking inconsistencies by executing:"
