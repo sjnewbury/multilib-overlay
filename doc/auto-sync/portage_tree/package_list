@@ -20,7 +20,7 @@ app-i18n/enca
 # app-misc/lirc
 # app-misc/tracker
 # app-pda/gnome-pilot
-# app-pda/gnome-pilot-conduits
+app-pda/gnome-pilot-conduits
 app-pda/pilot-link
 app-text/djvu
 app-text/enchant

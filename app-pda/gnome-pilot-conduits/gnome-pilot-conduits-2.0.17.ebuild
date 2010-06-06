@@ -16,7 +16,7 @@ IUSE=""
 
 RDEPEND=">=gnome-base/libgnome-2.0[lib32?]
 	>=app-pda/gnome-pilot-${PVR}[lib32?]
-	>=dev-libs/libxml2-2.5"[lib32?]
+	>=dev-libs/libxml2-2.5[lib32?]"
 DEPEND="sys-devel/gettext[lib32?]
 	dev-util/pkgconfig[lib32?]
 	${RDEPEND}"
@@ -25,6 +25,8 @@ G2CONF="${G2CONF} --enable-pilotlinktest"
 SCROLLKEEPER_UPDATE="0"
 
 multilib-native_src_prepare_internal() {
+	gnome2_src_prepare
+
 	# fix build failures
 	sed -i "s:pi-md5.h:libpisock/pi-md5.h:g" \
 		mal-conduit/mal/common/AG{Digest,MD5}.c || die "sed failed"

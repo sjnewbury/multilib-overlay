@@ -1,0 +1,13 @@
+--- /usr/portage/app-pda/gnome-pilot-conduits/gnome-pilot-conduits-2.0.17.ebuild	2009-06-02 19:36:35.000000000 +0200
++++ ./app-pda/gnome-pilot-conduits/gnome-pilot-conduits-2.0.17.ebuild	2010-06-06 03:05:29.000000000 +0200
+@@ -22,8 +22,8 @@
+ G2CONF="${G2CONF} --enable-pilotlinktest"
+ SCROLLKEEPER_UPDATE="0"
+ 
+-src_unpack() {
+-	gnome2_src_unpack
++src_prepare() {
++	gnome2_src_prepare
+ 
+ 	# fix build failures
+ 	sed -i "s:pi-md5.h:libpisock/pi-md5.h:g" \
