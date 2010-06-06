@@ -2,8 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-text/libpaper/libpaper-1.1.21.ebuild,v 1.15 2007/11/20 02:59:28 kumba Exp $
 
-EAPI="2"
-
 inherit eutils libtool multilib-native
 
 MY_P=${P/-/_}
@@ -16,7 +14,7 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE=""
 
-src_unpack() {
+multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 	epatch "${FILESDIR}"/libpaper-1.1.14.8-malloc.patch
@@ -30,7 +28,7 @@ multilib-native_src_install_internal() {
 	(paperconf 2>/dev/null || echo a4) > "${D}"/etc/papersize
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	elog "run \"paperconfig -p letter\" as root to use letter-pagesizes"
 	elog "or paperconf with normal user privileges."
 }

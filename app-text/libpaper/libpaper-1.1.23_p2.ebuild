@@ -18,7 +18,7 @@ IUSE=""
 
 S="${WORKDIR}/${PN}-${MY_PV}"
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	elibtoolize
 }
 
@@ -30,7 +30,7 @@ multilib-native_src_install_internal() {
 		|| die "papersize config failed"
 }
 
-pkg_postinst() {
+multilib-native_pkg_postinst_internal() {
 	echo
 	elog "run \"paperconf -p letter\" as root to use letter-pagesizes"
 	elog "or paperconf with normal user privileges."
