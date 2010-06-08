@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sci-geosciences/googleearth/googleearth-5.1.3533.1731-r1.ebuild,v 1.3 2010/04/26 19:06:59 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/sci-geosciences/googleearth/googleearth-5.1.3535.3218-r1.ebuild,v 1.1 2010/06/07 14:48:17 caster Exp $
 
 EAPI=2
 
@@ -13,9 +13,9 @@ HOMEPAGE="http://earth.google.com/"
 SRC_URI="http://dl.google.com/earth/client/current/GoogleEarthLinux.bin
 			-> GoogleEarthLinux-${PV}.bin"
 
-LICENSE="googleearth MIT SGI-B-1.1 openssl as-is ZLIB"
+LICENSE="googleearth GPL-2"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~x86"
 RESTRICT="mirror strip"
 IUSE="qt-bundled"
 
@@ -77,9 +77,27 @@ pkg_setup() {
 
 src_unpack() {
 	unpack_makeself
+
+	cd "${WORKDIR}"/bin || die
+	unpack ./../${PN}-linux-x86.tar
+
+	mkdir "${WORKDIR}"/data && cd "${WORKDIR}"/data || die
+	unpack ./../${PN}-data.tar
+
+	cd "${WORKDIR}"/bin || die
+
+	if ! use qt-bundled; then
+		rm -v libQt{Core,Gui,Network,WebKit}.so.4 ../data/qt.conf || die
+		rm -frv ../data/plugins/imageformats || die
+	fi
+	rm -rvf libGLU.so.1 libcurl.so.4 libnss_mdns4_minimal.so.2 libgdal.so.1 || die
 }
 
 src_prepare() {
+	cd "${WORKDIR}"/bin || die
+	# bug #262780
+	epatch "${FILESDIR}/decimal-separator.patch"
+
 	# make the postinst script only create the files; it's  installation
 	# are too complicated and inserting them ourselves is easier than
 	# hacking around it
@@ -87,7 +105,7 @@ src_prepare() {
 		-e 's:$SETUP_INSTALLPATH:1:' \
 		-e "s:^xdg-desktop-icon.*$::" \
 		-e "s:^xdg-desktop-menu.*$::" \
-		-e "s:^xdg-mime.*$::" postinstall.sh
+		-e "s:^xdg-mime.*$::" "${WORKDIR}"/postinstall.sh || die
 }
 
 src_install() {
@@ -99,24 +117,14 @@ src_install() {
 	doicon ${PN}-icon.png || die
 	dodoc README.linux || die
 
-	cd bin
-	tar xf "${WORKDIR}"/${PN}-linux-x86.tar || die
-	# bug #262780
-	epatch "${FILESDIR}/decimal-separator.patch"
+	cd bin || die
 	exeinto /opt/${PN}
 	doexe * || die
 
-	cd "${D}"/opt/${PN}
-	tar xf "${WORKDIR}"/${PN}-data.tar || die
-
-	if ! use qt-bundled; then
-		rm -rvf libQt{Core,Gui,Network,WebKit}.so.4 plugins/imageformats qt.conf || die
-	fi
-	rm -rvf libGLU.so.1 libcurl.so.4 libnss_mdns4_minimal.so.2 libgdal.so.1 || die
-
+	cp -pPR "${WORKDIR}"/data/* "${D}"/opt/${PN} || die
 	fowners -R root:root /opt/${PN}
 	fperms -R a-x,a+X /opt/googleearth/resources
-	scanelf -qXxzm ${D}opt/${PN}/${PN}-bin
+	scanelf -qXxzm "${D}"opt/${PN}/${PN}-bin
 }
 
 pkg_postinst() {
