@@ -1,8 +1,9 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/gimp/gimp-9999.ebuild,v 1.24 2010/02/10 13:54:28 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/gimp/gimp-9999.ebuild,v 1.27 2010/06/10 17:51:23 arfrever Exp $
 
 EAPI=2
+PYTHON_DEPEND="python? 2:2.5"
 
 inherit git eutils gnome2 fdo-mime multilib python multilib-native
 
@@ -42,8 +43,7 @@ RDEPEND=">=dev-libs/glib-2.18.1[lib32?]
 	mng? ( media-libs/libmng[lib32?] )
 	pdf? ( >=app-text/poppler-0.12.3-r3[cairo,lib32?] )
 	png? ( >=media-libs/libpng-1.2.2[lib32?] )
-	python?	( >=dev-lang/python-2.5.0[lib32?]
-		>=dev-python/pygtk-2.10.4[lib32?] )
+	python?	( >=dev-python/pygtk-2.10.4[lib32?] )
 	tiff? ( >=media-libs/tiff-3.5.7[lib32?] )
 	svg? ( >=gnome-base/librsvg-2.8.0[lib32?] )
 	wmf? ( >=media-libs/libwmf-0.2.8[lib32?] )"
@@ -90,17 +90,31 @@ multilib-native_pkg_setup_internal() {
 		$(use_with svg librsvg) \
 		$(use_with tiff libtiff) \
 		$(use_with wmf)"
+
+	if use python; then
+		python_set_active_version 2
+	fi
+}
+
+multilib-native_src_install_internal() {
+	gnome2_src_install
+
+	if use python; then
+		python_convert_shebangs -r $(python_get_version) "${D}"
+		python_need_rebuild
+	fi
 }
 
 multilib-native_pkg_postinst_internal() {
 	gnome2_pkg_postinst
 
-	python_mod_optimize /usr/$(get_libdir)/gimp/2.0/python \
+	use python && python_mod_optimize /usr/$(get_libdir)/gimp/2.0/python \
 		/usr/$(get_libdir)/gimp/2.0/plug-ins
 }
 
 multilib-native_pkg_postrm_internal() {
 	gnome2_pkg_postrm
-	python_mod_cleanup /usr/$(get_libdir)/gimp/2.0/python \
+
+	use python && python_mod_cleanup /usr/$(get_libdir)/gimp/2.0/python \
 		/usr/$(get_libdir)/gimp/2.0/plug-ins
 }
