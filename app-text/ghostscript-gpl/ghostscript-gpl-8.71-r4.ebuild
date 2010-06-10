@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/ghostscript-gpl/ghostscript-gpl-8.71-r4.ebuild,v 1.1 2010/04/15 12:43:56 spatz Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/ghostscript-gpl/ghostscript-gpl-8.71-r4.ebuild,v 1.4 2010/06/08 10:37:27 ssuominen Exp $
 
 EAPI=2
 inherit autotools eutils versionator flag-o-matic multilib-native
@@ -67,6 +67,11 @@ multilib-native_pkg_setup_internal() {
 		eerror
 		die "Path ${p} is not a symlink"
 	fi
+
+	if use bindist && use djvu; then
+		ewarn "You have bindist in your USE, djvu support will NOT be compiled!"
+		ewarn "See http://djvu.sourceforge.net/gsdjvu/COPYING for details on licensing issues."
+	fi
 }
 
 multilib-native_src_prepare_internal() {
@@ -82,28 +87,10 @@ multilib-native_src_prepare_internal() {
 
 	# Fedora patches
 	# http://cvs.fedoraproject.org/viewvc/devel/ghostscript/
-	epatch "${WORKDIR}/patches/${PN}-8.61-multilib.patch"
-	epatch "${WORKDIR}/patches/${PN}-8.64-scripts.patch"
-	epatch "${WORKDIR}/patches/${PN}-8.64-noopt.patch"
-	epatch "${WORKDIR}/patches/${PN}-8.64-fPIC.patch"
-	epatch "${WORKDIR}/patches/${PN}-8.70-runlibfileifexists.patch"
-	epatch "${WORKDIR}/patches/${PN}-8.64-system-jasper.patch"
-	epatch "${WORKDIR}/patches/${PN}-8.64-pksmraw.patch"
-	epatch "${WORKDIR}/patches/${PN}-8.71-jbig2dec-nullderef.patch"
-	epatch "${WORKDIR}/patches/${PN}-8.71-CVE-2009-4270.patch"
-	epatch "${WORKDIR}/patches/${PN}-8.71-vsnprintf.patch"
-	epatch "${WORKDIR}/patches/${PN}-8.71-pdftoraster-exit.patch"
-	epatch "${WORKDIR}/patches/${PN}-8.71-ldflags.patch"
-	epatch "${WORKDIR}/patches/${PN}-8.71-pdf2dsc.patch"
-	epatch "${WORKDIR}/patches/${PN}-8.71-cups-realloc-color-depth.patch"
-	epatch "${WORKDIR}/patches/${PN}-8.71-tiff-fail-close.patch"
-	epatch "${WORKDIR}/patches/${PN}-8.71-tiff-default-strip-size.patch"
-	epatch "${WORKDIR}/patches/${PN}-8.71-tiff-fixes.patch"
-
-	if use bindist && use djvu ; then
-		ewarn "You have bindist in your USE, djvu support will NOT be compiled!"
-		ewarn "See http://djvu.sourceforge.net/gsdjvu/COPYING for details on licensing issues."
-	fi
+	EPATCH_EXCLUDE="${PN}-8.64-gsdjvu-1.3.patch"
+	EPATCH_SUFFIX="patch" EPATCH_FORCE="yes"
+	EPATCH_SOURCE="${WORKDIR}/patches/"
+	epatch
 
 	if ! use bindist && use djvu ; then
 		unpack gsdjvu-${GSDJVU_PV}.tar.gz
@@ -168,7 +155,7 @@ multilib-native_src_configure_internal() {
 	fi
 
 	cd "${S}/ijs"
-	econf || die "ijs econf failed"
+	econf
 }
 
 multilib-native_src_compile_internal() {
@@ -196,7 +183,7 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake ijs install failed"
 
 	# Rename an original cidfmap to cidfmap.GS
-	mv "${D}/usr/share/ghostscript/${PVM}/Resource/Init/cidfmap"{,.GS}
+	mv "${D}/usr/share/ghostscript/${PVM}/Resource/Init/cidfmap"{,.GS} || die
 
 	# Install our own cidfmap to allow the separated cidfmap
 	insinto "/usr/share/ghostscript/${PVM}/Resource/Init"

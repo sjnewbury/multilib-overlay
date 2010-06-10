@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/ghostscript-gpl/ghostscript-gpl-8.71-r1.ebuild,v 1.5 2010/06/05 09:55:57 phajdan.jr Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/ghostscript-gpl/ghostscript-gpl-8.71-r1.ebuild,v 1.6 2010/06/08 10:37:27 ssuominen Exp $
 
 EAPI=2
 inherit autotools eutils versionator flag-o-matic multilib-native
@@ -17,7 +17,7 @@ SRC_URI="!bindist? ( djvu? ( mirror://sourceforge/djvu/gsdjvu-${GSDJVU_PV}.tar.g
 
 LICENSE="GPL-3 CPL-1.0"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="bindist cairo cups djvu gtk jpeg2k X"
 
 COMMON_DEPEND="app-text/libpaper[lib32?]
