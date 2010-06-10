@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/lvm2/lvm2-2.02.63-r1.ebuild,v 1.3 2010/06/07 23:09:45 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/lvm2/lvm2-2.02.67.ebuild,v 1.2 2010/06/07 22:39:26 robbat2 Exp $
 
 EAPI=2
 inherit eutils multilib toolchain-funcs autotools multilib-native
@@ -47,7 +47,7 @@ multilib-native_src_unpack_internal() {
 }
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}"/lvm.conf-2.02.56.patch
+	epatch "${FILESDIR}"/lvm.conf-2.02.67.patch
 
 	# Should not be needed due to upstream re-arrangement of build
 	#epatch "${FILESDIR}"/${PN}-2.02.56-dmeventd.patch
@@ -65,6 +65,10 @@ multilib-native_src_prepare_internal() {
 
 	epatch "${FILESDIR}"/${PN}-2.02.63-always-make-static-libdm.patch
 	epatch "${FILESDIR}"/lvm2-2.02.56-lvm2create_initrd.patch
+	# bug 318513
+	epatch "${FILESDIR}"/${PN}-2.02.64-dmeventd-libs.patch
+	# bug 301331
+	epatch "${FILESDIR}"/${PN}-2.02.67-createinitrd.patch
 
 	eautoreconf
 }
@@ -130,11 +134,15 @@ multilib-native_src_configure_internal() {
 		myconf="${myconf} --with-clvmd=none --with-cluster=none"
 	fi
 
-	myconf="${myconf} --sbindir=/sbin --with-staticdir=/sbin"
+	myconf="${myconf}
+			--sbindir=/sbin
+			--with-staticdir=/sbin
+			--with-dmeventd-path=/sbin/dmeventd"
 	econf $(use_enable readline) \
 		$(use_enable selinux) \
 		--enable-pkgconfig \
 		--libdir=/$(get_libdir) \
+		--with-usrlibdir=/usr/$(get_libdir) \
 		--enable-udev_rules \
 		--enable-udev_sync \
 		--with-udevdir=/$(get_libdir)/udev/rules.d/ \
@@ -155,33 +163,34 @@ multilib-native_src_compile_internal() {
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "Failed to emake install"
 
-	# Upstream build script puts a lot of this stuff into /usr/lib regardless of
-	# libdir variable
-	dodir /$(get_libdir)
-	# Put these in root so we can reach before /usr is up
-	for i in \
-		libdevmapper-event{,-lvm2{,mirror,snapshot}} \
-		libdevmapper-event \
-		libdevmapper \
-		liblvm2{format1,snapshot,cmd,app} \
-		; do
-		for d in $(get_libdir) lib ; do
-			b="${D}"/usr/${d}/${i}
-			#einfo "$i in $d : $b"
-			if [ -n "$(ls "${b}".so* 2>/dev/null)" ]; then
-				[ -s "$b.so" ] && rm -f $b
-				mv -f "${b}".so* "${D}"/$(get_libdir) || die
-				gen_usr_ldscript ${i}.so || die
-			fi
-			if [ "$d" != "$(get_libdir)" -a -f "${b}.a" ]; then
-				mv -f "${b}.a" "${D}"/usr/$(get_libdir) || die
-			fi
-		done
-		for d in $(get_libdir) lib ; do
-			b="${D}"/${d}/${i}
-			[ -s "$b.so" ] && rm -f $b
-		done
-	done
+	# All of this was change by upstream, and if we don't get any problems, we
+	# can probably drop it in .65
+	#X## Revamp all of our library handling for bug #316571
+	#X## Upstream build script puts a lot of this stuff into /usr/lib regardless of
+	#X## libdir variable.
+	#X#dodir /$(get_libdir)
+	#X## .so -> /$(get_libdir)
+	#X#mv -f "${D}"/usr/lib/lib*.so* "${D}"/$(get_libdir)
+	#X#[[ "$(get_libdir)" != "lib" ]] && \
+	#X#	mv "${D}"/usr/$(get_libdir)/lib*.so* "${D}"/$(get_libdir)
+	#X## .a -> /usr/$(get_libdir)
+	#X#[[ "$(get_libdir)" != "lib" ]] && \
+	#X#	mv -f "${D}"/usr/lib/lib*.a "${D}"/usr/$(get_libdir)
+	#X## The upstream symlinks are borked. lets rebuild them instead.
+	#X#find "${D}"/{usr,}/{lib,$(get_libdir)} -type l \
+	#X#	| xargs rm -f 2>/dev/null
+	#X#for i in "${D}"/$(get_libdir)/*.so.* ; do
+	#X#	b="${i//*\/}" o="${b/.so.*/.so}"
+	#X#	ln -s "${b}" "${D}/$(get_libdir)/${o}"
+	#X#done
+	#X## Now enable building properly
+	#X#for i in \
+	#X#	libdevmapper-event{,-lvm2{,mirror,snapshot}} \
+	#X#	libdevmapper \
+	#X#	liblvm2{format1,snapshot,cmd,app} \
+	#X#	; do
+	#X#	gen_usr_ldscript ${i}.so || die
+	#X#done
 
 	dodoc README VERSION WHATS_NEW doc/*.{conf,c,txt}
 	insinto /$(get_libdir)/rcscripts/addons

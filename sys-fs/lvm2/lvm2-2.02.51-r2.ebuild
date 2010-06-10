@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/lvm2/lvm2-2.02.51-r2.ebuild,v 1.6 2009/12/11 15:44:06 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/lvm2/lvm2-2.02.51-r2.ebuild,v 1.7 2010/06/07 23:09:45 robbat2 Exp $
 
 EAPI=2
 inherit eutils multilib toolchain-funcs autotools multilib-native
@@ -150,7 +150,7 @@ multilib-native_src_compile_internal() {
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${D}" install
+	emake DESTDIR="${D}" install || die "Failed to emake install"
 
 	dodir /$(get_libdir)
 	# Put these in root so we can reach before /usr is up

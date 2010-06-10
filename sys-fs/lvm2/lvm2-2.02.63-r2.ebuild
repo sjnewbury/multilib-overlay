@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/lvm2/lvm2-2.02.63-r2.ebuild,v 1.2 2010/05/07 18:22:16 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/lvm2/lvm2-2.02.63-r2.ebuild,v 1.3 2010/06/07 23:09:45 robbat2 Exp $
 
 EAPI=2
 inherit eutils multilib toolchain-funcs autotools multilib-native
@@ -153,7 +153,7 @@ multilib-native_src_compile_internal() {
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${D}" install
+	emake DESTDIR="${D}" install || die "Failed to emake install"
 
 	# Revamp all of our library handling for bug #316571
 	# Upstream build script puts a lot of this stuff into /usr/lib regardless of
