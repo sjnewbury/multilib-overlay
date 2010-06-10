@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/poppler/poppler-0.12.4-r3.ebuild,v 1.7 2010/06/08 19:18:43 grobian Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/poppler/poppler-0.14.0-r1.ebuild,v 1.2 2010/06/09 14:38:35 scarabeus Exp $
 
 EAPI="2"
 
@@ -8,12 +8,15 @@ inherit cmake-utils multilib-native
 
 DESCRIPTION="PDF rendering library based on the xpdf-3.0 code base"
 HOMEPAGE="http://poppler.freedesktop.org/"
-SRC_URI="http://poppler.freedesktop.org/${P}.tar.gz"
+SRC_URI="http://dev.gentooexperimental.org/~scarabeus/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd ~x64-freebsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 SLOT="0"
-IUSE="+abiword cairo cjk debug doc exceptions jpeg jpeg2k +lcms png qt4 +utils +xpdf-headers"
+IUSE="+abiword cairo cjk curl cxx debug doc exceptions jpeg jpeg2k +lcms png qt4 +utils +xpdf-headers"
+
+# No test data provided
+RESTRICT="test"
 
 COMMON_DEPEND="
 	>=media-libs/fontconfig-2.6.0[lib32?]
@@ -25,6 +28,7 @@ COMMON_DEPEND="
 		>=x11-libs/cairo-1.8.4[lib32?]
 		>=x11-libs/gtk+-2.14.0:2[lib32?]
 	)
+	curl? ( net-misc/curl[lib32?] )
 	jpeg? ( >=media-libs/jpeg-7:0[lib32?] )
 	jpeg2k? ( media-libs/openjpeg[lib32?] )
 	lcms? ( media-libs/lcms[lib32?] )
@@ -46,37 +50,19 @@ RDEPEND="${COMMON_DEPEND}
 	cjk? ( >=app-text/poppler-data-0.2.1 )
 "
 
-DOCS="AUTHORS ChangeLog NEWS README README-XPDF TODO"
-
-multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}"/${PN}-0.12.3-cmake-disable-tests.patch
-	epatch "${FILESDIR}"/${PN}-0.12.3-fix-headers-installation.patch
-	epatch "${FILESDIR}"/${PN}-0.12.3-gdk.patch
-	epatch "${FILESDIR}"/${PN}-0.12.3-darwin-gtk-link.patch
-	epatch "${FILESDIR}"/${P}-config.patch  #304407
-	epatch "${FILESDIR}"/${PN}-0.12.3-cairo-downscale.patch  #303817
-	epatch "${FILESDIR}"/${PN}-0.12.3-preserve-cflags.patch  #309297
-	epatch "${FILESDIR}"/${PN}-0.12.4-nanosleep-rt.patch
-	epatch "${FILESDIR}"/${PN}-0.12.4-strings_h.patch #314925
-	epatch "${FILESDIR}"/${PN}-0.12.4-xopen_source.patch #314925
-	# The whole _XOPEN_SOURCE thing breaks OSX Tiger and Solaris, this
-	# is introduced by #309297, and made worse by #314925.  Since
-	# vanilla sources don't have this enabled, the whole _XOPEN_SOURCE
-	# isn't set by default, and hence correct from upstream's point of
-	# view.  FreeBSD folks should file a proper bug for #314925 if they
-	# really need it to compile vanilla sources.
-	[[ ${CHOST} == *-darwin8 || ${CHOST} == *-solaris* ]] && \
-		sed -i -e '/add_definitions/d' cmake/modules/PopplerMacros.cmake
-}
+DOCS=(AUTHORS NEWS README README-XPDF TODO)
 
 multilib-native_src_configure_internal() {
 	mycmakeargs=(
 		-DBUILD_GTK_TESTS=OFF
 		-DBUILD_QT4_TESTS=OFF
+		-DBUILD_CPP_TESTS=OFF
 		-DWITH_Qt3=OFF
 		-DENABLE_SPLASH=ON
 		-DENABLE_ZLIB=ON
 		$(cmake-utils_use_enable abiword)
+		$(cmake-utils_use_enable curl LIBCURL)
+		$(cmake-utils_use_enable cxx CPP)
 		$(cmake-utils_use_enable jpeg2k LIBOPENJPEG)
 		$(cmake-utils_use_enable lcms)
 		$(cmake-utils_use_enable utils)
@@ -102,8 +88,12 @@ multilib-native_src_install_internal() {
 	fi
 }
 
+multilib-native_pkg_preinst_internal() {
+	preserve_old_lib /usr/$(get_libdir)/libpoppler-glib.so.5
+	preserve_old_lib /usr/$(get_libdir)/libpoppler.so.6
+}
+
 multilib-native_pkg_postinst_internal() {
-	ewarn 'After upgrading app-text/poppler you may need to reinstall packages'
-	ewarn 'depending on it. If you have gentoolkit installed, you can find those'
-	ewarn 'with `equery d poppler`.'
+	preserve_old_lib_notify /usr/$(get_libdir)/libpoppler-glib.so.5
+	preserve_old_lib_notify /usr/$(get_libdir)/libpoppler.so.6
 }
