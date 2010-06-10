@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libv4l/libv4l-0.7.91.ebuild,v 1.1 2010/05/10 15:07:28 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libv4l/libv4l-0.7.91.ebuild,v 1.2 2010/06/09 09:45:31 ssuominen Exp $
 
 EAPI=3
 inherit multilib toolchain-funcs multilib-native
@@ -15,6 +15,9 @@ LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ppc ~ppc64 ~sparc ~x86"
 IUSE=""
+
+RDEPEND=""
+DEPEND=">=sys-kernel/linux-headers-2.6.30-r1"
 
 S=${WORKDIR}/${MY_P}
 

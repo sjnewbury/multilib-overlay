@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libv4l/libv4l-0.5.3.ebuild,v 1.9 2010/05/10 15:07:28 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libv4l/libv4l-0.5.3.ebuild,v 1.10 2010/06/09 09:45:31 ssuominen Exp $
 
 # this version is marked as obsolete, delete asap
 
@@ -13,7 +13,7 @@ SRC_URI="http://people.atrpms.net/~hdegoede/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="alpha hppa"
+KEYWORDS="hppa"
 IUSE=""
 
 multilib-native_src_compile_internal() {
