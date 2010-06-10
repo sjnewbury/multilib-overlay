@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/cracklib/cracklib-2.8.15.ebuild,v 1.9 2010/04/01 17:24:35 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/cracklib/cracklib-2.8.15.ebuild,v 1.10 2010/06/05 20:46:31 vapier Exp $
 
 EAPI="2"
 
@@ -31,6 +31,7 @@ multilib-native_pkg_setup_internal() {
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-2.8.13-python-linkage.patch #246747
+	epatch "${FILESDIR}"/${P}-no-nls.patch
 	sed -i '/PYTHON/s:\(print\) \([^"]*\):\1(\2):' configure #302908
 	elibtoolize #269003
 }

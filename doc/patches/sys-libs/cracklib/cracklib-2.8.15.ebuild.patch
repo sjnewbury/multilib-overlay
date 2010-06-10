@@ -1,6 +1,6 @@
---- /usr/portage/sys-libs/cracklib/cracklib-2.8.15.ebuild	2010-03-08 23:37:33.000000000 +0100
-+++ ./sys-libs/cracklib/cracklib-2.8.15.ebuild	2010-03-14 18:26:07.000000000 +0100
-@@ -27,21 +27,18 @@
+--- /usr/portage/sys-libs/cracklib/cracklib-2.8.15.ebuild	2010-06-05 23:07:07.000000000 +0200
++++ ./sys-libs/cracklib/cracklib-2.8.15.ebuild	2010-06-10 23:48:13.000000000 +0200
+@@ -27,22 +27,19 @@
  	fi
  }
  
@@ -9,6 +9,7 @@
 -	cd "${S}"
 +src_prepare() {
  	epatch "${FILESDIR}"/${PN}-2.8.13-python-linkage.patch #246747
+ 	epatch "${FILESDIR}"/${P}-no-nls.patch
  	sed -i '/PYTHON/s:\(print\) \([^"]*\):\1(\2):' configure #302908
  	elibtoolize #269003
  }
