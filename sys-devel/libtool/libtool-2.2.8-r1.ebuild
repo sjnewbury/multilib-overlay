@@ -1,39 +1,32 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-devel/libtool/libtool-2.2.7b.ebuild,v 1.2 2010/05/25 19:26:13 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-devel/libtool/libtool-2.2.8-r1.ebuild,v 1.1 2010/06/08 21:52:05 vapier Exp $
 
-EAPI="2"
+EAPI="3"
 
 LIBTOOLIZE="true" #225559
-inherit eutils autotools flag-o-matic multilib multilib-native
+inherit eutils autotools multilib multilib-native
 
 DESCRIPTION="A shared library tool for developers"
 HOMEPAGE="http://www.gnu.org/software/libtool/"
 SRC_URI="mirror://gnu/${PN}/${P}.tar.lzma"
 
 LICENSE="GPL-2"
-SLOT="1.5"
+SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
-IUSE="vanilla test"
+IUSE="vanilla"
 
 RDEPEND="sys-devel/gnuconfig
 	>=sys-devel/autoconf-2.60
-	>=sys-devel/automake-1.10.1"
+	>=sys-devel/automake-1.10.1
+	!=sys-devel/libtool-2*:1.5"
 DEPEND="${RDEPEND}
-	|| ( app-arch/xz-utils[lib32?] app-arch/lzma-utils[lib32?] )
-	sys-apps/help2man"
-
-multilib-native_pkg_setup_internal() {
-	if use test && ! has_version '>sys-devel/binutils-2.19.51'; then
-		einfo "Disabling --as-needed, since you got older binutils and you asked"
-		einfo "to run tests. With the stricter (older) --as-needed behaviour"
-		einfo "you'd be seeing a test failure in test #63; this has been fixed"
-		einfo "in the newer version of binutils."
-		append-ldflags $(no-as-needed)
-	fi
-}
+	>=sys-devel/binutils-2.20
+	|| ( app-arch/xz-utils[lib32?] app-arch/lzma-utils[lib32?] )"
 
 multilib-native_src_prepare_internal() {
+	epatch "${FILESDIR}"/${P}-versioning-as-needed-test.patch #321551
+
 	if ! use vanilla ; then
 		epunt_cxx
 		cd libltdl/m4
@@ -43,23 +36,21 @@ multilib-native_src_prepare_internal() {
 		cd ..
 		AT_NOELIBTOOLIZE=yes eautoreconf
 	fi
+}
 
+multilib-native_src_configure_internal() {
 	# the libtool script uses bash code in it and at configure time, tries
 	# to find a bash shell.  if /bin/sh is bash, it uses that.  this can
 	# cause problems for people who switch /bin/sh on the fly to other
 	# shells, so just force libtool to use /bin/bash all the time.
 	export CONFIG_SHELL=/bin/bash
+
+	default
 }
 
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
 	dodoc AUTHORS ChangeLog* NEWS README THANKS TODO doc/PLATFORMS
-
-	local x
-	for x in libtool libtoolize ; do
-		help2man ${x} > ${x}.1
-		doman ${x}.1 || die
-	done
 
 	for x in $(find "${D}" -name config.guess -o -name config.sub) ; do
 		rm -f "${x}" ; ln -sf /usr/share/gnuconfig/${x##*/} "${x}"
