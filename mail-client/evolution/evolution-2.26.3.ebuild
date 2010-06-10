@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.26.3.ebuild,v 1.13 2010/03/22 09:14:23 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.26.3.ebuild,v 1.14 2010/06/08 12:06:22 eva Exp $
 
 EAPI="2"
 
@@ -67,7 +67,8 @@ DEPEND="${RDEPEND}
 	sys-devel/bison
 	app-text/scrollkeeper
 	>=gnome-base/gnome-common-2.12.0
-	>=app-text/gnome-doc-utils-0.9.1[lib32?]"
+	>=app-text/gnome-doc-utils-0.9.1[lib32?]
+	app-text/docbook-xml-dtd:4.1.2"
 
 PDEPEND="exchange? ( >=gnome-extra/evolution-exchange-2.26.1 )"
 
