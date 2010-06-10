@@ -1,6 +1,6 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pyorbit/pyorbit-2.14.3.ebuild,v 1.12 2008/10/27 10:29:01 hawking Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pyorbit/pyorbit-2.14.3.ebuild,v 1.13 2010/06/08 17:40:45 arfrever Exp $
 
 EAPI="2"
 
@@ -32,19 +32,14 @@ multilib-native_src_install_internal() {
 	python_need_rebuild
 	gnome2_src_install
 
-	python_version
-	mv "${D}"/usr/$(get_libdir)/python${PYVER}/site-packages/CORBA.py \
-		"${D}"/usr/$(get_libdir)/python${PYVER}/site-packages/pyorbit_CORBA.py
-
-	mv "${D}"/usr/$(get_libdir)/python${PYVER}/site-packages/PortableServer.py \
-		"${D}"/usr/$(get_libdir)/python${PYVER}/site-packages/pyorbit_PortableServer.py
+	mv "${D}"$(python_get_sitedir)/{CORBA.py,pyorbit_CORBA.py}
+	mv "${D}"$(python_get_sitedir)/{PortableServer.py,pyorbit_PortableServer.py}
 }
 
 multilib-native_pkg_postinst_internal() {
-	python_version
-	python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages
+	python_mod_optimize $(python_get_sitedir)/{pyorbit_CORBA.py,pyorbit_PortableServer.py}
 }
 
 multilib-native_pkg_postrm_internal() {
-	python_mod_cleanup
+	python_mod_cleanup $(python_get_sitedir)/{pyorbit_CORBA.py,pyorbit_PortableServer.py}
 }
