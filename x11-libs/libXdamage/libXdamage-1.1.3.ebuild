@@ -2,8 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/libXdamage/libXdamage-1.1.3.ebuild,v 1.1 2010/06/09 12:41:48 scarabeus Exp $
 
-EAPI="3"
-
+EAPI=3
 inherit xorg-2 multilib-native
 
 DESCRIPTION="X.Org Xdamage library"
