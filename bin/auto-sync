@@ -2,7 +2,12 @@
 
 # TODO: - add outer loop to iterate through multiple source dirs
 #	- ask to remove files / add to excdlude list
+#	- fix false positives
 
+debug()
+{
+	[[ -n ${DEBUG} ]] && echo "$*"
+}
 
 echo_red() {
 	echo -e "\033[1;31m$*\033[0m"
@@ -54,12 +59,14 @@ for PACKAGE in ${PACKAGE_LIST}; do
 	while [[ "${PACKAGE}" != "" ]]; do
 		echo_yellow "\nworking on: ${PACKAGE}"
 		EBUILDS=""
+		ASK=""
 		for I in . ${SOURCE_DIR}; do
 			pushd ${I} >/dev/null
 			if [[ -d ${PACKAGE} ]]; then
 				EBUILDS+="$(find ${PACKAGE} -name "*.ebuild" ${EXCLUDES}) "
 			else
 				echo "${PACKAGE} is not in ${I}"
+				ASK+="1"
 			fi
 			popd >/dev/null
 		done
@@ -85,6 +92,7 @@ for PACKAGE in ${PACKAGE_LIST}; do
 				bin/make_multilib --no-manifest ${EBUILD} 
 			else
 				echo_red "${EBUILD} is not in ${SOURCE_DIR}"
+				ASK+="2"
 			fi
 			echo_green "finished working on: ${EBUILD}"
 		done
@@ -92,15 +100,17 @@ for PACKAGE in ${PACKAGE_LIST}; do
 			if [[ "$NUM_PATCHED_EBUILDS" > 0 ]]; then
 				echo_red "the following patches are missing: ${MISSING_EBUILD_PATCHES}"
 				echo_red "if those ebuilds do not need a patch add a empty file"
+				ASK+="3"
 			fi
 		fi
 		if [[ -d ${PATCH_DIR}/${PACKAGE} ]]; then
 			if [[ -n $APPLIED_EBUILD_PATCHES ]]; then
 				if [[ "" == "$(cat $APPLIED_EBUILD_PATCHES)" ]]; then
 					echo_red "all applied ebuild patches are empty $APPLIED_EBUILD_PATCHES"
+					ASK+="4"
 				fi
 			fi
-			AVAILABLE_EBUILD_PATCHES="$(find ${PATCH_DIR}/${PACKAGE} -name "*.patch" -or -path "${PATCH_DIR}/${PACKAGE}/files" -prune)"
+			AVAILABLE_EBUILD_PATCHES="$(find ${PATCH_DIR}/${PACKAGE} -name "*.patch" -or -path "${PATCH_DIR}/${PACKAGE}/files" -prune -not -path "${PATCH_DIR}/${PACKAGE}/files")"
 			UNUSED_EBUILD_PATCHES="$(echo ${AVAILABLE_EBUILD_PATCHES} | sed "s/[[:space:]]\+/\n/g" | sort -u)"
 			for PATCH in $APPLIED_EBUILD_PATCHES; do
 				UNUSED_EBUILD_PATCHES="${UNUSED_EBUILD_PATCHES/${PATCH}/}"
@@ -108,6 +118,7 @@ for PACKAGE in ${PACKAGE_LIST}; do
 			for PATCH in ${UNUSED_EBUILD_PATCHES}; do
 				if [[ "" == "$(grep ${PATCH/.patch/} ${PACKAGE_EXCLUDE_IN_OVERLAY_FILE})" ]]; then
 					echo_red "$PATCH seems to be unneeded"
+					ASK+="5"
 				fi
 			done
 		fi
@@ -131,14 +142,21 @@ for PACKAGE in ${PACKAGE_LIST}; do
 				cp ${SOURCE_DIR}/${FILE} ${FILE}
 			else
 				echo_red "${FILE} is not in ${SOURCE_DIR}"
+				ASK+="6"
 			fi
 		done
 		if [[ -d ${PATCH_DIR}/${PACKAGE}/files ]]; then
 			cat ${PATCH_DIR}/${PACKAGE}/files/* | patch -p1
 		fi
 		echo_green "finished working on: ${PACKAGE}\n"
-		if [[ "" != "$(git status | grep ${PACKAGE})" ]]; then
+		UNNEEDED_FILES="$(find ${PACKAGE} -name "*.orig" -o -name "*.rej" -o -name "ChangeLog" -o -name "metadata.xml" )"
+		if [[ "" != "${ASK}" || "" != "${UNNEEDED_FILES}" || "" != "$(git status | grep ${PACKAGE})" ]]; then
+			debug "ASK: ${ASK} UNNEEDED_FILES ${UNNEEDED_FILES} git $(git status | grep ${PACKAGE})"
 			cat ${SOURCE_DIR}/${PACKAGE}/Manifest >> ${PACKAGE}/Manifest
+			for UNNEEDED in ${UNNEEDED_FILES}; do
+				rm -f ${UNNEEDED} 2> /dev/null
+				git rm ${UNNEEDED} 2> /dev/null
+			done
 			ebuild ${EBUILD} manifest
 			egencache --update --repo=multilib ${PACKAGE}
 			while true; do
