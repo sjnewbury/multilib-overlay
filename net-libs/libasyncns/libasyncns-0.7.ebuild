@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/libasyncns/libasyncns-0.7.ebuild,v 1.3 2010/06/03 13:17:56 josejx Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/libasyncns/libasyncns-0.7.ebuild,v 1.4 2010/06/06 17:35:02 angelos Exp $
 
 inherit libtool flag-o-matic multilib-native
 
@@ -11,7 +11,7 @@ SRC_URI="http://0pointer.de/lennart/projects/libasyncns/${P}.tar.gz"
 SLOT="0"
 
 LICENSE="LGPL-2.1"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ppc ppc64 ~sh ~sparc ~x86"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ppc ppc64 ~sh ~sparc ~x86"
 
 IUSE="doc debug"
 
