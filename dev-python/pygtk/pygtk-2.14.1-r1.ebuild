@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pygtk/pygtk-2.14.1-r1.ebuild,v 1.9 2010/05/22 20:13:01 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pygtk/pygtk-2.14.1-r1.ebuild,v 1.10 2010/06/08 00:44:34 arfrever Exp $
 
 EAPI="2"
 
@@ -76,15 +76,13 @@ src_test() {
 }
 
 multilib-native_pkg_postinst_internal() {
-	python_version
 	python_need_rebuild
-	python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages/gtk-2.0
+	python_mod_optimize $(python_get_sitedir)/gtk-2.0
 }
 
 multilib-native_pkg_postrm_internal() {
-	python_version
 	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/gtk-2.0
-	rm -f "${ROOT}"/usr/$(get_libdir)/python${PYVER}/site-packages/pygtk.{py,pth}
-	alternatives_auto_makesym /usr/$(get_libdir)/python${PYVER}/site-packages/pygtk.py pygtk.py-[0-9].[0-9]
-	alternatives_auto_makesym /usr/$(get_libdir)/python${PYVER}/site-packages/pygtk.pth pygtk.pth-[0-9].[0-9]
+	rm -f "${ROOT}"$(python_get_sitedir)/pygtk.{py,pth}
+	alternatives_auto_makesym $(python_get_sitedir)/pygtk.py pygtk.py-[0-9].[0-9]
+	alternatives_auto_makesym $(python_get_sitedir)/pygtk.pth pygtk.pth-[0-9].[0-9]
 }
