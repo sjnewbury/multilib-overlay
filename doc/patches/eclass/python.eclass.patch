@@ -1,11 +1,13 @@
 --- /usr/portage/eclass/python.eclass	2010-05-29 19:05:51.000000000 +0200
-+++ ./eclass/python.eclass	2010-06-05 21:01:05.000000000 +0200
-@@ -184,6 +184,9 @@
++++ ./eclass/python.eclass	2010-06-11 08:19:09.000000000 +0200
+@@ -184,6 +184,11 @@
  # Set this to a name of a USE flag if you need to make either PYTHON_USE_WITH or
  # PYTHON_USE_WITH_OR atoms conditional under a USE flag.
  
 +#add lib32? to PYTHON_USE_WITH to ensure that 32bit python is build if needed
-+PYTHON_USE_WITH+="${PYTHON_USE_WITH:+ }lib32?"
++if [[ "${PN}" != "python" ]]; then
++	PYTHON_USE_WITH+="${PYTHON_USE_WITH:+ }lib32?"
++fi
 +
  if ! has "${EAPI:-0}" 0 1 && [[ -n ${PYTHON_USE_WITH} || -n ${PYTHON_USE_WITH_OR} ]]; then
  	_PYTHON_USE_WITH_ATOMS_ARRAY=()
