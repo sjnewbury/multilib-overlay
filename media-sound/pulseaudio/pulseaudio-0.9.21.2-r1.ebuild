@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.21.2-r1.ebuild,v 1.2 2010/05/04 16:37:20 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.21.2-r1.ebuild,v 1.4 2010/06/11 12:33:23 ssuominen Exp $
 
 EAPI=2
 
@@ -44,8 +44,7 @@ RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib
 	)
 	app-admin/eselect-esd
 	bluetooth? (
-		|| ( >=net-wireless/bluez-4[lib32?]
-			 >=net-wireless/bluez-libs-3 )
+		>=net-wireless/bluez-4[lib32?]
 		>=sys-apps/dbus-1.0.0[lib32?]
 	)
 	asyncns? ( net-libs/libasyncns[lib32?] )
@@ -70,15 +69,13 @@ DEPEND="${RDEPEND}
 	dev-util/intltool"
 
 # alsa-utils dep is for the alsasound init.d script (see bug #155707)
-# bluez-utils dep is for the bluetooth init.d script
+# bluez dep is for the bluetooth init.d script
 RDEPEND="${RDEPEND}
 	gnome-extra/gnome-audio
 	system-wide? (
 		sys-apps/openrc
 		alsa? ( media-sound/alsa-utils )
-		bluetooth? (
-		|| ( >=net-wireless/bluez-4[lib32?]
-			 >=net-wireless/bluez-utils-3 ) )
+		bluetooth? ( >=net-wireless/bluez-4[lib32?] )
 	)"
 
 multilib-native_pkg_setup_internal() {
