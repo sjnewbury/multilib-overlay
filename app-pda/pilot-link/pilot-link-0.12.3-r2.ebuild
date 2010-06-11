@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-pda/pilot-link/pilot-link-0.12.3-r2.ebuild,v 1.10 2010/06/05 15:39:19 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-pda/pilot-link/pilot-link-0.12.3-r2.ebuild,v 1.12 2010/06/11 17:29:55 phajdan.jr Exp $
 
 EAPI=2
 
@@ -12,7 +12,7 @@ SRC_URI="http://pilot-link.org/source/${P}.tar.bz2"
 
 LICENSE="|| ( GPL-2 LGPL-2 )"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~hppa ~ia64 ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux"
+KEYWORDS="~alpha amd64 ~hppa ~ia64 ppc ~ppc64 ~sparc x86 ~x86-fbsd ~amd64-linux ~x86-linux"
 
 IUSE="perl java python png readline threads bluetooth usb debug"
 
@@ -24,7 +24,7 @@ BOTH_DEPEND="virtual/libiconv
 	png? ( >=media-libs/libpng-1.2.40:0[lib32?] )
 	readline? ( >=sys-libs/readline-5.2_p4[lib32?] )
 	usb? ( virtual/libusb:0[lib32?] )
-	bluetooth? ( || ( net-wireless/bluez[lib32?] >=net-wireless/bluez-libs-3.10 ) )"
+	bluetooth? ( net-wireless/bluez[lib32?] )"
 
 DEPEND="${BOTH_DEPEND}
 	java? ( >=virtual/jdk-1.4 )"
