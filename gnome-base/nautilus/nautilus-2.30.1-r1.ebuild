@@ -15,7 +15,6 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
 IUSE="doc gnome xmp"
 
-# not adding gnome-base/gail because it is in >=gtk+-2.13
 RDEPEND=">=dev-libs/glib-2.24.0[lib32?]
 	>=gnome-base/gnome-desktop-2.29.91[lib32?]
 	>=x11-libs/pango-1.1.2[lib32?]
