@@ -1,0 +1,10 @@
+--- /usr/portage/gnome-extra/evolution-data-server/evolution-data-server-2.30.1-r1.ebuild	2010-06-13 21:03:53.000000000 +0200
++++ ./gnome-extra/evolution-data-server/evolution-data-server-2.30.1-r1.ebuild	2010-06-14 23:22:50.000000000 +0200
+@@ -51,6 +51,7 @@
+ pkg_setup() {
+ 	G2CONF="${G2CONF}
+ 		$(use_with kerberos krb5 /usr)
++		$(use_with kerberos krb5-libs /usr/$(get_libdir) )
+ 		$(use_with ldap openldap)
+ 		$(use_enable gnome-keyring)
+ 		$(use_enable ipv6)
