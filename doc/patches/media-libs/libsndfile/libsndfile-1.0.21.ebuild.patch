@@ -1,5 +1,5 @@
---- /usr/portage/media-libs/libsndfile/libsndfile-1.0.21.ebuild	2010-03-31 04:36:03.000000000 +0200
-+++ ./media-libs/libsndfile/libsndfile-1.0.21.ebuild	2010-05-02 17:20:18.000000000 +0200
+--- /usr/portage/media-libs/libsndfile/libsndfile-1.0.21.ebuild	2010-06-12 14:36:00.000000000 +0200
++++ ./media-libs/libsndfile/libsndfile-1.0.21.ebuild	2010-06-14 23:27:05.000000000 +0200
 @@ -29,9 +29,7 @@
  
  S=${WORKDIR}/${MY_P}
@@ -17,10 +17,10 @@
  
 -src_compile() {
 +src_configure() {
+ 	append-lfs-flags
+ 
  	econf $(use_enable sqlite) \
- 		$(use_enable alsa) \
- 		$(use_enable !minimal external-libs) \
-@@ -51,7 +49,6 @@
+@@ -53,7 +51,6 @@
  		--disable-gcc-werror \
  		--disable-gcc-pipe \
  		--disable-dependency-tracking

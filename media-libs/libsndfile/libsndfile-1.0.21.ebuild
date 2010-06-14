@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libsndfile/libsndfile-1.0.21.ebuild,v 1.7 2010/01/07 18:04:17 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libsndfile/libsndfile-1.0.21.ebuild,v 1.8 2010/06/12 12:08:21 ssuominen Exp $
 
 EAPI="2"
 
-inherit eutils libtool autotools multilib-native
+inherit eutils libtool autotools flag-o-matic multilib-native
 
 MY_P=${P/_pre/pre}
 
@@ -44,6 +44,8 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
+	append-lfs-flags
+
 	econf $(use_enable sqlite) \
 		$(use_enable alsa) \
 		$(use_enable !minimal external-libs) \
