@@ -51,7 +51,6 @@ multilib-native_src_prepare_internal() {
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/$(type -P true)" \
 			-i gtk-doc.make || die "sed 2 failed"
 	fi
-
 	# Fix building -python, Gnome bug #596660.
 	epatch "${FILESDIR}/${PN}-2.30.0-fix-automagic-python-support.patch"
 
