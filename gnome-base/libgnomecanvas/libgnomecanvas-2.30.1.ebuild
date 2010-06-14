@@ -2,8 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/libgnomecanvas/libgnomecanvas-2.30.1.ebuild,v 1.1 2010/06/13 16:41:36 pacho Exp $
 
-EAPI="2"
-
+EAPI=2
 inherit virtualx gnome2 multilib-native
 
 DESCRIPTION="The Gnome 2 Canvas library"
@@ -27,6 +26,17 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1 )"
 
 DOCS="AUTHORS ChangeLog NEWS README"
+
+multilib-native_pkg_setup_internal() {
+	G2CONF="${G2CONF} $(use_enable glade)"
+}
+
+multilib-native_src_prepare_internal() {
+	# Fix intltoolize broken file, see upstream #577133
+	# TODO: report upstream their translations are broken (intltool)
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
+		|| die "sed failed"
+}
 
 src_test() {
 	Xmake check || die "Test phase failed"
