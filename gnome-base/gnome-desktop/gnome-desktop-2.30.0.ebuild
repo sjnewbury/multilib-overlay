@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-desktop/gnome-desktop-2.30.0.ebuild,v 1.1 2010/06/13 17:38:21 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-desktop/gnome-desktop-2.30.0.ebuild,v 1.2 2010/06/14 15:57:27 pacho Exp $
 
 EAPI="2"
 
@@ -49,4 +49,14 @@ multilib-native_src_prepare_internal() {
 	# Fix intltoolize broken file, see upstream #577133
 	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
 		|| die "sed failed"
+}
+
+multilib-native_pkg_preinst_internal() {
+	gnome2_pkg_preinst
+	preserve_old_lib /usr/$(get_libdir)/libgnome-desktop-2.so.11
+}
+
+multilib-native_pkg_postinst_internal() {
+	gnome2_pkg_postinst
+	preserve_old_lib_notify /usr/$(get_libdir)/libgnome-desktop-2.so.11
 }
