@@ -1,0 +1,24 @@
+From bc8e41851f670186c09a71e6525c4aea9766b1b6 Mon Sep 17 00:00:00 2001
+From: Benjamin Berg <benjamin@sipsolutions.net>
+Date: Sat, 22 May 2010 10:26:51 +0000
+Subject: Fix evolution table header workaround for new evo versions.
+
+---
+diff --git a/themes/Clearlooks/gtk-2.0/gtkrc b/themes/Clearlooks/gtk-2.0/gtkrc
+index 3f193ea..6df11b2 100644
+--- a/themes/Clearlooks/gtk-2.0/gtkrc
++++ b/themes/Clearlooks/gtk-2.0/gtkrc
+@@ -400,9 +400,9 @@ widget "gtk-tooltip*" style "tooltips"
+ ##########################################################################
+ 
+ # Workaround for the evolution ETable (bug #527532)
+-widget_class "*.ETable.ECanvas" style "treeview_header"
++widget_class "*.<ETable>.<ECanvas>" style "treeview_header"
+ # Workaround for the evolution ETree
+-widget_class "*.ETree.ECanvas" style "treeview_header"
++widget_class "*.<ETree>.<ECanvas>" style "treeview_header"
+ 
+ # Special case the nautilus-extra-view-widget
+ # ToDo: A more generic approach for all applications that have a widget like this.
+--
+cgit v0.8.3.1
