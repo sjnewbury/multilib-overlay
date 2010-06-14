@@ -27,11 +27,11 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README"
 
-multilib-native_pkg_config_internal() {
+pkg_config() {
 	G2CONF="${G2CONF} $(use-enable glade glade-catalog)"
 }
 
-multilib-native_src_test_internal() {
+src_test() {
 	Xemake check || die "Test phase failed"
 }
 
