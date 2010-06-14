@@ -474,18 +474,17 @@ multilib-native_check_inherited_funcs() {
 # Ignore the ones we inherit ourselves, base doesn't matter, as we default on
 # it.
 	local declared_func=""
-	if [[ -z ${EMULTILIB_INHERITED} ]]; then
-		if [[ -f "${T}"/eclass-debug.log ]]; then
-			EMULTILIB_INHERITED="$(grep ${1} "${T}"/eclass-debug.log | cut -d ' ' -f 4 | cut -d '_' -f 1)"
-		else
-			ewarn "You are using a package manager that does not provide "${T}"/eclass-debug.log."
-			ewarn "Join #gentoo-multilib-overlay on freenode to help finding another way for you."
-			ewarn "Falling back to old behaviour ..."
-			EMULTILIB_INHERITED="${INHERITED}"
-		fi
-		EMULTILIB_INHERITED="${EMULTILIB_INHERITED//base/}"
-		EMULTILIB_INHERITED="${EMULTILIB_INHERITED//multilib-native/}"
+	if [[ -f "${T}"/eclass-debug.log ]]; then
+		EMULTILIB_INHERITED="$(grep ${1} "${T}"/eclass-debug.log | cut -d ' ' -f 4 | cut -d '_' -f 1)"
+	else
+		ewarn "You are using a package manager that does not provide "${T}"/eclass-debug.log."
+		ewarn "Join #gentoo-multilib-overlay on freenode to help finding another way for you."
+		ewarn "Falling back to old behaviour ..."
+		EMULTILIB_INHERITED="${INHERITED}"
 	fi
+
+	EMULTILIB_INHERITED="${EMULTILIB_INHERITED//base/}"
+	EMULTILIB_INHERITED="${EMULTILIB_INHERITED//multilib-native/}"
 
 	multilib_debug EMULTILIB_INHERITED ${EMULTILIB_INHERITED}
 
