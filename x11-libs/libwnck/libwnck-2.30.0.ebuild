@@ -65,4 +65,5 @@ multilib-native_src_prepare_internal() {
 	# Fix intltoolize broken file, see upstream #577133
 	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
 		|| die "sed failed"
+
 }
