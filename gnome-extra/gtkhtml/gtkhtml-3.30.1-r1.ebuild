@@ -52,12 +52,12 @@ multilib-native_src_prepare_internal() {
 	sed -i -e 's:-DGTK_DISABLE_DEPRECATED=1 -DGDK_DISABLE_DEPRECATED=1 -DG_DISABLE_DEPRECATED=1 -DGNOME_DISABLE_DEPRECATED=1::g' \
 		a11y/Makefile.am a11y/Makefile.in || die "sed 2 failed"
 
-		# Upstream bug 575038: Cursor/caret mode breaks magic spacebar
-		epatch "${FILESDIR}/${P}-magic-spacebar.patch"
+	# Upstream bug 575038: Cursor/caret mode breaks magic spacebar
+	epatch "${FILESDIR}/${P}-magic-spacebar.patch"
 
-		# Upstream bug 607324: Crash doing table editing
-		epatch "${FILESDIR}/${P}-crash-table.patch"
+	# Upstream bug 607324: Crash doing table editing
+	epatch "${FILESDIR}/${P}-crash-table.patch"
 
-		# Upstream bug 344076: Crash after closing an inline view of text attachment
-		epatch "${FILESDIR}/${P}-crash-attachment.patch"
-	}
+	# Upstream bug 344076: Crash after closing an inline view of text attachment
+	epatch "${FILESDIR}/${P}-crash-attachment.patch"
+}
