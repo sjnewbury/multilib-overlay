@@ -3,7 +3,6 @@
 # $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-menus/gnome-menus-2.30.0.ebuild,v 1.1 2010/06/13 17:53:56 pacho Exp $
 
 EAPI="2"
-
 inherit eutils gnome2 python multilib-native
 
 DESCRIPTION="The GNOME menu system, implementing the F.D.O cross-desktop spec"
@@ -16,7 +15,7 @@ IUSE="debug python"
 
 RDEPEND=">=dev-libs/glib-2.18.0[lib32?]
 	python? (
-		>=virtual/python-2.4.4-r5[lib32?]
+		>=virtual/python-2.4.4-r5
 		dev-python/pygtk[lib32?] )"
 DEPEND="${RDEPEND}
 	sys-devel/gettext[lib32?]
