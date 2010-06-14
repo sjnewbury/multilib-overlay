@@ -1,12 +1,13 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/icu/icu-4.4.1.ebuild,v 1.3 2010/06/05 21:36:14 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/icu/icu-4.4.1.ebuild,v 1.4 2010/06/12 16:36:46 arfrever Exp $
 
 EAPI="3"
 
-inherit flag-o-matic versionator multilib-native
+inherit eutils flag-o-matic versionator multilib-native
 
 MAJOR_MINOR_VERSION="$(get_version_component_range 1-2)"
+MICRO_VERSION="$(get_version_component_range 3)"
 
 DESCRIPTION="International Components for Unicode"
 HOMEPAGE="http://www.icu-project.org/"
@@ -22,14 +23,14 @@ SRC_URI="${BASE_URI}/${SRC_ARCHIVE}
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
-IUSE="debug doc examples"
+IUSE="debug doc examples static-libs"
 
 DEPEND="doc? ( app-arch/unzip )"
 RDEPEND=""
 
 S="${WORKDIR}/${PN}/source"
 
-QA_DT_NEEDED="/usr/lib.*/libicudata.so.${MAJOR_MINOR_VERSION/./}.0"
+QA_DT_NEEDED="/usr/lib.*/libicudata.so.${MAJOR_MINOR_VERSION/./}.${MICRO_VERSION:-0}"
 
 multilib-native_src_unpack_internal() {
 	unpack "${SRC_ARCHIVE}"
@@ -48,13 +49,17 @@ multilib-native_src_prepare_internal() {
 	for x in ARFLAGS CFLAGS CPPFLAGS CXXFLAGS FFLAGS LDFLAGS; do
 		sed -i -e "/^${x} =.*/s:@${x}@::" "config/Makefile.inc.in" || die "sed failed"
 	done
+
+	epatch "${FILESDIR}/${P}-pkgdata.patch"
 }
 
 multilib-native_src_configure_internal() {
+	append-flags -fno-strict-aliasing
+
 	econf \
-		--enable-static \
 		$(use_enable debug) \
-		$(use_enable examples samples)
+		$(use_enable examples samples) \
+		$(use_enable static-libs static)
 }
 
 src_test() {
