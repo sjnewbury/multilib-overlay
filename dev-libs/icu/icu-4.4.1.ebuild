@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/icu/icu-4.4.1.ebuild,v 1.4 2010/06/12 16:36:46 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/icu/icu-4.4.1.ebuild,v 1.5 2010/06/16 19:50:33 patrick Exp $
 
 EAPI="3"
 
@@ -63,11 +63,11 @@ multilib-native_src_configure_internal() {
 }
 
 src_test() {
-	emake check || die "emake check failed"
+	emake -j1 check || die "emake check failed"
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${D}" install || die "emake install failed"
+	emake -j1 DESTDIR="${D}" install || die "emake install failed"
 
 	dohtml ../readme.html
 	dodoc ../unicode-license.txt
