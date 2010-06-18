@@ -1,8 +1,11 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libgamin/libgamin-0.1.10-r2.ebuild,v 1.11 2009/09/25 10:51:18 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libgamin/libgamin-0.1.10-r2.ebuild,v 1.12 2010/06/16 18:43:43 arfrever Exp $
 
 EAPI="2"
+PYTHON_DEPEND="python? 2"
+SUPPORT_PYTHON_ABIS="1"
+RESTRICT_PYTHON_ABIS="3.*"
 
 inherit autotools eutils flag-o-matic libtool python multilib-native
 
@@ -21,14 +24,19 @@ IUSE="debug kernel_linux python"
 
 RESTRICT="test" # need gam-server
 
-RDEPEND="python? ( virtual/python )
-	!app-admin/fam
+RDEPEND="!app-admin/fam
 	!<app-admin/gamin-0.1.10"
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]"
 
 S="${WORKDIR}/${MY_P}"
+
+multilib-native_pkg_setup_internal() {
+	if use python; then
+		python_pkg_setup
+	fi
+}
 
 multilib-native_src_prepare_internal() {
 	# Fix QA warnings, bug #257281, upstream #466791
@@ -39,6 +47,12 @@ multilib-native_src_prepare_internal() {
 
 	# Fix collision problem due to intermediate library, upstream bug #530635
 	epatch "${FILESDIR}/${P}-noinst-lib.patch"
+
+	# Build only shared version of Python module.
+	epatch "${FILESDIR}/${P}-disable_python_static_library.patch"
+
+	# Python bindings are built/installed manually.
+	sed -e "/SUBDIRS += python/d" -i Makefile.am
 
 	# autoconf is required as the user-cflags patch modifies configure.in
 	# however, elibtoolize is also required, so when the above patch is
@@ -58,8 +72,37 @@ multilib-native_src_configure_internal() {
 		$(use_with python)
 }
 
+multilib-native_src_compile_internal() {
+	default
+
+	if use python; then
+		python_copy_sources python
+
+		building() {
+			emake \
+				PYTHON_INCLUDES="$(python_get_includedir)" \
+				PYTHON_SITE_PACKAGES="$(python_get_sitedir)" \
+				PYTHON_VERSION="$(python_get_version)"
+		}
+		python_execute_function -s --source-dir python building
+	fi
+}
+
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "installation failed"
+
+	if use python; then
+		installation() {
+			emake \
+				DESTDIR="${D}" \
+				PYTHON_SITE_PACKAGES="$(python_get_sitedir)" \
+				PYTHON_VERSION="$(python_get_version)" \
+				install
+		}
+		python_execute_function -s --source-dir python installation
+
+		python_clean_installation_image
+	fi
 
 	dodoc AUTHORS ChangeLog README TODO NEWS doc/*txt || die "dodoc failed"
 	dohtml doc/* || die "dohtml failed"
@@ -67,11 +110,12 @@ multilib-native_src_install_internal() {
 
 multilib-native_pkg_postinst_internal() {
 	if use python; then
-		python_version
-		python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages
+		python_mod_optimize gamin.py
 	fi
 }
 
 multilib-native_pkg_postrm_internal() {
-	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages
+	if use python; then
+		python_mod_cleanup gamin.py
+	fi
 }
