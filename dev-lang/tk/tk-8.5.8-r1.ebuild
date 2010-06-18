@@ -4,9 +4,6 @@
 
 EAPI="3"
 
-WANT_AUTOCONF=latest
-WANT_AUTOMAKE=latest
-
 inherit autotools eutils multilib toolchain-funcs prefix multilib-native
 
 MY_P="${PN}${PV/_beta/b}"
@@ -69,7 +66,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable debug symbols) || die
 }
 
-src_compile() {
+multilib-native_src_compile_internal() {
 	cd "${S}"/unix
 	emake || die
 }

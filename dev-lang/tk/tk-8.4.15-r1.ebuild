@@ -1,11 +1,8 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/tk/tk-8.4.15-r1.ebuild,v 1.10 2008/01/10 08:43:10 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/tk/tk-8.4.15-r1.ebuild,v 1.12 2010/06/16 00:10:30 mr_bones_ Exp $
 
 EAPI="2"
-
-WANT_AUTOCONF=latest
-WANT_AUTOMAKE=latest
 
 inherit autotools eutils multilib toolchain-funcs multilib-native
 
