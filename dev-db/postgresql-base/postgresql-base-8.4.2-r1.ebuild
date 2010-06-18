@@ -1,10 +1,9 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/postgresql-base/postgresql-base-8.4.2-r1.ebuild,v 1.6 2010/05/12 15:36:44 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/postgresql-base/postgresql-base-8.4.2-r1.ebuild,v 1.7 2010/06/15 20:51:21 patrick Exp $
 
 EAPI="2"
 
-WANT_AUTOCONF="latest"
 WANT_AUTOMAKE="none"
 
 inherit eutils multilib toolchain-funcs versionator autotools multilib-native

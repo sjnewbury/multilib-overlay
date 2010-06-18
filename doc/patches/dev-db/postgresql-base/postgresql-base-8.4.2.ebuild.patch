@@ -1,6 +1,6 @@
---- /usr/portage/dev-db/postgresql-base/postgresql-base-8.4.2.ebuild	2010-01-07 21:35:27.000000000 +0100
-+++ ./dev-db/postgresql-base/postgresql-base-8.4.2.ebuild	2010-06-06 02:23:30.000000000 +0200
-@@ -50,10 +50,7 @@
+--- /usr/portage/dev-db/postgresql-base/postgresql-base-8.4.2.ebuild	2010-06-15 23:05:38.000000000 +0200
++++ ./dev-db/postgresql-base/postgresql-base-8.4.2.ebuild	2010-06-19 01:44:39.000000000 +0200
+@@ -49,10 +49,7 @@
  
  S="${WORKDIR}/postgresql-${PV}"
  
@@ -12,7 +12,7 @@
  	epatch "${FILESDIR}/postgresql-${SLOT}-common.patch" \
  		"${FILESDIR}/postgresql-${SLOT}-base.patch"
  
-@@ -66,7 +63,7 @@
+@@ -65,7 +62,7 @@
  	eautoconf
  }
  
@@ -21,7 +21,7 @@
  	econf --prefix=/usr/$(get_libdir)/postgresql-${SLOT} \
  		--datadir=/usr/share/postgresql-${SLOT} \
  		--docdir=/usr/share/doc/postgresql-${SLOT} \
-@@ -90,7 +87,9 @@
+@@ -89,7 +86,9 @@
  		$(use_with ldap) \
  		${myconf} \
  		|| die "configure failed"
