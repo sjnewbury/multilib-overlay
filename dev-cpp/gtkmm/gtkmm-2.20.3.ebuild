@@ -16,7 +16,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~
 IUSE="doc examples test"
 
 RDEPEND=">=dev-cpp/glibmm-2.24[lib32?]
-	>=x11-libs/gtk+-2.20[lib32?]
+	>=x11-libs/gtk+-2.20.0[lib32?]
 	>=dev-cpp/cairomm-1.2.2[lib32?]
 	>=dev-cpp/pangomm-2.26[lib32?]
 	>=dev-libs/atk-1.12[lib32?]
