@@ -1,11 +1,11 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pycairo/pycairo-1.8.8.ebuild,v 1.16 2010/02/07 20:55:36 pva Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pycairo/pycairo-1.8.8.ebuild,v 1.17 2010/06/18 17:49:39 arfrever Exp $
 
-EAPI="2"
-
-NEED_PYTHON="2.6"
+EAPI="3"
+PYTHON_DEPEND="2:2.6"
 SUPPORT_PYTHON_ABIS="1"
+RESTRICT_PYTHON_ABIS="2.4 2.5 3.*"
 
 inherit eutils distutils multilib multilib-native
 
@@ -22,10 +22,9 @@ RDEPEND=">=x11-libs/cairo-1.8.8[svg?,lib32?]"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	doc? ( >=dev-python/sphinx-0.6 )"
-RESTRICT_PYTHON_ABIS="2.4 2.5 3.*"
 
-PYTHON_MODNAME="cairo"
 DOCS="AUTHORS NEWS README"
+PYTHON_MODNAME="cairo"
 
 multilib-native_src_prepare_internal() {
 	# Don't run py-compile.
@@ -67,7 +66,6 @@ src_test() {
 }
 
 multilib-native_src_install_internal() {
-	[[ -z "${ED}" ]] && local ED="${D}"
 	PKGCONFIG_DIR="${EPREFIX}/usr/$(get_libdir)/pkgconfig" distutils_src_install
 
 	if use doc; then
