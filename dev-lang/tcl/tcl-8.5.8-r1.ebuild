@@ -2,10 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-lang/tcl/tcl-8.5.8-r1.ebuild,v 1.4 2010/06/16 07:40:18 jlec Exp $
 
-EAPI=3
-
-WANT_AUTOCONF=latest
-WANT_AUTOMAKE=latest
+EAPI="3"
 
 inherit autotools eutils flag-o-matic multilib toolchain-funcs multilib-native
 
@@ -55,11 +52,11 @@ multilib-native_src_configure_internal() {
 	econf \
 		$(use_enable threads) \
 		$(use_enable debug symbols) || die
-	}
+}
 
 multilib-native_src_compile_internal() {
-		cd "${S}"/unix
-		emake || die
+	cd "${S}"/unix
+	emake || die
 }
 
 multilib-native_src_install_internal() {

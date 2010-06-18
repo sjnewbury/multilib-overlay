@@ -1,9 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/tcl/tcl-8.5.8.ebuild,v 1.1 2010/01/07 14:20:04 patrick Exp $
-
-WANT_AUTOCONF=latest
-WANT_AUTOMAKE=latest
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/tcl/tcl-8.5.8.ebuild,v 1.3 2010/06/15 23:46:51 mr_bones_ Exp $
 
 inherit autotools eutils flag-o-matic multilib toolchain-funcs multilib-native
 
