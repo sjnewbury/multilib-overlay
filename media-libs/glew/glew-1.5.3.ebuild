@@ -1,8 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/glew/glew-1.5.3.ebuild,v 1.1 2010/04/21 09:09:35 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/glew/glew-1.5.3.ebuild,v 1.2 2010/06/18 19:33:01 abcd Exp $
 
-EAPI=2
+EAPI=3
 inherit multilib toolchain-funcs multilib-native
 
 DESCRIPTION="The OpenGL Extension Wrangler Library"
@@ -11,7 +11,7 @@ SRC_URI="mirror://sourceforge/${PN}/${P}.tgz"
 
 LICENSE="BSD MIT"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~sparc-solaris ~x64-solaris ~x86-solaris"
 IUSE=""
 
 DEPEND="x11-libs/libXmu[lib32?]
@@ -26,6 +26,10 @@ multilib-native_src_prepare_internal() {
 		-e '/INSTALL/s:-s::' \
 		-e '/$(CC) $(CFLAGS) -o/s:$(CFLAGS):$(CFLAGS) $(LDFLAGS):' \
 		Makefile || die
+	# for Prefix
+	sed -i -e '/^LDFLAGS.EXTRA/d' config/Makefile.linux || die
+	# don't do stupid Solaris specific stuff that won't work in Prefix
+	cp config/Makefile.linux config/Makefile.solaris || die
 }
 
 multilib-native_src_compile_internal(){
@@ -36,7 +40,7 @@ multilib-native_src_compile_internal(){
 multilib-native_src_install_internal() {
 	dodir /usr/$(get_libdir)/pkgconfig
 
-	emake STRIP=true GLEW_DEST="${D}/usr" LIBDIR="${D}/usr/$(get_libdir)" \
+	emake STRIP=true GLEW_DEST="${ED}/usr" LIBDIR="${ED}/usr/$(get_libdir)" \
 		M_ARCH="" install || die
 
 	dodoc doc/*.txt README.txt TODO.txt || die
