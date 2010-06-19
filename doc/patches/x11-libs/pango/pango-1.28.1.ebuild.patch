@@ -1,5 +1,5 @@
---- ./x11-libs/pango/pango-1.28.0.ebuild.orig	2010-03-06 14:40:11.000000000 +0100
-+++ ./x11-libs/pango/pango-1.28.0.ebuild	2010-03-06 14:39:46.000000000 +0100
+--- ./x11-libs/pango/pango-1.28.1.ebuild.orig	2010-03-06 14:40:11.000000000 +0100
++++ ./x11-libs/pango/pango-1.28.1.ebuild	2010-03-06 14:39:46.000000000 +0100
 @@ -13,7 +13,7 @@
  LICENSE="LGPL-2 FTL"
  SLOT="0"
