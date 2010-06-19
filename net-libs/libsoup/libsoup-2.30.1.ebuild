@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup/libsoup-2.30.1.ebuild,v 1.1 2010/06/13 15:48:57 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup/libsoup-2.30.1.ebuild,v 1.2 2010/06/14 23:03:41 dang Exp $
 
 EAPI="2"
 
@@ -47,7 +47,7 @@ multilib-native_src_prepare_internal() {
 	# Patch *must* be applied conditionally (see patch for details)
 	if use doc; then
 		# Fix bug 268592 (build fails !gnome && doc)
-		epatch "${FILESDIR}/${PN}-fix-build-without-gnome-with-doc.patch"
+		epatch "${FILESDIR}/${P}-fix-build-without-gnome-with-doc.patch"
 	fi
 	eautoreconf
 }
