@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.8.2.ebuild,v 1.1 2010/06/17 18:35:50 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.8.2.ebuild,v 1.2 2010/06/18 09:56:02 chithanh Exp $
 
 EAPI=3
 
@@ -49,6 +49,9 @@ RDEPEND="
 	>=app-admin/eselect-opengl-1.1.1-r2
 	dev-libs/expat[lib32?]
 	>=x11-libs/libdrm-2.4.19[lib32?]
+	gallium? (
+		video_cards_nouveau? ( <=x11-libs/libdrm-2.4.20[lib32?] )
+	)
 	x11-libs/libICE[lib32?]
 	x11-libs/libX11[xcb?,lib32?]
 	x11-libs/libXdamage[lib32?]
