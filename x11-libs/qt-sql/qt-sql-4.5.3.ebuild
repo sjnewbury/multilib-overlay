@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-sql/qt-sql-4.5.3.ebuild,v 1.8 2010/01/21 20:52:37 spatz Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-sql/qt-sql-4.5.3.ebuild,v 1.9 2010/06/17 21:11:48 patrick Exp $
 
 EAPI="2"
 inherit qt4-build multilib-native
@@ -14,7 +14,7 @@ DEPEND="~x11-libs/qt-core-${PV}[debug=,qt3support=,lib32?]
 	firebird? ( dev-db/firebird )
 	mysql? ( virtual/mysql[lib32?] )
 	odbc? ( dev-db/unixODBC[lib32?] )
-	postgres? ( virtual/postgresql-base[lib32?] )
+	postgres? ( dev-db/postgresql-base[lib32?] )
 	sqlite? ( dev-db/sqlite:3[lib32?] )"
 RDEPEND="${DEPEND}"
 
