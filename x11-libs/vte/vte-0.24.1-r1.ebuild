@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="debug doc glade python"
 
-RDEPEND=">=dev-libs/glib-2.18.0[lib32?]
+RDEPEND=">=dev-libs/glib-2.22.0[lib32?]
 	>=x11-libs/gtk+-2.14.0[lib32?]
 	>=x11-libs/pango-1.22.0[lib32?]
 	sys-libs/ncurses[lib32?]
@@ -40,7 +40,7 @@ multilib-native_pkg_setup_internal() {
 		--with-html-dir=/usr/share/doc/${PF}/html"
 }
 
-src_prepare() {
+multilib-native_src_prepare_internal() {
 	gnome2_src_prepare
 
 	# Fix ugly artifacts with upstream patches from bgo#618749
