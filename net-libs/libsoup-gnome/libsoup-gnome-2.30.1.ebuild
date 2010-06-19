@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup-gnome/libsoup-gnome-2.30.1.ebuild,v 1.2 2010/06/13 18:50:57 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup-gnome/libsoup-gnome-2.30.1.ebuild,v 1.3 2010/06/16 18:18:39 pacho Exp $
 
 EAPI="2"
 
@@ -20,7 +20,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~
 IUSE="debug doc"
 
 RDEPEND="~net-libs/libsoup-${PV}[lib32?]
-	gnome-base/gnome-keyring[lib32?]
+	|| ( gnome-base/libgnome-keyring[lib32?] <gnome-base/gnome-keyring-2.29.4[lib32?] )
 	net-libs/libproxy[lib32?]
 	>=gnome-base/gconf-2[lib32?]
 	dev-db/sqlite:3[lib32?]"
@@ -47,6 +47,6 @@ multilib-native_src_prepare_internal() {
 	sed -e 's/\(test.*\)==/\1=/g' -i configure.ac configure || die "sed failed"
 
 	# Use lib present on the system
-	epatch "${FILESDIR}"/${PN}-system-lib.patch
+	epatch "${FILESDIR}"/${PN}-2.30.1-system-lib.patch
 	eautoreconf
 }
