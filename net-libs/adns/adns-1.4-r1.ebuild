@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/adns/adns-1.4-r1.ebuild,v 1.1 2009/11/10 13:53:36 hwoarang Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/adns/adns-1.4-r1.ebuild,v 1.2 2010/06/15 16:46:12 hwoarang Exp $
 
 EAPI="2"
 
@@ -20,6 +20,8 @@ RDEPEND=""
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-cnamechain.patch
+	#remove bogus test wrt bug #295072
+	rm "${S}"/regress/case-cnametocname.sys
 }
 
 multilib-native_src_configure_internal() {
