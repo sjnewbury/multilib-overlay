@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/talloc/talloc-2.0.1-r1.ebuild,v 1.5 2010/06/05 18:41:29 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/talloc/talloc-2.0.1-r1.ebuild,v 1.6 2010/06/17 17:04:55 xarthisius Exp $
 
 EAPI="2"
 
@@ -23,7 +23,8 @@ DEPEND="doc? ( app-text/docbook-xml-dtd:4.2
 	!<net-fs/samba-3.3"
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}/${PN}-2.0.0-without-doc.patch"
+	epatch "${FILESDIR}/${PN}-2.0.0-without-doc.patch" \
+		"${FILESDIR}"/${P}-respect-ldflags.patch
 
 	eautoconf -Ilibreplace
 
