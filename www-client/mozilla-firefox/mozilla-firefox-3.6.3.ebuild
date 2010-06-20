@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/mozilla-firefox/mozilla-firefox-3.6.3.ebuild,v 1.6 2010/05/31 19:25:45 josejx Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/mozilla-firefox/mozilla-firefox-3.6.3.ebuild,v 1.7 2010/06/19 18:38:10 arfrever Exp $
 EAPI="2"
 WANT_AUTOCONF="2.1"
 
-inherit flag-o-matic toolchain-funcs eutils mozconfig-3 makeedit multilib pax-utils fdo-mime autotools mozextension java-pkg-opt-2 multilib-native
+inherit flag-o-matic toolchain-funcs eutils mozconfig-3 makeedit multilib pax-utils fdo-mime autotools mozextension java-pkg-opt-2 python multilib-native
 
 LANGS="af ar as be bg bn-BD bn-IN ca cs cy da de el en en-GB en-US eo es-AR
 es-CL es-ES es-MX et eu fa fi fr fy-NL ga-IE gl gu-IN he hi-IN hr hu id is it ja
@@ -62,6 +62,7 @@ RDEPEND="
 
 DEPEND="${RDEPEND}
 	java? ( >=virtual/jdk-1.4 )
+	=dev-lang/python-2*[threads,lib32?]
 	dev-util/pkgconfig[lib32?]"
 
 RDEPEND="${RDEPEND} java? ( >=virtual/jre-1.4 )"
@@ -108,6 +109,8 @@ multilib-native_pkg_setup_internal() {
 	fi
 
 	java-pkg-opt-2_pkg_setup
+
+	python_set_active_version 2
 }
 
 multilib-native_src_unpack_internal() {
@@ -215,7 +218,7 @@ multilib-native_src_configure_internal() {
 	#
 	####################################
 
-	CC="$(tc-getCC)" CXX="$(tc-getCXX)" LD="$(tc-getLD)" econf
+	CC="$(tc-getCC)" CXX="$(tc-getCXX)" LD="$(tc-getLD)" PYTHON="$(PYTHON)" econf
 }
 
 multilib-native_src_compile_internal() {
