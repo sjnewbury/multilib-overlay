@@ -29,10 +29,10 @@ RDEPEND=""
 S=${WORKDIR}/${MY_PN}/build/generic
 
 multilib-native_src_prepare_internal() {
+	# patch expects to be in ${WORKDIR} but this does not work for multilib-native
 	cd "${S}/../.."
 	epatch "${FILESDIR}"/${P}-noexecstack.patch
 
-	cd "${WORKDIR}"
 	sed -i \
 		-e '/^minimum_yasm_minor_version/s:=.*:=0:' \
 		"${S}"/configure || die

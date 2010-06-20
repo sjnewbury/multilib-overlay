@@ -1,0 +1,12 @@
+--- /usr/portage/media-libs/xvid/xvid-1.2.2-r2.ebuild	2010-05-24 21:06:01.000000000 +0200
++++ ./media-libs/xvid/xvid-1.2.2-r2.ebuild	2010-06-20 23:39:23.000000000 +0200
+@@ -29,7 +29,8 @@
+ S=${WORKDIR}/${MY_PN}/build/generic
+ 
+ src_prepare() {
+-	cd "${WORKDIR}"
++	# patch expects to be in ${WORKDIR} but this does not work for multilib-native
++	cd "${S}/../.."
+ 	epatch "${FILESDIR}"/${P}-noexecstack.patch
+ 
+ 	sed -i \
