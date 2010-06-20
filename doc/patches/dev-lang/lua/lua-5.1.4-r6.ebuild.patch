@@ -1,5 +1,5 @@
---- /usr/portage/dev-lang/lua/lua-5.1.4-r2.ebuild	2009-09-29 10:06:09.000000000 +0200
-+++ ./dev-lang/lua/lua-5.1.4-r2.ebuild	2010-06-06 01:57:02.000000000 +0200
+--- /usr/portage/dev-lang/lua/lua-5.1.4-r6.ebuild	2010-04-10 19:05:39.000000000 +0200
++++ ./dev-lang/lua/lua-5.1.4-r6.ebuild	2010-06-06 01:58:04.000000000 +0200
 @@ -19,11 +19,8 @@
  RDEPEND="${DEPEND}"
  PDEPEND="emacs? ( app-emacs/lua-mode )"

@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/lua/lua-5.1.4-r3.ebuild,v 1.1 2009/11/24 17:31:36 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/lua/lua-5.1.4-r6.ebuild,v 1.1 2010/06/19 17:04:05 mabi Exp $
 
 EAPI="2"
 
@@ -53,7 +53,7 @@ multilib-native_src_prepare_internal() {
 	# We want packages to find our things...
 	sed -i \
 		-e 's:/usr/local:/usr:' \
-		-e "s:lib/lua:$(get_libdir)/lua:" \
+		-e "s:/\<lib\>:/$(get_libdir):g" \
 		etc/lua.pc
 }
 
@@ -87,7 +87,7 @@ multilib-native_src_install_internal() {
 	|| die "emake install gentoo_install failed"
 
 	dodoc HISTORY README
-	dohtml doc/*.html doc/*.gif
+	dohtml doc/*.html doc/*.png doc/*.css doc/*.gif
 
 	insinto /usr/share/pixmaps
 	doins etc/lua.ico
