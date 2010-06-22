@@ -3,7 +3,6 @@
 # $Header: /var/cvsroot/gentoo-x86/media-libs/lcms/lcms-2.0a.ebuild,v 1.2 2010/06/21 09:05:31 ssuominen Exp $
 
 EAPI=2
-
 inherit libtool multilib-native
 
 DESCRIPTION="A lightweight, speed optimized color management engine"
