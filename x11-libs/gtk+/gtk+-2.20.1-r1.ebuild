@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.20.1-r1.ebuild,v 1.1 2010/06/13 15:43:44 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.20.1-r1.ebuild,v 1.2 2010/06/20 11:15:18 nirbheek Exp $
 
 EAPI="3"
 
@@ -12,7 +12,7 @@ HOMEPAGE="http://www.gtk.org/"
 LICENSE="LGPL-2"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
-IUSE="aqua cups debug doc jpeg jpeg2k tiff test vim-syntax xinerama"
+IUSE="aqua cups debug doc +introspection jpeg jpeg2k tiff test vim-syntax xinerama"
 
 # NOTE: cairo[svg] dep is due to bug 291283 (not patched to avoid eautoreconf)
 RDEPEND="!aqua? (
@@ -33,8 +33,8 @@ RDEPEND="!aqua? (
 	)
 	xinerama? ( x11-libs/libXinerama[lib32?] )
 	>=dev-libs/glib-2.23.6[lib32?]
-	>=x11-libs/pango-1.20[lib32?]
-	>=dev-libs/atk-1.29.2[lib32?]
+	>=x11-libs/pango-1.20[introspection?,lib32?]
+	>=dev-libs/atk-1.29.2[introspection?,lib32?]
 	media-libs/fontconfig[lib32?]
 	x11-misc/shared-mime-info
 	>=media-libs/libpng-1.2.43-r2:0[lib32?]
@@ -59,6 +59,7 @@ DEPEND="${RDEPEND}
 	doc? (
 		>=dev-util/gtk-doc-1.11
 		~app-text/docbook-xml-dtd-4.1.2 )
+	introspection? ( >=dev-libs/gobject-introspection-0.6.7[lib32?] )
 	test? (
 		media-fonts/font-misc-misc
 		media-fonts/font-cursor-misc )"
@@ -119,14 +120,14 @@ multilib-native_src_prepare_internal() {
 
 multilib-native_src_configure_internal() {
 	# png always on to display icons (foser)
-	local myconf="$(use_enable doc gtk-doc) \
-		$(use_with jpeg libjpeg) \
-		$(use_with jpeg2k libjasper) \
-		$(use_with tiff libtiff) \
-		$(use_enable xinerama) \
-		$(use_enable cups cups auto) \
-		--disable-introspection \
-		--disable-papi \
+	local myconf="$(use_enable doc gtk-doc)
+		$(use_with jpeg libjpeg)
+		$(use_with jpeg2k libjasper)
+		$(use_with tiff libtiff)
+		$(use_enable xinerama)
+		$(use_enable cups cups auto)
+		$(use_enable introspection)
+		--disable-papi
 		--with-libpng"
 	if use aqua; then
 		myconf="${myconf} --with-gdktarget=quartz"
