@@ -1,17 +1,17 @@
-From 6ff741f0302bc0eddba20ed4445e68b6e71af594 Mon Sep 17 00:00:00 2001
-From: Priit Laes <plaes@plaes.org>
-Date: Tue, 23 Feb 2010 08:16:49 +0200
+From 97871504515f029f004d032572b9ded0da2d948e Mon Sep 17 00:00:00 2001
+From: Arun Raghavan <ford_prefect@gentoo.org>
+Date: Sun, 20 Jun 2010 18:15:01 +0530
 Subject: [PATCH] Split support for libgnome-soup.
 
 Original patch by Romain Perier.
 ---
  Makefile.am         |   13 ++++++++++---
  configure.ac        |   49 ++++++++++++++++++++++++++++++++-----------------
- libsoup/Makefile.am |   36 +++++++++++++++++++++++++++---------
- 3 files changed, 69 insertions(+), 29 deletions(-)
+ libsoup/Makefile.am |   49 +++++++++++++++++++++++++++++++++++++++----------
+ 3 files changed, 81 insertions(+), 30 deletions(-)
 
 diff --git a/Makefile.am b/Makefile.am
-index b845e29..21529dd 100644
+index 861daff..039fb80 100644
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -1,7 +1,12 @@
@@ -28,7 +28,7 @@ index b845e29..21529dd 100644
  
  EXTRA_DIST =			\
  	libsoup-2.4.pc.in	\
-@@ -13,8 +18,10 @@ DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
+@@ -14,8 +19,10 @@ DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --enable-introspection
  
  pkgconfigdir = $(libdir)/pkgconfig
  
@@ -42,7 +42,7 @@ index b845e29..21529dd 100644
  pkgconfig_DATA += libsoup-gnome-2.4.pc
  endif
 diff --git a/configure.ac b/configure.ac
-index eb45cfc..a8cd7ed 100644
+index 275620d..d25875e 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -72,6 +72,14 @@ dnl ***********************
@@ -56,7 +56,7 @@ index eb45cfc..a8cd7ed 100644
 +   [with_libsoup_system=$withval], [with_libsoup_system=no])
 +
 +if test "$with_libsoup_system" = "no"; then
-+  
++
  AM_PATH_GLIB_2_0(2.21.3,,,gobject gthread gio)
  if test "$GLIB_LIBS" = ""; then
     AC_MSG_ERROR(GLIB 2.21.3 or later is required to build libsoup)
@@ -125,16 +125,17 @@ index eb45cfc..a8cd7ed 100644
  [Could not find libproxy:
  
 diff --git a/libsoup/Makefile.am b/libsoup/Makefile.am
-index 284d85f..cfb89b4 100644
+index 2e7c1fb..306ee8f 100644
 --- a/libsoup/Makefile.am
 +++ b/libsoup/Makefile.am
-@@ -4,17 +4,17 @@ if OS_WIN32
+@@ -4,17 +4,18 @@ if OS_WIN32
  LIBWS2_32 = -lws2_32
  endif
  
 -INCLUDES = 				\
 +INCLUDES =
-+lib_LTLIBRARIES = 
++lib_LTLIBRARIES =
++CLEANFILES =
 +
 +if BUILD_LIBSOUP
 +INCLUDES +=                \
@@ -151,7 +152,16 @@ index 284d85f..cfb89b4 100644
  	$(LIBGCRYPT_CFLAGS)		\
  	$(LIBGNUTLS_CFLAGS)
  
-@@ -91,7 +91,7 @@ libsoupinclude_HEADERS =	\
+@@ -45,7 +46,7 @@ soup-enum-types.c: $(libsoupinclude_HEADERS)
+ 
+ BUILT_SOURCES = $(MARSHAL_GENERATED) $(MKENUMS_GENERATED)
+ 
+-CLEANFILES = $(MARSHAL_GENERATED) $(MKENUMS_GENERATED)
++CLEANFILES += $(MARSHAL_GENERATED) $(MKENUMS_GENERATED)
+ 
+ libsoupincludedir = $(includedir)/libsoup-2.4/libsoup
+ 
+@@ -91,7 +92,7 @@ libsoupinclude_HEADERS =	\
  	$(soup_headers)		\
  	soup-enum-types.h
  
@@ -160,7 +170,7 @@ index 284d85f..cfb89b4 100644
  
  libsoup_2_4_la_LDFLAGS =	\
  	-version-info $(SOUP_CURRENT):$(SOUP_REVISION):$(SOUP_AGE) -no-undefined
-@@ -171,10 +171,18 @@ libsoup_2_4_la_SOURCES =		\
+@@ -171,10 +172,18 @@ libsoup_2_4_la_SOURCES =		\
  	soup-value-utils.c		\
  	soup-xmlrpc.c
  
@@ -179,7 +189,7 @@ index 284d85f..cfb89b4 100644
  libsoupgnomeinclude_HEADERS =	\
  	soup-cookie-jar-sqlite.h\
  	soup-gnome.h		\
-@@ -182,16 +190,26 @@ libsoupgnomeinclude_HEADERS =	\
+@@ -182,16 +191,26 @@ libsoupgnomeinclude_HEADERS =	\
  
  lib_LTLIBRARIES += libsoup-gnome-2.4.la
  
@@ -208,13 +218,38 @@ index 284d85f..cfb89b4 100644
  libsoup_gnome_2_4_la_SOURCES =		\
  	soup-cookie-jar-sqlite.c	\
  	soup-gnome-features.c		\
-@@ -205,4 +223,4 @@ endif
- EXTRA_DIST=				\
- 	soup-marshal.list		\
- 	soup-enum-types.h.tmpl		\
--	soup-enum-types.c.tmpl
-\ No newline at end of file
-+	soup-enum-types.c.tmpl
+@@ -212,6 +231,8 @@ INTROSPECTION_COMPILER_ARGS = --includedir=.
+ 
+ if HAVE_INTROSPECTION
+ 
++if BUILD_LIBSOUP
++
+ # Core library
+ gi_soup_files = \
+ 	$(filter-out soup.h soup-enum-types.% soup-marshal.%,\
+@@ -231,13 +252,21 @@ Soup_2_4_gir_FILES = \
+ 
+ INTROSPECTION_GIRS += Soup-2.4.gir
+ 
++endif
++
+ if BUILD_LIBSOUP_GNOME
+ 
++if BUILD_LIBSOUP
++SOUP_GIR = Soup-2.4.gir
++else
++SOUP_GIR =
++endif
++
+ # GNOME extensions
+ gi_soup_gnome_files = $(filter-out soup-gnome.h,\
+ 		          $(libsoupgnomeinclude_HEADERS) \
+ 	                  $(libsoup_gnome_2_4_la_SOURCES))
+-SoupGNOME-2.4.gir: libsoup-gnome-2.4.la Soup-2.4.gir
++SoupGNOME-2.4.gir: libsoup-gnome-2.4.la $(SOUP_GIR)
+ SoupGNOME_2_4_gir_SCANNERFLAGS = --strip-prefix=soup
+ SoupGNOME_2_4_gir_INCLUDES = Soup-2.4
+ SoupGNOME_2_4_gir_CFLAGS = $(INCLUDES)
 -- 
-1.7.0
+1.7.1
 
