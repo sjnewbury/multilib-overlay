@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/gnome-disk-utility/gnome-disk-utility-2.28.1.ebuild,v 1.3 2010/05/04 16:14:27 tester Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/gnome-disk-utility/gnome-disk-utility-2.28.1.ebuild,v 1.6 2010/06/04 21:11:02 maekke Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -13,7 +13,7 @@ SRC_URI="http://hal.freedesktop.org/releases/${P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 ~x86"
+KEYWORDS="~alpha amd64 ~arm ~ia64 ~sh ~sparc x86"
 IUSE="doc +nautilus"
 
 RDEPEND="
@@ -28,15 +28,15 @@ RDEPEND="
 
 	nautilus? ( >=gnome-base/nautilus-2.24[lib32?] )"
 DEPEND="${RDEPEND}
-	sys-devel/gettext
+	sys-devel/gettext[lib32?]
 	app-text/scrollkeeper
-	app-text/gnome-doc-utils
-	>=dev-util/pkgconfig-0.9
+	app-text/gnome-doc-utils[lib32?]
+	>=dev-util/pkgconfig-0.9[lib32?]
 	>=dev-util/intltool-0.35
 	doc? ( >=dev-util/gtk-doc-1.3 )"
 DOCS="AUTHORS NEWS README TODO"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		--disable-static
 		$(use_enable nautilus)"

@@ -5,7 +5,7 @@
 EAPI="2"
 GCONF_DEBUG="no"
 
-inherit autotools gnome2 eutils multilib-native
+inherit autotools eutils gnome2 multilib-native
 
 DESCRIPTION="Disk Utility for GNOME using devicekit-disks"
 HOMEPAGE="http://git.gnome.org/cgit/gnome-disk-utility/"
@@ -32,12 +32,12 @@ RDEPEND="
 
 	!!sys-apps/udisks"
 DEPEND="${RDEPEND}
-	sys-devel/gettext
+	sys-devel/gettext[lib32?]
 	gnome-base/gnome-common
 	app-text/scrollkeeper
-	app-text/gnome-doc-utils
+	app-text/gnome-doc-utils[lib32?]
 
-	>=dev-util/pkgconfig-0.9
+	>=dev-util/pkgconfig-0.9[lib32?]
 	>=dev-util/intltool-0.35
 	>=dev-util/gtk-doc-am-1.13
 
