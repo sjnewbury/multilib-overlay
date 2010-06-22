@@ -53,7 +53,7 @@ dev-lang/tk
 dev-lang/vala
 dev-libs/atk
 dev-libs/check
-# dev-libs/cyrus-sasl
+dev-libs/cyrus-sasl
 dev-libs/dbus-glib
 dev-libs/DirectFB
 dev-libs/eggdbus

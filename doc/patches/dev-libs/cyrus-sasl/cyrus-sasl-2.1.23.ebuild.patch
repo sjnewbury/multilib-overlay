@@ -1,0 +1,33 @@
+--- /usr/portage/dev-libs/cyrus-sasl/cyrus-sasl-2.1.23.ebuild	2009-06-30 16:05:31.000000000 +0200
++++ ./dev-libs/cyrus-sasl/cyrus-sasl-2.1.23.ebuild	2010-06-05 23:21:16.000000000 +0200
+@@ -50,10 +50,7 @@
+ 	java-pkg-opt-2_pkg_setup
+ }
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	# Fix default port name for rimap auth mechanism.
+ 	sed -e '/define DEFAULT_REMOTE_SERVICE/s:imap:imap2:' \
+ 		-i saslauthd/auth_rimap.c || die "sed failed"
+@@ -91,7 +88,7 @@
+ 	AT_M4DIR="${S}/cmulocal ${S}/config" eautoreconf
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	# Fix QA issues.
+ 	append-flags -fno-strict-aliasing
+ 	append-flags -D_XOPEN_SOURCE -D_XOPEN_SOURCE_EXTENDED -D_BSD_SOURCE -DLDAP_DEPRECATED
+@@ -152,7 +149,9 @@
+ 		--with-plugindir=/usr/$(get_libdir)/sasl2 \
+ 		--with-dbpath=/etc/sasl2/sasldb2 \
+ 		${myconf} || die "econf failed"
++}
+ 
++src_compile() {
+ 	# We force -j1 for bug #110066.
+ 	emake -j1 || die "emake failed"
+ 

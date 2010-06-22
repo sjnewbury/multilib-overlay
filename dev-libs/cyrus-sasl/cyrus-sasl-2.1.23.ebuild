@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/cyrus-sasl/cyrus-sasl-2.1.23.ebuild,v 1.8 2009/06/30 13:36:20 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/cyrus-sasl/cyrus-sasl-2.1.23.ebuild,v 1.9 2010/06/17 20:12:32 patrick Exp $
 
 EAPI="2"
 
@@ -26,18 +26,18 @@ RDEPEND="authdaemond? ( || ( >=net-mail/courier-imap-3.0.7 >=mail-mta/courier-0.
 		berkdb? ( >=sys-libs/db-3.2[lib32?] )
 		gdbm? ( >=sys-libs/gdbm-1.8.0[lib32?] )
 		java? ( >=virtual/jre-1.4 )
-		kerberos? ( virtual/krb5 )
+		kerberos? ( virtual/krb5[lib32?] )
 		ldap? ( >=net-nds/openldap-2.0.25[lib32?] )
-		mysql? ( virtual/mysql )
-		ntlm_unsupported_patch? ( >=net-fs/samba-3.0.9 )
-		pam? ( virtual/pam )
-		postgres? ( >=virtual/postgresql-base-7.2 )
+		mysql? ( virtual/mysql[lib32?] )
+		ntlm_unsupported_patch? ( >=net-fs/samba-3.0.9[lib32?] )
+		pam? ( virtual/pam[lib32?] )
+		postgres? ( dev-db/postgresql-base[lib32?] )
 		ssl? ( >=dev-libs/openssl-0.9.6d[lib32?] )"
 DEPEND="${RDEPEND}
 		>=sys-apps/sed-4
 		java? ( >=virtual/jdk-1.4 )"
 
-pkg_setup() {
+multilib-native_pkg_setup_internal() {
 	if use gdbm && use berkdb ; then
 		echo
 		ewarn "You have both the 'gdbm' and 'berkdb' USE flags enabled."
@@ -124,7 +124,7 @@ multilib-native_src_configure_internal() {
 	fi
 
 	if use mysql || use postgres ; then
-		myconf="${myconf} --enable-sql --without-sqlite"
+		myconf="${myconf} --enable-sql"
 	else
 		myconf="${myconf} --disable-sql"
 	fi
@@ -223,7 +223,7 @@ multilib-native_src_install_internal() {
 	newexe "${S}/saslauthd/testsaslauthd" testsaslauthd || die "Failed to install testsaslauthd"
 }
 
-pkg_postinst () {
+multilib-native_pkg_postinst_internal() {
 	# Generate an empty sasldb2 with correct permissions.
 	if ( use berkdb || use gdbm ) && [[ ! -f "${ROOT}/etc/sasl2/sasldb2" ]] ; then
 		einfo "Generating an empty sasldb2 with correct permissions ..."

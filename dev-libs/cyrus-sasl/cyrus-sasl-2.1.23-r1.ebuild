@@ -1,8 +1,8 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/cyrus-sasl/cyrus-sasl-2.1.23-r1.ebuild,v 1.6 2009/11/03 14:46:02 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/cyrus-sasl/cyrus-sasl-2.1.23-r1.ebuild,v 1.12 2010/06/17 20:12:32 patrick Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit eutils flag-o-matic multilib autotools pam java-pkg-opt-2 multilib-native
 
@@ -16,7 +16,7 @@ SRC_URI="ftp://ftp.andrew.cmu.edu/pub/cyrus-mail/${P}.tar.gz
 
 LICENSE="as-is"
 SLOT="2"
-KEYWORDS="alpha amd64 ~arm hppa ~ia64 ~mips ppc ~ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="authdaemond berkdb crypt gdbm kerberos ldap mysql ntlm_unsupported_patch pam postgres sample sqlite srp ssl urandom"
 
 RDEPEND="authdaemond? ( || ( >=net-mail/courier-imap-3.0.7 >=mail-mta/courier-0.46 ) )
@@ -27,7 +27,7 @@ RDEPEND="authdaemond? ( || ( >=net-mail/courier-imap-3.0.7 >=mail-mta/courier-0.
 	mysql? ( virtual/mysql[lib32?] )
 	ntlm_unsupported_patch? ( >=net-fs/samba-3.0.9[lib32?] )
 	pam? ( virtual/pam[lib32?] )
-	postgres? ( >=virtual/postgresql-base-7.2[lib32?] )
+	postgres? ( dev-db/postgresql-base[lib32?] )
 	sqlite? ( dev-db/sqlite:0[lib32?] )
 	ssl? ( >=dev-libs/openssl-0.9.6d[lib32?] )"
 DEPEND="${RDEPEND}
@@ -65,7 +65,6 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-2.1.22-db4.patch #192753
 	epatch "${FILESDIR}/${PN}-2.1.22-gcc44.patch" #248738
 	epatch "${FILESDIR}"/${P}-authd-fix.patch
-	epatch "${FILESDIR}"/${P}-mysql-includes.patch
 
 	# Upstream doesn't even honor their own configure options... grumble
 	sed -i '/^sasldir =/s:=.*:= $(plugindir):' \
@@ -77,6 +76,10 @@ multilib-native_src_prepare_internal() {
 	# Recreate configure.
 	rm -f "${S}/config/libtool.m4" || die "rm libtool.m4 failed"
 	AT_M4DIR="${S}/cmulocal ${S}/config" eautoreconf
+
+	# search in the correct dir for libs else .la file will messup everything
+	sed -i "/LIB_MYSQL/ s@/lib@/$(get_libdir)@g" configure
+	sed -i "/LIB_SQLITE/ s@/lib@/$(get_libdir)@g" configure
 }
 
 multilib-native_src_configure_internal() {
@@ -139,9 +142,9 @@ multilib-native_src_configure_internal() {
 		$(use_enable kerberos gssapi) \
 		$(use_enable java) \
 		$(use_with java javahome ${JAVA_HOME}) \
-		$(use_with mysql mysql /usr/$(get_libdir)) \
+		$(use_with mysql) \
 		$(use_with postgres pgsql $(pg_config --libdir)) \
-		$(use_with sqlite sqlite /usr/$(get_libdir)) \
+		$(use_with sqlite) \
 		$(use_enable srp) \
 		${myconf} || die "econf failed"
 }
@@ -216,7 +219,7 @@ multilib-native_src_install_internal() {
 	newexe "${S}/saslauthd/testsaslauthd" testsaslauthd || die "Failed to install testsaslauthd"
 }
 
-pkg_postinst () {
+multilib-native_pkg_postinst_internal() {
 	# Generate an empty sasldb2 with correct permissions.
 	if ( use berkdb || use gdbm ) && [[ ! -f "${ROOT}/etc/sasl2/sasldb2" ]] ; then
 		einfo "Generating an empty sasldb2 with correct permissions ..."
