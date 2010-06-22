@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/gimp/gimp-2.6.8.ebuild,v 1.13 2010/06/10 17:51:23 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/gimp/gimp-2.6.8.ebuild,v 1.14 2010/06/21 09:45:08 ssuominen Exp $
 
 EAPI=2
 PYTHON_DEPEND="python? 2:2.5"
@@ -37,7 +37,7 @@ RDEPEND=">=dev-libs/glib-2.18.1[lib32?]
 	webkit? ( net-libs/webkit-gtk[lib32?] )
 	jpeg? ( >=media-libs/jpeg-6b-r2:0[lib32?] )
 	exif? ( >=media-libs/libexif-0.6.15[lib32?] )
-	lcms? ( media-libs/lcms[lib32?] )
+	lcms? ( =media-libs/lcms-1*[lib32?] )
 	mng? ( media-libs/libmng[lib32?] )
 	pdf? ( >=app-text/poppler-0.12.3-r3[cairo,lib32?] )
 	png? ( >=media-libs/libpng-1.2.2[lib32?] )
