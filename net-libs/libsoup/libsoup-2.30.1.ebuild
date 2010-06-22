@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup/libsoup-2.30.1.ebuild,v 1.2 2010/06/14 23:03:41 dang Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup/libsoup-2.30.1.ebuild,v 1.3 2010/06/20 14:05:16 ford_prefect Exp $
 
 EAPI="2"
 
@@ -8,15 +8,18 @@ inherit autotools eutils gnome2 multilib-native
 
 DESCRIPTION="An HTTP library implementation in C"
 HOMEPAGE="http://www.gnome.org/"
+SRC_URI="${SRC_URI}
+	mirror://gentoo/${P}-build-gir-patches.tar.bz2"
 
 LICENSE="LGPL-2"
 SLOT="2.4"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 # Do NOT build with --disable-debug/--enable-debug=no - gnome2.eclass takes care of that
-IUSE="debug doc gnome ssl"
+IUSE="debug doc +introspection gnome ssl"
 
 RDEPEND=">=dev-libs/glib-2.21.3[lib32?]
 	>=dev-libs/libxml2-2[lib32?]
+	introspection? ( >=dev-libs/gobject-introspection-0.6.7[lib32?] )
 	ssl? ( >=net-libs/gnutls-2.1.7[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9[lib32?]
@@ -34,6 +37,7 @@ multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		--disable-static
 		--without-gnome
+		$(use_enable introspection)
 		$(use_enable ssl)"
 }
 
@@ -49,5 +53,11 @@ multilib-native_src_prepare_internal() {
 		# Fix bug 268592 (build fails !gnome && doc)
 		epatch "${FILESDIR}/${P}-fix-build-without-gnome-with-doc.patch"
 	fi
+
+	if use introspection; then
+		epatch "${WORKDIR}/${P}-build-gir-1.patch"
+		epatch "${WORKDIR}/${P}-build-gir-2.patch"
+	fi
+
 	eautoreconf
 }
