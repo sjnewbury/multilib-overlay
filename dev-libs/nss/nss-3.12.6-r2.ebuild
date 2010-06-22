@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/nss/nss-3.12.6-r2.ebuild,v 1.2 2010/06/16 18:53:30 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/nss/nss-3.12.6-r2.ebuild,v 1.3 2010/06/21 21:08:32 mr_bones_ Exp $
 
 EAPI="2"
 
@@ -144,7 +144,7 @@ multilib-native_src_install_internal() {
 	nssutils="shlibsign"
 	if use utils; then
 		# The tests we do not need to install.
-		#nssutils_test="bltest crmftest dbtest dertimetest 
+		#nssutils_test="bltest crmftest dbtest dertimetest
 		#fipstest remtest sdrtest"
 		nssutils="addbuiltin atob baddbdir btoa certcgi certutil checkcert
 		cmsutil conflict crlutil derdump digest makepqg mangle modutil multinit
