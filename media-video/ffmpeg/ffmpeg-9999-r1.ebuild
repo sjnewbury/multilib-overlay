@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999-r1.ebuild,v 1.43 2010/06/18 14:19:16 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999-r1.ebuild,v 1.44 2010/06/22 07:28:55 aballier Exp $
 
 EAPI="2"
 
@@ -31,7 +31,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
 IUSE="+3dnow +3dnowext alsa altivec amr bindist cpudetection custom-cflags
-debug dirac doc +encode faac faad gsm +hardcoded-tables ieee1394 jack jpeg2k
+debug dirac doc +encode faac gsm +hardcoded-tables ieee1394 jack jpeg2k
 +mmx +mmxext mp3 network oss pic rtmp schroedinger sdl speex +ssse3 test theora
 threads v4l v4l2 vaapi vdpau vorbis vpx X x264 xvid +zlib"
 
@@ -50,7 +50,6 @@ RDEPEND="sdl? ( >=media-libs/libsdl-1.2.10[lib32?] )
 		theora? ( >=media-libs/libtheora-1.1.1[encode,lib32?] media-libs/libogg[lib32?] )
 		x264? ( >=media-libs/x264-0.0.20100605[lib32?] )
 		xvid? ( >=media-libs/xvid-1.1.0[lib32?] ) )
-	faad? ( >=media-libs/faad2-2.6.1[lib32?] )
 	zlib? ( sys-libs/zlib[lib32?] )
 	ieee1394? ( media-libs/libdc1394[lib32?]
 				sys-libs/libraw1394[lib32?] )
@@ -144,7 +143,7 @@ multilib-native_src_configure_internal() {
 
 	# Decoders
 	use amr && myconf="${myconf} --enable-libopencore-amrwb --enable-libopencore-amrnb"
-	for i in gsm faad dirac rtmp schroedinger speex vpx; do
+	for i in gsm dirac rtmp schroedinger speex vpx; do
 		use ${i} && myconf="${myconf} --enable-lib${i}"
 	done
 	use jpeg2k && myconf="${myconf} --enable-libopenjpeg"
