@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.3-r1.ebuild,v 1.8 2010/05/31 19:24:28 josejx Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.3-r1.ebuild,v 1.9 2010/06/21 12:00:03 ssuominen Exp $
 
 EAPI="2"
 WANT_AUTOCONF="2.1"
@@ -29,7 +29,7 @@ RDEPEND="java? ( >=virtual/jre-1.4 )
 	system-sqlite? ( >=dev-db/sqlite-3.6.22-r2[fts3,secure-delete,lib32?] )
 	alsa? ( media-libs/alsa-lib[lib32?] )
 	>=app-text/hunspell-1.2[lib32?]
-	>=media-libs/lcms-1.17[lib32?]
+	=media-libs/lcms-1*[lib32?]
 	>=x11-libs/cairo-1.8.8[X,lib32?]
 	x11-libs/pango[X,lib32?]
 	x11-libs/libXt[lib32?]
