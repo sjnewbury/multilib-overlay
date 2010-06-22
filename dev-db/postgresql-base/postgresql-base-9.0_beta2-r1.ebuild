@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/postgresql-base/postgresql-base-9.0_beta2-r1.ebuild,v 1.1 2010/06/15 20:36:40 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/postgresql-base/postgresql-base-9.0_beta2-r1.ebuild,v 1.2 2010/06/20 13:26:58 patrick Exp $
 
 EAPI="2"
 
@@ -92,8 +92,8 @@ multilib-native_src_configure_internal() {
 		$(use_with ldap) \
 		|| die "configure failed"
 }
-multilib-native_src_compile_internal() {
 
+multilib-native_src_compile_internal() {
 	emake || die "emake failed"
 
 	cd "${S}/contrib"
@@ -144,7 +144,16 @@ __EOF__
 multilib-native_pkg_postinst_internal() {
 	eselect postgresql update
 	[[ "$(eselect postgresql show)" = "(none)" ]] && eselect postgresql set ${SLOT}
-	elog "If you need a global psqlrc-file, you can place it in '${ROOT}/etc/postgresql-${SLOT}/'."
+	elog "If you need a global psqlrc-file, you can place it in:"
+	elog "    '${ROOT}/etc/postgresql-${SLOT}/'"
+	elog
+	elog "The PostgreSQL community has called for more testers of the upcoming 9.0"
+	elog "release. This beta version of the PostgreSQL client applications and libraries,"
+	elog "while moved to ~arch, will never be marked stable. As such, you may not want to"
+	elog "use this package in an environment where incompatible changes are"
+	elog "unacceptable. Bear in mind, though, that these packages are slotted and that you"
+	elog "may have multiple installations simultaneously without conflict. However, you"
+	elog "may only use one set of client applications and libraries via 'eselect'."
 }
 
 multilib-native_pkg_postrm_internal() {
