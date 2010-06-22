@@ -65,7 +65,7 @@ dev-libs/glib
 dev-libs/icu
 dev-libs/iniparser
 dev-libs/libassuan
-# dev-libs/libatasmart
+dev-libs/libatasmart
 dev-libs/libatomic_ops
 dev-libs/libbeagle
 dev-libs/libcdio
@@ -128,7 +128,7 @@ gnome-base/libbonoboui
 gnome-base/libglade
 gnome-base/libgnome
 gnome-base/libgnomecanvas
-# gnome-base/libgnome-keyring
+gnome-base/libgnome-keyring
 gnome-base/libgnomeui
 gnome-base/libgtop
 gnome-base/librsvg
