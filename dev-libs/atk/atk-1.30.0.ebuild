@@ -1,8 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/atk/atk-1.30.0.ebuild,v 1.1 2010/06/13 15:40:50 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/atk/atk-1.30.0.ebuild,v 1.2 2010/06/20 09:54:24 ford_prefect Exp $
 
-EAPI="2"
+EAPI=2
 
 inherit gnome2 multilib-native
 
@@ -12,10 +12,11 @@ HOMEPAGE="http://live.gnome.org/GAP/"
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="doc"
+IUSE="doc +introspection"
 
 # FIXME: This package also supports introspection
-RDEPEND=">=dev-libs/glib-2[lib32?]"
+RDEPEND=">=dev-libs/glib-2[lib32?]
+	introspection? ( >=dev-libs/gobject-introspection-0.6.7[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5[lib32?]
 	sys-devel/gettext[lib32?]
@@ -25,5 +26,5 @@ DEPEND="${RDEPEND}
 DOCS="AUTHORS ChangeLog NEWS README"
 
 multilib-native_pkg_setup_internal() {
-	G2CONF="${G2CONF} --disable-introspection"
+	G2CONF="${G2CONF} $(use_enable introspection)"
 }
