@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/poppler/poppler-0.14.0-r1.ebuild,v 1.2 2010/06/09 14:38:35 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/poppler/poppler-0.14.0-r1.ebuild,v 1.4 2010/06/21 15:32:14 ssuominen Exp $
 
 EAPI="2"
 
@@ -13,7 +13,8 @@ SRC_URI="http://dev.gentooexperimental.org/~scarabeus/${P}.tar.bz2"
 LICENSE="GPL-2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd ~x64-freebsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 SLOT="0"
-IUSE="+abiword cairo cjk curl cxx debug doc exceptions jpeg jpeg2k +lcms png qt4 +utils +xpdf-headers"
+IUSE="+abiword cairo cjk curl cxx debug exceptions jpeg jpeg2k +lcms png qt4 +utils +xpdf-headers"
+# doc, see src_install
 
 # No test data provided
 RESTRICT="test"
@@ -31,7 +32,7 @@ COMMON_DEPEND="
 	curl? ( net-misc/curl[lib32?] )
 	jpeg? ( >=media-libs/jpeg-7:0[lib32?] )
 	jpeg2k? ( media-libs/openjpeg[lib32?] )
-	lcms? ( media-libs/lcms[lib32?] )
+	lcms? ( =media-libs/lcms-1*[lib32?] )
 	png? ( media-libs/libpng[lib32?] )
 	qt4? (
 		x11-libs/qt-core:4[lib32?]
@@ -81,19 +82,19 @@ multilib-native_src_configure_internal() {
 multilib-native_src_install_internal() {
 	cmake-utils_src_install
 
-	if use cairo && use doc; then
-		# For now install gtk-doc there
-		insinto /usr/share/gtk-doc/html/poppler
-		doins -r "${S}"/glib/reference/html/* || die 'failed to install API documentation'
-	fi
+# Restore with 0.14.1 per http://bugs.gentoo.org/323409
+#	if use cairo && use doc; then
+#		insinto /usr/share/doc/${PF}/html
+#		doins -r "${S}"/glib/reference/html/* || die
+#	fi
 }
 
 multilib-native_pkg_preinst_internal() {
-	preserve_old_lib /usr/$(get_libdir)/libpoppler-glib.so.5
-	preserve_old_lib /usr/$(get_libdir)/libpoppler.so.6
+	preserve_old_lib /usr/$(get_libdir)/libpoppler-glib.so.4
+	preserve_old_lib /usr/$(get_libdir)/libpoppler.so.5
 }
 
 multilib-native_pkg_postinst_internal() {
-	preserve_old_lib_notify /usr/$(get_libdir)/libpoppler-glib.so.5
-	preserve_old_lib_notify /usr/$(get_libdir)/libpoppler.so.6
+	preserve_old_lib_notify /usr/$(get_libdir)/libpoppler-glib.so.4
+	preserve_old_lib_notify /usr/$(get_libdir)/libpoppler.so.5
 }
