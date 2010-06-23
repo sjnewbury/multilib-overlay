@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup/libsoup-2.30.1.ebuild,v 1.3 2010/06/20 14:05:16 ford_prefect Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup/libsoup-2.30.2.ebuild,v 1.1 2010/06/23 11:46:31 pacho Exp $
 
 EAPI="2"
 
@@ -9,7 +9,7 @@ inherit autotools eutils gnome2 multilib-native
 DESCRIPTION="An HTTP library implementation in C"
 HOMEPAGE="http://www.gnome.org/"
 SRC_URI="${SRC_URI}
-	mirror://gentoo/${P}-build-gir-patches.tar.bz2"
+	mirror://gentoo/${PN}-2.30.1-build-gir-patches.tar.bz2"
 
 LICENSE="LGPL-2"
 SLOT="2.4"
@@ -51,12 +51,12 @@ multilib-native_src_prepare_internal() {
 	# Patch *must* be applied conditionally (see patch for details)
 	if use doc; then
 		# Fix bug 268592 (build fails !gnome && doc)
-		epatch "${FILESDIR}/${P}-fix-build-without-gnome-with-doc.patch"
+		epatch "${FILESDIR}/${PN}-2.30.1-fix-build-without-gnome-with-doc.patch"
 	fi
 
 	if use introspection; then
-		epatch "${WORKDIR}/${P}-build-gir-1.patch"
-		epatch "${WORKDIR}/${P}-build-gir-2.patch"
+		epatch "${WORKDIR}/${PN}-2.30.1-build-gir-1.patch"
+		epatch "${WORKDIR}/${PN}-2.30.1-build-gir-2.patch"
 	fi
 
 	eautoreconf
