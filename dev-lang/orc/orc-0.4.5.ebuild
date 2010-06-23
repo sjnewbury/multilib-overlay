@@ -13,7 +13,7 @@ SRC_URI="http://code.entropywave.com/download/orc/${P}.tar.gz"
 
 LICENSE="BSD BSD-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86 ~amd64-linux"
+KEYWORDS="~amd64 ~x86 ~amd64-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 IUSE="static-libs examples"
 
 multilib-native_src_prepare_internal() {
