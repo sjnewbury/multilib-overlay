@@ -1,0 +1,42 @@
+From a9d0d64ab9aa61855fce0537b90fc05924bc3d85 Mon Sep 17 00:00:00 2001
+From: Matthew Barnes <mbarnes@redhat.com>
+Date: Mon, 21 Jun 2010 11:28:22 +0000
+Subject: Revert "Bug 619347 - Return formatted address in e_destination_get_address"
+
+This reverts commit db8c986c4f06f0cb57de9bfa6982b4e78f0bb32a.
+
+Despite the misleading documentation, e_destination_get_address() -is-
+intended to return an encoded address suitable for use in mail headers.
+e_destination_get_textrep() exists for displaying destination addresses
+to the user.  The Contact List Editor is apparently calling the wrong
+function.
+---
+diff --git a/addressbook/libebook/e-destination.c b/addressbook/libebook/e-destination.c
+index 00b7e76..6ed9870 100644
+--- a/addressbook/libebook/e-destination.c
++++ b/addressbook/libebook/e-destination.c
+@@ -881,11 +881,11 @@ e_destination_get_address (const EDestination *dest)
+ 				iter = g_list_next (iter);
+ 			}
+ 
+-			priv->addr = camel_address_format (CAMEL_ADDRESS (addr));
++			priv->addr = camel_address_encode (CAMEL_ADDRESS (addr));
+ 		} else if (priv->raw) {
+ 
+ 			if (camel_address_unformat (CAMEL_ADDRESS (addr), priv->raw)) {
+-				priv->addr = camel_address_format (CAMEL_ADDRESS (addr));
++				priv->addr = camel_address_encode (CAMEL_ADDRESS (addr));
+ 			}
+ 		} else {
+ 			const gchar *name, *email;
+@@ -900,7 +900,7 @@ e_destination_get_address (const EDestination *dest)
+ 				nothing we can do here */
+ 				camel_address_decode (CAMEL_ADDRESS (addr), name);
+ 
+-			priv->addr = camel_address_format (CAMEL_ADDRESS (addr));
++			priv->addr = camel_address_encode (CAMEL_ADDRESS (addr));
+ 		}
+ 
+ 		camel_object_unref (CAMEL_OBJECT (addr));
+--
+cgit v0.8.3.1
