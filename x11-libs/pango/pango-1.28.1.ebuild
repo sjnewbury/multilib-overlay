@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.28.1.ebuild,v 1.2 2010/06/20 09:49:48 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.28.1.ebuild,v 1.3 2010/06/23 15:09:33 pacho Exp $
 
 EAPI="2"
 GCONF_DEBUG="yes"
@@ -25,14 +25,14 @@ RDEPEND=">=dev-libs/glib-2.17.3[lib32?]
 		x11-libs/libXft[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9[lib32?]
-	dev-util/gtk-doc-am
+	>=dev-util/gtk-doc-am-1.13
 	doc? (
-		>=dev-util/gtk-doc-1
+		>=dev-util/gtk-doc-1.13
 		~app-text/docbook-xml-dtd-4.1.2
 		x11-libs/libXft[lib32?] )
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7[lib32?] )
 	test? (
-		>=dev-util/gtk-doc-1
+		>=dev-util/gtk-doc-1.13
 		~app-text/docbook-xml-dtd-4.1.2
 		x11-libs/libXft[lib32?] )
 	X? ( x11-proto/xproto )"
