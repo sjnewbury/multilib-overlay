@@ -1,10 +1,10 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-menus/gnome-menus-2.20.3.ebuild,v 1.11 2009/05/10 18:43:15 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-menus/gnome-menus-2.20.3.ebuild,v 1.12 2010/06/23 14:55:34 arfrever Exp $
 
 EAPI="2"
 
-inherit eutils gnome2 python multilib linux-info multilib-native
+inherit eutils gnome2 python linux-info multilib-native
 
 DESCRIPTION="The GNOME menu system, implementing the F.D.O cross-desktop spec"
 HOMEPAGE="http://www.gnome.org"
@@ -52,14 +52,13 @@ multilib-native_src_prepare_internal() {
 multilib-native_pkg_postinst_internal() {
 	gnome2_pkg_postinst
 	if use python; then
-		python_version
-		python_mod_optimize /usr/$(get_libdir)/python${PYVER}/site-packages/GMenuSimpleEditor
+		python_mod_optimize $(python_get_sitedir)/GMenuSimpleEditor
 	fi
 }
 
 multilib-native_pkg_postrm_internal() {
 	gnome2_pkg_postrm
 	if use python; then
-		python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/GMenuSimpleEditor
+		python_mod_cleanup $(python_get_sitedir)/GMenuSimpleEditor
 	fi
 }

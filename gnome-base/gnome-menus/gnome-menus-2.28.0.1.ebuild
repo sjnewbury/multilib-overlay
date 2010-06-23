@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-menus/gnome-menus-2.28.0.1.ebuild,v 1.5 2010/06/04 19:36:22 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-menus/gnome-menus-2.28.0.1.ebuild,v 1.6 2010/06/23 14:55:34 arfrever Exp $
 
 EAPI="2"
 
@@ -62,7 +62,6 @@ multilib-native_src_install_internal() {
 multilib-native_pkg_postinst_internal() {
 	gnome2_pkg_postinst
 	if use python; then
-		python_version
 		python_need_rebuild
 		python_mod_optimize $(python_get_sitedir)/GMenuSimpleEditor
 	fi
@@ -75,5 +74,7 @@ multilib-native_pkg_postinst_internal() {
 
 multilib-native_pkg_postrm_internal() {
 	gnome2_pkg_postrm
-	python_mod_cleanup /usr/$(get_libdir)/python*/site-packages/GMenuSimpleEditor
+	if use python; then
+		python_mod_cleanup $(python_get_sitedir)/GMenuSimpleEditor
+	fi
 }
