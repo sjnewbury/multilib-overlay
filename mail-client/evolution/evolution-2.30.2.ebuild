@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.30.1.2-r1.ebuild,v 1.1 2010/06/13 20:13:01 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.30.2.ebuild,v 1.1 2010/06/23 14:05:13 pacho Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -13,9 +13,6 @@ HOMEPAGE="http://www.gnome.org/projects/evolution/"
 LICENSE="GPL-2 LGPL-2 OPENLDAP"
 SLOT="2.0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-
-SRC_URI="${SRC_URI}
-	mirror://gentoo/${P}-patches.tar.bz2"
 
 IUSE="crypt kerberos ldap networkmanager pda profile python ssl
 gstreamer +sound"
@@ -56,7 +53,6 @@ RDEPEND=">=dev-libs/glib-2.22[lib32?]
 	pda? (
 		>=app-pda/gnome-pilot-2.0.16[lib32?]
 		>=app-pda/gnome-pilot-conduits-2[lib32?] )
-	pst? ( >=net-mail/libpst-0.6.41 )
 	python? ( >=dev-lang/python-2.4[lib32?] )
 	sound? ( media-libs/libcanberra[lib32?] )
 	ssl? (
@@ -114,8 +110,14 @@ multilib-native_src_prepare_internal() {
 	# Do not require unstable libunique
 	epatch "${FILESDIR}/${PN}-2.30.1.2-configure.patch"
 
-	# Apply upstream patches committed to gnome-2-30 branch
-	epatch "${WORKDIR}"/${P}-patches/*.patch
+	# bgo#619347: Contact List Editor calls wrong EDestination function
+	epatch "${FILESDIR}/${P}-call-function.patch"
+
+	# bgo#622329: Help menu points to the wrong FAQ page
+	epatch "${FILESDIR}/${P}-proper-faq.patch"
+
+	# bgo#621819: Can't drag message attachments to folders
+	epatch "${FILESDIR}/${P}-drag-message.patch"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
