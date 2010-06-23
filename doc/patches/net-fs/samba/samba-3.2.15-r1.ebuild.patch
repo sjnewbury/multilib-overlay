@@ -1,0 +1,36 @@
+--- /usr/portage/net-fs/samba/samba-3.2.15-r1.ebuild	2010-06-23 19:11:00.000000000 +0200
++++ ./net-fs/samba/samba-3.2.15-r1.ebuild	2010-06-23 22:57:23.000000000 +0200
+@@ -51,8 +51,7 @@
+ 	confutils_use_depend_all cifsupcall ads
+ }
+ 
+-src_unpack() {
+-	unpack ${A}
++src_prepare() {
+ 	cd "${S}/source"
+ 
+ 	epatch \
+@@ -74,7 +73,7 @@
+ 		"${S}/source/script/tests/selftest.sh" || die "sed failed"
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	cd "${S}/source"
+ 
+ 	local myconf
+@@ -136,10 +135,13 @@
+ 		$(use_with syslog) \
+ 		$(use_with winbind) \
+ 		${myconf} ${mylangs} ${mymod_shared} || die "econf failed"
++}
++
++src_compile() {
++	cd "${S}/source"
+ 
+ 	emake -j1 proto || die "emake proto failed"
+ 	emake -j1 everything || die "emake everything failed"
+-
+ }
+ 
+ src_test() {
