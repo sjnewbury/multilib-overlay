@@ -1,11 +1,11 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-panel/gnome-panel-2.30.0-r1.ebuild,v 1.1 2010/06/13 17:59:45 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-panel/gnome-panel-2.30.2.ebuild,v 1.1 2010/06/23 11:54:31 pacho Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
 
-inherit autotools eutils gnome2 multilib-native
+inherit autotools gnome2 multilib-native
 
 DESCRIPTION="The GNOME panel"
 HOMEPAGE="http://www.gnome.org/"
@@ -74,9 +74,6 @@ multilib-native_src_prepare_internal() {
 		sed "/^TARGET_DIR/i \GTKDOC_REBASE=$(type -P true)" \
 			-i gtk-doc.make || die "sed 2 failed"
 	fi
-
-	# Make sure that newly-created panels become unhidden
-	epatch "${FILESDIR}/${P}-panels-unhidden.patch"
 
 	# Make it libtool-1 compatible, bug #271652
 	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
