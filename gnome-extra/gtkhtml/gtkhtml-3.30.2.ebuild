@@ -1,11 +1,11 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/gtkhtml/gtkhtml-3.30.1-r1.ebuild,v 1.2 2010/06/14 00:52:07 mr_bones_ Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-extra/gtkhtml/gtkhtml-3.30.2.ebuild,v 1.1 2010/06/23 12:38:46 pacho Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
 
-inherit eutils gnome2 multilib-native
+inherit gnome2 multilib-native
 
 DESCRIPTION="Lightweight HTML Rendering/Printing/Editing Engine"
 HOMEPAGE="http://www.gnome.org/"
@@ -51,13 +51,4 @@ multilib-native_src_prepare_internal() {
 		-i configure.ac configure || die "sed 1 failed"
 	sed -i -e 's:-DGTK_DISABLE_DEPRECATED=1 -DGDK_DISABLE_DEPRECATED=1 -DG_DISABLE_DEPRECATED=1 -DGNOME_DISABLE_DEPRECATED=1::g' \
 		a11y/Makefile.am a11y/Makefile.in || die "sed 2 failed"
-
-	# Upstream bug 575038: Cursor/caret mode breaks magic spacebar
-	epatch "${FILESDIR}/${P}-magic-spacebar.patch"
-
-	# Upstream bug 607324: Crash doing table editing
-	epatch "${FILESDIR}/${P}-crash-table.patch"
-
-	# Upstream bug 344076: Crash after closing an inline view of text attachment
-	epatch "${FILESDIR}/${P}-crash-attachment.patch"
 }
