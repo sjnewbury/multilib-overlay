@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.30.1-r1.ebuild,v 1.1 2010/06/13 18:43:22 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.30.3.ebuild,v 1.1 2010/06/23 11:05:39 pacho Exp $
 
 EAPI="2"
 
-inherit eutils gnome2 pam virtualx autotools multilib-native
+inherit gnome2 pam virtualx autotools multilib-native
 
 DESCRIPTION="Password and keyring managing daemon"
 HOMEPAGE="http://www.gnome.org/"
@@ -46,18 +46,6 @@ multilib-native_pkg_setup_internal() {
 
 multilib-native_src_prepare_internal() {
 	gnome2_src_prepare
-
-	# Add dbus activation service file for org.freedesktop.secrets, bgo#611002
-	epatch "${FILESDIR}/${P}-dbus-activation.patch"
-
-	# Make sure the service files are created correctly
-	epatch "${FILESDIR}/${P}-service-creation.patch"
-
-	# Fix checking of uninitialized value in prompting code, bgo#616071
-	epatch "${FILESDIR}/${P}-uninitialized-value.patch"
-
-	# Fix broken startup when used with gdm and password-less login, bgo#611002
-	epatch "${FILESDIR}/${P}-password-less-login.patch"
 
 	# Remove silly CFLAGS
 	sed 's:CFLAGS="$CFLAGS -Werror:CFLAGS="$CFLAGS:' \
