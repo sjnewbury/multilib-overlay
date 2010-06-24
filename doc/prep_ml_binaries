@@ -1,5 +1,6 @@
 #config scripts
 app-crypt/mit-krb5 prep_ml_binaries /usr/bin/krb5-config
+app-crypt/heimdal prep_ml_binaries /usr/bin/krb5-config
 dev-libs/fribidi prep_ml_binaries /usr/bin/fribidi-config
 dev-libs/glib prep_ml_binaries /usr/bin/glib-config
 dev-libs/icu prep_ml_binaries /usr/bin/icu-config

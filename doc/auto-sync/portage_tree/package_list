@@ -6,7 +6,7 @@ app-admin/gamin
 # app-arch/lzma-utils
 # app-arch/xz-utils
 app-crypt/gnupg
-# app-crypt/heimdal
+app-crypt/heimdal
 app-crypt/mit-krb5
 # app-emulation/emul-linux-x86-baselibs
 # app-emulation/emul-linux-x86-gtklibs
@@ -44,7 +44,7 @@ dev-dotnet/libgdiplus
 # dev-java/gcj-jdk     from where is this package???
 dev-java/java-config
 dev-lang/lua
-# dev-lang/orc
+dev-lang/orc
 dev-lang/perl
 dev-lang/python
 dev-lang/ruby

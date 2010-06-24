@@ -1,8 +1,9 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-crypt/heimdal/heimdal-1.2.1-r4.ebuild,v 1.1 2009/08/27 07:54:57 mueli Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-crypt/heimdal/heimdal-1.2.1-r4.ebuild,v 1.10 2010/02/13 16:32:35 armin76 Exp $
 
 EAPI=2
+VIRTUALX_REQUIRED="manual"
 
 inherit autotools libtool eutils virtualx toolchain-funcs flag-o-matic multilib-native
 
@@ -17,8 +18,8 @@ SRC_URI="http://www.h5l.org/dist/src/${P}.tar.gz
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~m68k"
-IUSE="afs +berkdb hdb-ldap ipv6 otp pkinit ssl threads X"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
+IUSE="afs +berkdb hdb-ldap ipv6 otp pkinit ssl test threads X"
 
 RDEPEND="ssl? ( dev-libs/openssl[lib32?] )
 	berkdb? ( sys-libs/db[lib32?] )
@@ -26,19 +27,19 @@ RDEPEND="ssl? ( dev-libs/openssl[lib32?] )
 	>=dev-db/sqlite-3.5.7[lib32?]
 	sys-libs/e2fsprogs-libs[lib32?]
 	|| ( >=sys-apps/util-linux-2.16[lib32?] <sys-libs/e2fsprogs-libs-1.41.8[lib32?] )
-	afs? ( net-fs/openafs[lib32?] )
+	afs? ( net-fs/openafs )
 	hdb-ldap? ( >=net-nds/openldap-2.3.0[lib32?] )
 	!virtual/krb5"
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
-	>=sys-devel/autoconf-2.62"
+	>=sys-devel/autoconf-2.62
+	test? ( X? ( ${VIRTUALX_DEPEND} ) )"
 #	>=sys-devel/libtool-2.2"
 
 PROVIDE="virtual/krb5"
 
 GENTOODIR=${WORKDIR}/gentoo
-
 S=${WORKDIR}/${P}
 
 multilib-native_src_prepare_internal() {

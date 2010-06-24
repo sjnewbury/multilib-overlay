@@ -107,3 +107,4 @@ dev-db/postgresql-base/postgresql-base-8.3.11.ebuild
 dev-db/postgresql-base/postgresql-base-8.3.11-r1.ebuild
 dev-db/postgresql-base/postgresql-base-8.3.8.ebuild
 dev-db/postgresql-base/postgresql-base-8.3.9.ebuild
+app-crypt/heimdal/heimdal-1.2.1-r1.ebuild # does not compile

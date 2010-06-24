@@ -1,0 +1,29 @@
+#!/sbin/runscript
+# Copyright 1999-2004 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: /var/cvsroot/gentoo-x86/app-crypt/heimdal/files/heimdal-kpasswdd.initd,v 1.1 2010/05/09 03:50:52 darkside Exp $
+
+depend() {
+	need net
+	use heimdal-kdc
+	after logger
+}
+
+start() {
+	ebegin "Starting Heimdal kpasswdd"
+	start-stop-daemon --background --start --quiet --exec \
+		/usr/sbin/kpasswdd
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping Heimdal kpasswdd"
+	start-stop-daemon --stop --quiet --exec \
+		/usr/sbin/kpasswdd
+	eend $?
+}
+
+restart() {
+	svc_stop
+	svc_start
+}

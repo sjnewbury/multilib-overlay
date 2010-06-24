@@ -1,0 +1,307 @@
+diff --git a/tests/bin/Makefile.am b/tests/bin/Makefile.am
+index 49accb0..3d54a97 100644
+--- a/tests/bin/Makefile.am
++++ b/tests/bin/Makefile.am
+@@ -8,7 +8,8 @@ do_subst = \
+ 	sed $(do_dlopen) \
+ 	-e "s,[@]EGREP[@],$(EGREP),g" \
+ 	-e "s,[@]top_srcdir[@],$${top_srcdir},g" \
+-	-e "s,[@]top_builddir[@],$${top_builddir},g"
++	-e "s,[@]top_builddir[@],$${top_builddir},g" \
++	-e "s,[@]NO_AFS[@],$${NO_AFS},g"
+ 
+ setup-env: setup-env.in Makefile
+ 	$(do_subst) < $(srcdir)/setup-env.in > setup-env.tmp
+diff --git a/tests/bin/setup-env.in b/tests/bin/setup-env.in
+index a848482..4857e17 100644
+--- a/tests/bin/setup-env.in
++++ b/tests/bin/setup-env.in
+@@ -6,6 +6,7 @@ unset KRB5CCNAME
+ top_builddir="@top_builddir@"
+ top_srcdir="@top_srcdir@"
+ EGREP="@EGREP@"
++NO_AFS="@NO_AFS@"
+ 
+ # Meant to be sourced (source or .) by the tester application, offers
+ # most commands in heimdal as variables
+@@ -42,6 +43,14 @@ have_db="${top_builddir}/tests/db/have-db"
+ leaks_kill="${top_srcdir}/tests/kdc/leaks-kill.sh"
+ wait_kdc="${top_srcdir}/tests/kdc/wait-kdc.sh"
+ 
++if [ ! "${NO_AFS}" ] ; then
++    afs_no_unlog="--no-unlog"
++    afs_no_afslog="--no-afslog"
++else
++    afs_no_unlog=""
++    afs_no_afslog=""
++fi
++
+ # data
+ hx509_data="${top_srcdir}/lib/hx509/data"
+ 
+diff --git a/tests/gss/check-basic.in b/tests/gss/check-basic.in
+index 5599e5f..ef63097 100644
+--- a/tests/gss/check-basic.in
++++ b/tests/gss/check-basic.in
+@@ -51,8 +51,8 @@ cache="FILE:krb5ccfile"
+ cache2="FILE:krb5ccfile2"
+ nocache="FILE:no-such-cache"
+ 
+-kinit="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cache --no-afslog"
+-kdestroy="${TESTS_ENVIRONMENT} ../../kuser/kdestroy -c $cache --no-unlog"
++kinit="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cache ${afs_no_afslog}"
++kdestroy="${TESTS_ENVIRONMENT} ../../kuser/kdestroy -c $cache ${afs_no_unlog}"
+ klist="${TESTS_ENVIRONMENT} ../../kuser/klist -c $cache"
+ kadmin="${TESTS_ENVIRONMENT} ../../kadmin/kadmin -l -r $R"
+ kdc="${TESTS_ENVIRONMENT} ../../kdc/kdc --addresses=localhost -P $port"
+diff --git a/tests/gss/check-context.in b/tests/gss/check-context.in
+index 06f7774..1b01e49 100644
+--- a/tests/gss/check-context.in
++++ b/tests/gss/check-context.in
+@@ -49,7 +49,7 @@ keytab="FILE:${keytabfile}"
+ nokeytab="FILE:no-such-keytab"
+ cache="FILE:krb5ccfile"
+ 
+-kinit="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cache --no-afslog"
++kinit="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cache ${afs_no_afslog}"
+ klist="${TESTS_ENVIRONMENT} ../../kuser/klist -c $cache"
+ kgetcred="${TESTS_ENVIRONMENT} ../../kuser/kgetcred -c $cache"
+ kadmin="${TESTS_ENVIRONMENT} ../../kadmin/kadmin -l -r $R"
+diff --git a/tests/gss/check-ntlm.in b/tests/gss/check-ntlm.in
+index c76f63d..a929e66 100644
+--- a/tests/gss/check-ntlm.in
++++ b/tests/gss/check-ntlm.in
+@@ -49,8 +49,8 @@ keytab="FILE:${keytabfile}"
+ cache="FILE:krb5ccfile"
+ cacheds="FILE:krb5ccfile-ds"
+ 
+-kinit="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cache --no-afslog"
+-kinitds="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cacheds --no-afslog"
++kinit="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cache ${afs_no_afslog}"
++kinitds="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cacheds ${afs_no_afslog}"
+ kadmin="${TESTS_ENVIRONMENT} ../../kadmin/kadmin -l -r $R"
+ kdc="${TESTS_ENVIRONMENT} ../../kdc/kdc --addresses=localhost -P $port"
+ kdigest="${TESTS_ENVIRONMENT} ../../kuser/kdigest"
+diff --git a/tests/gss/check-spnego.in b/tests/gss/check-spnego.in
+index 3284715..7e90f5b 100644
+--- a/tests/gss/check-spnego.in
++++ b/tests/gss/check-spnego.in
+@@ -49,8 +49,8 @@ keytab="FILE:${keytabfile}"
+ cache="FILE:krb5ccfile"
+ cacheds="FILE:krb5ccfile-ds"
+ 
+-kinit="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cache --no-afslog --forwardable"
+-kinitds="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cacheds --no-afslog"
++kinit="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cache ${afs_no_afslog} --forwardable"
++kinitds="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cacheds ${afs_no_afslog}"
+ kadmin="${TESTS_ENVIRONMENT} ../../kadmin/kadmin -l -r $R"
+ kdc="${TESTS_ENVIRONMENT} ../../kdc/kdc --addresses=localhost -P $port"
+ 
+diff --git a/tests/kdc/check-cc.in b/tests/kdc/check-cc.in
+index 0a37703..aef5e16 100644
+--- a/tests/kdc/check-cc.in
++++ b/tests/kdc/check-cc.in
+@@ -51,8 +51,8 @@ R=TEST.H5L.SE
+ port=@port@
+ pwport=@pwport@
+ 
+-kinit="${kinit} --password-file=${objdir}/foopassword --no-afslog"
+-kdestroy="${kdestroy} --no-unlog"
++kinit="${kinit} --password-file=${objdir}/foopassword ${afs_no_afslog}"
++kdestroy="${kdestroy} ${afs_no_unlog}"
+ kadmin="${kadmin} -l -r $R"
+ kdc="${kdc} --addresses=localhost -P $port"
+ 
+diff --git a/tests/kdc/check-delegation.in b/tests/kdc/check-delegation.in
+index 7e23157..9cf11c3 100644
+--- a/tests/kdc/check-delegation.in
++++ b/tests/kdc/check-delegation.in
+@@ -54,10 +54,10 @@ kdc="${kdc} --addresses=localhost -P $port"
+ server=host/datan.test4.h5l.se@TEST4.H5L.ORG
+ cache="FILE:${objdir}/cache.krb5"
+ 
+-kinit="${kinit} -c $cache --no-afslog"
++kinit="${kinit} -c $cache ${afs_no_afslog}"
+ klist="${klist} -c $cache"
+ kgetcred="${kgetcred} -c $cache"
+-kdestroy="${kdestroy} -c $cache --no-unlog"
++kdestroy="${kdestroy} -c $cache ${afs_no_unlog}"
+ 
+ KRB5_CONFIG="${objdir}/krb5.conf"
+ export KRB5_CONFIG
+diff --git a/tests/kdc/check-des.in b/tests/kdc/check-des.in
+index 1eca6c4..77a39b1 100644
+--- a/tests/kdc/check-des.in
++++ b/tests/kdc/check-des.in
+@@ -54,10 +54,10 @@ afsserver=afs/test.h5l.se
+ hostserver=host/server.test.h5l.se
+ cache="FILE:${objdir}/cache.krb5"
+ 
+-kinit="${kinit} -c $cache --no-afslog"
++kinit="${kinit} -c $cache ${afs_no_afslog}"
+ klist="${klist} -c $cache"
+ kgetcred="${kgetcred} -c $cache"
+-kdestroy="${kdestroy} -c $cache --no-unlog"
++kdestroy="${kdestroy} -c $cache ${afs_no_unlog}"
+ 
+ KRB5_CONFIG="${objdir}/krb5.conf"
+ export KRB5_CONFIG
+diff --git a/tests/kdc/check-digest.in b/tests/kdc/check-digest.in
+index d253d59..90eb130 100644
+--- a/tests/kdc/check-digest.in
++++ b/tests/kdc/check-digest.in
+@@ -56,7 +56,7 @@ ocache="FILE:${objdir}/ocache.krb5"
+ keytabfile=${objdir}/server.keytab
+ keytab="FILE:${keytabfile}"
+ 
+-kinit="${kinit} -c $cache --no-afslog"
++kinit="${kinit} -c $cache ${afs_no_afslog}"
+ klist="${klist} -c $cache"
+ kdigest="${kdigest} --ccache=$cache"
+ 
+diff --git a/tests/kdc/check-iprop.in b/tests/kdc/check-iprop.in
+index 2bc5544..ba9aff1 100644
+--- a/tests/kdc/check-iprop.in
++++ b/tests/kdc/check-iprop.in
+@@ -54,7 +54,7 @@ keytab="FILE:${keytabfile}"
+ 
+ kdc="${kdc} --addresses=localhost -P $port"
+ kadmin="${kadmin} -r $R"
+-kinit="${kinit} -c $cache --no-afslog"
++kinit="${kinit} -c $cache ${afs_no_afslog}"
+ 
+ KRB5_CONFIG="${objdir}/krb5.conf"
+ export KRB5_CONFIG
+diff --git a/tests/kdc/check-kadmin.in b/tests/kdc/check-kadmin.in
+index faba084..b761ef0 100644
+--- a/tests/kdc/check-kadmin.in
++++ b/tests/kdc/check-kadmin.in
+@@ -55,9 +55,9 @@ kadmind="${kadmind} -p $admport"
+ 
+ server=host/datan.test.h5l.se
+ 
+-kinit="${kinit} -c $cache --no-afslog"
++kinit="${kinit} -c $cache ${afs_no_afslog}"
+ kgetcred="${kgetcred} -c $cache"
+-kdestroy="${kdestroy} -c $cache --no-unlog"
++kdestroy="${kdestroy} -c $cache ${afs_no_unlog}"
+ 
+ KRB5_CONFIG="${objdir}/krb5.conf"
+ export KRB5_CONFIG
+diff --git a/tests/kdc/check-kdc.in b/tests/kdc/check-kdc.in
+index 0e1f9d7..5fc08fc 100644
+--- a/tests/kdc/check-kdc.in
++++ b/tests/kdc/check-kdc.in
+@@ -70,11 +70,11 @@ keytab="FILE:${keytabfile}"
+ ps="proxy-service@${R}"
+ aesenctype="aes256-cts-hmac-sha1-96"
+ 
+-kinit="${kinit} -c $cache --no-afslog"
++kinit="${kinit} -c $cache ${afs_no_afslog}"
+ klist="${klist} -c $cache"
+ kgetcred="${kgetcred} -c $cache"
+ kgetcred_imp="${kgetcred} -c $cache --out-cache=${ocache}"
+-kdestroy="${kdestroy} -c $cache --no-unlog"
++kdestroy="${kdestroy} -c $cache ${afs_no_unlog}"
+ kimpersonate="${kimpersonate} -k ${keytab} --ccache=${ocache}"
+ 
+ rm -f ${keytabfile}
+diff --git a/tests/kdc/check-kpasswdd.in b/tests/kdc/check-kpasswdd.in
+index dd2162a..355930f 100644
+--- a/tests/kdc/check-kpasswdd.in
++++ b/tests/kdc/check-kpasswdd.in
+@@ -60,10 +60,10 @@ cache="FILE:${objdir}/cache.krb5"
+ keytabfile=${objdir}/server.keytab
+ keytab="FILE:${keytabfile}"
+ 
+-kinit="${kinit} -c $cache --no-afslog"
++kinit="${kinit} -c $cache ${afs_no_afslog}"
+ klist="${klist} -c $cache"
+ kgetcred="${kgetcred} -c $cache"
+-kdestroy="${kdestroy} -c $cache --no-unlog"
++kdestroy="${kdestroy} -c $cache ${afs_no_unlog}"
+ 
+ KRB5_CONFIG="${objdir}/krb5.conf"
+ export KRB5_CONFIG
+diff --git a/tests/kdc/check-pkinit.in b/tests/kdc/check-pkinit.in
+index 1cb7b50..723cc14 100644
+--- a/tests/kdc/check-pkinit.in
++++ b/tests/kdc/check-pkinit.in
+@@ -54,9 +54,9 @@ cache="FILE:${objdir}/cache.krb5"
+ keyfile="${hx509_data}/key.der"
+ keyfile2="${hx509_data}/key2.der"
+ 
+-kinit="${kinit} -c $cache --no-afslog"
++kinit="${kinit} -c $cache ${afs_no_afslog}"
+ kgetcred="${kgetcred} -c $cache"
+-kdestroy="${kdestroy} -c $cache --no-unlog"
++kdestroy="${kdestroy} -c $cache ${afs_no_unlog}"
+ 
+ KRB5_CONFIG="${objdir}/krb5-pkinit.conf"
+ export KRB5_CONFIG
+diff --git a/tests/kdc/check-referral.in b/tests/kdc/check-referral.in
+index b64b06a..8ca2a31 100644
+--- a/tests/kdc/check-referral.in
++++ b/tests/kdc/check-referral.in
+@@ -54,10 +54,10 @@ kdc="${kdc} --addresses=localhost -P $port"
+ 
+ cache="FILE:${objdir}/cache.krb5"
+ 
+-kinit="${kinit} -c $cache --no-afslog"
++kinit="${kinit} -c $cache ${afs_no_afslog}"
+ klist="${klist} -c $cache"
+ kgetcred="${kgetcred} -c $cache"
+-kdestroy="${kdestroy} -c $cache --no-unlog"
++kdestroy="${kdestroy} -c $cache ${afs_no_unlog}"
+ 
+ 
+ KRB5_CONFIG="${objdir}/krb5.conf"
+diff --git a/tests/kdc/check-uu.in b/tests/kdc/check-uu.in
+index 91e1e64..2670956 100644
+--- a/tests/kdc/check-uu.in
++++ b/tests/kdc/check-uu.in
+@@ -54,10 +54,10 @@ kdc="${TESTS_ENVIRONMENT} ../../kdc/kdc --addresses=localhost -P $port"
+ cache1="FILE:${objdir}/cache1.krb5"
+ cache2="FILE:${objdir}/cache2.krb5"
+ 
+-kinit1="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cache1 --no-afslog"
+-kinit2="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cache2 --no-afslog"
+-kdestroy1="${TESTS_ENVIRONMENT} ../../kuser/kdestroy -c $cache1 --no-unlog"
+-kdestroy2="${TESTS_ENVIRONMENT} ../../kuser/kdestroy -c $cache2 --no-unlog"
++kinit1="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cache1 ${afs_no_afslog}"
++kinit2="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cache2 ${afs_no_afslog}"
++kdestroy1="${TESTS_ENVIRONMENT} ../../kuser/kdestroy -c $cache1 ${afs_no_unlog}"
++kdestroy2="${TESTS_ENVIRONMENT} ../../kuser/kdestroy -c $cache2 ${afs_no_unlog}"
+ uu_server="${TESTS_ENVIRONMENT} ../../appl/test/uu_server"
+ uu_client="${TESTS_ENVIRONMENT} ../../appl/test/uu_client"
+ 
+diff --git a/tests/ldap/check-ldap.in b/tests/ldap/check-ldap.in
+index ab61e48..3f706bd 100644
+--- a/tests/ldap/check-ldap.in
++++ b/tests/ldap/check-ldap.in
+@@ -45,7 +45,7 @@ port=@port@
+ server=host/datan.test.h5l.se
+ cache="FILE:${objdir}/cache.krb5"
+ 
+-kinit="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cache --no-afslog"
++kinit="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cache ${afs_no_afslog}"
+ kgetcred="${TESTS_ENVIRONMENT} ../../kuser/kgetcred -c $cache"
+ kadmin="${TESTS_ENVIRONMENT} ../../kadmin/kadmin -l -r $R"
+ kdc="${TESTS_ENVIRONMENT} ../../kdc/kdc --addresses=localhost -P $port"
+diff --git a/tests/plugin/check-pac.in b/tests/plugin/check-pac.in
+index 8c15309..17f7216 100644
+--- a/tests/plugin/check-pac.in
++++ b/tests/plugin/check-pac.in
+@@ -55,10 +55,10 @@ cache="FILE:${objdir}/cache.krb5"
+ keytabfile=${objdir}/server.keytab
+ keytab="FILE:${keytabfile}"
+ 
+-kinit="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cache --no-afslog"
++kinit="${TESTS_ENVIRONMENT} ../../kuser/kinit -c $cache ${afs_no_afslog}"
+ klist="${TESTS_ENVIRONMENT} ../../kuser/klist -c $cache"
+ kgetcred="${TESTS_ENVIRONMENT} ../../kuser/kgetcred -c $cache"
+-kdestroy="${TESTS_ENVIRONMENT} ../../kuser/kdestroy -c $cache --no-unlog"
++kdestroy="${TESTS_ENVIRONMENT} ../../kuser/kdestroy -c $cache ${afs_no_unlog}"
+ test_apreq="${TESTS_ENVIRONMENT} ../../lib/krb5/test_ap-req"
+ 
+ KRB5_CONFIG="${objdir}/krb5.conf"
