@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libvorbis/libvorbis-1.3.1.ebuild,v 1.2 2010/06/22 09:31:29 hwoarang Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libvorbis/libvorbis-1.3.1.ebuild,v 1.3 2010/06/24 19:29:18 phajdan.jr Exp $
 
 EAPI=2
 inherit autotools multilib-native
@@ -11,7 +11,7 @@ SRC_URI="http://downloads.xiph.org/releases/vorbis/${P}.tar.bz2"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
 IUSE="static-libs"
 
 RDEPEND="media-libs/libogg[lib32?]"
