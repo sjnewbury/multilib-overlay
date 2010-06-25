@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/poppler/poppler-0.12.4-r3.ebuild,v 1.9 2010/06/20 18:20:53 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/poppler/poppler-0.12.4-r3.ebuild,v 1.10 2010/06/24 21:40:59 pacho Exp $
 
 EAPI="2"
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://poppler.freedesktop.org/"
 SRC_URI="http://poppler.freedesktop.org/${P}.tar.gz"
 
 LICENSE="GPL-2"
-KEYWORDS="alpha ~amd64 arm ~hppa ia64 ~mips ~ppc ~ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd ~x64-freebsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="alpha amd64 arm ~hppa ia64 ~mips ~ppc ~ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd ~x64-freebsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 SLOT="0"
 IUSE="+abiword cairo cjk debug doc exceptions jpeg jpeg2k +lcms png qt4 +utils +xpdf-headers"
 
