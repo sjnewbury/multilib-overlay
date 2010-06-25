@@ -1,19 +1,19 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-arch/libarchive/libarchive-2.7.1-r1.ebuild,v 1.6 2010/01/14 20:59:50 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-arch/libarchive/libarchive-2.7.1-r1.ebuild,v 1.9 2010/03/24 13:03:26 pacho Exp $
 
 EAPI="2"
 
 inherit eutils libtool toolchain-funcs flag-o-matic multilib-native
 
 DESCRIPTION="BSD tar command"
-HOMEPAGE="http://people.freebsd.org/~kientzle/libarchive"
+HOMEPAGE="http://code.google.com/p/libarchive/"
 SRC_URI="http://${PN}.googlecode.com/files/${P}.tar.gz
 	http://people.freebsd.org/~kientzle/libarchive/src/${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~alpha amd64 arm hppa ~ia64 ~ppc ppc64 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="static static-libs acl xattr kernel_linux +bzip2 +lzma +zlib"
 
 COMPRESS_LIBS_DEPEND="lzma? ( app-arch/xz-utils[lib32?] )
@@ -27,7 +27,7 @@ RDEPEND="!dev-libs/libarchive
 	!static? ( ${COMPRESS_LIBS_DEPEND} )"
 DEPEND="${RDEPEND}
 	${COMPRESS_LIBS_DEPEND}
-	kernel_linux? ( sys-fs/e2fsprogs
+	kernel_linux? ( sys-fs/e2fsprogs[lib32?]
 		virtual/os-headers )"
 
 multilib-native_src_prepare_internal() {

@@ -1,13 +1,13 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-arch/libarchive/libarchive-2.7.902a.ebuild,v 1.1 2010/01/05 15:12:20 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-arch/libarchive/libarchive-2.8.3.ebuild,v 1.2 2010/03/24 13:03:26 pacho Exp $
 
 EAPI="2"
 
 inherit eutils libtool toolchain-funcs flag-o-matic multilib-native
 
 DESCRIPTION="BSD tar command"
-HOMEPAGE="http://people.freebsd.org/~kientzle/libarchive"
+HOMEPAGE="http://code.google.com/p/libarchive/"
 SRC_URI="http://${PN}.googlecode.com/files/${P}.tar.gz
 	http://people.freebsd.org/~kientzle/libarchive/src/${P}.tar.gz"
 
@@ -27,7 +27,7 @@ RDEPEND="!dev-libs/libarchive
 	!static? ( ${COMPRESS_LIBS_DEPEND} )"
 DEPEND="${RDEPEND}
 	${COMPRESS_LIBS_DEPEND}
-	kernel_linux? ( sys-fs/e2fsprogs
+	kernel_linux? ( sys-fs/e2fsprogs[lib32?]
 		virtual/os-headers )"
 
 multilib-native_src_prepare_internal() {

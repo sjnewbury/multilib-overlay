@@ -2,7 +2,7 @@
 
 app-admin/gamin
 # app-arch/bzip2
-# app-arch/libarchive
+app-arch/libarchive
 app-arch/lzma-utils
 app-arch/xz-utils
 app-crypt/gnupg

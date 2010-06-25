@@ -1,22 +1,22 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-arch/libarchive/libarchive-2.7.0-r1.ebuild,v 1.9 2009/08/31 15:41:06 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-arch/libarchive/libarchive-2.8.0.ebuild,v 1.2 2010/03/24 13:03:26 pacho Exp $
 
-EAPI=2
+EAPI="2"
 
 inherit eutils libtool toolchain-funcs flag-o-matic multilib-native
 
 DESCRIPTION="BSD tar command"
-HOMEPAGE="http://people.freebsd.org/~kientzle/libarchive"
+HOMEPAGE="http://code.google.com/p/libarchive/"
 SRC_URI="http://${PN}.googlecode.com/files/${P}.tar.gz
 	http://people.freebsd.org/~kientzle/libarchive/src/${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
-IUSE="static acl xattr kernel_linux +bzip2 +lzma +zlib"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+IUSE="static static-libs acl xattr kernel_linux +bzip2 +lzma +zlib"
 
-COMPRESS_LIBS_DEPEND="lzma? ( app-arch/lzma-utils[lib32?] )
+COMPRESS_LIBS_DEPEND="lzma? ( app-arch/xz-utils[lib32?] )
 		bzip2? ( app-arch/bzip2[lib32?] )
 		zlib? ( sys-libs/zlib[lib32?] )"
 
@@ -31,9 +31,6 @@ DEPEND="${RDEPEND}
 		virtual/os-headers )"
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}"/${P}-fortified-sources.patch
-	epatch "${FILESDIR}"/${P}-pipe.patch
-
 	elibtoolize
 	epunt_cxx
 }
@@ -45,25 +42,39 @@ multilib-native_src_configure_internal() {
 		myconf="--enable-bsdtar=shared --enable-bsdcpio=shared"
 	fi
 
+	# force static libs for static binaries
+	if use static && ! use static-libs; then
+		myconf="${myconf} --enable-static"
+	fi
+
 	# Check for need of this in 2.7.1 and later, on 2.7.0, -Werror was
 	# added to the final release, but since it's done in the
 	# Makefile.am we can just work it around this way.
 	append-flags -Wno-error
 
-	# We disable lzma because we don't have liblzma (not liblzmadec!)
-	# currently.
+	# We disable lzmadec because we support the newer liblzma from xz-utils
+	# and not liblzmadec with this version.
 	econf --bindir=/bin \
 		--enable-bsdtar --enable-bsdcpio \
 		$(use_enable acl) $(use_enable xattr) \
 		$(use_with zlib) \
-		$(use_with bzip2 bz2lib) $(use_with lzma lzmadec) \
-		--without-lzma \
+		$(use_with bzip2 bz2lib) $(use_with lzma) \
+		$(use_enable static-libs static) \
+		--without-lzmadec \
 		${myconf} \
 		--disable-dependency-tracking || die "econf failed."
 }
 
+src_test() {
+	# Replace the default src_test so that it builds tests in parallel
+	emake check || die "tests failed"
+}
+
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed."
+
+	# remove useless .a and .la files (only for non static compilation)
+	use static-libs || find "${D}" \( -name '*.a' -or -name '*.la' \) -delete
 
 	# Create tar symlink for FreeBSD
 	if [[ ${CHOST} == *-freebsd* ]]; then
