@@ -2,8 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-arch/bzip2/bzip2-1.0.5-r1.ebuild,v 1.7 2008/09/22 04:02:26 jer Exp $
 
-EAPI="2"
-
 inherit eutils multilib toolchain-funcs flag-o-matic multilib-native
 
 DESCRIPTION="A high-quality data compressor used extensively by Gentoo Linux"
@@ -17,7 +15,8 @@ IUSE="static"
 
 DEPEND=""
 
-multilib-native_src_prepare_internal() {
+multilib-native_src_unpack_internal() {
+	unpack ${A}
 	cd "${S}"
 	epatch "${FILESDIR}"/${PN}-1.0.4-makefile-CFLAGS.patch
 	epatch "${FILESDIR}"/${PN}-1.0.4-saneso.patch

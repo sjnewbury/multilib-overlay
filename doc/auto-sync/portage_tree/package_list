@@ -1,7 +1,7 @@
 #list of packages for the auot-sync script
 
 app-admin/gamin
-# app-arch/bzip2
+app-arch/bzip2
 app-arch/libarchive
 app-arch/lzma-utils
 app-arch/xz-utils
