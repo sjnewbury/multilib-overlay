@@ -1,8 +1,9 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-dns/avahi/avahi-0.6.25-r1.ebuild,v 1.2 2010/05/19 19:14:47 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-dns/avahi/avahi-0.6.25-r1.ebuild,v 1.4 2010/06/25 09:26:11 angelos Exp $
 
 EAPI="3"
+
 PYTHON_DEPEND="python? 2"
 PYTHON_USE_WITH="gdbm"
 PYTHON_USE_WITH_OPT="python"
@@ -15,7 +16,7 @@ SRC_URI="http://avahi.org/download/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="bookmarks howl-compat mdnsresponder-compat gdbm dbus doc mono gtk python qt4 autoipd kernel_linux test ipv6"
 
 RDEPEND=">=dev-libs/libdaemon-0.11-r1[lib32?]
@@ -92,6 +93,9 @@ multilib-native_src_prepare_internal() {
 	use ipv6 && sed -i -e s/use-ipv6=no/use-ipv6=yes/ avahi-daemon/avahi-daemon.conf
 
 	sed -i -e "s:\\.\\./\\.\\./\\.\\./doc/avahi-docs/html/:../../../doc/${PF}/html/:" doxygen_to_devhelp.xsl
+
+	# Fix intltoolize broken file, see GNOME upstream  #577133
+	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
 
 	rm -f common/libtool.m4 common/lt*.m4 || die "Removing libtool macros failed"
 
