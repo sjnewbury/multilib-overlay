@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/mozilla-firefox/mozilla-firefox-3.6.4.ebuild,v 1.4 2010/06/24 00:49:28 angelos Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/mozilla-firefox/mozilla-firefox-3.6.4.ebuild,v 1.5 2010/06/25 17:52:52 armin76 Exp $
 EAPI="2"
 WANT_AUTOCONF="2.1"
 
@@ -22,7 +22,7 @@ PATCH="${PN}-3.6-patches-0.6"
 DESCRIPTION="Firefox Web Browser"
 HOMEPAGE="http://www.mozilla.com/firefox"
 
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc x86"
+KEYWORDS="alpha amd64 arm ~hppa ia64 ~ppc ~ppc64 sparc x86"
 SLOT="0"
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 IUSE="+alsa bindist +ipc java libnotify system-sqlite wifi"
