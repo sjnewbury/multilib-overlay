@@ -1,12 +1,12 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/gnutls/gnutls-2.9.11.ebuild,v 1.1 2010/06/07 17:53:05 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/gnutls/gnutls-2.10.0.ebuild,v 1.3 2010/06/27 11:06:06 fauli Exp $
 
 EAPI="3"
 
 inherit autotools libtool multilib-native
 
-DESCRIPTION="A TLS 1.0 and SSL 3.0 implementation for the GNU project"
+DESCRIPTION="A TLS 1.2 and SSL 3.0 implementation for the GNU project"
 HOMEPAGE="http://www.gnutls.org/"
 
 if [[ "${PV}" == *pre* ]]; then
@@ -26,7 +26,7 @@ fi
 # GPL-3 for the gnutls-extras library and LGPL for the gnutls library.
 LICENSE="LGPL-2.1 GPL-3"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="bindist +cxx doc examples guile lzo nls zlib"
 
 RDEPEND="dev-libs/libgpg-error[lib32?]
@@ -93,4 +93,6 @@ multilib-native_src_install_internal() {
 		docinto examples
 		dodoc doc/examples/*.c
 	fi
+
+	prep_ml_binaries /usr/bin/libgnutls-config /usr/bin/libgnutls-extra-config
 }
