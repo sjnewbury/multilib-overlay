@@ -2,7 +2,10 @@ NO_AUTO_FLAG="dev-util/boost-build net-libs/nativebiginteger dev-python/PyQt4"
 
 # following packages added to MULTILIB_BINARIES because of none-default -config binaries:
 # dev-libs/libIDL, net-libs/courier-authlib
-MULTILIB_BINARIES="dev-lang/perl dev-lang/python dev-libs/libIDL net-libs/courier-authlib x11-libs/qt-core x11-libs/qt-gui"
+# following packages added to MULTILIB_BINARIES because their 32-bit binaries are used in pkg_postinst:
+# media-libs/fontconfig x11-libs/pango x11-libs/gtk+
+MULTILIB_BINARIES="dev-lang/perl dev-lang/python dev-libs/libIDL net-libs/courier-authlib x11-libs/qt-core x11-libs/qt-gui \
+	media-libs/fontconfig x11-libs/pango x11-libs/gtk+"
 USE="${USE} multilib"
 
 # set a default for $PKG_CONFIG to avoid a collision with crossdev-wrappers
