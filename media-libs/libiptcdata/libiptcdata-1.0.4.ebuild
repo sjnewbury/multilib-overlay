@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libiptcdata/libiptcdata-1.0.4.ebuild,v 1.5 2010/05/25 16:37:05 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libiptcdata/libiptcdata-1.0.4.ebuild,v 1.7 2010/06/28 07:12:28 angelos Exp $
 
 EAPI="3"
 SUPPORT_PYTHON_ABIS="1"
@@ -15,7 +15,7 @@ SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="~alpha amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 IUSE="doc examples nls python"
 
 RDEPEND="python? ( dev-lang/python[lib32?] )
@@ -52,17 +52,6 @@ multilib-native_src_compile_internal() {
 				pyexecdir=$(python_get_sitedir)
 		}
 		python_execute_function -s --source-dir python building
-	fi
-}
-
-src_test() {
-	default
-
-	if use python; then
-		testing() {
-			emake test
-		}
-		python_execute_function -s --source-dir python testing
 	fi
 }
 
