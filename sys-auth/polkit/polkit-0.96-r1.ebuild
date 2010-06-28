@@ -74,7 +74,7 @@ multilib-native_src_configure_internal() {
 		--libexecdir='${exec_prefix}/libexec/polkit-1' \
 		$(use_enable debug verbose-mode) \
 		$(use_enable doc gtk-doc) \
-		$(use_enable nls)
+		$(use_enable nls) \
 		$(use_enable introspection)
 }
 

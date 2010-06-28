@@ -1,5 +1,5 @@
---- /usr/portage/sys-auth/polkit/polkit-0.96-r1.ebuild	2010-04-13 17:36:54.000000000 +0200
-+++ ./sys-auth/polkit/polkit-0.96-r1.ebuild	2010-04-13 23:14:18.000000000 +0200
+--- /usr/portage/sys-auth/polkit/polkit-0.96-r1.ebuild	2010-06-04 22:06:48.000000000 +0200
++++ ./sys-auth/polkit/polkit-0.96-r1.ebuild	2010-06-29 01:11:52.000000000 +0200
 @@ -14,15 +14,13 @@
  LICENSE="GPL-2"
  SLOT="0"
@@ -27,11 +27,13 @@
  		--disable-ansi \
  		--disable-examples \
  		--enable-fast-install \
-@@ -78,7 +75,7 @@
+@@ -77,8 +74,8 @@
+ 		--libexecdir='${exec_prefix}/libexec/polkit-1' \
  		$(use_enable debug verbose-mode) \
  		$(use_enable doc gtk-doc) \
- 		$(use_enable nls)
+-		$(use_enable nls)
 -		#$(use_enable introspection)
++		$(use_enable nls) \
 +		$(use_enable introspection)
  }
  
