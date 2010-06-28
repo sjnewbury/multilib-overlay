@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/vala/vala-0.8.1.ebuild,v 1.1 2010/05/14 20:35:25 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/vala/vala-0.8.1.ebuild,v 1.2 2010/06/28 05:32:58 nirbheek Exp $
 
 EAPI=2
 GCONF_DEBUG=no
@@ -12,7 +12,7 @@ HOMEPAGE="http://live.gnome.org/Vala"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~sparc ~x86"
-IUSE="test +vapigen +coverage"
+IUSE="test +vapigen coverage"
 
 RDEPEND=">=dev-libs/glib-2.14[lib32?]"
 DEPEND="${RDEPEND}
@@ -27,4 +27,12 @@ multilib-native_pkg_setup_internal() {
 		$(use_enable vapigen)
 		$(use_enable coverage)"
 	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
+
+	if use coverage && has ccache ${FEATURES}; then
+		ewarn "USE=coverage does not work well with ccache; valac and libvala"
+		ewarn "built with ccache and USE=coverage create temporary files inside"
+		ewarn "CCACHE_DIR and mess with ccache's working, as well as causing"
+		ewarn "sandbox violations when used to compile other packages."
+		ewarn "It is STRONGLY recommended that you disable one of them."
+	fi
 }
