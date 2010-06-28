@@ -621,13 +621,17 @@ _check_build_dir() {
 prep_ml_binaries() {
 	if [[ -n $EMULTILIB_PKG ]] ; then
 		for binary in "$@"; do
-			mv ${D}/${binary} ${D}/${binary}-${ABI} || \
-				die "${D}/${binary} not found!"
-			echo mv ${D}/${binary} ${D}/${binary}-${ABI}
-			if is_final_abi; then
-				ln -s /usr/bin/abi-wrapper ${D}/${binary} || \
-					die "could link abi-wrapper to ${D}/${binary}!"
-				echo ln -s /usr/bin/abi-wrapper ${D}/${binary}
+			if [[ -a ${D}/${binary} ]]; then
+				mv ${D}/${binary} ${D}/${binary}-${ABI} || \
+					die "${D}/${binary} not found!"
+				einfo "mv ${D}/${binary} ${D}/${binary}-${ABI}"
+				if is_final_abi; then
+					ln -s /usr/bin/abi-wrapper ${D}/${binary} || \
+						die "could link abi-wrapper to ${D}/${binary}!"
+					einfo "ln -s /usr/bin/abi-wrapper ${D}/${binary}"
+				fi
+			else
+				ewarn "${D}/${binary} does not exist, please inform the people in #gentoo-multilib-overlay on freenode"
 			fi
 		done
 	fi		
