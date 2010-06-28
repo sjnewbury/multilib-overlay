@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/xine-lib/xine-lib-1.1.18.1.ebuild,v 1.5 2010/05/24 18:54:15 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/xine-lib/xine-lib-1.1.18.1.ebuild,v 1.6 2010/06/28 13:40:48 ssuominen Exp $
 
 EAPI=3
 inherit eutils flag-o-matic toolchain-funcs multilib multilib-native
@@ -53,7 +53,8 @@ RDEPEND="X? ( x11-libs/libXext[lib32?]
 	libcaca? ( >=media-libs/libcaca-0.99_beta14[lib32?] )
 	samba? ( net-fs/samba[lib32?] )
 	mng? ( media-libs/libmng[lib32?] )
-	vcd? ( media-video/vcdimager[lib32?] )
+	vcd? ( media-video/vcdimager[lib32?]
+		dev-libs/libcdio[-minimal,lib32?] )
 	a52? ( >=media-libs/a52dec-0.7.4-r5[lib32?] )
 	mad? ( media-libs/libmad[lib32?] )
 	imagemagick? ( media-gfx/imagemagick[lib32?] )
