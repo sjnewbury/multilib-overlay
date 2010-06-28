@@ -1,10 +1,11 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pygtk/pygtk-2.16.0-r1.ebuild,v 1.9 2010/05/22 20:13:01 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pygtk/pygtk-2.16.0-r1.ebuild,v 1.10 2010/06/27 23:48:22 arfrever Exp $
 
 EAPI="2"
-PYTHON_DEPEND="2"
+PYTHON_DEPEND="2:2.6"
 SUPPORT_PYTHON_ABIS="1"
+RESTRICT_PYTHON_ABIS="2.4 2.5 3.*"
 PYTHON_EXPORT_PHASE_FUNCTIONS="1"
 
 inherit alternatives autotools eutils flag-o-matic gnome.org python virtualx multilib-native
@@ -31,7 +32,6 @@ DEPEND="${RDEPEND}
 		dev-libs/libxslt[lib32?]
 		>=app-text/docbook-xsl-stylesheets-1.70.1 )
 	>=dev-util/pkgconfig-0.9[lib32?]"
-RESTRICT_PYTHON_ABIS="3.*"
 
 multilib-native_src_prepare_internal() {
 	# Fix declaration of codegen in .pc
@@ -58,11 +58,6 @@ src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
 
 	testing() {
-		if has ${PYTHON_ABI} 2.4 2.5; then
-			einfo "Skipping tests with Python ${PYTHON_ABI}. dev-python/pycairo supports only Python >=2.6."
-			return 0
-		fi
-
 		cd tests
 		Xemake check-local
 	}
