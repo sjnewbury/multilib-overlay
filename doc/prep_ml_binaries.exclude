@@ -6,6 +6,7 @@ libtasn1-2.*
 #removed since gnutls 2.8
 gnutls-2.8.*
 gnutls-2.9.*
+gnutls-2.10.*
 
 #gone since 1.0
 libusb-1*
