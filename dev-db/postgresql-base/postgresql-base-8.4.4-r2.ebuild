@@ -138,6 +138,8 @@ __EOF__
 	doenvd "${T}/50postgresql-94-${SLOT}"
 
 	keepdir /etc/postgresql-${SLOT}
+
+	prep_ml_binaries /usr/bin/pg_config
 }
 
 multilib-native_pkg_postinst_internal() {
