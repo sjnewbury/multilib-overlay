@@ -50,4 +50,4 @@ media-libs/libwmf prep_ml_binaries /usr/bin/libwmf-config
 media-libs/gd prep_ml_binaries /usr/bin/gdlib-config
 dev-util/automoc prep_ml_binaries /usr/bin/automoc4
 dev-lang/ruby prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
-
+dev-db/postgresql-base prep_ml_binaries /usr/bin/pg_config
