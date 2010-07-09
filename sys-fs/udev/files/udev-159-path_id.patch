@@ -1,0 +1,19 @@
+commit 847b4f84c671e98f29f22d8e3e0d70a231d71a7b
+Author: Harald Hoyer <harald@redhat.com>
+Date:   Wed Jul 7 10:57:09 2010 +0200
+
+    60-persistent-storage-tape: s/path_id.sh/path_id/
+
+diff --git a/rules/rules.d/60-persistent-storage-tape.rules b/rules/rules.d/60-persistent-storage-tape.rules
+index 338da5f..d9df35a 100644
+--- a/rules/rules.d/60-persistent-storage-tape.rules
++++ b/rules/rules.d/60-persistent-storage-tape.rules
+@@ -17,7 +17,7 @@ KERNEL=="st*[0-9]",  ENV{ID_SERIAL}=="?*", SYMLINK+="tape/by-id/$env{ID_BUS}-$en
+ KERNEL=="nst*[0-9]", ENV{ID_SERIAL}=="?*", SYMLINK+="tape/by-id/$env{ID_BUS}-$env{ID_SERIAL}-nst"
+ 
+ # by-path (parent device path)
+-KERNEL=="st*[0-9]|nst*[0-9]", IMPORT{program}="path_id.sh %p"
++KERNEL=="st*[0-9]|nst*[0-9]", IMPORT{program}="path_id %p"
+ KERNEL=="st*[0-9]", ENV{ID_PATH}=="?*", SYMLINK+="tape/by-path/$env{ID_PATH}"
+ KERNEL=="nst*[0-9]", ENV{ID_PATH}=="?*", SYMLINK+="tape/by-path/$env{ID_PATH}"
+ 
