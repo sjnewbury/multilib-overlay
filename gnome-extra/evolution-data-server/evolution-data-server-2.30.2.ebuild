@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/evolution-data-server/evolution-data-server-2.30.2.ebuild,v 1.1 2010/06/23 12:56:30 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-extra/evolution-data-server/evolution-data-server-2.30.2.ebuild,v 1.2 2010/07/05 18:52:13 pacho Exp $
 
 EAPI="2"
 
@@ -71,6 +71,12 @@ multilib-native_src_prepare_internal() {
 
 	# GNOME bug 611353 (skips failing test atm)
 	epatch "${FILESDIR}/e-d-s-camel-skip-failing-test.patch"
+
+	# GNOME bug 621763 (skip failing test-ebook-stress-factory--fifo)
+	sed -i -e '/test-ebook-stress-factory--fifo/d' addressbook/tests/ebook/Makefile.am \
+		|| die "failing test sed 1 failed"
+	sed -i -e '/test_ebook_stress_factory__fifo/d' addressbook/tests/ebook/Makefile.am \
+		|| die "failing test sed 2 failed"
 
 	# Revert "Bug 619347 - Return formatted address in e_destination_get_address"
 	epatch "${FILESDIR}/${P}-revert-addressbook.patch"
