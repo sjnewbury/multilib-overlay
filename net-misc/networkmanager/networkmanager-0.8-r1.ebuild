@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8-r1.ebuild,v 1.3 2010/06/04 10:44:43 dagger Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8-r1.ebuild,v 1.4 2010/07/07 17:57:32 nirbheek Exp $
 
 EAPI="2"
 
@@ -119,7 +119,7 @@ multilib-native_src_install_internal() {
 }
 
 multilib-native_pkg_postinst_internal() {
-	elog "You will need to restart DBUS if this is your first time"
-	elog "installing NetworkManager."
+	elog "You will need to reload DBus if this is your first time installing"
+	elog "NetworkManager, or if you're upgrading from 0.7 or older."
 	elog ""
 }
