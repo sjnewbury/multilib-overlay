@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. /etc/init.d/functions.sh
+. "@GENTOO_PORTAGE_EPREFIX@/etc/init.d/functions.sh"
 
 if ! type -p qfile >/dev/null; then
 	einfo "Please install app-portage/portage-utils."
