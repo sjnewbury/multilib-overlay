@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/gimp/gimp-2.6.9.ebuild,v 1.1 2010/06/24 10:45:22 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/gimp/gimp-2.6.10.ebuild,v 1.1 2010/07/09 15:21:01 scarabeus Exp $
 
 EAPI=2
 PYTHON_DEPEND="python? 2:2.5"
