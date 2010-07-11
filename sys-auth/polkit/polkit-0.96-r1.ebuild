@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-auth/polkit/polkit-0.96-r1.ebuild,v 1.6 2010/06/04 19:50:44 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-auth/polkit/polkit-0.96-r1.ebuild,v 1.7 2010/07/07 21:20:06 nirbheek Exp $
 
 EAPI="2"
 
@@ -93,4 +93,32 @@ multilib-native_src_install_internal() {
 	diropts -m0700 -o root -g polkituser
 	keepdir /var/run/polkit-1
 	keepdir /var/lib/polkit-1
+}
+
+multilib-native_pkg_postinst_internal() {
+	# Make sure that the user has consolekit sessions working so that the
+	# 'allow_active' directive in polkit action policies works
+	if has_version 'gnome-base/gdm' && ! has_version 'gnome-base/gdm[consolekit]'; then
+		# If user has GDM installed, but USE=-consolekit, warn them
+		ewarn "You have GDM installed, but it does not have USE=consolekit"
+		ewarn "If you login using GDM, polkit authorizations will not work"
+		ewarn "unless you enable USE=consolekit"
+		einfo
+	fi
+	if has_version 'kde-base/kdm' && ! has_version 'kde-base/kdm[consolekit]'; then
+		# If user has KDM installed, but USE=-consolekit, warn them
+		ewarn "You have KDM installed, but it does not have USE=consolekit"
+		ewarn "If you login using KDM, polkit authorizations will not work"
+		ewarn "unless you enable USE=consolekit"
+		einfo
+	fi
+	if ! has_version 'gnome-base/gdm[consolekit]' && \
+		! has_version 'kde-base/kdm[consolekit]'; then
+		# Inform user about the alternative method
+		ewarn "If you don't use GDM or KDM for logging in,"
+		ewarn "you must start your desktop environment (DE) as follows:"
+		ewarn "	ck-launch-session \$STARTGUI"
+		ewarn "Where \$STARTGUI is a DE-starting command such as 'gnome-session'."
+		ewarn "You should add this to your ~/.xinitrc if you use startx."
+	fi
 }
