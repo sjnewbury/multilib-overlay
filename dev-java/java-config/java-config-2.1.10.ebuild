@@ -1,9 +1,9 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-java/java-config/java-config-2.1.10.ebuild,v 1.8 2010/02/26 19:26:02 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-java/java-config/java-config-2.1.10.ebuild,v 1.9 2010/07/10 20:21:05 arfrever Exp $
 
 EAPI="2"
-NEED_PYTHON="2.4"
+PYTHON_DEPEND="2"
 SUPPORT_PYTHON_ABIS="1"
 
 inherit fdo-mime gnome2-utils distutils eutils multilib-native
