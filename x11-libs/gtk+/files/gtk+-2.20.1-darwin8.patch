@@ -1,0 +1,96 @@
+From 7f2e4c38a9bd9ed30db937d9fc8b51cb87324c23 Mon Sep 17 00:00:00 2001
+From: Kristian Rietveld <kris@gtk.org>
+Date: Sun, 27 Jun 2010 08:32:12 +0000
+Subject: Move Leopard-specific type definitions to gdkquartz.h
+
+Update includes subsequently where it matters.  Fixes build on Mac OS
+X 10.4.
+
+(cherry picked from commit e634f3fbe0498afc560530d9b92eb4709d7c7f97)
+---
+diff --git a/gdk/quartz/GdkQuartzView.c b/gdk/quartz/GdkQuartzView.c
+index 02018ff..2c897fb 100644
+--- a/gdk/quartz/GdkQuartzView.c
++++ b/gdk/quartz/GdkQuartzView.c
+@@ -23,6 +23,7 @@
+ #include "gdkregion-generic.h"
+ #include "gdkwindow-quartz.h"
+ #include "gdkprivate-quartz.h"
++#include "gdkquartz.h"
+ 
+ @implementation GdkQuartzView
+ 
+diff --git a/gdk/quartz/gdkprivate-quartz.h b/gdk/quartz/gdkprivate-quartz.h
+index 8e9708f..11d57bf 100644
+--- a/gdk/quartz/gdkprivate-quartz.h
++++ b/gdk/quartz/gdkprivate-quartz.h
+@@ -27,6 +27,7 @@
+ #include <gdk/gdkprivate.h>
+ #include <gdk/quartz/gdkpixmap-quartz.h>
+ #include <gdk/quartz/gdkwindow-quartz.h>
++#include <gdk/quartz/gdkquartz.h>
+ 
+ #include <gdk/gdk.h>
+ 
+diff --git a/gdk/quartz/gdkquartz.h b/gdk/quartz/gdkquartz.h
+index d7177fe..48c4748 100644
+--- a/gdk/quartz/gdkquartz.h
++++ b/gdk/quartz/gdkquartz.h
+@@ -26,6 +26,19 @@
+ 
+ G_BEGIN_DECLS
+ 
++/* NSInteger only exists in Leopard and newer.  This check has to be
++ * done after inclusion of the system headers.  If NSInteger has not
++ * been defined, we know for sure that we are on 32-bit.
++ */
++#ifndef NSINTEGER_DEFINED
++typedef int NSInteger;
++typedef unsigned int NSUInteger;
++#endif
++
++#ifndef CGFLOAT_DEFINED
++typedef float CGFloat;
++#endif
++
+ NSWindow *gdk_quartz_window_get_nswindow                        (GdkWindow      *window);
+ NSView   *gdk_quartz_window_get_nsview                          (GdkWindow      *window);
+ NSImage  *gdk_quartz_pixbuf_to_ns_image_libgtk_only             (GdkPixbuf      *pixbuf);
+diff --git a/gdk/quartz/gdkwindow-quartz.h b/gdk/quartz/gdkwindow-quartz.h
+index cbb0fe1..4a0e27a 100644
+--- a/gdk/quartz/gdkwindow-quartz.h
++++ b/gdk/quartz/gdkwindow-quartz.h
+@@ -25,19 +25,6 @@
+ #import <gdk/quartz/GdkQuartzView.h>
+ #import <gdk/quartz/GdkQuartzWindow.h>
+ 
+-/* NSInteger only exists in Leopard and newer.  This check has to be
+- * done after inclusion of the system headers.  If NSInteger has not
+- * been defined, we know for sure that we are on 32-bit.
+- */
+-#ifndef NSINTEGER_DEFINED
+-typedef int NSInteger;
+-typedef unsigned int NSUInteger;
+-#endif
+-
+-#ifndef CGFLOAT_DEFINED
+-typedef float CGFloat;
+-#endif
+-
+ G_BEGIN_DECLS
+ 
+ /* Window implementation for Quartz
+diff --git a/gtk/gtkquartz.c b/gtk/gtkquartz.c
+index dcc8ee0..265d9ff 100644
+--- a/gtk/gtkquartz.c
++++ b/gtk/gtkquartz.c
+@@ -21,6 +21,7 @@
+ #include "config.h"
+ 
+ #include "gtkquartz.h"
++#include <gdk/quartz/gdkquartz.h>
+ #include "gtkalias.h"
+ 
+ NSImage *
+--
+cgit v0.8.3.1
