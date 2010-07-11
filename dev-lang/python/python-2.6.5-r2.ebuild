@@ -1,13 +1,12 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.5-r2.ebuild,v 1.12 2010/06/22 13:09:38 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.5-r2.ebuild,v 1.14 2010/07/10 13:06:28 arfrever Exp $
 
 EAPI="2"
 
 inherit autotools eutils flag-o-matic multilib pax-utils python toolchain-funcs multilib-native
 
 MY_P="Python-${PV}"
-S="${WORKDIR}/${MY_P}"
 
 PATCHSET_REVISION="4"
 
@@ -38,7 +37,6 @@ RDEPEND=">=app-admin/eselect-python-20091230
 				sys-libs/db:4.3[lib32?]
 				sys-libs/db:4.2[lib32?]
 			) )
-			doc? ( dev-python/python-docs:${SLOT} )
 			gdbm? ( sys-libs/gdbm[lib32?] )
 			ncurses? (
 				>=sys-libs/ncurses-5.2[lib32?]
@@ -49,6 +47,7 @@ RDEPEND=">=app-admin/eselect-python-20091230
 			tk? ( >=dev-lang/tk-8.0[lib32?] )
 			xml? ( >=dev-libs/expat-2[lib32?] )
 		)
+		doc? ( dev-python/python-docs:${SLOT} )
 		app-arch/bzip2[lib32?]"
 DEPEND="${RDEPEND}
 		dev-util/pkgconfig[lib32?]
@@ -57,6 +56,8 @@ RDEPEND+=" !build? ( app-misc/mime-types )"
 PDEPEND="app-admin/python-updater"
 
 PROVIDE="virtual/python"
+
+S="${WORKDIR}/${MY_P}"
 
 multilib-native_pkg_setup_internal() {
 	python_pkg_setup
@@ -194,8 +195,7 @@ src_test() {
 	# Otherwise test_import fails.
 	python_enable_pyc
 
-	# Skip all tests that fail during emerge but pass without emerge:
-	# (See bug #67970)
+	# Skip failing tests.
 	local skip_tests="distutils httpservers minidom pyexpat sax tcl"
 
 	# test_ctypes fails with PAX kernel (bug #234498).
@@ -274,7 +274,7 @@ multilib-native_src_install_internal() {
 }
 
 multilib-native_pkg_preinst_internal() {
-	if has_version "<${CATEGORY}/${PN}-${SLOT}" && ! has_version ">=${CATEGORY}/${PN}-${SLOT}_alpha"; then
+	if has_version "<${CATEGORY}/${PN}-${SLOT}" && ! has_version "${CATEGORY}/${PN}:2.6" && ! has_version "${CATEGORY}/${PN}:2.7"; then
 		python_updater_warning="1"
 	fi
 }
