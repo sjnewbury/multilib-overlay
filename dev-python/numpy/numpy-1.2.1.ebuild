@@ -1,10 +1,10 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.2.1.ebuild,v 1.15 2009/08/09 16:45:48 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.2.1.ebuild,v 1.16 2010/06/30 01:59:25 arfrever Exp $
 
 EAPI="2"
 
-NEED_PYTHON=2.4
+PYTHON_DEPEND="2"
 
 inherit distutils eutils flag-o-matic fortran multilib-native
 

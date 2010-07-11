@@ -1,9 +1,11 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.4.1.ebuild,v 1.1 2010/04/22 19:26:48 bicatali Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.4.1.ebuild,v 1.5 2010/07/10 14:42:36 fauli Exp $
 
-EAPI="2"
+EAPI="3"
+PYTHON_DEPEND="2"
 SUPPORT_PYTHON_ABIS="1"
+RESTRICT_PYTHON_ABIS="3.*"
 
 inherit distutils eutils flag-o-matic toolchain-funcs versionator multilib-native
 
@@ -20,7 +22,7 @@ SRC_URI="mirror://sourceforge/numpy/${P}.tar.gz
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 -ppc -ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha amd64 ~arm hppa ~ia64 -ppc -ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x64-solaris ~x86-solaris"
 IUSE="doc lapack test"
 
 RDEPEND="dev-python/setuptools
@@ -29,7 +31,6 @@ DEPEND="${RDEPEND}
 	lapack? ( dev-util/pkgconfig[lib32?] )
 	test? ( >=dev-python/nose-0.10 )
 	doc? ( app-arch/unzip )"
-RESTRICT_PYTHON_ABIS="3.*"
 
 multilib-native_pkg_setup_internal() {
 	# See progress in http://projects.scipy.org/scipy/numpy/ticket/573
