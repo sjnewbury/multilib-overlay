@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-devel/gettext/gettext-0.18.1.ebuild,v 1.1 2010/06/05 01:55:49 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-devel/gettext/gettext-0.18.1.ebuild,v 1.2 2010/07/01 15:57:50 flameeyes Exp $
 
 EAPI="2"
 
@@ -39,12 +39,16 @@ multilib-native_src_configure_internal() {
 	# --without-emacs: Emacs support is now in a separate package
 	# --with-included-glib: glib depends on us so avoid circular deps
 	# --with-included-libcroco: libcroco depends on glib which ... ^^^
+	#
+	# --with-included-libunistring will _disable_ libunistring (since
+	# --it's not bundled), see bug #326477
 	econf \
 		--docdir="/usr/share/doc/${PF}" \
 		--without-emacs \
 		--disable-java \
 		--with-included-glib \
 		--with-included-libcroco \
+		--with-included-libunistring \
 		$(use_enable acl) \
 		$(use_enable openmp)
 }
