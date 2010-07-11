@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.4.1-r1.ebuild,v 1.3 2010/06/27 08:00:30 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.4.1-r1.ebuild,v 1.5 2010/07/05 14:13:25 ssuominen Exp $
 
 EAPI="2"
 
@@ -12,16 +12,16 @@ SRC_URI="mirror://kde/stable/phonon/${PV}/${P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc x86 ~x86-fbsd ~x64-freebsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-macos ~x86-solaris"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ppc64 ~sparc x86 ~x86-fbsd ~x64-freebsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-macos ~x86-solaris"
 IUSE="alsa aqua debug gstreamer pulseaudio +xcb +xine"
 
 RDEPEND="
 	!kde-base/phonon-xine
 	!x11-libs/qt-phonon:4
-	>=x11-libs/qt-test-4.4.0:4[aqua=,lib32?]
-	>=x11-libs/qt-dbus-4.4.0:4[aqua=,lib32?]
-	>=x11-libs/qt-gui-4.4.0:4[aqua=,lib32?]
-	>=x11-libs/qt-opengl-4.4.0:4[aqua=,lib32?]
+	>=x11-libs/qt-test-4.6.0:4[aqua=,lib32?]
+	>=x11-libs/qt-dbus-4.6.0:4[aqua=,lib32?]
+	>=x11-libs/qt-gui-4.6.0:4[aqua=,lib32?]
+	>=x11-libs/qt-opengl-4.6.0:4[aqua=,lib32?]
 	gstreamer? (
 		media-libs/gstreamer[lib32?]
 		media-plugins/gst-plugins-meta[alsa?]
