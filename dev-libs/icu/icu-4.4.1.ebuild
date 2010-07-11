@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/icu/icu-4.4.1.ebuild,v 1.7 2010/06/26 12:36:11 nixnut Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/icu/icu-4.4.1.ebuild,v 1.8 2010/07/02 22:45:03 arfrever Exp $
 
 EAPI="3"
 
@@ -51,6 +51,7 @@ multilib-native_src_prepare_internal() {
 	done
 
 	epatch "${FILESDIR}/${P}-pkgdata.patch"
+	epatch "${FILESDIR}/${P}-et_EE.patch"
 }
 
 multilib-native_src_configure_internal() {
