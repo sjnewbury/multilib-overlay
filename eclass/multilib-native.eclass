@@ -477,9 +477,11 @@ multilib-native_check_inherited_funcs() {
 	if [[ -f "${T}"/eclass-debug.log ]]; then
 		EMULTILIB_INHERITED="$(grep ${1} "${T}"/eclass-debug.log | cut -d ' ' -f 4 | cut -d '_' -f 1)"
 	else
-		ewarn "You are using a package manager that does not provide "${T}"/eclass-debug.log."
-		ewarn "Join #gentoo-multilib-overlay on freenode to help finding another way for you."
-		ewarn "Falling back to old behaviour ..."
+		if [[ "$1" != pkg_postrm ]]; then 
+			ewarn "You are using a package manager that does not provide "${T}"/eclass-debug.log."
+			ewarn "Join #gentoo-multilib-overlay on freenode to help finding another way for you."
+			ewarn "Falling back to old behaviour ..."
+		fi
 		EMULTILIB_INHERITED="${INHERITED}"
 	fi
 
