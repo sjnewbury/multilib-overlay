@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-gui/qt-gui-4.5.3-r2.ebuild,v 1.7 2009/11/10 22:38:04 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-gui/qt-gui-4.5.3-r2.ebuild,v 1.9 2010/07/04 11:53:15 ssuominen Exp $
 
 EAPI="2"
 inherit eutils qt4-build multilib-native
@@ -90,6 +90,9 @@ multilib-native_src_prepare_internal() {
 	# fixing hardcoded fonts, bug #252312
 	EPATCH_OPTS="--ignore-whitespace"
 	epatch "${FILESDIR}"/hardcoded_fonts.patch
+
+	has_version ">=media-libs/libpng-1.4" && epatch \
+		"${FILESDIR}"/qt-${PV}-libpng14.patch
 }
 
 multilib-native_src_configure_internal() {
