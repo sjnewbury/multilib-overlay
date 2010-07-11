@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/ruby/ruby-1.9.1_p376.ebuild,v 1.5 2010/05/19 19:42:23 a3li Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/ruby/ruby-1.9.1_p429.ebuild,v 1.1 2010/07/04 15:45:01 flameeyes Exp $
 
 EAPI=2
 
@@ -44,7 +44,7 @@ PROVIDE="virtual/ruby"
 
 multilib-native_src_prepare_internal() {
 	EPATCH_FORCE="yes" EPATCH_SUFFIX="patch" \
-	epatch "${WORKDIR}/patches-${PVR}"
+		epatch "${WORKDIR}/patches"
 
 	einfo "Removing rake and rubygems..."
 	# Strip rake and rubygems
