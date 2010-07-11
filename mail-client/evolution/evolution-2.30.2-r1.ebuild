@@ -1,11 +1,11 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.30.2.ebuild,v 1.1 2010/06/23 14:05:13 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.30.2-r1.ebuild,v 1.1 2010/07/05 21:38:09 pacho Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
 
-inherit autotools gnome2 flag-o-matic python multilib-native
+inherit autotools gnome2 flag-o-matic python versionator multilib-native
 
 DESCRIPTION="Integrated mail, addressbook and calendaring functionality"
 HOMEPAGE="http://www.gnome.org/projects/evolution/"
@@ -13,6 +13,9 @@ HOMEPAGE="http://www.gnome.org/projects/evolution/"
 LICENSE="GPL-2 LGPL-2 OPENLDAP"
 SLOT="2.0"
 KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+
+SRC_URI="${SRC_URI}
+	mirror://gentoo/${P}-patches.tar.bz2"
 
 IUSE="crypt kerberos ldap networkmanager pda profile python ssl
 gstreamer +sound"
@@ -24,7 +27,7 @@ gstreamer +sound"
 # password from inside evolution, bug 160302
 RDEPEND=">=dev-libs/glib-2.22[lib32?]
 	>=x11-libs/gtk+-2.18[lib32?]
-	>=gnome-extra/evolution-data-server-2.30.1[lib32?]
+	>=gnome-extra/evolution-data-server-$(get_version_component_range 1-2)
 	>=gnome-base/gnome-desktop-2.26.0[lib32?]
 	>=gnome-extra/gtkhtml-3.29.6[lib32?]
 	>=gnome-base/gconf-2[lib32?]
@@ -110,14 +113,8 @@ multilib-native_src_prepare_internal() {
 	# Do not require unstable libunique
 	epatch "${FILESDIR}/${PN}-2.30.1.2-configure.patch"
 
-	# bgo#619347: Contact List Editor calls wrong EDestination function
-	epatch "${FILESDIR}/${P}-call-function.patch"
-
-	# bgo#622329: Help menu points to the wrong FAQ page
-	epatch "${FILESDIR}/${P}-proper-faq.patch"
-
-	# bgo#621819: Can't drag message attachments to folders
-	epatch "${FILESDIR}/${P}-drag-message.patch"
+	# Apply upstream patches committed to gnome-2.30 branch
+	epatch "${WORKDIR}"/${P}-patches/*.patch
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
