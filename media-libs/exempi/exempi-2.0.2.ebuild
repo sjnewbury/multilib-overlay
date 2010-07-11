@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/exempi/exempi-2.0.2.ebuild,v 1.17 2010/02/17 08:29:58 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/exempi/exempi-2.0.2.ebuild,v 1.18 2010/07/07 18:08:34 ssuominen Exp $
 
 EAPI=2
 inherit autotools eutils multilib-native
@@ -11,7 +11,7 @@ SRC_URI="http://libopenraw.freedesktop.org/download/${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="2"
-KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86"
+KEYWORDS="hppa"
 IUSE="examples test"
 
 RDEPEND="dev-libs/expat[lib32?]
