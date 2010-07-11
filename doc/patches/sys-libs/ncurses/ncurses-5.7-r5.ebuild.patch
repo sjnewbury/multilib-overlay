@@ -1,6 +1,6 @@
---- /usr/portage/sys-libs/ncurses/ncurses-5.7-r2.ebuild	2009-10-22 14:40:24.000000000 +0200
-+++ ./sys-libs/ncurses/ncurses-5.7-r2.ebuild	2010-03-14 16:18:42.000000000 +0100
-@@ -22,20 +22,25 @@
+--- /usr/portage/sys-libs/ncurses/ncurses-5.7-r5.ebuild	2010-03-07 00:37:01.000000000 +0100
++++ ./sys-libs/ncurses/ncurses-5.7-r5.ebuild	2010-03-14 16:26:03.000000000 +0100
+@@ -23,9 +23,7 @@
  
  S=${WORKDIR}/${MY_P}
  
@@ -11,9 +11,10 @@
  	[[ -n ${PV_SNAP} ]] && epatch "${WORKDIR}"/${MY_P}-${PV_SNAP}-patch.sh
  	epatch "${FILESDIR}"/${PN}-5.6-gfbsd.patch
  	epatch "${FILESDIR}"/${PN}-5.7-emacs.patch #270527
- 	epatch "${FILESDIR}"/${PN}-5.7-nongnu.patch
- 	epatch "${FILESDIR}"/${PN}-5.7-tic-cross-detection.patch #288881
+@@ -34,11 +32,18 @@
+ 	epatch "${FILESDIR}"/${PN}-5.7-rxvt-unicode.patch #192083
  	epatch "${FILESDIR}"/${P}-hashdb-open.patch #245370
+ 	sed -i '/with_no_leaks=yes/s:=.*:=$enableval:' configure #305889
 +
 +	# Becaus of adding -L/usr/$(get_lib_dir) to LDFLAGS we see a bug when
 +	# upgrading this lib. This is because the buildsystem try to link against the old
@@ -31,7 +32,7 @@
  	export BUILD_CPPFLAGS+=" -D_GNU_SOURCE" #214642
  
  	# when cross-compiling, we need to build up our own tic
-@@ -52,14 +57,14 @@
+@@ -55,14 +60,14 @@
  	fi
  
  	make_flags=""
@@ -51,7 +52,7 @@
  	shift
  
  	# The chtype/mmask-t settings below are to retain ABI compat
-@@ -103,14 +108,24 @@
+@@ -106,14 +111,24 @@
  		${conf_abi} \
  		"$@" \
  		|| die "configure failed"
@@ -77,7 +78,7 @@
  }
  
  src_install() {
-@@ -119,10 +134,10 @@
+@@ -122,10 +137,10 @@
  
  	# install unicode version second so that the binaries in /usr/bin
  	# support both wide and narrow
