@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/curl/curl-7.21.0.ebuild,v 1.2 2010/07/01 20:46:53 darkside Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/curl/curl-7.21.0.ebuild,v 1.4 2010/07/02 13:34:48 spatz Exp $
 
 # NOTE: If you bump this ebuild, make sure you bump dev-python/pycurl!
 
@@ -27,7 +27,7 @@ RDEPEND="ldap? ( net-nds/openldap[lib32?] )
 		!gnutls? ( !nss? ( dev-libs/openssl[lib32?] ) )
 	)
 	idn? ( net-dns/libidn[lib32?] )
-	ares? ( >=net-dns/c-ares-1.4.0[lib32?] )
+	!threads? ( ares? ( >=net-dns/c-ares-1.4.0[lib32?] ) )
 	kerberos? ( virtual/krb5[lib32?] )
 	libssh2? ( >=net-libs/libssh2-0.16[lib32?] )"
 
@@ -46,12 +46,9 @@ multilib-native_pkg_setup_internal() {
 		ewarn "USE='gnutls nss' are ignored without USE='ssl'."
 		ewarn "Please review the local USE flags for this package."
 	fi
-
 	if use ares && use threads; then
-		eerror "USE flags 'ares' and 'threads' are mutually exclusive,"
-		eerror "please disable one of them."
-		eerror
-		die "USE flags 'ares' and 'threads' both enabled"
+		ewarn "USE flags 'ares' and 'threads' are mutually exclusive,"
+		ewarn "disabling 'ares', please review and re-emerge if needed."
 	fi
 }
 
@@ -72,8 +69,8 @@ multilib-native_src_configure_internal() {
 		$(use_with kerberos gssapi "${EPREFIX}"/usr)
 		$(use_with libssh2)
 		$(use_enable ipv6)
-		$(use_enable ares)
 		$(use_enable threads threaded-resolver)
+		$(use threads && echo --disable-ares || use_enable ares)
 		--enable-http
 		--enable-ftp
 		--enable-gopher
