@@ -1,6 +1,7 @@
-diff -Naur pilot-link-0.12.2.orig/configure.ac pilot-link-0.12.2/configure.ac
---- pilot-link-0.12.2.orig/configure.ac	2007-10-07 18:18:47.000000000 +0200
-+++ pilot-link-0.12.2/configure.ac	2007-10-07 18:18:35.000000000 +0200
+http://bugs.gentoo.org/194921
+
+--- configure.ac
++++ configure.ac
 @@ -757,11 +757,9 @@
  dnl *************************************
  dnl (already done) enable_werror=no

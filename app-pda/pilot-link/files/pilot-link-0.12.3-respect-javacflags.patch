@@ -1,6 +1,7 @@
-diff -Nur pilot-link-0.12.3/bindings/Java/Makefile.am pilot-link-0.12.3_patched/bindings/Java/Makefile.am
---- pilot-link-0.12.3/bindings/Java/Makefile.am	2007-11-09 16:42:41.000000000 +0200
-+++ pilot-link-0.12.3_patched/bindings/Java/Makefile.am	2009-04-26 08:03:30.000000000 +0300
+http://bugs.gentoo.org/267445
+
+--- bindings/Java/Makefile.am
++++ bindings/Java/Makefile.am
 @@ -70,7 +70,7 @@
  $(java_classes): java_compile
  
