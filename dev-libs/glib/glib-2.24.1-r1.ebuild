@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.24.1-r1.ebuild,v 1.1 2010/07/08 15:28:33 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.24.1-r1.ebuild,v 1.2 2010/07/10 19:26:58 nirbheek Exp $
 
 EAPI="2"
 
@@ -20,10 +20,12 @@ RDEPEND="virtual/libiconv
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.16[lib32?]
 	>=sys-devel/gettext-0.11[lib32?]
+	>=dev-util/gtk-doc-am-1.11
 	doc? (
 		>=dev-libs/libxslt-1.0[lib32?]
 		>=dev-util/gtk-doc-1.11
 		~app-text/docbook-xml-dtd-4.1.2 )"
+# eautoreconf needs gtk-doc-am
 # XXX: Consider adding test? ( sys-devel/gdb ); assert-msg-test tries to use it
 
 multilib-native_src_prepare_internal() {
