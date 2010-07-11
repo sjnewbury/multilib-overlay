@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtksourceview/gtksourceview-2.10.4.ebuild,v 1.1 2010/06/23 12:08:34 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtksourceview/gtksourceview-2.10.4.ebuild,v 1.2 2010/07/08 10:23:45 pacho Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -29,6 +29,13 @@ DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README"
 
 pkg_config() {
 	G2CONF="${G2CONF} $(use-enable glade glade-catalog)"
+}
+
+multilib-native_src_prepare_internal() {
+	gnome2_src_prepare
+
+	# Skip broken test until upstream bug #621383 is solved
+	sed -i -e "/guess-language/d" tests/test-languagemanager.c || die
 }
 
 src_test() {
