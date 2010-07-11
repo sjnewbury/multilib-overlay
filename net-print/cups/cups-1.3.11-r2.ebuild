@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.3.11-r2.ebuild,v 1.4 2010/03/08 22:20:59 reavertm Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.3.11-r2.ebuild,v 1.9 2010/07/11 09:28:20 klausman Exp $
 
 EAPI=2
 inherit autotools eutils flag-o-matic multilib pam multilib-native
@@ -13,7 +13,7 @@ SRC_URI="mirror://easysw/${PN}/${PV}/${MY_P}-source.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha ~amd64 ~arm hppa ~ia64 ~m68k ~mips ~ppc ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="acl avahi dbus gnutls java jpeg kerberos ldap pam perl php png ppds python samba slp ssl static tiff X xinetd zeroconf"
 
 COMMON_DEPEND="
@@ -191,6 +191,7 @@ multilib-native_src_configure_internal() {
 		--enable-libpaper \
 		--enable-pdftops \
 		--enable-threads \
+		--with-optim="${CFLAGS}" \
 		${myconf}
 
 	# install in /usr/libexec always, instead of using /usr$(get_libdir)cups, as that

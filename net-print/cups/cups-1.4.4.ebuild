@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.4.4.ebuild,v 1.1 2010/06/22 21:52:23 tgurr Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.4.4.ebuild,v 1.2 2010/06/30 17:33:49 jer Exp $
 
 EAPI="2"
 
@@ -91,6 +91,8 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
+	export DSOFLAGS="${LDFLAGS}"
+
 	# locale support
 	strip-linguas ${LANGS}
 	if [ -z "${LINGUAS}" ] ; then
