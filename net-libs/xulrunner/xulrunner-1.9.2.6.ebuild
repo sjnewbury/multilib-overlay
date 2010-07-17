@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.6.ebuild,v 1.1 2010/06/27 12:27:27 polynomial-c Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.6.ebuild,v 1.2 2010/07/11 12:30:16 nirbheek Exp $
 
 EAPI="2"
 WANT_AUTOCONF="2.1"
@@ -76,6 +76,9 @@ multilib-native_src_prepare_internal() {
 
 	# Ensure we find myspell dict.
 	epatch "${FILESDIR}/1002_fix-system-hunspell-dict-detections.patch"
+
+	# ARM fixes, bug 327783
+	epatch "${FILESDIR}/${PN}-1.9.2-arm-fixes.patch"
 
 	# Allow user to apply additional patches without modifing ebuild
 	epatch_user
