@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.24.1-r1.ebuild,v 1.2 2010/07/10 19:26:58 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.24.1-r1.ebuild,v 1.3 2010/07/14 10:43:32 pacho Exp $
 
 EAPI="2"
 
@@ -62,6 +62,7 @@ multilib-native_src_prepare_internal() {
 		-i "${S}"/gio/tests/desktop-app-info.c || die "sed failed"
 
 	# Needed for the punt-python-check patch.
+	# Also needed to prevent croscompile failures, see bug #267603
 	eautoreconf
 
 	[[ ${CHOST} == *-freebsd* ]] && elibtoolize
