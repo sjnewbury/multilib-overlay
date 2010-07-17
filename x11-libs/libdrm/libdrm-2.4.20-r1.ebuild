@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/libdrm/libdrm-2.4.20.ebuild,v 1.6 2010/07/14 17:08:10 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/libdrm/libdrm-2.4.20-r1.ebuild,v 1.2 2010/07/16 17:54:05 fauli Exp $
 
 EAPI="2"
 
@@ -16,13 +16,19 @@ else
 	SRC_URI="http://dri.freedesktop.org/${PN}/${P}.tar.bz2"
 fi
 
-KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
 IUSE="kernel_linux"
 RESTRICT="test" # see bug #236845
 
 RDEPEND="dev-libs/libpthread-stubs[lib32?]
 	sys-fs/udev[lib32?]"
 DEPEND="${RDEPEND}"
+
+PATCHES=(
+	# Fixes buidling of x11-drivers/xf86-video-openchrome, Gentoo bug 298352,
+	# upstream bug 26994
+	"${FILESDIR}"/2.4.18-0001-datatypes.patch
+	)
 
 multilib-native_pkg_setup_internal() {
 	# libdrm_intel fails to build on some arches if dev-libs/libatomic_ops is
