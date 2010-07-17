@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/hal/hal-0.5.14-r2.ebuild,v 1.5 2010/06/27 20:24:51 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/hal/hal-0.5.14-r2.ebuild,v 1.6 2010/07/14 12:14:07 dang Exp $
 
 EAPI="2"
 
@@ -294,9 +294,9 @@ multilib-native_pkg_postinst_internal() {
 	elog "scripts, this should be done like this :"
 	elog "\`rc-update add hald default\`"
 	echo
-	elog "Access to hal is not protected by either policykit or the plugdev group."
+	elog "Access to hal is now protected by either policykit or the plugdev group."
 	elog "If you have problems discovering/configuring hardware, try adding"
-	elog "yourself to plugdev."
+	elog "yourself to plugdev, or ensuring consolekit is started"
 	echo
 	elog "IF you have additional applications which consume ACPI events, you"
 	elog "should consider installing acpid to allow applications to share ACPI"
