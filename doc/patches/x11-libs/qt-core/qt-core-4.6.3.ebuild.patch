@@ -1,6 +1,6 @@
---- /usr/portage/x11-libs/qt-core/qt-core-4.6.3.ebuild	2010-05-22 11:37:19.000000000 +0200
-+++ ./x11-libs/qt-core/qt-core-4.6.3.ebuild	2010-05-24 03:00:09.000000000 +0200
-@@ -184,4 +184,6 @@
+--- /usr/portage/x11-libs/qt-core/qt-core-4.6.3.ebuild	2010-07-11 16:07:36.000000000 +0200
++++ ./x11-libs/qt-core/qt-core-4.6.3.ebuild	2010-07-17 20:07:23.000000000 +0200
+@@ -185,4 +185,6 @@
  
  	# Framework magic
  	fix_includes

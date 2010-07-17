@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-core/qt-core-4.5.3-r2.ebuild,v 1.7 2009/11/10 22:36:15 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-core/qt-core-4.5.3-r2.ebuild,v 1.9 2010/07/11 13:51:10 mr_bones_ Exp $
 
 EAPI="2"
 inherit qt4-build multilib-native
@@ -205,7 +205,8 @@ multilib-native_src_install_internal() {
 				$(use ssl && echo QT_OPENSSL)"
 		install_qconfigs
 	fi
-
+	# remove .la files
+	find "${D}"${QTLIBDIR} -name "*.la" -print0 | xargs -0 rm
 	# remove some unnecessary headers
 	rm -f "${D}${QTHEADERDIR}"/{Qt,QtCore}/{\
 qatomic_macosx.h,\
