@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.12.1.ebuild,v 1.1 2010/06/19 08:23:41 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.12.1.ebuild,v 1.2 2010/07/15 08:02:34 tove Exp $
 
 EAPI=3
 
@@ -39,7 +39,7 @@ COMMON_DEPEND="berkdb? ( sys-libs/db[lib32?] )
 DEPEND="${COMMON_DEPEND}
 	elibc_FreeBSD? ( sys-freebsd/freebsd-mk-defs )"
 RDEPEND="${COMMON_DEPEND}"
-PDEPEND=">=app-admin/perl-cleaner-2"
+PDEPEND=">=app-admin/perl-cleaner-2.2"
 
 S="${WORKDIR}/${MY_P}"
 
