@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gvfs/gvfs-1.6.2-r1.ebuild,v 1.1 2010/07/08 17:36:24 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gvfs/gvfs-1.6.3.ebuild,v 1.1 2010/07/13 11:52:33 pacho Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -79,12 +79,6 @@ multilib-native_pkg_setup_internal() {
 
 multilib-native_src_prepare_internal() {
 	gnome2_src_prepare
-
-	# AFC: remove com.apple.afc dependency from afc volume monitor; upstream bug 618019
-	epatch "${FILESDIR}/${P}-afc-depend.patch"
-
-	# Fix build error due to missing semicolon
-	epatch "${FILESDIR}/${P}-afc-semicolon.patch"
 
 	# Conditional patching purely to avoid eautoreconf
 	use gphoto2 && epatch "${FILESDIR}/${PN}-1.2.2-gphoto2-stricter-checks.patch"
