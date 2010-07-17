@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.66-r1.ebuild,v 1.3 2010/07/17 09:09:54 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.69.ebuild,v 1.1 2010/07/16 09:27:28 pacho Exp $
 
 EAPI="2"
 
@@ -11,9 +11,9 @@ HOMEPAGE="http://bluez.sourceforge.net/"
 SRC_URI="mirror://kernel/linux/bluetooth/${P}.tar.gz"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 ~arm ~ppc ~ppc64 x86"
+KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
 
-IUSE="alsa caps +consolekit cups debug gstreamer old-daemons pcmcia test-programs usb"
+IUSE="alsa caps +consolekit cups debug gstreamer maemo6 old-daemons pcmcia test-programs usb"
 
 CDEPEND="alsa? (
 		media-libs/alsa-lib[alsa_pcm_plugins_extplug,alsa_pcm_plugins_ioplug,lib32?]
@@ -80,6 +80,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable old-daemons hidd) \
 		$(use_enable old-daemons pand) \
 		$(use_enable old-daemons dund) \
+		$(use_enable maemo6) \
 		$(use_enable cups) \
 		$(use_enable test-programs test) \
 		--enable-udevrules \
@@ -154,7 +155,8 @@ multilib-native_pkg_postinst_internal() {
 		elog ""
 		elog "Since you have the consolekit use flag disabled, you will only be able to run"
 		elog "bluetooth clients as root. If you want to be able to run bluetooth clientes as "
-		elog "a regular user, you need to enable the consolekit use flag for this package."
+		elog "a regular user, you need to enable the consolekit use flag for this package or"
+		elog "to add the user to the plugdev group."
 	fi
 
 	if use old-daemons; then
