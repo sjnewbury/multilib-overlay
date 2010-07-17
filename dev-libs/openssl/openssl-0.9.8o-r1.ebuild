@@ -1,9 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-1.0.0a.ebuild,v 1.2 2010/07/14 20:52:37 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-0.9.8o-r1.ebuild,v 1.1 2010/07/17 10:02:17 ssuominen Exp $
 
-EAPI="2"
+# this ebuild is only for the libcrypto.so.0.9.8 and libssl.so.0.9.8 SONAME for ABI compat
 
+EAPI=2
 inherit eutils flag-o-matic toolchain-funcs multilib-native
 
 DESCRIPTION="Toolkit for SSL v2/v3 and TLS v1"
@@ -11,26 +12,30 @@ HOMEPAGE="http://www.openssl.org/"
 SRC_URI="mirror://openssl/source/${P}.tar.gz"
 
 LICENSE="openssl"
-SLOT="0"
+SLOT="0.9.8"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
-IUSE="bindist gmp kerberos rfc3779 sse2 test zlib"
+IUSE="bindist gmp kerberos sse2 test zlib"
 
 RDEPEND="gmp? ( dev-libs/gmp )
 	zlib? ( sys-libs/zlib[lib32?] )
-	kerberos? ( app-crypt/mit-krb5[lib32?] )"
+	kerberos? ( app-crypt/mit-krb5[lib32?] )
+	!=dev-libs/openssl-0.9.8*:0"
 DEPEND="${RDEPEND}
 	sys-apps/diffutils
 	>=dev-lang/perl-5[lib32?]
 	test? ( sys-devel/bc )"
-PDEPEND="app-misc/ca-certificates"
+
+multilib-native_pkg_setup_internal() {
+	if [[ -e ${ROOT}/usr/$(get_libdir)/lib{crypto,ssl}.so.0.9.8 ]]; then
+		rm -f "${ROOT}"/usr/$(get_libdir)/lib{crypto,ssl}.so.0.9.8
+	fi
+}
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-0.9.7e-gentoo.patch
-	#epatch "${FILESDIR}"/${PN}-0.9.8j-parallel-build.patch
-	#epatch "${FILESDIR}"/${PN}-0.9.8b-doc-updates.patch
-	#epatch "${FILESDIR}"/${PN}-0.9.8e-bsd-sparc64.patch
-	#epatch "${FILESDIR}"/${PN}-0.9.8h-ldflags.patch #181438
-	epatch "${FILESDIR}"/${PN}-0.9.8l-binutils.patch #289130
+	epatch "${FILESDIR}"/${PN}-0.9.8e-bsd-sparc64.patch
+	epatch "${FILESDIR}"/${PN}-0.9.8h-ldflags.patch #181438
+	epatch "${FILESDIR}"/${PN}-0.9.8m-binutils.patch #289130
 
 	# disable fips in the build
 	# make sure the man pages are suffixed #302165
@@ -55,6 +60,7 @@ multilib-native_src_prepare_internal() {
 	append-flags -Wa,--noexecstack
 
 	sed -i '1s,^:$,#!/usr/bin/perl,' Configure #141906
+	sed -i '/^"debug-steve/d' Configure # 0.9.8k shipped broken
 	./config --test-sanity || die "I AM NOT SANE"
 }
 
@@ -92,11 +98,9 @@ multilib-native_src_configure_internal() {
 		enable-tlsext \
 		$(use_ssl gmp gmp -lgmp) \
 		$(use_ssl kerberos krb5 --with-krb5-flavor=${krb5}) \
-		$(use_ssl rfc3779) \
 		$(use_ssl zlib) \
 		--prefix=/usr \
 		--openssldir=/etc/ssl \
-		--libdir=$(get_libdir) \
 		shared threads \
 		|| die "Configure failed"
 
@@ -110,6 +114,7 @@ multilib-native_src_configure_internal() {
 		-e 's:-m[a-z0-9]* ::g' \
 	)
 	sed -i \
+		-e "/^LIBDIR=/s:=.*:=$(get_libdir):" \
 		-e "/^CFLAG/s:=.*:=${CFLAG} ${CFLAGS}:" \
 		-e "/^SHARED_LDFLAGS=/s:$: ${LDFLAGS}:" \
 		Makefile || die
@@ -117,9 +122,8 @@ multilib-native_src_configure_internal() {
 
 multilib-native_src_compile_internal() {
 	# depend is needed to use $confopts
-	# rehash is needed to prep the certs/ dir
 	emake -j1 depend || die "depend failed"
-	emake -j1 all rehash || die "make all failed"
+	emake -j1 build_libs || die "make build_libs failed"
 }
 
 src_test() {
@@ -127,48 +131,5 @@ src_test() {
 }
 
 multilib-native_src_install_internal() {
-	emake -j1 INSTALL_PREFIX="${D}" install || die
-	dodoc CHANGES* FAQ NEWS README doc/*.txt doc/c-indentation.el
-	dohtml -r doc/*
-
-	# create the certs directory
-	dodir /etc/ssl/certs
-	cp -RP certs/* "${D}"/etc/ssl/certs/ || die "failed to install certs"
-	rm -r "${D}"/etc/ssl/certs/{demo,expired}
-
-	# Namespace openssl programs to prevent conflicts with other man pages
-	cd "${D}"/usr/share/man
-	local m d s
-	for m in $(find . -type f | xargs grep -L '#include') ; do
-		d=${m%/*} ; d=${d#./} ; m=${m##*/}
-		[[ ${m} == openssl.1* ]] && continue
-		[[ -n $(find -L ${d} -type l) ]] && die "erp, broken links already!"
-		mv ${d}/{,ssl-}${m}
-		# fix up references to renamed man pages
-		sed -i '/^[.]SH "SEE ALSO"/,/^[.]/s:\([^(, ]*(1)\):ssl-\1:g' ${d}/ssl-${m}
-		ln -s ssl-${m} ${d}/openssl-${m}
-		# locate any symlinks that point to this man page ... we assume
-		# that any broken links are due to the above renaming
-		for s in $(find -L ${d} -type l) ; do
-			s=${s##*/}
-			rm -f ${d}/${s}
-			ln -s ssl-${m} ${d}/ssl-${s}
-			ln -s ssl-${s} ${d}/openssl-${s}
-		done
-	done
-	[[ -n $(find -L ${d} -type l) ]] && die "broken manpage links found :("
-
-	dodir /etc/sandbox.d #254521
-	echo 'SANDBOX_PREDICT="/dev/crypto"' > "${D}"/etc/sandbox.d/10openssl
-
-	diropts -m0700
-	keepdir /etc/ssl/private
-}
-
-multilib-native_pkg_preinst_internal() {
-	preserve_old_lib /usr/$(get_libdir)/lib{crypto,ssl}.so.0.9.{6,7,8}
-}
-
-multilib-native_pkg_postinst_internal() {
-	preserve_old_lib_notify /usr/$(get_libdir)/lib{crypto,ssl}.so.0.9.{6,7,8}
+	dolib.so lib{crypto,ssl}.so.0.9.8 || die
 }
