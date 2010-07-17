@@ -22,8 +22,6 @@ sys-fs/udev/udev-147-r1.ebuild
 sys-fs/udev/udev-9999.ebuild
 sys-devel/gettext/gettext-0.16.1-r1.ebuild
 net-misc/openssh/openssh-5.2_p1-r3.ebuild
-dev-libs/libgcrypt/libgcrypt-1.4.0-r1.ebuild
-dev-libs/libgcrypt/libgcrypt-1.4.3-r1.ebuild
 dev-cpp/gtkmm/gtkmm-1.2.9-r2.ebuild
 dev-cpp/gtkmm/gtkmm-2.2.12.ebuild
 dev-cpp/glibmm/glibmm-2.8.4.ebuild
