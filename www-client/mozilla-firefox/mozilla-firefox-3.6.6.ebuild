@@ -1,15 +1,15 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/mozilla-firefox/mozilla-firefox-3.6.6.ebuild,v 1.1 2010/06/27 12:28:54 polynomial-c Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/mozilla-firefox/mozilla-firefox-3.6.6.ebuild,v 1.2 2010/07/11 12:25:34 nirbheek Exp $
 EAPI="2"
 WANT_AUTOCONF="2.1"
 
 inherit flag-o-matic toolchain-funcs eutils mozconfig-3 makeedit multilib pax-utils fdo-mime autotools mozextension java-pkg-opt-2 python multilib-native
 
-LANGS="af ar as be bg bn-BD bn-IN ca cs cy da de el en en-GB en-US eo es-AR
-es-CL es-ES es-MX et eu fa fi fr fy-NL ga-IE gl gu-IN he hi-IN hr hu id is it ja
-ka kk kn ko ku lt lv mk ml mr nb-NO nl nn-NO oc or pa-IN pl pt-BR pt-PT rm ro ru
-si sk sl sq sr sv-SE ta ta-LK te th tr uk vi zh-CN zh-TW"
+LANGS="af ar as be bg bn-BD bn-IN ca cs cy da de el en en-GB en-US eo es-AR \
+es-CL es-ES es-MX et eu fa fi fr fy-NL ga-IE gl gu-IN he hi-IN hr hu id is it \
+ja ka kk kn ko ku lt lv mk ml mr nb-NO nl nn-NO oc or pa-IN pl pt-BR pt-PT rm \
+ro ru si sk sl sq sr sv-SE ta ta-LK te th tr uk vi zh-CN zh-TW"
 NOSHORTLANGS="en-GB es-AR es-CL es-MX pt-BR zh-CN zh-TW"
 
 MAJ_XUL_PV="1.9.2"
@@ -140,6 +140,9 @@ multilib-native_src_prepare_internal() {
 
 	# Fix broken alignment
 	epatch "${FILESDIR}/1000_fix_alignment.patch"
+
+	# ARM fixes, bug 327783
+	epatch "${FILESDIR}/xulrunner-1.9.2-arm-fixes.patch"
 
 	# Allow user to apply additional patches without modifing ebuild
 	epatch_user
