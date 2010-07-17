@@ -316,7 +316,6 @@ virtual/libusb
 virtual/mysql
 virtual/opengl
 # virtual/pam not in portage but needed to get lib32 deps
-virtual/postgresql-base
 # www-client/epiphany			only 9999 version
 # www-client/epiphany-extensions	only 9999 version
 www-client/mozilla-firefox
