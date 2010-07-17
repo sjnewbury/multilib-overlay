@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-4.0.0_alpha11.ebuild,v 1.3 2010/02/28 16:03:03 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-4.0.0_alpha11.ebuild,v 1.5 2010/07/15 12:34:43 scarabeus Exp $
 
 EAPI="2"
 
@@ -37,27 +37,26 @@ RESTRICT="mirror"
 
 S="${WORKDIR}/${MY_P}/source4"
 
-SBINPROGS=""
-if use server ; then
-	SBINPROGS="${SBINPROGS} bin/samba"
-fi
-if use client ; then
-	SBINPROGS="${SBINPROGS} bin/mount.cifs bin/umount.cifs"
-fi
-
-BINPROGS=""
-if use client ; then
-	BINPROGS="${BINPROGS} bin/smbclient bin/net bin/nmblookup bin/ntlm_auth"
-fi
-if use server ; then
-	BINPROGS="${BINPROGS} bin/testparm bin/smbtorture"
-fi
-if use tools ; then
-	# Should be in sys-libs/ldb, but there's no ldb release yet
-	BINPROGS="${BINPROGS} bin/ldbedit bin/ldbsearch bin/ldbadd bin/ldbdel bin/ldbmodify bin/ldbrename"
-fi
-
 multilib-native_pkg_setup_internal() {
+	SBINPROGS=""
+	if use server ; then
+		SBINPROGS="${SBINPROGS} bin/samba"
+	fi
+	if use client ; then
+		SBINPROGS="${SBINPROGS} bin/mount.cifs bin/umount.cifs"
+	fi
+
+	BINPROGS=""
+	if use client ; then
+		BINPROGS="${BINPROGS} bin/smbclient bin/net bin/nmblookup bin/ntlm_auth"
+	fi
+	if use server ; then
+		BINPROGS="${BINPROGS} bin/testparm bin/smbtorture"
+	fi
+	if use tools ; then
+		# Should be in sys-libs/ldb, but there's no ldb release yet
+		BINPROGS="${BINPROGS} bin/ldbedit bin/ldbsearch bin/ldbadd bin/ldbdel bin/ldbmodify bin/ldbrename"
+	fi
 	confutils_use_depend_all server python
 }
 
@@ -145,7 +144,7 @@ src_test() {
 
 multilib-native_pkg_postinst_internal() {
 	# Optimize the python modules so they get properly removed
-	python_mod_optimize $(python_get_sitedir)/${PN}
+	use python && python_mod_optimize $(python_get_sitedir)/${PN}
 
 	# Warn that it's an alpha
 	ewarn "Samba 4 is an alpha and therefore not considered stable. It's only"
@@ -154,5 +153,5 @@ multilib-native_pkg_postinst_internal() {
 
 multilib-native_pkg_postrm_internal() {
 	# Clean up the python modules
-	python_mod_cleanup
+	use python && python_mod_cleanup $(python_get_sitedir)/${PN}
 }
