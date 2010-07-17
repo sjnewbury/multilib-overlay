@@ -1,6 +1,0 @@
---- pilot-link.m4.in
-+++ pilot-link.m4.in
-@@ -1,2 +1,2 @@
--AC_DEFUN(AC_PILOT_LINK_HOOK,
-+AC_DEFUN([AC_PILOT_LINK_HOOK],
- [
