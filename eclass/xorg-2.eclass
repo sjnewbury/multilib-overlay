@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/xorg-2.eclass,v 1.4 2010/06/08 20:22:12 remi Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/xorg-2.eclass,v 1.6 2010/07/14 08:34:27 scarabeus Exp $
 #
 # @ECLASS: xorg-2.eclass
 # @MAINTAINER:
@@ -210,7 +210,7 @@ xorg-2_reconf_source() {
 	case ${CHOST} in
 		*-interix* | *-aix* | *-winnt*)
 			# some hosts need full eautoreconf
-			[[ -e "./configure.ac" ]] && eautoreconf || ewarn "Unable to autoreconf the configure script. Things may fail."
+			[[ -e "./configure.ac" || -e "./configure.in" ]] && eautoreconf || ewarn "Unable to autoreconf the configure script. Things may fail."
 			;;
 		*)
 			# elibtoolize required for BSD
@@ -359,43 +359,8 @@ xorg-2_pkg_postinst() {
 # task right now is some cleanup for font packages.
 xorg-2_pkg_postrm() {
 	if [[ -n ${FONT} ]]; then
-		cleanup_fonts
 		font_pkg_postrm
 	fi
-}
-
-# @FUNCTION: cleanup_fonts
-# @USAGE:
-# @DESCRIPTION:
-# Get rid of font directories that only contain generated files
-cleanup_fonts() {
-	local allowed_files="encodings.dir fonts.alias fonts.cache-1 fonts.dir fonts.scale"
-	local real_dir=${EROOT}usr/share/fonts/${FONT_DIR}
-	local fle allowed_file
-
-	unset KEEP_FONTDIR
-
-	einfo "Checking ${real_dir} for useless files"
-	pushd ${real_dir} &> /dev/null
-	for fle in *; do
-		unset MATCH
-		for allowed_file in ${allowed_files}; do
-			if [[ ${fle} = ${allowed_file} ]]; then
-				# If it's allowed, then move on to the next file
-				MATCH="yes"
-				break
-			fi
-		done
-		# If we found a match in allowed files, move on to the next file
-		[[ -n ${MATCH} ]] && continue
-		# If we get this far, there wasn't a match in the allowed files
-		KEEP_FONTDIR="yes"
-		# We don't need to check more files if we're already keeping it
-		break
-	done
-	popd &> /dev/null
-	# If there are no files worth keeping, then get rid of the dir
-	[[ -z "${KEEP_FONTDIR}" ]] && rm -rf ${real_dir}
 }
 
 # @FUNCTION: setup_fonts
