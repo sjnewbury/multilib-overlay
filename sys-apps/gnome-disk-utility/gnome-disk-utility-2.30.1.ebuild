@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/gnome-disk-utility/gnome-disk-utility-2.30.1.ebuild,v 1.3 2010/07/06 13:27:36 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/gnome-disk-utility/gnome-disk-utility-2.30.1.ebuild,v 1.4 2010/07/11 11:24:12 armin76 Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -13,7 +13,7 @@ SRC_URI="http://hal.freedesktop.org/releases/${P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~ppc64 ~sh ~x86"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc64 ~sh ~sparc ~x86"
 IUSE="avahi doc fat +nautilus remote-access"
 
 RDEPEND="
