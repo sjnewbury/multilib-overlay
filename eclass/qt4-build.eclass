@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.74 2010/05/30 10:31:05 spatz Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.78 2010/07/11 10:32:17 hwoarang Exp $
 
 export EMULTILIB_SAVE_VARS="QTBASEDIR QTPREFIXDIR QTBINDIR QTLIBDIR \
 		QMAKE_LIBDIR_QT QTPCDIR QTDATADIR QTDOCDIR QTHEADERDIR \
@@ -168,12 +168,18 @@ qt4-build_src_unpack() {
 qt4-build_src_prepare() {
 	setqtenv
 	cd "${S}"
-
+	
 	# fix qt 4.7 regression that skips -fvisibility=hidden
 	if version_is_at_least "4.7.0_beta1"; then
 		sed -e "s/^gcc|g++)/*gcc|*g++)/" \
 			-i config.tests/unix/fvisibility.test ||
 				die "visibility fixing sed failed"
+	fi
+	# fix libx11 dependency on non X packages
+	if version_is_at_least "4.7.0_beta2"; then
+		local NOLIBX11PKG="qt-core qt-dbus qt-script qt-sql qt-test qt-xmlpatterns"
+		hasq ${PN} ${NOLIBX11PKG} && qt_nolibx11
+		[[ ${PN} == "qt-assistant" ]] && qt_assistant_cleanup
 	fi
 
 	if use aqua; then
@@ -282,6 +288,8 @@ qt4-build_src_prepare() {
 	# don't flirt with non-Prefix stuff, we're quite possessive
 	sed -i -e '/^QMAKE_\(LIB\|INC\)DIR\(_X11\|_OPENGL\|\)\t/s/=.*$/=/' \
 		mkspecs/$(qt_mkspecs_dir)/qmake.conf || die
+	# strip predefined CFLAGS from qmake ( bug #312689 )
+	sed -i '/^QMAKE_CFLAGS_\(RELEASE\|DEBUG\)/s:+=.*:+=:' mkspecs/common/g++.conf
 
 	base_src_prepare
 }
@@ -342,6 +350,15 @@ qt4-build_src_compile() {
 	build_directories ${QT4_TARGET_DIRECTORIES}
 }
 
+# @FUNCTION: qt4-build_src_test
+# @DESCRIPTION:
+# Runs tests only in target directories.
+qt4-build_src_test() {
+	for dir in ${QT4_TARGET_DIRECTORIES}; do
+		emake -j1 check -C ${dir}
+	done
+}
+
 # @FUNCTION: fix_includes
 # @DESCRIPTION:
 # For MacOSX we need to add some symlinks when frameworks are
@@ -378,6 +395,8 @@ qt4-build_src_install() {
 	install_qconfigs
 	fix_library_files
 	fix_includes
+	# remove .la files since we are building only shared Qt libraries
+	find "${D}"${QTLIBDIR} -name "*.la" -print0 | xargs -0 rm 
 	prep_ml_includes
 }
 
@@ -747,4 +766,37 @@ qt_mkspecs_dir() {
 	echo "${spec}"
 }
 
-EXPORT_FUNCTIONS pkg_setup src_unpack src_prepare src_configure src_compile src_install pkg_postrm pkg_postinst
+# @FUNCTION: qt_assistant_cleanup
+# @RETURN: nothing
+# @DESCRIPTION:
+# Tries to clean up tools.pro for qt-assistant ebuilds
+# Meant to be called in src_prepare
+qt_assistant_cleanup() {
+	# different versions (and branches...) may need different handling,
+	# add a case if you need special handling
+	case "${MY_PV_EXTRA}" in
+		*kde-qt*)
+			sed -e "/^[ \t]*porting/,/^[ \t]*win32.*activeqt$/d" \
+				-e "/mac/,/^embedded.*makeqpf$/d" \
+				-i tools/tools.pro || die "patching tools.pro failed"
+		;;
+		*)
+			sed -e "/^[ \t]*porting/,/^[ \t]*win32.*activeqt$/d" \
+				-e "/mac/,/^embedded.*makeqpf$/d" \
+				-e "s/^\([ \t]*pixeltool\) /\1 qdoc3 /" \
+				-i tools/tools.pro || die "patching tools.pro failed"
+		;;
+	esac
+}
+
+# @FUNCTION: qt_nolibx11
+# @RETURN: nothing
+# @DESCRIPTION:
+# Ignore X11 tests for packages that don't need X libraries installed
+qt_nolibx11() {
+	einfo "removing X11 check to allow X-less compilation"
+	sed -i "/unixtests\/compile.test.*config.tests\/x11\/xlib/,/fi$/d" "${S}"/configure ||
+		die "x11 check sed failed"
+}
+
+EXPORT_FUNCTIONS pkg_setup src_unpack src_prepare src_configure src_compile src_install src_test pkg_postrm pkg_postinst
