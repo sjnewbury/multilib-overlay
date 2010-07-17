@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/postgresql-base/postgresql-base-8.4.4-r2.ebuild,v 1.5 2010/07/13 14:21:28 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/postgresql-base/postgresql-base-9.0_beta3.ebuild,v 1.1 2010/07/14 18:40:22 patrick Exp $
 
 EAPI="2"
 
@@ -8,11 +8,15 @@ WANT_AUTOMAKE="none"
 
 inherit eutils multilib versionator autotools multilib-native
 
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ~ppc ~ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 
 DESCRIPTION="PostgreSQL libraries and clients"
 HOMEPAGE="http://www.postgresql.org/"
-SRC_URI="mirror://postgresql/source/v${PV}/postgresql-${PV}.tar.bz2"
+
+MY_PV=${PV/_/}
+SRC_URI="mirror://postgresql/source/v${MY_PV}/postgresql-${MY_PV}.tar.bz2"
+S=${WORKDIR}/postgresql-${MY_PV}
+
 LICENSE="POSTGRESQL"
 SLOT="$(get_version_component_range 1-2)"
 IUSE_LINGUAS="
@@ -47,12 +51,9 @@ DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext[lib32?] )"
 PDEPEND="doc? ( ~dev-db/postgresql-docs-${PV} )"
 
-S="${WORKDIR}/postgresql-${PV}"
-
 multilib-native_src_prepare_internal() {
-
-	epatch "${FILESDIR}/postgresql-${SLOT}-common.patch" \
-		"${FILESDIR}/postgresql-${SLOT}-base.patch"
+	epatch "${FILESDIR}/postgresql-9.0-common.3.patch" \
+		"${FILESDIR}/postgresql-${SLOT}-base.3.patch"
 
 	if use kerberos && has_version "<app-crypt/heimdal-1.3.2-r1" ; then
 		epatch "${FILESDIR}/postgresql-base-8.4-9.0-heimdal_strlcpy.patch"
@@ -63,7 +64,7 @@ multilib-native_src_prepare_internal() {
 
 	# because psql/help.c includes the file
 	ln -s "${S}/src/include/libpq/pqsignal.h" "${S}/src/bin/psql/"
-
+	cd "${S}"
 	eautoconf
 }
 
@@ -145,7 +146,16 @@ __EOF__
 multilib-native_pkg_postinst_internal() {
 	eselect postgresql update
 	[[ "$(eselect postgresql show)" = "(none)" ]] && eselect postgresql set ${SLOT}
-	elog "If you need a global psqlrc-file, you can place it in '${ROOT}/etc/postgresql-${SLOT}/'."
+	elog "If you need a global psqlrc-file, you can place it in:"
+	elog "    '${ROOT}/etc/postgresql-${SLOT}/'"
+	elog
+	elog "The PostgreSQL community has called for more testers of the upcoming 9.0"
+	elog "release. This beta version of the PostgreSQL client applications and libraries,"
+	elog "while moved to ~arch, will never be marked stable. As such, you may not want to"
+	elog "use this package in an environment where incompatible changes are"
+	elog "unacceptable. Bear in mind, though, that these packages are slotted and that you"
+	elog "may have multiple installations simultaneously without conflict. However, you"
+	elog "may only use one set of client applications and libraries via 'eselect'."
 }
 
 multilib-native_pkg_postrm_internal() {
