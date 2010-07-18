@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/curl/curl-7.20.0-r2.ebuild,v 1.6 2010/07/03 14:09:40 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/curl/curl-7.20.0-r2.ebuild,v 1.7 2010/07/18 04:42:35 dragonheart Exp $
 
 EAPI="2"
 
@@ -10,9 +10,8 @@ inherit multilib eutils multilib-native
 
 #MY_P=${P/_pre/-}
 DESCRIPTION="A Client that groks URLs"
-HOMEPAGE="http://curl.haxx.se/ http://curl.planetmirror.com"
+HOMEPAGE="http://curl.haxx.se/"
 #SRC_URI="http://cool.haxx.se/curl-daily/${MY_P}.tar.bz2"
-#SRC_URI="http://curl.planetmirror.com/download/${P}.tar.bz2"
 SRC_URI="http://curl.haxx.se/download/${P}.tar.bz2"
 
 LICENSE="MIT"

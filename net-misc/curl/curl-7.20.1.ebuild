@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/curl/curl-7.20.1.ebuild,v 1.1 2010/04/15 20:55:42 spatz Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/curl/curl-7.20.1.ebuild,v 1.2 2010/07/18 04:42:35 dragonheart Exp $
 
 # NOTE: If you bump this ebuild, make sure you bump dev-python/pycurl!
 
@@ -10,9 +10,8 @@ inherit multilib eutils multilib-native
 
 #MY_P=${P/_pre/-}
 DESCRIPTION="A Client that groks URLs"
-HOMEPAGE="http://curl.haxx.se/ http://curl.planetmirror.com"
+HOMEPAGE="http://curl.haxx.se/"
 #SRC_URI="http://cool.haxx.se/curl-daily/${MY_P}.tar.bz2"
-#SRC_URI="http://curl.planetmirror.com/download/${P}.tar.bz2"
 SRC_URI="http://curl.haxx.se/download/${P}.tar.bz2"
 
 LICENSE="MIT"

@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/curl/curl-7.21.0.ebuild,v 1.4 2010/07/02 13:34:48 spatz Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/curl/curl-7.21.0.ebuild,v 1.6 2010/07/18 09:35:29 dragonheart Exp $
 
 # NOTE: If you bump this ebuild, make sure you bump dev-python/pycurl!
 
@@ -10,9 +10,8 @@ inherit multilib eutils libtool prefix multilib-native
 
 #MY_P=${P/_pre/-}
 DESCRIPTION="A Client that groks URLs"
-HOMEPAGE="http://curl.haxx.se/ http://curl.planetmirror.com"
+HOMEPAGE="http://curl.haxx.se/"
 #SRC_URI="http://cool.haxx.se/curl-daily/${MY_P}.tar.bz2"
-#SRC_URI="http://curl.planetmirror.com/download/${P}.tar.bz2"
 SRC_URI="http://curl.haxx.se/download/${P}.tar.bz2"
 
 LICENSE="MIT"
@@ -31,6 +30,7 @@ RDEPEND="ldap? ( net-nds/openldap[lib32?] )
 	kerberos? ( virtual/krb5[lib32?] )
 	libssh2? ( >=net-libs/libssh2-0.16[lib32?] )"
 
+# rtmpdump ( media-video/rtmpdump )  / --with-librtmp
 # fbopenssl (not in gentoo) --with-spnego
 # krb4 http://web.mit.edu/kerberos/www/krb4-end-of-life.html
 
@@ -87,6 +87,7 @@ multilib-native_src_configure_internal() {
 		--enable-maintainer-mode
 		--disable-sspi
 		--without-krb4
+		--without-librtmp
 		--without-spnego"
 
 	if use ssl ; then
