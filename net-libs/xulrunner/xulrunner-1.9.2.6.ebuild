@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.6.ebuild,v 1.2 2010/07/11 12:30:16 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.6.ebuild,v 1.3 2010/07/18 15:07:38 anarchy Exp $
 
 EAPI="2"
 WANT_AUTOCONF="2.1"
@@ -197,6 +197,13 @@ multilib-native_src_install_internal() {
 
 	MOZLIBDIR="/usr/$(get_libdir)/${PN}-${MAJ_PV}"
 	SDKDIR="/usr/$(get_libdir)/${PN}-devel-${MAJ_PV}/sdk"
+
+	if has_multilib_profile; then
+		local config
+		for config in "${D}"/etc/gre.d/*.system.conf ; do
+			mv "${config}" "${config%.conf}.${CHOST}.conf"
+		done
+	fi
 
 	dodir /usr/bin
 	dosym "${MOZLIBDIR}/xulrunner" "/usr/bin/xulrunner-${MAJ_PV}" || die
