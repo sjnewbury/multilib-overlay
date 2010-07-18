@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pycairo/pycairo-1.8.10.ebuild,v 1.3 2010/07/09 02:53:18 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pycairo/pycairo-1.8.10.ebuild,v 1.4 2010/07/17 22:43:50 arfrever Exp $
 
 EAPI="3"
 PYTHON_DEPEND="2:2.6"
@@ -56,13 +56,7 @@ multilib-native_src_compile_internal() {
 }
 
 src_test() {
-	# python_execute_py.test -P '$(ls -d build-${PYTHON_ABI}/lib.*):../../$(ls -d build-${PYTHON_ABI}/lib.*)'
-
-	testing() {
-		echo PYTHONPATH="$(ls -d build-${PYTHON_ABI}/lib.*):../../$(ls -d build-${PYTHON_ABI}/lib.*)" py.test
-		PYTHONPATH="$(ls -d build-${PYTHON_ABI}/lib.*):../../$(ls -d build-${PYTHON_ABI}/lib.*)" py.test
-	}
-	python_execute_function testing
+	python_execute_py.test -P '$(ls -d build-${PYTHON_ABI}/lib.*):../../$(ls -d build-${PYTHON_ABI}/lib.*)'
 }
 
 multilib-native_src_install_internal() {
