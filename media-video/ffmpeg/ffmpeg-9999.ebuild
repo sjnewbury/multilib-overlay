@@ -1,12 +1,12 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999-r1.ebuild,v 1.44 2010/06/22 07:28:55 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999.ebuild,v 1.17 2010/07/22 20:57:23 aballier Exp $
 
 EAPI="2"
 
 SCM=""
 if [ "${PV#9999}" != "${PV}" ] ; then
-	SCM=subversion
+	SCM="subversion"
 	ESVN_REPO_URI="svn://svn.ffmpeg.org/ffmpeg/trunk"
 fi
 
@@ -25,14 +25,14 @@ FFMPEG_REVISION="${PV#*_p}"
 
 LICENSE="GPL-3"
 SLOT="0"
-if [[ ${PV} == *9999* ]]; then
+if [ "${PV#9999}" != "${PV}" ] ; then
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
-IUSE="+3dnow +3dnowext alsa altivec amr bindist cpudetection custom-cflags
+IUSE="+3dnow +3dnowext alsa altivec amr bindist +bzip2 cpudetection custom-cflags
 debug dirac doc +encode faac gsm +hardcoded-tables ieee1394 jack jpeg2k
-+mmx +mmxext mp3 network oss pic rtmp schroedinger sdl speex +ssse3 test theora
++mmx +mmxext mp3 network oss pic rtmp schroedinger sdl speex +ssse3 static-libs test theora
 threads v4l v4l2 vaapi vdpau vorbis vpx X x264 xvid +zlib"
 
 VIDEO_CARDS="nvidia"
@@ -41,32 +41,33 @@ for x in ${VIDEO_CARDS}; do
 	IUSE="${IUSE} video_cards_${x}"
 done
 
-RDEPEND="sdl? ( >=media-libs/libsdl-1.2.10[lib32?] )
+RDEPEND="
 	alsa? ( media-libs/alsa-lib[lib32?] )
+	amr? ( media-libs/opencore-amr[lib32?] )
+	bzip2? ( app-arch/bzip2[lib32?] )
+	dirac? ( media-video/dirac[lib32?] )
 	encode? (
 		faac? ( media-libs/faac[lib32?] )
 		mp3? ( media-sound/lame[lib32?] )
-		vorbis? ( media-libs/libvorbis[lib32?] media-libs/libogg[lib32?] )
 		theora? ( >=media-libs/libtheora-1.1.1[encode,lib32?] media-libs/libogg[lib32?] )
+		vorbis? ( media-libs/libvorbis[lib32?] media-libs/libogg[lib32?] )
 		x264? ( >=media-libs/x264-0.0.20100605[lib32?] )
-		xvid? ( >=media-libs/xvid-1.1.0[lib32?] ) )
-	zlib? ( sys-libs/zlib[lib32?] )
-	ieee1394? ( media-libs/libdc1394[lib32?]
-				sys-libs/libraw1394[lib32?] )
-	dirac? ( media-video/dirac[lib32?] )
+		xvid? ( >=media-libs/xvid-1.1.0[lib32?] )
+	)
 	gsm? ( >=media-sound/gsm-1.0.12-r1[lib32?] )
+	ieee1394? ( media-libs/libdc1394[lib32?] sys-libs/libraw1394[lib32?] )
+	jack? ( media-sound/jack-audio-connection-kit[lib32?] )
 	jpeg2k? ( >=media-libs/openjpeg-1.3-r2[lib32?] )
-	amr? ( media-libs/opencore-amr[lib32?] )
 	rtmp? ( media-video/rtmpdump )
+	sdl? ( >=media-libs/libsdl-1.2.13-r1[audio,video,lib32?] )
 	schroedinger? ( media-libs/schroedinger[lib32?] )
 	speex? ( >=media-libs/speex-1.2_beta3[lib32?] )
-	jack? ( media-sound/jack-audio-connection-kit[lib32?] )
-	X? ( x11-libs/libX11[lib32?] x11-libs/libXext[lib32?] )
 	vaapi? ( x11-libs/libva )
+	video_cards_nvidia? ( vdpau? ( x11-libs/libvdpau ) )
 	vpx? ( media-libs/libvpx )
-	video_cards_nvidia? (
-		vdpau? ( x11-libs/libvdpau )
-	)"
+	X? ( x11-libs/libX11[lib32?] x11-libs/libXext[lib32?] )
+	zlib? ( sys-libs/zlib[lib32?] )
+"
 
 DEPEND="${RDEPEND}
 	>=sys-devel/make-3.81
@@ -81,7 +82,7 @@ DEPEND="${RDEPEND}
 "
 
 multilib-native_src_prepare_internal() {
-	if [[ ${PV} = *9999* ]]; then
+	if [ "${PV#9999}" != "${PV}" ] ; then
 		# Set SVN version manually
 		subversion_wc_info
 		sed -i -e "s/UNKNOWN/SVN-r${ESVN_WC_REVISION}/" "${S}/version.sh" || die
@@ -97,7 +98,9 @@ multilib-native_src_configure_internal() {
 	for i in debug doc network vaapi zlib; do
 		use ${i} || myconf="${myconf} --disable-${i}"
 	done
+	use bzip2 || myconf="${myconf} --disable-bzlib"
 	use sdl || myconf="${myconf} --disable-ffplay"
+	use static-libs || myconf="${myconf} --disable-static"
 
 	use custom-cflags && myconf="${myconf} --disable-optimizations"
 	use cpudetection && myconf="${myconf} --enable-runtime-cpudetect"
