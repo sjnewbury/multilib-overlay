@@ -1,9 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/nss/nss-3.12.6-r2.ebuild,v 1.3 2010/06/21 21:08:32 mr_bones_ Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/nss/nss-3.12.6-r2.ebuild,v 1.4 2010/07/21 14:21:02 darkside Exp $
 
-EAPI="2"
-
+EAPI=3
 inherit eutils flag-o-matic multilib toolchain-funcs multilib-native
 
 NSPR_VER="4.8.3-r2"
@@ -14,7 +13,7 @@ SRC_URI="ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/${RTM_NAME}
 
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 IUSE="utils"
 
 DEPEND="dev-util/pkgconfig[lib32?]"
@@ -27,6 +26,9 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${PN}-3.12.6-gentoo-fixup-warnings.patch"
 
 	cd "${S}"/mozilla/security/coreconf
+	# hack nspr paths
+	echo 'INCLUDES += -I'"${EPREFIX}"'/usr/include/nspr -I$(DIST)/include/dbm' \
+		>> headers.mk || die "failed to append include"
 
 	# modify install path
 	sed -e 's:SOURCE_PREFIX = $(CORE_DEPTH)/\.\./dist:SOURCE_PREFIX = $(CORE_DEPTH)/dist:' \
@@ -37,16 +39,28 @@ multilib-native_src_prepare_internal() {
 
 	# Ensure we stay multilib aware
 	sed -i -e "s:gentoo\/nss:$(get_libdir):" "${S}"/mozilla/security/nss/config/Makefile || die "Failed to fix for multilib"
+
+	# Fix pkgconfig file for Prefix
+	sed -i -e "/^PREFIX =/s:= /usr:= ${EPREFIX}/usr:" \
+		"${S}"/mozilla/security/nss/config/Makefile
+
+	epatch "${FILESDIR}"/${PN}-3.12.4-solaris-gcc.patch  # breaks non-gnu tools
+	# dirty hack
+	cd "${S}"/mozilla/security/nss
+	sed -i -e "/CRYPTOLIB/s:\$(SOFTOKEN_LIB_DIR):../freebl/\$(OBJDIR):" \
+		lib/ssl/config.mk || die
+	sed -i -e "/CRYPTOLIB/s:\$(SOFTOKEN_LIB_DIR):../../lib/freebl/\$(OBJDIR):" \
+		cmd/platlibs.mk || die
 }
 
-multilib-native_src_configure_internal() {
+multilib-native_src_compile_internal() {
 	strip-flags
 
 	echo > "${T}"/test.c
 	$(tc-getCC) ${CFLAGS} -c "${T}"/test.c -o "${T}"/test.o
 	case $(file "${T}"/test.o) in
-	*64-bit*) export USE_64=1;;
-	*32-bit*) ;;
+	*64-bit*|*ppc64*|*x86_64*) export USE_64=1;;
+	*32-bit*|*ppc*|*i386*) ;;
 	*) die "Failed to detect whether your arch is 64bits or 32bits, disable distcc if you're using it, please";;
 	esac
 
@@ -58,9 +72,7 @@ multilib-native_src_configure_internal() {
 	export NSS_ENABLE_ECC=1
 	export XCFLAGS="${CFLAGS}"
 	export FREEBL_NO_DEPEND=1
-}
 
-multilib-native_src_compile_internal() {
 	cd "${S}"/mozilla/security/coreconf
 	emake -j1 CC="$(tc-getCC)" || die "coreconf make failed"
 	cd "${S}"/mozilla/security/dbm
@@ -119,24 +131,29 @@ multilib-native_src_install_internal() {
 	cd "${S}"/mozilla/security/dist
 
 	dodir /usr/$(get_libdir)
-	cp -L */lib/*.so "${D}"/usr/$(get_libdir) || die "copying shared libs failed"
+	cp -L */lib/*$(get_libname) "${ED}"/usr/$(get_libdir) || die "copying shared libs failed"
 	# We generate these after stripping the libraries, else they don't match.
-	#cp -L */lib/*.chk "${D}"/usr/$(get_libdir) || die "copying chk files failed"
-	cp -L */lib/libcrmf.a "${D}"/usr/$(get_libdir) || die "copying libs failed"
+	#cp -L */lib/*.chk "${ED}"/usr/$(get_libdir) || die "copying chk files failed"
+	cp -L */lib/libcrmf.a "${ED}"/usr/$(get_libdir) || die "copying libs failed"
 
 	# Install nss-config and pkgconfig file
 	dodir /usr/bin
-	cp -L */bin/nss-config "${D}"/usr/bin
+	cp -L */bin/nss-config "${ED}"/usr/bin
 	dodir /usr/$(get_libdir)/pkgconfig
-	cp -L */lib/pkgconfig/nss.pc "${D}"/usr/$(get_libdir)/pkgconfig
+	cp -L */lib/pkgconfig/nss.pc "${ED}"/usr/$(get_libdir)/pkgconfig
 
 	# all the include files
 	insinto /usr/include/nss
 	doins public/nss/*.h
-	cd "${D}"/usr/$(get_libdir)
-	for file in *.so; do
-		mv ${file} ${file}.${MINOR_VERSION}
-		ln -s ${file}.${MINOR_VERSION} ${file}
+	cd "${ED}"/usr/$(get_libdir)
+	local n=
+	for file in *$(get_libname); do
+		n=${file%$(get_libname)}$(get_libname ${MINOR_VERSION})
+		mv ${file} ${n}
+		ln -s ${n} ${file}
+		if [[ ${CHOST} == *-darwin* ]]; then
+			install_name_tool -id "${EPREFIX}/usr/$(get_libdir)/${n}" ${n} || die
+		fi
 	done
 
 	local nssutils
@@ -161,7 +178,7 @@ multilib-native_src_install_internal() {
 	# shlibsign after prelink.
 	declare -a libs
 	for l in ${NSS_CHK_SIGN_LIBS} ; do
-		libs+=("/usr/$(get_libdir)/lib${l}.so")
+		libs+=("${EPREFIX}/usr/$(get_libdir)/lib${l}.so")
 	done
 	OLD_IFS="${IFS}" IFS=":" ; liblist="${libs[*]}" ; IFS="${OLD_IFS}"
 	echo -e "PRELINK_PATH_MASK=${liblist}" >"${T}/90nss"
@@ -179,9 +196,9 @@ multilib-native_pkg_postinst_internal() {
 	elog " links after upgrade."
 	elog
 	# We must re-sign the libraries AFTER they are stripped.
-	generate_chk "${ROOT}"/usr/bin/shlibsign "${ROOT}"/usr/$(get_libdir)
+	generate_chk "${EROOT}"/usr/bin/shlibsign "${ROOT}"/usr/$(get_libdir)
 }
 
 multilib-native_pkg_postrm_internal() {
-	cleanup_chk "${ROOT}"/usr/$(get_libdir)
+	cleanup_chk "${EROOT}"/usr/$(get_libdir)
 }
