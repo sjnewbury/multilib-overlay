@@ -1,9 +1,0 @@
---- /usr/portage/media-sound/musepack-tools/musepack-tools-458.ebuild	2010-03-06 00:06:59.000000000 +0100
-+++ ./media-sound/musepack-tools/musepack-tools-458.ebuild	2010-04-04 16:03:29.000000000 +0200
-@@ -22,4 +22,5 @@
- 	!media-libs/libmpcdec
- 	!media-libs/libmpcdecsv7"
- 
--PATCHES=( "${FILESDIR}/${P}-gentoo.patch" )
-+PATCHES=( "${FILESDIR}/${P}-gentoo.patch"
-+	  "${FILESDIR}/${P}-CFLAGS.patch" )
