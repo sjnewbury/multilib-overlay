@@ -1,7 +1,8 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libcuefile/libcuefile-465.ebuild,v 1.1 2010/07/21 13:16:49 ssuominen Exp $
 
+EAPI=3
 inherit cmake-utils multilib-native
 
 # svn export http://svn.musepack.net/libcuefile/trunk libcuefile-${PV}
