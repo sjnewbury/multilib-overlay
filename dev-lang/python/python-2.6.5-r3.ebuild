@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.5-r3.ebuild,v 1.1 2010/07/12 19:11:19 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.5-r3.ebuild,v 1.2 2010/07/25 17:16:24 solar Exp $
 
 EAPI="2"
 
@@ -102,6 +102,9 @@ multilib-native_src_prepare_internal() {
 	# Fix OtherFileTests.testStdin() not to assume
 	# that stdin is a tty for bug #248081.
 	sed -e "s:'osf1V5':'osf1V5' and sys.stdin.isatty():" -i Lib/test/test_file.py || die "sed failed"
+
+	# python ctypes abuse mmap perms incorrectly. This breaks PaX
+	sed -i -e s/'PROT_READ | PROT_WRITE | PROT_EXEC'/'PROT_READ | PROT_WRITE'/g Modules/_ctypes/malloc_closure.c
 
 	eautoreconf
 }

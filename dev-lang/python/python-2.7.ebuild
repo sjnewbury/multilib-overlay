@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.7.ebuild,v 1.2 2010/07/10 13:06:28 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.7.ebuild,v 1.3 2010/07/25 17:16:24 solar Exp $
 
 EAPI="2"
 
@@ -108,6 +108,9 @@ multilib-native_src_prepare_internal() {
 
 	# Support versions of Autoconf other than 2.65.
 	sed -e "/version_required(2\.65)/d" -i configure.in || die "sed failed"
+
+	# python ctypes abuse mmap perms incorrectly. This breaks PaX
+	sed -i -e s/'PROT_READ | PROT_WRITE | PROT_EXEC'/'PROT_READ | PROT_WRITE'/g Modules/_ctypes/malloc_closure.c
 }
 
 multilib-native_src_configure_internal() {
