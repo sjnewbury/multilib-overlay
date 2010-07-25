@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-0.9.8o-r1.ebuild,v 1.1 2010/07/17 10:02:17 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-0.9.8o-r1.ebuild,v 1.2 2010/07/20 11:37:37 ssuominen Exp $
 
 # this ebuild is only for the libcrypto.so.0.9.8 and libssl.so.0.9.8 SONAME for ABI compat
 
@@ -26,9 +26,10 @@ DEPEND="${RDEPEND}
 	test? ( sys-devel/bc )"
 
 multilib-native_pkg_setup_internal() {
-	if [[ -e ${ROOT}/usr/$(get_libdir)/lib{crypto,ssl}.so.0.9.8 ]]; then
-		rm -f "${ROOT}"/usr/$(get_libdir)/lib{crypto,ssl}.so.0.9.8
-	fi
+	[[ -e ${ROOT}/usr/$(get_libdir)/libcrypto.so.0.9.8 ]] && \
+		rm -f "${ROOT}"/usr/$(get_libdir)/libcrypto.so.0.9.8
+	[[ -e ${ROOT}/usr/$(get_libdir)/libssl.so.0.9.8 ]] && \
+		rm -f "${ROOT}"/usr/$(get_libdir)/libssl.so.0.9.8
 }
 
 multilib-native_src_prepare_internal() {
