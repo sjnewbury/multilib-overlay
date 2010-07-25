@@ -310,6 +310,7 @@ virtual/acl
 # virtual/fam not in portage but needed to get lib32 deps
 virtual/glu
 virtual/glut
+virtual/jpeg
 # virtual/krb5 not in portage but needed to get lib32 deps
 virtual/libffi
 virtual/libusb
