@@ -1,12 +1,12 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/gnutls/gnutls-2.9.12.ebuild,v 1.1 2010/06/17 16:33:31 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/gnutls/gnutls-2.10.1.ebuild,v 1.1 2010/07/25 15:26:45 arfrever Exp $
 
 EAPI="3"
 
 inherit autotools libtool multilib-native
 
-DESCRIPTION="A TLS 1.0 and SSL 3.0 implementation for the GNU project"
+DESCRIPTION="A TLS 1.2 and SSL 3.0 implementation for the GNU project"
 HOMEPAGE="http://www.gnutls.org/"
 
 if [[ "${PV}" == *pre* ]]; then

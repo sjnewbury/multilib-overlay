@@ -1,12 +1,12 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/gnutls/gnutls-2.8.5.ebuild,v 1.8 2010/01/30 17:34:22 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/gnutls/gnutls-2.11.0.ebuild,v 1.1 2010/07/22 20:13:14 arfrever Exp $
 
-EAPI="2"
+EAPI="3"
 
 inherit autotools libtool multilib-native
 
-DESCRIPTION="A TLS 1.0 and SSL 3.0 implementation for the GNU project"
+DESCRIPTION="A TLS 1.2 and SSL 3.0 implementation for the GNU project"
 HOMEPAGE="http://www.gnutls.org/"
 
 if [[ "${PV}" == *pre* ]]; then
@@ -18,7 +18,8 @@ else
 		#SRC_URI="ftp://ftp.gnu.org/pub/gnu/${PN}/${P}.tar.bz2"
 		SRC_URI="mirror://gnu/${PN}/${P}.tar.bz2"
 	else
-		SRC_URI="ftp://alpha.gnu.org/gnu/${PN}/${P}.tar.bz2"
+		#SRC_URI="ftp://alpha.gnu.org/gnu/${PN}/${P}.tar.bz2"
+		SRC_URI="ftp://ftp.gnutls.org/pub/${PN}/devel/${P}.tar.bz2"
 	fi
 	unset MINOR_VERSION
 fi
@@ -26,7 +27,7 @@ fi
 # GPL-3 for the gnutls-extras library and LGPL for the gnutls library.
 LICENSE="LGPL-2.1 GPL-3"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="bindist +cxx doc examples guile lzo nls zlib"
 
 RDEPEND="dev-libs/libgpg-error[lib32?]
@@ -45,9 +46,8 @@ S="${WORKDIR}/${P%_pre*}"
 
 multilib-native_pkg_setup_internal() {
 	if use lzo && use bindist; then
-		ewarn "lzo support was disabled for binary distribution of gnutls"
-		ewarn "due to licensing issues. See Bug 202381 for details."
-		epause 5
+		ewarn "lzo support was disabled for binary distribution of GnuTLS"
+		ewarn "due to licensing issues. See Bug #202381 for details."
 	fi
 }
 
@@ -94,4 +94,6 @@ multilib-native_src_install_internal() {
 		docinto examples
 		dodoc doc/examples/*.c
 	fi
+
+	prep_ml_binaries /usr/bin/libgnutls-config /usr/bin/libgnutls-extra-config
 }
