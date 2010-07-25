@@ -16,11 +16,11 @@ SRC_URI="http://${PN}.freedesktop.org/src/${PN}/${P}.tar.bz2"
 LICENSE="LGPL-2"
 SLOT=${PV_MAJ_MIN}
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="nls test"
+IUSE="+introspection nls test"
 
 RDEPEND=">=dev-libs/glib-2.20:2[lib32?]
 	dev-libs/libxml2[lib32?]
-	introspection? ( >=dev-libs/gobject-introspection-0.6.3 )
+	introspection? ( >=dev-libs/gobject-introspection-0.6.3[lib32?] )
 	!<media-libs/gst-plugins-base-0.10.26"
 	# ^^ queue2 move, mustn't have both libgstcoreleements.so and libgstqueue2.so at runtime providing the element at once
 DEPEND="${RDEPEND}
