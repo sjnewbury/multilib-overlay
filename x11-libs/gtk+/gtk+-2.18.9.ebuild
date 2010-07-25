@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.18.9.ebuild,v 1.6 2010/07/07 19:35:05 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.18.9.ebuild,v 1.8 2010/07/23 20:33:03 ssuominen Exp $
 
 EAPI="3"
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.gtk.org/"
 
 LICENSE="LGPL-2"
 SLOT="2"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ppc64 ~sh ~sparc x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~mips ~ppc ppc64 ~sh ~sparc x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 IUSE="aqua cups debug doc jpeg jpeg2k tiff test vim-syntax xinerama"
 
 # FIXME: configure says >=xrandr-1.2.99 but remi tells me it's broken
@@ -40,7 +40,7 @@ RDEPEND="!aqua? (
 	x11-misc/shared-mime-info
 	>=media-libs/libpng-1.2.43-r2:0[lib32?]
 	cups? ( net-print/cups[lib32?] )
-	jpeg? ( >=media-libs/jpeg-6b-r2:0[lib32?] )
+	jpeg? ( virtual/jpeg[lib32?] )
 	jpeg2k? ( media-libs/jasper[lib32?] )
 	tiff? ( >=media-libs/tiff-3.5.7[lib32?] )
 	!<gnome-base/gail-1000"
