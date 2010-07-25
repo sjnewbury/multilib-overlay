@@ -1,23 +1,23 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.7.ebuild,v 1.7 2010/07/23 07:44:34 grobian Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.8.ebuild,v 1.4 2010/07/25 15:32:39 anarchy Exp $
 
 EAPI="3"
 WANT_AUTOCONF="2.1"
 
-inherit flag-o-matic toolchain-funcs eutils mozconfig-3 makeedit multilib java-pkg-opt-2 autotools python multilib-native
+inherit flag-o-matic toolchain-funcs eutils mozconfig-3 makeedit multilib java-pkg-opt-2 autotools python prefix multilib-native
 
 MY_PV="${PV/_rc/rc}" # Handle beta
 MY_PV="${MY_PV/1.9.2/3.6}"
 MAJ_PV="1.9.2" # from mozilla-* branch name
-PATCH="${PN}-1.9.2-patches-0.4"
+PATCH="${PN}-1.9.2-patches-0.5"
 
 DESCRIPTION="Mozilla runtime package that can be used to bootstrap XUL+XPCOM applications"
 HOMEPAGE="http://developer.mozilla.org/en/docs/XULRunner"
 SRC_URI="http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${MY_PV}/source/firefox-${MY_PV}.source.tar.bz2
-	http://dev.gentoo.org/~anarchy/dist/${PATCH}.tar.bz2"
+	http://dev.gentoo.org/~anarchy/mozilla/patchsets/${PATCH}.tar.bz2"
 
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ppc ~ppc64 ~sparc x86 ~amd64-linux ~x86-linux ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm hppa ~ia64 ppc ~ppc64 ~sparc x86 ~amd64-linux ~x86-linux ~sparc-solaris ~x64-solaris ~x86-solaris"
 SLOT="1.9"
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 IUSE="+alsa debug +ipc libnotify system-sqlite wifi"
@@ -29,7 +29,6 @@ RDEPEND="java? ( >=virtual/jre-1.4 )
 	system-sqlite? ( >=dev-db/sqlite-3.6.22-r2[fts3,secure-delete,lib32?] )
 	alsa? ( media-libs/alsa-lib[lib32?] )
 	>=app-text/hunspell-1.2[lib32?]
-	=media-libs/lcms-1*[lib32?]
 	>=x11-libs/cairo-1.8.8[X,lib32?]
 	x11-libs/pango[X,lib32?]
 	x11-libs/libXt[lib32?]
@@ -62,31 +61,11 @@ multilib-native_src_prepare_internal() {
 	EPATCH_FORCE="yes" \
 	epatch "${WORKDIR}"
 
-	# Fix build error for xpctools
-	epatch "${FILESDIR}/301-xulrunner-xpctools.diff"
-
-	# Fix broken mozilla-plugin.pc
-	epatch "${FILESDIR}/${PN}-1.9.2-fix-pkgconfig-file.patch"
-
-	epatch "${FILESDIR}"/${PN}-1.9-no_sunstudio.patch # breaks sunstudio
-	epatch "${FILESDIR}"/${PN}-1.9-solaris64.patch
-	epatch "${FILESDIR}"/${PN}-1.9.1.5-solaris-undef-regs.patch
-	epatch "${FILESDIR}"/${PN}-1.9.2-solaris-madvise.patch
-	epatch "${FILESDIR}"/${PN}-1.9_beta5-prefix.patch
 	eprefixify \
 		extensions/java/xpcom/interfaces/org/mozilla/xpcom/Mozilla.java \
 		xpcom/build/nsXPCOMPrivate.h \
 		xulrunner/installer/Makefile.in \
 		xulrunner/app/nsRegisterGREUnix.cpp
-
-	# Ensure we find myspell dict.
-	epatch "${FILESDIR}/1002_fix-system-hunspell-dict-detections.patch"
-
-	# ARM fixes, bug 327783
-	epatch "${FILESDIR}/${PN}-1.9.2-arm-fixes.patch"
-
-	# Enable tracemonkey for amd64 (bug #315997)
-	epatch "${FILESDIR}/801-enable-x86_64-tracemonkey.patch"
 
 	# Allow user to apply additional patches without modifing ebuild
 	epatch_user
@@ -157,7 +136,6 @@ multilib-native_src_configure_internal() {
 	mozconfig_annotate '' --with-system-nspr --with-nspr-prefix="${EPREFIX}"/usr
 	mozconfig_annotate '' --with-system-nss --with-nss-prefix="${EPREFIX}"/usr
 	mozconfig_annotate '' --x-includes="${EPREFIX}"/usr/include --x-libraries="${EPREFIX}"/usr/$(get_libdir)
-	mozconfig_annotate '' --enable-system-lcms
 	mozconfig_annotate '' --with-system-bz2
 
 	mozconfig_use_enable ipc # +ipc, upstream default
@@ -223,7 +201,7 @@ multilib-native_src_install_internal() {
 
 	# env.d file for ld search path
 	dodir /etc/env.d
-	echo "LDPATH=${EPREFIX}/${MOZLIBDIR}" > "${ED}"/etc/env.d/08xulrunner || die "env.d failed"
+	echo "LDPATH=${EPREFIX}/${MOZLIBDIR}" > "${ED}"/etc/env.d/08xulrunner-${ABI} || die "env.d failed"
 
 	# Add our defaults to xulrunner and out of firefox
 	cp "${FILESDIR}"/xulrunner-default-prefs.js \

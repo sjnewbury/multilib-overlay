@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.4.ebuild,v 1.7 2010/07/11 12:30:16 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.4.ebuild,v 1.8 2010/07/18 23:34:36 anarchy Exp $
 
 EAPI="2"
 WANT_AUTOCONF="2.1"
@@ -29,7 +29,6 @@ RDEPEND="java? ( >=virtual/jre-1.4 )
 	system-sqlite? ( >=dev-db/sqlite-3.6.22-r2[fts3,secure-delete,lib32?] )
 	alsa? ( media-libs/alsa-lib[lib32?] )
 	>=app-text/hunspell-1.2[lib32?]
-	=media-libs/lcms-1*[lib32?]
 	>=x11-libs/cairo-1.8.8[X,lib32?]
 	x11-libs/pango[X,lib32?]
 	x11-libs/libXt[lib32?]
@@ -148,7 +147,6 @@ multilib-native_src_configure_internal() {
 	mozconfig_annotate '' --enable-system-hunspell
 	mozconfig_annotate '' --with-system-nspr
 	mozconfig_annotate '' --with-system-nss
-	mozconfig_annotate '' --enable-system-lcms
 	mozconfig_annotate '' --with-system-bz2
 
 	mozconfig_use_enable ipc # +ipc, upstream default
