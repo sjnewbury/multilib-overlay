@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.6.23.ebuild,v 1.2 2010/03/19 18:33:37 grobian Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.7.0.ebuild,v 1.1 2010/07/23 19:40:05 arfrever Exp $
 
 EAPI="3"
 
@@ -22,7 +22,7 @@ SRC_URI="
 LICENSE="as-is"
 SLOT="3"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~ppc-aix ~sparc-fbsd ~x86-fbsd ~x86-freebsd ~hppa-hpux ~ia64-hpux ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~m68k-mint ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
-IUSE="debug doc extensions +fts3 icu +readline secure-delete soundex tcl +threadsafe test"
+IUSE="debug doc extensions +fts3 icu +readline secure-delete soundex tcl test +threadsafe unlock-notify"
 
 RDEPEND="icu? ( dev-libs/icu[lib32?] )
 	readline? ( sys-libs/readline[lib32?] )
@@ -88,6 +88,11 @@ multilib-native_src_configure_internal() {
 		append-cppflags -DNDEBUG
 	fi
 
+	# Enable unlock notification
+	if use unlock-notify; then
+		append-cppflags -DSQLITE_ENABLE_UNLOCK_NOTIFY
+	fi
+
 	local extensions_option
 	if use tcl || use test; then
 		extensions_option="load-extension"
@@ -101,7 +106,7 @@ multilib-native_src_configure_internal() {
 	# only available on OSX starting from 10.6 (Snow Leopard).  For earlier
 	# versions of OSX we have to disable all this nifty locking options, as
 	# suggested by upstream.
-	if [[ ${CHOST} == *-darwin[56789] ]] ; then
+	if [[ "${CHOST}" == *-darwin[56789] ]] ; then
 		append-cppflags -DSQLITE_ENABLE_LOCKING_STYLE=0
 	fi
 
