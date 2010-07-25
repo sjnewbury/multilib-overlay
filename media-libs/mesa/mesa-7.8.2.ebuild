@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.8.2.ebuild,v 1.5 2010/07/14 17:09:16 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.8.2.ebuild,v 1.7 2010/07/22 15:48:28 maekke Exp $
 
 EAPI=3
 
@@ -31,7 +31,7 @@ fi
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 arm hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
 
 VIDEO_CARDS="intel mach64 mga none nouveau r128 radeon radeonhd savage sis svga tdfx via"
 for card in ${VIDEO_CARDS}; do
@@ -50,7 +50,7 @@ RDEPEND="
 	dev-libs/expat[lib32?]
 	>=x11-libs/libdrm-2.4.19[lib32?]
 	gallium? (
-		video_cards_nouveau? ( <=x11-libs/libdrm-2.4.20[lib32?] )
+		video_cards_nouveau? ( <x11-libs/libdrm-2.4.21[lib32?] )
 	)
 	x11-libs/libICE[lib32?]
 	x11-libs/libX11[xcb?,lib32?]
