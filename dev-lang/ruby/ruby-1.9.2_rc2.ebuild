@@ -1,8 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/ruby/ruby-1.9.2_rc2.ebuild,v 1.1 2010/07/14 20:44:46 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/ruby/ruby-1.9.2_rc2.ebuild,v 1.3 2010/07/21 12:18:43 flameeyes Exp $
 
 EAPI=2
+
+PATCHSET=2
 
 inherit autotools eutils flag-o-matic multilib versionator multilib-native
 
@@ -14,10 +16,20 @@ MY_SUFFIX=$(delete_version_separator 1 ${SLOT})
 # 1.8 and 1.9 series disagree on this
 RUBYVERSION=$(get_version_component_range 1-3)
 
+if [[ -n ${PATCHSET} ]]; then
+	if [[ ${PVR} == ${PV} ]]; then
+		PATCHSET="${PV}-r0.${PATCHSET}"
+	else
+		PATCHSET="${PVR}.${PATCHSET}"
+	fi
+else
+	PATCHSET="${PVR}"
+fi
+
 DESCRIPTION="An object-oriented scripting language"
 HOMEPAGE="http://www.ruby-lang.org/"
 SRC_URI="mirror://ruby/${MY_P}.tar.bz2
-		 http://dev.gentoo.org/~flameeyes/ruby-team/${PN}-patches-${PVR}.tar.bz2"
+		 http://dev.gentoo.org/~flameeyes/ruby-team/${PN}-patches-${PATCHSET}.tar.bz2"
 
 LICENSE="|| ( Ruby GPL-2 )"
 KEYWORDS="~amd64 ~hppa ~x86 ~x86-fbsd"
