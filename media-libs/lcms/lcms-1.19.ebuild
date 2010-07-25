@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/lcms/lcms-1.19.ebuild,v 1.7 2010/03/24 18:12:07 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/lcms/lcms-1.19.ebuild,v 1.8 2010/07/23 20:40:22 ssuominen Exp $
 
 EAPI="2"
 
@@ -16,7 +16,7 @@ KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbs
 IUSE="tiff jpeg zlib python"
 
 RDEPEND="tiff? ( media-libs/tiff[lib32?] )
-	jpeg? ( media-libs/jpeg:0[lib32?] )
+	jpeg? ( virtual/jpeg[lib32?] )
 	zlib? ( sys-libs/zlib[lib32?] )
 	python? ( dev-lang/python[lib32?] )"
 DEPEND="${RDEPEND}

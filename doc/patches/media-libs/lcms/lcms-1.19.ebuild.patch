@@ -3,7 +3,7 @@
 @@ -17,7 +17,8 @@
  
  RDEPEND="tiff? ( media-libs/tiff )
- 	jpeg? ( media-libs/jpeg:0 )
+ 	jpeg? ( virtual/jpeg )
 -	zlib? ( sys-libs/zlib )"
 +	zlib? ( sys-libs/zlib )
 +	python? ( dev-lang/python )"

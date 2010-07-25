@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/lcms/lcms-2.0a.ebuild,v 1.5 2010/07/18 14:43:54 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/lcms/lcms-2.0a.ebuild,v 1.7 2010/07/23 20:40:22 ssuominen Exp $
 
 EAPI=2
 inherit libtool multilib-native
@@ -11,10 +11,10 @@ SRC_URI="mirror://sourceforge/${PN}/lcms2-${PV}.tar.gz"
 
 LICENSE="MIT"
 SLOT="2"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="jpeg static-libs tiff zlib"
 
-DEPEND="jpeg? ( media-libs/jpeg:0[lib32?] )
+DEPEND="jpeg? ( virtual/jpeg[lib32?] )
 	tiff? ( media-libs/tiff[lib32?] )
 	zlib? ( sys-libs/zlib[lib32?] )"
 
