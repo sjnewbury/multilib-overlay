@@ -28,11 +28,6 @@ dev-cpp/glibmm/glibmm-2.8.4.ebuild
 app-crypt/gnupg/gnupg-1.4.10.ebuild
 app-crypt/gnupg/gnupg-1.4.10-r1.ebuild
 app-crypt/gnupg/gnupg-2.0.11.ebuild
-www-client/mozilla-firefox/mozilla-firefox-2.0.0.19.ebuild
-net-libs/xulrunner/xulrunner-1.8.1.19.ebuild
-net-libs/xulrunner/xulrunner-1.9.0.11-r1.ebuild
-net-libs/xulrunner/xulrunner-1.9.0.14.ebuild
-net-libs/xulrunner/xulrunner-1.9.1.6.ebuild
 sys-libs/readline/readline-5.2_p14.ebuild
 sys-libs/db/db-1.85-r3.ebuild
 sys-libs/db/db-3.2.9_p2.ebuild
