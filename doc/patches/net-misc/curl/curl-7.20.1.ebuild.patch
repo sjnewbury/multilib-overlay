@@ -1,6 +1,6 @@
---- /usr/portage/net-misc/curl/curl-7.20.1.ebuild	2010-04-15 22:55:42.000000000 +0200
-+++ ./net-misc/curl/curl-7.20.1.ebuild	2010-04-22 01:25:52.000000000 +0200
-@@ -108,4 +108,6 @@
+--- /usr/portage/net-misc/curl/curl-7.20.1.ebuild	2010-07-18 07:07:03.000000000 +0200
++++ ./net-misc/curl/curl-7.20.1.ebuild	2010-07-25 21:37:17.000000000 +0200
+@@ -107,4 +107,6 @@
  	dodoc CHANGES README || die
  	dodoc docs/FEATURES docs/INTERNALS || die
  	dodoc docs/MANUAL docs/FAQ docs/BUGS docs/CONTRIBUTE || die

@@ -1,6 +1,6 @@
---- /usr/portage/net-misc/curl/curl-7.20.0-r2.ebuild	2010-03-21 16:12:16.000000000 +0100
-+++ ./net-misc/curl/curl-7.20.0-r2.ebuild	2010-04-03 22:58:21.000000000 +0200
-@@ -46,16 +46,13 @@
+--- /usr/portage/net-misc/curl/curl-7.20.0-r2.ebuild	2010-07-18 07:07:03.000000000 +0200
++++ ./net-misc/curl/curl-7.20.0-r2.ebuild	2010-07-25 21:36:45.000000000 +0200
+@@ -45,16 +45,13 @@
  	fi
  }
  
@@ -19,7 +19,7 @@
  	myconf="$(use_enable ldap)
  		$(use_enable ldap ldaps)
  		$(use_with idn libidn)
-@@ -97,8 +94,6 @@
+@@ -96,8 +93,6 @@
  	fi
  
  	econf ${myconf} || die 'configure failed'
@@ -28,7 +28,7 @@
  }
  
  src_install() {
-@@ -112,4 +107,6 @@
+@@ -111,4 +106,6 @@
  	dodoc CHANGES README
  	dodoc docs/FEATURES docs/INTERNALS
  	dodoc docs/MANUAL docs/FAQ docs/BUGS docs/CONTRIBUTE
