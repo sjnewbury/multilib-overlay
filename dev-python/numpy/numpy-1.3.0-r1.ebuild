@@ -13,7 +13,7 @@ DESCRIPTION="Fast array and numerical python library"
 SRC_URI="mirror://sourceforge/numpy/${P}.tar.gz"
 HOMEPAGE="http://numpy.scipy.org/"
 
-RDEPEND="dev-python/setuptools
+RDEPEND="dev-python/setuptools[lib32?]
 	lapack? ( virtual/cblas virtual/lapack )"
 DEPEND="${RDEPEND}
 	lapack? ( dev-util/pkgconfig[lib32?] )
