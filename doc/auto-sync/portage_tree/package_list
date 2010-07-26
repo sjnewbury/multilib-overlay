@@ -112,6 +112,7 @@ dev-python/pygobject
 dev-python/pygtk
 dev-python/pyorbit
 dev-python/pyrex
+dev-python/setuptools
 dev-util/automoc
 dev-util/cppunit
 dev-util/pkgconfig
