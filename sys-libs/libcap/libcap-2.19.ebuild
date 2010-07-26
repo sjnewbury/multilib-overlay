@@ -32,11 +32,11 @@ multilib-native_src_prepare_internal() {
 
 multilib-native_src_compile_internal() {
 	[[ -z ${EMULTILIB_PKG} ]] && tc-export BUILD_CC CC AR RANLIB
-	emake lib=$(get_libdir) || die
+	emake || die
 }
 
 multilib-native_src_install_internal() {
-	emake install lib=$(get_libdir) DESTDIR="${D}" || die
+	emake install DESTDIR="${D}" || die
 
 	gen_usr_ldscript -a cap
 
