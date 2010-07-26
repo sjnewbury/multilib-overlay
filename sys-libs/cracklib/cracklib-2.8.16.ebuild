@@ -21,7 +21,7 @@ IUSE="nls python"
 
 RDEPEND="sys-libs/zlib[lib32?]"
 DEPEND="${RDEPEND}
-	python? ( dev-python/setuptools )"
+	python? ( dev-python/setuptools[lib32?] )"
 
 S=${WORKDIR}/${MY_P}
 
