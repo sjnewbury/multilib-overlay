@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/distutils.eclass,v 1.75 2010/05/25 15:07:04 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/distutils.eclass,v 1.76 2010/07/17 23:03:29 arfrever Exp $
 
 # @ECLASS: distutils.eclass
 # @MAINTAINER:
@@ -42,9 +42,13 @@ fi
 # @DESCRIPTION:
 # Set this to use separate source directories for each enabled version of Python.
 
+# @ECLASS-VARIABLE: DISTUTILS_SETUP_FILES
+# @DESCRIPTION:
+# Paths to setup files.
+
 # @ECLASS-VARIABLE: DISTUTILS_GLOBAL_OPTIONS
 # @DESCRIPTION:
-# Global options passed to setup.py.
+# Global options passed to setup files.
 
 # @ECLASS-VARIABLE: DISTUTILS_SRC_TEST
 # @DESCRIPTION:
@@ -184,15 +188,21 @@ distutils_src_compile() {
 		distutils_building() {
 			_distutils_hook pre
 
-			echo ${_BOLD}"$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build -b "$(_distutils_get_build_dir)" "$@"${_NORMAL}
-			"$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build -b "$(_distutils_get_build_dir)" "$@" || return "$?"
+			local setup_file
+			for setup_file in "${DISTUTILS_SETUP_FILES[@]-setup.py}"; do
+				echo ${_BOLD}"$(PYTHON)" "${setup_file}" "${DISTUTILS_GLOBAL_OPTIONS[@]}" build -b "$(_distutils_get_build_dir)" "$@"${_NORMAL}
+				"$(PYTHON)" "${setup_file}" "${DISTUTILS_GLOBAL_OPTIONS[@]}" build -b "$(_distutils_get_build_dir)" "$@" || return "$?"
+			done
 
 			_distutils_hook post
 		}
 		python_execute_function ${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES:+-s} distutils_building "$@"
 	else
-		echo ${_BOLD}"$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build "$@"${_NORMAL}
-		"$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" build "$@" || die "Building failed"
+		local setup_file
+		for setup_file in "${DISTUTILS_SETUP_FILES[@]-setup.py}"; do
+			echo ${_BOLD}"$(PYTHON)" "${setup_file}" "${DISTUTILS_GLOBAL_OPTIONS[@]}" build "$@"${_NORMAL}
+			"$(PYTHON)" "${setup_file}" "${DISTUTILS_GLOBAL_OPTIONS[@]}" build "$@" || die "Building failed"
+		done
 	fi
 }
 
@@ -235,15 +245,21 @@ distutils_src_test() {
 			distutils_testing() {
 				_distutils_hook pre
 
-				echo ${_BOLD}PYTHONPATH="$(_distutils_get_PYTHONPATH)" "$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" $([[ -z "${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES}" ]] && echo build -b "$(_distutils_get_build_dir)") test "$@"${_NORMAL}
-				PYTHONPATH="$(_distutils_get_PYTHONPATH)" "$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" $([[ -z "${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES}" ]] && echo build -b "$(_distutils_get_build_dir)") test "$@" || return "$?"
+				local setup_file
+				for setup_file in "${DISTUTILS_SETUP_FILES[@]-setup.py}"; do
+					echo ${_BOLD}PYTHONPATH="$(_distutils_get_PYTHONPATH)" "$(PYTHON)" "${setup_file}" "${DISTUTILS_GLOBAL_OPTIONS[@]}" $([[ -z "${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES}" ]] && echo build -b "$(_distutils_get_build_dir)") test "$@"${_NORMAL}
+					PYTHONPATH="$(_distutils_get_PYTHONPATH)" "$(PYTHON)" "${setup_file}" "${DISTUTILS_GLOBAL_OPTIONS[@]}" $([[ -z "${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES}" ]] && echo build -b "$(_distutils_get_build_dir)") test "$@" || return "$?"
+				done
 
 				_distutils_hook post
 			}
 			python_execute_function ${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES:+-s} distutils_testing "$@"
 		else
-			echo ${_BOLD}PYTHONPATH="$(_distutils_get_PYTHONPATH)" "$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" test "$@"${_NORMAL}
-			PYTHONPATH="$(_distutils_get_PYTHONPATH)" "$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" test "$@" || die "Testing failed"
+			local setup_file
+			for setup_file in "${DISTUTILS_SETUP_FILES[@]-setup.py}"; do
+				echo ${_BOLD}PYTHONPATH="$(_distutils_get_PYTHONPATH)" "$(PYTHON)" "${setup_file}" "${DISTUTILS_GLOBAL_OPTIONS[@]}" test "$@"${_NORMAL}
+				PYTHONPATH="$(_distutils_get_PYTHONPATH)" "$(PYTHON)" "${setup_file}" "${DISTUTILS_GLOBAL_OPTIONS[@]}" test "$@" || die "Testing failed"
+			done
 		fi
 	elif [[ "${DISTUTILS_SRC_TEST}" == "nosetests" ]]; then
 		_distutils_src_test_hook nosetests
@@ -328,8 +344,11 @@ distutils_src_install() {
 		distutils_installation() {
 			_distutils_hook pre
 
-			echo ${_BOLD}"$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" $([[ -z "${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES}" ]] && echo build -b "$(_distutils_get_build_dir)") install --root="${D}" --no-compile "$@"${_NORMAL}
-			"$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" $([[ -z "${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES}" ]] && echo build -b "$(_distutils_get_build_dir)") install --root="${D}" --no-compile "$@" || return "$?"
+			local setup_file
+			for setup_file in "${DISTUTILS_SETUP_FILES[@]-setup.py}"; do
+				echo ${_BOLD}"$(PYTHON)" "${setup_file}" "${DISTUTILS_GLOBAL_OPTIONS[@]}" $([[ -z "${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES}" ]] && echo build -b "$(_distutils_get_build_dir)") install --root="${D}" --no-compile "$@"${_NORMAL}
+				"$(PYTHON)" "${setup_file}" "${DISTUTILS_GLOBAL_OPTIONS[@]}" $([[ -z "${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES}" ]] && echo build -b "$(_distutils_get_build_dir)") install --root="${D}" --no-compile "$@" || return "$?"
+			done
 
 			if [[ -z "${DISTUTILS_DISABLE_VERSIONING_OF_PYTHON_SCRIPTS}" && "${BASH_VERSINFO[0]}" -ge 4 ]]; then
 				rename_scripts_with_versioned_shebangs
@@ -347,8 +366,11 @@ distutils_src_install() {
 		# Mark the package to be rebuilt after a Python upgrade.
 		python_need_rebuild
 
-		echo ${_BOLD}"$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" install --root="${D}" --no-compile "$@"${_NORMAL}
-		"$(PYTHON)" setup.py "${DISTUTILS_GLOBAL_OPTIONS[@]}" install --root="${D}" --no-compile "$@" || die "Installation failed"
+		local setup_file
+		for setup_file in "${DISTUTILS_SETUP_FILES[@]-setup.py}"; do
+			echo ${_BOLD}"$(PYTHON)" "${setup_file}" "${DISTUTILS_GLOBAL_OPTIONS[@]}" install --root="${D}" --no-compile "$@"${_NORMAL}
+			"$(PYTHON)" "${setup_file}" "${DISTUTILS_GLOBAL_OPTIONS[@]}" install --root="${D}" --no-compile "$@" || die "Installation failed"
+		done
 	fi
 
 	if [[ -e "${ED}usr/local" ]]; then
@@ -459,40 +481,14 @@ distutils_pkg_postrm() {
 	fi
 }
 
-# @FUNCTION: distutils_python_version
-# @DESCRIPTION:
-# Deprecated wrapper function for deprecated python_version().
+# Scheduled for deletion on 2011-01-01.
 distutils_python_version() {
-	if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
-		eerror "Use PYTHON() and/or python_get_*() instead of ${FUNCNAME}()."
-		die "${FUNCNAME}() cannot be used in this EAPI"
-	fi
-
-	_python_set_color_variables
-
-	eerror
-	eerror "${_RED}Deprecation Warning: ${FUNCNAME}() is deprecated and will be banned on 2010-07-01.${_NORMAL}"
-	eerror "${_RED}Use PYTHON() instead of python variable. Use python_get_*() instead of PYVER* variables.${_NORMAL}"
-	eerror
-
-	python_version
+	eerror "Use PYTHON() instead of python variable. Use python_get_*() instead of PYVER* variables."
+	die "${FUNCNAME}() is banned"
 }
 
-# @FUNCTION: distutils_python_tkinter
-# @DESCRIPTION:
-# Deprecated wrapper function for deprecated python_tkinter_exists().
+# Scheduled for deletion on 2011-01-01.
 distutils_python_tkinter() {
-	if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
-		eerror "Use PYTHON_USE_WITH=\"xml\" and python_pkg_setup() instead of ${FUNCNAME}()."
-		die "${FUNCNAME}() cannot be used in this EAPI"
-	fi
-
-	_python_set_color_variables
-
-	eerror
-	eerror "${_RED}Deprecation Warning: ${FUNCNAME}() is deprecated and will be banned on 2010-07-01.${_NORMAL}"
-	eerror "${_RED}Use PYTHON_USE_WITH=\"xml\" and python_pkg_setup() instead of ${FUNCNAME}().${_NORMAL}"
-	eerror
-
-	python_tkinter_exists
+	eerror "Use PYTHON_USE_WITH=\"xml\" and python_pkg_setup() instead of ${FUNCNAME}()."
+	die "${FUNCNAME}() is banned"
 }

@@ -13,7 +13,7 @@
  	RDEPEND="${DEPEND}"
  fi
  
-@@ -278,6 +282,24 @@
+@@ -294,6 +298,24 @@
  		die "${FUNCNAME}() can be used only in src_install() phase"
  	fi
  
@@ -38,7 +38,7 @@
  	_python_initialize_prefix_variables
  	_python_set_color_variables
  
-@@ -368,6 +390,27 @@
+@@ -390,6 +412,27 @@
  		done
  	fi
  
