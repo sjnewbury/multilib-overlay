@@ -17,7 +17,7 @@
  }
  
  gcc-library-configure() {
-@@ -1174,7 +1175,14 @@
+@@ -1182,7 +1183,14 @@
  	if ! is_gcj ; then
  		confgcc="${confgcc} --disable-libgcj"
  	elif use gtk ; then
@@ -33,7 +33,7 @@
  	fi
  
  	case $(tc-arch) in
-@@ -1907,10 +1915,24 @@
+@@ -1914,10 +1922,24 @@
  		mv -f "${D}"${PREFIX}/lib/libgcj.spec "${D}"${LIBPATH}/libgcj.spec
  
  	# SLOT up libgcj.pc (and let gcc-config worry about links)

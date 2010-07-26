@@ -1,6 +1,6 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.434 2010/07/05 22:25:09 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.436 2010/07/22 01:26:33 dirtyepic Exp $
 #
 # Maintainer: Toolchain Ninjas <toolchain@gentoo.org>
 
@@ -1169,6 +1169,14 @@ gcc-compiler-configure() {
 		fi
 	fi
 
+	# For newer versions of gcc, use the default ("release"), because no
+	# one (even upstream apparently) tests with it disabled. #317217
+	if tc_version_is_at_least 4 || [[ -n ${GCC_CHECKS_LIST} ]] ; then
+		confgcc="${confgcc} --enable-checking=${GCC_CHECKS_LIST:-release}"
+	else
+		confgcc="${confgcc} --disable-checking"
+	fi
+
 	# GTK+ is preferred over xlib in 3.4.x (xlib is unmaintained
 	# right now). Much thanks to <csm@gnu.org> for the heads up.
 	# Travis Tilley <lv@gentoo.org>	 (11 Jul 2004)
@@ -1326,7 +1334,6 @@ gcc_do_configure() {
 	# reasonably sane globals (hopefully)
 	confgcc="${confgcc} \
 		--with-system-zlib \
-		--disable-checking \
 		--disable-werror \
 		--enable-secureplt"
 
