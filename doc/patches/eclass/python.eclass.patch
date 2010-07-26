@@ -1,6 +1,6 @@
---- /usr/portage/eclass/python.eclass	2010-05-29 19:05:51.000000000 +0200
-+++ ./eclass/python.eclass	2010-06-11 08:19:09.000000000 +0200
-@@ -184,6 +184,11 @@
+--- /usr/portage/eclass/python.eclass	2010-07-18 23:05:51.000000000 +0200
++++ ./eclass/python.eclass	2010-07-26 13:39:57.000000000 +0200
+@@ -194,6 +194,11 @@
  # Set this to a name of a USE flag if you need to make either PYTHON_USE_WITH or
  # PYTHON_USE_WITH_OR atoms conditional under a USE flag.
  
