@@ -41,7 +41,7 @@ x11-libs/libXft prep_ml_binaries /usr/bin/xft-config
 x11-libs/pango prep_ml_binaries /usr/bin/pango-querymodules
 x11-libs/qt-core prep_ml_binaries /usr/bin/qmake /usr/bin/moc /usr/bin/rcc /usr/bin/uic
 x11-misc/imake prep_ml_binaries /usr/bin/xmkmf /usr/bin/imake
-www-client/mozilla-firefox prep_ml_binaries /usr/bin/firefox
+www-client/firefox prep_ml_binaries /usr/bin/firefox
 dev-lang/python prep_ml_binaries usr/bin/python${SLOT} usr/bin/python-config-${SLOT}
 dev-lang/perl prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
 media-libs/fontconfig prep_ml_binaries /usr/bin/fc-cache

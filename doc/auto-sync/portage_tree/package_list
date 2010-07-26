@@ -319,7 +319,7 @@ virtual/opengl
 # virtual/pam not in portage but needed to get lib32 deps
 # www-client/epiphany			only 9999 version
 # www-client/epiphany-extensions	only 9999 version
-www-client/mozilla-firefox
+www-client/firefox
 # www-plugins/adobe-flash has no lib32 flag
 x11-libs/cairo
 x11-libs/goocanvas
