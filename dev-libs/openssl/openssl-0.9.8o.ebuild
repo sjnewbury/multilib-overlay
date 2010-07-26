@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="bindist gmp kerberos sse2 test zlib"
 
-RDEPEND="gmp? ( dev-libs/gmp )
+RDEPEND="gmp? ( dev-libs/gmp[lib32?] )
 	zlib? ( sys-libs/zlib[lib32?] )
 	kerberos? ( app-crypt/mit-krb5[lib32?] )"
 DEPEND="${RDEPEND}
