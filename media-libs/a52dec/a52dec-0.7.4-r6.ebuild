@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/a52dec/a52dec-0.7.4-r6.ebuild,v 1.13 2010/07/25 17:57:06 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/a52dec/a52dec-0.7.4-r6.ebuild,v 1.15 2010/07/26 01:22:16 zorry Exp $
 
 EAPI=2
 inherit autotools eutils flag-o-matic multilib-native
@@ -20,14 +20,14 @@ DEPEND="${RDEPEND}"
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-build.patch \
 		"${FILESDIR}"/${P}-freebsd.patch \
-		"${FILESDIR}"/${P}-tests-optional.patch
+		"${FILESDIR}"/${P}-tests-optional.patch \
+		"${FILESDIR}"/${P}-test-hidden-symbols.patch
 	eautoreconf
 	epunt_cxx
 }
 
 multilib-native_src_configure_internal() {
 	filter-flags -fprefetch-loop-arrays
-	filter-flags -fPIE
 
 	local myconf="--enable-shared"
 	use oss || myconf="${myconf} --disable-oss"
