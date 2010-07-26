@@ -23,7 +23,7 @@ DEPEND="=media-libs/freetype-2*[lib32?]
 	X? ( x11-libs/libXext[lib32?] x11-proto/xextproto )
 	mp3? ( media-libs/libid3tag[lib32?] )"
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# imlib2 has diff configure options for x86/amd64 mmx
 	local myconf=""
 	if [[ $(tc-arch) == "amd64" ]] ; then
@@ -45,7 +45,7 @@ multilib-native_src_compile_internal() {
 		$(use_with mp3 id3) \
 		${myconf} \
 	"
-	enlightenment_src_compile
+	enlightenment_src_configure
 }
 
 multilib-native_src_install_internal() {
