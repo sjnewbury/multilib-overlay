@@ -1,6 +1,6 @@
 # Copyright 1999-2007 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/mozconfig-2.eclass,v 1.21 2010/01/27 12:06:22 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/mozconfig-2.eclass,v 1.22 2010/07/23 19:53:30 ssuominen Exp $
 #
 # mozconfig.eclass: the new mozilla.eclass
 
@@ -11,7 +11,7 @@ IUSE="debug gnome ipv6 xinerama"
 RDEPEND="x11-libs/libXrender[lib32?]
 	x11-libs/libXt[lib32?]
 	x11-libs/libXmu[lib32?]
-	>=media-libs/jpeg-7[lib32?]
+	virtual/jpeg[lib32?]
 	>=media-libs/libpng-1.2.1[lib32?]
 	dev-libs/expat[lib32?]
 	app-arch/zip
