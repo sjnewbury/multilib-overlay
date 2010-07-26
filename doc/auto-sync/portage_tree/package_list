@@ -61,6 +61,7 @@ dev-libs/expat
 dev-libs/fribidi
 # dev-libs/gir-repository  we have only packages from a overlay
 dev-libs/glib
+dev-libs/gmp
 # dev-libs/gobject-introspection  we have only packages from a overlay
 dev-libs/icu
 dev-libs/iniparser
