@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/nss/nss-3.12.6-r2.ebuild,v 1.4 2010/07/21 14:21:02 darkside Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/nss/nss-3.12.6-r2.ebuild,v 1.5 2010/07/27 09:01:31 grobian Exp $
 
 EAPI=3
 inherit eutils flag-o-matic multilib toolchain-funcs multilib-native
@@ -196,7 +196,7 @@ multilib-native_pkg_postinst_internal() {
 	elog " links after upgrade."
 	elog
 	# We must re-sign the libraries AFTER they are stripped.
-	generate_chk "${EROOT}"/usr/bin/shlibsign "${ROOT}"/usr/$(get_libdir)
+	generate_chk "${EROOT}"/usr/bin/shlibsign "${EROOT}"/usr/$(get_libdir)
 }
 
 multilib-native_pkg_postrm_internal() {
