@@ -13,7 +13,7 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
 LICENSE="GPL-3 LGPL-2"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
-IUSE="acl doc emacs nls nocxx openmp elibc_glibc java"
+IUSE="acl doc emacs nls nocxx openmp elibc_glibc"
 
 DEPEND="virtual/libiconv
 	dev-libs/libxml2[lib32?]
@@ -21,8 +21,6 @@ DEPEND="virtual/libiconv
 	dev-libs/expat[lib32?]
 	acl? ( virtual/acl[lib32?] )"
 PDEPEND="emacs? ( app-emacs/po-mode )"
-RDEPEND="${DEPEND}
-	java? ( >=virtual/jdk-1.4 )"
 
 multilib-native_src_prepare_internal() {
 	epunt_cxx
@@ -67,7 +65,7 @@ multilib-native_src_configure_internal() {
 	econf \
 		--docdir="/usr/share/doc/${PF}" \
 		--without-emacs \
-		$(use_enable java) \
+		--disable-java \
 		--with-included-glib \
 		--with-included-libcroco \
 		$(use_enable openmp) \
@@ -94,15 +92,6 @@ multilib-native_src_install_internal() {
 		dodir /$(get_libdir)
 		mv "${D}"/usr/$(get_libdir)/${libname}* "${D}"/$(get_libdir)/
 		gen_usr_ldscript ${libname}
-	fi
-
-	if use java; then
-		java-pkg_newjar "${S}"/gettext-runtime/intl-java/libintl.jar || die
-		
-		if use doc; then
-			rm -rf "${D}"/usr/share/doc/${PF}/{html,javadoc2,javadoc1}
-			java-pkg_dojavadoc gettext-runtime/intl-java/javadoc*
-		fi
 	fi
 
 	if use doc ; then
