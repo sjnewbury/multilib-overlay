@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8.ebuild,v 1.5 2010/07/07 17:57:32 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8.1.ebuild,v 1.1 2010/07/28 09:34:45 dagger Exp $
 
 EAPI="2"
 
-inherit gnome.org eutils multilib-native
+inherit gnome.org eutils autotools multilib-native
 
 # NetworkManager likes itself with capital letters
 MY_PN=${PN/networkmanager/NetworkManager}
@@ -12,7 +12,8 @@ MY_P=${MY_PN}-${PV}
 
 DESCRIPTION="Network configuration and management in an easy way. Desktop environment independent."
 HOMEPAGE="http://www.gnome.org/projects/NetworkManager/"
-SRC_URI="${SRC_URI//${PN}/${MY_PN}}"
+SRC_URI="${SRC_URI//${PN}/${MY_PN}}
+	http://dev.gentoo.org/~dagger/files/${PN}-ifnet.patch"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -55,13 +56,12 @@ S=${WORKDIR}/${MY_P}
 
 multilib-native_src_prepare_internal() {
 	# Fix up the dbus conf file to use plugdev group
-	epatch "${FILESDIR}/${PN}-0.7.1-confchanges.patch"
+	epatch "${FILESDIR}/${P}-confchanges.patch"
 
-	# Hack keyfile plugin to read hostname file, fixes bug 176873
-	epatch "${FILESDIR}/${P}-read-hostname.patch"
+	# Gentoo system-plugin
+	epatch "${DISTDIR}/${PN}-ifnet.patch"
 
-	# Clear NSCD cache rather then kill daemon bug 301720
-	epatch "${FILESDIR}/${P}-nscd-clear-cache.patch"
+	eautoreconf
 }
 
 multilib-native_src_configure_internal() {
