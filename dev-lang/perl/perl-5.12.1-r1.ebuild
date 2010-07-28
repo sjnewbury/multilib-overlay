@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.12.1-r1.ebuild,v 1.1 2010/07/20 07:01:42 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.12.1-r1.ebuild,v 1.2 2010/07/28 06:12:23 tove Exp $
 
 EAPI=3
 
@@ -232,6 +232,7 @@ multilib-native_src_configure_internal() {
 		-Dprefix='/usr' \
 		-Dsiteprefix='/usr' \
 		-Dvendorprefix='/usr' \
+		-Dscriptdir='/usr/bin' \
 		-Dprivlib="${PRIV_LIB}" \
 		-Darchlib="${ARCH_LIB}" \
 		-Dsitelib="${SITE_LIB}" \
