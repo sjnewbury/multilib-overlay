@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/pam/pam-1.1.1-r2.ebuild,v 1.6 2010/07/27 14:06:05 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/pam/pam-1.1.1-r2.ebuild,v 1.8 2010/08/01 03:47:44 flameeyes Exp $
 
 EAPI="3"
 
@@ -17,7 +17,7 @@ SRC_URI="mirror://kernel/linux/libs/pam/library/${MY_P}.tar.bz2
 
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~amd64-linux ~ia64-linux ~x86-linux"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~amd64-linux ~ia64-linux ~x86-linux"
 IUSE="cracklib nls elibc_FreeBSD selinux vim-syntax audit test elibc_glibc debug berkdb"
 
 RDEPEND="nls? ( virtual/libintl )
@@ -183,4 +183,21 @@ multilib-native_src_install_internal() {
 
 multilib-native_pkg_preinst_internal() {
 	check_old_modules || die "deprecated PAM modules still used"
+}
+
+multilib-native_pkg_postinst_internal() {
+	ewarn "Some software with pre-loaded PAM libraries might experience"
+	ewarn "warnings or failures related to missing symbols and/or versions"
+	ewarn "after any update. While unfortunate this is a limit of the"
+	ewarn "implementation of PAM and the software, and it requires you to"
+	ewarn "restart the software manually after the update."
+	ewarn ""
+	ewarn "You can get a list of such software running a command like"
+	ewarn "  lsof / | egrep 'DEL.*libpam\\.so'"
+	elog ""
+	elog "Because of a bug present up to version 1.1.1-r2, you might have"
+	elog "an executable /var/log/tallylog file. If it is so, you can safely"
+	elog "correct it by running the command"
+	elog "  chmod -x /var/log/tallylog"
+	elog ""
 }
