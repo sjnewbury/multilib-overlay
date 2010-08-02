@@ -99,7 +99,7 @@ multilib-native_src_configure_internal() {
 	local myconf=''
 
 	# compilation with -O0 fails on amd64, see bug #171231
-	if use amd64; then
+	if use amd64 && [ ${ABI} = "amd64" ]; then
 		replace-flags -O0 -O2
 		is-flagq -O[s123] || append-flags -O2
 	fi

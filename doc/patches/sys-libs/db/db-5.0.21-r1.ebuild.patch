@@ -1,0 +1,11 @@
+--- /usr/portage/sys-libs/db/db-5.0.21-r1.ebuild	2010-05-14 13:07:13.000000000 +0200
++++ ./sys-libs/db/db-5.0.21-r1.ebuild	2010-08-02 20:01:49.000000000 +0200
+@@ -99,7 +99,7 @@
+ 	local myconf=''
+ 
+ 	# compilation with -O0 fails on amd64, see bug #171231
+-	if use amd64; then
++	if use amd64 && [ ${ABI} = "amd64" ]; then
+ 		replace-flags -O0 -O2
+ 		is-flagq -O[s123] || append-flags -O2
+ 	fi
