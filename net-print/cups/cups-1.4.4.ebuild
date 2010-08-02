@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.4.4.ebuild,v 1.2 2010/06/30 17:33:49 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.4.4.ebuild,v 1.3 2010/07/30 22:32:11 anarchy Exp $
 
 EAPI="2"
 
@@ -15,7 +15,7 @@ SRC_URI="mirror://easysw/${PN}/${PV}/${MY_P}-source.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
-IUSE="acl dbus debug gnutls java +jpeg kerberos ldap pam perl php +png python samba slp +ssl static +tiff +usb X xinetd"
+IUSE="acl dbus debug gnutls java +jpeg kerberos ldap pam perl php +png python samba slp +ssl static +threads +tiff +usb X xinetd"
 
 COMMON_DEPEND="
 	app-text/libpaper[lib32?]
@@ -130,6 +130,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable png) \
 		$(use_enable slp) \
 		$(use_enable static) \
+		$(use_enable threads) \
 		$(use_enable tiff) \
 		$(use_enable usb libusb) \
 		$(use_with java) \
@@ -138,7 +139,6 @@ multilib-native_src_configure_internal() {
 		$(use_with python) \
 		$(use_with xinetd xinetd /etc/xinetd.d) \
 		--enable-libpaper \
-		--enable-threads \
 		--disable-dnssd \
 		${myconf}
 
