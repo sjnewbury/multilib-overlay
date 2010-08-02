@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/ufraw/ufraw-0.16.ebuild,v 1.14 2010/01/31 17:45:56 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/ufraw/ufraw-0.16.ebuild,v 1.15 2010/07/28 13:26:36 ssuominen Exp $
 
 EAPI=2
 inherit fdo-mime gnome2-utils multilib-native
@@ -15,7 +15,7 @@ KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-freebsd ~amd64-l
 IUSE="contrast exif lensfun gimp gnome gtk hotpixels openmp timezone"
 
 RDEPEND="media-libs/jpeg[lib32?]
-	>=media-libs/lcms-1.13[lib32?]
+	=media-libs/lcms-1*[lib32?]
 	media-libs/tiff[lib32?]
 	exif? ( >=media-gfx/exiv2-0.11 )
 	gnome? ( gnome-base/gconf[lib32?] )

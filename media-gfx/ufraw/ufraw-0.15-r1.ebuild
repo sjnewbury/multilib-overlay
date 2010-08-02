@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/ufraw/ufraw-0.15-r1.ebuild,v 1.9 2009/06/01 13:37:56 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/ufraw/ufraw-0.15-r1.ebuild,v 1.10 2010/07/28 13:26:36 ssuominen Exp $
 
 EAPI="2"
 
@@ -16,7 +16,7 @@ KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="contrast exif gimp gnome openmp timezone"
 
 RDEPEND="media-libs/jpeg[lib32?]
-	>=media-libs/lcms-1.13[lib32?]
+	=media-libs/lcms-1*[lib32?]
 	media-libs/tiff[lib32?]
 	>=x11-libs/gtk+-2.4.0[lib32?]
 	exif? ( >=media-libs/libexif-0.6.13[lib32?]
