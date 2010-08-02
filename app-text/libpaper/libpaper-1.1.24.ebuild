@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/libpaper/libpaper-1.1.23_p2.ebuild,v 1.1 2010/03/08 07:30:09 sping Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/libpaper/libpaper-1.1.24.ebuild,v 1.1 2010/07/31 13:55:51 tgurr Exp $
 
 EAPI="2"
 
-inherit eutils libtool multilib-native
+inherit eutils multilib-native
 
 MY_PV=${PV/_p/+nmu}
 DESCRIPTION="Library for handling paper characteristics"
@@ -17,10 +17,6 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~spar
 IUSE=""
 
 S="${WORKDIR}/${PN}-${MY_PV}"
-
-multilib-native_src_prepare_internal() {
-	elibtoolize
-}
 
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
