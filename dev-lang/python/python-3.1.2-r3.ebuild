@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-3.1.2-r3.ebuild,v 1.15 2010/07/25 17:16:24 solar Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-3.1.2-r3.ebuild,v 1.17 2010/07/31 19:14:08 arfrever Exp $
 
 EAPI="3"
 
@@ -18,7 +18,7 @@ SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
 LICENSE="PSF-2.2"
 SLOT="3.1"
 PYTHON_ABI="${SLOT}"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~m68k ~mips ppc ~ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~m68k ~mips ppc ~ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite +ssl +threads tk +wide-unicode wininst +xml"
 
 RDEPEND=">=app-admin/eselect-python-20091230
@@ -90,8 +90,6 @@ multilib-native_src_prepare_internal() {
 	# that stdin is a tty for bug #248081.
 	sed -e "s:'osf1V5':'osf1V5' and sys.stdin.isatty():" -i Lib/test/test_file.py || die "sed failed"
 
-	# python ctypes abuse mmap perms incorrectly. This breaks PaX
-	sed -i -e s/'PROT_READ | PROT_WRITE | PROT_EXEC'/'PROT_READ | PROT_WRITE'/g Modules/_ctypes/malloc_closure.c
 	eautoreconf
 }
 
