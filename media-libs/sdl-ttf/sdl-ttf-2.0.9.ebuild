@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/sdl-ttf/sdl-ttf-2.0.9.ebuild,v 1.12 2010/07/27 02:16:18 mr_bones_ Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/sdl-ttf/sdl-ttf-2.0.9.ebuild,v 1.13 2010/07/31 10:38:49 scarabeus Exp $
 
 EAPI=2
 
@@ -24,7 +24,7 @@ S=${WORKDIR}/${MY_P}
 multilib-native_src_configure_internal() {
 	econf \
 		--disable-dependency-tracking \
-		$(use_with static-libs static) \
+		$(use_enable static-libs static) \
 		$(use_with X x)
 }
 
