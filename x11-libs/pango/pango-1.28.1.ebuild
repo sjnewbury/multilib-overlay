@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.28.1.ebuild,v 1.5 2010/08/01 11:04:53 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.28.1.ebuild,v 1.6 2010/08/05 16:23:37 jer Exp $
 
 EAPI="2"
 GCONF_DEBUG="yes"
@@ -12,7 +12,7 @@ HOMEPAGE="http://www.pango.org/"
 
 LICENSE="LGPL-2 FTL"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
 IUSE="X doc +introspection test"
 
 RDEPEND=">=dev-libs/glib-2.17.3[lib32?]
