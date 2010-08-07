@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-1.0.0a.ebuild,v 1.3 2010/07/18 19:39:21 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-1.0.0a.ebuild,v 1.4 2010/08/04 02:41:18 vapier Exp $
 
 EAPI="2"
 
@@ -27,6 +27,7 @@ PDEPEND="app-misc/ca-certificates"
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-0.9.7e-gentoo.patch
 	epatch "${FILESDIR}"/${PN}-0.9.8l-binutils.patch #289130
+	cp "${FILESDIR}"/alphacpuid.s "${S}"/crypto/ || die #330915
 
 	# disable fips in the build
 	# make sure the man pages are suffixed #302165
