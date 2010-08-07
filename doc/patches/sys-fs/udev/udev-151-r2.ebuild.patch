@@ -1,5 +1,5 @@
---- /usr/portage/./sys-fs/udev/udev-151-r2.ebuild	2010-04-19 22:57:35.000000000 +0200
-+++ ./sys-fs/udev/udev-151-r2.ebuild	2010-04-22 01:39:39.000000000 +0200
+--- /usr/portage/sys-fs/udev/udev-151-r2.ebuild	2010-08-02 23:15:45.000000000 +0200
++++ ./sys-fs/udev/udev-151-r2.ebuild	2010-08-07 03:15:52.000000000 +0200
 @@ -24,7 +24,7 @@
  LICENSE="GPL-2"
  SLOT="0"
@@ -9,8 +9,8 @@
  
  COMMON_DEPEND="selinux? ( sys-libs/libselinux )
  	extras? (
-@@ -35,7 +35,8 @@
- 		dev-libs/glib:2
+@@ -36,7 +36,8 @@
+ 		dev-util/pkgconfig
  	)
  	>=sys-apps/util-linux-2.16
 -	>=sys-libs/glibc-2.9"
@@ -19,7 +19,7 @@
  
  DEPEND="${COMMON_DEPEND}
  	extras? ( dev-util/gperf )
-@@ -138,9 +139,9 @@
+@@ -139,9 +140,9 @@
  			mv "${WORKDIR}"/test/sys "${S}"/test/
  		fi
  	fi
@@ -31,7 +31,7 @@
  	# patches go here...
  
  	# backport some patches
-@@ -192,7 +193,7 @@
+@@ -193,7 +194,7 @@
  	fi
  }
  
@@ -40,7 +40,7 @@
  	filter-flags -fprefetch-loop-arrays
  
  	econf \
-@@ -206,10 +207,7 @@
+@@ -207,10 +208,7 @@
  		--enable-static \
  		$(use_with selinux) \
  		$(use_enable extras) \
