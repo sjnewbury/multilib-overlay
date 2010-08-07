@@ -1,11 +1,11 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.8-r1.ebuild,v 1.2 2010/08/01 18:53:24 polynomial-c Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.8-r1.ebuild,v 1.3 2010/08/06 13:48:24 anarchy Exp $
 
 EAPI="3"
 WANT_AUTOCONF="2.1"
 
-inherit flag-o-matic toolchain-funcs eutils mozconfig-3 makeedit multilib java-pkg-opt-2 autotools python prefix multilib-native
+inherit flag-o-matic toolchain-funcs eutils mozconfig-3 makeedit multilib java-pkg-opt-2 autotools python prefix pax-utils multilib-native
 
 MY_PV="${PV/_rc/rc}" # Handle beta
 MY_PV="${MY_PV/1.9.2/3.6}"
@@ -213,6 +213,8 @@ multilib-native_src_install_internal() {
 	cp "${FILESDIR}"/xulrunner-default-prefs.js \
 		"${ED}/${MOZLIBDIR}/defaults/pref/all-gentoo.js" || \
 			die "failed to cp xulrunner-default-prefs.js"
+
+	pax-mark m "${D}"/${MOZLIBDIR}/plugin-container
 
 	if use java ; then
 		java-pkg_regjar "${ED}/${MOZLIBDIR}/javaxpcom.jar"
