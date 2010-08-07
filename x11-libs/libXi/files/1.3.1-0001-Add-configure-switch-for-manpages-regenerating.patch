@@ -1,0 +1,65 @@
+From c6d02ef39180174896fca5a720d25f991802ef60 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tom=C3=A1=C5=A1=20Chv=C3=A1tal?= <scarabeus@gentoo.org>
+Date: Mon, 2 Aug 2010 18:23:10 +0200
+Subject: [PATCH] Add configure switch for manpages regenerating.
+
+---
+ configure.ac |   35 ++++++++++++++++++++++-------------
+ 1 files changed, 22 insertions(+), 13 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index baf10f8..423e65d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -25,26 +25,35 @@ AC_SUBST(XI_CFLAGS)
+ AC_SUBST(XI_LIBS)
+ 
+ # Check for xmlto and asciidoc for man page conversion
+-# (only needed by people building tarballs)
+-AC_ARG_VAR([XMLTO], [Path to xmlto command])
+-AC_PATH_PROG([XMLTO], [xmlto])
+-AC_ARG_VAR([ASCIIDOC], [Path to asciidoc command])
+-AC_PATH_PROG([ASCIIDOC], [asciidoc])
+-if test "x$XMLTO" = "x" && test "x$ASCIIDOC" = "x"; then
+-	have_doctools=yes
++AC_ARG_WITH(manpages, AS_HELP_STRING([--with-manpages],
++	[Enable manpages building/regenerating (default: enabled if xmlto and asciidoc found)]),
++	[MANPAGES=$withval], [MANPAGES=auto])
++if test "x$MANPAGES" = "xyes" -o "x$MANPAGES" = "xauto" ; then
++		AC_ARG_VAR([XMLTO], [Path to xmlto command])
++		AC_PATH_PROG([XMLTO], [xmlto])
++		AC_ARG_VAR([ASCIIDOC], [Path to asciidoc command])
++		AC_PATH_PROG([ASCIIDOC], [asciidoc])
++		if test "x$XMLTO" != "x" && test "x$ASCIIDOC" != "x"; then
++			regen_manpages=yes
++		else
++			if test "x$MANPAGES" = "xyes"; then
++				AC_MSG_ERROR([Asciidoc or xmlto not found but manpages rebuild explicitely requested on configure line])
++			else
++				AC_MSG_WARN([xmlto or asciidoc not found - cannot create man pages without it])
++			fi
++			regen_manpages=no
++		fi
+ else
+-	have_doctools=no
+-fi
+-AM_CONDITIONAL([HAVE_DOCTOOLS], [test $have_doctools = yes])
+-if test $have_doctools = no; then
+-	AC_MSG_WARN([xmlto or asciidoc not found - cannot create man pages without it])
++	regen_manpages=no
++	AC_MSG_WARN([Manpage generating disabled on configure line])
+ fi
++AM_CONDITIONAL([HAVE_DOCTOOLS], [test "x$regen_manpages" = "xyes"])
+ 
+ # Determine if the source for man pages is available
+ # It may already be present (tarball) or can be generated using doctools
+ AM_CONDITIONAL([INSTALL_MANPAGES],
+ 	[test -f "$srcdir/man/XAllowDeviceEvents.man" || \
+-	  test $have_doctools = yes])
++	  test "x$regen_manpages" = "xyes"])
+ 
+ XORG_CHECK_MALLOC_ZERO
+ 
+-- 
+1.7.2
+
