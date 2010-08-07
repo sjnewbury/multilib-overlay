@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-dns/avahi/avahi-0.6.25-r1.ebuild,v 1.8 2010/08/03 01:56:46 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-dns/avahi/avahi-0.6.27.ebuild,v 1.1 2010/08/03 20:09:39 swegener Exp $
 
 EAPI="3"
 
@@ -8,7 +8,7 @@ PYTHON_DEPEND="python? 2"
 PYTHON_USE_WITH="gdbm"
 PYTHON_USE_WITH_OPT="python"
 
-inherit eutils mono python multilib autotools flag-o-matic multilib-native
+inherit eutils mono python multilib flag-o-matic multilib-native
 
 DESCRIPTION="System which facilitates service discovery on a local network"
 HOMEPAGE="http://avahi.org/"
@@ -16,7 +16,7 @@ SRC_URI="http://avahi.org/download/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="bookmarks howl-compat mdnsresponder-compat gdbm dbus doc mono gtk python qt4 autoipd kernel_linux test ipv6"
 
 RDEPEND=">=dev-libs/libdaemon-0.11-r1[lib32?]
@@ -25,7 +25,7 @@ RDEPEND=">=dev-libs/libdaemon-0.11-r1[lib32?]
 	gdbm? ( sys-libs/gdbm[lib32?] )
 	qt4? ( x11-libs/qt-core:4[lib32?] )
 	gtk? (
-		>=x11-libs/gtk+-2.4.0[lib32?]
+		>=x11-libs/gtk+-2.4.0:2[lib32?]
 		>=gnome-base/libglade-2.4.0[lib32?]
 	)
 	dbus? (
@@ -93,16 +93,6 @@ multilib-native_src_prepare_internal() {
 	use ipv6 && sed -i -e s/use-ipv6=no/use-ipv6=yes/ avahi-daemon/avahi-daemon.conf
 
 	sed -i -e "s:\\.\\./\\.\\./\\.\\./doc/avahi-docs/html/:../../../doc/${PF}/html/:" doxygen_to_devhelp.xsl
-
-	# Fix intltoolize broken file, see GNOME upstream  #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
-
-	rm -f common/libtool.m4 common/lt*.m4 || die "Removing libtool macros failed"
-
-	epatch "${FILESDIR}"/avahi-0.6.24-cmsg_space.patch
-	epatch "${FILESDIR}"/avahi-0.6.24-libintl.patch
-
-	eautoreconf
 }
 
 multilib-native_src_configure_internal() {
@@ -140,6 +130,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable mono) \
 		$(use_enable dbus) \
 		$(use_enable python) \
+		--disable-gtk3 \
 		$(use_enable gtk) \
 		--disable-qt3 \
 		$(use_enable qt4) \
