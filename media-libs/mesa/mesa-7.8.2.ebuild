@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.8.2.ebuild,v 1.7 2010/07/22 15:48:28 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.8.2.ebuild,v 1.8 2010/08/03 19:08:35 scarabeus Exp $
 
 EAPI=3
 
@@ -198,7 +198,7 @@ multilib-native_src_install_internal() {
 	ebegin "Moving libGL and friends for dynamic switching"
 		dodir /usr/$(get_libdir)/opengl/${OPENGL_DIR}/{lib,extensions,include}
 		local x
-		for x in "${D}"/usr/$(get_libdir)/libGL.{la,a,so*}; do
+		for x in "${D}"/usr/$(get_libdir)/libGL.{a,so*}; do
 			if [ -f ${x} -o -L ${x} ]; then
 				mv -f ${x} "${D}"/usr/$(get_libdir)/opengl/${OPENGL_DIR}/lib \
 					|| die "Failed to move ${x}"

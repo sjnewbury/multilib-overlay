@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.7.1.ebuild,v 1.7 2010/06/04 13:53:14 gmsoft Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.7.1.ebuild,v 1.9 2010/08/03 19:08:35 scarabeus Exp $
 
 EAPI="2"
 
@@ -32,7 +32,7 @@ fi
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 arm hppa ~ia64 ~mips ppc ppc64 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 
 VIDEO_CARDS="intel mach64 mga none nouveau r128 radeon radeonhd savage sis sunffb svga tdfx via"
 for card in ${VIDEO_CARDS}; do
@@ -180,7 +180,7 @@ multilib-native_src_install_internal() {
 	ebegin "Moving libGL and friends for dynamic switching"
 		dodir /usr/$(get_libdir)/opengl/${OPENGL_DIR}/{lib,extensions,include}
 		local x
-		for x in "${D}"/usr/$(get_libdir)/libGL.{la,a,so*}; do
+		for x in "${D}"/usr/$(get_libdir)/libGL.{a,so*}; do
 			if [ -f ${x} -o -L ${x} ]; then
 				mv -f ${x} "${D}"/usr/$(get_libdir)/opengl/${OPENGL_DIR}/lib \
 					|| die "Failed to move ${x}"
