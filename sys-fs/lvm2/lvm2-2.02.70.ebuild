@@ -1,9 +1,9 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/lvm2/lvm2-2.02.70.ebuild,v 1.1 2010/07/21 19:16:22 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/lvm2/lvm2-2.02.70.ebuild,v 1.3 2010/08/04 07:56:26 robbat2 Exp $
 
 EAPI=2
-inherit eutils multilib toolchain-funcs autotools multilib-native
+inherit eutils multilib toolchain-funcs autotools linux-info multilib-native
 
 DESCRIPTION="User-land utilities for LVM2 (device-mapper) software."
 HOMEPAGE="http://sources.redhat.com/lvm2/"
@@ -33,6 +33,9 @@ DEPEND="${DEPEND_COMMON}
 S="${WORKDIR}/${PN/lvm/LVM}.${PV}"
 
 multilib-native_pkg_setup_internal() {
+	local CONFIG_CHECK="~SYSVIPC"
+	local WARNING_SYSVIPC="CONFIG_SYSVIPC:\tis not set (required for udev sync)\n"
+	check_extra_config
 	# 1. Genkernel no longer copies /sbin/lvm blindly.
 	# 2. There are no longer any linking deps in /usr.
 	if use static; then
@@ -69,6 +72,8 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-2.02.64-dmeventd-libs.patch
 	# bug 301331
 	epatch "${FILESDIR}"/${PN}-2.02.67-createinitrd.patch
+	# bug 330373
+	epatch "${FILESDIR}"/${PN}-2.02.70-locale-muck.patch
 
 	eautoreconf
 }

@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/lvm2/lvm2-2.02.67.ebuild,v 1.3 2010/08/03 18:00:50 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/lvm2/lvm2-2.02.72.ebuild,v 1.2 2010/08/04 07:56:26 robbat2 Exp $
 
 EAPI=2
 inherit eutils multilib toolchain-funcs autotools linux-info multilib-native
@@ -72,6 +72,10 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-2.02.64-dmeventd-libs.patch
 	# bug 301331
 	epatch "${FILESDIR}"/${PN}-2.02.67-createinitrd.patch
+	# bug 330373
+	epatch "${FILESDIR}"/${PN}-2.02.70-locale-muck.patch
+	# --as-needed
+	epatch "${FILESDIR}"/${PN}-2.02.70-asneeded.patch
 
 	eautoreconf
 }
@@ -197,9 +201,10 @@ multilib-native_src_install_internal() {
 
 	dodoc README VERSION WHATS_NEW doc/*.{conf,c,txt}
 	insinto /$(get_libdir)/rcscripts/addons
-	newins "${FILESDIR}"/lvm2-start.sh-2.02.49-r3 lvm-start.sh || die
-	newins "${FILESDIR}"/lvm2-stop.sh-2.02.49-r3 lvm-stop.sh || die
-	newinitd "${FILESDIR}"/lvm.rc-2.02.51-r2 lvm || die
+	newins "${FILESDIR}"/lvm2-start.sh-2.02.67-r1 lvm-start.sh || die
+	newins "${FILESDIR}"/lvm2-stop.sh-2.02.67-r1 lvm-stop.sh || die
+	newinitd "${FILESDIR}"/lvm.rc-2.02.67-r1 lvm || die
+	newinitd "${FILESDIR}"/lvm-monitoring.initd-2.02.67-r2 lvm-monitoring || die
 	newconfd "${FILESDIR}"/lvm.confd-2.02.28-r2 lvm || die
 	if use clvm; then
 		newinitd "${FILESDIR}"/clvmd.rc-2.02.39 clvmd || die
@@ -220,10 +225,10 @@ multilib-native_src_install_internal() {
 	doins "${FILESDIR}"/dm-start.sh
 
 	# Device mapper stuff
-	newinitd "${FILESDIR}"/device-mapper.rc-1.02.51-r2 device-mapper || die
+	newinitd "${FILESDIR}"/device-mapper.rc-2.02.67-r1 device-mapper || die
 	newconfd "${FILESDIR}"/device-mapper.conf-1.02.22-r3 device-mapper || die
 
-	newinitd "${FILESDIR}"/1.02.22-dmeventd.initd dmeventd || die
+	newinitd "${FILESDIR}"/dmeventd.initd-2.02.67-r1 dmeventd || die
 	dolib.a daemons/dmeventd/libdevmapper-event.a \
 	|| die "dolib.a libdevmapper-event.a"
 	#gen_usr_ldscript libdevmapper-event.so
