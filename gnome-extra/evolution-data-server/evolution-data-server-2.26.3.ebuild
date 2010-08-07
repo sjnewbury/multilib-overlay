@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/evolution-data-server/evolution-data-server-2.26.3.ebuild,v 1.13 2010/07/19 22:04:34 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-extra/evolution-data-server/evolution-data-server-2.26.3.ebuild,v 1.14 2010/08/05 16:56:20 ssuominen Exp $
 
 EAPI="2"
 
@@ -12,7 +12,7 @@ HOMEPAGE="http://www.gnome.org/projects/evolution/"
 LICENSE="LGPL-2 BSD DB"
 SLOT="0"
 KEYWORDS="alpha amd64 arm ia64 ppc ppc64 sparc x86 ~x86-fbsd"
-IUSE="doc ipv6 kerberos gnome-keyring krb4 ldap ssl"
+IUSE="doc ipv6 kerberos gnome-keyring ldap ssl"
 
 RDEPEND=">=dev-libs/glib-2.16.1[lib32?]
 	>=x11-libs/gtk+-2.14[lib32?]
@@ -34,8 +34,7 @@ RDEPEND=">=dev-libs/glib-2.16.1[lib32?]
 	sys-libs/zlib[lib32?]
 	=sys-libs/db-4*[lib32?]
 	ldap? ( >=net-nds/openldap-2.0[lib32?] )
-	kerberos? ( virtual/krb5[lib32?] )
-	krb4? ( app-crypt/mit-krb5[krb4,lib32?] )"
+	kerberos? ( virtual/krb5[lib32?] )"
 
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9[lib32?]
@@ -49,8 +48,6 @@ DOCS="ChangeLog MAINTAINERS NEWS TODO"
 multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		$(use_with ldap openldap)
-		$(use_with krb4 krb4 /usr)
-		$(use_with krb4 krb4-libs /usr/$(get_libdir) )
 		$(use_with kerberos krb5 /usr)
 		$(use_with kerberos krb5-libs /usr/$(get_libdir) )
 		$(use_enable ssl nss)
