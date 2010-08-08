@@ -248,6 +248,7 @@ net-libs/gnutls
 net-libs/gssdp
 net-libs/gupnp
 net-libs/libasyncns
+net-libs/libgrss
 net-libs/libproxy
 net-libs/libsoup
 net-libs/libsoup-gnome
