@@ -19,6 +19,7 @@ app-crypt/mit-krb5
 # app-emulation/wine
 app-i18n/enca
 # app-misc/lirc
+app-misc/strigi 
 app-misc/tracker
 app-pda/gnome-pilot
 app-pda/gnome-pilot-conduits
