@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/icu/icu-4.4.1.ebuild,v 1.11 2010/08/05 18:06:36 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/icu/icu-4.4.1.ebuild,v 1.12 2010/08/08 16:05:41 armin76 Exp $
 
 EAPI="3"
 
@@ -22,7 +22,7 @@ SRC_URI="${BASE_URI}/${SRC_ARCHIVE}
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ~ia64 ~mips ppc ~ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ~ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="debug doc examples static-libs"
 
 DEPEND="doc? ( app-arch/unzip )"
