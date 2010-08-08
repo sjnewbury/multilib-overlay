@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.2.15-r1.ebuild,v 1.1 2010/06/23 17:11:00 vostorga Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.2.15-r1.ebuild,v 1.2 2010/08/07 16:02:22 armin76 Exp $
 
 EAPI="2"
 
@@ -13,7 +13,7 @@ HOMEPAGE="http://www.samba.org/"
 SRC_URI="mirror://samba/${MY_P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+KEYWORDS="alpha ~amd64 arm ~hppa ia64 ~mips ~ppc ~ppc64 s390 sh sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 
 # disabled for now
 #IUSE_LINGUAS="linguas_ja linguas_pl"
