@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libcaca/libcaca-0.99_beta17.ebuild,v 1.11 2010/07/25 16:26:09 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libcaca/libcaca-0.99_beta17.ebuild,v 1.13 2010/08/08 16:03:57 armin76 Exp $
 
 EAPI=2
 inherit autotools flag-o-matic mono multilib java-pkg-opt-2 multilib-native
@@ -13,7 +13,7 @@ SRC_URI="http://libcaca.zoy.org/files/${PN}/${MY_P}.tar.gz"
 
 LICENSE="GPL-2 ISC LGPL-2.1 WTFPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="cxx doc imlib java mono ncurses opengl ruby slang static-libs truetype X"
 
 COMMON_DEPEND="imlib? ( media-libs/imlib2[lib32?] )
@@ -22,7 +22,7 @@ COMMON_DEPEND="imlib? ( media-libs/imlib2[lib32?] )
 	opengl? ( virtual/opengl[lib32?]
 		media-libs/freeglut[lib32?]
 		truetype? ( >=media-libs/ftgl-2.1.3_rc5[lib32?] ) )
-	ruby? ( virtual/ruby )
+	ruby? ( =dev-lang/ruby-1.8*[lib32?] )
 	slang? ( >=sys-libs/slang-2[lib32?] )
 	X? ( x11-libs/libX11[lib32?] x11-libs/libXt[lib32?] )"
 RDEPEND="${COMMON_DEPEND}

@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libcaca/libcaca-0.99_beta16.ebuild,v 1.10 2009/08/24 19:54:11 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libcaca/libcaca-0.99_beta16.ebuild,v 1.11 2010/08/07 13:35:57 graaff Exp $
 
 EAPI="2"
 
@@ -23,7 +23,7 @@ RDEPEND="ncurses? ( >=sys-libs/ncurses-5.3[lib32?] )
 	X? ( x11-libs/libX11[lib32?] x11-libs/libXt[lib32?] )
 	opengl? ( virtual/opengl[lib32?] media-libs/freeglut[lib32?] )
 	mono? ( dev-lang/mono )
-	ruby? ( virtual/ruby )"
+	ruby? ( =dev-lang/ruby-1.8*[lib32?] )"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	doc? ( app-doc/doxygen
