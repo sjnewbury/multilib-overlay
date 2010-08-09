@@ -8,7 +8,7 @@ DESCRIPTION="Metapackage to provide 32bit libraries via multilib"
 HOMEPAGE="http://www.gentoo.org/"
 LICENSE="GPL-2"
 
-KEYWORDS="-* amd64"
+KEYWORDS="-* amd64 amd64-linux"
 SLOT="0"
 IUSE="opengl -nodep qt3 +qt4 +dbus +qt3support +svg +webkit +sql"
 
