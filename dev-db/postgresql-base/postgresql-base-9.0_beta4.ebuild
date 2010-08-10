@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/postgresql-base/postgresql-base-9.0_beta2-r1.ebuild,v 1.2 2010/06/20 13:26:58 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/postgresql-base/postgresql-base-9.0_beta4.ebuild,v 1.1 2010/08/09 19:26:47 patrick Exp $
 
 EAPI="2"
 
@@ -52,11 +52,11 @@ DEPEND="${RDEPEND}
 PDEPEND="doc? ( ~dev-db/postgresql-docs-${PV} )"
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}/postgresql-${SLOT}-common.patch" \
-		"${FILESDIR}/postgresql-${SLOT}-base.2.patch"
+	epatch "${FILESDIR}/postgresql-9.0-common.3.patch" \
+		"${FILESDIR}/postgresql-${SLOT}-base.3.patch"
 
 	if use kerberos && has_version "<app-crypt/heimdal-1.3.2-r1" ; then
-		"${FILESDIR}/postgresql-base-8.4-9.0-heimdal_strlcpy.patch"
+		epatch "${FILESDIR}/postgresql-base-8.4-9.0-heimdal_strlcpy.patch"
 	fi
 
 	# to avoid collision - it only should be installed by server
