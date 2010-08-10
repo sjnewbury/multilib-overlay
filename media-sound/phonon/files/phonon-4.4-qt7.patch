@@ -350,3 +350,14 @@ Author:	Heiko Przybyl <zuxez@cs.tu-berlin.de>
  	description.componentType = kAudioUnitType_Generator;
  	description.componentSubType = kAudioUnitSubType_ScheduledSoundPlayer;
  	description.componentManufacturer = kAudioUnitManufacturer_Apple;
+ayer.h
+--- phonon-4.4.2-orig/qt7/quicktimevideoplayer.h	2010-08-06 08:43:28.000000000 +0200
++++ phonon-4.4.2/qt7/quicktimevideoplayer.h	2010-08-06 08:43:43.000000000 +0200
+@@ -20,6 +20,7 @@
+ 
+ #include "backendheader.h"
+ 
++#include <QtGui/qmacdefines_mac.h>
+ #import <QTKit/QTDataReference.h>
+ #import <QTKit/QTMovie.h>
+ 
