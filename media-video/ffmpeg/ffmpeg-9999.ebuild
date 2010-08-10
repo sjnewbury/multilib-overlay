@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999.ebuild,v 1.18 2010/08/02 05:12:05 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999.ebuild,v 1.19 2010/08/10 09:57:39 ssuominen Exp $
 
 EAPI="2"
 
@@ -30,10 +30,7 @@ if [ "${PV#9999}" != "${PV}" ] ; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
-IUSE="+3dnow +3dnowext alsa altivec amr bindist +bzip2 cpudetection custom-cflags
-debug dirac doc +encode faac gsm +hardcoded-tables ieee1394 jack jpeg2k
-+mmx +mmxext mp3 network oss pic rtmp schroedinger sdl speex +ssse3 static-libs test theora
-threads v4l v4l2 vaapi vdpau vorbis vpx X x264 xvid +zlib"
+IUSE="+3dnow +3dnowext alsa altivec amr bindist +bzip2 cpudetection custom-cflags debug dirac doc +encode faac gsm +hardcoded-tables ieee1394 jack jpeg2k +mmx +mmxext mp3 network oss pic qt-faststart rtmp schroedinger sdl speex +ssse3 static-libs test theora threads v4l v4l2 vaapi vdpau vorbis vpx X x264 xvid +zlib"
 
 VIDEO_CARDS="nvidia"
 
@@ -67,6 +64,7 @@ RDEPEND="
 	vpx? ( media-libs/libvpx )
 	X? ( x11-libs/libX11[lib32?] x11-libs/libXext[lib32?] )
 	zlib? ( sys-libs/zlib[lib32?] )
+	!media-video/qt-faststart
 "
 
 DEPEND="${RDEPEND}
@@ -230,19 +228,28 @@ multilib-native_src_configure_internal() {
 		--mandir=/usr/share/man \
 		--enable-static --enable-shared \
 		--cc="$(tc-getCC)" \
-		${myconf} || die "configure failed"
+		${myconf} || die
 }
 
 multilib-native_src_compile_internal() {
 	emake version.h || die #252269
-	emake || die "make failed"
+	emake || die
+
+	if use qt-faststart; then
+		tc-export CC
+		emake -C tools qt-faststart || die
+	fi
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${D}" install install-man || die "Install Failed"
+	emake DESTDIR="${D}" install install-man || die
 
 	dodoc Changelog README INSTALL
 	dodoc doc/*
+
+	if use qt-faststart; then
+		dobin tools/qt-faststart || die
+	fi
 }
 
 src_test() {
