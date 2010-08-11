@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/firefox/firefox-3.6.4.ebuild,v 1.1 2010/07/25 19:06:36 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/firefox/firefox-3.6.4.ebuild,v 1.2 2010/08/10 22:52:14 truedfx Exp $
 EAPI="2"
 WANT_AUTOCONF="2.1"
 
@@ -69,6 +69,8 @@ RDEPEND="${RDEPEND} java? ( >=virtual/jre-1.4 )"
 
 S="${WORKDIR}/mozilla-1.9.2"
 
+# This is a copy of the launcher program installed as part of xulrunner, so has
+# already been stripped. Bug #332071 for details.
 QA_PRESTRIPPED="usr/$(get_libdir)/${PN}/firefox"
 
 linguas() {
