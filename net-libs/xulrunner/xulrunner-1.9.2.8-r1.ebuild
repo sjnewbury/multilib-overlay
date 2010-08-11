@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.8-r1.ebuild,v 1.3 2010/08/06 13:48:24 anarchy Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.8-r1.ebuild,v 1.4 2010/08/10 19:15:20 betelgeuse Exp $
 
 EAPI="3"
 WANT_AUTOCONF="2.1"
@@ -22,7 +22,7 @@ SLOT="1.9"
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 IUSE="+alsa +cups debug +ipc libnotify system-sqlite wifi"
 
-RDEPEND="java? ( >=virtual/jre-1.4 )
+RDEPEND="
 	>=sys-devel/binutils-2.16.1
 	>=dev-libs/nss-3.12.6[lib32?]
 	>=dev-libs/nspr-4.8[lib32?]
@@ -41,6 +41,9 @@ DEPEND="java? ( >=virtual/jdk-1.4 )
 	${RDEPEND}
 	=dev-lang/python-2*[threads,lib32?]
 	dev-util/pkgconfig[lib32?]"
+
+# virtual/jre should not be in DEPEND. bug 325981
+RDEPEND="java? ( >=virtual/jre-1.4 ) ${RDEPEND}"
 
 S="${WORKDIR}/mozilla-${MAJ_PV}"
 
