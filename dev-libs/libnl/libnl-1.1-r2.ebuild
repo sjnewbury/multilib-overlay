@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libnl/libnl-1.1-r2.ebuild,v 1.5 2010/05/22 13:33:30 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libnl/libnl-1.1-r2.ebuild,v 1.6 2010/08/11 00:53:27 jer Exp $
 
 EAPI="2"
 
@@ -12,7 +12,9 @@ SRC_URI="http://people.suug.ch/~tgr/libnl/files/${P}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-linux ~ia64-linux ~x86-linux"
-IUSE=""
+IUSE="doc"
+
+DEPEND="doc? ( app-doc/doxygen )"
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-vlan-header.patch
@@ -21,7 +23,21 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-flags.patch
 }
 
+multilib-native_src_compile_internal() {
+	default
+
+	if use doc ; then
+		cd "${S}/doc"
+		emake gendoc || die "emake gendoc failed"
+	fi
+}
+
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
 	dodoc ChangeLog
+
+	if use doc ; then
+		cd "${S}/doc"
+		dohtml -r html/*
+	fi
 }
