@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.3.11-r2.ebuild,v 1.12 2010/07/18 19:01:21 josejx Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.3.11-r2.ebuild,v 1.13 2010/08/10 20:54:31 scarabeus Exp $
 
 EAPI=2
 inherit autotools eutils flag-o-matic multilib pam multilib-native
@@ -25,7 +25,7 @@ COMMON_DEPEND="
 			sys-apps/attr[lib32?]
 		)
 	)
-	avahi? ( net-dns/avahi[lib32?] )
+	avahi? ( net-dns/avahi[mdnsresponder-compat,lib32?] )
 	dbus? ( sys-apps/dbus[lib32?] )
 	gnutls? ( net-libs/gnutls[lib32?] )
 	java? ( >=virtual/jre-1.4 )
@@ -89,14 +89,6 @@ for X in ${LANGS} ; do
 done
 
 multilib-native_pkg_setup_internal() {
-	if use avahi && ! built_with_use net-dns/avahi mdnsresponder-compat ; then
-		echo
-		eerror "In order to have cups working with avahi zeroconf support, you need"
-		eerror "to have net-dns/avahi emerged with \"mdnsresponder-compat\" in your USE"
-		eerror "flag. Please add that flag, re-emerge avahi, and then emerge cups again."
-		die "net-dns/avahi is missing the mdnsresponder-compat feature."
-	fi
-
 	enewgroup lp
 	enewuser lp -1 -1 -1 lp
 
