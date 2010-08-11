@@ -1,13 +1,13 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-multimedia/qt-multimedia-4.6.3.ebuild,v 1.1 2010/06/08 12:17:57 hwoarang Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-multimedia/qt-multimedia-4.6.3.ebuild,v 1.2 2010/08/11 17:05:13 jer Exp $
 
 EAPI="2"
 inherit qt4-build multilib-native
 
 DESCRIPTION="The Qt multimedia module"
 SLOT="4"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos"
 IUSE="iconv"
 
 # currently supported audio backends are: alsa, mac, win32
