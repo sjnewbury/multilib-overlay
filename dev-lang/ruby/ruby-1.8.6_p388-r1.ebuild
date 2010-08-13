@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/ruby/ruby-1.8.6_p388-r1.ebuild,v 1.4 2010/07/20 23:07:03 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/ruby/ruby-1.8.6_p388-r1.ebuild,v 1.5 2010/08/13 15:00:43 a3li Exp $
 
 EAPI=2
 
@@ -43,7 +43,7 @@ RDEPEND="
 	libedit? ( dev-libs/libedit[lib32?] )
 	!libedit? ( readline? ( sys-libs/readline[lib32?] ) )
 	sys-libs/zlib[lib32?]
-	>=app-admin/eselect-ruby-20091225
+	>=app-admin/eselect-ruby-20100603
 	!=dev-lang/ruby-cvs-${SLOT}*
 	!<dev-ruby/rdoc-2
 	!dev-ruby/rexml"
