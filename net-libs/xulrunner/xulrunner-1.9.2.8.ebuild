@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.8.ebuild,v 1.9 2010/08/10 15:53:36 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.8.ebuild,v 1.10 2010/08/13 19:38:39 polynomial-c Exp $
 
 EAPI="3"
 WANT_AUTOCONF="2.1"
@@ -57,9 +57,12 @@ multilib-native_pkg_setup_internal() {
 
 multilib-native_src_prepare_internal() {
 	# Apply our patches
+	EPATCH_EXCLUDE="1009-armv4t-nanojit.patch" \
 	EPATCH_SUFFIX="patch" \
 	EPATCH_FORCE="yes" \
 	epatch "${WORKDIR}"
+
+	epatch "${FILESDIR}"/1009-armv4t-nanojit-v2.patch
 
 	eprefixify \
 		extensions/java/xpcom/interfaces/org/mozilla/xpcom/Mozilla.java \
