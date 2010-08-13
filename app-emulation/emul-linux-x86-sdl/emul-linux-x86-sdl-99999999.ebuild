@@ -15,4 +15,4 @@ IUSE="-nodep"
 RDEPEND="!nodep? ( =app-emulation/emul-linux-x86-baselibs-${PV}
 		=app-emulation/emul-linux-x86-soundlibs-${PV}
 		=app-emulation/emul-linux-x86-xlibs-${PV}
-		media-libs/speex[lib32] )"
+		media-libs/speex[multilib_abi_x86] )"

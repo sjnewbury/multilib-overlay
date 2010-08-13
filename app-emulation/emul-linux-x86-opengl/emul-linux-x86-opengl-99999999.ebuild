@@ -14,9 +14,9 @@ IUSE="-nodep"
 
 RDEPEND="
 !nodep? (
-	media-libs/freeglut[lib32]
-	media-libs/mesa[lib32]
-	x11-libs/libdrm[lib32]
+	media-libs/freeglut[multilib_abi_x86]
+	media-libs/mesa[multilib_abi_x86]
+	x11-libs/libdrm[multilib_abi_x86]
 )
 "
 

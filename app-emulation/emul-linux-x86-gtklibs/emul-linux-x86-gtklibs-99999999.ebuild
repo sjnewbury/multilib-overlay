@@ -12,9 +12,9 @@ KEYWORDS="-* ~amd64"
 SLOT="0"
 IUSE="-nodep xfce"
 
-RDEPEND="!nodep? ( dev-libs/atk[lib32]
-		x11-libs/cairo[lib32]
-		x11-libs/gtk+[lib32]
-		x11-libs/pango[lib32]
-		x11-themes/gtk-engines[lib32]
-		xfce? ( x11-themes/gtk-engines-xfce[lib32] ) )"
+RDEPEND="!nodep? ( dev-libs/atk[multilib_abi_x86]
+		x11-libs/cairo[multilib_abi_x86]
+		x11-libs/gtk+[multilib_abi_x86]
+		x11-libs/pango[multilib_abi_x86]
+		x11-themes/gtk-engines[multilib_abi_x86]
+		xfce? ( x11-themes/gtk-engines-xfce[multilib_abi_x86] ) )"

@@ -17,11 +17,11 @@ RDEPEND="!nodep? ( =app-emulation/emul-linux-x86-baselibs-${PV}
 		=app-emulation/emul-linux-x86-xlibs-${PV}
 		=app-emulation/emul-linux-x86-sdl-${PV}
 		!<media-video/mplayer-bin-1.0_rc1-r2
-		media-libs/libtheora[lib32]
-		media-libs/libmad[lib32]
-		media-sound/lame[lib32]
-		dev-libs/DirectFB[lib32]
-		app-misc/lirc[lib32]
-		media-libs/xvid[lib32]
-		dev-libs/fribidi[lib32]
-		media-libs/libdv[lib32] )"
+		media-libs/libtheora[multilib_abi_x86]
+		media-libs/libmad[multilib_abi_x86]
+		media-sound/lame[multilib_abi_x86]
+		dev-libs/DirectFB[multilib_abi_x86]
+		app-misc/lirc[multilib_abi_x86]
+		media-libs/xvid[multilib_abi_x86]
+		dev-libs/fribidi[multilib_abi_x86]
+		media-libs/libdv[multilib_abi_x86] )"
