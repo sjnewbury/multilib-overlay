@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup/libsoup-2.30.2-r1.ebuild,v 1.6 2010/08/05 16:19:05 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup/libsoup-2.30.2-r1.ebuild,v 1.7 2010/08/13 22:05:58 eva Exp $
 
 EAPI="2"
 
@@ -23,8 +23,8 @@ RDEPEND=">=dev-libs/glib-2.21.3[lib32?]
 	ssl? ( >=net-libs/gnutls-2.1.7[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9[lib32?]
-	dev-util/gtk-doc-am
-	doc? ( >=dev-util/gtk-doc-1 )"
+	>=dev-util/gtk-doc-am-1.10
+	doc? ( >=dev-util/gtk-doc-1.10 )"
 #	test? (
 #		www-servers/apache
 #		dev-lang/php
