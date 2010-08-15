@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-crypt/gnupg/gnupg-2.0.16-r1.ebuild,v 1.1 2010/08/10 15:51:28 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-crypt/gnupg/gnupg-2.0.16-r1.ebuild,v 1.2 2010/08/14 21:20:32 truedfx Exp $
 
 EAPI="3"
 
@@ -68,7 +68,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable nls) \
 		$(use_enable ldap) \
 		$(use_with caps capabilities) \
-		CC_FOR_BUILD=$(tc-getBUILD_CC)
+		CC_FOR_BUILD="$(tc-getBUILD_CC)"
 }
 
 multilib-native_src_compile_internal() {
