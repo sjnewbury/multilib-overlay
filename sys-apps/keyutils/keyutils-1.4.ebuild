@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/keyutils/keyutils-1.4.ebuild,v 1.2 2010/07/04 21:09:25 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/keyutils/keyutils-1.4.ebuild,v 1.3 2010/08/15 20:43:21 truedfx Exp $
 
 inherit multilib eutils toolchain-funcs multilib-native
 
@@ -26,7 +26,7 @@ multilib-native_src_unpack_internal() {
 
 multilib-native_src_compile_internal() {
 	emake \
-		CC=$(tc-getCC) \
+		CC="$(tc-getCC)" \
 		CFLAGS="${CFLAGS}" \
 		LDFLAGS="${LDFLAGS}" \
 		|| die "emake failed"
