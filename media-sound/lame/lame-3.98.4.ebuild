@@ -1,20 +1,18 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/lame/lame-3.98.4.ebuild,v 1.1 2010/04/12 07:02:16 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/lame/lame-3.98.4.ebuild,v 1.4 2010/08/23 20:10:27 ssuominen Exp $
 
-EAPI="2"
-
-inherit flag-o-matic toolchain-funcs eutils autotools versionator multilib-native
+EAPI=3
+inherit autotools eutils multilib-native
 
 DESCRIPTION="LAME Ain't an MP3 Encoder"
 HOMEPAGE="http://lame.sourceforge.net"
-
 SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="debug mmx mp3rtp sndfile"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+IUSE="debug mmx mp3rtp sndfile static-libs"
 
 RDEPEND=">=sys-libs/ncurses-5.2[lib32?]
 	sndfile? ( >=media-libs/libsndfile-1.0.2[lib32?] )"
@@ -23,57 +21,38 @@ DEPEND="${RDEPEND}
 	mmx? ( dev-lang/nasm )"
 
 multilib-native_src_prepare_internal() {
-	# The frontened tries to link staticly, but we prefer shared libs
-	epatch "${FILESDIR}"/${PN}-3.98-shared-frontend.patch
+	epatch \
+		"${FILESDIR}"/${PN}-3.98-shared-frontend.patch \
+		"${FILESDIR}"/${PN}-3.96-ccc.patch \
+		"${FILESDIR}"/${PN}-3.98-gtk-path.patch \
+		"${FILESDIR}"/${PN}-3.98.2-get_audio.patch
 
-	# If ccc (alpha compiler) is installed on the system, the default
-	# configure is broken, fix it to respect CC.  This is only
-	# directly broken for ARCH=alpha but would affect anybody with a
-	# ccc binary in their PATH.  Bug #41908  (26 Jul 2004 agriffis)
-	epatch "${FILESDIR}"/${PN}-3.96-ccc.patch
-
-	# Patch gtk stuff, otherwise eautoreconf dies
-	epatch "${FILESDIR}"/${PN}-3.98-gtk-path.patch
-
-	# Read and write from std* when sndfile is used
-	epatch "${FILESDIR}"/${PN}-3.98.2-get_audio.patch
-
-	# It fails parallel make otherwise when enabling nasm...
-	mkdir "${S}/libmp3lame/i386/.libs" || die
+	mkdir libmp3lame/i386/.libs || die #workaround parallel build with nasm
 
 	AT_M4DIR="${S}" eautoreconf
-	epunt_cxx # embedded bug #74498
+	epunt_cxx #74498
 }
 
 multilib-native_src_configure_internal() {
+	local myconf
 	use sndfile && myconf="--with-fileio=sndfile"
-	# The user sets compiler optimizations... But if you'd like
-	# lame to choose it's own... uncomment one of these (experiMENTAL)
-	# myconf="${myconf} --enable-expopt=full \
-	# myconf="${myconf} --enable-expopt=norm \
 
 	econf \
-		--enable-shared \
+		--disable-dependency-tracking \
+		$(use_enable static-libs static) \
 		$(use_enable debug debug norm) \
-		--disable-mp3x \
 		$(use_enable mmx nasm) \
+		--disable-mp3x \
 		$(use_enable mp3rtp) \
-		${myconf} || die "econf failed"
+		${myconf}
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${D}" pkghtmldir="/usr/share/doc/${PF}/html" install || die
+	emake DESTDIR="${D}" pkghtmldir="${EPREFIX}/usr/share/doc/${PF}/html" install || die
+	dobin misc/mlame || die
 
 	dodoc API ChangeLog HACKING README* STYLEGUIDE TODO USAGE || die
 	dohtml misc/lameGUI.html Dll/LameDLLInterface.htm || die
 
-	dobin "${S}"/misc/mlame || die
-}
-
-multilib-native_pkg_postinst_internal(){
-	if use mp3rtp ; then
-	    ewarn "Warning, support for the encode-to-RTP program, 'mp3rtp'"
-	    ewarn "is broken as of August 2001."
-	    ewarn " "
-	fi
+	find "${ED}" -name '*.la' -exec rm -f '{}' +
 }

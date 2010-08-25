@@ -1,5 +1,7 @@
---- lame-398-2.orig/frontend/get_audio.c     2009-06-17 00:45:34.000000000 +0900
-+++ lame-398-2/frontend/get_audio.c 2009-06-17 00:48:58.000000000 +0900
+Read and write from std* when sndfile is used
+
+--- frontend/get_audio.c
++++ frontend/get_audio.c
 @@ -605,12 +605,17 @@
          }
  #endif
