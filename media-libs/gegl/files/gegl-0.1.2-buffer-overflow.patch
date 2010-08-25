@@ -1,0 +1,14 @@
+https://bugs.gentoo.org/319789
+http://git.gnome.org/browse/gegl/commit/?id=e287b94c8cb078db86d883395bd089002b405e18
+
+--- a/gegl/buffer/gegl-buffer-save.c
++++ b/gegl/buffer/gegl-buffer-save.c
+@@ -196,7 +196,7 @@ gegl_buffer_header_init (GeglBufferHeader *header,
+                          gint              bpp,
+                          Babl*             format)
+ {
+-  strcpy (header->magic, "GEGL");
++  memcpy (header->magic, "GEGL", 4);
+ 
+   header->flags = GEGL_FLAG_HEADER;
+   header->tile_width  = tile_width;

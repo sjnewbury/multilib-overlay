@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/gegl/gegl-0.1.2.ebuild,v 1.3 2010/02/21 07:00:51 abcd Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/gegl/gegl-0.1.2.ebuild,v 1.4 2010/08/22 05:36:39 dirtyepic Exp $
 
 EAPI="2"
 
@@ -35,6 +35,10 @@ DEPEND=">=media-libs/babl-0.1.2[lib32?]
 	sdl? ( media-libs/libsdl[lib32?] )
 	svg? ( >=gnome-base/librsvg-2.14.0[lib32?] )"
 RDEPEND="${DEPEND}"
+
+multilib-native_src_prepare_internal() {
+	epatch "${FILESDIR}"/${P}-buffer-overflow.patch
+}
 
 multilib-native_src_configure_internal() {
 	econf --with-gtk --with-pango --with-gdk-pixbuf \
