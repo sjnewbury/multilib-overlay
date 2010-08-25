@@ -1,6 +1,6 @@
---- /usr/portage/net-libs/xulrunner/xulrunner-1.9.2.8-r1.ebuild	2010-08-13 17:12:54.000000000 +0200
-+++ ./net-libs/xulrunner/xulrunner-1.9.2.8-r1.ebuild	2010-08-14 00:47:01.000000000 +0200
-@@ -213,7 +213,7 @@
+--- /usr/portage/net-libs/xulrunner/xulrunner-1.9.2.8-r1.ebuild	2010-08-23 17:06:41.000000000 +0200
++++ ./net-libs/xulrunner/xulrunner-1.9.2.8-r1.ebuild	2010-08-26 00:56:46.000000000 +0200
+@@ -215,7 +215,7 @@
  
  	# env.d file for ld search path
  	dodir /etc/env.d
@@ -9,7 +9,7 @@
  
  	# Add our defaults to xulrunner and out of firefox
  	cp "${FILESDIR}"/xulrunner-default-prefs.js \
-@@ -228,20 +228,27 @@
+@@ -230,20 +230,27 @@
  		java-pkg_regjar "${ED}/${SDKDIR}/lib/MozillaGlue.jar"
  		java-pkg_regjar "${ED}/${SDKDIR}/lib/MozillaInterfaces.jar"
  	fi
