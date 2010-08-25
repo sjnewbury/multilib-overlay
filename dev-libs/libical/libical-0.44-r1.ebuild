@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libical/libical-0.44.ebuild,v 1.1 2009/11/12 10:45:38 pva Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libical/libical-0.44-r1.ebuild,v 1.1 2010/08/19 19:52:24 dagger Exp $
 
 EAPI="2"
 
@@ -28,10 +28,15 @@ multilib-native_src_prepare_internal() {
 	# Do not waste time building examples
 	sed 's/^\(SUBDIRS =.*\)examples\(.*\)$/\1\2/' \
 		-i Makefile.am Makefile.in || die "sed failed"
+	# If errors are fatal, some software can segfault
+	sed 's/^#define ICAL_ERRORS_ARE_FATAL 0/#undef ICAL_ERRORS_ARE_FATAL/' \
+		-i configure || die "sed failed"
 }
 
 multilib-native_src_configure_internal() {
-	econf --disable-static
+	econf \
+		--disable-static \
+		--disable-icalerrors-are-fatal
 }
 
 multilib-native_src_install_internal() {
