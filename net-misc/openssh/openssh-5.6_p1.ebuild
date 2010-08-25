@@ -1,18 +1,19 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/openssh/openssh-5.4_p1-r2.ebuild,v 1.2 2010/03/29 06:40:15 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/openssh/openssh-5.6_p1.ebuild,v 1.1 2010/08/23 21:55:34 vapier Exp $
 
-EAPI=2
+EAPI="2"
 inherit eutils flag-o-matic multilib autotools pam multilib-native
 
 # Make it more portable between straight releases
 # and _p? releases.
 PARCH=${P/_/}
+#PARCH_54=${PARCH/5.?/5.4}
 
-HPN_PATCH="${PARCH}-hpn13v7.diff.gz"
-HPN_X509_PATCH="${HPN_PATCH%.diff.gz}-x509variant.diff.gz"
-LDAP_PATCH="${PARCH/openssh/openssh-lpk}-0.3.13.patch.gz"
-X509_VER="6.2.3" X509_PATCH="${PARCH}+x509-${X509_VER}.diff.gz"
+#HPN_PATCH="${PARCH/5.6/5.5}-hpn13v9.diff.gz"
+#HPN_X509_PATCH="${PARCH_54}-hpn13v7-x509variant.diff.gz"
+#LDAP_PATCH="${PARCH_54/openssh/openssh-lpk}-0.3.13.patch.gz"
+#X509_VER="6.2.3" X509_PATCH="${PARCH}+x509-${X509_VER}.diff.gz"
 
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="http://www.openssh.org/"
@@ -94,9 +95,7 @@ multilib-native_src_prepare_internal() {
 	else
 		use ldap && ewarn "Sorry, X509 and LDAP conflict internally, disabling LDAP"
 	fi
-	epatch "${FILESDIR}"/${P}-openssl.patch
-	epatch "${FILESDIR}"/${P}-pkcs11.patch #310929
-	epatch "${FILESDIR}"/${P}-relative-AuthorizedKeysFile.patch #308939
+	epatch "${FILESDIR}"/${PN}-5.4_p1-openssl.patch
 	epatch "${FILESDIR}"/${PN}-4.7_p1-GSSAPI-dns.patch #165444 integrated into gsskex
 	if [[ -n ${HPN_PATCH} ]] && use hpn; then
 		if use X509 ; then
@@ -183,8 +182,7 @@ multilib-native_src_configure_internal() {
 		$(use_with libedit) \
 		$(use_with selinux) \
 		$(use_with skey) \
-		$(use_with tcpd tcp-wrappers) \
-		|| die
+		$(use_with tcpd tcp-wrappers)
 }
 
 multilib-native_src_compile_internal() {
