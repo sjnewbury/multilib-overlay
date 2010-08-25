@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.30.2-r1.ebuild,v 1.4 2010/08/01 11:50:58 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.30.2-r1.ebuild,v 1.6 2010/08/24 08:19:58 eva Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -9,16 +9,13 @@ inherit autotools gnome2 flag-o-matic python versionator multilib-native
 
 DESCRIPTION="Integrated mail, addressbook and calendaring functionality"
 HOMEPAGE="http://www.gnome.org/projects/evolution/"
+SRC_URI="${SRC_URI}
+	mirror://gentoo/${P}-patches.tar.bz2"
 
 LICENSE="GPL-2 LGPL-2 OPENLDAP"
 SLOT="2.0"
 KEYWORDS="~alpha amd64 ~ia64 ~ppc ~ppc64 ~sparc x86 ~x86-fbsd"
-
-SRC_URI="${SRC_URI}
-	mirror://gentoo/${P}-patches.tar.bz2"
-
-IUSE="crypt kerberos ldap networkmanager pda profile python ssl
-gstreamer +sound"
+IUSE="crypt doc gstreamer kerberos ldap networkmanager nntp pda profile python ssl"
 # pst
 # mono - disabled because it just crashes on startup :S
 
@@ -34,11 +31,12 @@ RDEPEND=">=dev-libs/glib-2.22[lib32?]
 	>=gnome-base/libgnomecanvas-2[lib32?]
 	dev-libs/atk[lib32?]
 	>=dev-libs/dbus-glib-0.74[lib32?]
-	>=dev-libs/libunique-1[lib32?]
+	>=dev-libs/libunique-1.1.2[lib32?]
 	>=dev-libs/libxml2-2.7.3[lib32?]
 	>=dev-libs/libgweather-2.25.3[lib32?]
 	>=net-libs/libsoup-2.4[lib32?]
 	>=media-gfx/gtkimageview-1.6[lib32?]
+	media-libs/libcanberra[gtk,lib32?]
 	x11-libs/libnotify[lib32?]
 	>=x11-misc/shared-mime-info-0.22
 	>=x11-themes/gnome-icon-theme-2.20
@@ -57,10 +55,11 @@ RDEPEND=">=dev-libs/glib-2.22[lib32?]
 		>=app-pda/gnome-pilot-2.0.16[lib32?]
 		>=app-pda/gnome-pilot-conduits-2[lib32?] )
 	python? ( >=dev-lang/python-2.4[lib32?] )
-	sound? ( media-libs/libcanberra[lib32?] )
 	ssl? (
 		>=dev-libs/nspr-4.6.1[lib32?]
-		>=dev-libs/nss-3.11[lib32?] )"
+		>=dev-libs/nss-3.11[lib32?] )
+
+	!<gnome-extra/evolution-exchange-2.30"
 # champlain, geoclue, clutter, gtkimageview
 #	mono? ( >=dev-lang/mono-1 )
 
@@ -71,7 +70,10 @@ DEPEND="${RDEPEND}
 	sys-devel/bison
 	app-text/scrollkeeper
 	>=gnome-base/gnome-common-2.12.0
-	>=app-text/gnome-doc-utils-0.9.1[lib32?]"
+	>=app-text/gnome-doc-utils-0.9.1[lib32?]
+	app-text/docbook-xml-dtd:4.1.2
+	>=dev-util/gtk-doc-am-1.9
+	doc? ( >=dev-util/gtk-doc-1.9 )"
 
 DOCS="AUTHORS ChangeLog* HACKING MAINTAINERS NEWS* README"
 ELTCONF="--reverse-deps"
@@ -81,12 +83,13 @@ multilib-native_pkg_setup_internal() {
 		--without-kde-applnk-path
 		--enable-plugins=experimental
 		--enable-image-inline
+		--enable-canberra
 		--enable-weather
 		$(use_enable ssl nss)
 		$(use_enable ssl smime)
 		$(use_enable networkmanager nm)
+		$(use_enable nntp)
 		$(use_enable gstreamer audio-inline)
-		$(use_enable sound canberra)
 		--disable-pst-import
 		$(use_enable pda pilot-conduits)
 		$(use_enable profile profiling)
