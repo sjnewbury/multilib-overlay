@@ -1,5 +1,5 @@
---- /usr/portage/sys-fs/udev/udev-150-r1.ebuild	2010-08-02 23:15:45.000000000 +0200
-+++ ./sys-fs/udev/udev-150-r1.ebuild	2010-08-07 03:14:59.000000000 +0200
+--- /usr/portage/sys-fs/udev/udev-150-r1.ebuild	2010-08-24 20:37:11.000000000 +0200
++++ ./sys-fs/udev/udev-150-r1.ebuild	2010-08-26 01:03:01.000000000 +0200
 @@ -22,7 +22,7 @@
  LICENSE="GPL-2"
  SLOT="0"
@@ -9,8 +9,8 @@
  
  RESTRICT="test"
  
-@@ -36,7 +36,8 @@
- 		dev-util/pkgconfig
+@@ -35,7 +35,8 @@
+ 		dev-libs/glib:2
  	)
  	>=sys-apps/util-linux-2.16
 -	>=sys-libs/glibc-2.9"
@@ -18,8 +18,8 @@
 +	introspection? ( >=dev-libs/gobject-introspection-0.6.5 )"
  
  DEPEND="${COMMON_DEPEND}
- 	extras? ( dev-util/gperf )
-@@ -134,9 +135,9 @@
+ 	extras? (
+@@ -137,9 +138,9 @@
  	else
  		unpack ${A}
  	fi
@@ -31,7 +31,7 @@
  	# patches go here...
  
  	# backport some patches
-@@ -182,7 +183,7 @@
+@@ -185,7 +186,7 @@
  	fi
  }
  
@@ -40,7 +40,7 @@
  	filter-flags -fprefetch-loop-arrays
  
  	econf \
-@@ -195,10 +196,7 @@
+@@ -198,10 +199,7 @@
  		--enable-logging \
  		$(use_with selinux) \
  		$(use_enable extras) \

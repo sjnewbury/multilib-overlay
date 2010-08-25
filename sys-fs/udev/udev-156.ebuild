@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-156.ebuild,v 1.4 2010/08/08 16:19:04 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-156.ebuild,v 1.6 2010/08/24 18:28:32 zzam Exp $
 
 EAPI="2"
 
@@ -33,14 +33,17 @@ COMMON_DEPEND="selinux? ( sys-libs/libselinux[lib32?] )
 		virtual/libusb:0[lib32?]
 		sys-apps/pciutils[lib32?]
 		dev-libs/glib:2[lib32?]
-		dev-util/pkgconfig[lib32?]
 	)
 	>=sys-apps/util-linux-2.16[lib32?]
 	>=sys-libs/glibc-2.9"
 
 DEPEND="${COMMON_DEPEND}
-	extras? ( dev-util/gperf )
-	>=sys-kernel/linux-headers-2.6.29
+	extras? (
+		dev-util/gperf
+		dev-util/pkgconfig[lib32?]
+	)
+	virtual/os-headers
+	!<sys-kernel/linux-headers-2.6.29
 	test? ( app-text/tree )"
 
 RDEPEND="${COMMON_DEPEND}

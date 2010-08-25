@@ -1,12 +1,13 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-160.ebuild,v 1.5 2010/08/24 18:28:32 zzam Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-161.ebuild,v 1.1 2010/08/24 18:41:29 zzam Exp $
 
 EAPI="2"
 
 inherit eutils flag-o-matic multilib toolchain-funcs linux-info multilib-native
 
 #PATCHSET=${P}-gentoo-patchset-v1
+scriptversion=161
 
 if [[ ${PV} == "9999" ]]; then
 	EGIT_REPO_URI="git://git.kernel.org/pub/scm/linux/hotplug/udev.git"
@@ -146,6 +147,7 @@ multilib-native_src_unpack_internal() {
 
 multilib-native_src_prepare_internal() {
 	# patches go here...
+	epatch "${FILESDIR}/udev-161-cdrom_id_Drop_MEDIA_SESSION_NEXT_for_DVD-RW-RO.patch"
 
 	# backport some patches
 	if [[ -n "${PATCHSET}" ]]; then
@@ -163,7 +165,7 @@ multilib-native_src_prepare_internal() {
 		# (more for my own needs than anything else ...)
 		MD5=$(md5sum < "${S}/rules/rules.d/50-udev-default.rules")
 		MD5=${MD5/  -/}
-		if [[ ${MD5} != 61eda71c840620ff70386715d8010438 ]]
+		if [[ ${MD5} != 4c325a57c0624e240c2180744385fa3a ]]
 		then
 			echo
 			eerror "50-udev-default.rules has been updated, please validate!"
@@ -203,7 +205,7 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_install_internal() {
-	local scriptdir="${FILESDIR}/156"
+	local scriptdir="${FILESDIR}/${scriptversion}"
 
 	into /
 	emake DESTDIR="${D}" install || die "make install failed"

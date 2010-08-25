@@ -1,6 +1,6 @@
---- /usr/portage/sys-fs/udev/udev-160.ebuild	2010-08-02 23:15:45.000000000 +0200
-+++ ./sys-fs/udev/udev-160.ebuild	2010-08-07 03:15:52.000000000 +0200
-@@ -139,9 +139,9 @@
+--- /usr/portage/sys-fs/udev/udev-160.ebuild	2010-08-24 20:37:11.000000000 +0200
++++ ./sys-fs/udev/udev-160.ebuild	2010-08-26 01:04:28.000000000 +0200
+@@ -142,9 +142,9 @@
  			mv "${WORKDIR}"/test/sys "${S}"/test/
  		fi
  	fi
@@ -12,7 +12,7 @@
  	# patches go here...
  
  	# backport some patches
-@@ -181,7 +181,7 @@
+@@ -184,7 +184,7 @@
  	fi
  }
  
@@ -21,7 +21,7 @@
  	filter-flags -fprefetch-loop-arrays
  
  	econf \
-@@ -197,8 +197,6 @@
+@@ -200,8 +200,6 @@
  		$(use_enable extras) \
  		--disable-introspection
  	# we don't have gobject-introspection in portage tree
