@@ -1,6 +1,6 @@
---- /usr/portage/net-fs/samba/samba-3.2.15-r1.ebuild	2010-06-23 19:11:00.000000000 +0200
-+++ ./net-fs/samba/samba-3.2.15-r1.ebuild	2010-06-23 22:57:23.000000000 +0200
-@@ -51,8 +51,7 @@
+--- /usr/portage/net-fs/samba/samba-3.2.15-r1.ebuild	2010-08-17 18:12:11.000000000 +0200
++++ ./net-fs/samba/samba-3.2.15-r1.ebuild	2010-08-26 00:55:37.000000000 +0200
+@@ -52,8 +52,7 @@
  	confutils_use_depend_all cifsupcall ads
  }
  
@@ -10,7 +10,7 @@
  	cd "${S}/source"
  
  	epatch \
-@@ -74,7 +73,7 @@
+@@ -75,7 +74,7 @@
  		"${S}/source/script/tests/selftest.sh" || die "sed failed"
  }
  
@@ -19,7 +19,7 @@
  	cd "${S}/source"
  
  	local myconf
-@@ -136,10 +135,13 @@
+@@ -137,10 +136,13 @@
  		$(use_with syslog) \
  		$(use_with winbind) \
  		${myconf} ${mylangs} ${mymod_shared} || die "econf failed"

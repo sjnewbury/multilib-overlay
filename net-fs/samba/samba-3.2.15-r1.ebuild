@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.2.15-r1.ebuild,v 1.2 2010/08/07 16:02:22 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.2.15-r1.ebuild,v 1.3 2010/08/17 16:10:27 vostorga Exp $
 
 EAPI="2"
 
-inherit eutils pam multilib versionator confutils autotools multilib-native
+inherit eutils pam multilib versionator confutils multilib-native
 
 MY_P=${PN}-${PV/_/}
 
@@ -36,7 +36,8 @@ RDEPEND="dev-libs/popt[lib32?]
 	swat? ( sys-apps/xinetd )
 	syslog? ( virtual/logger )
 	fam? ( virtual/fam[lib32?] )
-	caps? ( sys-libs/libcap[lib32?] )"
+	caps? ( sys-libs/libcap[lib32?] )
+	!sys-libs/tdb"
 DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${MY_P}"

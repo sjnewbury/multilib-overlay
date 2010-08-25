@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.0.37-r1.ebuild,v 1.5 2010/08/10 18:08:00 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.0.37-r1.ebuild,v 1.6 2010/08/17 16:10:27 vostorga Exp $
 
 EAPI="2"
 
@@ -22,6 +22,7 @@ IUSE="acl ads async automount caps cups debug doc examples ipv6 kernel_linux lda
 
 RDEPEND="dev-libs/popt[lib32?]
 	virtual/libiconv
+	!sys-libs/tdb
 	acl?       ( virtual/acl[lib32?] )
 	cups?      ( net-print/cups[lib32?] )
 	ipv6?      ( sys-apps/xinetd )

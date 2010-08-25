@@ -1,6 +1,6 @@
---- /usr/portage/net-fs/samba/samba-3.0.37-r1.ebuild	2010-06-23 19:10:59.000000000 +0200
-+++ ./net-fs/samba/samba-3.0.37-r1.ebuild	2010-06-23 22:55:49.000000000 +0200
-@@ -46,8 +46,7 @@
+--- /usr/portage/net-fs/samba/samba-3.0.37-r1.ebuild	2010-08-17 18:12:11.000000000 +0200
++++ ./net-fs/samba/samba-3.0.37-r1.ebuild	2010-08-26 00:55:29.000000000 +0200
+@@ -47,8 +47,7 @@
  	confutils_use_depend_all ads ldap
  }
  
@@ -10,7 +10,7 @@
  	cd "${S}/source"
  
  	# lazyldflags.patch: adds "-Wl,-z,now" to smb{mnt,umount}
-@@ -74,7 +73,7 @@
+@@ -75,7 +74,7 @@
  
  }
  
@@ -19,7 +19,7 @@
  	cd "${S}/source"
  
  	local myconf
-@@ -133,13 +132,6 @@
+@@ -134,13 +133,6 @@
  		$(use_with winbind) \
  		${myconf} ${mylangs} ${mymod_shared}
  
@@ -33,7 +33,7 @@
  	if use oav ; then
  		# maintainer-info:
  		# - there are no known releases of mks or kavdc,
-@@ -154,6 +146,21 @@
+@@ -155,6 +147,21 @@
  			--with-filetype \
  			--with-fileregexp \
  			$(use_enable debug)
