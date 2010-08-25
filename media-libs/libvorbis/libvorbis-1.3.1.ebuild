@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libvorbis/libvorbis-1.3.1.ebuild,v 1.8 2010/07/25 15:27:43 klausman Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libvorbis/libvorbis-1.3.1.ebuild,v 1.9 2010/08/23 18:51:40 ssuominen Exp $
 
 EAPI=2
 inherit autotools multilib-native
@@ -36,4 +36,5 @@ multilib-native_src_configure_internal() {
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
 	dodoc AUTHORS CHANGES todo.txt
+	find "${D}" -name '*.la' -exec rm -f '{}' +
 }
