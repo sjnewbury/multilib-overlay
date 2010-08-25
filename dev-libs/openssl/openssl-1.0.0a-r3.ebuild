@@ -1,14 +1,15 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-1.0.0a-r1.ebuild,v 1.2 2010/08/17 04:10:10 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-1.0.0a-r3.ebuild,v 1.2 2010/08/23 06:02:48 vapier Exp $
 
 EAPI="2"
 
 inherit eutils flag-o-matic toolchain-funcs multilib-native
 
-DESCRIPTION="Toolkit for SSL v2/v3 and TLS v1"
+DESCRIPTION="full-strength general purpose cryptography library (including SSL v2/v3 and TLS v1)"
 HOMEPAGE="http://www.openssl.org/"
-SRC_URI="mirror://openssl/source/${P}.tar.gz"
+SRC_URI="mirror://openssl/source/${P}.tar.gz
+	http://cvs.pld-linux.org/cgi-bin/cvsweb.cgi/~checkout~/packages/${PN}/${PN}-c_rehash.sh?rev=1.7"
 
 LICENSE="openssl"
 SLOT="0"
@@ -24,12 +25,18 @@ DEPEND="${RDEPEND}
 	test? ( sys-devel/bc )"
 PDEPEND="app-misc/ca-certificates"
 
+multilib-native_src_unpack_internal() {
+	unpack ${P}.tar.gz
+	cp "${DISTDIR}"/openssl-c_rehash.sh* "${WORKDIR}"/c_rehash || die
+}
+
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-0.9.7e-gentoo.patch
 	epatch "${FILESDIR}"/${PN}-0.9.8l-binutils.patch #289130
 	epatch "${FILESDIR}"/${PN}-1.0.0a-ldflags.patch #327421
 	epatch "${FILESDIR}"/${P}-fix-double-free.patch #332027
 	cp "${FILESDIR}"/alphacpuid.s "${S}"/crypto/ || die #330915
+	epatch_user #332661
 
 	# disable fips in the build
 	# make sure the man pages are suffixed #302165
@@ -47,7 +54,7 @@ multilib-native_src_prepare_internal() {
 	sed -i '/^SET_X/s:=.*:=set -x:' Makefile.shared
 
 	# allow openssl to be cross-compiled
-	cp "${FILESDIR}"/gentoo.config-0.9.8 gentoo.config || die "cp cross-compile failed"
+	cp "${FILESDIR}"/gentoo.config-1.0.0 gentoo.config || die "cp cross-compile failed"
 	chmod a+rx gentoo.config
 
 	append-flags -fno-strict-aliasing
@@ -65,7 +72,7 @@ multilib-native_src_configure_internal() {
 
 	# Clean out patent-or-otherwise-encumbered code
 	# Camellia: Royalty Free            http://en.wikipedia.org/wiki/Camellia_(cipher)
-	# IDEA:     5,214,703 25/05/2010    http://en.wikipedia.org/wiki/International_Data_Encryption_Algorithm
+	# IDEA:     5,214,703 07/01/2012    http://en.wikipedia.org/wiki/International_Data_Encryption_Algorithm
 	# EC:       ????????? ??/??/2015    http://en.wikipedia.org/wiki/Elliptic_Curve_Cryptography
 	# MDC2:     Expired                 http://en.wikipedia.org/wiki/MDC-2
 	# RC5:      5,724,428 03/03/2015    http://en.wikipedia.org/wiki/RC5
@@ -127,6 +134,7 @@ src_test() {
 
 multilib-native_src_install_internal() {
 	emake -j1 INSTALL_PREFIX="${D}" install || die
+	dobin "${WORKDIR}"/c_rehash || die #333117
 	dodoc CHANGES* FAQ NEWS README doc/*.txt doc/c-indentation.el
 	dohtml -r doc/*
 
