@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gvfs/gvfs-1.6.3.ebuild,v 1.3 2010/08/01 11:30:21 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gvfs/gvfs-1.6.3.ebuild,v 1.4 2010/08/19 21:57:36 eva Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -29,7 +29,7 @@ RDEPEND=">=dev-libs/glib-2.23.4[lib32?]
 		net-wireless/bluez[lib32?]
 		dev-libs/expat[lib32?] )
 	fuse? ( sys-fs/fuse[lib32?] )
-	gdu? ( >=sys-apps/gnome-disk-utility-2.28[lib32?] )
+	gdu? ( >=sys-apps/gnome-disk-utility-2.29[lib32?] )
 	gnome? ( >=gnome-base/gconf-2.0[lib32?] )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-1.0[lib32?] )
 	gphoto2? ( >=media-libs/libgphoto2-2.4.7[lib32?] )
