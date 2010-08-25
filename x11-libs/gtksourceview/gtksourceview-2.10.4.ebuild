@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtksourceview/gtksourceview-2.10.4.ebuild,v 1.5 2010/08/01 11:16:58 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtksourceview/gtksourceview-2.10.4.ebuild,v 1.6 2010/08/16 21:27:52 eva Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -20,15 +20,17 @@ RDEPEND=">=x11-libs/gtk+-2.12[lib32?]
 	>=dev-libs/glib-2.14[lib32?]
 	glade? ( >=dev-util/glade-3.2 )"
 DEPEND="${RDEPEND}
-	sys-devel/gettext[lib32?]
+	>=sys-devel/gettext-0.17[lib32?]
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.9[lib32?]
-	doc? ( >=dev-util/gtk-doc-1 )"
+	doc? ( >=dev-util/gtk-doc-1.11 )"
 
 DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README"
 
 pkg_config() {
-	G2CONF="${G2CONF} $(use-enable glade glade-catalog)"
+	G2CONF="${G2CONF}
+		--disable-maintainer-mode
+		$(use-enable glade glade-catalog)"
 }
 
 multilib-native_src_prepare_internal() {
