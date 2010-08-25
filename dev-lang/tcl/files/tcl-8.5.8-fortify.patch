@@ -1,0 +1,16 @@
+Fix buffer overflow with GCC 4.5 -D_FORTIFY_SOURCE=2.
+https://bugs.gentoo.org/317727
+
+https://sourceforge.net/tracker/?func=detail&aid=3048354&group_id=10894&atid=310894
+
+--- a/generic/tclTrace.c
++++ b/generic/tclTrace.c
+@@ -909,7 +909,7 @@ TraceVariableObjCmd(
+ 	    }
+ 	    ctvarPtr->traceCmdInfo.length = length;
+ 	    flags |= TCL_TRACE_UNSETS | TCL_TRACE_RESULT_OBJECT;
+-	    strcpy(ctvarPtr->traceCmdInfo.command, command);
++	    memcpy(ctvarPtr->traceCmdInfo.command, command, length + 1);
+ 	    ctvarPtr->traceInfo.traceProc = TraceVarProc;
+ 	    ctvarPtr->traceInfo.clientData = (ClientData)
+ 		    &ctvarPtr->traceCmdInfo;
