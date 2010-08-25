@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8.1-r1.ebuild,v 1.1 2010/08/04 12:05:53 dagger Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8.1-r6.ebuild,v 1.2 2010/08/23 23:12:24 dagger Exp $
 
 EAPI="2"
 
-inherit gnome.org eutils autotools multilib-native
+inherit autotools eutils gnome.org linux-info multilib-native
 
 # NetworkManager likes itself with capital letters
 MY_PN=${PN/networkmanager/NetworkManager}
@@ -13,12 +13,12 @@ MY_P=${MY_PN}-${PV}
 DESCRIPTION="Network configuration and management in an easy way. Desktop environment independent."
 HOMEPAGE="http://www.gnome.org/projects/NetworkManager/"
 SRC_URI="${SRC_URI//${PN}/${MY_PN}}
-	http://dev.gentoo.org/~dagger/files/${PN}-ifnet.patch"
+	http://dev.gentoo.org/~dagger/files/${PN}-ifnet-540e40f.patch"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
-IUSE="avahi bluetooth doc nss gnutls dhclient dhcpcd resolvconf connection-sharing"
+IUSE="avahi bluetooth doc nss gnutls dhclient dhcpcd kernel_linux resolvconf connection-sharing"
 
 RDEPEND=">=sys-apps/dbus-1.2[lib32?]
 	>=dev-libs/dbus-glib-0.75[lib32?]
@@ -39,7 +39,7 @@ RDEPEND=">=sys-apps/dbus-1.2[lib32?]
 	!gnutls? ( >=dev-libs/nss-3.11[lib32?] )
 	dhclient? (
 		dhcpcd? ( >=net-misc/dhcpcd-4.0.0_rc3 )
-		!dhcpcd? ( >=net-misc/dhcp-4.0.0 ) )
+		!dhcpcd? ( net-misc/dhcp ) )
 	!dhclient? ( >=net-misc/dhcpcd-4.0.0_rc3 )
 	resolvconf? ( net-dns/openresolv )
 	connection-sharing? (
@@ -49,20 +49,54 @@ RDEPEND=">=sys-apps/dbus-1.2[lib32?]
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	dev-util/intltool
-	net-dialup/ppp
+	>=net-dialup/ppp-2.4.5
 	doc? ( >=dev-util/gtk-doc-1.8 )"
 
 S=${WORKDIR}/${MY_P}
 
+sysfs_deprecated_check() {
+	ebegin "Checking for SYSFS_DEPRECATED support"
+
+	if { linux_chkconfig_present SYSFS_DEPRECATED_V2; }; then
+		eerror "Please disable SYSFS_DEPRECATED_V2 support in your kernel config and recompile your kernel"
+		eerror "or NetworkManager will not work correctly."
+		eerror "See http://bugs.gentoo.org/333639 for more info."
+		die "CONFIG_SYSFS_DEPRECATED_V2 support detected!"
+	fi
+	eend $?
+}
+
+multilib-native_pkg_setup_internal() {
+
+	if use kernel_linux; then
+		get_version
+		if linux_config_exists; then
+			sysfs_deprecated_check
+		else
+			ewarn "Was unable to determine your kernel .config"
+			ewarn "Please note that if CONFIG_SYSFS_DEPRECATED_V2 is set in your kernel .config, NetworkManager will not work correctly."
+			ewarn "See http://bugs.gentoo.org/333639 for more info."
+		fi
+
+	fi
+}
+
 multilib-native_src_prepare_internal() {
+
+	# Gentoo system-plugin
+	epatch "${DISTDIR}/${PN}-ifnet-540e40f.patch"
+
 	# Fix up the dbus conf file to use plugdev group
 	epatch "${FILESDIR}/${P}-confchanges.patch"
 
 	# Fix problems with dhcpcd/dhclient (bug #330319)
 	epatch "${FILESDIR}/${P}-dhcp-configure.patch"
 
-	# Gentoo system-plugin
-	epatch "${DISTDIR}/${PN}-ifnet.patch"
+	# Backport some important patches
+	epatch "${FILESDIR}/${P}-CVE-2010-1172.patch"
+	epatch "${FILESDIR}/${P}-glib-2.25.12-workaround.patch"
+	epatch "${FILESDIR}/${P}-dhclient3.patch"
+	epatch "${FILESDIR}/${P}-dhclient3-fix.patch"
 
 	eautoreconf
 }
@@ -81,12 +115,12 @@ multilib-native_src_configure_internal() {
 	# default is dhcpcd (if none or both are specified), ISC dchclient otherwise
 	if use dhclient ; then
 		if use dhcpcd ; then
-			ECONF="${ECONF} --with-dhcpcd"
+			ECONF="${ECONF} --with-dhcpcd --without-dhclient"
 		else
-			ECONF="${ECONF} --with-dhclient"
+			ECONF="${ECONF} --with-dhclient --without-dhcpcd"
 		fi
 	else
-		ECONF="${ECONF} --with-dhcpcd"
+		ECONF="${ECONF} --with-dhcpcd --without-dhclient"
 	fi
 
 	# default is NSS (if none or both are specified), GnuTLS otherwise
@@ -117,7 +151,7 @@ multilib-native_src_install_internal() {
 	# Add keyfile plugin support
 	keepdir /etc/NetworkManager/system-connections
 	insinto /etc/NetworkManager
-	newins "${FILESDIR}/nm-system-settings.conf" nm-system-settings.conf \
+	newins "${FILESDIR}/nm-system-settings.conf-ifnet" nm-system-settings.conf \
 		|| die "newins failed"
 }
 
