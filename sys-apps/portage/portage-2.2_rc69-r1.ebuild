@@ -317,21 +317,18 @@ pkg_postinst() {
 	einfo "For help with using portage please consult the Gentoo Handbook"
 	einfo "at http://www.gentoo.org/doc/en/handbook/handbook-x86.xml?part=3"
 	einfo
-	einfo "For setup instructions after switching to portage-multilib"
-	einfo "read doc/portage-multilib-instructions inside the multilib overlay"
+	elog "For setup instructions after switching to portage-multilib"
+	elog "read doc/portage-multilib-instructions inside the multilib overlay"
 	einfo
+	elog "The bin/ dir of the overlay has some scripts to switch from lib32"
+	elog "to MULTILIB_ABI or to add the default MULTILIB_ABI flags"
+
 
 	if [ $MINOR_UPGRADE = 0 ] ; then
 		elog "If you're upgrading from a pre-2.2 version of portage you might"
 		elog "want to remerge world (emerge -e world) to take full advantage"
 		elog "of some of the new features in 2.2."
 		elog "This is not required however for portage to function properly."
-		elog
-	fi
-
-	if [ -z "${PV/*_rc*}" ]; then
-		elog "If you always want to use the latest development version of portage"
-		elog "please read http://www.gentoo.org/proj/en/portage/doc/testing.xml"
 		elog
 	fi
 }
