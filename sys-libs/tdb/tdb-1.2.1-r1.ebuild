@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/tdb/tdb-1.2.1-r1.ebuild,v 1.1 2010/08/14 20:22:59 hwoarang Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/tdb/tdb-1.2.1-r1.ebuild,v 1.2 2010/08/18 16:57:34 patrick Exp $
 
 EAPI="2"
 
@@ -63,7 +63,7 @@ multilib-native_src_install_internal() {
 	dodoc docs/README
 
 	use static-libs || rm -f "${D}"/usr/lib*/*.a
-	use tools || rm -rf "${D}/usr/bin"
+	use tools || rm -rf "${D}/usr/bin" "${D}/usr/share/man"
 	use tdbtest && dobin bin/tdbtest
 	use python && python_need_rebuild
 }
