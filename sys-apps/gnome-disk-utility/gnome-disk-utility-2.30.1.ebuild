@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/gnome-disk-utility/gnome-disk-utility-2.30.1.ebuild,v 1.8 2010/08/11 11:58:25 josejx Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/gnome-disk-utility/gnome-disk-utility-2.30.1.ebuild,v 1.9 2010/08/19 22:01:41 eva Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -51,11 +51,13 @@ multilib-native_src_prepare_internal() {
 		$(use_enable nautilus)
 		$(use_enable remote-access)"
 
+	# Keep avahi optional
 	epatch "${FILESDIR}/${P}-optional-avahi.patch"
 
 	# Drop encoding from POTFILES.skip, see bug #313351
 	epatch "${FILESDIR}/${PN}-2.28.1-fix-potfiles_skip.patch"
 
+	intltoolize --force --copy --automake || die
 	eautoreconf
 }
 
