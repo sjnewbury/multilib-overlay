@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/hal/hal-0.5.14-r2.ebuild,v 1.7 2010/07/21 11:22:11 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/hal/hal-0.5.14-r2.ebuild,v 1.8 2010/08/20 17:04:15 jer Exp $
 
 EAPI="2"
 
@@ -32,7 +32,7 @@ RDEPEND=">=dev-libs/dbus-glib-0.61[lib32?]
 		   virtual/eject
 		 amd64? ( >=sys-apps/dmidecode-2.7 )
 		 dell? ( >=sys-libs/libsmbios-0.13.4[lib32?] )
-		 disk-partition? ( >=sys-apps/parted-1.8.0[lib32?] )
+		 disk-partition? ( >=sys-block/parted-1.8.0[lib32?] )
 		 ia64? ( >=sys-apps/dmidecode-2.7 )
 		 kernel_linux?	(
 							>=sys-fs/udev-125[lib32?]
