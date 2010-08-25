@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/portage/portage-2.2_rc62.ebuild,v 1.2 2010/02/07 02:11:42 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/portage/portage-2.2_rc69.ebuild,v 1.1 2010/08/24 21:03:37 zmedico Exp $
 
 # Require EAPI 2 since we now require at least python-2.6 (for python 3
 # syntax support) which also requires EAPI 2.
@@ -19,7 +19,10 @@ SLOT="0"
 IUSE="build doc epydoc linguas_pl python3 selinux"
 
 python_dep="python3? ( =dev-lang/python-3* )
-	!python3? ( || ( ( >=dev-lang/python-2.6 <dev-lang/python-3 ) >=dev-lang/python-3 ) )"
+	!python3? (
+		build? ( || ( dev-lang/python:2.8 dev-lang/python:2.7 dev-lang/python:2.6 ) )
+		!build? ( || ( dev-lang/python:2.8 dev-lang/python:2.7 dev-lang/python:2.6 >=dev-lang/python-3 ) )
+	)"
 
 # The pysqlite blocker is for bug #282760.
 DEPEND="${python_dep}
@@ -78,6 +81,13 @@ pkg_setup() {
 }
 
 src_prepare() {
+	if [ -n "${PATCHVER}" ] ; then
+		if [[ -L $S/bin/ebuild-helpers/portageq ]] ; then
+			rm "$S/bin/ebuild-helpers/portageq" \
+				|| die "failed to remove portageq helper symlink"
+		fi
+		epatch "${WORKDIR}/${PN}-${PATCHVER}.patch"
+	fi
 	einfo "Setting portage.VERSION to ${PVR} ..."
 	sed -i "s/^VERSION=.*/VERSION=\"${PVR}\"/" pym/portage/__init__.py || \
 		die "Failed to patch portage.VERSION"
@@ -98,23 +108,23 @@ src_compile() {
 		einfo "Generating api docs"
 		mkdir "${WORKDIR}"/api
 		local my_modules epydoc_opts=""
-		# A name collision between the portage.dbapi class and the
-		# module with the same name triggers an epydoc crash unless
-		# portage.dbapi is excluded from introspection.
-		ROOT=/ has_version '>=dev-python/epydoc-3_pre0' && \
-			epydoc_opts='--exclude-introspect portage\.dbapi'
 		my_modules="$(find "${S}/pym" -name "*.py" \
 			| sed -e 's:/__init__.py$::' -e 's:\.py$::' -e "s:^${S}/pym/::" \
 			 -e 's:/:.:g' | sort)" || die "error listing modules"
+		# workaround for bug 282760
+		> "$S/pym/pysqlite2.py"
 		PYTHONPATH=${S}/pym:${PYTHONPATH:+:}${PYTHONPATH} \
 			epydoc -o "${WORKDIR}"/api \
 			-qqqqq --no-frames --show-imports $epydoc_opts \
 			--name "${PN}" --url "${HOMEPAGE}" \
 			${my_modules} || die "epydoc failed"
+		rm "$S/pym/pysqlite2.py"
 	fi
 }
 
 src_test() {
+	# make files executable, in case they were created by patch
+	find bin -type f | xargs chmod +x
 	PYTHONPATH=${S}/pym:${PYTHONPATH:+:}${PYTHONPATH} \
 		./pym/portage/tests/runTests || die "test(s) failed"
 }
@@ -128,8 +138,17 @@ src_install() {
 	insinto /etc
 	doins etc-update.conf dispatch-conf.conf || die
 
-	insinto "${portage_share_config}"
-	doins "${S}/cnf/"{sets.conf,make.globals}
+	# This allows config file updates that are applied for package
+	# moves to take effect immediately.
+	echo 'CONFIG_PROTECT_MASK="/etc/portage"' > "$T"/50portage \
+		|| die "failed to create 50portage"
+	doenvd "$T"/50portage || die "doenvd 50portage failed"
+	rm "$T"/50portage
+
+	insinto "$portage_share_config/sets"
+	doins "$S"/cnf/sets/*.conf || die
+	insinto "$portage_share_config"
+	doins "$S/cnf/make.globals" || die
 	if [ -f "make.conf.${ARCH}".diff ]; then
 		patch make.conf "make.conf.${ARCH}".diff || \
 			die "Failed to patch make.conf.example"
@@ -154,14 +173,8 @@ src_install() {
 
 	local x symlinks
 
-	# current tarball contains outdated stuff
-	rm -rf "$S"/bin/ebuild-helpers/3
-	for x in dohard dosed ; do
-		dosym ../../banned-helper ${portage_base}/bin/ebuild-helpers/4/$x
-	done
-
-	for x in $(find "$S"/bin -type d) ; do
-		x=${x#$S/}
+	cd "$S" || die "cd failed"
+	for x in $(find bin -type d) ; do
 		exeinto $portage_base/$x || die "exeinto failed"
 		cd "$S"/$x || die "cd failed"
 		doexe $(find . -mindepth 1 -maxdepth 1 -type f ! -type l) || \
@@ -172,8 +185,8 @@ src_install() {
 		fi
 	done
 
-	for x in $(find "$S"/pym/* -type d) ; do
-		x=${x#$S/}
+	cd "$S" || die "cd failed"
+	for x in $(find pym/* -type d) ; do
 		insinto $portage_base/$x || die "insinto failed"
 		cd "$S"/$x || die "cd failed"
 		doins *.py || die "doins failed"
