@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/xine-lib/xine-lib-1.1.19.ebuild,v 1.2 2010/07/27 19:52:04 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/xine-lib/xine-lib-1.1.19.ebuild,v 1.3 2010/08/20 14:35:28 ssuominen Exp $
 
 EAPI=3
 inherit eutils flag-o-matic toolchain-funcs multilib multilib-native
@@ -89,7 +89,8 @@ DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext[lib32?] )"
 
 multilib-native_src_prepare_internal() {
-	epatch "${DISTDIR}"/${PN}-1.1.15-textrel-fix.patch
+	epatch "${DISTDIR}"/${PN}-1.1.15-textrel-fix.patch \
+		"${FILESDIR}"/${P}-xvmc.patch
 }
 
 multilib-native_src_configure_internal() {
