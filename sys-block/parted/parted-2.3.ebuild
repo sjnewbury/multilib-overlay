@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/parted/parted-2.3.ebuild,v 1.10 2010/08/11 21:40:51 josejx Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-block/parted/parted-2.3.ebuild,v 1.1 2010/08/20 16:59:16 jer Exp $
 
 EAPI="2"
 

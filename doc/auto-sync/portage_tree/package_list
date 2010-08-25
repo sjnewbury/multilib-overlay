@@ -274,7 +274,7 @@ sys-apps/file
 sys-apps/gnome-disk-utility
 sys-apps/hal
 sys-apps/keyutils
-sys-apps/parted
+sys-block/parted
 sys-apps/pciutils
 sys-apps/tcp-wrappers
 sys-apps/util-linux
