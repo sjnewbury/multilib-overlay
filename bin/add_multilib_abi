@@ -1,0 +1,7 @@
+#!/bin/bash
+cd /var/db/pkg
+for i in */*/IUSE; do grep multilib_abi_amd64 $i>/dev/null || echo $(cat $i) multilib_abi_amd64 multilib_abi_x86 > $i ; done
+for i in */*; do ! [[ -e $i/IUSE ]] && echo "multilib_abi_amd64 multilib_abi_x86" > $i/IUSE ; done
+for i in */*/USE; do grep multilib_abi_amd64 $i>/dev/null || echo $(cat $i) multilib_abi_amd64 > $i ; done
+for i in */*; do ! [[ -e $i/USE ]] && echo "multilib_abi_amd64" > $i/IUSE ; done
+touch */*

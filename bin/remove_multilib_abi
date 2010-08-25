@@ -1,0 +1,43 @@
+#!/bin/bash
+cd /var/db/pkg
+for i in */*/IUSE; do
+	if grep multilib_abi_amd64 $i>/dev/null; then
+		j=$(cat $i)
+		echo ${j/ multilib_abi_amd64} > $i
+	fi
+	if grep multilib_abi_x86 $i>/dev/null; then
+		j=$(cat $i)
+		echo ${j/ multilib_abi_x86} > $i
+	fi
+done
+for i in */*/USE; do
+	if grep multilib_abi_amd64 $i>/dev/null; then
+		j=$(cat $i)
+		echo ${j/ multilib_abi_amd64} > $i
+	fi
+	if grep multilib_abi_x86 $i>/dev/null; then
+		j=$(cat $i)
+		echo ${j/ multilib_abi_x86} > $i
+	fi
+done
+for i in */*/IUSE; do
+	if grep multilib_abi_amd64 $i>/dev/null; then
+		j=$(cat $i)
+		echo ${j/multilib_abi_amd64} > $i
+	fi
+	if grep multilib_abi_x86 $i>/dev/null; then
+		j=$(cat $i)
+		echo ${j/multilib_abi_x86} > $i
+	fi
+done
+for i in */*/USE; do
+	if grep multilib_abi_amd64 $i>/dev/null; then
+		j=$(cat $i)
+		echo ${j/multilib_abi_amd64} > $i
+	fi
+	if grep multilib_abi_x86 $i>/dev/null; then
+		j=$(cat $i)
+		echo ${j/multilib_abi_x86} > $i
+	fi
+done
+touch */*
