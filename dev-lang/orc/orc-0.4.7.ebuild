@@ -1,10 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/orc/orc-0.4.5.ebuild,v 1.1 2010/06/16 11:26:32 hwoarang Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/orc/orc-0.4.7.ebuild,v 1.1 2010/08/21 14:47:12 ssuominen Exp $
 
 EAPI=3
-
-WANT_AUTOMAKE="1.10.3"
 inherit autotools multilib-native
 
 DESCRIPTION="The Oil Runtime Compiler"
@@ -17,10 +15,9 @@ KEYWORDS="~amd64 ~x86 ~amd64-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solar
 IUSE="static-libs examples"
 
 multilib-native_src_prepare_internal() {
-	if ! use examples;then
-		sed -i "s:examples ::" Makefile.am \
-			|| die "sed failed"
-		eautomake
+	if ! use examples; then
+		sed -i -e '/SUBDIRS/s:examples::' Makefile.am || die
+		AT_M4DIR="m4" eautoreconf
 	fi
 }
 
