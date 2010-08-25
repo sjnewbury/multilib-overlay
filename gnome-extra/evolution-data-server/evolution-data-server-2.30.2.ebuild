@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/evolution-data-server/evolution-data-server-2.30.2.ebuild,v 1.5 2010/08/01 11:38:34 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-extra/evolution-data-server/evolution-data-server-2.30.2.ebuild,v 1.6 2010/08/22 19:45:23 eva Exp $
 
 EAPI="2"
 
@@ -13,25 +13,24 @@ LICENSE="LGPL-2 BSD DB"
 SLOT="0"
 KEYWORDS="~alpha amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-solaris"
 
-IUSE="doc ipv6 kerberos gnome-keyring ldap nntp ssl"
+IUSE="doc ipv6 kerberos gnome-keyring ldap ssl"
 
 RDEPEND=">=dev-libs/glib-2.16.1[lib32?]
 	>=x11-libs/gtk+-2.18[lib32?]
 	>=gnome-base/gconf-2[lib32?]
 	>=dev-db/sqlite-3.5[lib32?]
 	>=dev-libs/libxml2-2[lib32?]
-	>=net-libs/libsoup-2.3[lib32?]
+	>=net-libs/libsoup-2.4[lib32?]
 	>=dev-libs/libgweather-2.25.4[lib32?]
 	>=dev-libs/libical-0.43[lib32?]
 	>=dev-libs/dbus-glib-0.6[lib32?]
-	gnome-keyring? ( >=gnome-base/gnome-keyring-2.20.1[lib32?] )
 	>=sys-libs/db-4[lib32?]
+	sys-libs/zlib[lib32?]
 	virtual/libiconv
+	gnome-keyring? ( >=gnome-base/gnome-keyring-2.20.1[lib32?] )
 	ssl? (
 		>=dev-libs/nspr-4.4[lib32?]
 		>=dev-libs/nss-3.9[lib32?] )
-	sys-libs/zlib[lib32?]
-
 	ldap? ( >=net-nds/openldap-2.0[lib32?] )
 	kerberos? ( virtual/krb5[lib32?] )"
 
@@ -52,7 +51,6 @@ multilib-native_pkg_setup_internal() {
 		$(use_with ldap openldap)
 		$(use_enable gnome-keyring)
 		$(use_enable ipv6)
-		$(use_enable nntp)
 		$(use_enable ssl ssl)
 		$(use_enable ssl smime)
 		--with-weather
@@ -81,14 +79,6 @@ multilib-native_src_prepare_internal() {
 	# Revert "Bug 619347 - Return formatted address in e_destination_get_address"
 	epatch "${FILESDIR}/${P}-revert-addressbook.patch"
 
-	if use doc; then
-		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
-			-i gtk-doc.make || die "sed 1 failed"
-	else
-		sed "/^TARGET_DIR/i \GTKDOC_REBASE=$(type -P true)" \
-			-i gtk-doc.make || die "sed 2 failed"
-	fi
-
 	# /usr/include/db.h is always db-1 on FreeBSD
 	# so include the right dir in CPPFLAGS
 	append-cppflags "-I$(db_includedir)"
@@ -97,10 +87,7 @@ multilib-native_src_prepare_internal() {
 	sed 's/CFLAGS="$CFLAGS $WARNING_FLAGS"//' \
 		-i configure.ac configure || die "sed 3 failed"
 
-	# Fix intltoolize broken file, see upstream #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in \
-		|| die "intltool rules fix failed"
-
+	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
 }
 
@@ -121,6 +108,7 @@ src_test() {
 
 multilib-native_pkg_preinst_internal() {
 	gnome2_pkg_preinst
+	preserve_old_lib /usr/$(get_libdir)/libedata-cal-1.2.so.6
 	preserve_old_lib /usr/$(get_libdir)/libedataserver-1.2.so.11
 }
 
@@ -132,5 +120,6 @@ multilib-native_pkg_postinst_internal() {
 		elog "LDAP schemas needed by evolution are installed in /etc/openldap/schema"
 	fi
 
+	preserve_old_lib_notify /usr/$(get_libdir)/libedata-cal-1.2.so.6
 	preserve_old_lib_notify /usr/$(get_libdir)/libedataserver-1.2.so.11
 }
