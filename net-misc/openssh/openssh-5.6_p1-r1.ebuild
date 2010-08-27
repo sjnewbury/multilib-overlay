@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/openssh/openssh-5.6_p1.ebuild,v 1.1 2010/08/23 21:55:34 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/openssh/openssh-5.6_p1-r1.ebuild,v 1.1 2010/08/26 07:32:44 vapier Exp $
 
 EAPI="2"
 inherit eutils flag-o-matic multilib autotools pam multilib-native
@@ -8,12 +8,10 @@ inherit eutils flag-o-matic multilib autotools pam multilib-native
 # Make it more portable between straight releases
 # and _p? releases.
 PARCH=${P/_/}
-#PARCH_54=${PARCH/5.?/5.4}
 
-#HPN_PATCH="${PARCH/5.6/5.5}-hpn13v9.diff.gz"
-#HPN_X509_PATCH="${PARCH_54}-hpn13v7-x509variant.diff.gz"
-#LDAP_PATCH="${PARCH_54/openssh/openssh-lpk}-0.3.13.patch.gz"
-#X509_VER="6.2.3" X509_PATCH="${PARCH}+x509-${X509_VER}.diff.gz"
+HPN_PATCH="${PARCH}-hpn13v9-gentoo.diff.gz"
+LDAP_PATCH="${PARCH/openssh/openssh-lpk}-0.3.13.patch.gz"
+X509_VER="6.2.3" X509_PATCH="${PARCH}+x509-${X509_VER}.diff.gz"
 
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="http://www.openssh.org/"
@@ -21,7 +19,6 @@ SRC_URI="mirror://openbsd/OpenSSH/portable/${PARCH}.tar.gz
 	${HPN_PATCH:+hpn? ( http://www.psc.edu/networking/projects/hpn-ssh/${HPN_PATCH} mirror://gentoo/${HPN_PATCH} )}
 	${LDAP_PATCH:+ldap? ( mirror://gentoo/${LDAP_PATCH} )}
 	${X509_PATCH:+X509? ( http://roumenpetrov.info/openssh/x509-${X509_VER}/${X509_PATCH} )}
-	${HPN_X509_PATCH:+hpn? ( X509? ( mirror://gentoo/${HPN_X509_PATCH} ) )}
 	"
 
 LICENSE="as-is"
@@ -58,7 +55,6 @@ multilib-native_pkg_setup_internal() {
 		$(use X509 && maybe_fail X509 X509_PATCH)
 		$(use ldap && maybe_fail ldap LDAP_PATCH)
 		$(use hpn && maybe_fail hpn HPN_PATCH)
-		$(use X509 && use hpn && maybe_fail x509+hpn HPN_X509_PATCH)
 	"
 	fail=$(echo ${fail})
 	if [[ -n ${fail} ]] ; then
@@ -82,7 +78,7 @@ multilib-native_src_prepare_internal() {
 		# Apply X509 patch
 		epatch "${DISTDIR}"/${X509_PATCH}
 		# Apply glue so that HPN will still work after X509
-		#epatch "${FILESDIR}"/${PN}-5.2_p1-x509-hpn-glue.patch
+		epatch "${FILESDIR}"/${PN}-5.6_p1-x509-hpn-glue.patch
 	fi
 	if ! use X509 ; then
 		if [[ -n ${LDAP_PATCH} ]] && use ldap ; then
@@ -98,11 +94,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-5.4_p1-openssl.patch
 	epatch "${FILESDIR}"/${PN}-4.7_p1-GSSAPI-dns.patch #165444 integrated into gsskex
 	if [[ -n ${HPN_PATCH} ]] && use hpn; then
-		if use X509 ; then
-			epatch "${DISTDIR}"/${HPN_X509_PATCH}
-		else
-			epatch "${DISTDIR}"/${HPN_PATCH}
-		fi
+		epatch "${DISTDIR}"/${HPN_PATCH}
 		# version.h patch conflict avoidence
 		mv version.h version.h.hpn
 		cp -f version.h.pristine version.h
