@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.8.2.ebuild,v 1.8 2010/08/03 19:08:35 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.8.2.ebuild,v 1.9 2010/08/27 19:18:31 robbat2 Exp $
 
 EAPI=3
 
@@ -29,7 +29,7 @@ else
 		${SRC_PATCHES}"
 fi
 
-LICENSE="LGPL-2"
+LICENSE="LGPL-2 kilgard"
 SLOT="0"
 KEYWORDS="~alpha amd64 arm hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
 
