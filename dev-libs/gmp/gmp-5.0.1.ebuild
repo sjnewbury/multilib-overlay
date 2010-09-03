@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/gmp/gmp-5.0.1.ebuild,v 1.5 2010/07/27 02:33:18 zorry Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/gmp/gmp-5.0.1.ebuild,v 1.6 2010/08/30 17:58:19 vapier Exp $
 
 inherit flag-o-matic eutils libtool flag-o-matic toolchain-funcs multilib-native
 
@@ -19,6 +19,7 @@ multilib-native_src_unpack_internal() {
 	cd "${S}"
 	[[ -d ${FILESDIR}/${PV} ]] && EPATCH_SUFFIX="diff" EPATCH_FORCE="yes" epatch "${FILESDIR}"/${PV}
 	epatch "${FILESDIR}"/${PN}-4.1.4-noexecstack.patch
+	epatch "${FILESDIR}"/${P}-perfpow-test.patch
 	epatch "${FILESDIR}"/${PN}-5.0.0-s390.diff
 
 	# disable -fPIE -pie in the tests for x86  #236054
