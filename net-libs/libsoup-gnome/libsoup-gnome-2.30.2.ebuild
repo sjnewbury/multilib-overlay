@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup-gnome/libsoup-gnome-2.30.2.ebuild,v 1.5 2010/08/13 22:03:56 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/libsoup-gnome/libsoup-gnome-2.30.2.ebuild,v 1.6 2010/09/01 17:18:48 pacho Exp $
 
 EAPI="2"
 
@@ -41,6 +41,13 @@ multilib-native_pkg_setup_internal() {
 		$(use_enable introspection)
 		--with-libsoup-system
 		--with-gnome"
+}
+
+multilib-native_src_configure_internal() {
+	# FIXME: we need addpredict to workaround bug #324779 until
+	# root cause (bug #249496) is solved
+	addpredict /usr/share/snmp/mibs/.index
+	gnome2_src_configure
 }
 
 multilib-native_src_prepare_internal() {
