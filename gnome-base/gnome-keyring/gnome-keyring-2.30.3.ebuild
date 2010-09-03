@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.30.3.ebuild,v 1.8 2010/08/27 18:30:15 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.30.3.ebuild,v 1.9 2010/08/31 22:04:09 eva Exp $
 
 EAPI="2"
 
@@ -27,6 +27,7 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext[lib32?]
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9[lib32?]
+	>=dev-util/gtk-doc-am-1.9
 	doc? ( >=dev-util/gtk-doc-1.9 )"
 PDEPEND="gnome-base/libgnome-keyring"
 
@@ -58,14 +59,4 @@ multilib-native_src_prepare_internal() {
 src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
 	Xemake check || die "emake check failed!"
-}
-
-multilib-native_pkg_preinst_internal() {
-	gnome2_pkg_preinst
-	preserve_old_lib /usr/$(get_libdir)/libgnome-keyring.so.0
-}
-
-multilib-native_pkg_postinst_internal() {
-	gnome2_pkg_postinst
-	preserve_old_lib_notify /usr/$(get_libdir)/libgnome-keyring.so.0
 }
