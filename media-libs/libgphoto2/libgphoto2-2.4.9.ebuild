@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libgphoto2/libgphoto2-2.4.9.ebuild,v 1.1 2010/05/08 11:23:30 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libgphoto2/libgphoto2-2.4.9.ebuild,v 1.2 2010/08/30 20:06:47 eva Exp $
 
 # TODO
 # 1. Track upstream bug --disable-docs does not work.
@@ -26,14 +26,14 @@ IUSE="bonjour doc examples exif hal nls kernel_linux"
 # If you want to only compile for specific camera(s), set CAMERAS
 # environment to a space-separated list (no commas) of drivers that
 # you want to build.
-IUSE_CAMERAS="adc65 agfa_cl20 aox barbie canon casio_qv clicksmart310
+IUSE_CAMERAS="adc65 agfa_cl20 aox ax203 barbie canon casio_qv clicksmart310
 digigr8 digita dimera3500 directory enigma13 fuji gsmart300 hp215 iclick
 jamcam jd11 jl2005a kodak_dc120 kodak_dc210 kodak_dc240 kodak_dc3200 kodak_ez200
 konica konica_qm150 largan lg_gsm mars dimagev mustek panasonic_coolshot
 panasonic_l859 panasonic_dc1000 panasonic_dc1580 pccam300 pccam600
 polaroid_pdc320 polaroid_pdc640 polaroid_pdc700 ptp2 ricoh ricoh_g3 samsung
 sierra sipix_blink sipix_blink2 sipix_web2 smal sonix sony_dscf1 sony_dscf55
-soundvision spca50x sq905 stv0674 stv0680 sx330z template toshiba_pdrm11
+soundvision spca50x sq905 st2205 stv0674 stv0680 sx330z template toshiba_pdrm11
 topfield"
 
 # jl2005c is still experimental -> not enabled
