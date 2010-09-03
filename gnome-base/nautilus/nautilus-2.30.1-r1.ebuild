@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/nautilus/nautilus-2.30.1-r1.ebuild,v 1.4 2010/08/01 11:31:51 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/nautilus/nautilus-2.30.1-r1.ebuild,v 1.5 2010/08/30 20:28:41 eva Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -52,15 +52,6 @@ multilib-native_pkg_setup_internal() {
 
 multilib-native_src_prepare_internal() {
 	gnome2_src_prepare
-
-	# FIXME: tarball generated with broken gtk-doc, revisit me.
-	if use doc; then
-		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" \
-			-i gtk-doc.make || die "sed 1 failed"
-	else
-		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/bin/true" \
-			-i gtk-doc.make || die "sed 2 failed"
-	fi
 
 	# Remove crazy CFLAGS
 	sed 's:-DG.*DISABLE_DEPRECATED::g' -i configure.in configure \
