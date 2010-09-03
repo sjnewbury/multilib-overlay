@@ -1,0 +1,33 @@
+--- /usr/portage/media-gfx/sane-backends/sane-backends-1.0.21-r1.ebuild	2010-09-01 23:35:51.000000000 +0200
++++ ./media-gfx/sane-backends/sane-backends-1.0.21-r1.ebuild	2010-09-04 00:33:09.000000000 +0200
+@@ -151,10 +151,7 @@
+ 	done
+ }
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	cat >> backend/dll.conf.in <<-EOF
+ 	# Add support for the HP-specific backend.  Needs net-print/hplip installed.
+ 	hpaio
+@@ -163,7 +160,7 @@
+ 	epatch "${FILESDIR}/xerox-grey.patch"
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	append-flags -fno-strict-aliasing
+ 
+ 	myconf=$(use_enable usb libusb)
+@@ -182,7 +179,9 @@
+ 		$(use_enable ipv6) \
+ 		$(use_enable avahi) \
+ 		${myconf} || die "econf failed"
++}
+ 
++src_compile() {
+ 	emake VARTEXFONTS="${T}/fonts" || die
+ 
+ 	if use usb; then
