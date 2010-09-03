@@ -1,6 +1,6 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.436 2010/07/22 01:26:33 dirtyepic Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.438 2010/08/14 01:26:05 vapier Exp $
 #
 # Maintainer: Toolchain Ninjas <toolchain@gentoo.org>
 
@@ -840,6 +840,10 @@ gcc-compiler_pkg_postinst() {
 		ewarn "If you have issues with packages unable to locate libstdc++.la,"
 		ewarn "then try running 'fix_libtool_files.sh' on the old gcc versions."
 		echo
+		ewarn "You might want to review the GCC upgrade guide when moving between"
+		ewarn "major versions (like 4.2 to 4.3):"
+		ewarn "http://www.gentoo.org/doc/en/gcc-upgrading.xml"
+		echo
 	fi
 
 	# If our gcc-config version doesn't like '-' in it's version string,
@@ -856,10 +860,6 @@ gcc-compiler_pkg_postinst() {
 		ewarn "upgrading between different versions of gcc.	 For example,"
 		ewarn "when moving to gcc-3.4 from gcc-3.3, emerge gentoolkit and run:"
 		ewarn "	 # revdep-rebuild --library libstdc++.so.5"
-		echo
-		ewarn "For more information on the steps to take when upgrading "
-		ewarn "from gcc-3.3 please refer to: "
-		ewarn "http://www.gentoo.org/doc/en/gcc-upgrading.xml"
 		echo
 	fi
 
@@ -1496,8 +1496,6 @@ gcc_do_make() {
 	elif [[ $(gcc-version) == "3.4" && ${GCC_BRANCH_VER} == "3.4" ]] && gcc-specs-ssp ; then
 		# See bug #79852
 		STAGE1_CFLAGS=${STAGE1_CFLAGS-"-O2"}
-	else
-		STAGE1_CFLAGS=${STAGE1_CFLAGS-"-O"}
 	fi
 
 	if is_crosscompile; then

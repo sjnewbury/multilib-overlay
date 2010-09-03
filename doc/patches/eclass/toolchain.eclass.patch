@@ -33,7 +33,7 @@
  	fi
  
  	case $(tc-arch) in
-@@ -1914,10 +1922,24 @@
+@@ -1912,10 +1920,24 @@
  		mv -f "${D}"${PREFIX}/lib/libgcj.spec "${D}"${LIBPATH}/libgcj.spec
  
  	# SLOT up libgcj.pc (and let gcc-config worry about links)
