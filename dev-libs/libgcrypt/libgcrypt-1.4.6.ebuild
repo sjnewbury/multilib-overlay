@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libgcrypt/libgcrypt-1.4.6.ebuild,v 1.1 2010/07/15 22:26:17 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libgcrypt/libgcrypt-1.4.6.ebuild,v 1.2 2010/08/30 18:31:39 patrick Exp $
 
 EAPI="2"
 
-inherit eutils flag-o-matic toolchain-funcs multilib-native
+inherit eutils flag-o-matic toolchain-funcs autotools multilib-native
 
 DESCRIPTION="General purpose crypto library based on the code used in GnuPG"
 HOMEPAGE="http://www.gnupg.org/"
@@ -20,6 +20,7 @@ RDEPEND=">=dev-libs/libgpg-error-1.5[lib32?]"
 DEPEND="${RDEPEND}"
 
 multilib-native_src_prepare_internal() {
+	eautoreconf
 	epunt_cxx
 }
 
