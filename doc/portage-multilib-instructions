@@ -45,7 +45,7 @@ then either recompile world:
 
 emerge -e world
 
-or use /path/to/multilib-overlay/bin/add_lib32 to add the useflag
+or use /path/to/multilib-overlay/bin/add_multilib_abi to add the useflag
 to the database. In this case, you might have to run
 /usr/bin/lafilefixer once since multilib-portage does remove most of
 .la files during install stage
