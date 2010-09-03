@@ -1,11 +1,11 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-panel/gnome-panel-2.30.2.ebuild,v 1.4 2010/08/01 11:34:01 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-panel/gnome-panel-2.30.2.ebuild,v 1.5 2010/08/30 20:18:27 eva Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
 
-inherit autotools gnome2 multilib-native
+inherit gnome2 multilib-native
 
 DESCRIPTION="The GNOME panel"
 HOMEPAGE="http://www.gnome.org/"
@@ -22,8 +22,6 @@ RDEPEND="dev-lang/python[lib32?]
 	>=x11-libs/gtk+-2.19.7[lib32?]
 	>=dev-libs/libgweather-2.27.90[lib32?]
 	dev-libs/libxml2[lib32?]
-	>=gnome-base/libgnome-2.13[lib32?]
-	>=gnome-base/libgnomeui-2.5.4[lib32?]
 	>=gnome-base/libbonoboui-2.1.1[lib32?]
 	>=gnome-base/orbit-2.4[lib32?]
 	>=x11-libs/libwnck-2.19.5[lib32?]
@@ -42,13 +40,14 @@ RDEPEND="dev-lang/python[lib32?]
 	policykit? ( >=sys-auth/polkit-0.91[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5[lib32?]
-	gnome-base/gnome-common
 	>=app-text/gnome-doc-utils-0.3.2[lib32?]
 	>=dev-util/pkgconfig-0.9[lib32?]
 	>=dev-util/intltool-0.40
 	~app-text/docbook-xml-dtd-4.1.2
-	dev-util/gtk-doc-am
 	doc? ( >=dev-util/gtk-doc-1 )"
+# eautoreconf needs
+#	gnome-base/gnome-common
+#	dev-util/gtk-doc-am
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README"
 
@@ -61,25 +60,6 @@ multilib-native_pkg_setup_internal() {
 		$(use_enable policykit polkit)
 		$(use_enable networkmanager network-manager)
 		$(use_enable eds)"
-}
-
-multilib-native_src_prepare_internal() {
-	gnome2_src_prepare
-
-	# FIXME: tarball generated with broken gtk-doc, revisit me.
-	if use doc; then
-		sed "/^TARGET_DIR/i \GTKDOC_REBASE=${EPREFIX}/usr/bin/gtkdoc-rebase" \
-			-i gtk-doc.make || die "sed 1 failed"
-	else
-		sed "/^TARGET_DIR/i \GTKDOC_REBASE=$(type -P true)" \
-			-i gtk-doc.make || die "sed 2 failed"
-	fi
-
-	# Make it libtool-1 compatible, bug #271652
-	rm -v m4/lt* m4/libtool.m4 || die "removing libtool macros failed"
-
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautoreconf
 }
 
 multilib-native_pkg_postinst_internal() {
