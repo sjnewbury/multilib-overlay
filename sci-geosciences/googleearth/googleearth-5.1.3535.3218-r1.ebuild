@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sci-geosciences/googleearth/googleearth-5.1.3535.3218-r1.ebuild,v 1.1 2010/06/07 14:48:17 caster Exp $
+# $Header: /var/cvsroot/gentoo-x86/sci-geosciences/googleearth/googleearth-5.1.3535.3218-r1.ebuild,v 1.4 2010/06/20 16:41:06 fauli Exp $
 
 EAPI=2
 
@@ -10,41 +10,41 @@ DESCRIPTION="A 3D interface to the planet"
 HOMEPAGE="http://earth.google.com/"
 # no upstream versioning, version determined from help/about
 # incorrect digest means upstream bumped and thus needs version bump
-SRC_URI="http://dl.google.com/earth/client/current/GoogleEarthLinux.bin
+SRC_URI="http://dl.google.com/earth/client/advanced/previous/GoogleEarthLinux.bin
 			-> GoogleEarthLinux-${PV}.bin"
 
 LICENSE="googleearth GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 x86"
 RESTRICT="mirror strip"
 IUSE="qt-bundled"
 
 GCC_NEEDED="4.2"
 
 RDEPEND=">=sys-devel/gcc-${GCC_NEEDED}[-nocxx]
-	dev-libs/glib:2[lib32?]
-	media-libs/fontconfig[lib32?]
-	media-libs/freetype[lib32?]
-	media-libs/mesa[lib32?]
-	net-misc/curl[lib32?]
-	sci-libs/gdal[lib32?]
-	sys-auth/nss-mdns[lib32?]
-	sys-libs/zlib[lib32?]
-	virtual/opengl[lib32?]
-	x11-libs/libICE[lib32?]
-	x11-libs/libSM[lib32?]
-	x11-libs/libX11[lib32?]
-	x11-libs/libXi[lib32?]
-	x11-libs/libXext[lib32?]
-	x11-libs/libXrender[lib32?]
-	x11-libs/libXau[lib32?]
-	x11-libs/libXdmcp[lib32?]
+	dev-libs/glib:2[multilib_abi_x86]
+	media-libs/fontconfig[multilib_abi_x86]
+	media-libs/freetype[multilib_abi_x86]
+	media-libs/mesa[multilib_abi_x86]
+	net-misc/curl[multilib_abi_x86]
+	sci-libs/gdal[multilib_abi_x86]
+	sys-auth/nss-mdns[multilib_abi_x86]
+	sys-libs/zlib[multilib_abi_x86]
+	virtual/opengl[multilib_abi_x86]
+	x11-libs/libICE[multilib_abi_x86]
+	x11-libs/libSM[multilib_abi_x86]
+	x11-libs/libX11[multilib_abi_x86]
+	x11-libs/libXi[multilib_abi_x86]
+	x11-libs/libXext[multilib_abi_x86]
+	x11-libs/libXrender[multilib_abi_x86]
+	x11-libs/libXau[multilib_abi_x86]
+	x11-libs/libXdmcp[multilib_abi_x86]
 	!qt-bundled? (
-		>=x11-libs/qt-core-4.5.3[lib32?]
-		>=x11-libs/qt-gui-4.5.3[lib32?]
-		>=x11-libs/qt-webkit-4.5.3[lib32?]
+		>=x11-libs/qt-core-4.5.3[multilib_abi_x86]
+		>=x11-libs/qt-gui-4.5.3[multilib_abi_x86]
+		>=x11-libs/qt-webkit-4.5.3[multilib_abi_x86]
 	)
-	virtual/ttf-fonts[lib32?]"
+	virtual/ttf-fonts[multilib_abi_x86]"
 
 S="${WORKDIR}"
 
