@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/mysql/mysql-5.1.50-r1.ebuild,v 1.3 2010/09/03 20:03:07 hwoarang Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/mysql/mysql-5.1.50-r1.ebuild,v 1.4 2010/09/05 08:52:20 robbat2 Exp $
 
 MY_EXTRAS_VER="20100901-1852Z"
 EAPI=2
@@ -194,7 +194,7 @@ src_test() {
 
 		# bug 332565
 		if use extraengine ; then
-			for t in main.partition_symlink ; do
+			for t in main.range ; do
 				mysql_disable_test $t "Test $t requires USE=extraengine"
 			done
 		fi
