@@ -1,19 +1,19 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.63.ebuild,v 1.5 2010/06/11 22:25:13 josejx Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.70.ebuild,v 1.2 2010/09/07 15:06:33 jer Exp $
 
 EAPI="2"
 
-inherit autotools multilib eutils multilib-native
+inherit multilib eutils multilib-native
 
 DESCRIPTION="Bluetooth Tools and System Daemons for Linux"
 HOMEPAGE="http://bluez.sourceforge.net/"
 SRC_URI="mirror://kernel/linux/bluetooth/${P}.tar.gz"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 ~ppc ~ppc64 x86"
+KEYWORDS="~amd64 ~arm ~hppa ~ppc ~ppc64 ~x86"
 
-IUSE="alsa caps +consolekit cups debug gstreamer old-daemons pcmcia test-programs usb"
+IUSE="alsa attrib caps +consolekit cups debug gstreamer maemo6 old-daemons pcmcia pnat test-programs usb"
 
 CDEPEND="alsa? (
 		media-libs/alsa-lib[alsa_pcm_plugins_extplug,alsa_pcm_plugins_ioplug,lib32?]
@@ -24,7 +24,7 @@ CDEPEND="alsa? (
 		>=media-libs/gst-plugins-base-0.10[lib32?] )
 	usb? ( dev-libs/libusb[lib32?] )
 	cups? ( net-print/cups[lib32?] )
-	sys-fs/udev[lib32?]
+	>=sys-fs/udev-146[extras,lib32?]
 	>=dev-libs/glib-2.14[lib32?]
 	sys-apps/dbus[lib32?]
 	media-libs/libsndfile[lib32?]
@@ -55,11 +55,6 @@ multilib-native_src_prepare_internal() {
 	if use cups; then
 		epatch "${FILESDIR}/4.60/cups-location.patch"
 	fi
-
-	# Fix alsa files location
-	epatch "${FILESDIR}/${PN}-alsa_location.patch"
-
-	eautoreconf
 }
 
 multilib-native_src_configure_internal() {
@@ -76,11 +71,13 @@ multilib-native_src_configure_internal() {
 		--enable-netlink \
 		--enable-tools \
 		--enable-bccmd \
-		--enable-hid2hci \
 		--enable-dfutool \
 		$(use_enable old-daemons hidd) \
 		$(use_enable old-daemons pand) \
 		$(use_enable old-daemons dund) \
+		$(use_enable attrib) \
+		$(use_enable pnat) \
+		$(use_enable maemo6) \
 		$(use_enable cups) \
 		$(use_enable test-programs test) \
 		--enable-udevrules \
@@ -110,7 +107,7 @@ multilib-native_src_install_internal() {
 
 	if use old-daemons; then
 		newconfd "${FILESDIR}/4.18/conf.d-hidd" hidd || die
-		newinitd "${FILESDIR}/4.18/init.d-hidd" hidd || die
+		newinitd "${FILESDIR}/init.d-hidd" hidd || die
 	fi
 
 	insinto /etc/bluetooth
@@ -126,7 +123,7 @@ multilib-native_src_install_internal() {
 	exeinto /$(get_libdir)/udev/
 	newexe "${FILESDIR}/${PN}-4.18-udev.script" bluetooth.sh || die
 
-	newinitd "${FILESDIR}/4.60/bluetooth-init.d" bluetooth || die
+	newinitd "${FILESDIR}/bluetooth-init.d" bluetooth || die
 	newconfd "${FILESDIR}/4.60/bluetooth-conf.d" bluetooth || die
 }
 
@@ -155,7 +152,8 @@ multilib-native_pkg_postinst_internal() {
 		elog ""
 		elog "Since you have the consolekit use flag disabled, you will only be able to run"
 		elog "bluetooth clients as root. If you want to be able to run bluetooth clientes as "
-		elog "a regular user, you need to enable the consolekit use flag for this package."
+		elog "a regular user, you need to enable the consolekit use flag for this package or"
+		elog "to add the user to the plugdev group."
 	fi
 
 	if use old-daemons; then
