@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/orbit/orbit-2.14.18.ebuild,v 1.6 2010/08/18 21:43:47 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/orbit/orbit-2.14.18.ebuild,v 1.7 2010/09/07 13:42:54 pacho Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -50,6 +50,8 @@ multilib-native_src_compile_internal() {
 		G2CONF="${G2CONF} --with-idl-compiler=/usr/bin/orbit-idl-2"
 	fi
 
+	# Parallel build fails from time to time, bug #273031
+	MAKEOPTS="${MAKEOPTS} -j1"
 	gnome2_src_compile
 }
 
