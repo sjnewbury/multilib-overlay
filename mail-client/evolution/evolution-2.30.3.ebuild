@@ -1,20 +1,18 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.30.2-r1.ebuild,v 1.7 2010/09/08 18:57:54 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.30.3.ebuild,v 1.1 2010/09/08 18:57:54 eva Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
 
-inherit autotools gnome2 flag-o-matic python versionator multilib-native
+inherit autotools eutils flag-o-matic gnome2 python versionator multilib-native
 
 DESCRIPTION="Integrated mail, addressbook and calendaring functionality"
 HOMEPAGE="http://www.gnome.org/projects/evolution/"
-SRC_URI="${SRC_URI}
-	mirror://gentoo/${PN}-2.30.2-patches.tar.bz2"
 
 LICENSE="GPL-2 LGPL-2 OPENLDAP"
 SLOT="2.0"
-KEYWORDS="~alpha amd64 ~ia64 ~ppc ~ppc64 ~sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="crypt doc gstreamer kerberos ldap networkmanager nntp pda profile python ssl"
 # pst
 # mono - disabled because it just crashes on startup :S
@@ -25,7 +23,7 @@ IUSE="crypt doc gstreamer kerberos ldap networkmanager nntp pda profile python s
 RDEPEND=">=dev-libs/glib-2.22[lib32?]
 	>=x11-libs/gtk+-2.18[lib32?]
 	>=gnome-extra/evolution-data-server-$(get_version_component_range 1-2)
-	>=gnome-base/gnome-desktop-2.26.0[lib32?]
+	>=gnome-base/gnome-desktop-2.26[lib32?]
 	>=gnome-extra/gtkhtml-3.29.6[lib32?]
 	>=gnome-base/gconf-2[lib32?]
 	>=gnome-base/libgnomecanvas-2[lib32?]
@@ -69,9 +67,9 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext[lib32?]
 	sys-devel/bison
 	app-text/scrollkeeper
-	>=gnome-base/gnome-common-2.12.0
 	>=app-text/gnome-doc-utils-0.9.1[lib32?]
 	app-text/docbook-xml-dtd:4.1.2
+	>=gnome-base/gnome-common-2.12
 	>=dev-util/gtk-doc-am-1.9
 	doc? ( >=dev-util/gtk-doc-1.9 )"
 
@@ -104,33 +102,41 @@ multilib-native_pkg_setup_internal() {
 	# autodetect new-mail-notify and exchange, but that cannot be helped for the
 	# moment.  They should be changed to depend on a --enable-<foo> like mono
 	# is.  This cleans up a ton of crap from this ebuild.
+
+	# Use NSS/NSPR only if 'ssl' is enabled.
+	if use ssl ; then
+		G2CONF="${G2CONF} --enable-nss=yes"
+	else
+		G2CONF="${G2CONF}
+			--without-nspr-libs
+			--without-nspr-includes
+			--without-nss-libs
+			--without-nss-includes"
+	fi
 }
 
 multilib-native_src_prepare_internal() {
 	gnome2_src_prepare
 
+	# Fix linking issues with libeshell, upstream #629098
+	epatch "${FILESDIR}/${PN}-2.30.3-fix-linking-issues-in-libeshell.patch"
+
 	# FIXME: Fix compilation flags crazyness
-	sed 's/CFLAGS="$CFLAGS $WARNING_FLAGS"//' \
+	sed -e 's/CFLAGS="$CFLAGS $WARNING_FLAGS"//' \
 		-i configure.ac configure || die "sed 1 failed"
-
-	# Do not require unstable libunique
-	epatch "${FILESDIR}/${PN}-2.30.1.2-configure.patch"
-
-	# Apply upstream patches committed to gnome-2.30 branch
-	epatch "${WORKDIR}"/${P}-patches/*.patch
-
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautoreconf
+	sed -e 's/-DG.*_DISABLE_DEPRECATED//' \
+		-e 's/-DPANGO_DISABLE_DEPRECATED//' \
+		-i configure.ac configure || die "sed 2 failed"
 
 	# Use NSS/NSPR only if 'ssl' is enabled.
 	if use ssl ; then
-		sed -i -e "s|mozilla-nss|nss|
-			s|mozilla-nspr|nspr|" "${S}"/configure || die "sed 1 failed"
-		G2CONF="${G2CONF} --enable-nss=yes"
-	else
-		G2CONF="${G2CONF} --without-nspr-libs --without-nspr-includes \
-			--without-nss-libs --without-nss-includes"
+		sed -e 's|mozilla-nss|nss|' \
+			-e 's|mozilla-nspr|nspr|' \
+			-i configure.ac configure || die "sed 3 failed"
 	fi
+
+	intltoolize --force --copy --automake || die "intltoolize failed"
+	eautoreconf
 }
 
 multilib-native_pkg_postinst_internal() {

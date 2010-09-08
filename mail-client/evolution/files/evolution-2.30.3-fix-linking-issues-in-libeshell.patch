@@ -1,0 +1,39 @@
+From 7ae36c45c81c8f1f4e837b564ea73c035c34a395 Mon Sep 17 00:00:00 2001
+From: Gilles Dartiguelongue <eva@gentoo.org>
+Date: Wed, 8 Sep 2010 18:39:35 +0200
+Subject: [PATCH] Fix linking issues in libeshell
+
+---
+ shell/Makefile.am |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
+
+diff --git a/shell/Makefile.am b/shell/Makefile.am
+index 7b742de..64ced47 100644
+--- a/shell/Makefile.am
++++ b/shell/Makefile.am
+@@ -2,6 +2,12 @@ if ENABLE_TEST_COMPONENT
+ SUBDIRS = . test
+ endif
+ 
++if OS_WIN32
++eggsm_libs =
++else
++eggsm_libs = -lSM -lICE
++endif
++
+ # Executable
+ bin_PROGRAMS = evolution
+ 
+@@ -82,7 +88,8 @@ libeshell_la_LIBADD =					\
+ 	$(top_builddir)/widgets/misc/libemiscwidgets.la	\
+ 	$(top_builddir)/widgets/menus/libmenus.la	\
+ 	$(GNOME_PLATFORM_LIBS)				\
+-	$(SHELL_LIBS)
++	$(SHELL_LIBS)					\
++	$(eggsm_libs)
+ 
+ # Evolution executable
+ 
+-- 
+1.7.2.2
+
