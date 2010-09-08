@@ -1,0 +1,215 @@
+From 6779fbf994d5270720ccb1687ba8b004e20a1821 Mon Sep 17 00:00:00 2001
+From: Sebastien Pouliot <sebastien@ximian.com>
+Date: Mon, 16 Aug 2010 16:48:02 -0400
+Subject: [PATCH] Fix integer overflows when loading images, see bnc #630756
+
+* src/bmpcodec.c:
+* src/jpgcodec.c:
+* src/tifcodec.c:
+	Ensure no integer overflow can occur when computing the
+	stride or the total pixel size (in bytes) used to load
+	pictures in memory. Fix bug #630756
+---
+ src/bmpcodec.c  |   32 +++++++++++++++++++++++---------
+ src/jpegcodec.c |   25 +++++++++++++++++++------
+ src/tiffcodec.c |   23 ++++++++++++++++++-----
+ 3 files changed, 60 insertions(+), 20 deletions(-)
+
+diff --git a/src/bmpcodec.c b/src/bmpcodec.c
+index 7f02561..5547262 100644
+--- a/src/bmpcodec.c
++++ b/src/bmpcodec.c
+@@ -781,7 +781,6 @@ gdip_read_bmp_image (void *pointer, GpImage **image, ImageSource source)
+ 	int		colours;
+ 	BOOL		os2format = FALSE;
+ 	BOOL		upsidedown = TRUE;
+-	int		size;
+ 	int		size_read;
+ 	BYTE		*data_read = NULL;
+ 	int		line;
+@@ -793,6 +792,7 @@ gdip_read_bmp_image (void *pointer, GpImage **image, ImageSource source)
+ 	ARGB green_mask = 0;
+ 	ARGB blue_mask = 0;
+ 	int red_shift = 0;
++	unsigned long long int size;
+ 
+ 	status = gdip_read_BITMAPINFOHEADER (pointer, &bmi, source, &os2format, &upsidedown);
+ 	if (status != Ok)
+@@ -860,23 +860,30 @@ gdip_read_bmp_image (void *pointer, GpImage **image, ImageSource source)
+ 	result->active_bitmap->width = bmi.biWidth;
+ 	result->active_bitmap->height = bmi.biHeight;
+ 
++	/* biWidth and biHeight are LONG (32 bits signed integer) */
++	size = bmi.biWidth;
++
+ 	switch (result->active_bitmap->pixel_format) {
+ 	case PixelFormat1bppIndexed:
+-		result->active_bitmap->stride = (result->active_bitmap->width + 7) / 8;
++		result->active_bitmap->stride = (size + 7) / 8;
+ 		break;
+ 	case PixelFormat4bppIndexed:
+-		result->active_bitmap->stride = (result->active_bitmap->width + 1) / 2;
++		result->active_bitmap->stride = (size + 1) / 2;
+ 		break;
+ 	case PixelFormat8bppIndexed:
+-		result->active_bitmap->stride =  result->active_bitmap->width;
+-		break;
+-	case PixelFormat24bppRGB:
+-		result->active_bitmap->stride = result->active_bitmap->width * 4;
++		result->active_bitmap->stride = size;
+ 		break;
+ 	default:
+ 		/* For other types, we assume 32 bit and translate into 32 bit from source format */
+ 		result->active_bitmap->pixel_format = PixelFormat32bppRGB;
+-		result->active_bitmap->stride = result->active_bitmap->width * 4;
++		/* fall-thru */
++	case PixelFormat24bppRGB:
++		/* stride is a (signed) _int_ and once multiplied by 4 it should hold a value that can be allocated by GdipAlloc
++		 * this effectively limits 'width' to 536870911 pixels */
++		size *= 4;
++		if (size > G_MAXINT32)
++			goto error;
++		result->active_bitmap->stride = size;
+ 		break;
+ 	}
+ 
+@@ -922,7 +929,14 @@ gdip_read_bmp_image (void *pointer, GpImage **image, ImageSource source)
+ 		data_read = NULL;
+ 	}
+ 
+-	pixels = GdipAlloc (result->active_bitmap->stride * result->active_bitmap->height);
++	size = result->active_bitmap->stride;
++	/* ensure total 'size' does not overflow an integer and fits inside our 2GB limit */
++	size *= result->active_bitmap->height;
++	if (size > G_MAXINT32) {
++		status = OutOfMemory;
++		goto error;
++	}
++	pixels = GdipAlloc (size);
+ 	if (pixels == NULL) {
+ 		status = OutOfMemory;
+ 		goto error;
+diff --git a/src/jpegcodec.c b/src/jpegcodec.c
+index 55df776..e330efb 100644
+--- a/src/jpegcodec.c
++++ b/src/jpegcodec.c
+@@ -282,6 +282,7 @@ gdip_load_jpeg_image_internal (struct jpeg_source_mgr *src, GpImage **image)
+ 	BYTE		*lines[4] = {NULL, NULL, NULL, NULL};
+ 	GpStatus	status;
+ 	int		stride;
++	unsigned long long int size;
+ 
+ 	destbuf = NULL;
+ 	result = NULL;
+@@ -323,20 +324,21 @@ gdip_load_jpeg_image_internal (struct jpeg_source_mgr *src, GpImage **image)
+ 
+ 	if (cinfo.num_components == 1) {
+ 		result->cairo_format = CAIRO_FORMAT_A8;
+-		result->active_bitmap->stride = cinfo.image_width;
+ 		result->active_bitmap->pixel_format = PixelFormat8bppIndexed;
++		size = 1;
+ 	} else if (cinfo.num_components == 3) {
+ 		/* libjpeg gives us RGB for many formats and
+ 		 * we convert to RGB format when needed. JPEG
+ 		 * does not support alpha (transparency). */
+ 		result->cairo_format = CAIRO_FORMAT_ARGB32;
+-		result->active_bitmap->stride = 4 * cinfo.image_width;
+ 		result->active_bitmap->pixel_format = PixelFormat24bppRGB;
++		size = 4;
+ 	} else if (cinfo.num_components == 4) {
+ 		result->cairo_format = CAIRO_FORMAT_ARGB32;
+-		result->active_bitmap->stride = 4 * cinfo.image_width;
+ 		result->active_bitmap->pixel_format = PixelFormat32bppRGB;
+-	}
++		size = 4;
++	} else
++		goto error;
+ 
+ 	switch (cinfo.jpeg_color_space) {
+ 	case JCS_GRAYSCALE:
+@@ -360,7 +362,12 @@ gdip_load_jpeg_image_internal (struct jpeg_source_mgr *src, GpImage **image)
+ 		break;
+ 	}
+ 
+-	stride = result->active_bitmap->stride;
++	size *= cinfo.image_width;
++	/* stride is a (signed) _int_ and once multiplied by 4 it should hold a value that can be allocated by GdipAlloc
++	 * this effectively limits 'width' to 536870911 pixels */
++	if (size > G_MAXINT32)
++		goto error;
++	stride = result->active_bitmap->stride = size;
+ 
+ 	/* Request cairo-compat output */
+ 	/* libjpeg can do only following conversions,
+@@ -397,7 +404,13 @@ gdip_load_jpeg_image_internal (struct jpeg_source_mgr *src, GpImage **image)
+ 
+ 	jpeg_start_decompress (&cinfo);
+ 
+-	destbuf = GdipAlloc (stride * cinfo.output_height);
++	/* ensure total 'size' does not overflow an integer and fits inside our 2GB limit */
++	size *= cinfo.output_height;
++	if (size > G_MAXINT32) {
++		status = OutOfMemory;
++		goto error;
++	}
++	destbuf = GdipAlloc (size);
+ 	if (destbuf == NULL) {
+ 		status = OutOfMemory;
+ 		goto error;
+diff --git a/src/tiffcodec.c b/src/tiffcodec.c
+index 9e9504f..cf4cf3b 100644
+--- a/src/tiffcodec.c
++++ b/src/tiffcodec.c
+@@ -1104,6 +1104,8 @@ gdip_load_tiff_image (TIFF *tiff, GpImage **image)
+ 	frame = gdip_frame_add(result, &gdip_image_frameDimension_page_guid);
+ 
+ 	for (page = 0; page < num_of_pages; page++) {
++		unsigned long long int size;
++
+ 		bitmap_data = gdip_frame_add_bitmapdata(frame);
+ 		if (bitmap_data == NULL) {
+ 			goto error;
+@@ -1139,14 +1141,25 @@ gdip_load_tiff_image (TIFF *tiff, GpImage **image)
+ 			bitmap_data->image_flags |= ImageFlagsHasRealDPI;
+ 		}
+ 
+-		bitmap_data->stride = tiff_image.width * 4;
++		/* width and height are uint32, but TIFF uses 32 bits offsets (so it's real size limit is 4GB),
++		 * however libtiff uses signed int (int32 not uint32) as offsets so we limit ourselves to 2GB */
++		size = tiff_image.width;
++		/* stride is a (signed) _int_ and once multiplied by 4 it should hold a value that can be allocated by GdipAlloc
++		 * this effectively limits 'width' to 536870911 pixels */
++		size *= sizeof (guint32);
++		if (size > G_MAXINT32)
++			goto error;
++		bitmap_data->stride = size;
+ 		bitmap_data->width = tiff_image.width;
+ 		bitmap_data->height = tiff_image.height;
+ 		bitmap_data->reserved = GBD_OWN_SCAN0;
+ 		bitmap_data->image_flags |= ImageFlagsColorSpaceRGB | ImageFlagsHasRealPixelSize | ImageFlagsReadOnly;
+ 
+-		num_of_pixels = tiff_image.width * tiff_image.height;
+-		pixbuf = GdipAlloc(num_of_pixels * sizeof(guint32));
++		/* ensure total 'size' does not overflow an integer and fits inside our 2GB limit */
++		size *= tiff_image.height;
++		if (size > G_MAXINT32)
++			goto error;
++		pixbuf = GdipAlloc (size);
+ 		if (pixbuf == NULL) {
+ 			goto error;
+ 		}
+@@ -1168,9 +1181,9 @@ gdip_load_tiff_image (TIFF *tiff, GpImage **image)
+ 			memcpy(pixbuf + (bitmap_data->stride * (tiff_image.height - i - 1)), pixbuf_row, bitmap_data->stride);
+ 		}
+ 
+-		/* Now flip from ARGB to ABGR */
++		/* Now flip from ARGB to ABGR processing one pixel (4 bytes) at the time */
+ 		pixbuf_ptr = (guint32 *)pixbuf;
+-		for (i = 0; i < num_of_pixels; i++) {
++		for (i = 0; i < (size >> 2); i++) {
+ 			*pixbuf_ptr =	(*pixbuf_ptr & 0xff000000) | 
+ 					((*pixbuf_ptr & 0x00ff0000) >> 16) |
+ 					(*pixbuf_ptr & 0x0000ff00) | 
+-- 
+1.7.2.1
+
