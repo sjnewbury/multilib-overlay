@@ -77,4 +77,3 @@ media-libs/capseo/capseo-0.3.0_pre200712251-r1.ebuild
 dev-db/postgresql-base/postgresql-base-8.1.21-r1.ebuild
 dev-db/postgresql-base/postgresql-base-8.2.17-r1.ebuild
 dev-db/postgresql-base/postgresql-base-8.3.11-r1.ebuild
-app-crypt/heimdal/heimdal-1.2.1-r1.ebuild # does not compile
