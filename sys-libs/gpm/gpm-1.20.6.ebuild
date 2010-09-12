@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/gpm/gpm-1.20.6.ebuild,v 1.6 2010/09/08 11:15:47 hwoarang Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/gpm/gpm-1.20.6.ebuild,v 1.9 2010/09/12 06:56:50 vapier Exp $
 
 EAPI="2"
 
-# emacs support disabled due to Bug 99533
+# emacs support disabled due to #99533 #335900
 
 inherit eutils toolchain-funcs flag-o-matic multilib-native
 
@@ -14,11 +14,11 @@ SRC_URI="http://linux.schottelius.org/gpm/archives/${P}.tar.lzma"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ppc64 ~s390 ~sh ~sparc x86"
+KEYWORDS="alpha amd64 arm ~hppa ia64 m68k ~mips ~ppc ppc64 s390 sh ~sparc x86"
 IUSE="selinux"
 
 DEPEND="sys-libs/ncurses[lib32?]
-	|| ( app-arch/xz-utils[lib32?] app-arch/lzma-utils[lib32?] )"
+	app-arch/xz-utils[lib32?]"
 RDEPEND="selinux? ( sec-policy/selinux-gpm )"
 
 multilib-native_src_prepare_internal() {
@@ -30,6 +30,7 @@ multilib-native_src_configure_internal() {
 	econf \
 		--libdir=/$(get_libdir) \
 		--sysconfdir=/etc/gpm \
+		emacs=/bin/false \
 		|| die "econf failed"
 }
 
