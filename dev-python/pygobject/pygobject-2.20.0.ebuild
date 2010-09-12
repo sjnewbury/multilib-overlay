@@ -1,9 +1,11 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pygobject/pygobject-2.20.0.ebuild,v 1.13 2010/07/12 16:59:39 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pygobject/pygobject-2.20.0.ebuild,v 1.15 2010/09/10 21:43:20 arfrever Exp $
 
 EAPI="2"
 SUPPORT_PYTHON_ABIS="1"
+PYTHON_DEPEND="2:2.5"
+RESTRICT_PYTHON_ABIS="2.4 3.*"
 
 inherit alternatives autotools gnome2 python virtualx multilib-native
 
@@ -16,16 +18,13 @@ KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd ~x86-
 IUSE="doc examples libffi test"
 
 # FIXME: add introspection support
-RDEPEND=">=dev-lang/python-2.4.4-r5[lib32?]
-	>=dev-libs/glib-2.20[lib32?]
+RDEPEND=">=dev-libs/glib-2.20[lib32?]
 	!<dev-python/pygtk-2.13
 	libffi? ( virtual/libffi[lib32?] )"
 DEPEND="${RDEPEND}
 	doc? ( dev-libs/libxslt[lib32?] >=app-text/docbook-xsl-stylesheets-1.70.1 )
 	test? ( media-fonts/font-cursor-misc media-fonts/font-misc-misc )
 	>=dev-util/pkgconfig-0.12.0[lib32?]"
-
-RESTRICT_PYTHON_ABIS="3.*"
 
 DOCS="AUTHORS ChangeLog* NEWS README"
 
