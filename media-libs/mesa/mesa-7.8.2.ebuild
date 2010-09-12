@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.8.2.ebuild,v 1.9 2010/08/27 19:18:31 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.8.2.ebuild,v 1.10 2010/09/09 11:00:12 scarabeus Exp $
 
 EAPI=3
 
@@ -53,7 +53,7 @@ RDEPEND="
 		video_cards_nouveau? ( <x11-libs/libdrm-2.4.21[lib32?] )
 	)
 	x11-libs/libICE[lib32?]
-	x11-libs/libX11[xcb?,lib32?]
+	|| ( <=x11-libs/libX11-1.3.5[xcb?,lib32?] >x11-libs/libX11-1.3.5[lib32?] )
 	x11-libs/libXdamage[lib32?]
 	x11-libs/libXext[lib32?]
 	x11-libs/libXi[lib32?]
