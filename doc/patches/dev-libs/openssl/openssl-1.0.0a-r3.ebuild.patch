@@ -1,5 +1,5 @@
---- /usr/portage/dev-libs/openssl/openssl-1.0.0a-r3.ebuild	2010-08-23 08:05:32.000000000 +0200
-+++ ./dev-libs/openssl/openssl-1.0.0a-r3.ebuild	2010-08-26 00:41:31.000000000 +0200
+--- /usr/portage/dev-libs/openssl/openssl-1.0.0a-r3.ebuild	2010-09-12 07:35:33.000000000 +0200
++++ ./dev-libs/openssl/openssl-1.0.0a-r3.ebuild	2010-09-12 13:38:53.000000000 +0200
 @@ -26,8 +26,9 @@
  src_unpack() {
  	unpack ${P}.tar.gz
@@ -11,7 +11,7 @@
  	epatch "${FILESDIR}"/${PN}-0.9.7e-gentoo.patch
  	epatch "${FILESDIR}"/${PN}-0.9.8l-binutils.patch #289130
  	epatch "${FILESDIR}"/${PN}-1.0.0a-ldflags.patch #327421
-@@ -61,7 +62,7 @@
+@@ -63,7 +64,7 @@
  	./config --test-sanity || die "I AM NOT SANE"
  }
  
@@ -20,7 +20,7 @@
  	unset APPS #197996
  	unset SCRIPTS #312551
  
-@@ -116,7 +117,9 @@
+@@ -118,7 +119,9 @@
  		-e "/^CFLAG/s:=.*:=${CFLAG} ${CFLAGS}:" \
  		-e "/^SHARED_LDFLAGS=/s:$: ${LDFLAGS}:" \
  		Makefile || die
