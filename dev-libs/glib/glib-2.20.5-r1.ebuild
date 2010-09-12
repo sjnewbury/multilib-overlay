@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.20.5-r1.ebuild,v 1.10 2009/11/17 15:41:51 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.20.5-r1.ebuild,v 1.11 2010/09/08 20:41:23 eva Exp $
 
 EAPI="2"
 
@@ -12,7 +12,7 @@ HOMEPAGE="http://www.gtk.org/"
 LICENSE="LGPL-2"
 SLOT="2"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
-IUSE="debug doc fam hardened selinux xattr"
+IUSE="debug doc fam selinux xattr"
 
 RDEPEND="virtual/libiconv
 	xattr? ( sys-apps/attr[lib32?] )
@@ -27,11 +27,6 @@ DEPEND="${RDEPEND}
 		~app-text/docbook-xml-dtd-4.1.2 )"
 
 multilib-native_src_prepare_internal() {
-	if use ppc64 && use hardened ; then
-		replace-flags -O[2-3] -O1
-		epatch "${FILESDIR}/glib-2.6.3-testglib-ssp.patch"
-	fi
-
 	if use ia64 ; then
 		# Only apply for < 4.1
 		local major=$(gcc-major-version)
