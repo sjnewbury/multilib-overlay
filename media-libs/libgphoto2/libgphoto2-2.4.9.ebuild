@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libgphoto2/libgphoto2-2.4.9.ebuild,v 1.2 2010/08/30 20:06:47 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libgphoto2/libgphoto2-2.4.9.ebuild,v 1.3 2010/09/10 18:25:46 ssuominen Exp $
 
 # TODO
 # 1. Track upstream bug --disable-docs does not work.
@@ -95,6 +95,8 @@ multilib-native_src_prepare_internal() {
 
 	# Increase max entries from 1024 to 8192 to fix bug #291049
 	epatch "${FILESDIR}/${PN}-2.4.8-increase_max_entries.patch"
+
+	epatch "${FILESDIR}"/${P}-dnl.patch #336598
 
 	eautoreconf
 
