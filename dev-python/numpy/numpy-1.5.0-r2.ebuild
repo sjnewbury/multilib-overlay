@@ -1,15 +1,14 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.5.0.ebuild,v 1.1 2010/09/02 13:25:02 djc Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.5.0-r2.ebuild,v 1.2 2010/09/11 10:24:16 xarthisius Exp $
 
 EAPI="3"
-PYTHON_DEPEND="2"
+PYTHON_DEPEND="*"
 SUPPORT_PYTHON_ABIS="1"
-RESTRICT_PYTHON_ABIS="3.*"
 
 inherit distutils eutils flag-o-matic toolchain-funcs versionator multilib-native
 
-NP="${PN}-1.3"
+NP="${PN}-1.5"
 
 DESCRIPTION="Fast array and numerical python library"
 HOMEPAGE="http://numpy.scipy.org/ http://pypi.python.org/pypi/numpy"
@@ -28,11 +27,15 @@ IUSE="doc lapack test"
 RDEPEND="dev-python/setuptools[lib32?]
 	lapack? ( virtual/cblas virtual/lapack )"
 DEPEND="${RDEPEND}
+	doc? ( app-arch/unzip )
 	lapack? ( dev-util/pkgconfig[lib32?] )
-	test? ( >=dev-python/nose-0.10 )
-	doc? ( app-arch/unzip )"
+	test? ( >=dev-python/nose-0.10 )"
+
+PYTHON_CFLAGS=("* + -fno-strict-aliasing")
 
 multilib-native_pkg_setup_internal() {
+	python_pkg_setup
+
 	# See progress in http://projects.scipy.org/scipy/numpy/ticket/573
 	# with the subtle difference that we don't want to break Darwin where
 	# -shared is not a valid linker argument
@@ -47,7 +50,10 @@ multilib-native_pkg_setup_internal() {
 	[[ -z ${FC} ]] && FC=$(tc-getFC)
 	# when fortran flags are set, pic is removed.
 	FFLAGS="${FFLAGS} -fPIC"
-	export NUMPY_FCONFIG="config_fc --noopt --noarch"
+	NUMPY_FCONFIG="config_fc --noopt --noarch"
+	# workaround bug 335908
+	[[ ${FC} == *gfortran* ]] && NUMPY_FCONFIG="${NUMPY_FCONFIG} --fcompiler=gnu95"
+	export NUMPY_FCONFIG
 }
 
 multilib-native_src_unpack_internal() {
@@ -60,6 +66,7 @@ multilib-native_src_unpack_internal() {
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-1.1.0-f2py.patch
 	epatch "${FILESDIR}"/${PN}-1.3.0-fenv-freebsd.patch # bug 279487
+	epatch "${FILESDIR}"/${P}-python3.patch # 336781
 
 	# Gentoo patch for ATLAS library names
 	sed -i \
@@ -110,6 +117,9 @@ multilib-native_src_compile_internal() {
 
 src_test() {
 	testing() {
+		# Disable tests with Python 3 until dev-python/nose supports Python 3.
+		[[ "$(python_get_version --major)" == 3 ]] && return
+
 		"$(PYTHON)" setup.py ${NUMPY_FCONFIG} build -b "build-${PYTHON_ABI}" install \
 			--home="${S}/test-${PYTHON_ABI}" --no-compile || die "install test failed"
 		pushd "${S}/test-${PYTHON_ABI}/"lib* > /dev/null
@@ -122,10 +132,9 @@ src_test() {
 }
 
 multilib-native_src_install_internal() {
-	[[ -z ${ED} ]] && local ED=${D}
 	distutils_src_install ${NUMPY_FCONFIG}
 	dodoc THANKS.txt DEV_README.txt COMPATIBILITY
-	rm -f "${ED}"/usr/lib/python*/site-packages/numpy/*.txt || die
+	rm -f "${ED}"usr/lib/python*/site-packages/numpy/*.txt || die
 	docinto f2py
 	dodoc numpy/f2py/docs/*.txt || die "dodoc f2py failed"
 	doman numpy/f2py/f2py.1 || die "doman failed"
