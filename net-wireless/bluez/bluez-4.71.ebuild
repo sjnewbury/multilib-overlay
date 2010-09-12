@@ -1,19 +1,20 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.69.ebuild,v 1.4 2010/09/09 16:23:44 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.71.ebuild,v 1.1 2010/09/10 10:07:56 pacho Exp $
 
 EAPI="2"
 
-inherit autotools multilib eutils multilib-native
+inherit multilib eutils multilib-native
 
 DESCRIPTION="Bluetooth Tools and System Daemons for Linux"
 HOMEPAGE="http://bluez.sourceforge.net/"
-SRC_URI="mirror://kernel/linux/bluetooth/${P}.tar.gz"
+SRC_URI="mirror://kernel/linux/bluetooth/${P}.tar.gz
+	http://standards.ieee.org/regauth/oui/oui.txt"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 ~arm ~hppa ~ppc ~ppc64 x86"
+KEYWORDS="~amd64 ~arm ~hppa ~ppc ~ppc64 ~x86"
 
-IUSE="alsa caps +consolekit cups debug gstreamer maemo6 old-daemons pcmcia test-programs usb"
+IUSE="alsa attrib caps +consolekit cups debug gstreamer maemo6 mcap old-daemons pcmcia pnat test-programs usb"
 
 CDEPEND="alsa? (
 		media-libs/alsa-lib[alsa_pcm_plugins_extplug,alsa_pcm_plugins_ioplug,lib32?]
@@ -55,11 +56,6 @@ multilib-native_src_prepare_internal() {
 	if use cups; then
 		epatch "${FILESDIR}/4.60/cups-location.patch"
 	fi
-
-	# Fix alsa files location
-	epatch "${FILESDIR}/${PN}-alsa_location.patch"
-
-	eautoreconf
 }
 
 multilib-native_src_configure_internal() {
@@ -80,6 +76,9 @@ multilib-native_src_configure_internal() {
 		$(use_enable old-daemons hidd) \
 		$(use_enable old-daemons pand) \
 		$(use_enable old-daemons dund) \
+		$(use_enable attrib) \
+		$(use_enable mcap) \
+		$(use_enable pnat) \
 		$(use_enable maemo6) \
 		$(use_enable cups) \
 		$(use_enable test-programs test) \
@@ -87,7 +86,8 @@ multilib-native_src_configure_internal() {
 		--enable-configfiles \
 		$(use_enable pcmcia) \
 		$(use_enable debug) \
-		--localstatedir=/var
+		--localstatedir=/var \
+		--disable-hal
 }
 
 multilib-native_src_install_internal() {
@@ -110,7 +110,7 @@ multilib-native_src_install_internal() {
 
 	if use old-daemons; then
 		newconfd "${FILESDIR}/4.18/conf.d-hidd" hidd || die
-		newinitd "${FILESDIR}/4.18/init.d-hidd" hidd || die
+		newinitd "${FILESDIR}/init.d-hidd" hidd || die
 	fi
 
 	insinto /etc/bluetooth
@@ -126,8 +126,12 @@ multilib-native_src_install_internal() {
 	exeinto /$(get_libdir)/udev/
 	newexe "${FILESDIR}/${PN}-4.18-udev.script" bluetooth.sh || die
 
-	newinitd "${FILESDIR}/4.60/bluetooth-init.d" bluetooth || die
+	newinitd "${FILESDIR}/bluetooth-init.d" bluetooth || die
 	newconfd "${FILESDIR}/4.60/bluetooth-conf.d" bluetooth || die
+
+	# Install oui.txt as requested in bug #283791 and approved by upstream
+	insinto /var/lib/misc
+	doins "${DISTDIR}/oui.txt" || die
 }
 
 multilib-native_pkg_postinst_internal() {
