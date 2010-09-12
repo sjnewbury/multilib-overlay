@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-dotnet/libgdiplus/libgdiplus-2.6.7-r1.ebuild,v 1.1 2010/09/07 21:57:03 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-dotnet/libgdiplus/libgdiplus-2.6.7-r1.ebuild,v 1.3 2010/09/10 10:52:19 hwoarang Exp $
 
 EAPI=2
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.go-mono.com/"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~ppc ~x86 ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
+KEYWORDS="amd64 ~ppc x86 ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 IUSE="cairo"
 
 RDEPEND=">=dev-libs/glib-2.16[lib32?]
