@@ -45,7 +45,8 @@ EMULTILIB_SAVE_VARS="${EMULTILIB_SAVE_VARS}
 		QTPLUGINDIR CMAKE_BUILD_DIR mycmakeargs KDE_S POPPLER_MODULE_S
 		ECONF_SOURCE MY_LIBDIR MOZLIBDIR SDKDIR G2CONF PKG_CONFIG_PATH
 		DESTTREE SRC_PREP USE_64 osname mythreading myarch PRIV_LIB 
-		SITE_LIB SITE_ARCH VENDOR_LIB VENDOR_ARCH ARCH_LIB"
+		SITE_LIB SITE_ARCH VENDOR_LIB VENDOR_ARCH ARCH_LIB MY_OPTS
+		ECONF_PARAMS MODULE_NAMES"
 
 # @VARIABLE: EMULTILIB_SOURCE_DIRNAME
 # @DESCRIPTION: Holds the name of the source directory
@@ -476,7 +477,7 @@ multilib-native_check_inherited_funcs() {
 # it.
 	local declared_func=""
 	if [[ -f "${T}"/eclass-debug.log ]]; then
-		EMULTILIB_INHERITED="$(grep ${1} "${T}"/eclass-debug.log | cut -d ' ' -f 4 | cut -d '_' -f 1)"
+		EMULTILIB_INHERITED="$(grep EXPORT_FUNCTIONS "${T}"/eclass-debug.log | grep ${1} | cut -d ' ' -f 4 | cut -d '_' -f 1)"
 	else
 		if [[ "$1" != pkg_postrm ]]; then 
 			ewarn "You are using a package manager that does not provide "${T}"/eclass-debug.log."
@@ -488,8 +489,12 @@ multilib-native_check_inherited_funcs() {
 
 	EMULTILIB_INHERITED="${EMULTILIB_INHERITED//base/}"
 	EMULTILIB_INHERITED="${EMULTILIB_INHERITED//multilib-native/}"
+	if [[ "${EMULTILIB_PYTHON_NOT_EXPORTED}" != "${EMULTILIB_PYTHON_NOT_EXPORTED//${1}}/" ]]; then 
+		multilib_debug EMULTILIB_PYTHON_NOT_EXPORTED "${EMULTILIB_PYTHON_NOT_EXPORTED}"
+		EMULTILIB_INHERITED="${EMULTILIB_INHERITED//python/}"
+	fi
 
-	multilib_debug EMULTILIB_INHERITED ${EMULTILIB_INHERITED}
+	multilib_debug EMULTILIB_INHERITED "${EMULTILIB_INHERITED}"
 
 	for func in ${EMULTILIB_INHERITED}; do
 		if [[ -n $(declare -f ${func}_${1}) ]]; then
