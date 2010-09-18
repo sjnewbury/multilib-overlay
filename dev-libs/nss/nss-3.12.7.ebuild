@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/nss/nss-3.12.7.ebuild,v 1.4 2010/09/11 10:30:16 hwoarang Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/nss/nss-3.12.7.ebuild,v 1.7 2010/09/14 21:19:28 jer Exp $
 
 EAPI=3
 inherit eutils flag-o-matic multilib toolchain-funcs multilib-native
@@ -13,7 +13,7 @@ SRC_URI="ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/${RTM_NAME}
 
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sparc x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 IUSE="utils"
 
 DEPEND="dev-util/pkgconfig[lib32?]"
