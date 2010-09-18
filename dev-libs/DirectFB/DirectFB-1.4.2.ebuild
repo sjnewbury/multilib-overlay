@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/DirectFB/DirectFB-1.4.2.ebuild,v 1.11 2010/01/15 08:19:18 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/DirectFB/DirectFB-1.4.2.ebuild,v 1.12 2010/09/13 19:05:14 mr_bones_ Exp $
 
 EAPI="2"
 
@@ -33,9 +33,8 @@ SRC_URI="http://directfb.org/downloads/Core/${PN}-${PV:0:3}/${P}.tar.gz
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 -mips ppc ppc64 sh -sparc x86"
-IUSE="debug fbcon fusion gif jpeg mmx png sdl sse sysfs truetype v4l v4l2 X zlib ${IUV} ${IUD}"
+IUSE="debug fbcon gif jpeg mmx png sdl sse sysfs truetype v4l v4l2 X zlib ${IUV} ${IUD}"
 
-#	fusion? ( >=dev-libs/linux-fusion-8.0.0 )
 RDEPEND="sdl? ( media-libs/libsdl[lib32?] )
 	gif? ( media-libs/giflib[lib32?] )
 	png? ( media-libs/libpng[lib32?] )
@@ -100,7 +99,6 @@ multilib-native_src_configure_internal() {
 		$(use_enable png) \
 		$(use_enable gif) \
 		$(use_enable truetype freetype) \
-		$(use_enable fusion multi) \
 		$(use_enable debug) \
 		$(use_enable sysfs) \
 		$(use_enable zlib) \
