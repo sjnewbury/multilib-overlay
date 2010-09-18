@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.5.3.ebuild,v 1.6 2010/06/02 16:03:31 vostorga Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.4.9.ebuild,v 1.3 2010/09/16 01:22:31 rich0 Exp $
 
 EAPI="2"
 
-inherit pam confutils versionator multilib eutils multilib-native
+inherit pam confutils versionator multilib multilib-native
 
 MY_PV=${PV/_/}
 MY_P="${PN}-${MY_PV}"
@@ -14,7 +14,7 @@ HOMEPAGE="http://www.samba.org/"
 SRC_URI="mirror://samba/${P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc x86"
 IUSE="acl addns ads aio avahi caps +client cluster cups debug doc examples fam
 	ldap ldb +netapi pam quota +readline +server +smbclient smbsharemodes swat
 	syslog winbind "
@@ -49,9 +49,6 @@ RESTRICT="test"
 
 SBINPROGS=""
 BINPROGS=""
-KRBPLUGIN=""
-PLUGINEXT=".so"
-SHAREDMODS=""
 
 if use server ; then
 	SBINPROGS="${SBINPROGS} bin/smbd bin/nmbd"
@@ -60,7 +57,7 @@ if use server ; then
 
 	use swat && SBINPROGS="${SBINPROGS} bin/swat"
 	use winbind && SBINPROGS="${SBINPROGS} bin/winbindd"
-	use ads && use winbind && KRBPLUGIN="${KRBPLUGIN} bin/winbind_krb5_locator"
+	use ads && use winbind && SBIN_PROGS="${SBINPROGS} bin/winbind_krb5_locator"
 fi
 
 if use client ; then
@@ -73,13 +70,7 @@ fi
 
 use cups && BINPROGS="${BINPROGS} bin/smbspool"
 use ldb && BINPROGS="${BINPROGS} bin/ldbedit bin/ldbsearch bin/ldbadd bin/ldbdel bin/ldbmodify bin/ldbrename";
-
-if use winbind ; then
-	BINPROGS="${BINPROGS} bin/wbinfo"
-	SHAREDMODS="${SHAREDMODS}idmap_rid"
-	use ads && SHAREDMODS="${SHAREDMODS},idmap_ad"
-	use ldap && SHAREDMODS="${SHAREDMODS},idmap_ldap"
-fi
+use winbind && BINPROGS="${BINPROGS} bin/wbinfo"
 
 S="${WORKDIR}/${MY_P}/source3"
 
@@ -91,7 +82,7 @@ S="${WORKDIR}/${MY_P}/source3"
 CONFDIR="${FILESDIR}/$(get_version_component_range 1-2)"
 
 multilib-native_pkg_setup_internal() {
-	if use winbind &&
+	 if use winbind &&
 		[[ $(tc-getCC)$ == *gcc* ]] &&
 		[[ $(gcc-major-version)$(gcc-minor-version) -lt 43 ]]
 	then
@@ -103,6 +94,7 @@ multilib-native_pkg_setup_internal() {
 
 	confutils_use_depend_all ads ldap
 	confutils_use_depend_all swat server
+	confutils_use_depend_all client netapi
 }
 
 multilib-native_src_prepare_internal() {
@@ -167,7 +159,6 @@ multilib-native_src_configure_internal() {
 		$(use_with ads dnsupdate) \
 		--without-automount \
 		$(use_with client cifsmount) \
-		$(use_with client cifsumount) \
 		$(use_with pam) \
 		$(use_with pam pam_smbpass) \
 		$(use_with syslog) \
@@ -185,7 +176,6 @@ multilib-native_src_configure_internal() {
 		$(use_with aio aio-support) \
 		--with-sendfile-support \
 		$(use_with winbind) \
-		--with-shared-modules=${SHAREDMODS} \
 		--without-included-popt \
 		--without-included-iniparser
 }
@@ -232,11 +222,6 @@ multilib-native_src_compile_internal() {
 	if [ -n "${SBINPROGS}" ] ; then
 		einfo "make sbinprogs"
 		emake ${SBINPROGS} || die "emake sbinprogs failed";
-	fi
-
-	if [ -n "${KRBPLUGIN}" ] ; then
-		einfo "make krbplugin"
-		emake ${KRBPLUGIN}${PLUGINEXT} || die "emake krbplugin failed";
 	fi
 
 	if use client ; then
@@ -302,23 +287,6 @@ multilib-native_src_install_internal() {
 		doman ../docs/manpages/${prog/bin\/}* || die "doman failed"
 	done
 
-	# install krbplugin
-	if [ -n "${KRBPLUGIN}" ] ; then
-		if has_version app-crypt/mit-krb5 ; then
-			insinto /usr/$(get_libdir)/krb5/plugins/libkrb5
-			doins ${KRBPLUGIN}${PLUGINEXT} || die "installing
-			${KRBPLUGIN}${PLUGINEXT} failed"
-		elif has_version app-crypt/heimdal ; then
-			insinto /usr/$(get_libdir)/plugin/krb5
-			doins ${KRBPLUGIN}${PLUGINEXT} || die "installing
-			${KRBPLUGIN}${PLUGINEXT} failed"
-		fi
-		insinto /usr
-		for prog in ${KRBPLUGIN} ; do
-			doman ../docs/manpages/${prog/bin\/}* || die "doman failed"
-		done
-	fi
-
 	# install server components
 	if use server ; then
 		doman ../docs/manpages/vfs* ../docs/manpages/samba.7
@@ -364,9 +332,7 @@ multilib-native_src_install_internal() {
 	fi
 
 	# install the spooler to cups
-	if use cups ; then
-		dosym /usr/bin/smbspool $(cups-config --serverbin)/backend/smb
-	fi
+	use cups && dosym /usr/bin/smbspool $(cups-config --serverbin)/backend/smb
 
 	# install misc files
 	insinto /etc/samba
@@ -384,6 +350,7 @@ multilib-native_src_install_internal() {
 
 	# install examples
 	if use examples ; then
+		einfo "install examples"
 		insinto /usr/share/doc/${PF}/examples
 
 		if use smbclient ; then
@@ -395,10 +362,9 @@ multilib-native_src_install_internal() {
 		fi
 
 		if use server ; then
-			cd ../examples
-			doins -r auth autofs dce-dfs LDAP logon misc pdb \
-			perfcounter printer-accounting printing scripts tridge \
-			validchars VFS
+			doins -r \
+				auth autofs dce-dfs LDAP logon misc pdb perfcounter \
+				printer-accounting printing scripts tridge validchars VFS
 		fi
 	fi
 
@@ -412,16 +378,13 @@ multilib-native_src_install_internal() {
 }
 
 multilib-native_pkg_postinst_internal() {
-	elog "The default value of 'wide links' has been changed to 'no' in samba 3.5"
-	elog "to avoid an insecure default configuration"
-	elog "('wide links = yes' and 'unix extensions = yes'). For more details,"
-	elog "please see http://www.samba.org/samba/news/symlink_attack.html ."
-	elog ""
-	elog "An EXPERIMENTAL implementation of the SMB2 protocol has been added."
-	elog "SMB2 can be enabled by setting 'max protocol = smb2'. SMB2 is a new "
-	elog "implementation of the SMB protocol used by Windows Vista and higher"
-	elog ""
+	elog "The default passdb backend has been changed to 'tdbsam' in samba 3.4!"
+	elog "That breaks existing setups using the 'smbpasswd' backend without"
+	elog "explicit declaration!"
+	elog "Please use 'passdb backend = smbpasswd' if you would like to stick to the"
+	elog "'smbpasswd' backend or convert your smbpasswd entries using e.g. "
+	elog "'pdbedit -i smbpasswd -e tdbsam'."
 	elog "For further information make sure to read the release notes at"
 	elog "http://samba.org/samba/history/${P}.html and "
-	elog "http://samba.org/samba/history/${PN}-3.5.0.html"
+	elog "http://samba.org/samba/history/${PN}-3.4.0.html"
 }
