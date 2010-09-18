@@ -2,8 +2,14 @@ get the new alpha-mont code building with GNU toolchains
 
 https://bugs.gentoo.org/330915
 
---- a/crypto/bn/asm/alpha-mont.pl
-+++ b/crypto/bn/asm/alpha-mont.pl
+Index: crypto/bn/asm/alpha-mont.pl
+===================================================================
+RCS file: /usr/local/src/openssl/CVSROOT/openssl/crypto/bn/asm/alpha-mont.pl,v
+retrieving revision 1.6
+retrieving revision 1.7
+diff -u -p -r1.6 -r1.7
+--- crypto/bn/asm/alpha-mont.pl	10 Apr 2010 13:33:04 -0000	1.6
++++ crypto/bn/asm/alpha-mont.pl	13 Sep 2010 13:28:51 -0000	1.7
 @@ -41,8 +41,12 @@ $j="s4";
  $m1="s5";
  
@@ -16,6 +22,15 @@ https://bugs.gentoo.org/330915
 +#endif
  
  .text
+ 
+@@ -76,7 +80,7 @@ bn_mul_mont:
+ 	ldq	$aj,8($ap)
+ 	subq	sp,AT,sp
+ 	ldq	$bi,0($bp)	# bp[0]
+-	mov	-4096,AT
++	lda	AT,-4096(zero)	# mov	-4096,AT
+ 	ldq	$n0,0($n0)
+ 	and	sp,AT,sp
  
 @@ -106,9 +110,9 @@ bn_mul_mont:
  .align	4
@@ -97,14 +112,14 @@ https://bugs.gentoo.org/330915
  	lda	$tp,8($tp)
  	lda	$rp,8($rp)
  	lda	$ap,8($ap)
-@@ -309,8 +313,10 @@ bn_mul_mont:
+@@ -309,8 +313,8 @@ bn_mul_mont:
  	lda	sp,48(sp)
  	ret	(ra)
  .end	bn_mul_mont
-+#if 0
- .rdata
- .asciiz	"Montgomery Multiplication for Alpha, CRYPTOGAMS by <appro\@openssl.org>"
-+#endif
+-.rdata
+-.asciiz	"Montgomery Multiplication for Alpha, CRYPTOGAMS by <appro\@openssl.org>"
++.ascii	"Montgomery Multiplication for Alpha, CRYPTOGAMS by <appro\@openssl.org>"
++.align	2
  ___
  
  print $code;
