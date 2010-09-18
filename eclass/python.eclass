@@ -417,6 +417,8 @@ python_pkg_setup() {
 
 if ! has "${EAPI:-0}" 0 1 2 3 || has "${EAPI:-0}" 2 3 && [[ -n "${PYTHON_USE_WITH}" || -n "${PYTHON_USE_WITH_OR}" ]]; then
 	EXPORT_FUNCTIONS pkg_setup
+else
+	EMULTILIB_PYTHON_NOT_EXPORTED+=" pkg_setup"
 fi
 
 # @FUNCTION: python_convert_shebangs
@@ -605,6 +607,8 @@ if ! has "${EAPI:-0}" 0 1; then
 
 	if [[ -n "${PYTHON_EXPORT_PHASE_FUNCTIONS}" ]]; then
 		EXPORT_FUNCTIONS src_prepare src_configure src_compile src_test src_install
+	else
+		EMULTILIB_PYTHON_NOT_EXPORTED+=" src_prepare src_configure src_compile src_test src_install"
 	fi
 fi
 
