@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/firefox/firefox-3.6.9.ebuild,v 1.8 2010/09/14 21:21:45 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/firefox/firefox-3.6.9-r1.ebuild,v 1.1 2010/09/16 12:03:09 anarchy Exp $
 EAPI="3"
 WANT_AUTOCONF="2.1"
 
@@ -22,7 +22,7 @@ PATCH="${PN}-3.6-patches-0.2"
 DESCRIPTION="Firefox Web Browser"
 HOMEPAGE="http://www.mozilla.com/firefox"
 
-KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 ~sparc x86 ~amd64-linux ~ia64-linux ~x86-linux ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~ia64-linux ~x86-linux ~sparc-solaris ~x64-solaris ~x86-solaris"
 SLOT="0"
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 IUSE="+alsa bindist +cups +ipc java libnotify system-sqlite wifi"
@@ -135,6 +135,8 @@ multilib-native_src_prepare_internal() {
 	EPATCH_SUFFIX="patch" \
 	EPATCH_FORCE="yes" \
 	epatch "${WORKDIR}"
+
+	epatch "${FILESDIR}/fix_blocklist_support.patch"
 
 	# Allow user to apply additional patches without modifing ebuild
 	epatch_user
