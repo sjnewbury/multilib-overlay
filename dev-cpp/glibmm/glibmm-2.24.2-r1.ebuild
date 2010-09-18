@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-cpp/glibmm/glibmm-2.24.2.ebuild,v 1.7 2010/09/15 12:48:23 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-cpp/glibmm/glibmm-2.24.2-r1.ebuild,v 1.1 2010/09/15 12:51:53 pacho Exp $
 
 EAPI="3"
 inherit gnome2 multilib-native
