@@ -1,6 +1,6 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libsigc++/libsigc++-1.0.4-r3.ebuild,v 1.14 2008/07/18 03:50:18 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libsigc++/libsigc++-1.0.4-r3.ebuild,v 1.15 2010/09/13 11:40:08 pacho Exp $
 
 inherit eutils multilib-native
 
@@ -24,6 +24,10 @@ multilib-native_src_unpack_internal() {
 	# fix --as-needed, see bug #140248
 	sed -i -e 's:^libsigc_la_LIBADD =:& $(THREAD_LIB):' \
 		sigc++/Makefile.in || die
+
+	# Respect LDFLAGS, bug #336827
+	sed -i "/CC\|LD/{s/-shared/-shared \$LDFLAGS/}" \
+		scripts/ltconfig || die
 }
 
 multilib-native_src_compile_internal() {
