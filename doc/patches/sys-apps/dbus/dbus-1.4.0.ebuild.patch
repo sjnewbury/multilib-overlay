@@ -1,0 +1,60 @@
+--- /usr/portage/sys-apps/dbus/dbus-1.4.0.ebuild	2010-09-13 23:37:05.000000000 +0200
++++ ./sys-apps/dbus/dbus-1.4.0.ebuild	2010-09-18 12:35:25.000000000 +0200
+@@ -38,11 +38,6 @@
+ 	)
+ "
+ 
+-# out of sources build directory
+-BD=${WORKDIR}/${P}-build
+-# out of sources build dir for make check
+-TBD=${WORKDIR}/${P}-tests-build
+-
+ pkg_setup() {
+ 	enewgroup messagebus
+ 	enewuser messagebus -1 "-1" -1 messagebus
+@@ -64,6 +59,11 @@
+ }
+ 
+ src_configure() {
++	# out of sources build directory
++	BD=${WORKDIR}/${P}-build-${ABI}
++	# out of sources build dir for make check
++	TBD=${WORKDIR}/${P}-tests-build-${ABI}
++
+ 	local my_conf
+ 
+ 	# so we can get backtraces from apps
+@@ -107,6 +107,11 @@
+ }
+ 
+ src_compile() {
++	# out of sources build directory
++	BD=${WORKDIR}/${P}-build-${ABI}
++	# out of sources build dir for make check
++	TBD=${WORKDIR}/${P}-tests-build-${ABI}
++
+ 	# after the compile, it uses a selinuxfs interface to
+ 	# check if the SELinux policy has the right support
+ 	use selinux && addwrite /selinux/access
+@@ -128,11 +133,21 @@
+ }
+ 
+ src_test() {
++	# out of sources build directory
++	BD=${WORKDIR}/${P}-build-${ABI}
++	# out of sources build dir for make check
++	TBD=${WORKDIR}/${P}-tests-build-${ABI}
++
+ 	cd "${TBD}"
+ 	DBUS_VERBOSE=1 make check || die "make check failed"
+ }
+ 
+ src_install() {
++	# out of sources build directory
++	BD=${WORKDIR}/${P}-build-${ABI}
++	# out of sources build dir for make check
++	TBD=${WORKDIR}/${P}-tests-build-${ABI}
++
+ 	# initscript
+ 	newinitd "${FILESDIR}"/dbus.init-1.0 dbus || die "newinitd failed"
+ 
