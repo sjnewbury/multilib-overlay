@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.4.4-r2.ebuild,v 1.2 2010/09/11 17:53:40 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.4.4-r2.ebuild,v 1.3 2010/09/12 17:19:23 scarabeus Exp $
 
 EAPI=3
 
@@ -88,6 +88,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${PN}-1.4.4-fix-install-perms.patch"
 	epatch "${FILESDIR}/${PN}-1.4.4-nostrip.patch"
 	epatch "${FILESDIR}/${PN}-1.4.4-php-destdir.patch"
+	epatch "${FILESDIR}/${PN}-1.4.4-perl-includes.patch"
 
 	AT_M4DIR=config-scripts eaclocal
 	eautoconf
