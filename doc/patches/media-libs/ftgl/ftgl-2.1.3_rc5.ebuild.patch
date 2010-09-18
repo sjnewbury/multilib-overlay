@@ -4,8 +4,8 @@
  DEPEND=">=media-libs/freetype-2.0.9
  	virtual/opengl
  	virtual/glu
--	virtual/glut"
-+	virtual/glut
+-	media-libs/freeglut"
++	media-libs/freeglut
 +	dev-util/cppunit"
  
  S=${WORKDIR}/${MY_P2}
