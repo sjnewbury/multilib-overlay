@@ -1,8 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libmp4v2/libmp4v2-1.9.1.ebuild,v 1.14 2010/06/25 02:00:18 mr_bones_ Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libmp4v2/libmp4v2-1.9.1.ebuild,v 1.15 2010/09/16 00:37:30 ssuominen Exp $
 
-EAPI=2
+EAPI=3
 inherit multilib libtool multilib-native
 
 DESCRIPTION="Functions for accessing ISO-IEC:14496-1:2001 MPEG-4 standard"
@@ -19,7 +19,7 @@ DEPEND="utils? ( sys-apps/help2man )
 	!media-video/mpeg4ip
 	sys-apps/sed"
 
-RESTRICT="test"
+RESTRICT="test" # This will need dejagnu, and is only fixed in trunk.
 
 S=${WORKDIR}/${P/lib}
 
@@ -36,7 +36,7 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${D}" install || die "emake install failed"
+	emake DESTDIR="${D}" install || die
 	dodoc doc/*.txt README
-	use static-libs || rm -f "${D}"/usr/$(get_libdir)/lib*.la
+	find "${ED}" -name '*.la' -exec rm -f '{}' +
 }
