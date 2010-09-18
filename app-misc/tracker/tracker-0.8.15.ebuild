@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-0.8.15.ebuild,v 1.3 2010/08/21 15:26:28 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-0.8.15.ebuild,v 1.4 2010/09/13 21:41:03 eva Exp $
 
 EAPI="2"
 G2CONF_DEBUG="no"
@@ -77,7 +77,8 @@ DEPEND="${RDEPEND}
 		>=dev-libs/libgee-0.3[lib32?] )
 	doc? (
 		>=dev-util/gtk-doc-1.8
-		media-gfx/graphviz[lib32?] )"
+		media-gfx/graphviz[lib32?] )
+	test? ( sys-apps/dbus[X,lib32?] )"
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
