@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/jasper/jasper-1.900.1-r3.ebuild,v 1.12 2010/07/23 20:47:49 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/jasper/jasper-1.900.1-r3.ebuild,v 1.13 2010/09/16 17:15:07 scarabeus Exp $
 
 EAPI="2"
 
@@ -17,7 +17,7 @@ KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbs
 IUSE="opengl jpeg"
 
 RDEPEND="jpeg? ( virtual/jpeg[lib32?] )
-		opengl? ( virtual/opengl[lib32?] virtual/glut[lib32?] )"
+		opengl? ( virtual/opengl[lib32?] media-libs/freeglut[lib32?] )"
 DEPEND="${RDEPEND}
 		app-arch/unzip"
 
