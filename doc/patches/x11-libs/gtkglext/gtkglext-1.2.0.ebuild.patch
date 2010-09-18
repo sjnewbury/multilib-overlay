@@ -1,6 +1,6 @@
---- /usr/portage/x11-libs/gtkglext/gtkglext-1.2.0.ebuild	2010-03-14 23:37:11.000000000 +0100
-+++ ./x11-libs/gtkglext/gtkglext-1.2.0.ebuild	2010-03-27 20:36:43.000000000 +0100
-@@ -37,3 +37,8 @@
+--- /usr/portage/x11-libs/gtkglext/gtkglext-1.2.0.ebuild	2010-09-17 13:37:25.000000000 +0200
++++ ./x11-libs/gtkglext/gtkglext-1.2.0.ebuild	2010-09-18 12:37:51.000000000 +0200
+@@ -36,3 +36,8 @@
  		gtk/Makefile.am gtk/Makefile.in \
  		|| die "sed failed"
  }
