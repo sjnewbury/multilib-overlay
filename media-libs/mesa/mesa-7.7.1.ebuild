@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.7.1.ebuild,v 1.12 2010/09/17 21:43:19 dberkholz Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.7.1.ebuild,v 1.13 2010/09/21 07:54:22 scarabeus Exp $
 
 EAPI="2"
 
@@ -51,7 +51,7 @@ RDEPEND="
 	dev-libs/expat[lib32?]
 	>=x11-libs/libdrm-2.4.17[lib32?]
 	x11-libs/libICE[lib32?]
-	|| ( <=x11-libs/libX11-1.3.5[xcb?,lib32?] >x11-libs/libX11-1.3.5[lib32?] )
+	|| ( <x11-libs/libX11-1.3.99.901[xcb?,lib32?] >=x11-libs/libX11-1.3.99.901[lib32?] )
 	x11-libs/libXdamage[lib32?]
 	x11-libs/libXext[lib32?]
 	x11-libs/libXi[lib32?]
