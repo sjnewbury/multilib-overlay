@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.82 2010/08/14 18:09:10 hwoarang Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.83 2010/09/05 09:25:08 hwoarang Exp $
 
 export EMULTILIB_SAVE_VARS="QTBASEDIR QTPREFIXDIR QTBINDIR QTLIBDIR \
 		QMAKE_LIBDIR_QT QTPCDIR QTDATADIR QTDOCDIR QTHEADERDIR \
@@ -295,7 +295,7 @@ qt4-build_src_prepare() {
 	sed -i -e '/^QMAKE_\(LIB\|INC\)DIR\(_X11\|_OPENGL\|\)\t/s/=.*$/=/' \
 		mkspecs/$(qt_mkspecs_dir)/qmake.conf || die
 	# strip predefined CFLAGS from qmake ( bug #312689 )
-	sed -i '/^QMAKE_CFLAGS_\(RELEASE\|DEBUG\)/s:+=.*:+=:' mkspecs/common/g++.conf
+	sed -i '/^QMAKE_CFLAGS_RELEASE/s:+=.*:+=:' mkspecs/common/g++.conf
 
 	base_src_prepare
 }
