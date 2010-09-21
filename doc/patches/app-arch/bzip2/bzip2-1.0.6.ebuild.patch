@@ -1,0 +1,11 @@
+--- /usr/portage/app-arch/bzip2/bzip2-1.0.6.ebuild	2010-09-21 15:36:14.000000000 +0200
++++ ./app-arch/bzip2/bzip2-1.0.6.ebuild	2010-09-21 21:25:17.000000000 +0200
+@@ -28,7 +28,7 @@
+ 	# - pass custom variables to control libdir
+ 	sed -i \
+ 		-e 's:\$(PREFIX)/man:\$(PREFIX)/share/man:g' \
+-		-e 's:ln -s -f $(PREFIX)/bin/:ln -s :' \
++		-e 's:ln -s -f $(PREFIX)/bin/:ln -s -f :' \
+ 		-e 's:$(PREFIX)/lib:$(PREFIX)/$(LIBDIR):g' \
+ 		Makefile || die
+ }
