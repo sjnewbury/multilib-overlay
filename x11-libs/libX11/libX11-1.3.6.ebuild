@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/libX11/libX11-1.3.5.ebuild,v 1.1 2010/08/12 07:48:53 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/libX11/libX11-1.3.6.ebuild,v 1.1 2010/09/21 08:11:11 scarabeus Exp $
 
 EAPI=3
 inherit xorg-2 toolchain-funcs flag-o-matic multilib-native
