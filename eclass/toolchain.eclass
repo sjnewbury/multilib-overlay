@@ -1,6 +1,6 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.438 2010/08/14 01:26:05 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.439 2010/09/05 05:52:46 dirtyepic Exp $
 #
 # Maintainer: Toolchain Ninjas <toolchain@gentoo.org>
 
@@ -368,9 +368,13 @@ get_gcc_src_uri() {
 	# >= gcc-4.3 uses ecj.jar and we only add gcj as a use flag under certain
 	# conditions
 	if [[ ${PN} != "kgcc64" && ${PN} != gcc-* ]] ; then
-		tc_version_is_at_least "4.3" && \
+		if tc_version_is_at_least "4.5" ; then
+			GCC_SRC_URI="${GCC_SRC_URI}
+			gcj? ( ftp://sourceware.org/pub/java/ecj-4.5.jar )"
+		elif tc_version_is_at_least "4.3" ; then
 			GCC_SRC_URI="${GCC_SRC_URI}
 			gcj? ( ftp://sourceware.org/pub/java/ecj-4.3.jar )"
+		fi
 	fi
 
 	echo "${GCC_SRC_URI}"
@@ -1058,9 +1062,14 @@ gcc_src_unpack() {
 	fi
 
 	# >= gcc-4.3 doesn't bundle ecj.jar, so copy it
-	if [[ ${GCCMAJOR}.${GCCMINOR} > 4.2 ]] &&
-		use gcj ; then
-		cp -pPR "${DISTDIR}/ecj-4.3.jar" "${S}/ecj.jar" || die
+	if [[ ${GCCMAJOR}.${GCCMINOR} > 4.2 ]] && use gcj ; then
+		if tc_version_is_at_least "4.5" ; then
+			einfo "Copying ecj-4.5.jar"
+			cp -pPR "${DISTDIR}/ecj-4.5.jar" "${S}/ecj.jar" || die
+		elif tc_version_is_at_least "4.3" ; then
+			einfo "Copying ecj-4.3.jar"
+			cp -pPR "${DISTDIR}/ecj-4.3.jar" "${S}/ecj.jar" || die
+		fi
 	fi
 
 	# disable --as-needed from being compiled into gcc specs
