@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.8.4.ebuild,v 1.6 2010/07/02 09:14:32 gmsoft Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.8.4.ebuild,v 1.7 2010/09/20 19:47:39 jlec Exp $
 
 inherit eutils multilib toolchain-funcs versionator multilib-native
 
@@ -59,7 +59,7 @@ multilib-native_src_install_internal() {
 	cd "${D}"/usr/$(get_libdir)
 	for file in *.a; do
 		einfo "removing static libraries as upstream has requested!"
-		rm -f ${file} || die "failed to remove staic libraries."
+		rm -f ${file} || die "failed to remove static libraries."
 	done
 
 	for file in *.so; do
