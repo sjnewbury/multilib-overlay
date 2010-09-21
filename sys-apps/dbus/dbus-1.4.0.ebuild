@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/dbus/dbus-1.4.0.ebuild,v 1.2 2010/09/13 21:23:52 reavertm Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/dbus/dbus-1.4.0.ebuild,v 1.5 2010/09/20 17:07:46 ssuominen Exp $
 
 EAPI="2"
 
@@ -44,12 +44,16 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
+	# Delete pregenerated files from tarball wrt #337989 (testsuite fails)
+	find test/data -type f -name '*.service' -exec rm -f '{}' +
+	find test/data -type f -name 'debug-*.conf' -exec rm -f '{}' +
+
 	# Remove CFLAGS that is not supported by all gcc, bug #274456
-	sed 's/-Wno-pointer-sign//g' -i configure.in configure || die "sed failed"
+	sed 's/-Wno-pointer-sign//g' -i configure.in configure || die
 
 	# Tests were restricted because of this
 	sed -e 's/.*bus_dispatch_test.*/printf ("Disabled due to excess noise\\n");/' \
-		-e '/"dispatch"/d' -i "${S}/bus/test-main.c" || die "sed failed"
+		-e '/"dispatch"/d' -i "${S}/bus/test-main.c" || die
 
 	epatch "${FILESDIR}"/${P}-asneeded.patch
 
@@ -182,9 +186,7 @@ multilib-native_src_install_internal() {
 	fi
 
 	# Remove .la files
-	if ! use static-libs; then
-		find "${D}" -type f -name '*.la' -exec rm -f {} + || die
-	fi
+	find "${D}" -type f -name '*.la' -exec rm -f '{}' +
 }
 
 multilib-native_pkg_postinst_internal() {
@@ -197,13 +199,7 @@ multilib-native_pkg_postinst_internal() {
 	elog
 	ewarn "You must restart D-Bus \`/etc/init.d/dbus restart\` to run"
 	ewarn "the new version of the daemon."
-
-	if has_version "x11-base/xorg-server[hal]"; then
-		elog
-		ewarn "You are currently running X with the hal useflag enabled"
-		ewarn "restarting the dbus service WILL restart X as well"
-		ebeep 5
-	fi
+	ewarn "Don't do this while X is running because it will restart your X as well."
 
 	# Ensure unique id is generated
 	dbus-uuidgen --ensure="${ROOT}"/var/lib/dbus/machine-id

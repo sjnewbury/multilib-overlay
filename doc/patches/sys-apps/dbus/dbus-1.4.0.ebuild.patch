@@ -1,5 +1,5 @@
---- /usr/portage/sys-apps/dbus/dbus-1.4.0.ebuild	2010-09-13 23:37:05.000000000 +0200
-+++ ./sys-apps/dbus/dbus-1.4.0.ebuild	2010-09-18 12:35:25.000000000 +0200
+--- /usr/portage/sys-apps/dbus/dbus-1.4.0.ebuild	2010-09-20 19:08:40.000000000 +0200
++++ ./sys-apps/dbus/dbus-1.4.0.ebuild	2010-09-21 23:11:13.000000000 +0200
 @@ -38,11 +38,6 @@
  	)
  "
@@ -12,7 +12,7 @@
  pkg_setup() {
  	enewgroup messagebus
  	enewuser messagebus -1 "-1" -1 messagebus
-@@ -64,6 +59,11 @@
+@@ -68,6 +63,11 @@
  }
  
  src_configure() {
@@ -24,7 +24,7 @@
  	local my_conf
  
  	# so we can get backtraces from apps
-@@ -107,6 +107,11 @@
+@@ -111,6 +111,11 @@
  }
  
  src_compile() {
@@ -36,7 +36,7 @@
  	# after the compile, it uses a selinuxfs interface to
  	# check if the SELinux policy has the right support
  	use selinux && addwrite /selinux/access
-@@ -128,11 +133,21 @@
+@@ -132,11 +137,21 @@
  }
  
  src_test() {

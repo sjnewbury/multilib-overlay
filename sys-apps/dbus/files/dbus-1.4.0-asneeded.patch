@@ -1,3 +1,5 @@
+http://bugs.freedesktop.org/show_bug.cgi?id=23162
+
 diff -ru ../dbus-1.4.0/dbus/Makefile.am ./dbus/Makefile.am
 --- ../dbus-1.4.0/dbus/Makefile.am	2010-08-31 23:44:19.000000000 +0200
 +++ ./dbus/Makefile.am	2010-09-12 22:49:08.191226651 +0200
