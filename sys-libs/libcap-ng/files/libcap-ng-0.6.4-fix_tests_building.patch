@@ -1,0 +1,27 @@
+https://fedorahosted.org/libcap-ng/changeset/2
+
+--- src/test/Makefile.am
++++ src/test/Makefile.am
+@@ -1,5 +1,5 @@
+ # Makefile.am --
+-# Copyright 2009 Red Hat Inc., Durham, North Carolina.
++# Copyright 2009,10 Red Hat Inc., Durham, North Carolina.
+ # All Rights Reserved.
+ #
+ # This library is free software; you can redistribute it and/or
+@@ -20,6 +20,7 @@
+ #   Steve Grubb <sgrubb@redhat.com>
+ #
+ 
++INCLUDES = -I${top_srcdir} -I${top_srcdir}/src
+ check_PROGRAMS = lib_test thread_test
+ TESTS = $(check_PROGRAMS)
+ 
+--- src/test/thread_test.c
++++ src/test/thread_test.c
+@@ -1,4 +1,5 @@
+ #include <stdio.h>
++#include <stdlib.h>
+ #include <cap-ng.h>
+ #include <pthread.h>
+ 
