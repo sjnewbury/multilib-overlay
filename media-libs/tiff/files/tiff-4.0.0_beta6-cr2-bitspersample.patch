@@ -1,0 +1,13 @@
+diff --git a/libtiff/tif_dirread.c b/libtiff/tif_dirread.c
+index 64c39fc..60bde82 100644
+--- a/libtiff/tif_dirread.c
++++ b/libtiff/tif_dirread.c
+@@ -2727,7 +2727,7 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryPersampleShort(TIFF* tif, TIFFDi
+ 	uint16* m;
+ 	uint16* na;
+ 	uint16 nb;
+-	if (direntry->tdir_count!=(uint64)tif->tif_dir.td_samplesperpixel)
++	if (direntry->tdir_count<(uint64)tif->tif_dir.td_samplesperpixel)
+ 		return(TIFFReadDirEntryErrCount);
+ 	err=TIFFReadDirEntryShortArray(tif,direntry,&m);
+ 	if (err!=TIFFReadDirEntryErrOk)
