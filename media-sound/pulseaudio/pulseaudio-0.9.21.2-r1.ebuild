@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.21.2-r1.ebuild,v 1.6 2010/08/11 17:56:13 josejx Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.21.2-r1.ebuild,v 1.7 2010/09/20 08:03:17 abcd Exp $
 
 EAPI=2
 
@@ -98,7 +98,7 @@ multilib-native_src_prepare_internal() {
 
 multilib-native_src_configure_internal() {
 	# It's a binutils bug, once I can find time to fix that I'll add a
-	# proper dependency and fix this up. â flameeyes
+	# proper dependency and fix this up. — flameeyes
 	append-ldflags $(no-as-needed)
 
 	econf \
