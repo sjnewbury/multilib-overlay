@@ -2,7 +2,7 @@ diff --git b/eclass/x-modular.eclass a/eclass/x-modular.eclass
 index 01b298b..7732943 100644
 --- b/eclass/x-modular.eclass
 +++ a/eclass/x-modular.eclass
-@@ -23,6 +23,8 @@ if [[ ${PV} = 9999* ]]; then
+@@ -27,6 +27,8 @@ if [[ ${PV} = 9999* ]]; then
  	SRC_URI=""
  fi
  
