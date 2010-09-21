@@ -1,0 +1,13 @@
+http://gcc.gnu.org/bugzilla/show_bug.cgi?id=42289
+
+--- src/arm/sysv.S
++++ src/arm/sysv.S
+@@ -235,7 +235,7 @@ ARM_FUNC_START ffi_closure_SYSV
+ 	stmfd	sp!, {ip, lr}
+ 	UNWIND .save	{r0, lr}
+ 	add	r2, sp, #8
+-	.pad #16
++	UNWIND .pad #16
+ 	sub	sp, sp, #16
+ 	str	sp, [sp, #8]
+ 	add	r1, sp, #8
