@@ -1,16 +1,17 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/vala/vala-0.9.5.ebuild,v 1.1 2010/08/20 11:23:18 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/vala/vala-0.10.0.ebuild,v 1.1 2010/09/19 17:28:34 eva Exp $
 
-EAPI=2
-GCONF_DEBUG=no
+EAPI="2"
+GCONF_DEBUG="no"
+
 inherit gnome2 multilib-native
 
 DESCRIPTION="Vala - Compiler for the GObject type system"
 HOMEPAGE="http://live.gnome.org/Vala"
 
 LICENSE="LGPL-2.1"
-SLOT="0"
+SLOT="0.10"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 IUSE="test +vapigen coverage"
 
@@ -24,6 +25,7 @@ DEPEND="${RDEPEND}
 
 multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
+		--disable-unversioned
 		$(use_enable vapigen)
 		$(use_enable coverage)"
 	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
