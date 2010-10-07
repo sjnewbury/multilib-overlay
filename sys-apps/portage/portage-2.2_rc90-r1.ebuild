@@ -9,7 +9,7 @@ inherit eutils git multilib python
 
 EGIT_REPO_URI="git://git.overlays.gentoo.org/proj/portage.git"
 EGIT_BRANCH="multilib"
-EGIT_COMMIT="dde8e277184e03bff2ce183608d17ce44d7f8c1c"
+EGIT_COMMIT="cdac6a91518c28395541c3b35554427e19746c22"
 DESCRIPTION="Portage is the package management and distribution system for Gentoo"
 HOMEPAGE="http://www.gentoo.org/proj/en/portage/index.xml"
 LICENSE="GPL-2"
