@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-arch/bzip2/bzip2-1.0.6.ebuild,v 1.8 2010/09/29 04:48:06 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-arch/bzip2/bzip2-1.0.6-r1.ebuild,v 1.1 2010/09/23 09:19:49 vapier Exp $
 
 inherit eutils multilib toolchain-funcs flag-o-matic multilib-native
 
@@ -10,7 +10,7 @@ SRC_URI="http://www.bzip.org/${PV}/${P}.tar.gz"
 
 LICENSE="BZIP2"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="static"
 
 multilib-native_src_unpack_internal() {
@@ -28,7 +28,7 @@ multilib-native_src_unpack_internal() {
 	# - pass custom variables to control libdir
 	sed -i \
 		-e 's:\$(PREFIX)/man:\$(PREFIX)/share/man:g' \
-		-e 's:ln -s -f $(PREFIX)/bin/:ln -s -f :' \
+		-e 's:ln -s -f $(PREFIX)/bin/:ln -s :' \
 		-e 's:$(PREFIX)/lib:$(PREFIX)/$(LIBDIR):g' \
 		Makefile || die
 }
@@ -50,10 +50,15 @@ multilib-native_src_install_internal() {
 	emake PREFIX="${D}"/usr LIBDIR=$(get_libdir) install || die
 	dodoc README* CHANGES bzip2.txt manual.*
 
-	# Install the shared lib manually
+	# Install the shared lib manually.  We install:
+	#  .x.x.x - standard shared lib behavior
+	#  .x.x   - SONAME some distros use #338321
+	#  .x     - SONAME Gentoo uses
 	dolib.so libbz2.so.${PV} || die
-	dosym libbz2.so.${PV} /usr/$(get_libdir)/libbz2.so || die
-	dosym libbz2.so.${PV} /usr/$(get_libdir)/libbz2.so.${PV%%.*} || die
+	local s
+	for v in libbz2.so{,.{${PV%%.*},${PV%.*}}} ; do
+		dosym libbz2.so.${PV} /usr/$(get_libdir)/${v} || die
+	done
 	gen_usr_ldscript -a bz2
 
 	if ! use static ; then
