@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-crypt/gnupg/gnupg-2.0.16.ebuild,v 1.1 2010/07/19 17:04:07 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-crypt/gnupg/gnupg-2.0.16.ebuild,v 1.2 2010/09/30 18:56:21 ssuominen Exp $
 
 EAPI="3"
 
@@ -29,7 +29,7 @@ COMMON_DEPEND_LIBS="
 	openct? ( >=dev-libs/openct-0.5.0[lib32?] )
 	smartcard? ( =virtual/libusb-0*[lib32?] )
 	ldap? ( net-nds/openldap[lib32?] )"
-COMMON_DEPEND_BINS="app-crypt/pinentry"
+COMMON_DEPEND_BINS="|| ( app-crypt/pinentry app-crypt/pinentry-qt )"
 
 # existence of bins are checked during configure
 DEPEND="${COMMON_DEPEND_LIBS}
