@@ -1,8 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.28.1.ebuild,v 1.10 2010/10/09 16:39:50 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/pango/pango-1.28.3.ebuild,v 1.1 2010/10/03 22:22:26 eva Exp $
 
-EAPI="2"
+EAPI="3"
 GCONF_DEBUG="yes"
 
 inherit autotools eutils gnome2 multilib toolchain-funcs multilib-native
@@ -12,7 +12,7 @@ HOMEPAGE="http://www.pango.org/"
 
 LICENSE="LGPL-2 FTL"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="X doc +introspection test"
 
 RDEPEND=">=dev-libs/glib-2.17.3[lib32?]
@@ -30,7 +30,7 @@ DEPEND="${RDEPEND}
 		>=dev-util/gtk-doc-1.13
 		~app-text/docbook-xml-dtd-4.1.2
 		x11-libs/libXft[lib32?] )
-	introspection? ( >=dev-libs/gobject-introspection-0.6.7[lib32?] )
+	introspection? ( >=dev-libs/gobject-introspection-0.9.5[lib32?] )
 	test? (
 		>=dev-util/gtk-doc-1.13
 		~app-text/docbook-xml-dtd-4.1.2
@@ -63,6 +63,13 @@ multilib-native_src_prepare_internal() {
 	eautoreconf
 }
 
+multilib-native_src_install_internal() {
+	gnome2_src_install
+	find "${ED}/usr/$(get_libdir)/pango/1.6.0/modules" -name "*.la" -delete || die
+
+	prep_ml_binaries /usr/bin/pango-querymodules
+}
+
 multilib-native_pkg_postinst_internal() {
 	if [ "${ROOT}" = "/" ] ; then
 		einfo "Generating modules listing..."
@@ -79,9 +86,4 @@ multilib-native_pkg_postinst_internal() {
 
 		pango-querymodules > ${PANGO_CONFDIR}/pango.modules
 	fi
-}
-
-multilib-native_src_install_internal() {
-	multilib-native_check_inherited_funcs src_install
-	prep_ml_binaries /usr/bin/pango-querymodules
 }
