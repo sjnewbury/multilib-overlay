@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/evolution-data-server/evolution-data-server-2.30.3.ebuild,v 1.1 2010/09/07 22:21:27 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-extra/evolution-data-server/evolution-data-server-2.30.3.ebuild,v 1.2 2010/09/26 17:48:57 nirbheek Exp $
 
 EAPI="2"
 
@@ -75,7 +75,7 @@ multilib-native_src_prepare_internal() {
 	append-cppflags "-I$(db_includedir)"
 
 	# FIXME: Fix compilation flags crazyness
-	sed 's/CFLAGS="$CFLAGS $WARNING_FLAGS"//' \
+	sed 's/AM_CPPFLAGS="$WARNING_FLAGS/AM_CPPFLAGS="/' \
 		-i configure.ac configure || die "sed 3 failed"
 }
 
