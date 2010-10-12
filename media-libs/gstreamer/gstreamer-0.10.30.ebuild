@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/gstreamer/gstreamer-0.10.30.ebuild,v 1.1 2010/07/21 17:59:43 ford_prefect Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/gstreamer/gstreamer-0.10.30.ebuild,v 1.3 2010/09/29 01:10:06 flameeyes Exp $
 
 EAPI=2
 
-inherit eutils multilib versionator multilib-native
+inherit autotools eutils multilib versionator multilib-native
 
 # Create a major/minor combo for our SLOT and executables suffix
 PV_MAJ_MIN=$(get_version_component_range '1-2')
@@ -25,7 +25,13 @@ RDEPEND=">=dev-libs/glib-2.20:2[lib32?]
 	# ^^ queue2 move, mustn't have both libgstcoreleements.so and libgstqueue2.so at runtime providing the element at once
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
+	dev-util/gtk-doc-am
 	nls? ( sys-devel/gettext[lib32?] )"
+
+multilib-native_src_prepare_internal() {
+	epatch "${FILESDIR}"/${P}-make-382.patch
+	eautoreconf
+}
 
 multilib-native_src_configure_internal() {
 	# Disable static archives, dependency tracking and examples
@@ -37,7 +43,7 @@ multilib-native_src_configure_internal() {
 		--disable-valgrind \
 		--disable-examples \
 		--enable-check \
-		$(use_enable introspection)
+		$(use_enable introspection) \
 		$(use_enable test tests) \
 		--with-package-name="GStreamer ebuild for Gentoo" \
 		--with-package-origin="http://packages.gentoo.org/package/media-libs/gstreamer"
