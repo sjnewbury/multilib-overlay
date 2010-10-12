@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/firefox/firefox-3.6.9-r1.ebuild,v 1.1 2010/09/16 12:03:09 anarchy Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/firefox/firefox-3.6.9-r1.ebuild,v 1.2 2010/10/03 15:09:24 anarchy Exp $
 EAPI="3"
 WANT_AUTOCONF="2.1"
 
@@ -59,7 +59,7 @@ RDEPEND="
 	wifi? ( net-wireless/wireless-tools )
 	libnotify? ( >=x11-libs/libnotify-0.4[lib32?] )
 	cups? ( net-print/cups[gnutls,lib32?] )
-	~net-libs/xulrunner-${XUL_PV}[ipc=,java=,wifi=,libnotify=,system-sqlite=,lib32?]"
+	~net-libs/xulrunner-${XUL_PV}[ipc=,java=,wifi=,libnotify=,system-sqlite=,cups=,lib32?]"
 
 DEPEND="${RDEPEND}
 	java? ( >=virtual/jdk-1.4 )
