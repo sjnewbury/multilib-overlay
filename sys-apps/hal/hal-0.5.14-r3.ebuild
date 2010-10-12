@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/hal/hal-0.5.14-r2.ebuild,v 1.11 2010/09/28 04:47:53 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/hal/hal-0.5.14-r3.ebuild,v 1.1 2010/09/28 06:20:47 ssuominen Exp $
 
 EAPI="2"
 
@@ -18,7 +18,7 @@ SRC_URI="http://hal.freedesktop.org/releases/${MY_P}.tar.bz2
 
 LICENSE="|| ( GPL-2 AFL-2.0 )"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 
 KERNEL_IUSE="kernel_linux kernel_FreeBSD"
 IUSE="X acpi apm crypt consolekit debug dell disk-partition doc laptop policykit selinux ${KERNEL_IUSE}"
@@ -128,7 +128,7 @@ multilib-native_pkg_setup_internal() {
 
 multilib-native_src_prepare_internal() {
 	# Patch for fbsd, Bug #309263.  MOVE INTO PATCHSET FOR NEXT BUMP!
-	epatch "${FILESDIR}"/${PF}-fbsd.patch
+	epatch "${FILESDIR}"/${P}-r2-fbsd.patch
 
 	# Only apply one of the policy patches.  Bug #267042
 	if use policykit ; then
@@ -239,13 +239,13 @@ multilib-native_src_install_internal() {
 	newexe "${FILESDIR}/hal-unmount.dev" hal_unmount || die "udev helper failed"
 
 	# initscript
-	cp "${FILESDIR}/0.5.14-hald.rc" "${WORKDIR}/" || \
-		die "failed to copy hald.rc"
+	cp "${FILESDIR}/0.5.14-hald.rc.1" "${WORKDIR}/" || \
+		die "failed to copy hald.rc.1"
 	if use consolekit || use policykit; then
 		sed -e 's:need dbus:need dbus consolekit:' \
-			-i "${WORKDIR}/0.5.14-hald.rc" || die "failed to change verbose"
+			-i "${WORKDIR}/0.5.14-hald.rc.1" || die "failed to change verbose"
 	fi
-	newinitd "${WORKDIR}/0.5.14-hald.rc" hald || die "init script failed"
+	newinitd "${WORKDIR}/0.5.14-hald.rc.1" hald || die "init script failed"
 
 	# configuration
 	cp "${FILESDIR}/0.5.14-hald.conf" "${WORKDIR}/" || \
