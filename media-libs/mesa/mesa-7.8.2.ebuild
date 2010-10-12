@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.8.2.ebuild,v 1.14 2010/09/21 07:54:22 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.8.2.ebuild,v 1.19 2010/10/10 18:40:59 ulm Exp $
 
 EAPI=3
 
@@ -31,7 +31,7 @@ fi
 
 LICENSE="LGPL-2 kilgard"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ~ppc ~ppc64 sh sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ~ppc ppc64 sh sparc x86 ~x86-fbsd"
 
 VIDEO_CARDS="intel mach64 mga nouveau r128 radeon radeonhd savage sis svga tdfx via"
 for card in ${VIDEO_CARDS}; do
@@ -48,9 +48,9 @@ RDEPEND="
 	!<=x11-proto/xf86driproto-2.0.3
 	>=app-admin/eselect-opengl-1.1.1-r2
 	dev-libs/expat[lib32?]
-	>=x11-libs/libdrm-2.4.19[lib32?]
-	gallium? (
-		video_cards_nouveau? ( <x11-libs/libdrm-2.4.21[lib32?] )
+	|| (
+		<=x11-libs/libdrm-2.4.21[lib32?]
+		>=x11-libs/libdrm-2.4.22[video_cards_radeon?,video_cards_intel?,video_cards_nouveau?,lib32?]
 	)
 	x11-libs/libICE[lib32?]
 	|| ( <x11-libs/libX11-1.3.99.901[xcb?,lib32?] >=x11-libs/libX11-1.3.99.901[lib32?] )
@@ -59,7 +59,7 @@ RDEPEND="
 	x11-libs/libXi[lib32?]
 	x11-libs/libXmu[lib32?]
 	x11-libs/libXxf86vm[lib32?]
-	motif? ( x11-libs/openmotif[lib32?] )
+	motif? ( >=x11-libs/openmotif-2.3:0[lib32?] )
 "
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]

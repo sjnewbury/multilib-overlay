@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.7.1.ebuild,v 1.13 2010/09/21 07:54:22 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.7.1.ebuild,v 1.14 2010/10/10 18:40:59 ulm Exp $
 
 EAPI="2"
 
@@ -57,7 +57,7 @@ RDEPEND="
 	x11-libs/libXi[lib32?]
 	x11-libs/libXmu[lib32?]
 	x11-libs/libXxf86vm[lib32?]
-	motif? ( x11-libs/openmotif[lib32?] )
+	motif? ( >=x11-libs/openmotif-2.3:0[lib32?] )
 "
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
