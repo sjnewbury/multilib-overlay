@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/openmotif/openmotif-2.3.2-r2.ebuild,v 1.13 2010/06/07 12:18:26 angelos Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/openmotif/openmotif-2.3.2-r2.ebuild,v 1.14 2010/10/10 13:18:46 ulm Exp $
 
 EAPI=3
 
@@ -34,7 +34,6 @@ DEPEND="${RDEPEND}
 RDEPEND="${RDEPEND}
 	!x11-libs/motif-config
 	!x11-libs/lesstif
-	!<=x11-libs/openmotif-2.3.0
 	doc? ( app-doc/openmotif-manual )"
 
 pkg_nofetch() {
