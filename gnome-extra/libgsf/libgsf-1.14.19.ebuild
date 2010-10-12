@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/libgsf/libgsf-1.14.18.ebuild,v 1.9 2010/10/07 21:27:50 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-extra/libgsf/libgsf-1.14.19.ebuild,v 1.1 2010/09/26 22:14:11 eva Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -14,7 +14,7 @@ SRC_URI="${SRC_URI}
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 IUSE="bzip2 doc gnome gtk python thumbnail"
 
 RDEPEND="
@@ -66,6 +66,9 @@ multilib-native_src_prepare_internal() {
 
 	# Fix useless variable in toplevel Makefile.am, bug #298813
 	epatch "${FILESDIR}/${PN}-1.14.16-automake-fixes.patch"
+
+	# Fix build with FEATURES="stricter"
+	epatch "${FILESDIR}/${PN}-1.14.19-missing-declaration.patch"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
