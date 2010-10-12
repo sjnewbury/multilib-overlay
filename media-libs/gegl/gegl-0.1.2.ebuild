@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/gegl/gegl-0.1.2.ebuild,v 1.4 2010/08/22 05:36:39 dirtyepic Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/gegl/gegl-0.1.2.ebuild,v 1.5 2010/10/02 18:04:01 grobian Exp $
 
 EAPI="2"
 
-inherit eutils multilib-native
+inherit eutils autotools multilib-native
 
 DESCRIPTION="A graph based image processing framework"
 HOMEPAGE="http://www.gegl.org/"
@@ -38,6 +38,10 @@ RDEPEND="${DEPEND}"
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-buffer-overflow.patch
+	epatch "${FILESDIR}"/${P}-backtrace.patch
+	# fix OSX loadable module filename extension
+	sed -i -e 's/\.dylib/.bundle/' configure.ac || die
+	eautoreconf
 }
 
 multilib-native_src_configure_internal() {
