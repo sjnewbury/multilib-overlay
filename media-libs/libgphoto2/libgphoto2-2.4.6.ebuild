@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libgphoto2/libgphoto2-2.4.6.ebuild,v 1.9 2010/01/14 16:44:03 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libgphoto2/libgphoto2-2.4.6.ebuild,v 1.10 2010/10/02 14:16:28 eva Exp $
 
 # TODO
 # 1. Track upstream bug --disable-docs does not work.
@@ -18,7 +18,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="alpha amd64 hppa ia64 ppc ppc64 sparc x86"
 
-IUSE="bonjour doc exif hal nls kernel_linux"
+IUSE="doc exif hal nls kernel_linux zeroconf"
 RESTRICT="test"
 
 # By default, drivers for all supported cameras will be compiled.
@@ -43,7 +43,7 @@ done
 
 # libgphoto2 actually links to libtool
 RDEPEND="virtual/libusb:0[lib32?]
-	bonjour? ( || (
+	zeroconf? ( || (
 		net-dns/avahi[mdnsresponder-compat,lib32?]
 		net-misc/mDNSResponder ) )
 	exif? ( >=media-libs/libexif-0.5.9[lib32?] )
@@ -105,7 +105,7 @@ multilib-native_src_configure_internal() {
 	econf \
 		--disable-docs \
 		--disable-gp2ddb \
-		$(use_with bonjour) \
+		$(use_with zeroconf bonjour) \
 		$(use_with hal) \
 		$(use_enable nls) \
 		$(use_with exif libexif) \
