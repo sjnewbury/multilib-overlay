@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/icu/icu-4.4.1.ebuild,v 1.13 2010/09/30 20:35:42 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/icu/icu-4.4.2.ebuild,v 1.1 2010/10/02 22:31:41 arfrever Exp $
 
 EAPI="3"
 
@@ -22,7 +22,7 @@ SRC_URI="${BASE_URI}/${SRC_ARCHIVE}
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="debug doc examples static-libs"
 
 DEPEND="doc? ( app-arch/unzip )"
@@ -50,9 +50,9 @@ multilib-native_src_prepare_internal() {
 		sed -i -e "/^${x} =.*/s:@${x}@::" "config/Makefile.inc.in" || die "sed failed"
 	done
 
-	epatch "${FILESDIR}/${P}-pkgdata.patch"
-	epatch "${FILESDIR}/${P}-et_EE.patch"
-	epatch "${FILESDIR}/${P}-arm.patch"
+	epatch "${FILESDIR}/${PN}-4.4.1-pkgdata.patch"
+	epatch "${FILESDIR}/${PN}-4.4.1-et_EE.patch"
+	epatch "${FILESDIR}/${PN}-4.4.1-arm.patch"
 }
 
 multilib-native_src_configure_internal() {
@@ -65,11 +65,11 @@ multilib-native_src_configure_internal() {
 }
 
 src_test() {
-	emake -j1 check || die "emake check failed"
+	emake check || die "emake check failed"
 }
 
 multilib-native_src_install_internal() {
-	emake -j1 DESTDIR="${D}" install || die "emake install failed"
+	emake DESTDIR="${D}" install || die "emake install failed"
 
 	dohtml ../readme.html
 	dodoc ../unicode-license.txt
