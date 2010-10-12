@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/lame/lame-3.98.4.ebuild,v 1.4 2010/08/23 20:10:27 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/lame/lame-3.98.4.ebuild,v 1.5 2010/10/04 15:21:56 mr_bones_ Exp $
 
 EAPI=3
 inherit autotools eutils multilib-native
@@ -28,6 +28,8 @@ multilib-native_src_prepare_internal() {
 		"${FILESDIR}"/${PN}-3.98.2-get_audio.patch
 
 	mkdir libmp3lame/i386/.libs || die #workaround parallel build with nasm
+
+	sed -i -e '/define sp/s/+/ + /g' libmp3lame/i386/nasm.h || die
 
 	AT_M4DIR="${S}" eautoreconf
 	epunt_cxx #74498
