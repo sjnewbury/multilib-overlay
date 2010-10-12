@@ -7,7 +7,7 @@ Subject: [PATCH] cfdisk: fix --with-slang
 
 Signed-off-by: Karel Zak <kzak@redhat.com>
 ---
- fdisk/Makefile.am |    2 +-
+ fdisk/Makefile.in |    2 +-
  fdisk/cfdisk.c    |   11 ++++++++++-
  2 files changed, 11 insertions(+), 2 deletions(-)
 
@@ -32,19 +32,6 @@ Signed-off-by: Karel Zak <kzak@redhat.com>
  @ARCH_M68K_FALSE@@ARCH_SPARC_FALSE@@HAVE_NCURSES_TRUE@@USE_SLANG_FALSE@cfdisk_CFLAGS = $(cflags_blkid)
  @ARCH_M68K_FALSE@@ARCH_SPARC_FALSE@@USE_SLANG_TRUE@cfdisk_CFLAGS = $(cflags_blkid)
  @ARCH_M68K_FALSE@@ARCH_SPARC_FALSE@@HAVE_NCURSES_TRUE@@USE_SLANG_FALSE@cfdisk_LDADD = @NCURSES_LIBS@ $(ldadd_blkid)
-diff --git a/fdisk/Makefile.am b/fdisk/Makefile.am
-index 9a9db0c..36871f3 100644
---- a/fdisk/Makefile.am
-+++ b/fdisk/Makefile.am
-@@ -54,7 +54,7 @@ endif
- if USE_SLANG
- sbin_PROGRAMS += cfdisk
- dist_man_MANS += cfdisk.8
--cfdisk_SOURCES = cfdisk.c $(fdisk_common) $(top_srcdir)/lib/mbsalign.c
-+cfdisk_SOURCES = cfdisk.c $(fdisk_common)
- cfdisk_CFLAGS = $(cflags_blkid)
- cfdisk_LDADD = -lslang $(ldadd_blkid)
- else
 diff --git a/fdisk/cfdisk.c b/fdisk/cfdisk.c
 index 30550c0..552858b 100644
 --- a/fdisk/cfdisk.c
