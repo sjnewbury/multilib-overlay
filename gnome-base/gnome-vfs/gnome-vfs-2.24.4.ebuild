@@ -1,41 +1,43 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-vfs/gnome-vfs-2.24.3-r1.ebuild,v 1.8 2010/10/07 21:56:03 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-vfs/gnome-vfs-2.24.4.ebuild,v 1.1 2010/10/02 11:55:03 eva Exp $
 
-EAPI="2"
+EAPI="3"
+GCONF_DEBUG="no"
 
-inherit autotools eutils gnome2 multilib-native
+inherit autotools eutils gnome2 virtualx multilib-native
 
 DESCRIPTION="Gnome Virtual Filesystem"
 HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="2"
-KEYWORDS="alpha amd64 arm ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="acl avahi doc fam gnutls hal ipv6 kerberos samba ssl"
 
 RDEPEND=">=gnome-base/gconf-2[lib32?]
 	>=dev-libs/glib-2.9.3[lib32?]
 	>=dev-libs/libxml2-2.6[lib32?]
 	app-arch/bzip2[lib32?]
-	fam? ( virtual/fam[lib32?] )
 	gnome-base/gnome-mime-data
 	>=x11-misc/shared-mime-info-0.14
 	>=dev-libs/dbus-glib-0.71[lib32?]
+	acl? (
+		sys-apps/acl[lib32?]
+		sys-apps/attr[lib32?] )
+	avahi? ( >=net-dns/avahi-0.6[lib32?] )
+	kerberos? ( virtual/krb5[lib32?] )
+	hal? ( >=sys-apps/hal-0.5.7[lib32?] )
+	fam? ( virtual/fam[lib32?] )
 	samba? ( >=net-fs/samba-3[lib32?] )
-	gnutls?	(
-		net-libs/gnutls[lib32?]
-		!gnome-extra/gnome-vfs-sftp )
 	ssl? (
+		gnutls?	(
+			net-libs/gnutls[lib32?]
+			!gnome-extra/gnome-vfs-sftp )
 		!gnutls? (
 			>=dev-libs/openssl-0.9.5[lib32?]
 			!gnome-extra/gnome-vfs-sftp ) )
-	hal? ( >=sys-apps/hal-0.5.7[lib32?] )
-	avahi? ( >=net-dns/avahi-0.6[lib32?] )
-	kerberos? ( virtual/krb5[lib32?] )
-	acl? (
-		sys-apps/acl[lib32?]
-		sys-apps/attr[lib32?] )"
+"
 DEPEND="${RDEPEND}
 	sys-devel/gettext[lib32?]
 	gnome-base/gnome-common
@@ -78,6 +80,8 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
+	gnome2_src_prepare
+
 	# Allow the Trash on afs filesystems (#106118)
 	epatch "${FILESDIR}"/${PN}-2.12.0-afs.patch
 
@@ -93,7 +97,7 @@ multilib-native_src_prepare_internal() {
 
 	# Fix to identify ${HOME} (#200897)
 	# thanks to debian folks
-	epatch "${FILESDIR}"/${PN}-2.20.0-home_dir_fakeroot.patch
+	epatch "${FILESDIR}"/${PN}-2.24.4-home_dir_fakeroot.patch
 
 	# Configure with gnutls-2.7, bug #253729
 	epatch "${FILESDIR}"/${PN}-2.24.0-gnutls27.patch
@@ -101,22 +105,21 @@ multilib-native_src_prepare_internal() {
 	# Prevent duplicated volumes, bug #193083
 	epatch "${FILESDIR}"/${PN}-2.24.0-uuid-mount.patch
 
+	# Do not build tests with FEATURES="-test", bug #226221
+	epatch "${FILESDIR}"/${PN}-2.24.4-build-tests-asneeded.patch
+
+	# Disable broken test, bug #285706
+	epatch "${FILESDIR}"/${PN}-2.24.4-disable-test-async-cancel.patch
+
 	# Fix deprecated API disabling in used libraries - this is not future-proof, bug 212163
 	# upstream bug #519632
 	sed -i -e '/DISABLE_DEPRECATED/d' \
 		daemon/Makefile.am daemon/Makefile.in \
 		libgnomevfs/Makefile.am libgnomevfs/Makefile.in \
 		modules/Makefile.am modules/Makefile.in \
-		test/Makefile.am test/Makefile.in
+		test/Makefile.am test/Makefile.in || die
 	sed -i -e 's:-DG_DISABLE_DEPRECATED:$(NULL):g' \
-		programs/Makefile.am programs/Makefile.in
-
-	# Fix use of broken gtk-doc.make
-	if use doc; then
-		sed "/^TARGET_DIR/i \GTKDOC_REBASE=/usr/bin/gtkdoc-rebase" -i gtk-doc.make
-	else
-		sed "/^TARGET_DIR/i \GTKDOC_REBASE=true" -i gtk-doc.make
-	fi
+		programs/Makefile.am programs/Makefile.in || die
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
@@ -126,5 +129,10 @@ src_test() {
 	unset DISPLAY
 	# Fix bug #285706
 	unset XAUTHORITY
-	emake check || die "tests failed"
+	Xemake check || die "tests failed"
+}
+
+multilib-native_src_install_internal() {
+	gnome2_src_install
+	find "${ED}/usr/$(get_libdir)/gnome-vfs-2.0/modules/" -name "*.la" -delete || die
 }
