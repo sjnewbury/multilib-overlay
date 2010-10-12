@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/nautilus/nautilus-2.30.1-r1.ebuild,v 1.7 2010/10/09 09:27:26 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/nautilus/nautilus-2.30.1-r2.ebuild,v 1.1 2010/09/26 17:10:20 nirbheek Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -12,7 +12,7 @@ HOMEPAGE="http://www.gnome.org/projects/nautilus/"
 
 LICENSE="GPL-2 LGPL-2 FDL-1.1"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~ia64 ppc ppc64 ~sh ~sparc x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
 IUSE="doc gnome xmp"
 
 RDEPEND=">=dev-libs/glib-2.24.0[lib32?]
@@ -62,6 +62,9 @@ multilib-native_src_prepare_internal() {
 
 	# Do not show Unmount when showing Eject/Safe removal
 	epatch "${FILESDIR}/${P}-unmount-entries.patch"
+
+	# Fixes compilation with gtk+-2.22
+	epatch "${FILESDIR}/${PN}-2.30.1-remove-eel-gdk-window-focus.patch"
 }
 
 src_test() {

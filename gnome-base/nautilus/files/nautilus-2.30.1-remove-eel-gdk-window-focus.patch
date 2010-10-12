@@ -1,0 +1,62 @@
+Fix compile failure with gtk+-2.22 by removing eel_gdk_window_focus.
+ * Patches **ported** from master repository, not needed 2.90 onwards
+ * Might be needed in 2.32
+
+--
+From 7e8d1dfa6a17fe9189bf2489b735cd6462f03571 Mon Sep 17 00:00:00 2001
+From: Cosimo Cecchi <cosimoc@gnome.org>
+Date: Sat, 21 Aug 2010 16:57:15 +0000
+Subject: [eel] remove eel_gdk_window_focus
+
+---
+From 6b06e0e27ca1cf29afd4fac716c58e15928a8ff8 Mon Sep 17 00:00:00 2001
+From: Cosimo Cecchi <cosimoc@gnome.org>
+Date: Sat, 21 Aug 2010 16:56:57 +0000
+Subject: icon-container: use gdk_window_focus
+
+---
+--- eel/eel-gdk-extensions.c
++++ eel/eel-gdk-extensions.c
+@@ -585,19 +585,7 @@
+ 	 * the focus at this point. Do a little X trickery to
+ 	 * ensure it is focused.
+ 	 */
+-	eel_gdk_window_focus (window, GDK_CURRENT_TIME);
+-}
+-
+-void
+-eel_gdk_window_focus (GdkWindow *window, guint32 timestamp)
+-{
+-	gdk_error_trap_push ();
+-	XSetInputFocus (GDK_DISPLAY (),
+-			GDK_WINDOW_XWINDOW (window),
+-			RevertToParent,
+-			timestamp);
+-	gdk_flush();
+-	gdk_error_trap_pop ();
++	gdk_window_focus (window, GDK_CURRENT_TIME);
+ }
+ 
+ void
+--- eel/eel-gdk-extensions.h
++++ eel/eel-gdk-extensions.h
+@@ -137,8 +137,6 @@
+ /* Misc GdkWindow helper functions */
+ void                eel_gdk_window_bring_to_front          (GdkWindow           *window);
+ void                eel_gdk_window_set_invisible_cursor    (GdkWindow           *window);
+-void                eel_gdk_window_focus                   (GdkWindow           *window,
+-							    guint32              timestamp);
+ void                eel_gdk_window_set_wm_protocols        (GdkWindow           *window,
+ 							    GdkAtom             *protocols,
+ 							    int                  nprotocols);
+--- libnautilus-private/nautilus-icon-container.c
++++ libnautilus-private/nautilus-icon-container.c
+@@ -4475,7 +4475,7 @@
+ 	/* Ensure the window itself is focused.. */
+ 	toplevel = gtk_widget_get_toplevel (GTK_WIDGET (container));
+ 	if (toplevel != NULL && gtk_widget_get_realized (toplevel)) {
+-		eel_gdk_window_focus (toplevel->window, GDK_CURRENT_TIME);
++		gdk_window_focus (toplevel->window, GDK_CURRENT_TIME);
+ 	}
+ 
+ 	return TRUE;
