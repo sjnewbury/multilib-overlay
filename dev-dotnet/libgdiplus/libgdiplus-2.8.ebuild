@@ -1,22 +1,17 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-dotnet/libgdiplus/libgdiplus-9999.ebuild,v 1.5 2010/10/05 20:53:39 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-dotnet/libgdiplus/libgdiplus-2.8.ebuild,v 1.1 2010/10/08 08:26:59 ali_bush Exp $
 
 EAPI=2
 
-EGIT_REPO_URI="http://github.com/mono/${PN}.git"
-EGIT_STORE_DIR="${PORTAGE_ACTUAL_DISTDIR:-${DISTDIR}}/git-src/${P}"
-
-inherit go-mono mono flag-o-matic git autotools multilib-native
+inherit eutils go-mono mono flag-o-matic multilib-native
 
 DESCRIPTION="Library for using System.Drawing with mono"
 HOMEPAGE="http://www.go-mono.com/"
 
-SRC_URI=""
-
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~ppc ~x86 ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 IUSE="cairo"
 
 RDEPEND=">=dev-libs/glib-2.16[lib32?]
@@ -37,8 +32,6 @@ DEPEND="${RDEPEND}"
 RESTRICT="test"
 
 multilib-native_src_prepare_internal() {
-	rm -rf cairo pixman
-	sed -i -e 's:pixman cairo::' Makefile.am || die
 	go-mono_src_prepare
 	sed -i -e 's:ungif:gif:g' configure || die
 }
