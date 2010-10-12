@@ -1,21 +1,22 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.30.3.ebuild,v 1.11 2010/10/09 10:01:44 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.32.0.ebuild,v 1.1 2010/10/09 20:53:38 pacho Exp $
 
-EAPI="2"
+EAPI="3"
+GCONF_DEBUG="yes"
 
-inherit autotools eutils gnome2 pam virtualx multilib-native
+inherit gnome2 pam virtualx multilib-native
 
 DESCRIPTION="Password and keyring managing daemon"
 HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~ia64 ppc ppc64 ~sh ~sparc x86"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
 IUSE="debug doc pam test"
 # USE=valgrind is probably not a good idea for the tree
 
-RDEPEND=">=dev-libs/glib-2.16[lib32?]
+RDEPEND=">=dev-libs/glib-2.25.0[lib32?]
 	>=x11-libs/gtk+-2.20.0[lib32?]
 	gnome-base/gconf[lib32?]
 	>=sys-apps/dbus-1.0[lib32?]
@@ -41,7 +42,9 @@ multilib-native_pkg_setup_internal() {
 		$(use_with pam pam-dir $(getpam_mod_dir))
 		--with-root-certs=/usr/share/ca-certificates/
 		--enable-acl-prompts
-		--enable-ssh-agent"
+		--enable-ssh-agent
+		--enable-gpg-agent
+		--with-gtk=2.0"
 #		$(use_enable valgrind)
 }
 
@@ -52,8 +55,9 @@ multilib-native_src_prepare_internal() {
 	sed 's:CFLAGS="$CFLAGS -Werror:CFLAGS="$CFLAGS:' \
 		-i configure.in configure || die "sed failed"
 
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautoreconf
+	# Remove DISABLE_DEPRECATED flags
+	sed -e '/-D[A-Z_]*DISABLE_DEPRECATED/d' \
+		-i configure.in configure || die "sed 2 failed"
 }
 
 src_test() {
