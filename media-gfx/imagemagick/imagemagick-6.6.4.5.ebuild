@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/imagemagick/imagemagick-6.6.2.5.ebuild,v 1.11 2010/10/09 17:10:28 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/imagemagick/imagemagick-6.6.4.5.ebuild,v 1.1 2010/09/23 15:17:59 flameeyes Exp $
 
 EAPI=3
 inherit multilib toolchain-funcs versionator multilib-native
@@ -13,10 +13,8 @@ SRC_URI="mirror://${PN}/${MY_P}.tar.xz"
 
 LICENSE="imagemagick"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 s390 sh sparc x86 ~ppc-aix ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
-IUSE="autotrace bzip2 cxx djvu fftw fontconfig fpx graphviz gs hdri jbig jpeg
-jpeg2k lcms lqr openexr openmp perl png q32 q8 raw static-libs svg tiff
-truetype wmf X xml zlib"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~ppc-aix ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+IUSE="autotrace bzip2 +corefonts cxx djvu fftw fontconfig fpx graphviz gs hdri jbig jpeg jpeg2k lcms lqr openexr openmp perl png q32 q8 raw static-libs svg tiff truetype wmf X xml zlib"
 IUSE="${IUSE} video_cards_nvidia" # opencl support
 
 RDEPEND=">=sys-devel/libtool-2.2.6b[lib32?]
@@ -25,7 +23,7 @@ RDEPEND=">=sys-devel/libtool-2.2.6b[lib32?]
 	djvu? ( app-text/djvu[lib32?] )
 	fftw? ( sci-libs/fftw )
 	fontconfig? ( media-libs/fontconfig[lib32?] )
-	fpx? ( media-libs/libfpx[lib32?] )
+	fpx? ( >=media-libs/libfpx-1.3.0-r1[lib32?] )
 	graphviz? ( >=media-gfx/graphviz-2.6[lib32?] )
 	gs? ( app-text/ghostscript-gpl[lib32?] )
 	jbig? ( media-libs/jbigkit[lib32?] )
@@ -39,7 +37,8 @@ RDEPEND=">=sys-devel/libtool-2.2.6b[lib32?]
 	raw? ( media-gfx/ufraw[lib32?] )
 	svg? ( >=gnome-base/librsvg-2.9.0[lib32?] )
 	tiff? ( >=media-libs/tiff-3.5.5[lib32?] )
-	truetype? ( =media-libs/freetype-2*[lib32?] )
+	truetype? ( =media-libs/freetype-2*[lib32?]
+		corefonts? ( media-fonts/corefonts ) )
 	video_cards_nvidia? ( x11-drivers/nvidia-drivers )
 	wmf? ( >=media-libs/libwmf-0.2.8[lib32?] )
 	X? (
@@ -69,14 +68,19 @@ multilib-native_src_prepare_internal() {
 
 multilib-native_src_configure_internal() {
 	local depth=16
-
 	use q8 && depth=8
 	use q32 && depth=32
 
 	local openmp=disable
-
 	if use openmp && tc-has-openmp; then
 		openmp=enable
+	fi
+
+	local myconf
+	if use truetype; then
+		myconf="$(use_with corefonts windows-font-dir /usr/share/fonts/corefonts)"
+	else
+		myconf="--without-corefonts"
 	fi
 
 	econf \
@@ -110,13 +114,14 @@ multilib-native_src_configure_internal() {
 		$(use_with jbig) \
 		$(use_with jpeg) \
 		$(use_with jpeg2k jp2) \
-		$(use_with lcms) \
+		--without-lcms \
+		$(use_with lcms lcms2) \
 		$(use_with lqr) \
 		$(use_with openexr) \
 		$(use_with png) \
 		$(use_with svg rsvg) \
 		$(use_with tiff) \
-		--with-windows-font-dir="${EPREFIX}/usr/share/fonts/corefonts" \
+		${myconf} \
 		$(use_with wmf) \
 		$(use_with xml) \
 		--${openmp}-openmp
