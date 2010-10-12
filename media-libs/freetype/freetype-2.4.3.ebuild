@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/freetype/freetype-2.3.12.ebuild,v 1.8 2010/09/30 20:00:29 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/freetype/freetype-2.4.3.ebuild,v 1.1 2010/10/04 00:28:28 dirtyepic Exp $
 
 EAPI="2"
 
@@ -14,18 +14,15 @@ SRC_URI="mirror://sourceforge/freetype/${P/_/}.tar.bz2
 
 LICENSE="FTL GPL-2"
 SLOT="2"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
-IUSE="X bindist debug doc utils fontforge"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+IUSE="X auto-hinter bindist debug doc utils fontforge"
 
 DEPEND="sys-libs/zlib[lib32?]
 	X?	( x11-libs/libX11[lib32?]
 		  x11-libs/libXau[lib32?]
 		  x11-libs/libXdmcp[lib32?] )"
 
-# We also need a recent fontconfig version to prevent segfaults. #166029
-# July 3 2007 dirtyepic
-RDEPEND="${DEPEND}
-		!<media-libs/fontconfig-2.3.2-r2"
+RDEPEND="${DEPEND}"
 
 multilib-native_src_prepare_internal() {
 	enable_option() {
@@ -41,14 +38,14 @@ multilib-native_src_prepare_internal() {
 	}
 
 	if ! use bindist; then
-		# Bytecodes and subpixel hinting supports are patented
-		# in United States; for safety, disable them while building
-		# binaries, so that no risky code is distributed.
 		# See http://freetype.org/patents.html
-
+		# ClearType is covered by several Microsoft patents in the US
 		enable_option FT_CONFIG_OPTION_SUBPIXEL_RENDERING
-		enable_option TT_CONFIG_OPTION_BYTECODE_INTERPRETER
-		disable_option TT_CONFIG_OPTION_UNPATENTED_HINTING
+	fi
+
+	if use auto-hinter; then
+		disable_option TT_CONFIG_OPTION_BYTECODE_INTERPRETER
+		enable_option TT_CONFIG_OPTION_UNPATENTED_HINTING
 	fi
 
 	if use debug; then
@@ -56,7 +53,6 @@ multilib-native_src_prepare_internal() {
 		enable_option FT_DEBUG_MEMORY
 	fi
 
-	enable_option FT_CONFIG_OPTION_INCREMENTAL
 	disable_option FT_CONFIG_OPTION_OLD_INTERNALS
 
 	epatch "${FILESDIR}"/${PN}-2.3.2-enable-valid.patch
@@ -64,7 +60,6 @@ multilib-native_src_prepare_internal() {
 	if use utils; then
 		cd "${WORKDIR}/ft2demos-${PV}"
 		sed -i -e "s:\.\.\/freetype2$:../freetype-${PV}:" Makefile
-
 		# Disable tests needing X11 when USE="-X". (bug #177597)
 		if ! use X; then
 			sed -i -e "/EXES\ +=\ ftdiff/ s:^:#:" Makefile
@@ -94,19 +89,20 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
 	dodoc ChangeLog README
-	dodoc docs/{CHANGES,CUSTOMIZE,DEBUG,*.txt,PATENTS,TODO}
+	dodoc docs/{CHANGES,CUSTOMIZE,DEBUG,*.txt,PROBLEMS,TODO}
 
 	use doc && dohtml -r docs/*
 
 	if use utils; then
-		rm "${WORKDIR}/ft2demos-${PV}/bin/README"
+		rm "${WORKDIR}"/ft2demos-${PV}/bin/README
 		for ft2demo in ../ft2demos-${PV}/bin/*; do
 			./builds/unix/libtool --mode=install $(type -P install) -m 755 "$ft2demo" \
 				"${D}"/usr/bin
 		done
 	fi
-	# Probably fontforge needs less but this way makes things simplier...
+
 	if use fontforge; then
+		# Probably fontforge needs less but this way makes things simplier...
 		einfo "Installing internal headers required for fontforge"
 		find src/truetype include/freetype/internal -name '*.h' | \
 		while read header; do
@@ -116,4 +112,10 @@ multilib-native_src_install_internal() {
 	fi
 
 	prep_ml_binaries /usr/bin/freetype-config
+}
+
+multilib-native_pkg_postinst_internal() {
+	elog "The TrueType bytecode interpreter is no longer patented and thus no"
+	elog "longer controlled by the bindist USE flag.  Enable the auto-hinter"
+	elog "USE flag if you want the old USE="bindist" hinting behavior."
 }
