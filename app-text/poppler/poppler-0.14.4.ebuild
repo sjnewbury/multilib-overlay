@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/poppler/poppler-0.14.1.ebuild,v 1.9 2010/10/06 21:39:32 reavertm Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/poppler/poppler-0.14.4.ebuild,v 1.1 2010/10/06 21:39:32 reavertm Exp $
 
 EAPI="2"
 
@@ -11,7 +11,7 @@ HOMEPAGE="http://poppler.freedesktop.org/"
 SRC_URI="http://poppler.freedesktop.org/${P}.tar.gz"
 
 LICENSE="GPL-2"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd ~x64-freebsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd ~x64-freebsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 SLOT="0"
 IUSE="+abiword cairo cjk curl cxx debug doc exceptions jpeg jpeg2k +lcms png qt4 +utils +xpdf-headers"
 
@@ -87,12 +87,8 @@ multilib-native_src_install_internal() {
 	fi
 }
 
-multilib-native_pkg_preinst_internal() {
-	preserve_old_lib /usr/$(get_libdir)/libpoppler-glib.so.4
-	preserve_old_lib /usr/$(get_libdir)/libpoppler.so.5
-}
-
 multilib-native_pkg_postinst_internal() {
-	preserve_old_lib_notify /usr/$(get_libdir)/libpoppler-glib.so.4
-	preserve_old_lib_notify /usr/$(get_libdir)/libpoppler.so.5
+	ewarn "After upgrading app-text/poppler you may need to reinstall packages"
+	ewarn "linking to it. If you're not a portage-2.2_rc user, you're advised"
+	ewarn "to run revdep-rebuild"
 }
