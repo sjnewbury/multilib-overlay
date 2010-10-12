@@ -1,11 +1,11 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/gst-plugins-base/gst-plugins-base-0.10.29.ebuild,v 1.10 2010/09/11 09:50:50 nixnut Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/gst-plugins-base/gst-plugins-base-0.10.29.ebuild,v 1.11 2010/09/23 16:31:58 ssuominen Exp $
 
 EAPI="2"
 
 # order is important, gnome2 after gst-plugins
-inherit gst-plugins-base gst-plugins10 gnome2 flag-o-matic eutils multilib-native
+inherit gst-plugins-base gst-plugins10 gnome2 flag-o-matic autotools eutils multilib-native
 # libtool
 
 DESCRIPTION="Basepack of plugins for gstreamer"
@@ -24,11 +24,19 @@ RDEPEND=">=dev-libs/glib-2.18[lib32?]
 	!<media-libs/gst-plugins-bad-0.10.10"
 DEPEND="${RDEPEND}
 	nls? ( >=sys-devel/gettext-0.11.5[lib32?] )
-	dev-util/pkgconfig[lib32?]"
+	dev-util/pkgconfig[lib32?]
+	dev-util/gtk-doc-am"
 
 GST_PLUGINS_BUILD=""
 
 DOCS="AUTHORS README RELEASE"
+
+multilib-native_src_unpack_internal() {
+	unpack ${A}
+	cd "${S}"
+	epatch "${FILESDIR}"/${P}-make-382.patch
+	eautoreconf
+}
 
 multilib-native_src_configure_internal() {
 	# gst doesnt handle opts well, last tested with 0.10.15
