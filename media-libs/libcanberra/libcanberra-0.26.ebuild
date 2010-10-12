@@ -1,8 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libcanberra/libcanberra-0.25.ebuild,v 1.12 2010/10/07 20:22:07 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libcanberra/libcanberra-0.26.ebuild,v 1.1 2010/10/09 16:04:02 pacho Exp $
 
-EAPI=2
+EAPI="3"
 inherit gnome2-utils libtool multilib-native
 
 DESCRIPTION="Portable Sound Event Library"
@@ -11,7 +11,7 @@ SRC_URI="http://0pointer.de/lennart/projects/${PN}/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ppc ppc64 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="alsa gstreamer +gtk oss pulseaudio +sound tdb"
 
 COMMON_DEPEND="media-libs/libvorbis[lib32?]
@@ -28,7 +28,8 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/pkgconfig-0.17[lib32?]"
 
 multilib-native_src_prepare_internal() {
-	elibtoolize
+	# Run elibtoolize for ~x86-fbsd.
+	use x86-fbsd && elibtoolize
 }
 
 # --disable-gtk3 for now
@@ -52,7 +53,7 @@ multilib-native_src_configure_internal() {
 
 multilib-native_src_install_internal() {
 	# Disable parallel installation until bug #253862 is solved
-	emake -j1 DESTDIR="${D}" install || die
+	emake -j1 DESTDIR="${ED}" install || die
 	prepalldocs
 }
 
