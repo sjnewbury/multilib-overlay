@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/gtkhtml/gtkhtml-3.30.3.ebuild,v 1.1 2010/08/16 21:16:59 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-extra/gtkhtml/gtkhtml-3.30.3.ebuild,v 1.2 2010/09/26 15:14:01 nirbheek Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -17,7 +17,7 @@ IUSE=""
 
 # We keep bonobo until we can make sure no apps in tree uses
 # the old composer code.
-RDEPEND=">=x11-libs/gtk+-2.18[lib32?]
+RDEPEND=">=x11-libs/gtk+-2.20[lib32?]
 	>=x11-themes/gnome-icon-theme-2.22.0
 	>=gnome-base/orbit-2[lib32?]
 	>=app-text/enchant-1.1.7[lib32?]
@@ -40,9 +40,7 @@ multilib-native_pkg_setup_internal() {
 multilib-native_src_prepare_internal() {
 	gnome2_src_prepare
 
-	# FIXME: Fix compilation flags crazyness
-	sed 's/CFLAGS="$CFLAGS $WARNING_FLAGS"//' \
-		-i configure.ac configure || die "sed 1 failed"
-	sed -i -e 's:-DGTK_DISABLE_DEPRECATED=1 -DGDK_DISABLE_DEPRECATED=1 -DG_DISABLE_DEPRECATED=1 -DGNOME_DISABLE_DEPRECATED=1::g' \
-		a11y/Makefile.am a11y/Makefile.in || die "sed 2 failed"
+	# XXX: This is fixed with --disable-deprecations in >=3.31.90
+	sed -e 's/CFLAGS="$CFLAGS $WARNING_FLAGS/CFLAGS="$CFLAGS/' \
+		-i configure.ac configure || die "Warning flags sed failed"
 }
