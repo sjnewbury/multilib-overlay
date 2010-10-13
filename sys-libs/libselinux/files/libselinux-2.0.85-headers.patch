@@ -1,0 +1,14 @@
+https://bugs.gentoo.org/338302
+
+fix by Chris Richards for building with glibc-2.12
+
+--- src/label_file.c
++++ src/label_file.c
+@@ -19,6 +19,7 @@
+ #include <regex.h>
+ #include "callbacks.h"
+ #include "label_internal.h"
++#include <sys/stat.h>
+ 
+ /*
+  * Internals, mostly moved over from matchpathcon.c

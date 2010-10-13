@@ -1,10 +1,11 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-0.9.8o-r2.ebuild,v 1.1 2010/08/14 05:53:33 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-0.9.8o-r2.ebuild,v 1.4 2010/10/11 07:05:25 fauli Exp $
 
 # this ebuild is only for the libcrypto.so.0.9.8 and libssl.so.0.9.8 SONAME for ABI compat
 
-EAPI=2
+EAPI="2"
+
 inherit eutils flag-o-matic toolchain-funcs multilib-native
 
 DESCRIPTION="Toolkit for SSL v2/v3 and TLS v1"
@@ -13,7 +14,7 @@ SRC_URI="mirror://openssl/source/${P}.tar.gz"
 
 LICENSE="openssl"
 SLOT="0.9.8"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="bindist gmp kerberos sse2 test zlib"
 
 RDEPEND="gmp? ( dev-libs/gmp[lib32?] )
@@ -26,10 +27,11 @@ DEPEND="${RDEPEND}
 	test? ( sys-devel/bc )"
 
 multilib-native_pkg_setup_internal() {
-	[[ -e ${ROOT}/usr/$(get_libdir)/libcrypto.so.0.9.8 ]] && \
-		rm -f "${ROOT}"/usr/$(get_libdir)/libcrypto.so.0.9.8
-	[[ -e ${ROOT}/usr/$(get_libdir)/libssl.so.0.9.8 ]] && \
-		rm -f "${ROOT}"/usr/$(get_libdir)/libssl.so.0.9.8
+	# avoid collisions with openssl-1 (preserve lib)
+	if ! has_version dev-libs/openssl:${SLOT} ; then
+		ewarn "Removing lib{crypto,ssl}.so.0.9.8 to avoid collision with openssl-1"
+		rm -f "${ROOT}"/usr/$(get_libdir)/lib{crypto,ssl}.so.0.9.8
+	fi
 }
 
 multilib-native_src_prepare_internal() {

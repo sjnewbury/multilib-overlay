@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libtheora/libtheora-1.1.1.ebuild,v 1.7 2010/02/25 18:38:25 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libtheora/libtheora-1.1.1.ebuild,v 1.8 2010/09/25 14:52:08 ssuominen Exp $
 
 EAPI=2
 inherit autotools eutils flag-o-matic multilib-native
@@ -12,7 +12,7 @@ SRC_URI="http://downloads.xiph.org/releases/theora/${P/_}.tar.bz2"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
-IUSE="doc +encode examples"
+IUSE="doc +encode examples static-libs"
 
 RDEPEND="media-libs/libogg[lib32?]
 	encode? ( media-libs/libvorbis[lib32?] )
@@ -41,6 +41,7 @@ multilib-native_src_configure_internal() {
 	# --disable-spec because LaTeX documentation has been prebuilt
 	econf \
 		--disable-dependency-tracking \
+		$(use_enable static-libs static) \
 		--disable-spec \
 		$(use_enable encode) \
 		$(use_enable examples) \
@@ -65,4 +66,6 @@ multilib-native_src_install_internal() {
 			newbin examples/.libs/${bin} theora_${bin} || die "newbin failed"
 		done
 	fi
+
+	find "${D}" -name '*.la' -exec rm -f '{}' +
 }

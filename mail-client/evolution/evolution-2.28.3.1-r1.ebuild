@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.28.3.1-r1.ebuild,v 1.4 2010/08/05 16:54:14 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.28.3.1-r1.ebuild,v 1.5 2010/09/30 18:52:28 ssuominen Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -19,6 +19,7 @@ IUSE="crypt dbus hal kerberos ldap mono networkmanager nntp pda profile python s
 # Pango dependency required to avoid font rendering problems
 # We need a graphical pinentry frontend to be able to ask for the GPG
 # password from inside evolution, bug 160302
+PINENTRY_DEPEND="|| ( app-crypt/pinentry[gtk] app-crypt/pinentry-qt app-crypt/pinentry[qt4] app-crypt/pinentry[qt3] )"
 RDEPEND=">=dev-libs/glib-2.20[lib32?]
 	>=x11-libs/gtk+-2.16[lib32?]
 	>=gnome-extra/evolution-data-server-${PV}[lib32?]
@@ -52,7 +53,7 @@ RDEPEND=">=dev-libs/glib-2.20[lib32?]
 	>=gnome-base/orbit-2.9.8[lib32?]
 	crypt? ( || (
 				  ( >=app-crypt/gnupg-2.0.1-r2[lib32?]
-					app-crypt/pinentry[gtk] )
+					${PINENTRY_DEPEND} )
 				  =app-crypt/gnupg-1.4*[lib32?] ) )
 	ldap? ( >=net-nds/openldap-2[lib32?] )
 	mono? ( >=dev-lang/mono-1 )

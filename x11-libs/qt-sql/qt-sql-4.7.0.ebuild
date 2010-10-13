@@ -1,16 +1,16 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-sql/qt-sql-4.7.0.ebuild,v 1.1 2010/09/21 15:02:47 tampakrap Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-sql/qt-sql-4.7.0.ebuild,v 1.3 2010/10/10 11:58:41 armin76 Exp $
 
-EAPI="2"
+EAPI="3"
 inherit qt4-build multilib-native
 
 DESCRIPTION="The SQL module for the Qt toolkit"
 SLOT="4"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 -sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x64-solaris ~x86-solaris"
 IUSE="firebird freetds iconv mysql odbc postgres qt3support +sqlite"
 
-DEPEND="~x11-libs/qt-core-${PV}[debug=,qt3support=,lib32?]
+DEPEND="~x11-libs/qt-core-${PV}[aqua=,debug=,qt3support=,lib32?]
 	firebird? ( dev-db/firebird )
 	freetds? ( dev-db/freetds )
 	mysql? ( virtual/mysql[lib32?] )
@@ -52,8 +52,8 @@ multilib-native_src_prepare_internal() {
 multilib-native_src_configure_internal() {
 	# Don't support sqlite2 anymore
 	myconf="${myconf} -no-sql-sqlite2
-		$(qt_use mysql sql-mysql plugin) $(use mysql && echo "-I/usr/include/mysql -L/usr/$(get_libdir)/mysql ")
-		$(qt_use postgres sql-psql plugin) $(use postgres && echo "-I/usr/include/postgresql/pgsql ")
+		$(qt_use mysql sql-mysql plugin) $(use mysql && echo "-I${EPREFIX}/usr/include/mysql -L${EPREFIX}/usr/$(get_libdir)/mysql ")
+		$(qt_use postgres sql-psql plugin) $(use postgres && echo "-I${EPREFIX}/usr/include/postgresql/pgsql ")
 		$(qt_use sqlite sql-sqlite plugin) $(use sqlite && echo '-system-sqlite')
 		$(qt_use odbc sql-odbc plugin)
 		$(qt_use freetds sql-tds plugin)

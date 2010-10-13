@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/lcms/lcms-2.0a.ebuild,v 1.10 2010/09/04 14:51:17 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/lcms/lcms-2.0a.ebuild,v 1.13 2010/09/29 15:20:06 jer Exp $
 
 EAPI=2
 inherit libtool multilib-native
@@ -11,14 +11,15 @@ SRC_URI="mirror://sourceforge/${PN}/lcms2-${PV}.tar.gz"
 
 LICENSE="MIT"
 SLOT="2"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ~ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="jpeg static-libs tiff zlib"
 
-DEPEND="jpeg? ( virtual/jpeg[lib32?] )
+RDEPEND="jpeg? ( virtual/jpeg[lib32?] )
 	tiff? ( media-libs/tiff[lib32?] )
 	zlib? ( sys-libs/zlib[lib32?] )"
+DEPEND="${RDEPEND}"
 
-RESTRICT="test" # Segment maxima GBD test fails with gcc-4.4, but not with gcc-4.5
+RESTRICT="test" # Segment maxima GBD test fails randomly
 
 S=${WORKDIR}/${P/a}
 
@@ -46,5 +47,5 @@ multilib-native_src_install_internal() {
 	insinto /usr/share/doc/${PF}/pdf
 	doins doc/*.pdf || die
 
-	find "${D}" -name '*.la' -delete
+	find "${D}" -name '*.la' -exec rm -f '{}' +
 }

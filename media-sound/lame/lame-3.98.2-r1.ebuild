@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/lame/lame-3.98.2-r1.ebuild,v 1.8 2009/06/25 17:30:18 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/lame/lame-3.98.2-r1.ebuild,v 1.9 2010/10/04 15:21:56 mr_bones_ Exp $
 
 EAPI="2"
 
@@ -43,6 +43,8 @@ multilib-native_src_prepare_internal() {
 
 	# It fails parallel make otherwise when enabling nasm...
 	mkdir "${S}/libmp3lame/i386/.libs" || die
+
+	sed -i -e '/define sp/s/+/ + /g' libmp3lame/i386/nasm.h || die
 
 	AT_M4DIR="${S}" eautoreconf
 	epunt_cxx # embedded bug #74498

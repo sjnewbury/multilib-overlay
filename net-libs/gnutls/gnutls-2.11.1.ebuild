@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/gnutls/gnutls-2.11.1.ebuild,v 1.1 2010/09/14 21:19:19 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/gnutls/gnutls-2.11.1.ebuild,v 1.2 2010/09/30 14:46:42 ssuominen Exp $
 
 EAPI="3"
 
@@ -27,7 +27,7 @@ fi
 LICENSE="LGPL-2.1 GPL-3"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
-IUSE="bindist +cxx doc examples guile lzo +nettle nls zlib"
+IUSE="bindist +cxx doc examples guile lzo +nettle nls test zlib"
 
 # lib/m4/hooks.m4 says that GnuTLS uses a fork of PaKChoiS.
 RDEPEND=">=dev-libs/libtasn1-0.3.4[lib32?]
@@ -40,7 +40,8 @@ RDEPEND=">=dev-libs/libtasn1-0.3.4[lib32?]
 DEPEND="${RDEPEND}
 	sys-devel/libtool[lib32?]
 	doc? ( dev-util/gtk-doc )
-	nls? ( sys-devel/gettext[lib32?] )"
+	nls? ( sys-devel/gettext[lib32?] )
+	test? ( app-misc/datefudge )"
 
 S="${WORKDIR}/${P%_pre*}"
 

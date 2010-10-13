@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/atk/atk-1.30.0.ebuild,v 1.9 2010/09/11 18:26:00 josejx Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/atk/atk-1.30.0.ebuild,v 1.10 2010/10/07 20:01:31 ssuominen Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -12,19 +12,18 @@ HOMEPAGE="http://live.gnome.org/GAP/"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~mips ppc ~ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
 IUSE="doc +introspection"
 
-RDEPEND=">=dev-libs/glib-2[lib32?]
+RDEPEND="dev-libs/glib:2[lib32?]
 	introspection? ( >=dev-libs/gobject-introspection-0.6.7[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5[lib32?]
 	sys-devel/gettext[lib32?]
-	>=dev-util/pkgconfig-0.9[lib32?]
+	dev-util/pkgconfig[lib32?]
 	doc? ( >=dev-util/gtk-doc-1 )"
-
-DOCS="AUTHORS ChangeLog NEWS README"
 
 multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF} $(use_enable introspection)"
+	DOCS="AUTHORS ChangeLog NEWS README"
 }

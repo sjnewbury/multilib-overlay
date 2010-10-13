@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-0.8.15.ebuild,v 1.4 2010/09/13 21:41:03 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-0.8.15.ebuild,v 1.5 2010/09/28 04:56:54 ssuominen Exp $
 
 EAPI="2"
 G2CONF_DEBUG="no"
@@ -50,7 +50,7 @@ RDEPEND="
 	jpeg? ( media-libs/jpeg:0[lib32?] )
 	laptop? (
 		hal? ( >=sys-apps/hal-0.5[lib32?] )
-		!hal? ( || ( sys-power/upower >=sys-apps/devicekit-power-007 ) ) )
+		!hal? ( sys-power/upower ) )
 	mp3? ( >=media-libs/id3lib-3.8.3[lib32?] )
 	nautilus? (
 		gnome-base/nautilus[lib32?]

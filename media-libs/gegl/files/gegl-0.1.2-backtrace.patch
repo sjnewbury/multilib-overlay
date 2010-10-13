@@ -1,0 +1,43 @@
+Not all platforms have backtrace() facility, such as Darwin <=10.4 and
+Solaris.
+
+See also
+https://trac.macports.org/browser/trunk/dports/graphics/gegl/files/patch-gegl-buffer-gegl-buffer.c.diff?rev=71233
+
+This patch uses a configure check to disable it based on existance of
+execinfo.h instead of hardcoded knowledge about the target platforms.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=631183
+
+--- gegl-0.1.2/configure.ac
++++ gegl-0.1.2/configure.ac
+@@ -986,6 +986,7 @@
+ 
+ AM_CONDITIONAL(ENABLE_WORKSHOP, test "x$enable_workshop" = "xyes")
+ 
++AC_CHECK_HEADERS([execinfo.h])
+ 
+ dnl bin/node-editors/Makefile
+ AC_OUTPUT([
+--- gegl-0.1.2/gegl/buffer/gegl-buffer.c
++++ gegl-0.1.2/gegl/buffer/gegl-buffer.c
+@@ -80,7 +80,7 @@
+ /* #define GEGL_BUFFER_DEBUG_ALLOCATIONS to print allocation stack
+  * traces for leaked GeglBuffers using GNU C libs backtrace_symbols()
+  */
+-#ifndef G_OS_WIN32
++#ifdef HAVE_EXECINFO_H
+ #include <execinfo.h>
+ #endif
+ 
+@@ -876,8 +876,8 @@
+ gegl_buffer_get_alloc_stack (void)
+ {
+   char  *result         = NULL;
+-#ifdef G_OS_WIN32
+-  result = g_strdup ("backtrack not available on win32\n");
++#ifndef HAVE_EXECINFO_H
++  result = g_strdup ("backtrack not available for this platform\n");
+ #else
+   void  *functions[MAX_N_FUNCTIONS];
+   int    n_functions    = 0;
