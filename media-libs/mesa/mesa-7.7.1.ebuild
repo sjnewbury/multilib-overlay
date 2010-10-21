@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.7.1.ebuild,v 1.14 2010/10/10 18:40:59 ulm Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.7.1.ebuild,v 1.15 2010/10/19 10:56:15 scarabeus Exp $
 
 EAPI="2"
 
@@ -34,7 +34,7 @@ LICENSE="LGPL-2 kilgard"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 
-VIDEO_CARDS="intel mach64 mga nouveau r128 radeon radeonhd savage sis sunffb svga tdfx via"
+VIDEO_CARDS="intel mach64 mga nouveau r128 radeon savage sis sunffb svga tdfx via"
 for card in ${VIDEO_CARDS}; do
 	IUSE_VIDEO_CARDS+=" video_cards_${card}"
 done
@@ -114,7 +114,6 @@ multilib-native_src_configure_internal() {
 	driver_enable video_cards_r128 r128
 	# ATI has two implementations as video_cards
 	driver_enable video_cards_radeon radeon r200 r300 r600
-	driver_enable video_cards_radeonhd r300 r600
 	driver_enable video_cards_savage savage
 	driver_enable video_cards_sis sis
 	driver_enable video_cards_sunffb ffb
@@ -136,7 +135,7 @@ multilib-native_src_configure_internal() {
 			$(use_enable video_cards_svga gallium-svga)
 			$(use_enable video_cards_nouveau gallium-nouveau)"
 			#$(use_enable video_cards_intel gallium-intel)"
-		if use video_cards_radeon || use video_cards_radeonhd; then
+		if use video_cards_radeon; then
 			myconf="${myconf} --enable-gallium-radeon"
 		else
 			myconf="${myconf} --disable-gallium-radeon"
