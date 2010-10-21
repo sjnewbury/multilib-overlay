@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-0.8.17.ebuild,v 1.2 2010/09/28 04:56:54 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-0.8.17.ebuild,v 1.3 2010/10/20 13:39:45 eva Exp $
 
 EAPI="2"
 G2CONF_DEBUG="no"
@@ -157,8 +157,13 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
+	gnome2_src_prepare
+
 	# Fix build failures with USE=strigi
 	epatch "${FILESDIR}/${PN}-0.8.0-strigi.patch"
+
+	# Fix build failures with eds-2.32
+	epatch "${FILESDIR}/${PN}-0.8.17-build-with-eds232.patch"
 
 	# FIXME: report broken tests
 	sed -e '/\/libtracker-common\/tracker-dbus\/request-client-lookup/,+1 s:^\(.*\)$:/*\1*/:' \
@@ -174,4 +179,10 @@ src_test() {
 	export XDG_CONFIG_HOME="${T}"
 	unset DBUS_SESSION_BUS_ADDRESS
 	emake check || die "tests failed"
+}
+
+multilib-native_src_install_internal() {
+	gnome2_src_install
+	# Tracker and none of the plugins it provides needs la files
+	find "${D}" -name "*.la" -delete || die
 }

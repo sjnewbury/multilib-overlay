@@ -1,0 +1,26 @@
+From 8db05ac879dcd7f0e10fb76563ba62512b932bb9 Mon Sep 17 00:00:00 2001
+From: Gilles Dartiguelongue <eva@gentoo.org>
+Date: Wed, 20 Oct 2010 14:32:19 +0200
+Subject: [PATCH] gentoo: fix build with eds-2.32, cherry-picked from master
+
+---
+ src/plugins/evolution/tracker-evolution-plugin.c |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/src/plugins/evolution/tracker-evolution-plugin.c b/src/plugins/evolution/tracker-evolution-plugin.c
+index 8e56d8d..991e525 100644
+--- a/src/plugins/evolution/tracker-evolution-plugin.c
++++ b/src/plugins/evolution/tracker-evolution-plugin.c
+@@ -41,7 +41,9 @@
+ #include <sqlite3.h>
+ 
+ #include <camel/camel.h>
++#ifndef HAVE_EDS_2_31_2
+ #include <camel/camel-db.h>
++#endif
+ 
+ #include <mail/mail-config.h>
+ #include <mail/mail-session.h>
+-- 
+1.7.3.1
+
