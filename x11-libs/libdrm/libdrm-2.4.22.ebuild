@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/libdrm/libdrm-2.4.22.ebuild,v 1.1 2010/09/30 03:46:59 chithanh Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/libdrm/libdrm-2.4.22.ebuild,v 1.2 2010/10/17 21:02:25 scarabeus Exp $
 
 EAPI=3
 inherit xorg-2 multilib-native
@@ -36,12 +36,4 @@ multilib-native_pkg_setup_internal() {
 			$(use_enable libkms)"
 
 	xorg-2_pkg_setup
-}
-
-multilib-native_pkg_postinst_internal() {
-	xorg-2_pkg_postinst
-
-	ewarn "libdrm's ABI may have changed without change in library name"
-	ewarn "Please rebuild media-libs/mesa, x11-base/xorg-server and"
-	ewarn "your video drivers in x11-drivers/*."
 }
