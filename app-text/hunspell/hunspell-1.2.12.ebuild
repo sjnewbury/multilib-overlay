@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/hunspell/hunspell-1.2.11.ebuild,v 1.8 2010/10/19 02:28:38 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/hunspell/hunspell-1.2.12.ebuild,v 1.1 2010/10/15 13:36:00 pva Exp $
 
 EAPI="2"
 inherit eutils multilib autotools flag-o-matic multilib-native
@@ -14,7 +14,7 @@ HOMEPAGE="http://hunspell.sourceforge.net/"
 SLOT="0"
 LICENSE="MPL-1.1 GPL-2 LGPL-2.1"
 IUSE="ncurses nls readline"
-KEYWORDS="~alpha amd64 arm hppa ~ia64 ~mips ppc ppc64 ~sh ~sparc x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 
 DEPEND="readline? ( sys-libs/readline[lib32?] )
 	ncurses? ( sys-libs/ncurses[lib32?] )
@@ -47,7 +47,7 @@ multilib-native_src_prepare_internal() {
 	# Upstream package creates some executables which names are too generic
 	# to be placed in /usr/bin - this patch prefixes them with 'hunspell-'.
 	# It modifies a Makefile.am file, hence eautoreconf.
-	epatch "${FILESDIR}"/${PN}-1.2.11-renameexes.patch
+	epatch "${FILESDIR}"/${PN}-1.2.12-renameexes.patch
 	eautoreconf
 }
 
