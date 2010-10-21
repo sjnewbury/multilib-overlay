@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.9.ebuild,v 1.9 2010/10/13 00:08:43 anarchy Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.11.ebuild,v 1.2 2010/10/20 10:53:31 polynomial-c Exp $
 
 EAPI="3"
 WANT_AUTOCONF="2.1"
@@ -17,7 +17,7 @@ HOMEPAGE="http://developer.mozilla.org/en/docs/XULRunner"
 SRC_URI="http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${MY_PV}/source/firefox-${MY_PV}.source.tar.bz2
 	http://dev.gentoo.org/~anarchy/mozilla/patchsets/${PATCH}.tar.bz2"
 
-KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 ~sparc x86 ~amd64-linux ~x86-linux ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux ~sparc-solaris ~x64-solaris ~x86-solaris"
 SLOT="1.9"
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
 IUSE="+alsa debug +ipc libnotify system-sqlite wifi"
@@ -26,7 +26,7 @@ RDEPEND="
 	>=sys-devel/binutils-2.16.1
 	>=dev-libs/nss-3.12.7[lib32?]
 	>=dev-libs/nspr-4.8.6[lib32?]
-	system-sqlite? ( >=dev-db/sqlite-3.6.22-r2[fts3,secure-delete,lib32?] )
+	system-sqlite? ( >=dev-db/sqlite-3.7.1[fts3,secure-delete,lib32?] )
 	alsa? ( media-libs/alsa-lib[lib32?] )
 	>=app-text/hunspell-1.2[lib32?]
 	>=x11-libs/cairo-1.8.8[X,lib32?]
@@ -61,6 +61,7 @@ multilib-native_pkg_setup_internal() {
 
 multilib-native_src_prepare_internal() {
 	# Apply our patches
+	EPATCH_EXCLUDE="2001_mozilla_ps_pdf_simplify_operators.patch" \
 	EPATCH_SUFFIX="patch" \
 	EPATCH_FORCE="yes" \
 	epatch "${WORKDIR}"
@@ -210,7 +211,7 @@ multilib-native_src_install_internal() {
 
 	# env.d file for ld search path
 	dodir /etc/env.d
-	echo "LDPATH=${EPREFIX}/${MOZLIBDIR}" > "${ED}"/etc/env.d/08xulrunner-${ABI} || die "env.d failed"
+	echo "LDPATH=${EPREFIX}/${MOZLIBDIR}" > "${ED}"/etc/env.d/08xulrunner || die "env.d failed"
 
 	# Add our defaults to xulrunner and out of firefox
 	cp "${FILESDIR}"/xulrunner-default-prefs.js \
@@ -225,27 +226,20 @@ multilib-native_src_install_internal() {
 		java-pkg_regjar "${ED}/${SDKDIR}/lib/MozillaGlue.jar"
 		java-pkg_regjar "${ED}/${SDKDIR}/lib/MozillaInterfaces.jar"
 	fi
-
-	# each ABI should generate exactly one /etc/gre.d/*.system.conf file
-	for conf in "${D}"/etc/gre.d/*.system.conf ; do
-		mv "${conf}" "${conf%.conf}-${ABI}.conf"
-	done
 }
 
 multilib-native_pkg_postinst_internal() {
-	if is_final_abi ; then
-		ewarn "If firefox fails to start with \"failed to load xpcom\", run revdep-rebuild"
-		ewarn "If that does not fix the problem, rebuild dev-libs/nss"
-		ewarn "Try dev-util/lafilefixer if you get build failures related to .la files"
+	ewarn "If firefox fails to start with \"failed to load xpcom\", run revdep-rebuild"
+	ewarn "If that does not fix the problem, rebuild dev-libs/nss"
+	ewarn "Try dev-util/lafilefixer if you get build failures related to .la files"
 
-		einfo
-		einfo "All prefs can be overridden by the user. The preferences are to make"
-		einfo "use of xulrunner out of the box on an average system without the user"
-		einfo "having to go through and enable the basics."
+	einfo
+	einfo "All prefs can be overridden by the user. The preferences are to make"
+	einfo "use of xulrunner out of the box on an average system without the user"
+	einfo "having to go through and enable the basics."
 
-		einfo
-		ewarn "Any package that requires xulrunner:1.9 slot could and most likely will"
-		ewarn "have issues. These issues should be reported to maintainer, and mozilla herd"
-		ewarn "should be cc'd on the bug report. Thank you anarchy@gentoo.org ."
-	fi
+	einfo
+	ewarn "Any package that requires xulrunner:1.9 slot could and most likely will"
+	ewarn "have issues. These issues should be reported to maintainer, and mozilla herd"
+	ewarn "should be cc'd on the bug report. Thank you anarchy@gentoo.org ."
 }
