@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/freetype/freetype-2.4.2.ebuild,v 1.8 2010/09/06 20:34:21 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/freetype/freetype-2.4.2.ebuild,v 1.9 2010/10/12 18:34:41 dirtyepic Exp $
 
 EAPI="2"
 
@@ -49,7 +49,7 @@ multilib-native_src_prepare_internal() {
 	fi
 
 	if use debug; then
-		enable_option FT_DEBUG_LEVEL_ERROR
+		enable_option FT_DEBUG_LEVEL_TRACE
 		enable_option FT_DEBUG_MEMORY
 	fi
 
