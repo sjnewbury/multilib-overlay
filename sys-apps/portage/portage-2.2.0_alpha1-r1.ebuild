@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/portage/portage-2.2_rc69.ebuild,v 1.1 2010/08/24 21:03:37 zmedico Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/portage/portage-2.2.0_alpha1.ebuild,v 1.1 2010/10/23 11:44:32 zmedico Exp $
 
 # Require EAPI 2 since we now require at least python-2.6 (for python 3
 # syntax support) which also requires EAPI 2.
@@ -9,14 +9,14 @@ inherit eutils git multilib python
 
 EGIT_REPO_URI="git://git.overlays.gentoo.org/proj/portage.git"
 EGIT_BRANCH="multilib"
-EGIT_COMMIT="93f238475d94375aba0cc407917f1152d5f3e5be"
+EGIT_COMMIT="f2b84cdd5689c97c34a77c4fc31777d488e4d388"
 DESCRIPTION="Portage is the package management and distribution system for Gentoo"
 HOMEPAGE="http://www.gentoo.org/proj/en/portage/index.xml"
 LICENSE="GPL-2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
 PROVIDE="virtual/portage"
 SLOT="0"
-IUSE="build doc epydoc linguas_pl python3 selinux"
+IUSE="build doc epydoc +ipc linguas_pl python3 selinux"
 
 python_dep="python3? ( =dev-lang/python-3* )
 	!python3? (
@@ -41,6 +41,7 @@ RDEPEND="${python_dep}
 	elibc_uclibc? ( >=sys-apps/sandbox-2.2 )
 	>=app-misc/pax-utils-0.1.17
 	selinux? ( sys-libs/libselinux )
+	!<app-shells/bash-3.2_p17
 	>=sys-apps/abi-wrapper-1.0-r2"
 PDEPEND="
 	!build? (
@@ -89,10 +90,22 @@ src_prepare() {
 		epatch "${WORKDIR}/${PN}-${PATCHVER}.patch"
 	fi
 	einfo "Setting portage.VERSION to ${PVR} ..."
-	sed -i "s/^VERSION=.*/VERSION=\"${PVR}\"/" pym/portage/__init__.py || \
+	sed -e "s/^VERSION=.*/VERSION=\"${PVR}\"/" -i pym/portage/__init__.py || \
 		die "Failed to patch portage.VERSION"
+	sed -e "1s/VERSION/${PVR}/" -i doc/fragment/version || \
+		die "Failed to patch VERSION in doc/fragment/version"
+	sed -e "1s/VERSION/${PVR}/" -i man/* || \
+		die "Failed to patch VERSION in man page headers"
+
+	if ! use ipc ; then
+		einfo "Disabling ipc..."
+		sed -e "s:_enable_ipc_daemon = True:_enable_ipc_daemon = False:" \
+			-i pym/_emerge/AbstractEbuildProcess.py || \
+			die "failed to patch AbstractEbuildProcess.py"
+	fi
 
 	if use python3; then
+		einfo "Converting shebangs for python3..."
 		python_convert_shebangs -r 3 .
 	fi
 }
@@ -138,13 +151,6 @@ src_install() {
 	insinto /etc
 	doins etc-update.conf dispatch-conf.conf || die
 
-	# This allows config file updates that are applied for package
-	# moves to take effect immediately.
-	echo 'CONFIG_PROTECT_MASK="/etc/portage"' > "$T"/50portage \
-		|| die "failed to create 50portage"
-	doenvd "$T"/50portage || die "doenvd 50portage failed"
-	rm "$T"/50portage
-
 	insinto "$portage_share_config/sets"
 	doins "$S"/cnf/sets/*.conf || die
 	insinto "$portage_share_config"
@@ -189,6 +195,8 @@ src_install() {
 	for x in $(find pym/* -type d) ; do
 		insinto $portage_base/$x || die "insinto failed"
 		cd "$S"/$x || die "cd failed"
+		# __pycache__ directories contain no py files
+		[[ "*.py" != $(echo *.py) ]] || continue
 		doins *.py || die "doins failed"
 		symlinks=$(find . -mindepth 1 -maxdepth 1 -type l)
 		if [ -n "$symlinks" ] ; then
@@ -217,7 +225,7 @@ src_install() {
 	use epydoc && dohtml -r "${WORKDIR}"/api
 
 	dodir /usr/bin
-	for x in ebuild egencache emerge portageq repoman ; do
+	for x in ebuild egencache emerge portageq quickpkg repoman ; do
 		dosym ../${libdir}/portage/bin/${x} /usr/bin/${x}
 	done
 
@@ -229,7 +237,6 @@ src_install() {
 		env-update
 		etc-update
 		fixpackages
-		quickpkg
 		regenworld"
 	local x
 	for x in ${my_syms}; do
