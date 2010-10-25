@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/libgnome-keyring/libgnome-keyring-2.32.0.ebuild,v 1.1 2010/10/09 20:59:10 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/libgnome-keyring/libgnome-keyring-2.32.0.ebuild,v 1.3 2010/10/19 18:44:45 pacho Exp $
 
 EAPI="3"
 GCONF_DEBUG="yes"
@@ -17,7 +17,7 @@ IUSE="debug doc test"
 
 RDEPEND=">=sys-apps/dbus-1.0[lib32?]
 	gnome-base/gconf[lib32?]
-	>=gnome-base/gnome-keyring-2.29[lib32?]
+	>=gnome-base/gnome-keyring-2.29[test?,lib32?]
 	!<gnome-base/gnome-keyring-2.29[lib32?]"
 DEPEND="${RDEPEND}
 	sys-devel/gettext[lib32?]
@@ -45,6 +45,6 @@ multilib-native_src_prepare_internal() {
 }
 
 src_test() {
-	# Needed to run tests on console, bug #323661
-	dbus-launch emake check || die "tests failed"
+	unset DBUS_SESSION_BUS_ADDRESS
+	emake check || die "tests failed"
 }

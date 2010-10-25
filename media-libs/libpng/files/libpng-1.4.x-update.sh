@@ -12,5 +12,5 @@ for i in $(qlist -a | grep "\.la$"); do
 	sed -i \
 		-e '/^dependency_libs/s:-lpng12:-lpng14:g' \
 		-e '/^dependency_libs/s:libpng12.la:libpng14.la:g' \
-                "${i}" 2>/dev/null
+		"${i}" 2>/dev/null
 done

@@ -1,10 +1,11 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.22.0.ebuild,v 1.1 2010/09/24 22:50:05 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.22.0.ebuild,v 1.2 2010/10/20 21:11:52 eva Exp $
 
 EAPI="3"
+PYTHON_DEPEND="2:2.4"
 
-inherit gnome.org flag-o-matic eutils libtool virtualx multilib-native
+inherit eutils flag-o-matic gnome.org libtool python virtualx multilib-native
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="http://www.gtk.org/"
@@ -149,6 +150,8 @@ multilib-native_src_install_internal() {
 	use aqua && for i in gtk+-2.0.pc gtk+-quartz-2.0.pc gtk+-unix-print-2.0.pc; do
 		sed -i -e "s:Libs\: :Libs\: -framework Carbon :" "${ED%/}"/usr/lib/pkgconfig/$i || die "sed failed"
 	done
+
+	python_convert_shebangs 2 "${D}"usr/bin/gtk-builder-convert
 
 	prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
 }

@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/opensc/opensc-0.11.13.ebuild,v 1.6 2010/05/20 01:50:41 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/opensc/opensc-0.11.13.ebuild,v 1.7 2010/10/17 18:02:28 arfrever Exp $
 
 EAPI="2"
 
@@ -22,6 +22,13 @@ RDEPEND="dev-libs/openssl[lib32?]
 	pcsc-lite? ( >=sys-apps/pcsc-lite-1.3.0 )"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]"
+
+multilib-native_pkg_setup_internal() {
+	if use openct; then
+		elog "Support for openct is deprecated."
+		elog "It is recommended to use pcsc-lite."
+	fi
+}
 
 multilib-native_src_configure_internal() {
 	econf \
