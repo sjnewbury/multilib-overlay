@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-dotnet/libgdiplus/libgdiplus-9999.ebuild,v 1.5 2010/10/05 20:53:39 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-dotnet/libgdiplus/libgdiplus-9999.ebuild,v 1.6 2010/11/07 22:06:46 ssuominen Exp $
 
 EAPI=2
 
@@ -22,14 +22,14 @@ IUSE="cairo"
 RDEPEND=">=dev-libs/glib-2.16[lib32?]
 		>=media-libs/freetype-2.3.7[lib32?]
 		>=media-libs/fontconfig-2.6[lib32?]
-		media-libs/libpng[lib32?]
+		>=media-libs/libpng-1.4[lib32?]
 		x11-libs/libXrender[lib32?]
 		x11-libs/libX11[lib32?]
 		x11-libs/libXt[lib32?]
 		>=x11-libs/cairo-1.8.4[X,lib32?]
 		media-libs/libexif[lib32?]
 		>=media-libs/giflib-4.1.3[lib32?]
-		media-libs/jpeg[lib32?]
+		virtual/jpeg[lib32?]
 		media-libs/tiff[lib32?]
 		!cairo? ( >=x11-libs/pango-1.20[lib32?] )"
 DEPEND="${RDEPEND}"
