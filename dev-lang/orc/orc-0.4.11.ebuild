@@ -1,9 +1,9 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/orc/orc-0.4.11.ebuild,v 1.1 2010/10/15 10:05:50 ford_prefect Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/orc/orc-0.4.11.ebuild,v 1.3 2010/10/30 15:54:09 grobian Exp $
 
 EAPI=3
-inherit autotools multilib-native
+inherit autotools flag-o-matic multilib-native
 
 DESCRIPTION="The Oil Runtime Compiler"
 HOMEPAGE="http://code.entropywave.com/projects/orc/"
@@ -22,6 +22,11 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
+	# any optimisation on PPC/Darwin yields in a complaint from the assembler
+	# Parameter error: r0 not allowed for parameter %lu (code as 0 not r0)
+	# the same for Intel/Darwin, although the error message there is different
+	# but along the same lines
+	[[ ${CHOST} == *-darwin* ]] && filter-flags -O*
 	econf \
 		$(use_enable static-libs static) \
 		--disable-dependency-tracking \
