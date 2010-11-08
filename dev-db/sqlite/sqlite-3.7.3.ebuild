@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.7.2.ebuild,v 1.8 2010/10/30 18:15:58 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/sqlite/sqlite-3.7.3.ebuild,v 1.2 2010/11/01 19:38:59 arfrever Exp $
 
 EAPI="3"
 
@@ -21,8 +21,8 @@ SRC_URI="
 
 LICENSE="as-is"
 SLOT="3"
-KEYWORDS="~alpha amd64 arm hppa ~ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~ppc-aix ~sparc-fbsd ~x86-fbsd ~x86-freebsd ~hppa-hpux ~ia64-hpux ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~m68k-mint ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
-IUSE="debug doc extensions +fts3 icu +readline secure-delete soundex tcl test +threadsafe unlock-notify"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~ppc-aix ~sparc-fbsd ~x86-fbsd ~x86-freebsd ~hppa-hpux ~ia64-hpux ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~m68k-mint ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+IUSE="debug doc +extensions +fts3 icu +readline secure-delete soundex tcl test +threadsafe unlock-notify"
 
 RDEPEND="icu? ( dev-libs/icu[lib32?] )
 	readline? ( sys-libs/readline[lib32?] )
@@ -32,13 +32,10 @@ DEPEND="${RDEPEND}
 	doc? ( app-arch/unzip )"
 
 multilib-native_src_prepare_internal() {
-	if use icu; then
-		rm -f test/like.test
-	fi
-
 	if use tcl || use test; then
 		epatch "${FILESDIR}/${PN}-3.6.22-interix-fixes.patch"
 		epatch "${FILESDIR}/${PN}-3.6.22-dlopen.patch"  # bug 300836
+		epatch "${FILESDIR}/${P}-icu_tests.patch"
 		eautoreconf  # dlopen.patch patches configure.ac
 	else
 		epatch "${FILESDIR}/${PN}-3.6.22-interix-fixes-amalgamation.patch"
