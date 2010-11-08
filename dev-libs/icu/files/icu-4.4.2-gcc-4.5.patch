@@ -1,0 +1,32 @@
+https://ssl.icu-project.org/trac/ticket/7932
+https://ssl.icu-project.org/trac/changeset/28667
+https://ssl.icu-project.org/trac/ticket/8011
+https://ssl.icu-project.org/trac/changeset/28772
+
+--- test/cintltst/cnumtst.c
++++ test/cintltst/cnumtst.c
+@@ -405,7 +405,12 @@
+         log_err("parse failed. The error is  : %s\n", myErrorName(status));
+     }
+ 
+-    if(d1!=462.12345)
++    /*
++     * Note: "for strict standard conformance all operations and constants are now supposed to be evaluated in precision of long double".  So,  we assign a1 before comparing to a double. Bug #7932.
++     */
++    a1 = 462.12345;
++
++    if(d1!=a1)
+         log_err("Fail: Error in parsing\n");
+     else
+         log_verbose("Pass: parsing successful\n");
+--- test/intltest/numfmtst.cpp
++++ test/intltest/numfmtst.cpp
+@@ -6144,7 +6144,7 @@
+        ) 
+     { 
+         errln("ERROR: parse failed - expected 123.0, 3  - returned %d, %i", 
+-               result.getDouble(), parsePos); 
++               result.getDouble(), parsePos.getIndex()); 
+     } 
+ } 
+ 
