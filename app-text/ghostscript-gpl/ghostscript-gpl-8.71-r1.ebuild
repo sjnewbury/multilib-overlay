@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/ghostscript-gpl/ghostscript-gpl-8.71-r1.ebuild,v 1.11 2010/07/11 17:34:25 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/ghostscript-gpl/ghostscript-gpl-8.71-r1.ebuild,v 1.12 2010/11/07 19:17:54 anarchy Exp $
 
 EAPI=2
 inherit autotools eutils versionator flag-o-matic multilib-native
@@ -22,7 +22,7 @@ IUSE="bindist cairo cups djvu gtk jpeg2k X"
 
 COMMON_DEPEND="app-text/libpaper[lib32?]
 	media-libs/fontconfig[lib32?]
-	>=media-libs/jpeg-6b[lib32?]
+	virtual/jpeg[lib32?]
 	>=media-libs/libpng-1.2.42[lib32?]
 	>=media-libs/tiff-3.9.2[lib32?]
 	>=sys-libs/zlib-1.2.3[lib32?]
