@@ -1,12 +1,12 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.12.2-r1.ebuild,v 1.10 2010/10/28 18:05:38 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.12.2-r2.ebuild,v 1.5 2010/11/06 13:27:39 maekke Exp $
 
 EAPI=3
 
 inherit eutils alternatives flag-o-matic toolchain-funcs multilib multilib-native
 
-PATCH_VER=2
+PATCH_VER=5
 
 PERL_OLDVERSEN="5.12.1 5.12.0"
 
@@ -27,7 +27,7 @@ HOMEPAGE="http://www.perl.org/"
 
 LICENSE="|| ( Artistic GPL-1 GPL-2 GPL-3 )"
 SLOT="0"
-KEYWORDS="~alpha amd64 arm hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 arm hppa ~ia64 ~m68k ~mips ppc ~ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
 IUSE="berkdb build debug doc gdbm ithreads"
 
 COMMON_DEPEND="berkdb? ( sys-libs/db[lib32?] )
@@ -286,7 +286,7 @@ multilib-native_src_install_internal() {
 
 #	# Fix for "stupid" modules and programs
 #	dodir ${SITE_ARCH} ${SITE_LIB}
-	keepdir "${VENDOR_ARCH}" #338802 for enc2xs
+#	keepdir "${VENDOR_ARCH}" #338802 for enc2xs
 
 	local installtarget=install
 	if use build ; then
@@ -340,11 +340,11 @@ multilib-native_src_install_internal() {
 			--libpods='perlfunc:perlguts:perlvar:perlrun:perlop'
 	fi
 
-	dual_scripts
-
 	if use build ; then
 		src_remove_extra_files
 	fi
+
+	dual_scripts
 
 	prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
 }
@@ -370,8 +370,10 @@ multilib-native_pkg_postinst_internal() {
 				find "${DIR}" -depth -type d -print0 | xargs -0 -r rmdir &> /dev/null
 			fi
 		done
-		ebegin "Generating ConfigLocal.pm (ignore any error)"
-		enc2xs -C
+		if ! use build ; then
+			ebegin "Generating ConfigLocal.pm (ignore any error)"
+			enc2xs -C
+		fi
 		ebegin "Converting C header files to the corresponding Perl format (ignore any error)"
 		pushd /usr/include >/dev/null
 			h2ph -Q -a -d ${ARCH_LIB} \
@@ -391,6 +393,11 @@ multilib-native_pkg_postinst_internal() {
 
 multilib-native_pkg_postrm_internal(){
 	dual_scripts
+
+#	if [[ -e ${ARCH_LIB}/Encode/ConfigLocal.pm ]] ; then
+#		ebegin "Removing ConfigLocal.pm"
+#		rm "${ARCH_LIB}/Encode/ConfigLocal.pm"
+#	fi
 }
 
 cleaner_msg() {
@@ -416,18 +423,16 @@ cleaner_msg() {
 
 src_remove_dual_scripts() {
 
-	use build && return
-
 	local i pkg ver ff
 	pkg="$1"
 	ver="$2"
 	shift 2
 	if has "${EBUILD_PHASE:-none}" "postinst" "postrm" ;then
 		for i in "$@" ; do
-			ff=`echo ${ROOT}/usr/share/man/man1/${i}-${ver}-${P}.1*`
-			ff=${ff##*.1}
 			alternatives_auto_makesym "/usr/bin/${i}" "/usr/bin/${i}-[0-9]*"
 			if [[ ${i} != cpanp-run-perl ]] ; then
+				ff=`echo ${ROOT}/usr/share/man/man1/${i}-${ver}-${P}.1*`
+				ff=${ff##*.1}
 				alternatives_auto_makesym "/usr/share/man/man1/${i}.1${ff}" "/usr/share/man/man1/${i}-[0-9]*"
 			fi
 		done
@@ -440,6 +445,10 @@ src_remove_dual_scripts() {
 		done
 	else
 		for i in "$@" ; do
+			if ! [[ -f "${D}"/usr/bin/${i} ]] ; then
+				use build || ewarn "/usr/bin/${i} does not exist!"
+				continue
+			fi
 			mv "${D}"/usr/bin/${i}{,-${ver}-${P}} || die
 			if [[ -f ${D}/usr/share/man/man1/${i}.1 ]] ; then
 				mv "${D}"/usr/share/man/man1/${i}{.1,-${ver}-${P}.1} || die
@@ -467,66 +476,48 @@ src_remove_extra_files() {
 	${libdir}/libperl$(get_libname)
 	${libdir}/libperl$(get_libname ${SHORT_PV})
 	.${PRIV_LIB}/AutoLoader.pm
-	.${PRIV_LIB}/autouse.pm
 	.${PRIV_LIB}/B/Deparse.pm
-	.${PRIV_LIB}/base.pm
-	.${PRIV_LIB}/bigint.pm
-	.${PRIV_LIB}/bignum.pm
-	.${PRIV_LIB}/bigrat.pm
-	.${PRIV_LIB}/blib.pm
-	.${PRIV_LIB}/bytes_heavy.pl
-	.${PRIV_LIB}/bytes.pm
-	.${PRIV_LIB}/Carp/Heavy.pm
 	.${PRIV_LIB}/Carp.pm
-	.${PRIV_LIB}/charnames.pm
+	.${PRIV_LIB}/Carp/Heavy.pm
 	.${PRIV_LIB}/Class/Struct.pm
-	.${PRIV_LIB}/constant.pm
-	.${PRIV_LIB}/diagnostics.pm
 	.${PRIV_LIB}/DirHandle.pm
-	.${PRIV_LIB}/Exporter/Heavy.pm
 	.${PRIV_LIB}/Exporter.pm
+	.${PRIV_LIB}/Exporter/Heavy.pm
 	.${PRIV_LIB}/ExtUtils/Command.pm
-	.${PRIV_LIB}/ExtUtils/Constant.pm
-	.${PRIV_LIB}/ExtUtils/Embed.pm
-	.${PRIV_LIB}/ExtUtils/Installed.pm
-	.${PRIV_LIB}/ExtUtils/Install.pm
-	.${PRIV_LIB}/ExtUtils/Liblist.pm
-	.${PRIV_LIB}/ExtUtils/MakeMaker.pm
-	.${PRIV_LIB}/ExtUtils/Manifest.pm
-	.${PRIV_LIB}/ExtUtils/Mkbootstrap.pm
-	.${PRIV_LIB}/ExtUtils/Mksymlists.pm
-	.${PRIV_LIB}/ExtUtils/MM_Any.pm
-	.${PRIV_LIB}/ExtUtils/MM_MacOS.pm
-	.${PRIV_LIB}/ExtUtils/MM.pm
-	.${PRIV_LIB}/ExtUtils/MM_Unix.pm
-	.${PRIV_LIB}/ExtUtils/MY.pm
-	.${PRIV_LIB}/ExtUtils/Packlist.pm
-	.${PRIV_LIB}/ExtUtils/testlib.pm
-	.${PRIV_LIB}/ExtUtils/Miniperl.pm
 	.${PRIV_LIB}/ExtUtils/Command/MM.pm
+	.${PRIV_LIB}/ExtUtils/Constant.pm
 	.${PRIV_LIB}/ExtUtils/Constant/Base.pm
 	.${PRIV_LIB}/ExtUtils/Constant/Utils.pm
 	.${PRIV_LIB}/ExtUtils/Constant/XS.pm
+	.${PRIV_LIB}/ExtUtils/Embed.pm
+	.${PRIV_LIB}/ExtUtils/Install.pm
+	.${PRIV_LIB}/ExtUtils/Installed.pm
+	.${PRIV_LIB}/ExtUtils/Liblist.pm
 	.${PRIV_LIB}/ExtUtils/Liblist/Kid.pm
-	.${PRIV_LIB}/fields.pm
+	.${PRIV_LIB}/ExtUtils/MM.pm
+	.${PRIV_LIB}/ExtUtils/MM_Any.pm
+	.${PRIV_LIB}/ExtUtils/MM_MacOS.pm
+	.${PRIV_LIB}/ExtUtils/MM_Unix.pm
+	.${PRIV_LIB}/ExtUtils/MY.pm
+	.${PRIV_LIB}/ExtUtils/MakeMaker.pm
+	.${PRIV_LIB}/ExtUtils/Manifest.pm
+	.${PRIV_LIB}/ExtUtils/Miniperl.pm
+	.${PRIV_LIB}/ExtUtils/Mkbootstrap.pm
+	.${PRIV_LIB}/ExtUtils/Mksymlists.pm
+	.${PRIV_LIB}/ExtUtils/Packlist.pm
+	.${PRIV_LIB}/ExtUtils/testlib.pm
 	.${PRIV_LIB}/File/Basename.pm
 	.${PRIV_LIB}/File/Compare.pm
 	.${PRIV_LIB}/File/Copy.pm
 	.${PRIV_LIB}/File/Find.pm
-	.${PRIV_LIB}/FileHandle.pm
 	.${PRIV_LIB}/File/Path.pm
 	.${PRIV_LIB}/File/stat.pm
-	.${PRIV_LIB}/filetest.pm
+	.${PRIV_LIB}/FileHandle.pm
 	.${PRIV_LIB}/Getopt/Long.pm
 	.${PRIV_LIB}/Getopt/Std.pm
-	.${PRIV_LIB}/if.pm
-	.${PRIV_LIB}/integer.pm
 	.${PRIV_LIB}/IPC/Open2.pm
 	.${PRIV_LIB}/IPC/Open3.pm
-	.${PRIV_LIB}/less.pm
-	.${PRIV_LIB}/locale.pm
-	.${PRIV_LIB}/open.pm
-	.${PRIV_LIB}/overload.pm
+	.${PRIV_LIB}/PerlIO.pm
 	.${PRIV_LIB}/Pod/InputObjects.pm
 	.${PRIV_LIB}/Pod/Man.pm
 	.${PRIV_LIB}/Pod/ParseLink.pm
@@ -534,35 +525,75 @@ src_remove_extra_files() {
 	.${PRIV_LIB}/Pod/Select.pm
 	.${PRIV_LIB}/Pod/Text.pm
 	.${PRIV_LIB}/Pod/Usage.pm
-	.${PRIV_LIB}/PerlIO.pm
 	.${PRIV_LIB}/SelectSaver.pm
+	.${PRIV_LIB}/Symbol.pm
+	.${PRIV_LIB}/Text/ParseWords.pm
+	.${PRIV_LIB}/Text/Tabs.pm
+	.${PRIV_LIB}/Text/Wrap.pm
+	.${PRIV_LIB}/Tie/Hash.pm
+	.${PRIV_LIB}/Time/Local.pm
+	.${PRIV_LIB}/XSLoader.pm
+	.${PRIV_LIB}/autouse.pm
+	.${PRIV_LIB}/base.pm
+	.${PRIV_LIB}/bigint.pm
+	.${PRIV_LIB}/bignum.pm
+	.${PRIV_LIB}/bigrat.pm
+	.${PRIV_LIB}/blib.pm
+	.${PRIV_LIB}/bytes.pm
+	.${PRIV_LIB}/bytes_heavy.pl
+	.${PRIV_LIB}/charnames.pm
+	.${PRIV_LIB}/constant.pm
+	.${PRIV_LIB}/diagnostics.pm
+	.${PRIV_LIB}/fields.pm
+	.${PRIV_LIB}/filetest.pm
+	.${PRIV_LIB}/if.pm
+	.${PRIV_LIB}/integer.pm
+	.${PRIV_LIB}/less.pm
+	.${PRIV_LIB}/locale.pm
+	.${PRIV_LIB}/open.pm
+	.${PRIV_LIB}/overload.pm
 	.${PRIV_LIB}/sigtrap.pm
 	.${PRIV_LIB}/sort.pm
 	.${PRIV_LIB}/stat.pl
 	.${PRIV_LIB}/strict.pm
 	.${PRIV_LIB}/subs.pm
-	.${PRIV_LIB}/Symbol.pm
-	.${PRIV_LIB}/Text/ParseWords.pm
-	.${PRIV_LIB}/Text/Tabs.pm
-	.${PRIV_LIB}/Text/Wrap.pm
-	.${PRIV_LIB}/Time/Local.pm
-	.${PRIV_LIB}/Tie/Hash.pm
-	.${PRIV_LIB}/unicore/Canonical.pl
-	.${PRIV_LIB}/unicore/Exact.pl
-	.${PRIV_LIB}/unicore/lib/gc_sc/Digit.pl
-	.${PRIV_LIB}/unicore/lib/gc_sc/Word.pl
-	.${PRIV_LIB}/unicore/PVA.pl
 	.${PRIV_LIB}/unicore/To/Fold.pl
 	.${PRIV_LIB}/unicore/To/Lower.pl
 	.${PRIV_LIB}/unicore/To/Upper.pl
-	.${PRIV_LIB}/utf8_heavy.pl
 	.${PRIV_LIB}/utf8.pm
+	.${PRIV_LIB}/utf8_heavy.pl
 	.${PRIV_LIB}/vars.pm
 	.${PRIV_LIB}/vmsish.pm
 	.${PRIV_LIB}/warnings
 	.${PRIV_LIB}/warnings.pm
 	.${PRIV_LIB}/warnings/register.pm
-	.${PRIV_LIB}/XSLoader.pm
+	.${ARCH_LIB}/B.pm
+	.${ARCH_LIB}/CORE/libperl$(get_libname)
+	.${ARCH_LIB}/Config.pm
+	.${ARCH_LIB}/Config_heavy.pl
+	.${ARCH_LIB}/Cwd.pm
+	.${ARCH_LIB}/Data/Dumper.pm
+	.${ARCH_LIB}/DynaLoader.pm
+	.${ARCH_LIB}/Errno.pm
+	.${ARCH_LIB}/Fcntl.pm
+	.${ARCH_LIB}/File/Glob.pm
+	.${ARCH_LIB}/File/Spec.pm
+	.${ARCH_LIB}/File/Spec/Unix.pm
+	.${ARCH_LIB}/IO.pm
+	.${ARCH_LIB}/IO/File.pm
+	.${ARCH_LIB}/IO/Handle.pm
+	.${ARCH_LIB}/IO/Pipe.pm
+	.${ARCH_LIB}/IO/Seekable.pm
+	.${ARCH_LIB}/IO/Select.pm
+	.${ARCH_LIB}/IO/Socket.pm
+	.${ARCH_LIB}/IO/Socket/INET.pm
+	.${ARCH_LIB}/IO/Socket/UNIX.pm
+	.${ARCH_LIB}/List/Util.pm
+	.${ARCH_LIB}/NDBM_File.pm
+	.${ARCH_LIB}/POSIX.pm
+	.${ARCH_LIB}/Scalar/Util.pm
+	.${ARCH_LIB}/Socket.pm
+	.${ARCH_LIB}/Storable.pm
 	.${ARCH_LIB}/attributes.pm
 	.${ARCH_LIB}/auto/Cwd/Cwd$(get_libname)
 	.${ARCH_LIB}/auto/Data/Dumper/Dumper$(get_libname)
@@ -570,54 +601,26 @@ src_remove_extra_files() {
 	.${ARCH_LIB}/auto/Fcntl/Fcntl$(get_libname)
 	.${ARCH_LIB}/auto/File/Glob/Glob$(get_libname)
 	.${ARCH_LIB}/auto/IO/IO$(get_libname)
+	.${ARCH_LIB}/auto/POSIX/POSIX$(get_libname)
 	.${ARCH_LIB}/auto/POSIX/autosplit.ix
 	.${ARCH_LIB}/auto/POSIX/fstat.al
 	.${ARCH_LIB}/auto/POSIX/load_imports.al
-	.${ARCH_LIB}/auto/POSIX/POSIX$(get_libname)
 	.${ARCH_LIB}/auto/POSIX/stat.al
 	.${ARCH_LIB}/auto/POSIX/tmpfile.al
-	.${ARCH_LIB}/auto/re/re$(get_libname)
 	.${ARCH_LIB}/auto/Socket/Socket$(get_libname)
-	.${ARCH_LIB}/auto/Storable/autosplit.ix
-	.${ARCH_LIB}/auto/Storable/_retrieve.al
-	.${ARCH_LIB}/auto/Storable/retrieve.al
 	.${ARCH_LIB}/auto/Storable/Storable$(get_libname)
+	.${ARCH_LIB}/auto/Storable/_retrieve.al
 	.${ARCH_LIB}/auto/Storable/_store.al
+	.${ARCH_LIB}/auto/Storable/autosplit.ix
+	.${ARCH_LIB}/auto/Storable/retrieve.al
 	.${ARCH_LIB}/auto/Storable/store.al
-	.${ARCH_LIB}/B.pm
-	.${ARCH_LIB}/Config.pm
-	.${ARCH_LIB}/Config_heavy.pl
-	.${ARCH_LIB}/CORE/libperl$(get_libname)
-	.${ARCH_LIB}/Cwd.pm
-	.${ARCH_LIB}/Data/Dumper.pm
-	.${ARCH_LIB}/DynaLoader.pm
+	.${ARCH_LIB}/auto/re/re$(get_libname)
 	.${ARCH_LIB}/encoding.pm
-	.${ARCH_LIB}/Errno.pm
-	.${ARCH_LIB}/Fcntl.pm
-	.${ARCH_LIB}/File/Glob.pm
-	.${ARCH_LIB}/File/Spec.pm
-	.${ARCH_LIB}/File/Spec/Unix.pm
-	.${ARCH_LIB}/_h2ph_pre.ph
-	.${ARCH_LIB}/IO/File.pm
-	.${ARCH_LIB}/IO/Handle.pm
-	.${ARCH_LIB}/IO/Pipe.pm
-	.${ARCH_LIB}/IO.pm
-	.${ARCH_LIB}/IO/Seekable.pm
-	.${ARCH_LIB}/IO/Select.pm
-	.${ARCH_LIB}/IO/Socket.pm
-	.${ARCH_LIB}/IO/Socket/INET.pm
-	.${ARCH_LIB}/IO/Socket/UNIX.pm
 	.${ARCH_LIB}/lib.pm
-	.${ARCH_LIB}/List/Util.pm
-	.${ARCH_LIB}/NDBM_File.pm
 	.${ARCH_LIB}/ops.pm
-	.${ARCH_LIB}/POSIX.pm
 	.${ARCH_LIB}/re.pm
-	.${ARCH_LIB}/Scalar/Util.pm
-	.${ARCH_LIB}/Socket.pm
-	.${ARCH_LIB}/Storable.pm
-	.${ARCH_LIB}/threads
-	.${ARCH_LIB}/threads.pm"
+	.${ARCH_LIB}/threads.pm
+"
 
 	pushd "${D}" > /dev/null
 	# Remove cruft
@@ -628,5 +631,8 @@ src_remove_extra_files() {
 	done
 	# Remove empty directories
 	find . -depth -type d -print0 | xargs -0 -r rmdir &> /dev/null
+	#for f in ${MINIMAL_PERL_INSTALL} ; do
+	#	[[ -e $f ]] || ewarn "$f unused in MINIMAL_PERL_INSTALL"
+	#done
 	popd > /dev/null
 }
