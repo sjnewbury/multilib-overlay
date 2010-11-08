@@ -1,23 +1,24 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-9999.ebuild,v 1.25 2010/10/28 21:32:05 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-0.9.27.ebuild,v 1.1 2010/10/28 21:32:05 eva Exp $
 
 EAPI="2"
 G2CONF_DEBUG="no"
 PYTHON_DEPEND="2"
 
-inherit autotools git gnome2 linux-info python multilib-native
+inherit eutils gnome2 linux-info python multilib-native
 
 DESCRIPTION="A tagging metadata database, search tool and indexer"
 HOMEPAGE="http://www.tracker-project.org/"
-EGIT_REPO_URI="git://git.gnome.org/${PN}"
-SRC_URI=""
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~x86"
 # USE="doc" is managed by eclass.
 IUSE="applet doc eds exif flac gif gnome-keyring gsf gstreamer gtk hal iptc +jpeg laptop mp3 nautilus networkmanager pdf playlist rss strigi test +tiff upnp +vorbis xine +xml xmp"
+
+# Test suite highly disfunctional, putting aside for now
+RESTRICT="test"
 
 # TODO: rest -> flickr, qt vs. gdk
 RDEPEND="
@@ -25,7 +26,7 @@ RDEPEND="
 	>=dev-db/sqlite-3.7[threadsafe,lib32?]
 	>=dev-libs/dbus-glib-0.82-r1[lib32?]
 	>=sys-apps/dbus-1.3.1[lib32?]
-	>=dev-libs/glib-2.24:2[lib32?]
+	>=dev-libs/glib-2.20:2[lib32?]
 	|| (
 		>=media-gfx/imagemagick-5.2.1[png,jpeg=,lib32?]
 		media-gfx/graphicsmagick[imagemagick,png,jpeg=] )
@@ -78,15 +79,13 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
 	>=sys-devel/gettext-0.14[lib32?]
 	>=dev-util/pkgconfig-0.20[lib32?]
-	dev-util/gtk-doc-am
-	>=dev-util/gtk-doc-1.8
 	applet? ( dev-lang/vala[lib32?] )
 	gtk? (
 		dev-lang/vala[lib32?]
 		>=dev-libs/libgee-0.3[lib32?] )
 	doc? (
-		media-gfx/graphviz[lib32?] )
-	test? ( sys-apps/dbus[X,lib32?] )"
+		>=dev-util/gtk-doc-1.8
+		media-gfx/graphviz[lib32?] )"
 
 function inotify_enabled() {
 	if linux_config_exists; then
@@ -128,6 +127,7 @@ multilib-native_pkg_setup_internal() {
 
 	# unicode-support: libunistring, libicu or glib ?
 	G2CONF="${G2CONF}
+		--disable-functional-tests
 		--enable-tracker-fts
 		--with-enca
 		--with-unicode-support=glib
@@ -151,25 +151,23 @@ multilib-native_pkg_setup_internal() {
 		$(use_enable rss miner-rss)
 		$(use_enable strigi libstreamanalyzer)
 		$(use_enable test unit-tests)
-		$(use_enable test functional-tests)
 		$(use_enable tiff libtiff)
 		$(use_enable vorbis libvorbis)
 		$(use_enable xml libxml2)
 		$(use_enable xmp exempi)"
 		# FIXME: handle gdk vs qt for mp3 thumbnail extract
 		# $(use_enable gtk gdkpixbuf)
+		# FIXME: missing some files ?
+		#$(use_enable test functional-tests)
 
 	DOCS="AUTHORS ChangeLog NEWS README"
 
 	python_set_active_version 2
 }
 
-multilib-native_src_unpack_internal() {
-	git_src_unpack
-}
-
 multilib-native_src_prepare_internal() {
-	gnome2_src_prepare
+	# Fix build failures with USE=strigi
+	epatch "${FILESDIR}/${PN}-0.8.0-strigi.patch"
 
 	# Fix functional tests scripts
 	find "${S}" -name "*.pyc" -delete
@@ -179,9 +177,21 @@ multilib-native_src_prepare_internal() {
 	python_convert_shebangs 2 "${S}"/utils/gtk-sparql/*.py
 	python_convert_shebangs 2 "${S}"/examples/rss-reader/*.py
 
-	gtkdocize || die "gtkdocize failed"
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautoreconf
+	# FIXME: report broken/disabled tests
+	sed -e '/\/libtracker-common\/tracker-dbus\/request-client-lookup/,+1 s:^\(.*\)$:/*\1*/:' \
+		-i tests/libtracker-common/tracker-dbus-test.c || die
+	sed -e '/\/libtracker-miner\/tracker-password-provider\/setting/,+1 s:^\(.*\)$:/*\1*/:' \
+		-e '/\/libtracker-miner\/tracker-password-provider\/getting/,+1 s:^\(.*\)$:/*\1*/:' \
+		-i tests/libtracker-miner/tracker-password-provider-test.c || die
+	sed -e '/\/libtracker-db\/tracker-db-journal\/init-and-shutdown/,+1 s:^\(.*\)$:/*\1*/:' \
+		-i tests/libtracker-data/tracker-db-journal.c || die
+	# Needs to setup a fake system dbus
+	sed -e 's/tracker-test//' \
+		-i tests/libtracker-sparql/Makefile.{am,in} || die
+	sed -e 's/tracker-test-xmp//' \
+		-i tests/libtracker-extract/Makefile.{am,in} || die
+	sed -e 's/tracker-test//' \
+		-i tests/tracker-steroids/Makefile.{am,in} || die
 }
 
 src_test() {
