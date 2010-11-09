@@ -1,13 +1,13 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-assistant/qt-assistant-4.7.0.ebuild,v 1.6 2010/10/20 13:19:58 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-assistant/qt-assistant-4.7.0.ebuild,v 1.7 2010/11/01 12:29:46 ssuominen Exp $
 
 EAPI="3"
 inherit qt4-build multilib-native
 
 DESCRIPTION="The assistant help module for the Qt toolkit"
 SLOT="4"
-KEYWORDS="~amd64 ~arm ~ia64 ~ppc ~x86"
+KEYWORDS="~amd64 ~arm ~ia64 ~ppc ~ppc64 ~x86"
 IUSE="compat doc +glib trace"
 SRC_URI+=" compat? ( ftp://ftp.qt.nokia.com/qt/source/${PN}-qassistantclient-library-compat-src-4.6.3.tar.gz )"
 
