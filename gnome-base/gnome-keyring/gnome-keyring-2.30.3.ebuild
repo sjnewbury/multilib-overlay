@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.30.3.ebuild,v 1.13 2010/10/17 14:56:14 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.30.3.ebuild,v 1.17 2010/11/03 00:34:29 dang Exp $
 
 EAPI="2"
 
-inherit autotools eutils gnome2 pam virtualx multilib-native
+inherit autotools eutils gnome2 multilib pam virtualx multilib-native
 
 DESCRIPTION="Password and keyring managing daemon"
 HOMEPAGE="http://www.gnome.org/"
@@ -54,6 +54,14 @@ multilib-native_src_prepare_internal() {
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
 	eautoreconf
+}
+
+multilib-native_src_install_internal() {
+	gnome2_src_install
+	if use pam; then
+		find "${D}"/$(get_libdir)/security -name "*.la" -delete \
+			|| die "la file removal failed"
+	fi
 }
 
 src_test() {
