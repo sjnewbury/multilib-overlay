@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-block/parted/parted-2.3.ebuild,v 1.1 2010/08/20 16:59:16 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-block/parted/parted-2.3.ebuild,v 1.2 2010/10/29 15:42:37 jer Exp $
 
 EAPI="2"
 
@@ -19,16 +19,18 @@ IUSE="nls readline +debug selinux device-mapper"
 
 # specific version for gettext needed
 # to fix bug 85999
-DEPEND=">=sys-fs/e2fsprogs-1.27[lib32?]
+RDEPEND="
+	>=sys-fs/e2fsprogs-1.27[lib32?]
 	>=sys-libs/ncurses-5.2[lib32?]
 	nls? ( >=sys-devel/gettext-0.12.1-r2[lib32?] )
 	readline? ( >=sys-libs/readline-5.2[lib32?] )
 	selinux? ( sys-libs/libselinux[lib32?] )
-	device-mapper? ( || (
-		>=sys-fs/lvm2-2.02.45[lib32?]
-		sys-fs/device-mapper[lib32?] )
-	)
-	dev-libs/check[lib32?]"
+	device-mapper? ( || ( >=sys-fs/lvm2-2.02.45[lib32?] sys-fs/device-mapper[lib32?] ) )
+"
+DEPEND="
+	${RDEPEND}
+	dev-util/pkgconfig[lib32?]
+"
 
 multilib-native_src_prepare_internal() {
 	# Remove tests known to FAIL instead of SKIP without OS/userland support
