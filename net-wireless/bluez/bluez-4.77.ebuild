@@ -1,8 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.75.ebuild,v 1.5 2010/11/05 12:04:37 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.77.ebuild,v 1.1 2010/10/31 11:23:38 pacho Exp $
 
-EAPI="2"
+EAPI="3"
 
 inherit multilib eutils multilib-native
 
@@ -12,7 +12,7 @@ SRC_URI="mirror://kernel/linux/bluetooth/${P}.tar.gz
 	http://standards.ieee.org/regauth/oui/oui.txt"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 arm hppa ~ppc ~ppc64 x86"
+KEYWORDS="~amd64 ~arm ~hppa ~ppc ~ppc64 ~x86"
 
 IUSE="alsa attrib caps +consolekit cups debug gstreamer maemo6 health old-daemons pcmcia pnat test-programs usb"
 
@@ -69,7 +69,6 @@ multilib-native_src_configure_internal() {
 		$(use_enable gstreamer) \
 		$(use_enable alsa) \
 		$(use_enable usb) \
-		--enable-netlink \
 		--enable-tools \
 		--enable-bccmd \
 		--enable-dfutool \
@@ -91,19 +90,19 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${D}" install || die "make install failed"
+	emake DESTDIR="${ED}" install || die "make install failed"
 
 	dodoc AUTHORS ChangeLog README || die
 
 	if use test-programs ; then
 		cd "${S}/test"
-		dobin simple-agent simple-service monitor-bluetooth
-		newbin list-devices list-bluetooth-devices
+		dobin simple-agent simple-service monitor-bluetooth || die
+		newbin list-devices list-bluetooth-devices || die
 		for b in apitest hsmicro hsplay test-* ; do
-			newbin "${b}" "bluez-${b}"
+			newbin "${b}" "bluez-${b}" || die
 		done
 		insinto /usr/share/doc/${PF}/test-services
-		doins service-*
+		doins service-* || die
 
 		cd "${S}"
 	fi
