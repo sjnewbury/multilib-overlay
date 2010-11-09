@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/setuptools/setuptools-0.6_rc9-r1.ebuild,v 1.3 2009/11/21 03:13:00 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/setuptools/setuptools-0.6_rc9-r1.ebuild,v 1.4 2010/10/30 22:21:05 arfrever Exp $
 
 EAPI="2"
 SUPPORT_PYTHON_ABIS="1"
@@ -11,7 +11,7 @@ MY_P="${P/_rc/c}"
 
 DESCRIPTION="A collection of enhancements to the Python distutils including easy install"
 HOMEPAGE="http://peak.telecommunity.com/DevCenter/setuptools"
-SRC_URI="http://cheeseshop.python.org/packages/source/s/setuptools/${MY_P}.tar.gz"
+SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${MY_P}.tar.gz"
 
 LICENSE="PSF-2.2"
 SLOT="0"
