@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8-r1.ebuild,v 1.9 2010/10/19 19:03:33 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8-r1.ebuild,v 1.10 2010/10/28 09:08:46 ssuominen Exp $
 
 EAPI="2"
 
@@ -16,7 +16,7 @@ SRC_URI="${SRC_URI//${PN}/${MY_PN}}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 ~arm ppc ~ppc64 x86"
+KEYWORDS="amd64 ~arm ppc ppc64 x86"
 IUSE="avahi bluetooth doc nss gnutls dhclient dhcpcd resolvconf connection-sharing"
 
 RDEPEND=">=sys-apps/dbus-1.2[lib32?]
