@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/libgnome/libgnome-2.32.0.ebuild,v 1.1 2010/10/12 18:26:11 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/libgnome/libgnome-2.32.0.ebuild,v 1.2 2010/10/21 21:33:15 eva Exp $
 
 EAPI="3"
 GCONF_DEBUG="yes"
@@ -13,7 +13,7 @@ HOMEPAGE="http://www.gnome.org/"
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~sparc-solaris ~x86-solaris"
-IUSE="branding doc esd +sound"
+IUSE="branding doc esd"
 
 SRC_URI="${SRC_URI}
 	branding? ( mirror://gentoo/gentoo-gdm-theme-r3.tar.bz2 )"
@@ -23,12 +23,13 @@ RDEPEND=">=gnome-base/gconf-2[lib32?]
 	>=gnome-base/gnome-vfs-2.5.3[lib32?]
 	>=gnome-base/libbonobo-2.13[lib32?]
 	>=dev-libs/popt-1.7[lib32?]
-	sound? ( media-libs/libcanberra[lib32?] )
+	media-libs/libcanberra[lib32?]
 	esd? (
 		>=media-sound/esound-0.2.26[lib32?]
 		>=media-libs/audiofile-0.2.3[lib32?] )"
 
 DEPEND="${RDEPEND}
+	>=dev-lang/perl-5[lib32?]
 	>=dev-util/intltool-0.40
 	>=dev-util/pkgconfig-0.17[lib32?]
 	doc? ( >=dev-util/gtk-doc-1 )"
@@ -38,8 +39,8 @@ PDEPEND="gnome-base/gvfs"
 multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		--disable-schemas-install
-		$(use_enable esd)
-		$(use_enable sound canberra)"
+		--enable-sound
+		$(use_enable esd)"
 	DOCS="AUTHORS ChangeLog NEWS README"
 }
 
@@ -57,7 +58,7 @@ multilib-native_src_install_internal() {
 
 	if use branding; then
 		# Add gentoo backgrounds
-		dodir /usr/share/pixmaps/backgrounds/gnome/gentoo
+		dodir /usr/share/pixmaps/backgrounds/gnome/gentoo || die "dodir failed"
 		insinto /usr/share/pixmaps/backgrounds/gnome/gentoo
 		doins "${WORKDIR}"/gentoo-emergence/gentoo-emergence.png || die "doins 1 failed"
 		doins "${WORKDIR}"/gentoo-cow/gentoo-cow-alpha.png || die "doins 2 failed"
