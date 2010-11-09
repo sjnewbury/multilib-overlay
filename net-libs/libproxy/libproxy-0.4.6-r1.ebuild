@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/libproxy/libproxy-0.4.6.ebuild,v 1.9 2010/11/03 20:07:02 hwoarang Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/libproxy/libproxy-0.4.6-r1.ebuild,v 1.2 2010/11/02 15:10:38 ssuominen Exp $
 
 EAPI="2"
 PYTHON_DEPEND="python? 2:2.5"
@@ -13,8 +13,8 @@ SRC_URI="http://${PN}.googlecode.com/files/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm hppa ~ia64 ppc ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="gnome kde mono networkmanager perl python test webkit xulrunner"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+IUSE="gnome kde mono networkmanager perl python test vala webkit xulrunner"
 
 RDEPEND="
 	gnome? ( gnome-base/gconf[lib32?] )
@@ -22,6 +22,7 @@ RDEPEND="
 	mono? ( dev-lang/mono )
 	networkmanager? ( net-misc/networkmanager[lib32?] )
 	perl? (	dev-lang/perl[lib32?] )
+	vala? ( dev-lang/vala[lib32?] )
 	webkit? ( net-libs/webkit-gtk[lib32?] )
 	xulrunner? ( >=net-libs/xulrunner-1.9.1:1.9[lib32?] )"
 
@@ -49,12 +50,11 @@ multilib-native_src_configure_internal() {
 			$(cmake-utils_use_with networkmanager NM)
 			$(cmake-utils_use_with perl PERL)
 			$(cmake-utils_use_with python PYTHON)
-			-DWITH_VALA=OFF
+			$(cmake-utils_use_with vala VALA)
 			$(cmake-utils_use_with webkit WEBKIT)
 			$(cmake-utils_use_with xulrunner MOZJS)
 			$(cmake-utils_use test BUILD_TESTING)
-			)
-
+	)
 	cmake-utils_src_configure
 }
 
