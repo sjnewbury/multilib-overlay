@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/libXt/libXt-1.0.8.ebuild,v 1.8 2010/08/02 18:26:08 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/libXt/libXt-1.0.8.ebuild,v 1.9 2010/10/28 11:43:34 scarabeus Exp $
 
 EAPI=3
 inherit xorg-2 flag-o-matic toolchain-funcs multilib-native
@@ -18,10 +18,6 @@ DEPEND="${RDEPEND}"
 
 multilib-native_pkg_setup_internal() {
 	xorg-2_pkg_setup
-	# (#125465) Broken with Bdirect support
-	filter-flags -Wl,-Bdirect
-	filter-ldflags -Bdirect
-	filter-ldflags -Wl,-Bdirect
 
 	if tc-is-cross-compiler; then
 		export CFLAGS_FOR_BUILD="${BUILD_CFLAGS}"
