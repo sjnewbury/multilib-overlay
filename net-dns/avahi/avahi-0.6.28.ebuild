@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-dns/avahi/avahi-0.6.28.ebuild,v 1.2 2010/10/06 22:47:20 swegener Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-dns/avahi/avahi-0.6.28.ebuild,v 1.3 2010/11/03 13:02:49 scarabeus Exp $
 
 EAPI="3"
 
@@ -17,8 +17,9 @@ SRC_URI="http://avahi.org/download/${P}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="bookmarks howl-compat mdnsresponder-compat gdbm dbus doc mono gtk python qt4 autoipd kernel_linux test ipv6"
+IUSE="autoipd bookmarks dbus doc gdbm gtk howl-compat ipv6 kernel_linux mdnsresponder-compat mono python qt4 test "
 
+DBUS_DEPEND=">=sys-apps/dbus-0.30[lib32?]"
 RDEPEND=">=dev-libs/libdaemon-0.14[lib32?]
 	dev-libs/expat[lib32?]
 	>=dev-libs/glib-2[lib32?]
@@ -29,15 +30,21 @@ RDEPEND=">=dev-libs/libdaemon-0.14[lib32?]
 		>=gnome-base/libglade-2.4.0[lib32?]
 	)
 	dbus? (
-		>=sys-apps/dbus-0.30[lib32?]
+		${DBUS_DEPEND}
 		python? ( dev-python/dbus-python[lib32?] )
 	)
 	mono? (
 		>=dev-lang/mono-1.1.10
 		gtk? ( >=dev-dotnet/gtk-sharp-2 )
 	)
-	howl-compat? ( !net-misc/howl )
-	mdnsresponder-compat? ( !net-misc/mDNSResponder )
+	howl-compat? (
+		!net-misc/howl
+		${DBUS_DEPEND}
+	)
+	mdnsresponder-compat? (
+		!net-misc/mDNSResponder
+		${DBUS_DEPEND}
+	)
 	python? (
 		gtk? ( >=dev-python/pygtk-2[lib32?] )
 	)
@@ -55,25 +62,13 @@ DEPEND="${RDEPEND}
 	)"
 
 multilib-native_pkg_setup_internal() {
-	if use python
-	then
+	if use python; then
 		python_set_active_version 2
 		python_pkg_setup
 	fi
 
-	if ( use mdnsresponder-compat || use howl-compat || use mono ) && ! use dbus
-	then
-		die "For *-compat or mono support you also need to enable the dbus USE flag!"
-	fi
-
-	if use bookmarks && ! ( use python && use dbus && use gtk )
-	then
-		die "For bookmarks support you also need to enable the python, dbus and gtk USE flags!"
-	fi
-
-	if use python && ! use dbus && ! use gtk
-	then
-		die "For proper python support you also need the dbus and gtk USE flags!"
+	if use python && ! use dbus && ! use gtk; then
+		ewarn "For proper python support you should also enable the dbus and gtk USE flags!"
 	fi
 }
 
@@ -82,17 +77,22 @@ multilib-native_pkg_preinst_internal() {
 	enewgroup avahi
 	enewuser avahi -1 -1 -1 avahi
 
-	if use autoipd
-	then
+	if use autoipd; then
 		enewgroup avahi-autoipd
 		enewuser avahi-autoipd -1 -1 -1 avahi-autoipd
 	fi
 }
 
 multilib-native_src_prepare_internal() {
-	use ipv6 && sed -i -e s/use-ipv6=no/use-ipv6=yes/ avahi-daemon/avahi-daemon.conf
+	if use ipv6; then
+		sed -i \
+			-e s/use-ipv6=no/use-ipv6=yes/ \
+			avahi-daemon/avahi-daemon.conf || die
+	fi
 
-	sed -i -e "s:\\.\\./\\.\\./\\.\\./doc/avahi-docs/html/:../../../doc/${PF}/html/:" doxygen_to_devhelp.xsl
+	sed -i\
+		-e "s:\\.\\./\\.\\./\\.\\./doc/avahi-docs/html/:../../../doc/${PF}/html/:" \
+		doxygen_to_devhelp.xsl || die
 }
 
 multilib-native_src_configure_internal() {
@@ -100,15 +100,20 @@ multilib-native_src_configure_internal() {
 
 	local myconf=""
 
-	if use python
-	then
-		use dbus && myconf="${myconf} --enable-python-dbus"
-		use gtk && myconf="${myconf} --enable-pygtk"
+	if use python; then
+		myconf+="
+			$(use_enable dbus python-dbus)
+			$(use_enable gtk pygtk)
+		"
 	fi
 
-	if use mono && use doc
-	then
-		myconf="${myconf} --enable-monodoc"
+	if use mono; then
+		myconf+=" $(use_enable doc monodoc)"
+	fi
+
+	# these require dbus enabled
+	if use mdnsresponder-compat || use howl-compat || use mono; then
+		myconf+=" --enable-dbus"
 	fi
 
 	# We need to unset DISPLAY, else the configure script might have problems detecting the pygtk module
@@ -145,59 +150,50 @@ multilib-native_src_configure_internal() {
 multilib-native_src_compile_internal() {
 	emake || die "emake failed"
 
-	use doc && emake avahi.devhelp
+	use doc && { emake avahi.devhelp || die ; }
 }
 
 multilib-native_src_install_internal() {
 	emake install py_compile=true DESTDIR="${D}" || die "make install failed"
-	use bookmarks || rm -f "${D}"/usr/bin/avahi-bookmarks
+	use bookmargs && use python && use dbus && use gtk || \
+		rm -f "${D}"/usr/bin/avahi-bookmarks
 
 	use howl-compat && ln -s avahi-compat-howl.pc "${D}"/usr/$(get_libdir)/pkgconfig/howl.pc
 	use mdnsresponder-compat && ln -s avahi-compat-libdns_sd/dns_sd.h "${D}"/usr/include/dns_sd.h
 
-	if use autoipd
-	then
+	if use autoipd; then
 		insinto /$(get_libdir)/rcscripts/net
-		doins "${FILESDIR}"/autoipd.sh
+		doins "${FILESDIR}"/autoipd.sh || die
 
 		insinto /$(get_libdir)/rc/net
-		newins "${FILESDIR}"/autoipd-openrc.sh autoipd.sh
+		newins "${FILESDIR}"/autoipd-openrc.sh autoipd.sh || die
 	fi
 
-	dodoc docs/{AUTHORS,NEWS,README,TODO}
+	dodoc docs/{AUTHORS,NEWS,README,TODO} || die
 
-	if use doc
-	then
-		dohtml -r doxygen/html/.
+	if use doc; then
+		dohtml -r doxygen/html/. || die
 		insinto /usr/share/devhelp/books/avahi
-		doins avahi.devhelp
+		doins avahi.devhelp || die
 	fi
 }
 
 multilib-native_pkg_postrm_internal() {
-	if use python; then
-		python_mod_cleanup avahi avahi_discover
-	fi
+	use python && python_mod_cleanup avahi avahi_discover
 }
 
 multilib-native_pkg_postinst_internal() {
-	if use python; then
-		python_mod_optimize avahi avahi_discover
-	fi
+	use python && python_mod_optimize avahi avahi_discover
 
-	if use autoipd
-	then
-		elog
+	if use autoipd; then
+		echo
 		elog "To use avahi-autoipd to configure your interfaces with IPv4LL (RFC3927)"
 		elog "addresses, just set config_<interface>=( autoipd ) in /etc/conf.d/net!"
-		elog
 	fi
 
-	if use dbus
-	then
-		elog
+	if use dbus; then
+		echo
 		elog "If this is your first install of avahi please reload your dbus config"
 		elog "with /etc/init.d/dbus reload before starting avahi-daemon!"
-		elog
 	fi
 }
