@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/cairo/cairo-1.10.0-r3.ebuild,v 1.1 2010/09/10 10:30:53 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/cairo/cairo-1.10.0-r3.ebuild,v 1.3 2010/11/06 15:34:56 scarabeus Exp $
 
 EAPI=3
 
@@ -28,6 +28,7 @@ RDEPEND="media-libs/fontconfig[lib32?]
 	>=x11-libs/pixman-0.18.4[lib32?]
 	directfb? ( dev-libs/DirectFB[lib32?] )
 	opengl? ( virtual/opengl[lib32?] )
+	openvg? ( media-libs/mesa[gallium,lib32?] )
 	qt4? ( >=x11-libs/qt-gui-4.4:4[lib32?] )
 	svg? ( dev-libs/libxml2[lib32?] )
 	X? (
@@ -85,6 +86,9 @@ multilib-native_src_configure_internal() {
 
 	#gets rid of fbmmx.c inlining warnings
 	append-flags -finline-limit=1200
+
+	# bug #342319
+	[[ ${CHOST} == powerpc*-*-darwin* ]] && filter-flags -mcpu=*
 
 	if use X; then
 		myopts+="

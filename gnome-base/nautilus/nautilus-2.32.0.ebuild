@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/nautilus/nautilus-2.32.0.ebuild,v 1.1 2010/10/12 18:49:52 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/nautilus/nautilus-2.32.0.ebuild,v 1.3 2010/11/02 02:30:40 ford_prefect Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -12,11 +12,11 @@ HOMEPAGE="http://www.gnome.org/projects/nautilus/"
 
 LICENSE="GPL-2 LGPL-2 FDL-1.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
 IUSE="doc gnome +introspection xmp"
 
 RDEPEND=">=dev-libs/glib-2.25.9[lib32?]
-	>=gnome-base/gnome-desktop-2.29.91:0[lib32?]
+	>=gnome-base/gnome-desktop-2.29.91:2[lib32?]
 	>=x11-libs/pango-1.1.2[lib32?]
 	>=x11-libs/gtk+-2.22:2[introspection?,lib32?]
 	>=dev-libs/libxml2-2.4.7[lib32?]

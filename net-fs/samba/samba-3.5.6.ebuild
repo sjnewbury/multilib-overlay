@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.5.6.ebuild,v 1.1 2010/10/18 16:48:59 vostorga Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.5.6.ebuild,v 1.2 2010/11/05 15:24:44 scarabeus Exp $
 
 EAPI="2"
 
@@ -53,34 +53,6 @@ KRBPLUGIN=""
 PLUGINEXT=".so"
 SHAREDMODS=""
 
-if use server ; then
-	SBINPROGS="${SBINPROGS} bin/smbd bin/nmbd"
-	BINPROGS="${BINPROGS} bin/testparm bin/smbstatus bin/smbcontrol bin/pdbedit
-		bin/profiles bin/sharesec bin/eventlogadm"
-
-	use swat && SBINPROGS="${SBINPROGS} bin/swat"
-	use winbind && SBINPROGS="${SBINPROGS} bin/winbindd"
-	use ads && use winbind && KRBPLUGIN="${KRBPLUGIN} bin/winbind_krb5_locator"
-fi
-
-if use client ; then
-	BINPROGS="${BINPROGS} bin/smbclient bin/net bin/smbget bin/smbtree
-		bin/nmblookup bin/smbpasswd bin/rpcclient bin/smbcacls bin/smbcquotas
-		bin/ntlm_auth"
-
-	use ads && SBINPROGS="${SBINPROGS} bin/cifs.upcall"
-fi
-
-use cups && BINPROGS="${BINPROGS} bin/smbspool"
-use ldb && BINPROGS="${BINPROGS} bin/ldbedit bin/ldbsearch bin/ldbadd bin/ldbdel bin/ldbmodify bin/ldbrename";
-
-if use winbind ; then
-	BINPROGS="${BINPROGS} bin/wbinfo"
-	SHAREDMODS="${SHAREDMODS}idmap_rid"
-	use ads && SHAREDMODS="${SHAREDMODS},idmap_ad"
-	use ldap && SHAREDMODS="${SHAREDMODS},idmap_ldap"
-fi
-
 S="${WORKDIR}/${MY_P}/source3"
 
 # TODO:
@@ -91,6 +63,34 @@ S="${WORKDIR}/${MY_P}/source3"
 CONFDIR="${FILESDIR}/$(get_version_component_range 1-2)"
 
 multilib-native_pkg_setup_internal() {
+	if use server ; then
+		SBINPROGS="${SBINPROGS} bin/smbd bin/nmbd"
+		BINPROGS="${BINPROGS} bin/testparm bin/smbstatus bin/smbcontrol bin/pdbedit
+			bin/profiles bin/sharesec bin/eventlogadm"
+
+		use swat && SBINPROGS="${SBINPROGS} bin/swat"
+		use winbind && SBINPROGS="${SBINPROGS} bin/winbindd"
+		use ads && use winbind && KRBPLUGIN="${KRBPLUGIN} bin/winbind_krb5_locator"
+	fi
+
+	if use client ; then
+		BINPROGS="${BINPROGS} bin/smbclient bin/net bin/smbget bin/smbtree
+			bin/nmblookup bin/smbpasswd bin/rpcclient bin/smbcacls bin/smbcquotas
+			bin/ntlm_auth"
+
+		use ads && SBINPROGS="${SBINPROGS} bin/cifs.upcall"
+	fi
+
+	use cups && BINPROGS="${BINPROGS} bin/smbspool"
+	use ldb && BINPROGS="${BINPROGS} bin/ldbedit bin/ldbsearch bin/ldbadd bin/ldbdel bin/ldbmodify bin/ldbrename";
+
+	if use winbind ; then
+		BINPROGS="${BINPROGS} bin/wbinfo"
+		SHAREDMODS="${SHAREDMODS}idmap_rid"
+		use ads && SHAREDMODS="${SHAREDMODS},idmap_ad"
+		use ldap && SHAREDMODS="${SHAREDMODS},idmap_ldap"
+	fi
+
 	if use winbind &&
 		[[ $(tc-getCC)$ == *gcc* ]] &&
 		[[ $(gcc-major-version)$(gcc-minor-version) -lt 43 ]]

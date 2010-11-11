@@ -1,10 +1,12 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/gnome-doc-utils/gnome-doc-utils-0.20.2.ebuild,v 1.1 2010/10/04 09:19:15 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/gnome-doc-utils/gnome-doc-utils-0.20.2.ebuild,v 1.2 2010/10/29 19:50:01 eva Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
 PYTHON_DEPEND="2:2.4"
+SUPPORT_PYTHON_ABIS="1"
+RESTRICT_PYTHON_ABIS="3.*"
 
 inherit gnome2 python multilib-native
 
@@ -37,7 +39,7 @@ MAKEOPTS="${MAKEOPTS} -j1"
 
 multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF} --disable-scrollkeeper"
-	python_set_active_version 2
+	python_pkg_setup
 }
 
 multilib-native_src_prepare_internal() {
@@ -46,10 +48,35 @@ multilib-native_src_prepare_internal() {
 	# disable pyc compiling
 	mv py-compile py-compile.orig
 	ln -s $(type -P true) py-compile
+
+	python_copy_sources
+}
+
+multilib-native_src_configure_internal() {
+	python_execute_function -s gnome2_src_configure
+}
+
+multilib-native_src_compile_internal() {
+	python_execute_function -d -s
+}
+
+src_test() {
+	python_execute_function -d -s
+}
+
+multilib-native_src_install_internal() {
+	installation() {
+		gnome2_src_install
+		python_convert_shebangs $(python_get_version) "${D}"usr/bin/xml2po
+		mv "${D}"usr/bin/xml2po "${D}"usr/bin/xml2po-$(python_get_version)
+	}
+	python_execute_function -s installation
+	python_clean_installation_image
+
+	python_generate_wrapper_scripts -E -f "${D}"usr/bin/xml2po
 }
 
 multilib-native_pkg_postinst_internal() {
-	python_need_rebuild
 	python_mod_optimize xml2po
 	gnome2_pkg_postinst
 }

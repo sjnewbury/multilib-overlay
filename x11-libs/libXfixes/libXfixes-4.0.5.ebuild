@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/libXfixes/libXfixes-4.0.5.ebuild,v 1.9 2010/10/21 01:17:06 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/libXfixes/libXfixes-4.0.5.ebuild,v 1.10 2010/11/01 14:28:01 scarabeus Exp $
 
 EAPI=3
 inherit xorg-2 multilib-native
@@ -12,6 +12,6 @@ IUSE=""
 
 RDEPEND="x11-libs/libX11[lib32?]
 	>=x11-proto/fixesproto-4
-	x11-proto/xproto"
-DEPEND="${RDEPEND}
+	x11-proto/xproto
 	x11-proto/xextproto"
+DEPEND="${RDEPEND}"

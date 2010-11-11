@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/libcap-ng/libcap-ng-0.6.4.ebuild,v 1.1 2010/09/20 18:41:56 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/libcap-ng/libcap-ng-0.6.4.ebuild,v 1.6 2010/11/01 12:26:06 phajdan.jr Exp $
 
 EAPI="2"
 SUPPORT_PYTHON_ABIS="1"
@@ -13,7 +13,7 @@ SRC_URI="http://people.redhat.com/sgrubb/libcap-ng/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~hppa ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="amd64 arm hppa ~ppc ~ppc64 ~sparc x86"
 IUSE="python"
 
 RDEPEND="sys-apps/attr[lib32?]
@@ -65,6 +65,11 @@ multilib-native_src_compile_internal() {
 }
 
 src_test() {
+	if [[ "${EUID}" -eq 0 ]]; then
+		ewarn "Skipping tests due to root permissions."
+		return
+	fi
+
 	default
 
 	if use python; then

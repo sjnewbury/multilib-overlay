@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.12.2-r1.ebuild,v 1.3 2010/10/07 07:43:28 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.12.2-r1.ebuild,v 1.10 2010/10/28 18:05:38 tove Exp $
 
 EAPI=3
 
@@ -27,7 +27,7 @@ HOMEPAGE="http://www.perl.org/"
 
 LICENSE="|| ( Artistic GPL-1 GPL-2 GPL-3 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 arm hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
 IUSE="berkdb build debug doc gdbm ithreads"
 
 COMMON_DEPEND="berkdb? ( sys-libs/db[lib32?] )
@@ -546,6 +546,7 @@ src_remove_extra_files() {
 	.${PRIV_LIB}/Text/Tabs.pm
 	.${PRIV_LIB}/Text/Wrap.pm
 	.${PRIV_LIB}/Time/Local.pm
+	.${PRIV_LIB}/Tie/Hash.pm
 	.${PRIV_LIB}/unicore/Canonical.pl
 	.${PRIV_LIB}/unicore/Exact.pl
 	.${PRIV_LIB}/unicore/lib/gc_sc/Digit.pl

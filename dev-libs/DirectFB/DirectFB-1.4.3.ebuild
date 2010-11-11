@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/DirectFB/DirectFB-1.4.3.ebuild,v 1.10 2010/09/13 19:05:14 mr_bones_ Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/DirectFB/DirectFB-1.4.3.ebuild,v 1.11 2010/10/25 19:06:16 ssuominen Exp $
 
 EAPI="2"
 
@@ -37,7 +37,7 @@ IUSE="debug fbcon gif jpeg mmx png sdl sse sysfs truetype v4l v4l2 X zlib ${IUV}
 
 RDEPEND="sdl? ( media-libs/libsdl[lib32?] )
 	gif? ( media-libs/giflib[lib32?] )
-	png? ( media-libs/libpng[lib32?] )
+	png? ( >=media-libs/libpng-1.4[lib32?] )
 	jpeg? ( media-libs/jpeg[lib32?] )
 	sysfs? ( sys-fs/sysfsutils[lib32?] )
 	zlib? ( sys-libs/zlib[lib32?] )
@@ -50,10 +50,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-1.2.7-CFLAGS.patch
 	epatch "${FILESDIR}"/${PN}-1.2.0-headers.patch
 	epatch "${FILESDIR}"/${PN}-1.1.1-pkgconfig.patch
-
-	# info_ptr->trans_alpha might be no-go with libpng12
-	has_version ">=media-libs/libpng-1.4" && epatch \
-		"${FILESDIR}"/${P}-libpng14.patch
+	epatch "${FILESDIR}"/${P}-libpng14.patch
 
 	# Avoid invoking `ld` directly #300779
 	find -name Makefile.in -exec sed -i \

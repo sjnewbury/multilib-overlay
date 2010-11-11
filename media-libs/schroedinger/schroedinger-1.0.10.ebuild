@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/schroedinger/schroedinger-1.0.10.ebuild,v 1.1 2010/10/08 20:55:14 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/schroedinger/schroedinger-1.0.10.ebuild,v 1.2 2010/10/28 19:33:24 grobian Exp $
 
 EAPI=3
 inherit autotools eutils multilib-native
@@ -20,6 +20,7 @@ DEPEND="${RDEPEND}
 	dev-util/gtk-doc-am"
 
 multilib-native_src_prepare_internal() {
+	epatch "${FILESDIR}"/${P}-orc-symbols.patch
 	sed -i \
 		-e '/AS_COMPILER_FLAG(-O3/d' \
 		configure.ac || die

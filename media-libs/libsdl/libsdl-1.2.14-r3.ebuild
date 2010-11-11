@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libsdl/libsdl-1.2.14-r3.ebuild,v 1.1 2010/07/20 15:09:54 mr_bones_ Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libsdl/libsdl-1.2.14-r3.ebuild,v 1.2 2010/10/26 16:03:26 mr_bones_ Exp $
 
 EAPI=2
 inherit flag-o-matic multilib toolchain-funcs eutils libtool multilib-native
@@ -120,7 +120,6 @@ multilib-native_src_configure_internal() {
 		--disable-pulseaudio-shared \
 		--disable-arts-shared \
 		--disable-nas-shared \
-		--disable-x11-shared \
 		--disable-osmesa-shared \
 		$(use_enable oss) \
 		$(use_enable alsa) \

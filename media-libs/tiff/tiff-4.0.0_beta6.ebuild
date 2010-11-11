@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/tiff/tiff-4.0.0_beta6.ebuild,v 1.5 2010/09/18 23:32:11 nerdboy Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/tiff/tiff-4.0.0_beta6.ebuild,v 1.6 2010/11/05 21:01:24 ssuominen Exp $
 
 EAPI=3
 inherit eutils libtool multilib-native
@@ -43,6 +43,8 @@ multilib-native_src_configure_internal() {
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
 	dodoc ChangeLog README TODO
+
+	use static-libs || find "${ED}" -name '*.la' -exec rm -f '{}' +
 }
 
 multilib-native_pkg_postinst_internal() {
