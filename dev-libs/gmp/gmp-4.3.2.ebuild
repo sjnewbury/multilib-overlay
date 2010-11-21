@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/gmp/gmp-4.3.2.ebuild,v 1.7 2010/04/16 17:43:11 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/gmp/gmp-4.3.2.ebuild,v 1.8 2010/11/17 16:27:04 jer Exp $
 
 inherit flag-o-matic eutils libtool flag-o-matic multilib-native
 
@@ -30,11 +30,10 @@ multilib-native_src_unpack_internal() {
 }
 
 multilib-native_src_compile_internal() {
-	# GMP believes hppa2.0 is 64bit
-	local is_hppa_2_0
+	# Because of our 32-bit userland, 1.0 is the only HPPA ABI that works
+	# http://gmplib.org/manual/ABI-and-ISA.html#ABI-and-ISA (bug #344613)
 	if [[ ${CHOST} == hppa2.0-* ]] ; then
-		is_hppa_2_0=1
-		export CHOST=${CHOST/2.0/1.1}
+		export GMPABI="1.0"
 	fi
 
 	# ABI mappings (needs all architectures supported)
@@ -51,14 +50,6 @@ multilib-native_src_compile_internal() {
 		--disable-mpbsd \
 		$(use_enable !nocxx cxx) \
 		|| die "configure failed"
-
-	# Fix the ABI for hppa2.0
-	if [[ -n ${is_hppa_2_0} ]] ; then
-		sed -i \
-			-e 's:pa32/hppa1_1:pa32/hppa2_0:' \
-			"${S}"/config.h || die
-		export CHOST=${CHOST/1.1/2.0}
-	fi
 
 	emake || die "emake failed"
 }
