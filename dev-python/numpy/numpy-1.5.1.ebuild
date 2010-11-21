@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.5.0-r2.ebuild,v 1.7 2010/11/07 17:41:38 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.5.1.ebuild,v 1.1 2010/11/19 04:35:55 bicatali Exp $
 
 EAPI="3"
 PYTHON_DEPEND="*"
@@ -68,7 +68,6 @@ multilib-native_src_unpack_internal() {
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-1.1.0-f2py.patch
 	epatch "${FILESDIR}"/${PN}-1.3.0-fenv-freebsd.patch # bug 279487
-	epatch "${FILESDIR}"/${P}-python3.patch # 336781
 
 	# Gentoo patch for ATLAS library names
 	sed -i \
@@ -109,7 +108,6 @@ multilib-native_src_prepare_internal() {
 	else
 		export {ATLAS,PTATLAS,BLAS,LAPACK,MKL}=None
 	fi
-
 	epatch "${FILESDIR}"/${PN}-1.4.0-interix.patch
 }
 
