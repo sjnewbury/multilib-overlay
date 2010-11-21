@@ -1,10 +1,11 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/libglade/libglade-2.6.4.ebuild,v 1.7 2009/10/09 18:25:07 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/libglade/libglade-2.6.4.ebuild,v 1.8 2010/11/08 22:43:29 eva Exp $
 
 EAPI="2"
+PYTHON_DEPEND="2"
 
-inherit eutils gnome2 multilib-native
+inherit eutils gnome2 python multilib-native
 
 DESCRIPTION="Library to construct graphical interfaces at runtime"
 HOMEPAGE="http://www.gnome.org/"
@@ -14,16 +15,18 @@ SLOT="2.0"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="doc"
 
-RDEPEND=">=dev-libs/glib-2.10[lib32?]
-	>=x11-libs/gtk+-2.8.10[lib32?]
+RDEPEND=">=dev-libs/glib-2.10:2[lib32?]
+	>=x11-libs/gtk+-2.8.10:2[lib32?]
 	>=dev-libs/atk-1.9[lib32?]
-	>=dev-libs/libxml2-2.4.10[lib32?]
-	>=dev-lang/python-2.0-r7[lib32?]"
+	>=dev-libs/libxml2-2.4.10[lib32?]"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9[lib32?]
 	doc? ( >=dev-util/gtk-doc-1 )"
 
-DOCS="AUTHORS ChangeLog NEWS README"
+multilib-native_pkg_setup_internal() {
+	DOCS="AUTHORS ChangeLog NEWS README"
+	python_set_active_version 2
+}
 
 multilib-native_src_prepare_internal() {
 	# patch to stop make install installing the xml catalog
@@ -37,6 +40,7 @@ multilib-native_src_prepare_internal() {
 multilib-native_src_install_internal() {
 	dodir /etc/xml
 	gnome2_src_install
+	python_convert_shebangs 2 "${D}"/usr/bin/libglade-convert
 }
 
 multilib-native_pkg_postinst_internal() {
