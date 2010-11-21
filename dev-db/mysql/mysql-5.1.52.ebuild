@@ -1,8 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/mysql/mysql-5.1.50-r1.ebuild,v 1.12 2010/11/13 12:21:36 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/mysql/mysql-5.1.52.ebuild,v 1.2 2010/11/06 19:18:29 leio Exp $
 
-MY_EXTRAS_VER="20100901-1852Z"
+MY_EXTRAS_VER="20101104-1842Z"
 EAPI=2
 
 # PBXT
@@ -15,18 +15,26 @@ inherit toolchain-funcs mysql multilib-native
 IUSE="$IUSE"
 
 # REMEMBER: also update eclass/mysql*.eclass before committing!
-KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd ~x64-macos ~x86-macos ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd ~x64-macos ~x86-solaris"
 
 # When MY_EXTRAS is bumped, the index should be revised to exclude these.
 # This is often broken still
-EPATCH_EXCLUDE='02040_all_embedded-library-shared-5.1.43.patch '
+EPATCH_EXCLUDE=''
 
-DEPEND="|| ( >=sys-devel/gcc-3.4.6 >=sys-devel/gcc-apple-4.0 )"
-RDEPEND="!media-sound/amarok[embedded]"
+# Most of these are in the eclass
+RDEPEND=""
+DEPEND="|| ( >=sys-devel/gcc-3.4.6 >=sys-devel/gcc-apple-4.0 )
+		>=sys-devel/libtool-2.2.10[lib32?]"
 
 # Please do not add a naive src_unpack to this ebuild
 # If you want to add a single patch, copy the ebuild to an overlay
 # and create your own mysql-extras tarball, looking at 000_index.txt
+multilib-native_src_prepare_internal() {
+	sed -i \
+		-e '/^noinst_PROGRAMS/s/basic-t//g' \
+		"${S}"/unittest/mytap/t/Makefile.am
+	mysql_src_prepare
+}
 
 # Official test instructions:
 # USE='berkdb -cluster embedded extraengine perl ssl community' \
@@ -157,6 +165,19 @@ src_test() {
 				main.not_partition funcs_1.is_columns_mysql \
 				funcs_1.is_tables_mysql funcs_1.is_triggers; do
 				mysql_disable_test  "$t" "False positives in Gentoo"
+			done
+			;;
+		esac
+
+		# New failures in 5.1.50/5.1.51, reported by jmbsvicetto.
+		# These tests are picking up a 'connect-timeout' config from somewhere,
+		# which is not valid, and since it does not have 'loose-' in front of
+		# it, it's causing a failure
+		case ${PV} in
+			5.1.5*|5.4.*|5.5.*|6*)
+			for t in rpl.rpl_mysql_upgrade main.log_tables_upgrade ; do
+				mysql_disable_test  "$t" \
+					"False positives in Gentoo: connect-timeout"
 			done
 			;;
 		esac
