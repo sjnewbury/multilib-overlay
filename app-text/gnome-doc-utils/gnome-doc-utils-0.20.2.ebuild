@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/gnome-doc-utils/gnome-doc-utils-0.20.2.ebuild,v 1.2 2010/10/29 19:50:01 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/gnome-doc-utils/gnome-doc-utils-0.20.2.ebuild,v 1.3 2010/11/08 15:27:24 darkside Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -67,13 +67,13 @@ src_test() {
 multilib-native_src_install_internal() {
 	installation() {
 		gnome2_src_install
-		python_convert_shebangs $(python_get_version) "${D}"usr/bin/xml2po
-		mv "${D}"usr/bin/xml2po "${D}"usr/bin/xml2po-$(python_get_version)
+		python_convert_shebangs $(python_get_version) "${ED}"usr/bin/xml2po
+		mv "${ED}"usr/bin/xml2po "${ED}"usr/bin/xml2po-$(python_get_version)
 	}
 	python_execute_function -s installation
 	python_clean_installation_image
 
-	python_generate_wrapper_scripts -E -f "${D}"usr/bin/xml2po
+	python_generate_wrapper_scripts -E -f "${ED}"usr/bin/xml2po
 }
 
 multilib-native_pkg_postinst_internal() {
