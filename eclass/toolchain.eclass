@@ -1,6 +1,6 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.439 2010/09/05 05:52:46 dirtyepic Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.441 2010/10/28 04:24:13 vapier Exp $
 #
 # Maintainer: Toolchain Ninjas <toolchain@gentoo.org>
 
@@ -1151,8 +1151,16 @@ gcc-compiler-configure() {
 		fi
 
 		if tc_version_is_at_least "4.2" ; then
+			# Make sure target has pthreads support. #326757 #335883
+			# There shouldn't be a chicken&egg problem here as openmp won't
+			# build without a C library, and you can't build that w/out
+			# already having a compiler ...
+			if ! is_crosscompile || \
+				$(tc-getCPP ${CTARGET}) -E - <<<"#include <pthread.h>" >& /dev/null
+		then
 			confgcc="${confgcc} $(use_enable openmp libgomp)"
 		fi
+	fi
 
 		# enable the cld workaround until we move things to stable.
 		# by that point, the rest of the software out there should
@@ -1170,7 +1178,7 @@ gcc-compiler-configure() {
 		#    Specifies where to install the Python modules used for aot-compile. DIR
 		#  should not include the prefix used in installation. For example, if the
 		#  Python modules are to be installed in /usr/lib/python2.5/site-packages,
-		#  then –with-python-dir=/lib/python2.5/site-packages should be passed.
+		#  then âwith-python-dir=/lib/python2.5/site-packages should be passed.
 		#
 		# This should translate into "/share/gcc-data/${CTARGET}/${GCC_CONFIG_VER}/python"
 		if tc_version_is_at_least "4.4" ; then
@@ -1362,7 +1370,7 @@ gcc_do_configure() {
 		case ${CTARGET} in
 			*-linux)		 needed_libc=no-fucking-clue;;
 			*-dietlibc)		 needed_libc=dietlibc;;
-			*-elf)			 needed_libc=newlib;;
+			*-elf|*-eabi)    needed_libc=newlib;;
 			*-freebsd*)		 needed_libc=freebsd-lib;;
 			*-gnu*)			 needed_libc=glibc;;
 			*-klibc)		 needed_libc=klibc;;
@@ -1399,23 +1407,30 @@ gcc_do_configure() {
 				confgcc="${confgcc} --enable-threads=posix" ;;
 		esac
 	fi
-	[[ ${CTARGET} == *-elf ]] && confgcc="${confgcc} --with-newlib"
 	# __cxa_atexit is "essential for fully standards-compliant handling of
 	# destructors", but apparently requires glibc.
-	if [[ ${CTARGET} == *-uclibc* ]] ; then
+	case ${CTARGET} in
+	*-uclibc*)
 		confgcc="${confgcc} --disable-__cxa_atexit --enable-target-optspace $(use_enable nptl tls)"
 		[[ ${GCCMAJOR}.${GCCMINOR} == 3.3 ]] && confgcc="${confgcc} --enable-sjlj-exceptions"
 		if tc_version_is_at_least 3.4 && [[ ${GCCMAJOR}.${GCCMINOR} < 4.3 ]] ; then
 			confgcc="${confgcc} --enable-clocale=uclibc"
 		fi
-	elif [[ ${CTARGET} == *-gnu* ]] ; then
+		;;
+	*-elf|*-eabi)
+		confgcc="${confgcc} --with-newlib"
+		;;
+	*-gnu*)
 		confgcc="${confgcc} --enable-__cxa_atexit"
 		confgcc="${confgcc} --enable-clocale=gnu"
-	elif [[ ${CTARGET} == *-freebsd* ]]; then
+		;;
+	*-freebsd*)
 		confgcc="${confgcc} --enable-__cxa_atexit"
-	elif [[ ${CTARGET} == *-solaris* ]]; then
+		;;
+	*-solaris*)
 		confgcc="${confgcc} --enable-__cxa_atexit"
-	fi
+		;;
+	esac
 	[[ ${GCCMAJOR}.${GCCMINOR} < 3.4 ]] && confgcc="${confgcc} --disable-libunwind-exceptions"
 
 	# create a sparc*linux*-{gcc,g++} that can handle -m32 and -m64 (biarch)
