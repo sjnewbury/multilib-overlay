@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libgweather/libgweather-2.30.3.ebuild,v 1.2 2010/11/01 07:23:17 ford_prefect Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libgweather/libgweather-2.30.3.ebuild,v 1.3 2010/11/14 23:05:07 eva Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -23,6 +23,7 @@ RDEPEND=">=x11-libs/gtk+-2.11:2[lib32?]
 	>=gnome-base/gconf-2.8[lib32?]
 	>=net-libs/libsoup-gnome-2.25.1:2.4[lib32?]
 	>=dev-libs/libxml2-2.6.0[lib32?]
+	>=sys-libs/timezone-data-2010k
 	python? (
 		>=dev-python/pygobject-2[lib32?]
 		>=dev-python/pygtk-2[lib32?] )
