@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/sane-backends/sane-backends-1.0.20-r3.ebuild,v 1.4 2010/04/02 22:15:15 phosphan Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/sane-backends/sane-backends-1.0.20-r3.ebuild,v 1.5 2010/11/16 21:00:45 phosphan Exp $
 
 EAPI="2"
 
@@ -96,9 +96,9 @@ DESCRIPTION="Scanner Access Now Easy - Backends"
 HOMEPAGE="http://www.sane-project.org/"
 
 RDEPEND="
-	sane_backends_dc210? ( >=media-libs/jpeg-6b[lib32?] )
-	sane_backends_dc240? ( >=media-libs/jpeg-6b[lib32?] )
-	sane_backends_dell1600n_net? ( >=media-libs/jpeg-6b[lib32?] )
+	sane_backends_dc210? ( virtual/jpeg[lib32?] )
+	sane_backends_dc240? ( virtual/jpeg[lib32?] )
+	sane_backends_dell1600n_net? ( virtual/jpeg[lib32?] )
 	avahi? ( >=net-dns/avahi-0.6.24[lib32?] )
 	sane_backends_canon_pp? ( sys-libs/libieee1284[lib32?] )
 	sane_backends_hpsj5s? ( sys-libs/libieee1284[lib32?] )
@@ -106,7 +106,7 @@ RDEPEND="
 	usb? ( virtual/libusb:0[lib32?] )
 	gphoto2? (
 				media-libs/libgphoto2[lib32?]
-				>=media-libs/jpeg-6b[lib32?]
+				virtual/jpeg[lib32?]
 			)
 	v4l? ( media-libs/libv4l[lib32?] )"
 
