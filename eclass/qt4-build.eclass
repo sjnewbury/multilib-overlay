@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.83 2010/09/05 09:25:08 hwoarang Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.87 2010/11/13 20:50:57 wired Exp $
 
 export EMULTILIB_SAVE_VARS="QTBASEDIR QTPREFIXDIR QTBINDIR QTLIBDIR \
 		QMAKE_LIBDIR_QT QTPCDIR QTDATADIR QTDOCDIR QTHEADERDIR \
@@ -23,7 +23,9 @@ inherit base eutils multilib toolchain-funcs flag-o-matic versionator
 MY_PV=${PV/_/-}
 if version_is_at_least 4.5.99999999; then
 	MY_P=qt-everywhere-opensource-src-${MY_PV}
-	[[ ${CATEGORY}/${PN} != x11-libs/qt-xmlpatterns ]] && IUSE="+exceptions"
+	[[ ${CATEGORY}/${PN} != x11-libs/qt-xmlpatterns ]] &&
+		[[ ${CATEGORY}/${PN} != x11-themes/qgtkstyle ]] &&
+		IUSE="+exceptions"
 else
 	MY_P=qt-x11-opensource-src-${MY_PV}
 fi
@@ -202,12 +204,6 @@ qt4-build_src_prepare() {
 		replace-flags -O2 -O3
 	fi
 
-	if [[ ${CHOST} == arm* ]] ; then
-		# Fails on arm with -Os, bug 331641
-		# This can be removed once qt-4.7 is stable or the bug on gcc is fixed
-		replace-flags -Os -O2
-	fi
-
 	# Bug 178652
 	if [[ $(gcc-major-version) == 3 ]] && use amd64; then
 		ewarn "Appending -fno-gcse to CFLAGS/CXXFLAGS"
@@ -341,6 +337,12 @@ qt4-build_src_configure() {
 		# freetype2 include dir is non-standard, thus include it on configure
 		# use -I from configure
 		myconf+=" $(pkg-config --cflags freetype2)"
+	fi
+
+	# Disable SSE4.x, since auto-detection is currently broken
+	# Upstream bug http://bugreports.qt.nokia.com/browse/QTBUG-13623
+	if version_is_at_least 4.7.1; then
+		myconf+=" -no-sse4.1 -no-sse4.2"
 	fi
 
 	echo ./configure ${myconf}
