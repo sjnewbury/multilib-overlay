@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/graphviz/graphviz-2.26.3-r2.ebuild,v 1.8 2010/11/13 19:38:08 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/graphviz/graphviz-2.26.3-r3.ebuild,v 1.1 2010/11/17 16:24:35 ssuominen Exp $
 
 EAPI=3
 PYTHON_DEPEND="python? 2"
@@ -13,7 +13,7 @@ SRC_URI="http://www.graphviz.org/pub/graphviz/ARCHIVE/${P}.tar.gz"
 
 LICENSE="CPL-1.0"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ~ppc ~ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd ~amd64-linux ~x86-linux"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd ~amd64-linux ~x86-linux"
 IUSE="cairo doc examples gtk java lasi nls perl python ruby static-libs tcl"
 
 # Requires ksh
@@ -25,10 +25,9 @@ RDEPEND="
 	>=media-libs/fontconfig-2.3.95[lib32?]
 	>=media-libs/freetype-2.1.10[lib32?]
 	>=media-libs/gd-2.0.28[fontconfig,jpeg,png,truetype,lib32?]
-	>=media-libs/libpng-1.2.10[lib32?]
+	>=media-libs/libpng-1.4[lib32?]
 	virtual/jpeg[lib32?]
 	virtual/libiconv
-	gnome-base/librsvg[lib32?]
 	cairo?	(
 		x11-libs/libXaw[lib32?]
 		>=x11-libs/pango-1.12[lib32?]
@@ -106,6 +105,8 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
+	epatch "${FILESDIR}"/${P}-libtool.patch
+
 	# ToDo: Do the same thing for examples and/or
 	#       write a patch for a configuration-option
 	#       and send it to upstream

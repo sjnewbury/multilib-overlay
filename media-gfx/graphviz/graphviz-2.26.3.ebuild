@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/graphviz/graphviz-2.26.3.ebuild,v 1.2 2010/05/22 19:26:13 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/graphviz/graphviz-2.26.3.ebuild,v 1.3 2010/11/08 22:23:18 maekke Exp $
 
 EAPI=2
 inherit eutils autotools multilib python multilib-native
@@ -23,8 +23,8 @@ RDEPEND="
 	>=media-libs/fontconfig-2.3.95[lib32?]
 	>=media-libs/freetype-2.1.10[lib32?]
 	>=media-libs/gd-2.0.28[jpeg,png,lib32?]
-	>=media-libs/jpeg-6b[lib32?]
 	>=media-libs/libpng-1.2.10[lib32?]
+	virtual/jpeg[lib32?]
 	virtual/libiconv
 	gnome-base/librsvg[lib32?]
 	cairo?	(
