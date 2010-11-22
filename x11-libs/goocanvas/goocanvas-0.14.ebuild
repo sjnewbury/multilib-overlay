@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/goocanvas/goocanvas-0.14.ebuild,v 1.7 2010/09/09 17:59:53 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/goocanvas/goocanvas-0.14.ebuild,v 1.8 2010/11/19 09:01:14 jlec Exp $
 
 EAPI="2"
 
@@ -8,7 +8,7 @@ GCONF_DEBUG="no"
 
 inherit gnome2 libtool multilib-native
 
-DESCRIPTION="GooCanvas is a canvas widget for GTK+ using the cairo 2D library for drawing."
+DESCRIPTION="Canvas widget for GTK+ using the cairo 2D library for drawing"
 HOMEPAGE="http://live.gnome.org/GooCanvas"
 
 LICENSE="GPL-2"
