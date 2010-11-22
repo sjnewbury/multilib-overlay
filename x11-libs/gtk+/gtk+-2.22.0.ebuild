@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.22.0.ebuild,v 1.2 2010/10/20 21:11:52 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.22.0.ebuild,v 1.3 2010/11/15 22:58:56 eva Exp $
 
 EAPI="3"
 PYTHON_DEPEND="2:2.4"
@@ -87,8 +87,6 @@ multilib-native_src_prepare_internal() {
 	# Non-working test in gentoo's env
 	sed 's:\(g_test_add_func ("/ui-tests/keys-events.*\):/*\1*/:g' \
 		-i gtk/tests/testing.c || die "sed 1 failed"
-	sed '\%/recent-manager/add%,/recent_manager_purge/ d' \
-		-i gtk/tests/recentmanager.c || die "sed 2 failed"
 
 	if use x86-interix; then
 		# activate the itx-bind package...
@@ -121,7 +119,10 @@ multilib-native_src_configure_internal() {
 
 src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
-	Xemake check || die "tests failed"
+	# Exporting HOME fixes tests using XDG directories spec since all defaults
+	# are based on $HOME. It is also backward compatible with functions not
+	# yet ported to this spec.
+	HOME="${T}" Xemake check || die "tests failed"
 }
 
 multilib-native_src_install_internal() {
@@ -175,7 +176,9 @@ multilib-native_pkg_postinst_internal() {
 		elog "emerge -va1 \$(qfile -qC ${EPREFIX}/usr/lib/gtk-2.0/2.[^1]*)"
 	fi
 
-	elog "Please install app-text/evince for print preview functionality."
-	elog "Alternatively, check \"gtk-print-preview-command\" documentation and"
-	elog "add it to your gtkrc."
+	if ! has_version "app-text/evince"; then
+		elog "Please install app-text/evince for print preview functionality."
+		elog "Alternatively, check \"gtk-print-preview-command\" documentation and"
+		elog "add it to your gtkrc."
+	fi
 }
