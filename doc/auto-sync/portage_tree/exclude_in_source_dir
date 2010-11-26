@@ -1,8 +1,6 @@
 # exclude list of ebuilds and files in the ${FILESDIR} which are in the source_dir but not in the overlay
-x11-libs/libXxf86dga/libXxf86dga-1.0.1.ebuild
 x11-libs/libview/libview-0.5.6-r1.ebuild
 x11-libs/libview/libview-0.6.1.ebuild
-x11-libs/libdrm/libdrm-2.4.18_pre20100211.ebuild
 sys-fs/udev/udev-114.ebuild
 sys-fs/udev/udev-115-r1.ebuild
 sys-fs/udev/udev-119.ebuild
@@ -10,15 +8,7 @@ sys-fs/udev/udev-124-r1.ebuild
 sys-fs/udev/udev-124-r2.ebuild
 sys-fs/udev/udev-141.ebuild
 sys-fs/udev/udev-141-r1.ebuild
-sys-fs/udev/udev-145.ebuild
-sys-fs/udev/udev-145-r1.ebuild
-sys-fs/udev/udev-145-r2.ebuild
-sys-fs/udev/udev-145-r3.ebuild
-sys-fs/udev/udev-146.ebuild
 sys-fs/udev/udev-146-r1.ebuild
-sys-fs/udev/udev-146-r2.ebuild
-sys-fs/udev/udev-146-r3.ebuild
-sys-fs/udev/udev-147-r1.ebuild
 sys-fs/udev/udev-9999.ebuild
 sys-devel/gettext/gettext-0.16.1-r1.ebuild
 net-misc/openssh/openssh-5.2_p1-r3.ebuild
@@ -27,17 +17,13 @@ dev-cpp/gtkmm/gtkmm-2.2.12.ebuild
 dev-cpp/glibmm/glibmm-2.8.4.ebuild
 app-crypt/gnupg/gnupg-1.4.10.ebuild
 app-crypt/gnupg/gnupg-1.4.10-r1.ebuild
-app-crypt/gnupg/gnupg-2.0.11.ebuild
 sys-libs/readline/readline-5.2_p14.ebuild
 sys-libs/db/db-1.85-r3.ebuild
 sys-libs/db/db-3.2.9_p2.ebuild
-sys-libs/db/db-3.2.9-r11.ebuild
-sys-libs/db/db-4.2.52_p4-r2.ebuild
 sys-libs/db/db-4.2.52_p5.ebuild
 sys-libs/db/db-4.2.52_p5-r1.ebuild
 sys-libs/db/db-4.3.29_p1.ebuild
 sys-libs/db/db-4.3.29_p1-r1.ebuild
-sys-libs/db/db-4.3.29-r2.ebuild
 sys-libs/db/db-4.4.20_p4.ebuild
 sys-libs/db/db-4.4.20_p4-r1.ebuild
 sys-libs/db/db-4.5.20_p2.ebuild
@@ -60,7 +46,6 @@ sys-fs/lvm2/lvm2-2.02.49-r1.ebuild
 sys-fs/lvm2/lvm2-2.02.49-r2.ebuild
 sys-fs/lvm2/lvm2-2.02.49-r3.ebuild
 sys-fs/lvm2/lvm2-2.02.51.ebuild
-sys-fs/e2fsprogs/e2fsprogs-1.40.9.ebuild
 sys-fs/e2fsprogs/e2fsprogs-1.41.7-r1.ebuild
 sys-fs/device-mapper/device-mapper-1.02.19.ebuild
 sys-fs/device-mapper/device-mapper-1.02.19-r1.ebuild

@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-arch/libarchive/libarchive-2.8.4.ebuild,v 1.1 2010/08/11 08:48:08 ferringb Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-arch/libarchive/libarchive-2.8.4.ebuild,v 1.2 2010/11/14 13:42:00 jlec Exp $
 
 EAPI="2"
 
@@ -62,7 +62,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable static-libs static) \
 		--without-lzmadec \
 		${myconf} \
-		--disable-dependency-tracking || die "econf failed."
+		--disable-dependency-tracking
 }
 
 src_test() {

@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-dns/avahi/avahi-0.6.28.ebuild,v 1.3 2010/11/03 13:02:49 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-dns/avahi/avahi-0.6.28.ebuild,v 1.4 2010/11/20 00:50:07 flameeyes Exp $
 
 EAPI="3"
 
@@ -155,7 +155,7 @@ multilib-native_src_compile_internal() {
 
 multilib-native_src_install_internal() {
 	emake install py_compile=true DESTDIR="${D}" || die "make install failed"
-	use bookmargs && use python && use dbus && use gtk || \
+	use bookmarks && use python && use dbus && use gtk || \
 		rm -f "${D}"/usr/bin/avahi-bookmarks
 
 	use howl-compat && ln -s avahi-compat-howl.pc "${D}"/usr/$(get_libdir)/pkgconfig/howl.pc

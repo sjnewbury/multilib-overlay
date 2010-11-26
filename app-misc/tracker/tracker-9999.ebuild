@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-9999.ebuild,v 1.25 2010/10/28 21:32:05 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-9999.ebuild,v 1.28 2010/11/14 17:43:22 eva Exp $
 
 EAPI="2"
 G2CONF_DEBUG="no"
@@ -20,6 +20,7 @@ KEYWORDS=""
 IUSE="applet doc eds exif flac gif gnome-keyring gsf gstreamer gtk hal iptc +jpeg laptop mp3 nautilus networkmanager pdf playlist rss strigi test +tiff upnp +vorbis xine +xml xmp"
 
 # TODO: rest -> flickr, qt vs. gdk
+# vala is built with debug by default (see VALAFLAGS)
 RDEPEND="
 	>=app-i18n/enca-1.9[lib32?]
 	>=dev-db/sqlite-3.7[threadsafe,lib32?]
@@ -43,7 +44,9 @@ RDEPEND="
 	flac? ( >=media-libs/flac-1.2.1[lib32?] )
 	gif? ( media-libs/giflib[lib32?] )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.26[lib32?] )
-	gsf? ( >=gnome-extra/libgsf-1.13[lib32?] )
+	gsf? (
+		app-text/odt2txt
+		>=gnome-extra/libgsf-1.13[lib32?] )
 	upnp? ( >=media-libs/gupnp-dlna-0.3 )
 	!upnp? (
 		gstreamer? ( >=media-libs/gstreamer-0.10.12[lib32?] )
@@ -53,7 +56,7 @@ RDEPEND="
 		>=dev-libs/libgee-0.3[lib32?]
 		>=x11-libs/gtk+-2.18[lib32?] )
 	iptc? ( media-libs/libiptcdata[lib32?] )
-	jpeg? ( media-libs/jpeg:0[lib32?] )
+	jpeg? ( virtual/jpeg:0[lib32?] )
 	laptop? (
 		hal? ( >=sys-apps/hal-0.5[lib32?] )
 		!hal? ( >=sys-power/upower-0.9 ) )
@@ -80,13 +83,16 @@ DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.20[lib32?]
 	dev-util/gtk-doc-am
 	>=dev-util/gtk-doc-1.8
-	applet? ( dev-lang/vala[lib32?] )
+	applet? ( >=dev-lang/vala-0.11.1:0.12[lib32?] )
 	gtk? (
-		dev-lang/vala[lib32?]
+		>=dev-lang/vala-0.11.1:0.12[lib32?]
 		>=dev-libs/libgee-0.3[lib32?] )
 	doc? (
 		media-gfx/graphviz[lib32?] )
-	test? ( sys-apps/dbus[X,lib32?] )"
+	test? (
+		>=dev-libs/dbus-glib-0.82-r1[lib32?]
+		>=sys-apps/dbus-1.3.1[X,lib32?] )
+"
 
 function inotify_enabled() {
 	if linux_config_exists; then
@@ -124,6 +130,10 @@ multilib-native_pkg_setup_internal() {
 		G2CONF="${G2CONF} $(use_enable hal) $(use_enable !hal upower)"
 	else
 		G2CONF="${G2CONF} --disable-hal --disable-upower"
+	fi
+
+	if use applet || use gtk; then
+		G2CONF="${G2CONF} VALAC=$(type -P valac-0.12)"
 	fi
 
 	# unicode-support: libunistring, libicu or glib ?

@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999.ebuild,v 1.26 2010/11/07 20:36:13 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999.ebuild,v 1.27 2010/11/19 16:48:47 aballier Exp $
 
 EAPI="2"
 
@@ -54,7 +54,7 @@ RDEPEND="
 	ieee1394? ( media-libs/libdc1394[lib32?] sys-libs/libraw1394[lib32?] )
 	jack? ( media-sound/jack-audio-connection-kit[lib32?] )
 	jpeg2k? ( >=media-libs/openjpeg-1.3-r2[lib32?] )
-	rtmp? ( media-video/rtmpdump )
+	rtmp? ( >=media-video/rtmpdump-2.2f )
 	sdl? ( >=media-libs/libsdl-1.2.13-r1[audio,video,lib32?] )
 	schroedinger? ( media-libs/schroedinger[lib32?] )
 	speex? ( >=media-libs/speex-1.2_beta3[lib32?] )

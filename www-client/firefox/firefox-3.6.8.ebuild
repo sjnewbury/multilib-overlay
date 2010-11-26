@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/firefox/firefox-3.6.8.ebuild,v 1.5 2010/08/10 22:52:14 truedfx Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/firefox/firefox-3.6.8.ebuild,v 1.7 2010/10/28 15:12:07 polynomial-c Exp $
 EAPI="3"
 WANT_AUTOCONF="2.1"
 

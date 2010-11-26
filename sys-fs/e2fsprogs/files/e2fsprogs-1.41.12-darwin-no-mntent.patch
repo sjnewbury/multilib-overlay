@@ -1,0 +1,27 @@
+diff --git a/misc/ismounted.c b/misc/ismounted.c
+index 50b4140..84579a4 100644
+--- a/misc/ismounted.c
++++ b/misc/ismounted.c
+@@ -86,8 +86,10 @@ static errcode_t check_mntent_file(const char *mtab_file, const char *file,
+ 	char		buf[1024], *device = 0, *mnt_dir = 0, *cp;
+ 
+ 	*mount_flags = 0;
++	#ifndef __APPLE__
+ 	if ((f = setmntent (mtab_file, "r")) == NULL)
+ 		return errno;
++	#endif
+ 	if (stat(file, &st_buf) == 0) {
+ 		if (S_ISBLK(st_buf.st_mode)) {
+ #ifndef __GNU__ /* The GNU hurd is broken with respect to stat devices */
+@@ -175,7 +177,11 @@ static errcode_t check_mntent_file(const char *mtab_file, const char *file,
+ 
+ 	retval = 0;
+ errout:
++	#ifdef __APPLE__
++	fclose (f);
++	#else
+ 	endmntent (f);
++	#endif
+ 	return retval;
+ #else /* !HAVE_MNTENT_H */
+ 	return 0;

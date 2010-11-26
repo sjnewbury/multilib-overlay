@@ -1,0 +1,43 @@
+https://bugs.gentoo.org/342121
+
+From 59eb9f8cfe7d1df379a2318316d1f04f80fba54a Mon Sep 17 00:00:00 2001
+From: Werner Lemberg <wl@gnu.org>
+Date: Tue, 12 Oct 2010 05:49:17 +0000
+Subject: Fix Savannah bug #31310.
+
+* src/truetype/ttgxvar.c (ft_var_readpackedpoints): Protect against
+invalid `runcnt' values.
+---
+diff --git a/src/truetype/ttgxvar.c b/src/truetype/ttgxvar.c
+index 653d9d5..47bb9fc 100644
+--- a/src/truetype/ttgxvar.c
++++ b/src/truetype/ttgxvar.c
+@@ -130,7 +130,7 @@
+     FT_Int     j;
+     FT_Int     first;
+     FT_Memory  memory = stream->memory;
+-    FT_Error   error = TT_Err_Ok;
++    FT_Error   error  = TT_Err_Ok;
+ 
+     FT_UNUSED( error );
+ 
+@@ -154,7 +154,7 @@
+         runcnt = runcnt & GX_PT_POINT_RUN_COUNT_MASK;
+         first  = points[i++] = FT_GET_USHORT();
+ 
+-        if ( runcnt < 1 )
++        if ( runcnt < 1 || i + runcnt >= n )
+           goto Exit;
+ 
+         /* first point not included in runcount */
+@@ -165,7 +165,7 @@
+       {
+         first = points[i++] = FT_GET_BYTE();
+ 
+-        if ( runcnt < 1 )
++        if ( runcnt < 1 || i + runcnt >= n )
+           goto Exit;
+ 
+         for ( j = 0; j < runcnt; ++j )
+--
+cgit v0.8.3.2

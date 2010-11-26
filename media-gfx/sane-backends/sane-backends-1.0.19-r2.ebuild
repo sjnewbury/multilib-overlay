@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/sane-backends/sane-backends-1.0.19-r2.ebuild,v 1.15 2010/04/02 22:15:15 phosphan Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/sane-backends/sane-backends-1.0.19-r2.ebuild,v 1.16 2010/11/16 21:00:45 phosphan Exp $
 
 EAPI="2"
 
@@ -11,7 +11,7 @@ IUSE="usb gphoto2 ipv6 v4l doc"
 DESCRIPTION="Scanner Access Now Easy - Backends"
 HOMEPAGE="http://www.sane-project.org/"
 
-RDEPEND=">=media-libs/jpeg-6b[lib32?]
+RDEPEND="virtual/jpeg[lib32?]
 	amd64? ( sys-libs/libieee1284[lib32?] )
 	x86? ( sys-libs/libieee1284[lib32?] )
 	usb? ( dev-libs/libusb:0[lib32?] )

@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-0.9.27.ebuild,v 1.1 2010/10/28 21:32:05 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-0.9.27.ebuild,v 1.3 2010/11/14 16:17:32 eva Exp $
 
 EAPI="2"
 G2CONF_DEBUG="no"
@@ -44,7 +44,9 @@ RDEPEND="
 	flac? ( >=media-libs/flac-1.2.1[lib32?] )
 	gif? ( media-libs/giflib[lib32?] )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.26[lib32?] )
-	gsf? ( >=gnome-extra/libgsf-1.13[lib32?] )
+	gsf? (
+		app-text/odt2txt
+		>=gnome-extra/libgsf-1.13[lib32?] )
 	upnp? ( >=media-libs/gupnp-dlna-0.3 )
 	!upnp? (
 		gstreamer? ( >=media-libs/gstreamer-0.10.12[lib32?] )
@@ -54,7 +56,7 @@ RDEPEND="
 		>=dev-libs/libgee-0.3[lib32?]
 		>=x11-libs/gtk+-2.18[lib32?] )
 	iptc? ( media-libs/libiptcdata[lib32?] )
-	jpeg? ( media-libs/jpeg:0[lib32?] )
+	jpeg? ( virtual/jpeg:0[lib32?] )
 	laptop? (
 		hal? ( >=sys-apps/hal-0.5[lib32?] )
 		!hal? ( >=sys-power/upower-0.9 ) )

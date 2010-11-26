@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libgphoto2/libgphoto2-2.4.9.ebuild,v 1.9 2010/11/05 20:25:43 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libgphoto2/libgphoto2-2.4.9.ebuild,v 1.11 2010/11/14 23:06:06 eva Exp $
 
 # TODO
 # 1. Track upstream bug --disable-docs does not work.
@@ -16,7 +16,7 @@ SRC_URI="mirror://sourceforge/gphoto/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 hppa ~ia64 ppc ppc64 ~sparc x86"
+KEYWORDS="alpha amd64 hppa ia64 ppc ppc64 sparc x86"
 IUSE="doc examples exif hal nls kernel_linux zeroconf"
 
 # ???
@@ -44,13 +44,16 @@ done
 
 # libgphoto2 actually links to libtool
 RDEPEND="virtual/libusb:0[lib32?]
+	cameras_ax203? ( media-libs/gd[lib32?] )
+	cameras_st2205? ( media-libs/gd[lib32?] )
 	zeroconf? ( || (
 		net-dns/avahi[mdnsresponder-compat,lib32?]
 		net-misc/mDNSResponder ) )
 	exif? ( >=media-libs/libexif-0.5.9[lib32?] )
 	hal? (
 		>=sys-apps/hal-0.5[lib32?]
-		>=sys-apps/dbus-1[lib32?] )"
+		>=sys-apps/dbus-1[lib32?] )
+	sys-devel/libtool[lib32?]"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	sys-devel/flex[lib32?]

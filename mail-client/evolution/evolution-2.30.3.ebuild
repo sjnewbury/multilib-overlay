@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.30.3.ebuild,v 1.2 2010/09/30 18:52:28 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.30.3.ebuild,v 1.3 2010/11/14 22:43:27 eva Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -24,7 +24,7 @@ IUSE="crypt doc gstreamer kerberos ldap networkmanager nntp pda profile python s
 PINENTRY_DEPEND="|| ( app-crypt/pinentry[gtk] app-crypt/pinentry-qt app-crypt/pinentry[qt4] app-crypt/pinentry[qt3] )"
 RDEPEND=">=dev-libs/glib-2.22[lib32?]
 	>=x11-libs/gtk+-2.18[lib32?]
-	>=gnome-extra/evolution-data-server-$(get_version_component_range 1-2)
+	>=gnome-extra/evolution-data-server-$(get_version_component_range 1-2)[weather]
 	>=gnome-base/gnome-desktop-2.26[lib32?]
 	>=gnome-extra/gtkhtml-3.29.6[lib32?]
 	>=gnome-base/gconf-2[lib32?]

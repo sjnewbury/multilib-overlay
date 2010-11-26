@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-0.8.17.ebuild,v 1.3 2010/10/20 13:39:45 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-0.8.17.ebuild,v 1.5 2010/11/14 16:17:32 eva Exp $
 
 EAPI="2"
 G2CONF_DEBUG="no"
@@ -12,7 +12,7 @@ HOMEPAGE="http://www.tracker-project.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="~amd64 ~x86"
 # USE="doc" is managed by eclass.
 IUSE="applet doc eds exif flac gnome-keyring gsf gstreamer gtk hal iptc +jpeg kmail laptop mp3 nautilus pdf playlist rss strigi test +tiff +vorbis xine +xml xmp"
 
@@ -40,14 +40,16 @@ RDEPEND="
 	exif? ( >=media-libs/libexif-0.6[lib32?] )
 	flac? ( >=media-libs/flac-1.2.1[lib32?] )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.26[lib32?] )
-	gsf? ( >=gnome-extra/libgsf-1.13[lib32?] )
+	gsf? (
+		app-text/odt2txt
+		>=gnome-extra/libgsf-1.13[lib32?] )
 	gstreamer? ( >=media-libs/gstreamer-0.10.12[lib32?] )
 	!gstreamer? ( !xine? ( || ( media-video/totem media-video/mplayer ) ) )
 	gtk? (
 		>=dev-libs/libgee-0.3[lib32?]
 		>=x11-libs/gtk+-2.18[lib32?] )
 	iptc? ( media-libs/libiptcdata[lib32?] )
-	jpeg? ( media-libs/jpeg:0[lib32?] )
+	jpeg? ( virtual/jpeg:0[lib32?] )
 	laptop? (
 		hal? ( >=sys-apps/hal-0.5[lib32?] )
 		!hal? ( sys-power/upower ) )

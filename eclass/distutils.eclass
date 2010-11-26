@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/distutils.eclass,v 1.76 2010/07/17 23:03:29 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/distutils.eclass,v 1.77 2010/10/10 19:23:20 arfrever Exp $
 
 # @ECLASS: distutils.eclass
 # @MAINTAINER:
@@ -101,7 +101,7 @@ fi
 # Additional documentation files installed by distutils_src_install().
 
 _distutils_get_build_dir() {
-	if [[ -n "${SUPPORT_PYTHON_ABIS}" && -z "${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES}" ]]; then
+	if _python_package_supporting_installation_for_multiple_python_abis && [[ -z "${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES}" ]]; then
 		echo "build-${PYTHON_ABI}"
 	else
 		echo "build"
@@ -109,7 +109,7 @@ _distutils_get_build_dir() {
 }
 
 _distutils_get_PYTHONPATH() {
-	if [[ -n "${SUPPORT_PYTHON_ABIS}" && -z "${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES}" ]]; then
+	if _python_package_supporting_installation_for_multiple_python_abis && [[ -z "${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES}" ]]; then
 		ls -d build-${PYTHON_ABI}/lib* 2> /dev/null
 	else
 		ls -d build/lib* 2> /dev/null
@@ -184,7 +184,7 @@ distutils_src_compile() {
 
 	_python_set_color_variables
 
-	if [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
+	if _python_package_supporting_installation_for_multiple_python_abis; then
 		distutils_building() {
 			_distutils_hook pre
 
@@ -211,7 +211,7 @@ _distutils_src_test_hook() {
 		die "${FUNCNAME}() requires 1 arguments"
 	fi
 
-	if [[ -z "${SUPPORT_PYTHON_ABIS}" ]]; then
+	if ! _python_package_supporting_installation_for_multiple_python_abis; then
 		return
 	fi
 
@@ -241,7 +241,7 @@ distutils_src_test() {
 	_python_set_color_variables
 
 	if [[ "${DISTUTILS_SRC_TEST}" == "setup.py" ]]; then
-		if [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
+		if _python_package_supporting_installation_for_multiple_python_abis; then
 			distutils_testing() {
 				_distutils_hook pre
 
@@ -319,7 +319,7 @@ distutils_src_install() {
 	_python_initialize_prefix_variables
 	_python_set_color_variables
 
-	if [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
+	if _python_package_supporting_installation_for_multiple_python_abis; then
 		if [[ -z "${DISTUTILS_DISABLE_VERSIONING_OF_PYTHON_SCRIPTS}" && "${BASH_VERSINFO[0]}" -ge 4 ]]; then
 			declare -A wrapper_scripts=()
 
@@ -329,7 +329,7 @@ distutils_src_install() {
 
 					local nonversioned_file file
 					for file in *; do
-						if [[ -f "${file}" && ! "${file}" =~ [[:digit:]]+\.[[:digit:]](-jython)?+$ && "$(head -n1 "${file}")" =~ ^'#!'.*(python|jython-)[[:digit:]]+\.[[:digit:]]+ ]]; then
+						if [[ -f "${file}" && ! "${file}" =~ [[:digit:]]+\.[[:digit:]]+(-jython)?$ && "$(head -n1 "${file}")" =~ ^'#!'.*(python|jython-)[[:digit:]]+\.[[:digit:]]+ ]]; then
 							for nonversioned_file in "${DISTUTILS_NONVERSIONED_PYTHON_SCRIPTS[@]}"; do
 								[[ "${nonversioned_file}" == "/usr/bin/${file}" ]] && continue 2
 							done
@@ -405,7 +405,7 @@ distutils_pkg_postinst() {
 
 	local pylibdir pymod
 	if [[ -z "$(declare -p PYTHON_MODNAME 2> /dev/null)" ]]; then
-		for pylibdir in "${EROOT}"usr/$(get_libdir)/python* "${EROOT}"/usr/share/jython-*/Lib; do
+		for pylibdir in "${EROOT}"usr/$(get_libdir)/python* "${EROOT}"usr/share/jython-*/Lib; do
 			if [[ -d "${pylibdir}/site-packages/${PN}" ]]; then
 				PYTHON_MODNAME="${PN}"
 			fi
@@ -434,7 +434,7 @@ distutils_pkg_postinst() {
 	fi
 	einfo Using ${python}
 	if [[ -n "${PYTHON_MODNAME}" ]]; then
-		if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
+		if ! has "${EAPI:-0}" 0 1 2 || _python_package_supporting_installation_for_multiple_python_abis; then
 			python_mod_optimize ${PYTHON_MODNAME}
 		else
 			for pymod in ${PYTHON_MODNAME}; do
@@ -459,7 +459,7 @@ distutils_pkg_postrm() {
 
 	local pylibdir pymod
 	if [[ -z "$(declare -p PYTHON_MODNAME 2> /dev/null)" ]]; then
-		for pylibdir in "${EROOT}"usr/$(get_libdir)/python* "${EROOT}"/usr/share/jython-*/Lib; do
+		for pylibdir in "${EROOT}"usr/$(get_libdir)/python* "${EROOT}"usr/share/jython-*/Lib; do
 			if [[ -d "${pylibdir}/site-packages/${PN}" ]]; then
 				PYTHON_MODNAME="${PN}"
 			fi
@@ -467,7 +467,7 @@ distutils_pkg_postrm() {
 	fi
 
 	if [[ -n "${PYTHON_MODNAME}" ]]; then
-		if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
+		if ! has "${EAPI:-0}" 0 1 2 || _python_package_supporting_installation_for_multiple_python_abis; then
 			python_mod_cleanup ${PYTHON_MODNAME}
 		else
 			for pymod in ${PYTHON_MODNAME}; do
