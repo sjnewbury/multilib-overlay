@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/ncurses/ncurses-5.7-r3.ebuild,v 1.10 2010/03/06 23:12:41 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/ncurses/ncurses-5.7-r6.ebuild,v 1.1 2010/11/15 11:55:07 wired Exp $
 
 EAPI="2"
 inherit eutils flag-o-matic toolchain-funcs multilib-native
@@ -14,8 +14,8 @@ SRC_URI="mirror://gnu/ncurses/${MY_P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="5"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
-IUSE="ada +cxx debug doc gpm minimal profile trace unicode"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+IUSE="ada +cxx debug doc gpm minimal profile static-libs trace unicode"
 
 DEPEND="gpm? ( sys-libs/gpm[lib32?] )"
 #	berkdb? ( sys-libs/db )"
@@ -29,7 +29,7 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-5.7-emacs.patch #270527
 	epatch "${FILESDIR}"/${PN}-5.7-nongnu.patch
 	epatch "${FILESDIR}"/${PN}-5.7-tic-cross-detection.patch #288881
-	epatch "${FILESDIR}"/${PN}-5.7-rxvt-unicode.patch #192083
+	epatch "${FILESDIR}"/${PN}-5.7-rxvt-unicode-9.09.patch #192083
 	epatch "${FILESDIR}"/${P}-hashdb-open.patch #245370
 	sed -i '/with_no_leaks=yes/s:=.*:=$enableval:' configure #305889
 
@@ -56,7 +56,7 @@ multilib-native_src_configure_internal() {
 		CXXFLAGS=${BUILD_CXXFLAGS} \
 		CPPFLAGS=${BUILD_CPPFLAGS} \
 		LDFLAGS="${BUILD_LDFLAGS} -static" \
-		do_configure cross --without-shared
+		do_configure cross --without-shared --with-normal
 	fi
 
 	make_flags=""
@@ -86,9 +86,9 @@ do_configure() {
 	# multilib-native_src_install_internal() ...
 #		$(use_with berkdb hashed-db)
 	econf \
-		--libdir="/$(get_libdir)" \
 		--with-terminfo-dirs="/etc/terminfo:/usr/share/terminfo" \
 		--with-shared \
+		$(use_with static-libs normal) \
 		--without-hashed-db \
 		$(use_with ada) \
 		$(use_with cxx) \
@@ -105,7 +105,7 @@ do_configure() {
 		--enable-echo \
 		$(use_enable !ada warnings) \
 		$(use_with debug assertions) \
-		$(use_enable !debug leaks) \
+		$(use_enable debug leaks) \
 		$(use_with debug expanded) \
 		$(use_with !debug macros) \
 		$(use_with trace) \
@@ -145,15 +145,10 @@ multilib-native_src_install_internal() {
 		emake DESTDIR="${D}" install || die "make widec install failed"
 	fi
 
-	# Move static and extraneous ncurses libraries out of /lib
-	dodir /usr/$(get_libdir)
-	cd "${D}"/$(get_libdir)
-	mv lib{form,menu,panel}.so* *.a "${D}"/usr/$(get_libdir)/
-	gen_usr_ldscript lib{,n}curses.so
-	if use unicode ; then
-		mv lib{form,menu,panel}w.so* "${D}"/usr/$(get_libdir)/
-		gen_usr_ldscript libncursesw.so
-	fi
+	# Move libncurses{,w} into /lib
+	gen_usr_ldscript -a ncurses
+	use unicode && gen_usr_ldscript -a ncursesw
+	ln -sf libncurses.so "${D}"/usr/$(get_libdir)/libcurses.so
 
 #	if ! use berkdb ; then
 		# We need the basic terminfo files in /etc, bug #37026
