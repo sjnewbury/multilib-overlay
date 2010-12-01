@@ -1,0 +1,20 @@
+commit 5f5c52cbc5ccbfba662c24619f4ba6ce7ae815a3
+Author: Edward Hervey <bilboed@bilboed.com>
+Date:   Tue Sep 7 16:26:56 2010 +0200
+
+    check: Fix linking order of libs/tag
+
+diff --git a/tests/check/Makefile.am b/tests/check/Makefile.am
+index 93542c7..0ed71f2 100644
+--- a/tests/check/Makefile.am
++++ b/tests/check/Makefile.am
+@@ -221,8 +221,8 @@ libs_rtp_LDADD = \
+ 	$(top_builddir)/gst-libs/gst/rtp/libgstrtp-@GST_MAJORMINOR@.la $(LDADD)
+ 
+ libs_tag_CFLAGS = \
+-	$(GST_BASE_CFLAGS) \
+ 	$(GST_PLUGINS_BASE_CFLAGS) \
++	$(GST_BASE_CFLAGS) \
+ 	$(AM_CFLAGS)
+ libs_tag_LDADD = \
+ 	$(GST_BASE_LIBS) \
