@@ -21,7 +21,7 @@ RDEPEND=">=dev-libs/glib-2.22:2[lib32?]
 	>=x11-libs/pango-1.22.0[lib32?]
 	sys-libs/ncurses[lib32?]
 	glade? ( dev-util/glade:3 )
-	introspection? ( >=dev-libs/gobject-introspection-0.6.7[lib32?] )
+	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 	python? ( >=dev-python/pygtk-2.4[lib32?] )
 	x11-libs/libX11[lib32?]
 	x11-libs/libXft[lib32?]"
