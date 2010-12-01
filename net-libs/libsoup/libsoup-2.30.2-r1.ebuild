@@ -19,7 +19,7 @@ IUSE="debug doc +introspection gnome ssl"
 
 RDEPEND=">=dev-libs/glib-2.21.3[lib32?]
 	>=dev-libs/libxml2-2[lib32?]
-	introspection? ( >=dev-libs/gobject-introspection-0.6.7[lib32?] )
+	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 	ssl? ( >=net-libs/gnutls-2.1.7[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9[lib32?]
