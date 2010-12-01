@@ -41,7 +41,7 @@ RDEPEND="!aqua? (
 	media-libs/fontconfig[lib32?]
 	x11-misc/shared-mime-info
 	cups? ( net-print/cups[lib32?] )
-	introspection? ( >=dev-libs/gobject-introspection-0.9.3[lib32?] )
+	introspection? ( >=dev-libs/gobject-introspection-0.9.3 )
 	!<gnome-base/gail-1000"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9[lib32?]
