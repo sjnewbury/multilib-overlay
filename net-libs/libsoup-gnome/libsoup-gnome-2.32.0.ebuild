@@ -24,7 +24,7 @@ RDEPEND="~net-libs/libsoup-${PV}[lib32?]
 	net-libs/libproxy[lib32?]
 	>=gnome-base/gconf-2[lib32?]
 	dev-db/sqlite:3[lib32?]
-	introspection? ( >=dev-libs/gobject-introspection-0.9.5[lib32?] )"
+	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9[lib32?]
 	>=dev-util/gtk-doc-am-1.10
