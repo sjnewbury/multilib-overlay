@@ -57,9 +57,10 @@ done
 
 for PACKAGE in ${PACKAGE_LIST}; do
 	while [[ "${PACKAGE}" != "" ]]; do
-		echo_yellow "\nworking on: ${PACKAGE}"
+		echo_yellow "\nworking on:\t\t${PACKAGE}"
 		EBUILDS=""
 		ASK=""
+		CLEAN_FILES=""
 		for I in . ${SOURCE_DIR}; do
 			pushd ${I} >/dev/null
 			if [[ -d ${PACKAGE} ]]; then
@@ -78,7 +79,7 @@ for PACKAGE in ${PACKAGE_LIST}; do
 		APPLIED_EBUILD_PATCHES=""
 		for EBUILD in ${EBUILDS}; do
 			NUM_EBUILDS+=1
-			echo_yellow "working on: ${EBUILD}"
+			echo_yellow "working on:\t\t${EBUILD}"
 			if [[ -f ${SOURCE_DIR}/${EBUILD} ]]; then
 				mkdir -p ${PACKAGE}
 				cp ${SOURCE_DIR}/${EBUILD} ${EBUILD}
@@ -91,10 +92,11 @@ for PACKAGE in ${PACKAGE_LIST}; do
 				fi
 				bin/make_multilib --no-manifest ${EBUILD} 
 			else
+				CLEAN_FILES="${EBUILD} ${CLEAN_FILES}"
 				echo_red "${EBUILD} is not in ${SOURCE_DIR}"
 				ASK+="2"
 			fi
-			echo_green "finished working on: ${EBUILD}"
+			echo_green "finished working on:\t${EBUILD}"
 		done
 		if [[ "$NUM_EBUILDS" != "$NUM_PATCHED_EBUILDS" ]];then
 			if [[ "$NUM_PATCHED_EBUILDS" > 0 ]]; then
@@ -142,15 +144,16 @@ for PACKAGE in ${PACKAGE_LIST}; do
 				cp ${SOURCE_DIR}/${FILE} ${FILE}
 			else
 				echo_red "${FILE} is not in ${SOURCE_DIR}"
+				CLEAN_FILES="${CLEAN_FILES} ${FILE}"
 				ASK+="6"
 			fi
 		done
 		if [[ -d ${PATCH_DIR}/${PACKAGE}/files ]]; then
 			cat ${PATCH_DIR}/${PACKAGE}/files/* | patch -p1
 		fi
-		echo_green "finished working on: ${PACKAGE}\n"
+		echo_green "finished working on:\t${PACKAGE}\n"
 		UNNEEDED_FILES="$(find ${PACKAGE} -name "*.orig" -o -name "*.rej" -o -name "ChangeLog" -o -name "metadata.xml" )"
-		if [[ "" != "${ASK}" || "" != "${UNNEEDED_FILES}" || "" != "$(git status | grep ${PACKAGE})" ]]; then
+		if [[ "" != "${ASK}" || "" != "${UNNEEDED_FILES}" || "" != "$(git status | grep ${PACKAGE})" || "" != "${CLEAN_FILES}" ]]; then
 			debug "ASK: ${ASK} UNNEEDED_FILES ${UNNEEDED_FILES} git $(git status | grep ${PACKAGE})"
 			cat ${SOURCE_DIR}/${PACKAGE}/Manifest >> ${PACKAGE}/Manifest
 			for UNNEEDED in ${UNNEEDED_FILES}; do
@@ -160,7 +163,7 @@ for PACKAGE in ${PACKAGE_LIST}; do
 			ebuild ${EBUILD} manifest
 			egencache --update --repo=multilib ${PACKAGE}
 			while true; do
-				echo "d:show diff e:show eix c:commit s:skip a:sync again" 
+				echo "d:show diff e:show eix c:commit s:skip a:sync again r:remove unneeded ebuild" 
 				read INPUT
 				case $INPUT in
 					d)
@@ -185,6 +188,13 @@ for PACKAGE in ${PACKAGE_LIST}; do
 						break
 						;;
 					a)
+						break
+						;;
+					r)
+						git rm ${CLEAN_FILES}
+						ebuild ${EBUILD} manifest
+						git add ${PACKAGE}
+						git commit -m "removed outdated ebuilds of ${PACKAGE} via auto-sync"
 						break
 						;;
 				esac
