@@ -28,7 +28,7 @@ RDEPEND="!aqua? (
 		x11-libs/libXcomposite[lib32?]
 		x11-libs/libXdamage[lib32?]
 		>=x11-libs/cairo-1.6[X,svg,lib32?]
-		x11-libs/gdk-pixbuf[X,introspection?,jpeg?,jpeg2k?,tiff?]
+		x11-libs/gdk-pixbuf[X,introspection?,jpeg?,jpeg2k?,tiff?,lib32?]
 	)
 	aqua? (
 		>=x11-libs/cairo-1.6[aqua,svg,lib32?]
