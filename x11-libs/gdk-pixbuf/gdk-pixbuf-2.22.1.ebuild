@@ -67,6 +67,8 @@ multilib-native_src_install_internal() {
 
 	# New library, remove .la files
 	rm -vf "${D}"/usr/lib*/gdk-pixbuf-2.0/*/loaders/*.la
+
+	prep_ml_binaries /usr/bin/gdk-pixbuf-query-loaders
 }
 
 multilib-native_pkg_postinst_internal() {
