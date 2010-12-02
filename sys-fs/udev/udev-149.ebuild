@@ -36,7 +36,7 @@ COMMON_DEPEND="selinux? ( sys-libs/libselinux[lib32?] )
 	)
 	>=sys-apps/util-linux-2.16[lib32?]
 	>=sys-libs/glibc-2.9
-	introspection? ( >=dev-libs/gobject-introspection-0.6.5[lib32?] )"
+	introspection? ( >=dev-libs/gobject-introspection-0.6.5 )"
 
 DEPEND="${COMMON_DEPEND}
 	extras? (

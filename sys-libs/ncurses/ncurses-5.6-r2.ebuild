@@ -61,6 +61,7 @@ multilib-native_src_configure_internal() {
 		do_configure ${myconf} --enable-widec
 	fi
 }
+
 do_configure() {
 	ECONF_SOURCE=${S}
 

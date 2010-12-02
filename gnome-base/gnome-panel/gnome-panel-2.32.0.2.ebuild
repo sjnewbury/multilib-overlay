@@ -37,7 +37,7 @@ RDEPEND=">=gnome-base/gnome-desktop-2.26[lib32?]
 		>=gnome-base/orbit-2.4[lib32?]
 		>=x11-libs/libwnck-2.19.5[lib32?] )
 	eds? ( >=gnome-extra/evolution-data-server-1.6[lib32?] )
-	introspection? ( >=dev-libs/gobject-introspection-0.6.7[lib32?] )
+	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 	networkmanager? ( >=net-misc/networkmanager-0.6.7[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5[lib32?]

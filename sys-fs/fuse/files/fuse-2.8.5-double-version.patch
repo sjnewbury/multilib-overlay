@@ -1,0 +1,23 @@
+commit 824b4ce6acd676e13cfa216dfbb5dbf4380781a0
+Author: Miklos Szeredi <mszeredi@suse.cz>
+Date:   Tue Sep 28 20:04:02 2010 +0200
+
+    Fix ambiguous symbol version for fuse_chan_new
+    
+    fuse_versionscript included fuse_chan_new in both FUSE_2.4 and
+    FUSE_2.6.  Remove the FUSE_2.4, which is invalid.
+    
+    Reported by Raymes Khoury, who discovered this with the gold linker
+
+diff --git a/lib/fuse_versionscript b/lib/fuse_versionscript
+index bd0186d..860c403 100644
+--- a/lib/fuse_versionscript
++++ b/lib/fuse_versionscript
+@@ -27,7 +27,6 @@ FUSE_2.4 {
+ 		fuse_chan_data;
+ 		fuse_chan_destroy;
+ 		fuse_chan_fd;
+-		fuse_chan_new;
+ 		fuse_chan_receive;
+ 		fuse_chan_send;
+ 		fuse_chan_session;

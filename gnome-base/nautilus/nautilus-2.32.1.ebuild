@@ -25,7 +25,7 @@ RDEPEND=">=dev-libs/glib-2.25.9[lib32?]
 	dev-libs/libunique[lib32?]
 	x11-libs/libXext[lib32?]
 	x11-libs/libXrender[lib32?]
-	introspection? ( >=dev-libs/gobject-introspection-0.6.4[lib32?] )
+	introspection? ( >=dev-libs/gobject-introspection-0.6.4 )
 	xmp? ( >=media-libs/exempi-2[lib32?] )"
 
 DEPEND="${RDEPEND}

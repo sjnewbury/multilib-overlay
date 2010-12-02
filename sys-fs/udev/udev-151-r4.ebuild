@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-151-r4.ebuild,v 1.13 2010/08/28 19:06:20 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/udev/udev-151-r4.ebuild,v 1.14 2010/10/29 06:13:22 jer Exp $
 
 EAPI="2"
 
@@ -23,8 +23,8 @@ HOMEPAGE="http://www.kernel.org/pub/linux/utils/kernel/hotplug/udev.html"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 arm ~hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
-IUSE="selinux devfs-compat old-hd-rules -extras test introspection"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
+IUSE="selinux devfs-compat old-hd-rules -extras test"
 
 COMMON_DEPEND="selinux? ( sys-libs/libselinux[lib32?] )
 	extras? (
@@ -36,7 +36,7 @@ COMMON_DEPEND="selinux? ( sys-libs/libselinux[lib32?] )
 	)
 	>=sys-apps/util-linux-2.16[lib32?]
 	>=sys-libs/glibc-2.9
-	introspection? ( >=dev-libs/gobject-introspection-0.6.5[lib32?] )"
+	introspection? ( >=dev-libs/gobject-introspection-0.6.5 )"
 
 DEPEND="${COMMON_DEPEND}
 	extras? (

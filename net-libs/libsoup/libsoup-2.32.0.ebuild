@@ -17,7 +17,7 @@ IUSE="debug doc +introspection ssl test"
 
 RDEPEND=">=dev-libs/glib-2.21.3[lib32?]
 	>=dev-libs/libxml2-2[lib32?]
-	introspection? ( >=dev-libs/gobject-introspection-0.9.5[lib32?] )
+	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	ssl? ( >=net-libs/gnutls-2.1.7[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9[lib32?]
