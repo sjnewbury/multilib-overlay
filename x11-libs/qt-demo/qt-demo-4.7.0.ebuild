@@ -1,26 +1,26 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-demo/qt-demo-4.7.0.ebuild,v 1.3 2010/10/20 13:51:04 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-demo/qt-demo-4.7.0.ebuild,v 1.5 2010/11/06 19:16:57 wired Exp $
 
 EAPI="3"
 inherit qt4-build multilib-native
 
 DESCRIPTION="Demonstration module of the Qt toolkit"
 SLOT="4"
-KEYWORDS="~amd64 ~ppc ~x86"
-IUSE="kde"
+KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
+IUSE="kde qt3support"
 
 DEPEND="~x11-libs/qt-assistant-${PV}:${SLOT}[aqua=,lib32?]
-	~x11-libs/qt-core-${PV}:${SLOT}[aqua=,lib32?]
+	~x11-libs/qt-core-${PV}:${SLOT}[aqua=,qt3support=,lib32?]
 	~x11-libs/qt-dbus-${PV}:${SLOT}[aqua=,lib32?]
-	~x11-libs/qt-gui-${PV}:${SLOT}[aqua=,lib32?]
+	~x11-libs/qt-gui-${PV}:${SLOT}[aqua=,qt3support=,lib32?]
 	~x11-libs/qt-multimedia-${PV}:${SLOT}[aqua=,lib32?]
-	~x11-libs/qt-opengl-${PV}:${SLOT}[aqua=,lib32?]
+	~x11-libs/qt-opengl-${PV}:${SLOT}[aqua=,qt3support=,lib32?]
 	!kde? ( || ( ~x11-libs/qt-phonon-${PV}:${SLOT}[aqua=,lib32?]
 		media-sound/phonon[aqua=,lib32?] ) )
 	kde? ( media-sound/phonon[aqua=,lib32?] )
 	~x11-libs/qt-script-${PV}:${SLOT}[aqua=,lib32?]
-	~x11-libs/qt-sql-${PV}:${SLOT}[aqua=,lib32?]
+	~x11-libs/qt-sql-${PV}:${SLOT}[aqua=,qt3support=,lib32?]
 	~x11-libs/qt-svg-${PV}:${SLOT}[aqua=,lib32?]
 	~x11-libs/qt-test-${PV}:${SLOT}[aqua=,lib32?]
 	~x11-libs/qt-webkit-${PV}:${SLOT}[aqua=,lib32?]
@@ -40,6 +40,11 @@ multilib-native_pkg_setup_internal() {
 		tools/"
 
 	qt4-build_pkg_setup
+}
+
+multilib-native_src_configure_internal() {
+	myconf="${myconf} $(qt_use qt3support)"
+	qt4-build_src_configure
 }
 
 multilib-native_src_install_internal() {
