@@ -176,7 +176,5 @@ qt_windows.h}
 	# Framework magic
 	fix_includes
 
-	prep_ml_includes
-
 	prep_ml_binaries /usr/bin/qmake /usr/bin/moc /usr/bin/rcc /usr/bin/uic
 }
