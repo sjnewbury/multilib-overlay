@@ -1,12 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/openslp/openslp-1.2.1-r1.ebuild,v 1.3 2010/01/22 08:48:35 abcd Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/openslp/openslp-1.2.1-r1.ebuild,v 1.4 2010/12/02 01:15:14 flameeyes Exp $
 
 EAPI="2"
 
-WANT_AUTOMAKE="1.8"
-
-inherit libtool eutils autotools multilib-native
+inherit eutils autotools multilib-native
 
 DESCRIPTION="An open-source implementation of Service Location Protocol"
 HOMEPAGE="http://www.openslp.org/"
@@ -23,9 +21,7 @@ RDEPEND="${DEPEND}"
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-fbsd.patch
-	eautomake
-
-	elibtoolize
+	eautoreconf
 }
 
 multilib-native_src_compile_internal() {
