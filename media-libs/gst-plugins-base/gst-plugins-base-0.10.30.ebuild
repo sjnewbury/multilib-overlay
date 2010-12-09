@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/gst-plugins-base/gst-plugins-base-0.10.30.ebuild,v 1.1 2010/11/19 05:31:11 ford_prefect Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/gst-plugins-base/gst-plugins-base-0.10.30.ebuild,v 1.4 2010/11/22 11:06:03 ford_prefect Exp $
 
 EAPI=2
 
@@ -14,10 +14,10 @@ SRC_URI="http://gstreamer.freedesktop.org/src/${PN}/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
-IUSE="introspection nls +orc"
+IUSE="+introspection nls +orc"
 
 RDEPEND=">=dev-libs/glib-2.20[lib32?]
-	>=media-libs/gstreamer-0.10.29[lib32?]
+	>=media-libs/gstreamer-0.10.30[lib32?]
 	dev-libs/libxml2[lib32?]
 	app-text/iso-codes
 	orc? ( >=dev-lang/orc-0.4.5[lib32?] )
@@ -35,6 +35,8 @@ multilib-native_src_unpack_internal() {
 	unpack ${A}
 	cd "${S}"
 	epatch "${FILESDIR}"/${PN}-0.10.29-make-382.patch
+	# From upstream commit 5f5c52cb
+	epatch "${FILESDIR}"/${P}-fix-tag-test-linking.patch
 	eautoreconf
 }
 
