@@ -20,7 +20,7 @@ RDEPEND=">=net-libs/gssdp-0.7.1[introspection?,lib32?]
 	>=dev-libs/glib-2.18:2[lib32?]
 	dev-libs/libxml2[lib32?]
 	|| ( >=sys-apps/util-linux-2.16[lib32?] <sys-libs/e2fsprogs-libs-1.41.8[lib32?] )
-	introspection? ( >=dev-libs/gobject-introspection-0.6.4[lib32?] )
+	introspection? ( >=dev-libs/gobject-introspection-0.6.4 )
 	networkmanager? ( >=dev-libs/dbus-glib-0.76[lib32?] )"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
