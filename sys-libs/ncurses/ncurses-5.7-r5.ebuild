@@ -36,7 +36,7 @@ multilib-native_src_prepare_internal() {
 	# Becaus of adding -L/usr/$(get_lib_dir) to LDFLAGS we see a bug when
 	# upgrading this lib. This is because the buildsystem try to link against the old
 	# version installed in the system. This patch should fix that
-	epatch "${FILESDIR}"/${PN}-5.7-ldflags-multilib-overlay.patch
+	epatch "${FILESDIR}"/${PN}-5.7-ldflags-multilib-overlay.patch 
 }
 
 multilib-native_src_configure_internal() {
@@ -56,14 +56,13 @@ multilib-native_src_configure_internal() {
 		CXXFLAGS=${BUILD_CXXFLAGS} \
 		CPPFLAGS=${BUILD_CPPFLAGS} \
 		LDFLAGS="${BUILD_LDFLAGS} -static" \
-		do_configure cross --without-shared --with-normal
+		do_compile cross --without-shared --with-normal
 	fi
 
 	make_flags=""
 	do_configure narrowc
 	use unicode && do_configure widec --enable-widec --includedir=/usr/include/ncursesw
 }
-
 do_configure() {
 	ECONF_SOURCE=${S}
 

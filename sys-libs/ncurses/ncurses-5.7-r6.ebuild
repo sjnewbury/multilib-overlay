@@ -23,7 +23,9 @@ RDEPEND="!<x11-terms/rxvt-unicode-9.06-r3"
 
 S=${WORKDIR}/${MY_P}
 
-multilib-native_src_prepare_internal() {
+multilib-native_src_unpack_internal() {
+	unpack ${A}
+	cd "${S}"
 	[[ -n ${PV_SNAP} ]] && epatch "${WORKDIR}"/${MY_P}-${PV_SNAP}-patch.sh
 	epatch "${FILESDIR}"/${PN}-5.6-gfbsd.patch
 	epatch "${FILESDIR}"/${PN}-5.7-emacs.patch #270527
@@ -32,18 +34,11 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-5.7-rxvt-unicode-9.09.patch #192083
 	epatch "${FILESDIR}"/${P}-hashdb-open.patch #245370
 	sed -i '/with_no_leaks=yes/s:=.*:=$enableval:' configure #305889
-
-	# Becaus of adding -L/usr/$(get_lib_dir) to LDFLAGS we see a bug when
-	# upgrading this lib. This is because the buildsystem try to link against the old
-	# version installed in the system. This patch should fix that
-	epatch "${FILESDIR}"/${PN}-5.7-ldflags-multilib-overlay.patch
 }
 
-multilib-native_src_configure_internal() {
+multilib-native_src_compile_internal() {
 	unset TERMINFO #115036
-	# The ebuild keeps failing if this variable is set when a
-	# crossdev compiler is installed so is better to remove it
-	#tc-export BUILD_CC
+	tc-export BUILD_CC
 	export BUILD_CPPFLAGS+=" -D_GNU_SOURCE" #214642
 
 	# when cross-compiling, we need to build up our own tic
@@ -56,19 +51,18 @@ multilib-native_src_configure_internal() {
 		CXXFLAGS=${BUILD_CXXFLAGS} \
 		CPPFLAGS=${BUILD_CPPFLAGS} \
 		LDFLAGS="${BUILD_LDFLAGS} -static" \
-		do_configure cross --without-shared --with-normal
+		do_compile cross --without-shared --with-normal
 	fi
 
 	make_flags=""
-	do_configure narrowc
-	use unicode && do_configure widec --enable-widec --includedir=/usr/include/ncursesw
+	do_compile narrowc
+	use unicode && do_compile widec --enable-widec --includedir=/usr/include/ncursesw
 }
-
-do_configure() {
+do_compile() {
 	ECONF_SOURCE=${S}
 
-	mkdir "${WORKDIR}"/$1.${ABI}
-	cd "${WORKDIR}"/$1.${ABI}
+	mkdir "${WORKDIR}"/$1
+	cd "${WORKDIR}"/$1
 	shift
 
 	# The chtype/mmask-t settings below are to retain ABI compat
@@ -112,24 +106,14 @@ do_configure() {
 		${conf_abi} \
 		"$@" \
 		|| die "configure failed"
-}
 
-multilib-native_src_compile_internal() {
 	# A little hack to fix parallel builds ... they break when
 	# generating sources so if we generate the sources first (in
 	# non-parallel), we can then build the rest of the package
 	# in parallel.  This is not really a perf hit since the source
 	# generation is quite small.  -vapier
-	cd "${WORKDIR}"/narrowc.${ABI}
-	einfo "Compiling regular ncurses in ${WORKDIR}/narrowc.${ABI} ..."
 	emake -j1 sources || die "make sources failed"
-	emake || die "make failed"
-	if use unicode ; then
-		cd "${WORKDIR}"/widec.${ABI}
-		einfo "Compiling unicode ncurses in ${WORKDIR}/widec.${ABI} .."
-		emake -j1 sources || die "make sources failed"
-		emake ${make_flags} || die "make ${make_flags} failed"
-	fi
+	emake ${make_flags} || die "make ${make_flags} failed"
 }
 
 multilib-native_src_install_internal() {
@@ -138,10 +122,10 @@ multilib-native_src_install_internal() {
 
 	# install unicode version second so that the binaries in /usr/bin
 	# support both wide and narrow
-	cd "${WORKDIR}"/narrowc.${ABI}
+	cd "${WORKDIR}"/narrowc
 	emake DESTDIR="${D}" install || die "make narrowc install failed"
 	if use unicode ; then
-		cd "${WORKDIR}"/widec.${ABI}
+		cd "${WORKDIR}"/widec
 		emake DESTDIR="${D}" install || die "make widec install failed"
 	fi
 
