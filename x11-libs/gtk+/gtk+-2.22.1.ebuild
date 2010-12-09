@@ -32,7 +32,7 @@ RDEPEND="!aqua? (
 	)
 	aqua? (
 		>=x11-libs/cairo-1.6[aqua,svg,lib32?]
-		x11-libs/gdk-pixbuf[introspection?,jpeg?,jpeg2k?,tiff?]
+		x11-libs/gdk-pixbuf[introspection?,jpeg?,jpeg2k?,tiff?,lib32?]
 	)
 	xinerama? ( x11-libs/libXinerama[lib32?] )
 	>=dev-libs/glib-2.25.10[lib32?]
