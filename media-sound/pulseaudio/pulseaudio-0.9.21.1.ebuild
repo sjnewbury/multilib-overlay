@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.21.1.ebuild,v 1.10 2010/09/21 22:36:43 abcd Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.21.1.ebuild,v 1.12 2010/12/01 07:44:13 maekke Exp $
 
 EAPI=2
 
-inherit eutils libtool flag-o-matic versionator multilib-native
+inherit autotools eutils libtool flag-o-matic versionator multilib-native
 
 DESCRIPTION="A networked sound server with an advanced plugin system"
 HOMEPAGE="http://www.pulseaudio.org/"
@@ -23,7 +23,7 @@ S="${WORKDIR}/${P/_rc/-test}"
 
 LICENSE="LGPL-2 GPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 ~arm hppa ia64 ppc ppc64 sh sparc x86"
+KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86"
 IUSE="+alsa avahi +caps jack lirc oss tcpd +X hal dbus libsamplerate gnome bluetooth +asyncns +glib test doc +udev ipv6 system-wide"
 
 RDEPEND="X? ( x11-libs/libX11[lib32?] x11-libs/libSM[lib32?] x11-libs/libICE[lib32?] x11-libs/libXtst[lib32?] )
@@ -92,6 +92,12 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
+	if use arm; then
+		# Fix build on armv5 - bug #294599
+		epatch "${FILESDIR}/${PN}-0.9.21-armv5-build-fix.patch"
+		eautoreconf
+	fi
+
 	elibtoolize
 }
 

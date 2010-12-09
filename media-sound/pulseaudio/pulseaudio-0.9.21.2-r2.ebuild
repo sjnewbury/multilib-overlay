@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.21.2-r2.ebuild,v 1.1 2010/09/21 22:36:43 abcd Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.21.2-r2.ebuild,v 1.2 2010/11/27 06:52:54 ford_prefect Exp $
 
 EAPI=3
 
-inherit eutils libtool flag-o-matic versionator multilib-native
+inherit autotools eutils libtool flag-o-matic versionator multilib-native
 
 DESCRIPTION="A networked sound server with an advanced plugin system"
 HOMEPAGE="http://www.pulseaudio.org/"
@@ -93,6 +93,12 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
+	if use arm; then
+		# Fix build on armv5 - bug #294599
+		epatch "${FILESDIR}/${PN}-0.9.21-armv5-build-fix.patch"
+		eautoreconf
+	fi
+
 	elibtoolize
 }
 
