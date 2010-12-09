@@ -32,6 +32,7 @@ app-text/hunspell
 app-text/libpaper
 app-text/opensp
 app-text/poppler
+dev-cpp/atkmm
 dev-cpp/cairomm
 dev-cpp/glibmm
 dev-cpp/gtkmm
@@ -76,6 +77,7 @@ dev-libs/libdaemon
 dev-libs/libedit
 dev-libs/libffi
 dev-libs/libgamin
+dev-libs/libgdata
 dev-libs/libgcrypt
 dev-libs/libgee
 dev-libs/libgpg-error
@@ -243,7 +245,7 @@ net-dns/avahi
 net-dns/c-ares
 net-dns/libidn
 net-fs/samba
-net-fs/samba-libs
+# net-fs/samba-libs	does not exist any more
 net-libs/adns
 net-libs/gnutls
 net-libs/gssdp
