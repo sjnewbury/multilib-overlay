@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-assistant/qt-assistant-4.6.2-r2.ebuild,v 1.3 2010/11/05 18:05:30 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-assistant/qt-assistant-4.6.2-r2.ebuild,v 1.4 2010/12/07 16:05:35 wired Exp $
 
 EAPI="2"
 inherit qt4-build multilib-native
@@ -10,9 +10,9 @@ SLOT="4"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x64-solaris ~x86-solaris"
 IUSE="trace"
 
-DEPEND="~x11-libs/qt-gui-${PV}[aqua=,trace?,lib32?]
-	~x11-libs/qt-sql-${PV}[aqua=,sqlite,lib32?]
-	~x11-libs/qt-webkit-${PV}[aqua=,lib32?]"
+DEPEND="~x11-libs/qt-gui-${PV}[aqua=,debug=,trace?,lib32?]
+	~x11-libs/qt-sql-${PV}[aqua=,debug=,sqlite,lib32?]
+	~x11-libs/qt-webkit-${PV}[aqua=,debug=,lib32?]"
 RDEPEND="${DEPEND}"
 
 PATCHES=( "${FILESDIR}/${PN}-4.6.1-tools.patch" )

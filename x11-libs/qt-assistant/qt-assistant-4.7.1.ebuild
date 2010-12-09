@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-assistant/qt-assistant-4.7.1.ebuild,v 1.1 2010/11/09 15:51:17 wired Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-assistant/qt-assistant-4.7.1.ebuild,v 1.2 2010/12/07 16:05:35 wired Exp $
 
 EAPI="3"
 inherit qt4-build multilib-native
@@ -11,10 +11,10 @@ KEYWORDS="~amd64 ~arm ~ia64 ~ppc ~ppc64 ~x86"
 IUSE="compat doc +glib qt3support trace"
 SRC_URI+=" compat? ( ftp://ftp.qt.nokia.com/qt/source/${PN}-qassistantclient-library-compat-src-4.6.3.tar.gz )"
 
-DEPEND="~x11-libs/qt-gui-${PV}[aqua=,glib=,qt3support=,trace?,lib32?]
-	~x11-libs/qt-sql-${PV}[aqua=,qt3support=,sqlite,lib32?]
-	~x11-libs/qt-webkit-${PV}[aqua=,lib32?]
-	~x11-libs/qt-declarative-${PV}[qt3support=]"
+DEPEND="~x11-libs/qt-gui-${PV}[aqua=,debug=,glib=,qt3support=,trace?,lib32?]
+	~x11-libs/qt-sql-${PV}[aqua=,debug=,qt3support=,sqlite,lib32?]
+	~x11-libs/qt-webkit-${PV}[aqua=,debug=,lib32?]
+	~x11-libs/qt-declarative-${PV}[debug=,qt3support=]"
 RDEPEND="${DEPEND}"
 
 multilib-native_pkg_setup_internal() {
