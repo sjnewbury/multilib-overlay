@@ -18,7 +18,7 @@ IUSE="+introspection"
 RDEPEND=">=dev-libs/glib-2.18:2[lib32?]
 	net-libs/libsoup:2.4[introspection?,lib32?]
 	>=x11-libs/gtk+-2.12:2[lib32?]
-	introspection? ( >=dev-libs/gobject-introspection-0.6.4[lib32?] )"
+	introspection? ( >=dev-libs/gobject-introspection-0.6.4 )"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
 	sys-devel/gettext[lib32?]"
