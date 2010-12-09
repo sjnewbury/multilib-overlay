@@ -26,7 +26,7 @@ RDEPEND=">=dev-libs/glib-2.25.9:2[lib32?]
 	>=sys-apps/dbus-1[lib32?]
 	>=gnome-base/orbit-2.4[lib32?]
 	>=dev-libs/libxml2-2[lib32?]
-	introspection? ( >=dev-libs/gobject-introspection-0.9.5[lib32?] )
+	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
 	ldap? ( net-nds/openldap[lib32?] )
 	policykit? ( sys-auth/polkit[lib32?] )"
 DEPEND="${RDEPEND}
