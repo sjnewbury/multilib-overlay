@@ -170,7 +170,7 @@ for PACKAGE in ${PACKAGE_LIST}; do
 						git diff ${PACKAGE} | colordiff | less
 						;;
 					e)
-						eix ${PACKAGE}
+						eix -e ${PACKAGE}
 						;;
 					c)
 						git add ${PACKAGE}
