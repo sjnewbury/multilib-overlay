@@ -30,7 +30,7 @@ DEPEND="${RDEPEND}
 		>=dev-util/gtk-doc-1.13
 		~app-text/docbook-xml-dtd-4.1.2
 		x11-libs/libXft[lib32?] )
-	introspection? ( >=dev-libs/gobject-introspection-0.6.7[lib32?] )
+	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )
 	test? (
 		>=dev-util/gtk-doc-1.13
 		~app-text/docbook-xml-dtd-4.1.2
