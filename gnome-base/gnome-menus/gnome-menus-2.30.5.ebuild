@@ -1,8 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-menus/gnome-menus-2.30.4.ebuild,v 1.2 2010/11/08 22:08:18 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-menus/gnome-menus-2.30.5.ebuild,v 1.1 2010/11/29 19:17:43 pacho Exp $
 
-EAPI="2"
+EAPI="3"
+GCONF_DEBUG="no"
+
 PYTHON_DEPEND="python? 2:2.4"
 SUPPORT_PYTHON_ABIS="1"
 RESTRICT_PYTHON_ABIS="3.*"
@@ -70,8 +72,8 @@ multilib-native_src_install_internal() {
 	python_clean_installation_image
 
 	# Prefix menu, bug #256614
-	mv "${D}"/etc/xdg/menus/applications.menu \
-		"${D}"/etc/xdg/menus/gnome-applications.menu || die "menu move failed"
+	mv "${ED}"/etc/xdg/menus/applications.menu \
+		"${ED}"/etc/xdg/menus/gnome-applications.menu || die "menu move failed"
 
 	exeinto /etc/X11/xinit/xinitrc.d/
 	doexe "${FILESDIR}/10-xdg-menu-gnome" || die "doexe failed"
