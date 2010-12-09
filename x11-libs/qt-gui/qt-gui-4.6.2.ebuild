@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-gui/qt-gui-4.6.2.ebuild,v 1.9 2010/09/26 13:32:36 wired Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-gui/qt-gui-4.6.2.ebuild,v 1.11 2010/12/05 19:53:27 wired Exp $
 
 EAPI="2"
 inherit confutils eutils qt4-build multilib-native
@@ -12,7 +12,7 @@ IUSE="+accessibility cups dbus +glib gtk mng nas nis raster tiff qt3support xine
 
 RDEPEND="media-libs/fontconfig[lib32?]
 	>=media-libs/freetype-2[lib32?]
-	media-libs/jpeg:0[lib32?]
+	virtual/jpeg[lib32?]
 	media-libs/libpng[lib32?]
 	sys-libs/zlib[lib32?]
 	~x11-libs/qt-core-${PV}[aqua=,debug=,glib=,qt3support=,lib32?]
@@ -34,6 +34,7 @@ RDEPEND="media-libs/fontconfig[lib32?]
 	tiff? ( media-libs/tiff[lib32?] )
 	xinerama? ( x11-libs/libXinerama[lib32?] )"
 DEPEND="${RDEPEND}
+	dev-util/pkgconfig[lib32?]
 	!aqua? (
 		x11-proto/xextproto
 		x11-proto/inputproto

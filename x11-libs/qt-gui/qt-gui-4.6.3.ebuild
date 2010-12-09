@@ -1,13 +1,13 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-gui/qt-gui-4.6.3.ebuild,v 1.5 2010/10/19 21:21:39 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-gui/qt-gui-4.6.3.ebuild,v 1.10 2010/12/05 19:53:27 wired Exp $
 
 EAPI="2"
 inherit confutils eutils qt4-build multilib-native
 
 DESCRIPTION="The GUI module for the Qt toolkit"
 SLOT="4"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x64-solaris ~x86-solaris"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ~ppc64 sparc x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x64-solaris ~x86-solaris"
 IUSE="+accessibility cups dbus +glib gtk mng nas nis raster tiff trace qt3support xinerama"
 
 RDEPEND="media-libs/fontconfig[lib32?]
@@ -34,12 +34,16 @@ RDEPEND="media-libs/fontconfig[lib32?]
 	tiff? ( media-libs/tiff[lib32?] )
 	xinerama? ( x11-libs/libXinerama[lib32?] )"
 DEPEND="${RDEPEND}
+	dev-util/pkgconfig[lib32?]
 	!aqua? (
 		x11-proto/xextproto
 		x11-proto/inputproto
 	)
 	gtk? ( || ( >=x11-libs/cairo-1.10.0[-qt4,lib32?] <x11-libs/cairo-1.10.0[lib32?] ) )
 	xinerama? ( x11-proto/xineramaproto )"
+RDEPEND="${RDEPEND}
+	!x11-themes/qgtkstyle
+"
 PDEPEND="qt3support? ( ~x11-libs/qt-qt3support-${PV}[aqua=,debug=] )"
 
 multilib-native_pkg_setup_internal() {
