@@ -16,7 +16,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86
 IUSE="doc +introspection"
 
 RDEPEND="dev-libs/glib:2[lib32?]
-	introspection? ( >=dev-libs/gobject-introspection-0.6.7[lib32?] )"
+	introspection? ( >=dev-libs/gobject-introspection-0.6.7 )"
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5[lib32?]
 	sys-devel/gettext[lib32?]
