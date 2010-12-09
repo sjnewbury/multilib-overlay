@@ -20,7 +20,7 @@ RDEPEND=">=dev-libs/glib-2.21.4[lib32?]
 	>=dev-libs/eggdbus-0.6[lib32?]
 	pam? ( virtual/pam[lib32?] )
 	expat? ( dev-libs/expat[lib32?] )
-	introspection? ( dev-libs/gobject-introspection[lib32?] )"
+	introspection? ( dev-libs/gobject-introspection )"
 DEPEND="${RDEPEND}
 	!!>=sys-auth/policykit-0.92
 	dev-libs/libxslt[lib32?]

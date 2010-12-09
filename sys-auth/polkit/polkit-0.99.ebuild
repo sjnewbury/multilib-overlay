@@ -18,7 +18,7 @@ IUSE="debug doc examples +introspection nls pam"
 # not mature enough
 RDEPEND=">=dev-libs/glib-2.25.12[lib32?]
 	dev-libs/expat[lib32?]
-	introspection? ( dev-libs/gobject-introspection[lib32?] )
+	introspection? ( dev-libs/gobject-introspection )
 	pam? ( virtual/pam[lib32?] )"
 DEPEND="${RDEPEND}
 	!!>=sys-auth/policykit-0.92
