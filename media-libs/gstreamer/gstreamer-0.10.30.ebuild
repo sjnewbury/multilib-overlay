@@ -20,7 +20,7 @@ IUSE="+introspection nls test"
 
 RDEPEND=">=dev-libs/glib-2.20:2[lib32?]
 	dev-libs/libxml2[lib32?]
-	introspection? ( >=dev-libs/gobject-introspection-0.6.3[lib32?] )
+	introspection? ( >=dev-libs/gobject-introspection-0.6.3 )
 	!<media-libs/gst-plugins-base-0.10.26"
 	# ^^ queue2 move, mustn't have both libgstcoreleements.so and libgstqueue2.so at runtime providing the element at once
 DEPEND="${RDEPEND}
