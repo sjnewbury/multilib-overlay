@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/e2fsprogs-libs/e2fsprogs-libs-1.41.12.ebuild,v 1.9 2010/10/09 17:07:31 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/e2fsprogs-libs/e2fsprogs-libs-1.41.12.ebuild,v 1.10 2010/12/04 21:51:20 vapier Exp $
 
 EAPI="2"
 
@@ -20,8 +20,7 @@ RDEPEND="elibc_glibc? ( >=sys-libs/glibc-2.6 )
 	!sys-libs/ss
 	!<sys-fs/e2fsprogs-1.41.8"
 DEPEND="nls? ( sys-devel/gettext[lib32?] )
-	dev-util/pkgconfig[lib32?]
-	sys-devel/bc"
+	dev-util/pkgconfig[lib32?]"
 
 multilib-native_src_prepare_internal() {
 	echo 'all %:' > doc/Makefile.in # don't bother with docs #305613
