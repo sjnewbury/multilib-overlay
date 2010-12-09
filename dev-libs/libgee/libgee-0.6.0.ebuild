@@ -15,7 +15,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 IUSE="+introspection"
 
 RDEPEND=">=dev-libs/glib-2.12[lib32?]
-	introspection? ( >=dev-libs/gobject-introspection-0.9.6[lib32?] )"
+	introspection? ( >=dev-libs/gobject-introspection-0.9.6 )"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]"
 
