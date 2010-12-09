@@ -21,7 +21,7 @@ IUSE="doc cairo examples +introspection libffi test"
 RDEPEND=">=dev-libs/glib-2.22.4:2[lib32?]
 	!<dev-python/pygtk-2.13
 	introspection? (
-		>=dev-libs/gobject-introspection-0.9.5[lib32?]
+		>=dev-libs/gobject-introspection-0.9.5
 		cairo? ( >=dev-python/pycairo-1.0.2[lib32?] ) )
 	libffi? ( virtual/libffi[lib32?] )"
 DEPEND="${RDEPEND}
