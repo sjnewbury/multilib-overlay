@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-sql/qt-sql-4.7.0.ebuild,v 1.4 2010/11/06 09:37:41 wired Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/qt-sql/qt-sql-4.7.1-r1.ebuild,v 1.1 2010/12/05 19:35:43 wired Exp $
 
 EAPI="3"
 inherit qt4-build multilib-native
@@ -44,6 +44,9 @@ multilib-native_pkg_setup_internal() {
 
 multilib-native_src_prepare_internal() {
 	qt4-build_src_prepare
+
+	# bug 346099
+	epatch "${FILESDIR}"/"${P}"_postgres_9.patch
 
 	sed -e '/pg_config --libs/d' -i "${S}"/configure \
 		|| die "sed to fix postgresql usage in ./configure failed"
