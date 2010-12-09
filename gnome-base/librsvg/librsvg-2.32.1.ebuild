@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/librsvg/librsvg-2.32.1.ebuild,v 1.1 2010/11/19 21:39:45 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/librsvg/librsvg-2.32.1.ebuild,v 1.2 2010/12/05 18:27:55 eva Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -22,12 +22,12 @@ RDEPEND=">=media-libs/fontconfig-1.0.1[lib32?]
 	>=x11-libs/pango-1.10[lib32?]
 	>=dev-libs/libxml2-2.4.7[lib32?]
 	>=dev-libs/libcroco-0.6.1[lib32?]
-	|| ( x11-libs/gdk-pixbuf
+	|| ( x11-libs/gdk-pixbuf[lib32?]
 		x11-libs/gtk+:2[lib32?] )
 	gtk? ( >=x11-libs/gtk+-2.16:2[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.12[lib32?]
-	doc? ( >=dev-util/gtk-doc-1 )"
+	doc? ( >=dev-util/gtk-doc-1.13 )"
 # >=dev-util/gtk-doc-am-1.13 needed by eautoreconf
 
 multilib-native_pkg_setup_internal() {
