@@ -1,7 +1,12 @@
-diff --git a/lib/Makefile.darwin-lib b/lib/Makefile.darwin-lib
-index c94a5e7..6a11a66 100644
---- a/lib/Makefile.darwin-lib
-+++ b/lib/Makefile.darwin-lib
+On Darwin, create dylibs with a versioning scheme like Linux/ELF, not
+like BSD/ELF.
+This patch uses intentionally ELF_* vars to make it easier to diff
+against the ELF Makefile.
+
+http://sourceforge.net/tracker/index.php?func=detail&aid=2555389&group_id=2406&atid=302406
+
+--- lib/Makefile.darwin-lib
++++ lib/Makefile.darwin-lib
 @@ -1,14 +1,15 @@
  #
 -# This is a Makefile stub which handles the creation of Darwin BSD shared
@@ -26,7 +31,7 @@ index c94a5e7..6a11a66 100644
  
  all:: image
  
-@@ -16,36 +17,53 @@ real-subdirs:: Makefile
+@@ -16,36 +17,58 @@
  	$(E) "	MKDIR pic"
  	$(Q) mkdir -p pic
  
@@ -38,12 +43,13 @@ index c94a5e7..6a11a66 100644
 -image:		$(BSD_LIB)
 +image:		$(ELF_LIB)
  
- $(BSD_LIB): $(OBJS)
+-$(BSD_LIB): $(OBJS)
 -	$(E) "	GEN_BSD_SOLIB $(BSD_LIB)"
 -	$(Q) (cd pic; $(CC) -dynamiclib -compatibility_version 1.0 -current_version $(BSDLIB_VERSION) \
 -		-flat_namespace -undefined warning -o $(BSD_LIB) $(OBJS))
 -	$(Q) $(MV) pic/$(BSD_LIB) .
 -	$(Q) $(RM) -f ../$(BSD_LIB)
++$(ELF_LIB): $(OBJS)
 +	$(E) "	GEN_ELF_SOLIB $(ELF_LIB)"
 +	$(Q) (cd pic; $(CC) -dynamiclib -o $(ELF_LIB) $(LDFLAGS) \
 +		-Wl,-install_name,$(libdir)/$(ELF_SONAME) $(OBJS) $(ELF_OTHER_LIBS))
@@ -52,8 +58,15 @@ index c94a5e7..6a11a66 100644
  	$(Q) (cd ..; $(LN) $(LINK_BUILD_FLAGS) \
 -		`echo $(my_dir) | sed -e 's;lib/;;'`/$(BSD_LIB) $(BSD_LIB))
 -	$(Q) (cd ..; $(LN) $(LINK_BUILD_FLAGS) $(BSD_LIB) $(BSDLIB_IMAGE).dylib)
+-
+-install-shlibs install:: $(BSD_LIB)
+-	$(E) "	INSTALL_PROGRAM $(BSDLIB_INSTALL_DIR)/$(BSD_LIB)"
+-	$(Q) $(INSTALL_PROGRAM) $(BSD_LIB) \
+-		$(DESTDIR)$(BSDLIB_INSTALL_DIR)/$(BSD_LIB)
+-	-$(Q) $(LDCONFIG)
 +		`echo $(my_dir) | sed -e 's;lib/;;'`/$(ELF_LIB) $(ELF_LIB))
-+	$(Q) (cd ..; $(LN) $(LINK_BUILD_FLAGS) ../$(ELF_SONAME))
++	$(Q) (cd ..; $(LN) $(LINK_BUILD_FLAGS) $(ELF_LIB) $(ELF_IMAGE).dylib)
++	$(Q) (cd ..; $(LN) $(LINK_BUILD_FLAGS) $(ELF_LIB) $(ELF_SONAME))
 +
 +installdirs-elf-lib::
 +	$(E) "	MKINSTALLDIRS $(ELF_INSTALL_DIR) $(libdir)"
@@ -61,20 +74,19 @@ index c94a5e7..6a11a66 100644
 +		$(DESTDIR)$(libdir)
 +
 +installdirs:: installdirs-elf-lib
- 
--install-shlibs install:: $(BSD_LIB)
--	$(E) "	INSTALL_PROGRAM $(BSDLIB_INSTALL_DIR)/$(BSD_LIB)"
--	$(Q) $(INSTALL_PROGRAM) $(BSD_LIB) \
--		$(DESTDIR)$(BSDLIB_INSTALL_DIR)/$(BSD_LIB)
--	-$(Q) $(LDCONFIG)
++
 +install-shlibs install:: $(ELF_LIB) installdirs-elf-lib
 +	$(E) "	INSTALL-ELF-LIB $(ELF_INSTALL_DIR)/$(ELF_LIB)"
 +	$(Q) $(INSTALL_PROGRAM) $(ELF_LIB) $(DESTDIR)$(ELF_INSTALL_DIR)/$(ELF_LIB)
 +	$(E) "	SYMLINK $(ELF_INSTALL_DIR)/$(ELF_SONAME)"
 +	$(Q) $(LN_S) -f $(ELF_LIB) $(DESTDIR)$(ELF_INSTALL_DIR)/$(ELF_SONAME)
 +	$(E) "	SYMLINK $(libdir)/$(ELF_IMAGE).dylib"
-+	$(Q) $(LN_S) -f $(ELF_SONAME) \
-+		$(DESTDIR)$(libdir)/$(ELF_IMAGE).dylib
++	$(Q) if test "$(ELF_INSTALL_DIR)" = "$(libdir)"; then \
++		$(LN_S) -f $(ELF_SONAME) $(DESTDIR)$(libdir)/$(ELF_IMAGE).dylib ; \
++	else \
++		$(LN_S) -f $(ELF_INSTALL_DIR)/$(ELF_SONAME) \
++			$(DESTDIR)$(libdir)/$(ELF_IMAGE).dylib; \
++	fi			
  
  install-strip: install
 +	$(E) "	STRIP-LIB $(ELF_INSTALL_DIR)/$(ELF_LIB)"
@@ -83,7 +95,7 @@ index c94a5e7..6a11a66 100644
  
  install-shlibs-strip: install-shlibs
 +	$(E) "	STRIP-LIB $(ELF_INSTALL_DIR)/$(ELF_LIB)"
-+	@$(STRIP) --strip-unneeded --remove-section=.comment \
++	$(Q) $(STRIP) --strip-unneeded --remove-section=.comment \
 +		--remove-section=.note $(DESTDIR)$(ELF_INSTALL_DIR)/$(ELF_LIB)
  
  uninstall-shlibs uninstall::

@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/e2fsprogs/e2fsprogs-1.41.12-r1.ebuild,v 1.2 2010/11/19 18:51:40 jlec Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/e2fsprogs/e2fsprogs-1.41.12-r1.ebuild,v 1.4 2010/12/05 14:46:57 grobian Exp $
 
 EAPI="3"
 
@@ -15,14 +15,13 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 -x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~m68k-mint"
 IUSE="nls elibc_FreeBSD"
 
-RDEPEND="
+RDEPEND="~sys-libs/${PN}-libs-${PV}[lib32?]
 	>=sys-apps/util-linux-2.16[lib32?]
-	~sys-libs/${PN}-libs-${PV}[lib32?]
 	nls? ( virtual/libintl )"
 DEPEND="${RDEPEND}
+	nls? ( sys-devel/gettext[lib32?] )
 	dev-util/pkgconfig[lib32?]
-	sys-apps/texinfo
-	nls? ( sys-devel/gettext[lib32?] )"
+	sys-apps/texinfo"
 
 multilib-native_pkg_setup_internal() {
 	if [[ ! -e ${EROOT}/etc/mtab ]] ; then
@@ -35,19 +34,19 @@ multilib-native_pkg_setup_internal() {
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-1.38-tests-locale.patch #99766
 	epatch "${FILESDIR}"/${PN}-1.41.8-makefile.patch
+	epatch "${FILESDIR}"/${PN}-1.41.12-getpagesize.patch
 	epatch "${FILESDIR}"/${PN}-1.40-fbsd.patch
 	# use symlinks rather than hardlinks
 	sed -i \
 		-e 's:$(LN) -f $(DESTDIR).*/:$(LN_S) -f :' \
 		{e2fsck,misc}/Makefile.in || die
 	epatch "${FILESDIR}"/${P}-darwin-makefile.patch
-	epatch "${FILESDIR}"/${P}-darwin-no-mntent.patch
 	if [[ ${CHOST} == *-mint* ]] ; then
 		epatch "${FILESDIR}"/${PN}-1.41-mint.patch
 		epatch "${FILESDIR}"/${PN}-1.41.7-mint-blkid.patch
 	fi
 	# blargh ... trick e2fsprogs into using e2fsprogs-libs
-	rm -rf doc || die
+	rm -rf doc
 	sed -i -r \
 		-e 's:@LIBINTL@:@LTLIBINTL@:' \
 		-e '/^LIB(COM_ERR|SS)/s:[$][(]LIB[)]/lib([^@]*)@LIB_EXT@:-l\1:' \
@@ -76,13 +75,6 @@ multilib-native_src_configure_internal() {
 		*-mint*)   libtype=                     ;;
 		*)         libtype=--enable-elf-shlibs  ;;
 	esac
-
-	# On MacOSX 10.4 using the assembly built-in bitoperation functions causes
-	# segmentation faults. Though this is likely fixable we can quickly make it
-	# at least work by using the C functions.
-	if [[ ${CHOST} == i?86-apple-darwin* ]]; then
-		append-flags -D_EXT2_USE_C_VERSIONS_
-	fi
 
 	ac_cv_path_LDCONFIG=: \
 	econf \
@@ -129,30 +121,16 @@ multilib-native_src_install_internal() {
 		root_libdir="${EPREFIX}/usr/$(get_libdir)" \
 		DESTDIR="${D}" \
 		install install-libs || die
-	dodoc README RELEASE-NOTES || die
+	dodoc README RELEASE-NOTES
 
 	insinto /etc
 	doins "${FILESDIR}"/e2fsck.conf || die
 
 	# Move shared libraries to /lib/, install static libraries to
-	# /usr/lib/,
-	# and install linker scripts to /usr/lib/.
+	# /usr/lib/, and install linker scripts to /usr/lib/.
 	set -- "${ED}"/usr/$(get_libdir)/*.a
 	set -- ${@/*\/lib}
 	gen_usr_ldscript -a "${@/.a}"
-
-	# For correct install_names (on Darwin) we can't do this with
-	# root_libdir=/lib and the code below, instead we need root_libdir=/usr/lib
-	# and gen_usr_ldscript that fixes install_names as the libs are moved
-	## make sure symlinks are relative, not absolute, for cross-compiling
-	#cd "${ED}"/usr/$(get_libdir)
-	#local x l
-	#for x in lib* ; do
-	#	l=$(readlink "${x}")
-	#	[[ ${l} == /* ]] || continue
-	#	rm -f "${x}"
-	#	ln -s "../..${l}" "${x}"
-	#done
 
 	if use elibc_FreeBSD ; then
 		# Install helpers for us
