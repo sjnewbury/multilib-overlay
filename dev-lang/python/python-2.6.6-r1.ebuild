@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.6-r1.ebuild,v 1.3 2010/10/27 12:49:29 djc Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.6.6-r1.ebuild,v 1.6 2010/12/07 09:33:01 phajdan.jr Exp $
 
 EAPI="2"
 
@@ -19,7 +19,7 @@ SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.bz2
 LICENSE="PSF-2.2"
 SLOT="2.6"
 PYTHON_ABI="${SLOT}"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="-berkdb build doc elibc_uclibc examples gdbm ipv6 +ncurses +readline sqlite +ssl +threads tk +wide-unicode wininst +xml"
 
 RDEPEND="!!<sys-apps/portage-2.1.9
@@ -274,24 +274,48 @@ multilib-native_src_install_internal() {
 	prep_ml_binaries usr/bin/python${SLOT} usr/bin/python-config-${SLOT}
 }
 
+save_active_python_version() {
+	active_python_2=$(eselect python show --python2)
+	active_python_3=$(eselect python show --python3)
+	active_python_main=$(eselect python show)
+}
+
+restore_active_python_version() {
+	if [[ -n "${active_python_2}" &&
+			"${active_python_2}" != $(eselect python show --python2) ]] ; then
+		einfo "Restoring active Python 2.x interpreter: ${active_python_2}"
+		eselect python set --python2 "${active_python_2}"
+	fi
+	if [[ -n "${active_python_3}" &&
+			"${active_python_3}" != $(eselect python show --python3) ]] ; then
+		einfo "Restoring active Python 3.x interpreter: ${active_python_3}"
+		eselect python set --python3 "${active_python_3}"
+	fi
+
+	if [[ -n "${active_python_main}" &&
+			"${active_python_main}" != $(eselect python show) ]] ; then
+		einfo "Restoring main active Python interpreter: ${active_python_main}"
+		eselect python set "${active_python_main}"
+	fi
+}
+
+ensure_python_symlink() {
+	if [[ -z "$(eselect python show --python${PV%%.*})" ]]; then
+		eselect python update --python${PV%%.*}
+	fi
+}
+
 multilib-native_pkg_preinst_internal() {
+	save_active_python_version
+
 	if has_version "<${CATEGORY}/${PN}-${SLOT}" && ! has_version "${CATEGORY}/${PN}:2.6" && ! has_version "${CATEGORY}/${PN}:2.7"; then
 		python_updater_warning="1"
 	fi
 }
 
-eselect_python_update() {
-	local eselect_python_options
-	[[ "$(eselect python show)" == "python2."* ]] && eselect_python_options="--python2"
-
-	# Create python2 symlink.
-	eselect python update --python2 > /dev/null
-
-	eselect python update ${eselect_python_options}
-}
-
 multilib-native_pkg_postinst_internal() {
-	eselect_python_update
+	restore_active_python_version
+	ensure_python_symlink
 
 	python_mod_optimize -f -x "/(site-packages|test|tests)/" $(python_get_libdir)
 
@@ -309,7 +333,7 @@ multilib-native_pkg_postinst_internal() {
 }
 
 multilib-native_pkg_postrm_internal() {
-	eselect_python_update
+	ensure_python_symlink
 
 	python_mod_cleanup $(python_get_libdir)
 }
