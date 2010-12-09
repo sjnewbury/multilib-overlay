@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/hal/hal-0.5.14-r3.ebuild,v 1.1 2010/09/28 06:20:47 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/hal/hal-0.5.14-r3.ebuild,v 1.2 2010/12/05 21:14:21 dang Exp $
 
 EAPI="2"
 
@@ -57,6 +57,7 @@ DEPEND="${RDEPEND}
 					dev-libs/libxml2[lib32?]
 					dev-util/gtk-doc
 					app-text/docbook-sgml-utils
+					app-text/docbook-xml-dtd:4.1.2
 				)"
 PDEPEND=">=app-misc/hal-info-20081219
 	!gnome-extra/hal-device-manager
