@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/tcl/tcl-8.5.7.ebuild,v 1.13 2010/06/15 23:46:51 mr_bones_ Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/tcl/tcl-8.5.7.ebuild,v 1.14 2010/12/06 16:15:24 jlec Exp $
 
 inherit autotools eutils flag-o-matic multilib toolchain-funcs multilib-native
 
@@ -13,8 +13,6 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="debug threads"
-
-DEPEND=""
 
 S="${WORKDIR}/${MY_P}"
 
@@ -54,7 +52,7 @@ multilib-native_src_compile_internal() {
 	cd "${S}"/unix
 	econf \
 		$(use_enable threads) \
-		$(use_enable debug symbols) || die
+		$(use_enable debug symbols)
 	emake || die
 }
 

@@ -1,6 +1,6 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/tcl/tcl-8.4.18.ebuild,v 1.11 2010/06/15 23:46:51 mr_bones_ Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/tcl/tcl-8.4.18.ebuild,v 1.12 2010/12/06 16:15:24 jlec Exp $
 
 inherit autotools eutils multilib toolchain-funcs multilib-native
 
@@ -13,14 +13,12 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc ~sparc-fbsd x86 ~x86-fbsd"
 IUSE="debug threads"
 
-DEPEND=""
-
 S="${WORKDIR}/${PN}${PV}"
 
 multilib-native_pkg_setup_internal() {
 	if use threads ; then
 		ewarn ""
-		ewarn "PLEASE NOTE: You are compiling ${PF} with"
+		ewarn "PLEASE NOTE: You are compiling ${P} with"
 		ewarn "threading enabled."
 		ewarn "Threading is not supported by all applications"
 		ewarn "that compile against tcl. You use threading at"
@@ -62,7 +60,7 @@ multilib-native_src_compile_internal() {
 	cd "${S}"/unix
 	econf \
 		$(use_enable threads) \
-		$(use_enable debug symbols) || die
+		$(use_enable debug symbols)
 	emake || die
 }
 

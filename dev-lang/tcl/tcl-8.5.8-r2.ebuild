@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/tcl/tcl-8.5.8-r2.ebuild,v 1.2 2010/11/08 13:16:52 mduft Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/tcl/tcl-8.5.8-r2.ebuild,v 1.3 2010/12/06 16:15:24 jlec Exp $
 
 EAPI="3"
 
@@ -52,7 +52,7 @@ multilib-native_src_configure_internal() {
 	cd "${S}"/unix
 	econf \
 		$(use_enable threads) \
-		$(use_enable debug symbols) || die
+		$(use_enable debug symbols)
 }
 
 multilib-native_src_compile_internal() {
