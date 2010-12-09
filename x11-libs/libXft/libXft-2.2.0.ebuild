@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/libXft/libXft-2.2.0.ebuild,v 1.2 2010/11/01 14:28:03 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/libXft/libXft-2.2.0.ebuild,v 1.3 2010/12/04 12:36:53 scarabeus Exp $
 
 EAPI=3
 inherit xorg-2 flag-o-matic multilib-native
@@ -15,7 +15,8 @@ RDEPEND=">=x11-libs/libXrender-0.8.2[lib32?]
 	x11-libs/libXext[lib32?]
 	media-libs/freetype[lib32?]
 	media-libs/fontconfig[lib32?]
-	x11-proto/xproto"
+	x11-proto/xproto
+	virtual/ttf-fonts"
 DEPEND="${RDEPEND}"
 
 multilib-native_src_install_internal() {
