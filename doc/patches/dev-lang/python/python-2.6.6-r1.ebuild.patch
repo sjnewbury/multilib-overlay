@@ -1,6 +1,6 @@
---- /usr/portage/dev-lang/python/python-3.1.2-r3.ebuild	2010-07-04 23:36:35.000000000 +0200
-+++ ./dev-lang/python/python-3.1.2-r3.ebuild	2010-07-11 18:29:50.000000000 +0200
-@@ -36,7 +36,8 @@
+--- /usr/portage/dev-lang/python/python-2.6.6-r1.ebuild	2010-12-22 16:05:36.000000000 +0100
++++ ./dev-lang/python/python-2.6.6-r1.ebuild	2010-12-25 00:21:09.000000000 +0100
+@@ -46,7 +46,8 @@
  			tk? ( >=dev-lang/tk-8.0 )
  			xml? ( >=dev-libs/expat-2 )
  		)

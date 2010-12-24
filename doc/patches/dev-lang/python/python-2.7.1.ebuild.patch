@@ -1,0 +1,12 @@
+--- /usr/portage/dev-lang/python/python-2.7.1.ebuild	2010-12-16 17:35:54.000000000 +0100
++++ ./dev-lang/python/python-2.7.1.ebuild	2010-12-25 00:24:47.000000000 +0100
+@@ -59,7 +59,8 @@
+ 			tk? ( >=dev-lang/tk-8.0 )
+ 			xml? ( >=dev-libs/expat-2 )
+ 		)
+-		!!<sys-apps/portage-2.1.9"
++		!!<sys-apps/portage-2.1.9
++		app-arch/bzip2"
+ DEPEND="${RDEPEND}
+ 		$([[ "${PV}" == *_pre* ]] && echo "=${CATEGORY}/${PN}-${PV%%.*}*")
+ 		dev-util/pkgconfig
