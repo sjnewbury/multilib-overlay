@@ -1,9 +1,9 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-9999.ebuild,v 1.28 2010/11/14 17:43:22 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-9999.ebuild,v 1.31 2010/12/22 22:52:27 eva Exp $
 
-EAPI="2"
-G2CONF_DEBUG="no"
+EAPI="3"
+GCONF_DEBUG="no"
 PYTHON_DEPEND="2"
 
 inherit autotools git gnome2 linux-info python multilib-native
@@ -24,9 +24,7 @@ IUSE="applet doc eds exif flac gif gnome-keyring gsf gstreamer gtk hal iptc +jpe
 RDEPEND="
 	>=app-i18n/enca-1.9[lib32?]
 	>=dev-db/sqlite-3.7[threadsafe,lib32?]
-	>=dev-libs/dbus-glib-0.82-r1[lib32?]
-	>=sys-apps/dbus-1.3.1[lib32?]
-	>=dev-libs/glib-2.24:2[lib32?]
+	>=dev-libs/glib-2.26:2[lib32?]
 	|| (
 		>=media-gfx/imagemagick-5.2.1[png,jpeg=,lib32?]
 		media-gfx/graphicsmagick[imagemagick,png,jpeg=] )
@@ -35,7 +33,7 @@ RDEPEND="
 	sys-apps/util-linux[lib32?]
 
 	applet? (
-		gnome-base/gnome-panel[lib32?]
+		|| ( gnome-base/gnome-panel[bonobo,lib32?] <gnome-base/gnome-panel-2.32[lib32?] )
 		>=x11-libs/gtk+-2.18:2[lib32?] )
 	eds? (
 		>=mail-client/evolution-2.29.1[lib32?]
@@ -54,7 +52,7 @@ RDEPEND="
 	)
 	gtk? (
 		>=dev-libs/libgee-0.3[lib32?]
-		>=x11-libs/gtk+-2.18[lib32?] )
+		>=x11-libs/gtk+-2.18:2[lib32?] )
 	iptc? ( media-libs/libiptcdata[lib32?] )
 	jpeg? ( virtual/jpeg:0[lib32?] )
 	laptop? (
@@ -68,7 +66,7 @@ RDEPEND="
 	pdf? (
 		>=x11-libs/cairo-1[lib32?]
 		>=app-text/poppler-0.12.3-r3[cairo,utils,lib32?]
-		>=x11-libs/gtk+-2.12[lib32?] )
+		>=x11-libs/gtk+-2.12:2[lib32?] )
 	playlist? ( dev-libs/totem-pl-parser )
 	rss? ( net-libs/libgrss[lib32?] )
 	strigi? ( >=app-misc/strigi-0.7[lib32?] )
@@ -83,9 +81,9 @@ DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.20[lib32?]
 	dev-util/gtk-doc-am
 	>=dev-util/gtk-doc-1.8
-	applet? ( >=dev-lang/vala-0.11.1:0.12[lib32?] )
+	applet? ( >=dev-lang/vala-0.11.2:0.12[lib32?] )
 	gtk? (
-		>=dev-lang/vala-0.11.1:0.12[lib32?]
+		>=dev-lang/vala-0.11.2:0.12[lib32?]
 		>=dev-libs/libgee-0.3[lib32?] )
 	doc? (
 		media-gfx/graphviz[lib32?] )
@@ -195,13 +193,12 @@ multilib-native_src_prepare_internal() {
 }
 
 src_test() {
-	export XDG_CONFIG_HOME="${T}"
 	unset DBUS_SESSION_BUS_ADDRESS
-	emake check || die "tests failed"
+	Xemake check XDG_DATA_HOME="${T}" XDG_CONFIG_HOME="${T}" || die "tests failed"
 }
 
 multilib-native_src_install_internal() {
 	gnome2_src_install
 	# Tracker and none of the plugins it provides needs la files
-	find "${D}" -name "*.la" -delete || die
+	find "${ED}" -name "*.la" -delete || die
 }

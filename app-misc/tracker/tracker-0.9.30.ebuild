@@ -1,12 +1,12 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-0.9.27.ebuild,v 1.3 2010/11/14 16:17:32 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-0.9.30.ebuild,v 1.3 2010/12/22 22:52:27 eva Exp $
 
-EAPI="2"
-G2CONF_DEBUG="no"
+EAPI="3"
+GCONF_DEBUG="no"
 PYTHON_DEPEND="2"
 
-inherit eutils gnome2 linux-info python multilib-native
+inherit eutils gnome2 linux-info python virtualx multilib-native
 
 DESCRIPTION="A tagging metadata database, search tool and indexer"
 HOMEPAGE="http://www.tracker-project.org/"
@@ -21,12 +21,11 @@ IUSE="applet doc eds exif flac gif gnome-keyring gsf gstreamer gtk hal iptc +jpe
 RESTRICT="test"
 
 # TODO: rest -> flickr, qt vs. gdk
+# vala is built with debug by default (see VALAFLAGS)
 RDEPEND="
 	>=app-i18n/enca-1.9[lib32?]
 	>=dev-db/sqlite-3.7[threadsafe,lib32?]
-	>=dev-libs/dbus-glib-0.82-r1[lib32?]
-	>=sys-apps/dbus-1.3.1[lib32?]
-	>=dev-libs/glib-2.20:2[lib32?]
+	>=dev-libs/glib-2.26:2[lib32?]
 	|| (
 		>=media-gfx/imagemagick-5.2.1[png,jpeg=,lib32?]
 		media-gfx/graphicsmagick[imagemagick,png,jpeg=] )
@@ -35,7 +34,7 @@ RDEPEND="
 	sys-apps/util-linux[lib32?]
 
 	applet? (
-		gnome-base/gnome-panel[lib32?]
+		|| ( gnome-base/gnome-panel[bonobo,lib32?] <gnome-base/gnome-panel-2.32[lib32?] )
 		>=x11-libs/gtk+-2.18:2[lib32?] )
 	eds? (
 		>=mail-client/evolution-2.29.1[lib32?]
@@ -54,7 +53,7 @@ RDEPEND="
 	)
 	gtk? (
 		>=dev-libs/libgee-0.3[lib32?]
-		>=x11-libs/gtk+-2.18[lib32?] )
+		>=x11-libs/gtk+-2.18:2[lib32?] )
 	iptc? ( media-libs/libiptcdata[lib32?] )
 	jpeg? ( virtual/jpeg:0[lib32?] )
 	laptop? (
@@ -68,7 +67,7 @@ RDEPEND="
 	pdf? (
 		>=x11-libs/cairo-1[lib32?]
 		>=app-text/poppler-0.12.3-r3[cairo,utils,lib32?]
-		>=x11-libs/gtk+-2.12[lib32?] )
+		>=x11-libs/gtk+-2.12:2[lib32?] )
 	playlist? ( dev-libs/totem-pl-parser )
 	rss? ( net-libs/libgrss[lib32?] )
 	strigi? ( >=app-misc/strigi-0.7[lib32?] )
@@ -81,13 +80,17 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
 	>=sys-devel/gettext-0.14[lib32?]
 	>=dev-util/pkgconfig-0.20[lib32?]
-	applet? ( dev-lang/vala[lib32?] )
+	applet? ( >=dev-lang/vala-0.11.2:0.12[lib32?] )
 	gtk? (
-		dev-lang/vala[lib32?]
+		>=dev-lang/vala-0.11.2:0.12[lib32?]
 		>=dev-libs/libgee-0.3[lib32?] )
 	doc? (
 		>=dev-util/gtk-doc-1.8
-		media-gfx/graphviz[lib32?] )"
+		media-gfx/graphviz[lib32?] )
+	test? (
+		>=dev-libs/dbus-glib-0.82-r1[lib32?]
+		>=sys-apps/dbus-1.3.1[X,lib32?] )
+"
 
 function inotify_enabled() {
 	if linux_config_exists; then
@@ -127,6 +130,10 @@ multilib-native_pkg_setup_internal() {
 		G2CONF="${G2CONF} --disable-hal --disable-upower"
 	fi
 
+	if use applet || use gtk; then
+		G2CONF="${G2CONF} VALAC=$(type -P valac-0.12)"
+	fi
+
 	# unicode-support: libunistring, libicu or glib ?
 	G2CONF="${G2CONF}
 		--disable-functional-tests
@@ -160,7 +167,7 @@ multilib-native_pkg_setup_internal() {
 		# FIXME: handle gdk vs qt for mp3 thumbnail extract
 		# $(use_enable gtk gdkpixbuf)
 		# FIXME: missing some files ?
-		#$(use_enable test functional-tests)
+		# $(use_enable test functional-tests)
 
 	DOCS="AUTHORS ChangeLog NEWS README"
 
@@ -180,13 +187,9 @@ multilib-native_src_prepare_internal() {
 	python_convert_shebangs 2 "${S}"/examples/rss-reader/*.py
 
 	# FIXME: report broken/disabled tests
-	sed -e '/\/libtracker-common\/tracker-dbus\/request-client-lookup/,+1 s:^\(.*\)$:/*\1*/:' \
-		-i tests/libtracker-common/tracker-dbus-test.c || die
 	sed -e '/\/libtracker-miner\/tracker-password-provider\/setting/,+1 s:^\(.*\)$:/*\1*/:' \
 		-e '/\/libtracker-miner\/tracker-password-provider\/getting/,+1 s:^\(.*\)$:/*\1*/:' \
 		-i tests/libtracker-miner/tracker-password-provider-test.c || die
-	sed -e '/\/libtracker-db\/tracker-db-journal\/init-and-shutdown/,+1 s:^\(.*\)$:/*\1*/:' \
-		-i tests/libtracker-data/tracker-db-journal.c || die
 	# Needs to setup a fake system dbus
 	sed -e 's/tracker-test//' \
 		-i tests/libtracker-sparql/Makefile.{am,in} || die
@@ -197,13 +200,12 @@ multilib-native_src_prepare_internal() {
 }
 
 src_test() {
-	export XDG_CONFIG_HOME="${T}"
 	unset DBUS_SESSION_BUS_ADDRESS
-	emake check || die "tests failed"
+	Xemake check XDG_DATA_HOME="${T}" XDG_CONFIG_HOME="${T}" || die "tests failed"
 }
 
 multilib-native_src_install_internal() {
 	gnome2_src_install
 	# Tracker and none of the plugins it provides needs la files
-	find "${D}" -name "*.la" -delete || die
+	find "${ED}" -name "*.la" -delete || die
 }

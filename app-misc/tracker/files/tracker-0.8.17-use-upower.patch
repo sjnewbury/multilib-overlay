@@ -1,0 +1,516 @@
+From 16a8576cb8e06de02f366002464709797aa92050 Mon Sep 17 00:00:00 2001
+From: Michael Biebl <biebl@debian.org>
+Date: Wed, 14 Apr 2010 03:49:31 +0200
+Subject: [PATCH 2/3] gentoo: port from libdevkit-power-gobject to libupower-glib
+
+Squashed from 0.9 series commits:
+ * 0476409b069a8a23f6829af1365426c1d8385d91
+ * cfa8dcbcbea9b80ca27636532fb38fbf5d08a110
+ * 8099bdd7c8409e7819864b4b7e315fd99383041f
+---
+ configure.ac                                    |   54 +++---
+ src/libtracker-common/Makefile.am               |   11 +-
+ src/libtracker-common/tracker-power-devicekit.c |  247 -----------------------
+ src/libtracker-common/tracker-power-upower.c    |  247 +++++++++++++++++++++++
+ src/miners/fs/tracker-miner-files.c             |   24 +-
+ 5 files changed, 291 insertions(+), 292 deletions(-)
+ delete mode 100644 src/libtracker-common/tracker-power-devicekit.c
+ create mode 100644 src/libtracker-common/tracker-power-upower.c
+
+diff --git a/configure.ac b/configure.ac
+index 4f1ebc4..7c8b284 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -139,7 +139,7 @@ GTK_REQUIRED=2.18.0
+ LIBXML2_REQUIRED=2.6
+ LIBNOTIFY_REQUIRED=0.4.3
+ HAL_REQUIRED=0.5
+-DEVKIT_POWER_REQUIRED=007
++UPOWER_REQUIRED=0.9.0
+ GDKPIXBUF_REQUIRED=2.12.0
+ QUILL_REQUIRED=1.0.0
+ UNAC_REQUIRED=1.0.0
+@@ -422,36 +422,36 @@ fi
+ 
+ 
+ ##################################################################
+-# Check for DeviceKit-power
++# Check for UPower
+ ##################################################################
+ 
+-AC_ARG_ENABLE(devkit_power,
+-	      AS_HELP_STRING([--disable-devkit-power],
+-			     [disable DeviceKit-power support for AC power detection [[default=auto]]]),,
+-	      [enable_devkit_power=auto])
+-
+-if test "x$enable_devkit_power" != "xno"; then
+-   PKG_CHECK_MODULES(DEVKIT_POWER,
+-		     [devkit-power-gobject >= $DEVKIT_POWER_REQUIRED],
+-		     [have_devkit_power=yes] ,
+-		     [have_devkit_power=no])
+-   AC_SUBST(DEVKIT_POWER_CFLAGS)
+-   AC_SUBST(DEVKIT_POWER_LIBS)
+-
+-   if test "x$have_devkit_power" = "xyes"; then
+-      AC_DEFINE(HAVE_DEVKIT_POWER, [], [Define if we have DEVKIT_POWER])
++AC_ARG_ENABLE(upower,
++	      AS_HELP_STRING([--disable-upower],
++			     [disable UPower support for AC power detection [[default=auto]]]),,
++	      [enable_upower=auto])
++
++if test "x$enable_upower" != "xno"; then
++   PKG_CHECK_MODULES(UPOWER,
++		     [upower-glib >= $UPOWER_REQUIRED],
++		     [have_upower=yes] ,
++		     [have_upower=no])
++   AC_SUBST(UPOWER_CFLAGS)
++   AC_SUBST(UPOWER_LIBS)
++
++   if test "x$have_upower" = "xyes"; then
++      AC_DEFINE(HAVE_UPOWER, [], [Define if we have UPOWER])
+    fi
+ else
+-   have_devkit_power="no  (disabled)"
++   have_upower="no  (disabled)"
+ fi
+ 
+-if test "x$enable_devkit_power" = "xyes"; then
+-   if test "x$have_devkit_power" != "xyes"; then
+-      AC_MSG_ERROR([Couldn't find devkit_power >= $DEVKIT_POWER_REQUIRED.])
++if test "x$enable_upower" = "xyes"; then
++   if test "x$have_upower" != "xyes"; then
++      AC_MSG_ERROR([Couldn't find upower >= $UPOWER_REQUIRED.])
+    fi
+ fi
+ 
+-AM_CONDITIONAL(HAVE_DEVKIT_POWER, test "x$have_devkit_power" = "xyes")
++AM_CONDITIONAL(HAVE_UPOWER, test "x$have_upower" = "xyes")
+ 
+ ##################################################################
+ # Check for HAL
+@@ -462,7 +462,7 @@ AC_ARG_ENABLE(hal,
+ 			     [disable HAL support for AC power detection [[default=auto]]]),,
+ 	      [enable_hal=auto])
+ 
+-if test "x$have_devkit_power" != "xyes" && test "x$enable_hal" != "xno"; then
++if test "x$have_upower" != "xyes" && test "x$enable_hal" != "xno"; then
+    PKG_CHECK_MODULES(HAL,
+                      [hal >= $HAL_REQUIRED],
+ 		     [have_hal=yes] ,
+@@ -478,8 +478,8 @@ else
+ fi
+ 
+ if test "x$enable_hal" = "xyes"; then
+-   if test "x$have_devkit_power" = "xyes"; then
+-      AC_MSG_ERROR([Only one of DeviceKit-power and HAL can be used.])
++   if test "x$have_upower" = "xyes"; then
++      AC_MSG_ERROR([Only one of UPower and HAL can be used.])
+    elif test "x$have_hal" != "xyes"; then
+       AC_MSG_ERROR([Couldn't find hal >= $HAL_REQUIRED.])
+    fi
+@@ -1797,8 +1797,8 @@ Build Configuration:
+ 	Enable unit tests:			$have_unit_tests
+ 
+ 	Support for ioprio:			$tracker_cv_have_ioprio
+-	Support for HAL:                    	$have_hal
+-	Support for DeviceKit-power:           	$have_devkit_power
++	Support for HAL:			$have_hal
++	Support for UPower:			$have_upower
+ 	Support for file monitoring:            $have_file_monitor
+ 	Support for accent stripping (unac):  	$have_unac
+ 	Support for Cyrillic languages (enca): 	$have_enca
+diff --git a/src/libtracker-common/Makefile.am b/src/libtracker-common/Makefile.am
+index 5a3d33e..555fcff 100644
+--- a/src/libtracker-common/Makefile.am
++++ b/src/libtracker-common/Makefile.am
+@@ -4,14 +4,13 @@ INCLUDES =						\
+ 	-DSHAREDIR=\""$(datadir)"\"			\
+ 	-DG_LOG_DOMAIN=\"Tracker\"			\
+ 	-DTRACKER_COMPILATION				\
+-	-DI_KNOW_THE_DEVICEKIT_POWER_API_IS_SUBJECT_TO_CHANGE	\
+ 	-I$(top_srcdir)/src				\
+ 	$(WARN_CFLAGS)					\
+ 	$(GLIB2_CFLAGS)					\
+ 	$(GCOV_CFLAGS)					\
+ 	$(GIO_CFLAGS)					\
+ 	$(HAL_CFLAGS)					\
+-	$(DEVKIT_POWER_CFLAGS)				\
++	$(UPOWER_CFLAGS)				\
+ 	$(DBUS_CFLAGS)
+ 
+ libtracker_commondir = $(libdir)/tracker-$(TRACKER_API_VERSION)
+@@ -23,12 +22,12 @@ else
+ os_sources = tracker-os-dependant-unix.c
+ endif
+ 
+-# Prefer DeviceKit-power for the power data if it's available, else fall back to HAL
+-if HAVE_DEVKIT_POWER
++# Prefer UPower for the power data if it's available, else fall back to HAL
++if HAVE_UPOWER
+ power_headers =						\
+ 	tracker-power.h
+ power_sources =						\
+-	tracker-power-devicekit.c
++	tracker-power-upower.c
+ else
+ if HAVE_HAL
+ power_headers =						\
+@@ -77,7 +76,7 @@ libtracker_common_la_LDFLAGS = 				\
+ libtracker_common_la_LIBADD = 				\
+ 	$(top_builddir)/src/libstemmer/libstemmer.la	\
+ 	$(HAL_LIBS)					\
+-	$(DEVKIT_POWER_LIBS)				\
++	$(UPOWER_LIBS)					\
+ 	$(DBUS_LIBS)					\
+ 	$(GIO_LIBS)					\
+ 	$(GCOV_LIBS)					\
+diff --git a/src/libtracker-common/tracker-power-devicekit.c b/src/libtracker-common/tracker-power-devicekit.c
+deleted file mode 100644
+index 4022302..0000000
+
+Hunk removed to avoid 20k patch size limit.
+
+diff --git a/src/libtracker-common/tracker-power-upower.c b/src/libtracker-common/tracker-power-upower.c
+new file mode 100644
+index 0000000..8a1b71e
+--- /dev/null
++++ b/src/libtracker-common/tracker-power-upower.c
+@@ -0,0 +1,247 @@
++/*
++ * Copyright (C) 2006, Jamie McCracken <jamiemcc@gnome.org>
++ * Copyright (C) 2008, Nokia <ivan.frade@nokia.com>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the
++ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
++ * Boston, MA  02110-1301, USA.
++ */
++
++#include "config.h"
++
++#ifdef HAVE_UPOWER
++
++#include <upower.h>
++
++#include "tracker-power.h"
++
++#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), TRACKER_TYPE_POWER, TrackerPowerPriv))
++
++typedef struct {
++	UpClient  *client;
++	gboolean   on_battery;
++	gboolean   on_low_battery;
++} TrackerPowerPriv;
++
++static void     tracker_power_finalize          (GObject         *object);
++static void     tracker_power_get_property      (GObject         *object,
++                                                 guint            param_id,
++                                                 GValue                  *value,
++                                                 GParamSpec      *pspec);
++static void     tracker_power_client_changed_cb (UpClient        *client,
++                                                 TrackerPower    *power);
++
++enum {
++	PROP_0,
++	PROP_ON_BATTERY,
++	PROP_ON_LOW_BATTERY,
++	PROP_BATTERY_PERCENTAGE
++};
++
++G_DEFINE_TYPE (TrackerPower, tracker_power, G_TYPE_OBJECT);
++
++static void
++tracker_power_class_init (TrackerPowerClass *klass)
++{
++	GObjectClass *object_class;
++
++	object_class = G_OBJECT_CLASS (klass);
++
++	object_class->finalize     = tracker_power_finalize;
++	object_class->get_property = tracker_power_get_property;
++
++	g_object_class_install_property (object_class,
++	                                 PROP_ON_BATTERY,
++	                                 g_param_spec_boolean ("on-battery",
++	                                                       "Battery in use",
++	                                                       "Whether the battery is being used",
++	                                                       FALSE,
++	                                                       G_PARAM_READABLE));
++
++	g_object_class_install_property (object_class,
++	                                 PROP_ON_LOW_BATTERY,
++	                                 g_param_spec_boolean ("on-low-battery",
++	                                                       "Battery low",
++	                                                       "Whether the battery is low",
++	                                                       FALSE,
++	                                                       G_PARAM_READABLE));
++	g_object_class_install_property (object_class,
++	                                 PROP_BATTERY_PERCENTAGE,
++	                                 g_param_spec_double ("battery-percentage",
++	                                                      "Battery percentage",
++	                                                      "Current battery percentage left",
++	                                                      0.0,
++	                                                      1.0,
++	                                                      0.0,
++	                                                      G_PARAM_READABLE));
++
++	g_type_class_add_private (object_class, sizeof (TrackerPowerPriv));
++}
++
++static void
++tracker_power_init (TrackerPower *power)
++{
++	TrackerPowerPriv *priv;
++
++	g_message ("Initializing UPower...");
++
++	priv = GET_PRIV (power);
++
++	/* connect to a UPower instance */
++	priv->client = up_client_new ();
++	g_signal_connect (priv->client, "changed",
++	                  G_CALLBACK (tracker_power_client_changed_cb), power);
++
++	/* coldplug */
++	priv->on_battery = up_client_get_on_battery (priv->client);
++	priv->on_low_battery = up_client_get_on_low_battery (priv->client);
++}
++
++static void
++tracker_power_finalize (GObject *object)
++{
++	TrackerPowerPriv *priv;
++
++	priv = GET_PRIV (object);
++
++	g_object_unref (priv->client);
++
++	(G_OBJECT_CLASS (tracker_power_parent_class)->finalize) (object);
++}
++
++static void
++tracker_power_get_property (GObject    *object,
++                            guint       param_id,
++                            GValue     *value,
++                            GParamSpec *pspec)
++{
++	TrackerPowerPriv *priv;
++
++	priv = GET_PRIV (object);
++
++	switch (param_id) {
++	case PROP_ON_BATTERY:
++		g_value_set_boolean (value, priv->on_battery);
++		break;
++	case PROP_ON_LOW_BATTERY:
++		g_value_set_boolean (value, priv->on_low_battery);
++		break;
++	default:
++		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
++		break;
++	};
++}
++
++/**
++ * tracker_power_client_changed_cb:
++ **/
++static void
++tracker_power_client_changed_cb (UpClient *client, TrackerPower *power)
++{
++	gboolean on_battery;
++	gboolean on_low_battery;
++	TrackerPowerPriv *priv;
++
++	priv = GET_PRIV (power);
++
++	/* get the on-battery state */
++	on_battery = up_client_get_on_battery (priv->client);
++	if (on_battery != priv->on_battery) {
++		priv->on_battery = on_battery;
++		g_object_notify (G_OBJECT (power), "on-battery");
++	}
++
++	/* get the on-low-battery state */
++	on_low_battery = up_client_get_on_low_battery (priv->client);
++	if (on_low_battery != priv->on_low_battery) {
++		priv->on_low_battery = on_low_battery;
++		g_object_notify (G_OBJECT (power), "on-low-battery");
++	}
++}
++
++/**
++ * tracker_power_new:
++ *
++ * Creates a new instance of #TrackerPower.
++ *
++ * Returns: The newly created #TrackerPower.
++ **/
++TrackerPower *
++tracker_power_new ()
++{
++	return g_object_new (TRACKER_TYPE_POWER, NULL);
++}
++
++/**
++ * tracker_power_get_on_battery:
++ * @power: A #TrackerPower.
++ *
++ * Returns whether the computer battery (if any) is currently in use.
++ *
++ * Returns: #TRUE if the computer is running on battery power.
++ **/
++gboolean
++tracker_power_get_on_battery (TrackerPower *power)
++{
++	TrackerPowerPriv *priv;
++
++	g_return_val_if_fail (TRACKER_IS_POWER (power), TRUE);
++
++	priv = GET_PRIV (power);
++
++	return priv->on_battery;
++}
++
++/**
++ * tracker_power_get_on_low_battery:
++ * @power: A #TrackerPower
++ *
++ * Returns whether the computer has batteries.
++ *
++ * Returns: #TRUE if the computer has batteries available.
++ **/
++gboolean
++tracker_power_get_on_low_battery (TrackerPower *power)
++{
++	TrackerPowerPriv *priv;
++
++	g_return_val_if_fail (TRACKER_IS_POWER (power), TRUE);
++
++	priv = GET_PRIV (power);
++
++	return priv->on_low_battery;
++}
++
++/**
++ * tracker_power_get_battery_percentage:
++ * @power: A #TrackerPower
++ *
++ * Returns the percentage of battery power available.
++ *
++ * Returns: #gdouble representing the percentage between 0.0 and 1.0.
++ **/
++gdouble
++tracker_power_get_battery_percentage (TrackerPower *power)
++{
++	TrackerPowerPriv *priv;
++
++	g_return_val_if_fail (TRACKER_IS_POWER (power), TRUE);
++
++	priv = GET_PRIV (power);
++
++	/* FIXME: Implement */
++	return 0.5;
++}
++
++#endif /* HAVE_UPOWER */
+diff --git a/src/miners/fs/tracker-miner-files.c b/src/miners/fs/tracker-miner-files.c
+index 86364ab..6732364 100644
+--- a/src/miners/fs/tracker-miner-files.c
++++ b/src/miners/fs/tracker-miner-files.c
+@@ -76,9 +76,9 @@ struct TrackerMinerFilesPrivate {
+ 
+ 	guint low_battery_pause_cookie;
+ 
+-#if defined(HAVE_DEVKIT_POWER) || defined(HAVE_HAL)
++#if defined(HAVE_UPOWER) || defined(HAVE_HAL)
+ 	TrackerPower *power;
+-#endif /* defined(HAVE_DEVKIT_POWER) || defined(HAVE_HAL) */
++#endif /* defined(HAVE_UPOWER) || defined(HAVE_HAL) */
+ 	gulong finished_handler;
+ 
+ 	DBusGProxy *extractor_proxy;
+@@ -225,7 +225,7 @@ tracker_miner_files_init (TrackerMinerFiles *mf)
+ 	                  G_CALLBACK (mount_point_removed_cb),
+ 	                  mf);
+ 
+-#if defined(HAVE_DEVKIT_POWER) || defined(HAVE_HAL)
++#if defined(HAVE_UPOWER) || defined(HAVE_HAL)
+ 	priv->power = tracker_power_new ();
+ 
+ 	g_signal_connect (priv->power, "notify::on-low-battery",
+@@ -234,7 +234,7 @@ tracker_miner_files_init (TrackerMinerFiles *mf)
+ 	g_signal_connect (priv->power, "notify::on-battery",
+ 	                  G_CALLBACK (battery_status_cb),
+ 	                  mf);
+-#endif /* defined(HAVE_DEVKIT_POWER) || defined(HAVE_HAL) */
++#endif /* defined(HAVE_UPOWER) || defined(HAVE_HAL) */
+ 
+ 	priv->finished_handler = g_signal_connect_after (mf, "finished",
+ 							 G_CALLBACK (miner_finished_cb),
+@@ -323,9 +323,9 @@ miner_files_finalize (GObject *object)
+                 g_slist_free (priv->index_single_directories);
+         }
+ 
+-#if defined(HAVE_DEVKIT_POWER) || defined(HAVE_HAL)
++#if defined(HAVE_UPOWER) || defined(HAVE_HAL)
+ 	g_object_unref (priv->power);
+-#endif /* defined(HAVE_DEVKIT_POWER) || defined(HAVE_HAL) */
++#endif /* defined(HAVE_UPOWER) || defined(HAVE_HAL) */
+ 
+ 	g_object_unref (priv->storage);
+ 
+@@ -375,9 +375,9 @@ miner_files_constructed (GObject *object)
+ 
+ 	mounts = tracker_storage_get_device_roots (mf->private->storage, type, TRUE);
+ 
+-#if defined(HAVE_DEVKIT_POWER) || defined(HAVE_HAL)
++#if defined(HAVE_UPOWER) || defined(HAVE_HAL)
+ 	check_battery_status (mf);
+-#endif /* defined(HAVE_DEVKIT_POWER) || defined(HAVE_HAL) */
++#endif /* defined(HAVE_UPOWER) || defined(HAVE_HAL) */
+ 
+ 	g_message ("Setting up directories to iterate from config (IndexSingleDirectory)");
+ 
+@@ -988,7 +988,7 @@ mount_point_added_cb (TrackerStorage *storage,
+ 	g_free (urn);
+ }
+ 
+-#if defined(HAVE_DEVKIT_POWER) || defined(HAVE_HAL)
++#if defined(HAVE_UPOWER) || defined(HAVE_HAL)
+ 
+ static void
+ set_up_throttle (TrackerMinerFiles *mf,
+@@ -1092,7 +1092,7 @@ index_on_battery_cb (GObject    *object,
+ 	check_battery_status (mf);
+ }
+ 
+-#endif /* defined(HAVE_DEVKIT_POWER) || defined(HAVE_HAL) */
++#endif /* defined(HAVE_UPOWER) || defined(HAVE_HAL) */
+ 
+ /* Called when mining has finished the first time */
+ static void
+@@ -1118,9 +1118,9 @@ miner_finished_cb (TrackerMinerFS *fs,
+ 		mf->private->finished_handler = 0;
+ 	}
+ 
+-#if defined(HAVE_DEVKIT_POWER) || defined(HAVE_HAL)
++#if defined(HAVE_UPOWER) || defined(HAVE_HAL)
+ 	check_battery_status (mf);
+-#endif /* defined(HAVE_DEVKIT_POWER) || defined(HAVE_HAL) */
++#endif /* defined(HAVE_UPOWER) || defined(HAVE_HAL) */
+ }
+ 
+ static void
+-- 
+1.7.3.4
+

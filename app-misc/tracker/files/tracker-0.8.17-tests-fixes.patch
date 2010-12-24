@@ -1,0 +1,61 @@
+From c1d19b6060bcf5c70ea1bf6eed9bb07583506f6d Mon Sep 17 00:00:00 2001
+From: Gilles Dartiguelongue <eva@gentoo.org>
+Date: Wed, 22 Dec 2010 12:46:40 +0100
+Subject: [PATCH 3/3] gentoo: tests apps are not named lt-*
+
+---
+ tests/libtracker-common/tracker-dbus-test.c |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/tests/libtracker-common/tracker-dbus-test.c b/tests/libtracker-common/tracker-dbus-test.c
+index c029eb4..245e2d7 100644
+--- a/tests/libtracker-common/tracker-dbus-test.c
++++ b/tests/libtracker-common/tracker-dbus-test.c
+@@ -327,7 +327,7 @@ test_dbus_request_client_lookup ()
+         }
+         g_test_trap_assert_passed ();
+         g_test_trap_assert_stdout ("*TestNewOK*");
+-        g_test_trap_assert_stdout ("*lt-tracker-dbus*");
++        g_test_trap_assert_stdout ("*tracker-dbus*");
+ 
+         if (g_test_trap_fork (0, G_TEST_TRAP_SILENCE_STDERR)) {
+                 tracker_dbus_request_comment (request_id, context, 
+@@ -336,7 +336,7 @@ test_dbus_request_client_lookup ()
+         }
+         g_test_trap_assert_passed ();
+         g_test_trap_assert_stderr ("*TestCommentOK*");
+-        g_test_trap_assert_stderr ("*lt-tracker-dbus*");
++        g_test_trap_assert_stderr ("*tracker-dbus*");
+ 
+ 
+         if (g_test_trap_fork (0, G_TEST_TRAP_SILENCE_STDOUT)) {
+@@ -346,7 +346,7 @@ test_dbus_request_client_lookup ()
+         }
+         g_test_trap_assert_passed ();
+         g_test_trap_assert_stdout ("*TestInfoOK*");
+-        g_test_trap_assert_stdout ("*lt-tracker-dbus*");
++        g_test_trap_assert_stdout ("*tracker-dbus*");
+ 
+         if (g_test_trap_fork (0, G_TEST_TRAP_SILENCE_STDOUT)) {
+                 tracker_dbus_request_debug (request_id, context, 
+@@ -355,7 +355,7 @@ test_dbus_request_client_lookup ()
+         }
+         g_test_trap_assert_passed ();
+         g_test_trap_assert_stdout ("*TestDebugOK*");
+-        g_test_trap_assert_stdout ("*lt-tracker-dbus*");
++        g_test_trap_assert_stdout ("*tracker-dbus*");
+ 
+         if (g_test_trap_fork (0, G_TEST_TRAP_SILENCE_STDOUT)) {
+                 tracker_dbus_request_success (request_id, context);
+@@ -363,7 +363,7 @@ test_dbus_request_client_lookup ()
+         }
+         g_test_trap_assert_passed ();
+         g_test_trap_assert_stdout ("*Success*");
+-        g_test_trap_assert_stdout ("*lt-tracker-dbus*");
++        g_test_trap_assert_stdout ("*tracker-dbus*");
+ 
+         /* Force client shutdown */
+         tracker_dbus_enable_client_lookup (FALSE);
+-- 
+1.7.3.4
+
