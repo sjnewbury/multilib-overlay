@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libpcre/libpcre-8.02.ebuild,v 1.5 2010/12/21 11:02:47 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libpcre/libpcre-8.10.ebuild,v 1.1 2010/12/12 09:35:27 flameeyes Exp $
 
 EAPI=2
 
@@ -18,8 +18,8 @@ else
 fi
 LICENSE="BSD"
 SLOT="3"
-KEYWORDS="~alpha amd64 arm hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
-IUSE="bzip2 +cxx unicode zlib static-libs"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+IUSE="bzip2 +cxx unicode zlib static-libs +recursion-limit"
 
 RDEPEND="bzip2? ( app-arch/bzip2[lib32?] )
 	zlib? ( sys-libs/zlib[lib32?] )"
@@ -30,12 +30,12 @@ DEPEND="${RDEPEND}
 S=${WORKDIR}/${MY_P}
 
 multilib-native_src_prepare_internal() {
-	sed -i -e "s:libdir=@libdir@:libdir=/$(get_libdir):" libpcre.pc.in || die "Fixing libpcre pkgconfig files failed"
 	sed -i -e "s:-lpcre ::" libpcrecpp.pc.in || die "Fixing libpcrecpp pkgconfig files failed"
+	elibtoolize
 }
 
 multilib-native_src_configure_internal() {
-	econf --with-match-limit-recursion=8192 \
+	econf --with-match-limit-recursion=$(use recursion-limit && echo 8192 || echo MATCH_LIMIT) \
 		$(use_enable unicode utf8) $(use_enable unicode unicode-properties) \
 		$(use_enable cxx cpp) \
 		$(use_enable zlib pcregrep-libz) \
