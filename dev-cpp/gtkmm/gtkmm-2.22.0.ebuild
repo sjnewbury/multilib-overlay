@@ -17,7 +17,7 @@ IUSE="doc examples test"
 
 RDEPEND=">=dev-cpp/glibmm-2.24:2[lib32?]
 	>=x11-libs/gtk+-2.22:2[lib32?]
-	>=dev-cpp/atkmm-2.22
+	>=dev-cpp/atkmm-2.22[lib32?]
 	>=dev-cpp/cairomm-1.2.2[lib32?]
 	>=dev-cpp/pangomm-2.26:2.4[lib32?]
 	dev-libs/libsigc++:2[lib32?]"
