@@ -1,8 +1,8 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-crypt/mit-krb5/mit-krb5-1.8.3-r1.ebuild,v 1.6 2010/11/27 11:36:59 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-crypt/mit-krb5/mit-krb5-1.8.3-r2.ebuild,v 1.8 2010/12/10 19:35:04 ranger Exp $
 
-EAPI="2"
+EAPI=2
 
 inherit eutils flag-o-matic versionator multilib-native
 
@@ -15,7 +15,7 @@ SRC_URI="http://web.mit.edu/kerberos/dist/krb5/${P_DIR}/${MY_P}-signed.tar"
 LICENSE="as-is"
 SLOT="0"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
-IUSE="ldap doc xinetd"
+IUSE="doc ldap test xinetd"
 
 RDEPEND="!!app-crypt/heimdal
 	>=sys-libs/e2fsprogs-libs-1.41.0[lib32?]
@@ -23,7 +23,10 @@ RDEPEND="!!app-crypt/heimdal
 	ldap? ( net-nds/openldap[lib32?] )
 	xinetd? ( sys-apps/xinetd )"
 DEPEND="${RDEPEND}
-	doc? ( virtual/latex-base )"
+	doc? ( virtual/latex-base )
+	test? (	dev-lang/tcl[lib32?]
+			dev-lang/perl[lib32?]
+			dev-util/dejagnu )"
 
 S=${WORKDIR}/${MY_P}/src
 
@@ -36,12 +39,15 @@ multilib-native_src_unpack_internal() {
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/CVE-2010-1322.patch"
+	epatch "${FILESDIR}/CVE-2010-1323.1324.4020.patch"
+	epatch "${FILESDIR}/mit-krb5_testsuite.patch"
 }
 
 multilib-native_src_configure_internal() {
 	append-flags "-I/usr/include/et"
 	econf \
 		$(use_with ldap) \
+		$(use_with test tcl /usr) \
 		--without-krb4 \
 		--enable-shared \
 		--with-system-et \
@@ -60,10 +66,6 @@ multilib-native_src_compile_internal() {
 			emake -C "${dir}" || die "doc emake failed"
 		done
 	fi
-}
-
-src_test() {
-	einfo "Tests do not run in sandbox, they need mit-krb5 to be already installed to test it."
 }
 
 multilib-native_src_install_internal() {
@@ -86,8 +88,8 @@ multilib-native_src_install_internal() {
 	    dodoc doc/{api,implement}/*.ps || die "dodoc failed"
 	fi
 
-	newinitd "${FILESDIR}"/mit-krb5kadmind.initd mit-krb5kadmind
-	newinitd "${FILESDIR}"/mit-krb5kdc.initd mit-krb5kdc
+	newinitd "${FILESDIR}"/mit-krb5kadmind.initd mit-krb5kadmind || die
+	newinitd "${FILESDIR}"/mit-krb5kdc.initd mit-krb5kdc || die
 
 	insinto /etc
 	newins "${D}/usr/share/doc/${PF}/examples/krb5.conf" krb5.conf.example
@@ -96,12 +98,12 @@ multilib-native_src_install_internal() {
 
 	if use ldap ; then
 		insinto /etc/openldap/schema
-		doins "${S}/plugins/kdb/ldap/libkdb_ldap/kerberos.schema"
+		doins "${S}/plugins/kdb/ldap/libkdb_ldap/kerberos.schema" || die
 	fi
 
 	if use xinetd ; then
 		insinto /etc/xinetd.d
-		newins "${FILESDIR}/kpropd.xinetd" kpropd
+		newins "${FILESDIR}/kpropd.xinetd" kpropd || die
 	fi
 
 	prep_ml_binaries /usr/bin/krb5-config

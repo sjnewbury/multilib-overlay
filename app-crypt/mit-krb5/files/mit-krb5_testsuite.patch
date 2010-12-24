@@ -1,0 +1,93 @@
+--- a/src/tests/dejagnu/config/default.exp	2010-04-21 01:37:22.000000000 +0300
++++ b/src/tests/dejagnu/config/default.exp	2010-11-24 16:51:53.000000000 +0200
+@@ -1619,7 +1619,7 @@
+     set spawnid $spawn_id
+     set pid [exp_pid]
+ 
+-    set markstr "===MARK $pid [clock format [clock seconds]] ==="
++    set markstr "===MARK $pid [clock seconds] ==="
+     puts $f $markstr
+     flush $f
+ 
+--- a/src/tests/dejagnu/krb-standalone/gssapi.exp	2009-06-11 20:27:45.000000000 +0300
++++ b/src/tests/dejagnu/krb-standalone/gssapi.exp	2010-11-24 16:52:21.000000000 +0200
+@@ -182,7 +182,7 @@
+ 	}
+     }
+     catch "expect_after"
+-    if ![check_exit_status $test] {
++    if { [check_exit_status $test] == 0 } {
+ 	# check_exit_staus already calls fail for us
+ 	return
+     }
+@@ -209,59 +209,59 @@
+     global portbase
+ 
+     # Start up the kerberos and kadmind daemons.
+-    if ![start_kerberos_daemons 0] {
++    if { [start_kerberos_daemons 0] == 0 } {
+ 	perror "failed to start kerberos daemons"
+     }
+ 
+     # Use kadmin to add a key for us.
+-    if ![add_kerberos_key gsstest0 0] {
++    if { [add_kerberos_key gsstest0 0] == 0 } {
+ 	perror "failed to set up gsstest0 key"
+     }
+ 
+     # Use kadmin to add a key for us.
+-    if ![add_kerberos_key gsstest1 0] {
++    if { [add_kerberos_key gsstest1 0] ==0 } {
+ 	perror "failed to set up gsstest1 key"
+     }
+ 
+     # Use kadmin to add a key for us.
+-    if ![add_kerberos_key gsstest2 0] {
++    if { [add_kerberos_key gsstest2 0] == 0 } {
+ 	perror "failed to set up gsstest2 key"
+     }
+ 
+     # Use kadmin to add a key for us.
+-    if ![add_kerberos_key gsstest3 0] {
++    if { [add_kerberos_key gsstest3 0] == 0 } {
+ 	perror "failed to set up gsstest3 key"
+     }
+ 
+     # Use kadmin to add a service key for us.
+-    if ![add_random_key gssservice/$hostname 0] {
++    if { [add_random_key gssservice/$hostname 0] == 0 } {
+ 	perror "failed to set up gssservice/$hostname key"
+     }
+ 
+     # Use kdb5_edit to create a srvtab entry for gssservice
+-    if ![setup_srvtab 0 gssservice] {
++    if { [setup_srvtab 0 gssservice] == 0 } {
+ 	perror "failed to set up gssservice srvtab"
+     }
+ 
+     catch "exec rm -f $tmppwd/gss_tk_0 $tmppwd/gss_tk_1 $tmppwd/gss_tk_2 $tmppwd/gss_tk_3"
+ 
+     # Use kinit to get a ticket.
+-    if ![our_kinit gsstest0 gsstest0$KEY $tmppwd/gss_tk_0] {
++    if { [our_kinit gsstest0 gsstest0$KEY $tmppwd/gss_tk_0] == 0 } {
+ 	perror "failed to kinit gsstest0"
+     }
+ 
+     # Use kinit to get a ticket.
+-    if ![our_kinit gsstest1 gsstest1$KEY $tmppwd/gss_tk_1] {
++    if { [our_kinit gsstest1 gsstest1$KEY $tmppwd/gss_tk_1] == 0 } {
+ 	perror "failed to kinit gsstest1"
+     }
+ 
+     # Use kinit to get a ticket.
+-    if ![our_kinit gsstest2 gsstest2$KEY $tmppwd/gss_tk_2] {
++    if { [our_kinit gsstest2 gsstest2$KEY $tmppwd/gss_tk_2] == 0 } {
+ 	perror "failed to kinit gsstest2"
+     }
+ 
+     # Use kinit to get a ticket.
+-    if ![our_kinit gsstest3 gsstest3$KEY $tmppwd/gss_tk_3] {
++    if { [our_kinit gsstest3 gsstest3$KEY $tmppwd/gss_tk_3] == 0 } {
+ 	perror "failed to kinit gsstest3"
+     }
+ 

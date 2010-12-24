@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-crypt/mit-krb5/mit-krb5-1.9_beta1.ebuild,v 1.1 2010/11/24 16:44:34 eras Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-crypt/mit-krb5/mit-krb5-1.9_beta3.ebuild,v 1.1 2010/12/20 21:24:57 eras Exp $
 
 EAPI=2
 
@@ -16,7 +16,7 @@ SRC_URI="http://web.mit.edu/kerberos/dist/krb5/${P_DIR}/${MY_P}-signed.tar"
 LICENSE="as-is"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
-IUSE="doc ldap pkinit test xinetd"
+IUSE="doc ldap +pkinit +threads test xinetd"
 
 RDEPEND="!!app-crypt/heimdal
 	>=sys-libs/e2fsprogs-libs-1.41.0[lib32?]
@@ -44,12 +44,14 @@ multilib-native_src_configure_internal() {
 		$(use_with ldap) \
 		$(use_with test tcl /usr) \
 		$(use_enable pkinit) \
+		$(use_enable threads thread-support) \
 		--without-krb4 \
+		--without-hesiod \
 		--enable-shared \
 		--with-system-et \
 		--with-system-ss \
 		--enable-dns-for-realm \
-		--enable-kdc-replay-cache \
+		--enable-kdc-lookaside-cache \
 		--disable-rpath
 }
 
@@ -74,10 +76,11 @@ multilib-native_src_install_internal() {
 	keepdir /var/lib/krb5kdc
 
 	cd ..
-	dodoc README
+	dodoc NOTICE README
 	dodoc doc/*.ps
 	doinfo doc/*.info*
 	dohtml -r doc/*
+	rm -rf gnats
 
 	# die if we cannot respect a USE flag
 	if use doc ; then
