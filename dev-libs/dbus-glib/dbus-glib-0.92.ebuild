@@ -44,15 +44,15 @@ multilib-native_src_configure_internal() {
 		$(use_enable doc gtk-doc)
 		--with-html-dir=/usr/share/doc/${PF}/html"
 
-	mkdir "${BD}"
-	cd "${BD}"
-	einfo "Running configure in ${BD}"
+	mkdir "${BD}-${ABI}"
+	cd "${BD}-${ABI}"
+	einfo "Running configure in ${BD}-${ABI}"
 	ECONF_SOURCE="${S}" econf ${my_conf}
 
 	if use test; then
-		mkdir "${TBD}"
-		cd "${TBD}"
-		einfo "Running configure in ${TBD}"
+		mkdir "${TBD}-${ABI}"
+		cd "${TBD}-${ABI}"
+		einfo "Running configure in ${TBD}-${ABI}"
 		ECONF_SOURCE="${S}" econf \
 			${my_conf} \
 			$(use_enable test checks) \
@@ -63,26 +63,26 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_compile_internal() {
-	cd "${BD}"
-	einfo "Running make in ${BD}"
+	cd "${BD}-${ABI}"
+	einfo "Running make in ${BD}-${ABI}"
 	emake || die
 
 	if use test; then
-		cd "${TBD}"
-		einfo "Running make in ${TBD}"
+		cd "${TBD}-${ABI}"
+		einfo "Running make in ${TBD}-${ABI}"
 		emake || die
 	fi
 }
 
 src_test() {
-	cd "${TBD}"
+	cd "${TBD}-${ABI}"
 	emake check || die
 }
 
 multilib-native_src_install_internal() {
 	dodoc AUTHORS ChangeLog HACKING NEWS README || die
 
-	cd "${BD}"
+	cd "${BD}-${ABI}"
 	emake DESTDIR="${D}" install || die
 
 	# FIXME: We need --with-bash-completion-dir

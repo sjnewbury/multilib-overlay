@@ -1,6 +1,6 @@
---- /usr/portage/dev-libs/dbus-glib/dbus-glib-0.92.ebuild	2010-11-10 17:49:58.000000000 +0100
-+++ ./dev-libs/dbus-glib/dbus-glib-0.92.ebuild	2010-12-25 00:43:24.000000000 +0100
-@@ -44,15 +44,15 @@
+--- /usr/portage/dev-libs/dbus-glib/dbus-glib-0.88.ebuild	2010-12-23 17:36:00.000000000 +0100
++++ ./dev-libs/dbus-glib/dbus-glib-0.88.ebuild	2010-12-25 00:40:38.000000000 +0100
+@@ -45,15 +45,15 @@
  		$(use_enable doc gtk-doc)
  		--with-html-dir=/usr/share/doc/${PF}/html"
  
@@ -22,7 +22,7 @@
  		ECONF_SOURCE="${S}" econf \
  			${my_conf} \
  			$(use_enable test checks) \
-@@ -63,26 +63,26 @@
+@@ -64,26 +64,26 @@
  }
  
  src_compile() {
@@ -30,28 +30,28 @@
 -	einfo "Running make in ${BD}"
 +	cd "${BD}-${ABI}"
 +	einfo "Running make in ${BD}-${ABI}"
- 	emake || die
+ 	emake || die "make failed"
  
  	if use test; then
 -		cd "${TBD}"
 -		einfo "Running make in ${TBD}"
 +		cd "${TBD}-${ABI}"
 +		einfo "Running make in ${TBD}-${ABI}"
- 		emake || die
+ 		emake || die "make failed"
  	fi
  }
  
  src_test() {
 -	cd "${TBD}"
 +	cd "${TBD}-${ABI}"
- 	emake check || die
+ 	emake check || die "make check failed"
  }
  
  src_install() {
- 	dodoc AUTHORS ChangeLog HACKING NEWS README || die
+ 	dodoc AUTHORS ChangeLog HACKING NEWS README || die "dodoc failed."
  
 -	cd "${BD}"
 +	cd "${BD}-${ABI}"
- 	emake DESTDIR="${D}" install || die
+ 	emake DESTDIR="${D}" install || die "make install failed"
  
  	# FIXME: We need --with-bash-completion-dir
