@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.26.1.ebuild,v 1.1 2010/12/04 20:11:36 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.26.1.ebuild,v 1.2 2010/12/16 18:09:21 grobian Exp $
 
 EAPI="3"
 
@@ -107,7 +107,7 @@ multilib-native_src_configure_internal() {
 
 multilib-native_src_install_internal() {
 	local f
-	emake DESTDIR="${ED}" install || die "Installation failed"
+	emake DESTDIR="${D}" install || die "Installation failed"
 
 	# Do not install charset.alias even if generated, leave it to libiconv
 	rm -f "${ED}/usr/lib/charset.alias"
