@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-pda/gnome-pilot/gnome-pilot-2.32.0.ebuild,v 1.1 2010/10/27 21:51:01 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-pda/gnome-pilot/gnome-pilot-2.32.0.ebuild,v 1.2 2010/12/08 16:38:33 pacho Exp $
 
 EAPI="3"
 G2CONF_DEBUG="no"
@@ -15,7 +15,7 @@ KEYWORDS="~amd64 ~ppc ~sparc ~x86"
 IUSE="eds hal"
 
 RDEPEND="
-	>=gnome-base/gnome-panel-2[lib32?]
+	|| ( gnome-base/gnome-panel[bonobo,lib32?] <gnome-base/gnome-panel-2.32[lib32?] )
 	>=gnome-base/gconf-2[lib32?]
 	dev-libs/libxml2[lib32?]
 	>=app-pda/pilot-link-0.11.7[lib32?]
