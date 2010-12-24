@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-crypt/gnupg/gnupg-1.4.11.ebuild,v 1.1 2010/10/19 00:49:17 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-crypt/gnupg/gnupg-1.4.11.ebuild,v 1.7 2010/12/15 22:12:01 maekke Exp $
 
 EAPI="3"
 
@@ -21,7 +21,7 @@ SRC_URI="mirror://gnupg/gnupg/${P}.tar.bz2
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-macos"
+KEYWORDS="~alpha amd64 arm hppa ~ia64 ~mips ppc ~ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-macos"
 IUSE="bzip2 bindist curl idea ldap nls readline selinux smartcard static usb zlib linguas_ru"
 #IUSE="bzip2 bindist curl ecc idea ldap nls readline selinux smartcard static usb zlib linguas_ru"
 
@@ -75,8 +75,10 @@ multilib-native_src_prepare_internal() {
 	sed -e "/^man_MANS =/s/ gpg\.ru\.1//" -i doc/Makefile.in || die "sed doc/Makefile.in failed"
 
 	# Fix PIC definitions
-	sed -i -e 's:PIC:__PIC__:' mpi/i386/mpih-{add,sub}1.S intl/relocatable.c
-	sed -i -e 's:if PIC:ifdef __PIC__:' mpi/sparc32v8/mpih-mul{1,2}.S
+	sed -i -e 's:PIC:__PIC__:' mpi/i386/mpih-{add,sub}1.S intl/relocatable.c \
+		|| die "sed PIC failed"
+	sed -i -e 's:if PIC:ifdef __PIC__:' mpi/sparc32v8/mpih-mul{1,2}.S || \
+		die"Sed PIC failed"
 }
 
 multilib-native_src_configure_internal() {
@@ -102,10 +104,9 @@ multilib-native_src_configure_internal() {
 		$(use_enable bzip2) \
 		$(use_enable smartcard card-support) \
 		$(use_enable selinux selinux-support) \
-		--disable-capabilities \
+		--without-capabilities \
 		$(use_with readline) \
 		$(use_with usb libusb /usr) \
-		$(use_enable static) \
 		--enable-static-rnd=linux \
 		--libexecdir="${EPREFIX}/usr/libexec" \
 		--enable-noexecstack \
@@ -117,18 +118,18 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
 	# keep the documentation in /usr/share/doc/...
-	rm -rf "${ED}usr/share/gnupg/FAQ" "${ED}usr/share/gnupg/faq.html"
+	rm -rf "${ED}usr/share/gnupg/FAQ" "${ED}usr/share/gnupg/faq.html" || die
 
 	dodoc AUTHORS BUGS ChangeLog NEWS PROJECTS README THANKS \
-		TODO VERSION doc/{FAQ,HACKING,DETAILS,OpenPGP}
+		TODO VERSION doc/{FAQ,HACKING,DETAILS,OpenPGP} || die
 
 	exeinto /usr/libexec/gnupg
-	doexe tools/make-dns-cert
+	doexe tools/make-dns-cert || die
 
 	# install RU documentation in right location
 	if use linguas_ru; then
-		cp doc/gpg.ru.1 "${T}/gpg.1"
-		doman -i18n=ru "${T}/gpg.1"
+		cp doc/gpg.ru.1 "${T}/gpg.1" || die
+		doman -i18n=ru "${T}/gpg.1" || die
 	fi
 }
 
