@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/tk/tk-8.5.9.ebuild,v 1.2 2010/12/07 09:11:06 jlec Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/tk/tk-8.5.9-r1.ebuild,v 1.1 2010/12/09 20:42:58 jlec Exp $
 
 EAPI="3"
 
@@ -37,6 +37,8 @@ multilib-native_src_prepare_internal() {
 
 	# Bug 125971
 	epatch "${FILESDIR}"/${PN}-8.5_alpha6-tclm4-soname.patch
+
+	sed -i 's/FT_New_Face/XftFontOpen/g' unix/configure.in || die
 
 	cd "${S}"/unix
 	eautoreconf

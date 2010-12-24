@@ -23,7 +23,7 @@
 @@ -65,8 +63,6 @@
  		--with-tcl=/usr/${mylibdir} \
  		$(use_enable threads) \
- 		$(use_enable debug symbols) || die
+ 		$(use_enable debug symbols)
 -
 -	emake || die
  }

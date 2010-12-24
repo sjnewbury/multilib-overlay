@@ -59,8 +59,6 @@ multilib-native_src_configure_internal() {
 		$(use_enable threads) \
 		$(use_enable truetype xft) \
 		$(use_enable debug symbols)
-
-	emake || die
 }
 
 multilib-native_src_install_internal() {
