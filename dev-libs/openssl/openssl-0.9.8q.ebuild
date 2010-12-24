@@ -34,10 +34,7 @@ multilib-native_pkg_setup_internal() {
 	fi
 }
 
-multilib-native_src_unpack_internal() {
-	unpack ${A}
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-0.9.7e-gentoo.patch
 	epatch "${FILESDIR}"/${PN}-0.9.8e-bsd-sparc64.patch
 	epatch "${FILESDIR}"/${PN}-0.9.8h-ldflags.patch #181438
@@ -70,7 +67,7 @@ multilib-native_src_unpack_internal() {
 	./config --test-sanity || die "I AM NOT SANE"
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	unset APPS #197996
 	unset SCRIPTS #312551
 
@@ -124,7 +121,9 @@ multilib-native_src_compile_internal() {
 		-e "/^CFLAG/s:=.*:=${CFLAG} ${CFLAGS}:" \
 		-e "/^SHARED_LDFLAGS=/s:$: ${LDFLAGS}:" \
 		Makefile || die
+}
 
+multilib-native_src_compile_internal() {
 	# depend is needed to use $confopts
 	emake -j1 depend || die "depend failed"
 	emake -j1 build_libs || die "make build_libs failed"
