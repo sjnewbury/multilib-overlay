@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/vala/vala-0.10.1.ebuild,v 1.1 2010/10/27 20:27:31 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/vala/vala-0.10.1.ebuild,v 1.2 2010/12/20 22:37:26 eva Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -13,28 +13,21 @@ HOMEPAGE="http://live.gnome.org/Vala"
 LICENSE="LGPL-2.1"
 SLOT="0.10"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
-IUSE="test +vapigen coverage"
+IUSE="test +vapigen"
 
-RDEPEND=">=dev-libs/glib-2.14[lib32?]"
+RDEPEND=">=dev-libs/glib-2.14:2[lib32?]"
 DEPEND="${RDEPEND}
 	sys-devel/flex[lib32?]
 	|| ( sys-devel/bison dev-util/byacc dev-util/yacc )
 	dev-util/pkgconfig[lib32?]
 	dev-libs/libxslt[lib32?]
-	test? ( dev-libs/dbus-glib[lib32?] )"
+	test? (
+		>=dev-libs/glib-2.26[lib32?]
+		dev-libs/dbus-glib[lib32?] )"
 
 multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		--disable-unversioned
-		$(use_enable vapigen)
-		$(use_enable coverage)"
+		$(use_enable vapigen)"
 	DOCS="AUTHORS ChangeLog MAINTAINERS NEWS README"
-
-	if use coverage && has ccache ${FEATURES}; then
-		ewarn "USE=coverage does not work well with ccache; valac and libvala"
-		ewarn "built with ccache and USE=coverage create temporary files inside"
-		ewarn "CCACHE_DIR and mess with ccache's working, as well as causing"
-		ewarn "sandbox violations when used to compile other packages."
-		ewarn "It is STRONGLY recommended that you disable one of them."
-	fi
 }
