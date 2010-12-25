@@ -376,7 +376,7 @@ multilib-native_setup_abi_env() {
 	export CHOST=$(get_abi_CHOST $1)
 	export CBUILD=$(get_abi_CHOST $1)
 	export CDEFINE="${CDEFINE} $(get_abi_CDEFINE $1)"
-	export LDFLAGS="${LDFLAGS} -L/$(get_abi_LIBDIR $1) -L/usr/$(get_abi_LIBDIR $1)"
+	export LDFLAGS="${LDFLAGS}"
 
 	if [[ -z PKG_CONFIG_PATH ]]; then
 		export PKG_CONFIG_PATH="/usr/$(get_libdir)/pkgconfig"
