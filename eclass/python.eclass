@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/python.eclass,v 1.105 2010/10/29 19:09:08 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/python.eclass,v 1.106 2010/12/24 15:01:09 arfrever Exp $
 
 # @ECLASS: python.eclass
 # @MAINTAINER:
@@ -15,14 +15,34 @@ if ! has "${EAPI:-0}" 0 1 2 3; then
 	die "API of python.eclass in EAPI=\"${EAPI}\" not established"
 fi
 
-_CPYTHON2_SUPPORTED_ABIS=(2.4 2.5 2.6 2.7)
-_CPYTHON3_SUPPORTED_ABIS=(3.0 3.1 3.2)
-_JYTHON_SUPPORTED_ABIS=(2.5-jython)
-_PYTHON_SUPPORTED_ABIS=(${_CPYTHON2_SUPPORTED_ABIS[@]} ${_CPYTHON3_SUPPORTED_ABIS[@]} ${_JYTHON_SUPPORTED_ABIS[@]})
+_CPYTHON2_GLOBALLY_SUPPORTED_ABIS=(2.4 2.5 2.6 2.7)
+_CPYTHON3_GLOBALLY_SUPPORTED_ABIS=(3.0 3.1 3.2)
+_JYTHON_GLOBALLY_SUPPORTED_ABIS=(2.5-jython)
+_PYTHON_GLOBALLY_SUPPORTED_ABIS=(${_CPYTHON2_GLOBALLY_SUPPORTED_ABIS[@]} ${_CPYTHON3_GLOBALLY_SUPPORTED_ABIS[@]} ${_JYTHON_GLOBALLY_SUPPORTED_ABIS[@]})
 
 # ================================================================================================
 # ===================================== HANDLING OF METADATA =====================================
 # ================================================================================================
+
+_python_check_python_abi_matching() {
+	if [[ "$#" -ne 2 ]]; then
+		die "${FUNCNAME}() requires 2 arguments"
+	fi
+
+	if [[ "$2" == *"-cpython" ]]; then
+		[[ "$1" =~ ^[[:digit:]]+\.[[:digit:]]+$ && "$1" == ${2%-cpython} ]]
+	elif [[ "$2" == *"-jython" ]]; then
+		[[ "$1" == $2 ]]
+	else
+		if [[ "$1" =~ ^[[:digit:]]+\.[[:digit:]]+$ ]]; then
+			[[ "$1" == $2 ]]
+		elif [[ "$1" =~ ^[[:digit:]]+\.[[:digit:]]+-jython$ ]]; then
+			[[ "${1%-jython}" == $2 ]]
+		else
+			die "${FUNCNAME}(): Unrecognized Python ABI '$1'"
+		fi
+	fi
+}
 
 # @ECLASS-VARIABLE: PYTHON_DEPEND
 # @DESCRIPTION:
@@ -67,17 +87,17 @@ _python_parse_PYTHON_DEPEND() {
 
 			if [[ "${major_version}" == "2" ]]; then
 				python2="1"
-				python_versions=("${_CPYTHON2_SUPPORTED_ABIS[@]}")
+				python_versions=("${_CPYTHON2_GLOBALLY_SUPPORTED_ABIS[@]}")
 				python2_minimal_version="${minimal_version}"
 				python2_maximal_version="${maximal_version}"
 			elif [[ "${major_version}" == "3" ]]; then
 				python3="1"
-				python_versions=("${_CPYTHON3_SUPPORTED_ABIS[@]}")
+				python_versions=("${_CPYTHON3_GLOBALLY_SUPPORTED_ABIS[@]}")
 				python3_minimal_version="${minimal_version}"
 				python3_maximal_version="${maximal_version}"
 			else
 				python_all="1"
-				python_versions=("${_CPYTHON2_SUPPORTED_ABIS[@]}" "${_CPYTHON3_SUPPORTED_ABIS[@]}")
+				python_versions=("${_CPYTHON2_GLOBALLY_SUPPORTED_ABIS[@]}" "${_CPYTHON3_GLOBALLY_SUPPORTED_ABIS[@]}")
 				python_minimal_version="${minimal_version}"
 				python_maximal_version="${maximal_version}"
 			fi
@@ -115,7 +135,7 @@ _python_parse_PYTHON_DEPEND() {
 			if [[ -z "${python_minimal_version}" && -z "${python_maximal_version}" ]]; then
 				_PYTHON_ATOMS+=("dev-lang/python")
 			else
-				python_versions=("${_CPYTHON2_SUPPORTED_ABIS[@]}" "${_CPYTHON3_SUPPORTED_ABIS[@]}")
+				python_versions=("${_CPYTHON2_GLOBALLY_SUPPORTED_ABIS[@]}" "${_CPYTHON3_GLOBALLY_SUPPORTED_ABIS[@]}")
 				python_minimal_version="${python_minimal_version:-${python_versions[0]}}"
 				python_maximal_version="${python_maximal_version:-${python_versions[${#python_versions[@]}-1]}}"
 				_append_accepted_versions_range
@@ -125,7 +145,7 @@ _python_parse_PYTHON_DEPEND() {
 				if [[ -z "${python3_minimal_version}" && -z "${python3_maximal_version}" ]]; then
 					_PYTHON_ATOMS+=("=dev-lang/python-3*")
 				else
-					python_versions=("${_CPYTHON3_SUPPORTED_ABIS[@]}")
+					python_versions=("${_CPYTHON3_GLOBALLY_SUPPORTED_ABIS[@]}")
 					python_minimal_version="${python3_minimal_version:-${python_versions[0]}}"
 					python_maximal_version="${python3_maximal_version:-${python_versions[${#python_versions[@]}-1]}}"
 					_append_accepted_versions_range
@@ -135,7 +155,7 @@ _python_parse_PYTHON_DEPEND() {
 				if [[ -z "${python2_minimal_version}" && -z "${python2_maximal_version}" ]]; then
 					_PYTHON_ATOMS+=("=dev-lang/python-2*")
 				else
-					python_versions=("${_CPYTHON2_SUPPORTED_ABIS[@]}")
+					python_versions=("${_CPYTHON2_GLOBALLY_SUPPORTED_ABIS[@]}")
 					python_minimal_version="${python2_minimal_version:-${python_versions[0]}}"
 					python_maximal_version="${python2_maximal_version:-${python_versions[${#python_versions[@]}-1]}}"
 					_append_accepted_versions_range
@@ -355,6 +375,9 @@ python_pkg_setup() {
 		die "${FUNCNAME}() does not accept arguments"
 	fi
 
+	export JYTHON_SYSTEM_CACHEDIR="1"
+	addwrite "${EPREFIX}/var/cache/jython"
+
 	if _python_package_supporting_installation_for_multiple_python_abis; then
 		_python_calculate_PYTHON_ABIS
 		export EPYTHON="$(PYTHON -f)"
@@ -412,14 +435,16 @@ else
 	EMULTILIB_PYTHON_NOT_EXPORTED+=" pkg_setup"
 fi
 
+_PYTHON_SHEBANG_BASE_PART_REGEX='^#![[:space:]]*([^[:space:]]*/usr/bin/env[[:space:]]+)?([^[:space:]]*/)?(jython|python)'
+
 # @FUNCTION: python_convert_shebangs
-# @USAGE: [-q|--quiet] [-r|--recursive] [-x|--only-executables] [--] <Python_version> <file|directory> [files|directories]
+# @USAGE: [-q|--quiet] [-r|--recursive] [-x|--only-executables] [--] <Python_ABI|Python_version> <file|directory> [files|directories]
 # @DESCRIPTION:
 # Convert shebangs in specified files. Directories can be specified only with --recursive option.
 python_convert_shebangs() {
 	_python_check_python_pkg_setup_execution
 
-	local argument file files=() only_executables="0" python_version quiet="0" recursive="0"
+	local argument file files=() only_executables="0" python_interpreter quiet="0" recursive="0"
 
 	while (($#)); do
 		case "$1" in
@@ -452,7 +477,11 @@ python_convert_shebangs() {
 		die "${FUNCNAME}(): Missing files or directories"
 	fi
 
-	python_version="$1"
+	if [[ -n "$(_python_get_implementation --ignore-invalid "$1")" ]]; then
+		python_interpreter="$(PYTHON "$1")"
+	else
+		python_interpreter="python$1"
+	fi
 	shift
 
 	for argument in "$@"; do
@@ -477,17 +506,14 @@ python_convert_shebangs() {
 		file="${file#./}"
 		[[ "${only_executables}" == "1" && ! -x "${file}" ]] && continue
 
-		if [[ "$(head -n1 "${file}")" =~ ^'#!'.*python ]]; then
+		if [[ "$(head -n1 "${file}")" =~ ${_PYTHON_SHEBANG_BASE_PART_REGEX} ]]; then
 			[[ "$(sed -ne "2p" "${file}")" =~ ^"# Gentoo '".*"' wrapper script generated by python_generate_wrapper_scripts()"$ ]] && continue
 
 			if [[ "${quiet}" == "0" ]]; then
 				einfo "Converting shebang in '${file}'"
 			fi
 
-			sed -e "1s/python\([[:digit:]]\+\(\.[[:digit:]]\+\)\?\)\?/python${python_version}/" -i "${file}" || die "Conversion of shebang in '${file}' failed"
-
-			# Delete potential whitespace after "#!".
-			sed -e '1s/\(^#!\)[[:space:]]*/\1/' -i "${file}" || die "sed '${file}' failed"
+			sed -e "1s:^#![[:space:]]*\([^[:space:]]*/usr/bin/env[[:space:]]\)\?[[:space:]]*\([^[:space:]]*/\)\?\(jython\|python\)\([[:digit:]]\+\(\.[[:digit:]]\+\)\?\)\?\(\$\|[[:space:]].*\):#!\1\2${python_interpreter}\6:" -i "${file}" || die "Conversion of shebang in '${file}' failed"
 		fi
 	done
 }
@@ -627,17 +653,17 @@ _python_calculate_PYTHON_ABIS() {
 			fi
 
 			for PYTHON_ABI in ${USE_PYTHON}; do
-				if ! has "${PYTHON_ABI}" ${_PYTHON_SUPPORTED_ABIS[@]}; then
+				if ! has "${PYTHON_ABI}" "${_PYTHON_GLOBALLY_SUPPORTED_ABIS[@]}"; then
 					die "USE_PYTHON variable contains invalid value '${PYTHON_ABI}'"
 				fi
 
-				if has "${PYTHON_ABI}" "${_CPYTHON2_SUPPORTED_ABIS[@]}" "${_CPYTHON3_SUPPORTED_ABIS[@]}"; then
+				if has "${PYTHON_ABI}" "${_CPYTHON2_GLOBALLY_SUPPORTED_ABIS[@]}" "${_CPYTHON3_GLOBALLY_SUPPORTED_ABIS[@]}"; then
 					cpython_enabled="1"
 				fi
 
 				support_ABI="1"
 				while read restricted_ABI; do
-					if [[ "${PYTHON_ABI}" == ${restricted_ABI} ]]; then
+					if _python_check_python_abi_matching "${PYTHON_ABI}" "${restricted_ABI}"; then
 						support_ABI="0"
 						break
 					fi
@@ -668,10 +694,10 @@ _python_calculate_PYTHON_ABIS() {
 
 				python2_version="$("${EPREFIX}/usr/bin/python2" -c 'from sys import version_info; print(".".join(str(x) for x in version_info[:2]))')"
 
-				for PYTHON_ABI in "${_CPYTHON2_SUPPORTED_ABIS[@]}"; do
+				for PYTHON_ABI in "${_CPYTHON2_GLOBALLY_SUPPORTED_ABIS[@]}"; do
 					support_python_major_version="1"
 					while read restricted_ABI; do
-						if [[ "${PYTHON_ABI}" == ${restricted_ABI} ]]; then
+						if _python_check_python_abi_matching "${PYTHON_ABI}" "${restricted_ABI}"; then
 							support_python_major_version="0"
 						fi
 					done <<< "${restricted_ABIs}"
@@ -679,8 +705,8 @@ _python_calculate_PYTHON_ABIS() {
 				done
 				if [[ "${support_python_major_version}" == "1" ]]; then
 					while read restricted_ABI; do
-						if [[ "${python2_version}" == ${restricted_ABI} ]]; then
-							die "Active version of Python 2 is not supported by ${CATEGORY}/${PF}"
+						if _python_check_python_abi_matching "${python2_version}" "${restricted_ABI}"; then
+							die "Active version of CPython 2 is not supported by ${CATEGORY}/${PF}"
 						fi
 					done <<< "${restricted_ABIs}"
 				else
@@ -695,10 +721,10 @@ _python_calculate_PYTHON_ABIS() {
 
 				python3_version="$("${EPREFIX}/usr/bin/python3" -c 'from sys import version_info; print(".".join(str(x) for x in version_info[:2]))')"
 
-				for PYTHON_ABI in "${_CPYTHON3_SUPPORTED_ABIS[@]}"; do
+				for PYTHON_ABI in "${_CPYTHON3_GLOBALLY_SUPPORTED_ABIS[@]}"; do
 					support_python_major_version="1"
 					while read restricted_ABI; do
-						if [[ "${PYTHON_ABI}" == ${restricted_ABI} ]]; then
+						if _python_check_python_abi_matching "${PYTHON_ABI}" "${restricted_ABI}"; then
 							support_python_major_version="0"
 						fi
 					done <<< "${restricted_ABIs}"
@@ -706,8 +732,8 @@ _python_calculate_PYTHON_ABIS() {
 				done
 				if [[ "${support_python_major_version}" == "1" ]]; then
 					while read restricted_ABI; do
-						if [[ "${python3_version}" == ${restricted_ABI} ]]; then
-							die "Active version of Python 3 is not supported by ${CATEGORY}/${PF}"
+						if _python_check_python_abi_matching "${python3_version}" "${restricted_ABI}"; then
+							die "Active version of CPython 3 is not supported by ${CATEGORY}/${PF}"
 						fi
 					done <<< "${restricted_ABIs}"
 				else
@@ -749,7 +775,7 @@ _python_prepare_flags() {
 						element="${element#* }"
 						operator="${element%% *}"
 						flags="${element#* }"
-						if [[ "${PYTHON_ABI}" == ${pattern} ]]; then
+						if _python_check_python_abi_matching "${PYTHON_ABI}" "${pattern}"; then
 							if [[ "${operator}" == "+" ]]; then
 								eval "export ${variable}+=\"\${variable:+ }${flags}\""
 							elif [[ "${operator}" == "-" ]]; then
@@ -1066,7 +1092,7 @@ python_generate_wrapper_scripts() {
 
 	_python_initialize_prefix_variables
 
-	local eselect_python_option file force="0" quiet="0" PYTHON_ABI python2_enabled="0" python3_enabled="0" respect_EPYTHON="0"
+	local eselect_python_option file force="0" quiet="0" PYTHON_ABI PYTHON_ABIS_list python2_enabled="0" python3_enabled="0" respect_EPYTHON="0"
 
 	while (($#)); do
 		case "$1" in
@@ -1098,12 +1124,12 @@ python_generate_wrapper_scripts() {
 	fi
 
 	_python_calculate_PYTHON_ABIS
-	for PYTHON_ABI in "${_CPYTHON2_SUPPORTED_ABIS[@]}"; do
+	for PYTHON_ABI in "${_CPYTHON2_GLOBALLY_SUPPORTED_ABIS[@]}"; do
 		if has "${PYTHON_ABI}" ${PYTHON_ABIS}; then
 			python2_enabled="1"
 		fi
 	done
-	for PYTHON_ABI in "${_CPYTHON3_SUPPORTED_ABIS[@]}"; do
+	for PYTHON_ABI in "${_CPYTHON3_GLOBALLY_SUPPORTED_ABIS[@]}"; do
 		if has "${PYTHON_ABI}" ${PYTHON_ABIS}; then
 			python3_enabled="1"
 		fi
@@ -1119,9 +1145,11 @@ python_generate_wrapper_scripts() {
 		die "${FUNCNAME}(): Unsupported environment"
 	fi
 
+	PYTHON_ABIS_list="$("$(PYTHON -f)" -c "print(', '.join('\"%s\"' % x for x in reversed('${PYTHON_ABIS}'.split())))")"
+
 	for file in "$@"; do
 		if [[ -f "${file}" && "${force}" == "0" ]]; then
-			die "${FUNCNAME}(): '$1' already exists"
+			die "${FUNCNAME}(): '${file}' already exists"
 		fi
 
 		if [[ "${quiet}" == "0" ]]; then
@@ -1137,9 +1165,21 @@ import re
 import subprocess
 import sys
 
-EPYTHON_re = re.compile(r"^python(\d+\.\d+)$")
+cpython_re = re.compile(r"^python(\d+\.\d+)$")
+jython_re = re.compile(r"^jython(\d+\.\d+)$")
 python_shebang_re = re.compile(r"^#! *(${EPREFIX}/usr/bin/python|(${EPREFIX})?/usr/bin/env +(${EPREFIX}/usr/bin/)?python)")
 python_verification_output_re = re.compile("^GENTOO_PYTHON_TARGET_SCRIPT_PATH supported\n$")
+
+def get_PYTHON_ABI(EPYTHON):
+	cpython_matched = cpython_re.match(EPYTHON)
+	jython_matched = jython_re.match(EPYTHON)
+	if cpython_matched is not None:
+		PYTHON_ABI = cpython_matched.group(1)
+	elif jython_matched is not None:
+		PYTHON_ABI = jython_matched.group(1) + "-jython"
+	else:
+		PYTHON_ABI = None
+	return PYTHON_ABI
 
 EOF
 		if [[ "$?" != "0" ]]; then
@@ -1149,10 +1189,8 @@ EOF
 			cat << EOF >> "${file}"
 EPYTHON = os.environ.get("EPYTHON")
 if EPYTHON:
-	EPYTHON_matched = EPYTHON_re.match(EPYTHON)
-	if EPYTHON_matched:
-		PYTHON_ABI = EPYTHON_matched.group(1)
-	else:
+	PYTHON_ABI = get_PYTHON_ABI(EPYTHON)
+	if PYTHON_ABI is None:
 		sys.stderr.write("EPYTHON variable has unrecognized value '%s'\n" % EPYTHON)
 		sys.exit(1)
 else:
@@ -1170,12 +1208,16 @@ else:
 		EPYTHON = EPYTHON.decode()
 	EPYTHON = EPYTHON.rstrip("\n")
 
-	EPYTHON_matched = EPYTHON_re.match(EPYTHON)
-	if EPYTHON_matched:
-		PYTHON_ABI = EPYTHON_matched.group(1)
-	else:
+	PYTHON_ABI = get_PYTHON_ABI(EPYTHON)
+	if PYTHON_ABI is None:
 		sys.stderr.write("'eselect python show${eselect_python_option:+ }${eselect_python_option}' printed unrecognized value '%s'\n" % EPYTHON)
 		sys.exit(1)
+
+wrapper_script_path = os.path.realpath(sys.argv[0])
+target_executable_path = "%s-%s" % (wrapper_script_path, PYTHON_ABI)
+if not os.path.exists(target_executable_path):
+	sys.stderr.write("'%s' does not exist\n" % target_executable_path)
+	sys.exit(1)
 EOF
 			if [[ "$?" != "0" ]]; then
 				die "${FUNCNAME}(): Generation of '$1' failed"
@@ -1196,11 +1238,18 @@ if not isinstance(EPYTHON, str):
 	EPYTHON = EPYTHON.decode()
 EPYTHON = EPYTHON.rstrip("\n")
 
-EPYTHON_matched = EPYTHON_re.match(EPYTHON)
-if EPYTHON_matched:
-	PYTHON_ABI = EPYTHON_matched.group(1)
-else:
+PYTHON_ABI = get_PYTHON_ABI(EPYTHON)
+if PYTHON_ABI is None:
 	sys.stderr.write("'eselect python show${eselect_python_option:+ }${eselect_python_option}' printed unrecognized value '%s'\n" % EPYTHON)
+	sys.exit(1)
+
+wrapper_script_path = os.path.realpath(sys.argv[0])
+for PYTHON_ABI in [PYTHON_ABI, ${PYTHON_ABIS_list}]:
+	target_executable_path = "%s-%s" % (wrapper_script_path, PYTHON_ABI)
+	if os.path.exists(target_executable_path):
+		break
+else:
+	sys.stderr.write("No target script exists for '%s'\n" % wrapper_script_path)
 	sys.exit(1)
 EOF
 			if [[ "$?" != "0" ]]; then
@@ -1208,15 +1257,6 @@ EOF
 			fi
 		fi
 		cat << EOF >> "${file}"
-
-wrapper_script_path = os.path.realpath(sys.argv[0])
-target_executable_path = "%s-%s" % (wrapper_script_path, PYTHON_ABI)
-os.environ["GENTOO_PYTHON_PROCESS_NAME"] = os.path.basename(sys.argv[0])
-os.environ["GENTOO_PYTHON_WRAPPER_SCRIPT_PATH"] = sys.argv[0]
-os.environ["GENTOO_PYTHON_TARGET_SCRIPT_PATH"] = target_executable_path
-if not os.path.exists(target_executable_path):
-	sys.stderr.write("'%s' does not exist\n" % target_executable_path)
-	sys.exit(1)
 
 target_executable = open(target_executable_path, "rb")
 target_executable_first_line = target_executable.readline()
@@ -1227,7 +1267,7 @@ if not isinstance(target_executable_first_line, str):
 python_shebang_matched = python_shebang_re.match(target_executable_first_line)
 target_executable.close()
 
-if python_shebang_matched:
+if python_shebang_matched is not None:
 	try:
 		python_interpreter_path = "${EPREFIX}/usr/bin/%s" % EPYTHON
 		os.environ["GENTOO_PYTHON_TARGET_SCRIPT_PATH_VERIFICATION"] = "1"
@@ -1244,19 +1284,211 @@ if python_shebang_matched:
 		if not python_verification_output_re.match(python_verification_output):
 			raise ValueError
 
-		os.execv(python_interpreter_path, [python_interpreter_path] + sys.argv)
+		if cpython_re.match(EPYTHON) is not None:
+			os.environ["GENTOO_PYTHON_PROCESS_NAME"] = os.path.basename(sys.argv[0])
+			os.environ["GENTOO_PYTHON_WRAPPER_SCRIPT_PATH"] = sys.argv[0]
+			os.environ["GENTOO_PYTHON_TARGET_SCRIPT_PATH"] = target_executable_path
+
+		if hasattr(os, "execv"):
+			os.execv(python_interpreter_path, [python_interpreter_path] + sys.argv)
+		else:
+			sys.exit(subprocess.Popen([python_interpreter_path] + sys.argv).wait())
+	except (KeyboardInterrupt, SystemExit):
+		raise
 	except:
 		pass
-	if "GENTOO_PYTHON_TARGET_SCRIPT_PATH_VERIFICATION" in os.environ:
-		del os.environ["GENTOO_PYTHON_TARGET_SCRIPT_PATH_VERIFICATION"]
+	for variable in ("GENTOO_PYTHON_PROCESS_NAME", "GENTOO_PYTHON_WRAPPER_SCRIPT_PATH", "GENTOO_PYTHON_TARGET_SCRIPT_PATH", "GENTOO_PYTHON_TARGET_SCRIPT_PATH_VERIFICATION"):
+		if variable in os.environ:
+			del os.environ[variable]
 
-os.execv(target_executable_path, sys.argv)
+if hasattr(os, "execv"):
+	os.execv(target_executable_path, sys.argv)
+else:
+	sys.exit(subprocess.Popen([target_executable_path] + sys.argv[1:]).wait())
 EOF
 		if [[ "$?" != "0" ]]; then
 			die "${FUNCNAME}(): Generation of '$1' failed"
 		fi
 		fperms +x "${file#${ED%/}}" || die "fperms '${file}' failed"
 	done
+}
+
+# @ECLASS-VARIABLE: PYTHON_VERSIONED_SCRIPTS
+# @DESCRIPTION:
+# Array of regular expressions of paths to versioned Python scripts.
+# Python scripts in /usr/bin and /usr/sbin are versioned by default.
+
+# @ECLASS-VARIABLE: PYTHON_VERSIONED_EXECUTABLES
+# @DESCRIPTION:
+# Array of regular expressions of paths to versioned executables (including Python scripts).
+
+# @ECLASS-VARIABLE: PYTHON_NONVERSIONED_EXECUTABLES
+# @DESCRIPTION:
+# Array of regular expressions of paths to nonversioned executables (including Python scripts).
+
+# @FUNCTION: python_merge_intermediate_installation_images
+# @USAGE: [-q|--quiet] [--] <intermediate_installation_images_directory>
+# @DESCRIPTION:
+# Merge intermediate installation images into installation image.
+python_merge_intermediate_installation_images() {
+	_python_check_python_pkg_setup_execution
+	_python_initialize_prefix_variables
+
+	local b file files=() intermediate_installation_images_directory PYTHON_ABI quiet="0" regex shebang version_executable wrapper_scripts=() wrapper_scripts_set=()
+
+	# Check if phase is src_install().
+	[[ "${EBUILD_PHASE}" != "install" ]] && die "${FUNCNAME}() can be used only in src_install() phase"
+
+	while (($#)); do
+		case "$1" in
+			-q|--quiet)
+				quiet="1"
+				;;
+			--)
+				shift
+				break
+				;;
+			-*)
+				die "${FUNCNAME}(): Unrecognized option '$1'"
+				;;
+			*)
+				break
+				;;
+		esac
+		shift
+	done
+
+	if [[ "$#" -ne 1 ]]; then
+		die "${FUNCNAME}() requires 1 argument"
+	fi
+
+	intermediate_installation_images_directory="$1"
+
+	if [[ ! -d "${intermediate_installation_images_directory}" ]]; then
+		die "${FUNCNAME}(): Intermediate installation images directory '${intermediate_installation_images_directory}' does not exist"
+	fi
+
+	_python_calculate_PYTHON_ABIS
+	if [[ "$(PYTHON -f --ABI)" == 3.* ]]; then
+		b="b"
+	fi
+
+	while read -d $'\0' -r file; do
+		files+=("${file}")
+	done < <("$(PYTHON -f)" -c \
+"import os
+import sys
+
+if hasattr(sys.stdout, 'buffer'):
+	# Python 3
+	stdout = sys.stdout.buffer
+else:
+	# Python 2
+	stdout = sys.stdout
+
+files_set = set()
+
+os.chdir(${b}'${intermediate_installation_images_directory}')
+
+for PYTHON_ABI in ${b}'${PYTHON_ABIS}'.split():
+	for root, dirs, files in os.walk(PYTHON_ABI + ${b}'${EPREFIX}'):
+		root = root[len(PYTHON_ABI + ${b}'${EPREFIX}')+1:]
+		files_set.update(root + ${b}'/' + file for file in files)
+
+for file in sorted(files_set):
+	stdout.write(file)
+	stdout.write(${b}'\x00')" || die "${FUNCNAME}(): Failure of extraction of files in intermediate installation images")
+
+	for PYTHON_ABI in ${PYTHON_ABIS}; do
+		if [[ ! -d "${intermediate_installation_images_directory}/${PYTHON_ABI}" ]]; then
+			die "${FUNCNAME}(): Intermediate installation image for Python ABI '${PYTHON_ABI}' does not exist"
+		fi
+
+		pushd "${intermediate_installation_images_directory}/${PYTHON_ABI}${EPREFIX}" > /dev/null || die "pushd failed"
+
+		for file in "${files[@]}"; do
+			version_executable="0"
+			for regex in "/usr/bin/.*" "/usr/sbin/.*" "${PYTHON_VERSIONED_SCRIPTS[@]}"; do
+				if [[ "/${file}" =~ ^${regex}$ ]]; then
+					version_executable="1"
+					break
+				fi
+			done
+			for regex in "${PYTHON_VERSIONED_EXECUTABLES[@]}"; do
+				if [[ "/${file}" =~ ^${regex}$ ]]; then
+					version_executable="2"
+					break
+				fi
+			done
+			if [[ "${version_executable}" != "0" ]]; then
+				for regex in "${PYTHON_NONVERSIONED_EXECUTABLES[@]}"; do
+					if [[ "/${file}" =~ ^${regex}$ ]]; then
+						version_executable="0"
+						break
+					fi
+				done
+			fi
+
+			[[ "${version_executable}" == "0" || ! -x "${file}" ]] && continue
+
+			shebang="$(head -n1 "${file}")" || die "Extraction of shebang from '${file}' failed"
+
+			if [[ "${version_executable}" == "2" ]]; then
+				wrapper_scripts+=("${ED}${file}")
+			elif [[ "${version_executable}" == "1" ]]; then
+				if [[ "${shebang}" =~ ${_PYTHON_SHEBANG_BASE_PART_REGEX}([[:digit:]]+(\.[[:digit:]]+)?)?($|[[:space:]]+) ]]; then
+					wrapper_scripts+=("${ED}${file}")
+				else
+					version_executable="0"
+				fi
+			fi
+
+			[[ "${version_executable}" == "0" ]] && continue
+
+			if [[ -e "${file}-${PYTHON_ABI}" ]]; then
+				die "${FUNCNAME}(): '${EPREFIX}/${file}-${PYTHON_ABI}' already exists"
+			fi
+
+			mv "${file}" "${file}-${PYTHON_ABI}" || die "Renaming of '${file}' failed"
+
+			if [[ "${shebang}" =~ ${_PYTHON_SHEBANG_BASE_PART_REGEX}[[:digit:]]*($|[[:space:]]+) ]]; then
+				python_convert_shebangs $([[ "${quiet}" == "1" ]] && echo --quiet) "${PYTHON_ABI}" "${file}-${PYTHON_ABI}"
+			fi
+		done
+
+		popd > /dev/null || die "popd failed"
+
+		cp -fr --preserve=all "${intermediate_installation_images_directory}/${PYTHON_ABI}/"* "${ED}" || die "Merging of intermediate installation image for Python ABI '${PYTHON_ABI} into installation image failed"
+	done
+
+	if [[ "${#wrapper_scripts[@]}" -ge 1 ]]; then
+		rm -f "${T}/python_wrapper_scripts"
+
+		for file in "${wrapper_scripts[@]}"; do
+			echo -n "${file}" >> "${T}/python_wrapper_scripts"
+			echo -en "\x00" >> "${T}/python_wrapper_scripts"
+		done
+
+		while read -d $'\0' -r file; do
+			wrapper_scripts_set+=("${file}")
+		done < <("$(PYTHON -f)" -c \
+"import sys
+
+if hasattr(sys.stdout, 'buffer'):
+	# Python 3
+	stdout = sys.stdout.buffer
+else:
+	# Python 2
+	stdout = sys.stdout
+
+files = set(open('${T}/python_wrapper_scripts', 'rb').read().rstrip(${b}'\x00').split(${b}'\x00'))
+
+for file in sorted(files):
+	stdout.write(file)
+	stdout.write(${b}'\x00')" || die "${FUNCNAME}(): Failure of extraction of set of wrapper scripts")
+
+		python_generate_wrapper_scripts $([[ "${quiet}" == "1" ]] && echo --quiet) "${wrapper_scripts_set[@]}"
+	fi
 }
 
 # ================================================================================================
@@ -1266,9 +1498,12 @@ EOF
 unset EPYTHON PYTHON_ABI
 
 # @FUNCTION: python_set_active_version
-# @USAGE: <CPython_ABI|2|3>
+# @USAGE: <Python_ABI|2|3>
 # @DESCRIPTION:
-# Set specified version of CPython as active version of Python.
+# Set locally active version of Python.
+# If Python_ABI argument is specified, then version of Python corresponding to Python_ABI is used.
+# If 2 argument is specified, then active version of CPython 2 is used.
+# If 3 argument is specified, then active version of CPython 3 is used.
 #
 # This function can be used only in pkg_setup() phase.
 python_set_active_version() {
@@ -1286,9 +1521,12 @@ python_set_active_version() {
 	_python_initial_sanity_checks
 
 	if [[ -z "${PYTHON_ABI}" ]]; then
-		if [[ "$1" =~ ^[[:digit:]]+\.[[:digit:]]+$ ]]; then
-			if ! _python_implementation && ! has_version "dev-lang/python:$1"; then
-				die "${FUNCNAME}(): 'dev-lang/python:$1' is not installed"
+		if [[ -n "$(_python_get_implementation --ignore-invalid "$1")" ]]; then
+			# PYTHON_ABI variable is intended to be used only in ebuilds/eclasses,
+			# so it does not need to be exported to subprocesses.
+			PYTHON_ABI="$1"
+			if ! _python_implementation && ! has_version "$(python_get_implementational_package)"; then
+				die "${FUNCNAME}(): '$(python_get_implementational_package)' is not installed"
 			fi
 			export EPYTHON="$(PYTHON "$1")"
 		elif [[ "$1" == "2" ]]; then
@@ -1296,19 +1534,18 @@ python_set_active_version() {
 				die "${FUNCNAME}(): '=dev-lang/python-2*' is not installed"
 			fi
 			export EPYTHON="$(PYTHON -2)"
+			PYTHON_ABI="${EPYTHON#python}"
+			PYTHON_ABI="${PYTHON_ABI%%-*}"
 		elif [[ "$1" == "3" ]]; then
 			if ! _python_implementation && ! has_version "=dev-lang/python-3*"; then
 				die "${FUNCNAME}(): '=dev-lang/python-3*' is not installed"
 			fi
 			export EPYTHON="$(PYTHON -3)"
+			PYTHON_ABI="${EPYTHON#python}"
+			PYTHON_ABI="${PYTHON_ABI%%-*}"
 		else
 			die "${FUNCNAME}(): Unrecognized argument '$1'"
 		fi
-
-		# PYTHON_ABI variable is intended to be used only in ebuilds/eclasses,
-		# so it does not need to be exported to subprocesses.
-		PYTHON_ABI="${EPYTHON#python}"
-		PYTHON_ABI="${PYTHON_ABI%%-*}"
 	fi
 
 	_python_final_sanity_checks
@@ -1345,6 +1582,27 @@ if platform.system()[:4] == "Java":
 	sys.stdout.write("-jython")'
 
 _python_get_implementation() {
+	local ignore_invalid="0"
+
+	while (($#)); do
+		case "$1" in
+			--ignore-invalid)
+				ignore_invalid="1"
+				;;
+			--)
+				shift
+				break
+				;;
+			-*)
+				die "${FUNCNAME}(): Unrecognized option '$1'"
+				;;
+			*)
+				break
+				;;
+		esac
+		shift
+	done
+
 	if [[ "$#" -ne 1 ]]; then
 		die "${FUNCNAME}() requires 1 argument"
 	fi
@@ -1354,7 +1612,9 @@ _python_get_implementation() {
 	elif [[ "$1" =~ ^[[:digit:]]+\.[[:digit:]]+-jython$ ]]; then
 		echo "Jython"
 	else
-		die "${FUNCNAME}(): Unrecognized Python ABI '$1'"
+		if [[ "${ignore_invalid}" == "0" ]]; then
+			die "${FUNCNAME}(): Unrecognized Python ABI '$1'"
+		fi
 	fi
 }
 
@@ -1363,8 +1623,8 @@ _python_get_implementation() {
 # @DESCRIPTION:
 # Print filename of Python interpreter for specified Python ABI. If Python_ABI argument
 # is ommitted, then PYTHON_ABI environment variable must be set and is used.
-# If -2 option is specified, then active version of Python 2 is used.
-# If -3 option is specified, then active version of Python 3 is used.
+# If -2 option is specified, then active version of CPython 2 is used.
+# If -3 option is specified, then active version of CPython 3 is used.
 # If --final-ABI option is specified, then final ABI from the list of enabled ABIs is used.
 # -2, -3 and --final-ABI options and Python_ABI argument cannot be specified simultaneously.
 # If --ABI option is specified, then only specified Python ABI is printed instead of
@@ -1425,14 +1685,14 @@ PYTHON() {
 		elif [[ "${python2}" == "1" ]]; then
 			PYTHON_ABI="$(eselect python show --python2 --ABI)"
 			if [[ -z "${PYTHON_ABI}" ]]; then
-				die "${FUNCNAME}(): Active version of Python 2 not set"
+				die "${FUNCNAME}(): Active version of CPython 2 not set"
 			elif [[ "${PYTHON_ABI}" != "2."* ]]; then
 				die "${FUNCNAME}(): Internal error in \`eselect python show --python2\`"
 			fi
 		elif [[ "${python3}" == "1" ]]; then
 			PYTHON_ABI="$(eselect python show --python3 --ABI)"
 			if [[ -z "${PYTHON_ABI}" ]]; then
-				die "${FUNCNAME}(): Active version of Python 3 not set"
+				die "${FUNCNAME}(): Active version of CPython 3 not set"
 			elif [[ "${PYTHON_ABI}" != "3."* ]]; then
 				die "${FUNCNAME}(): Internal error in \`eselect python show --python3\`"
 			fi
@@ -1468,7 +1728,7 @@ PYTHON() {
 		if [[ "$(_python_get_implementation "${PYTHON_ABI}")" == "CPython" ]]; then
 			python_interpreter="python${PYTHON_ABI}"
 		elif [[ "$(_python_get_implementation "${PYTHON_ABI}")" == "Jython" ]]; then
-			python_interpreter="jython-${PYTHON_ABI%-jython}"
+			python_interpreter="jython${PYTHON_ABI%-jython}"
 		fi
 
 		if [[ "${absolute_path_output}" == "1" ]]; then
@@ -2185,7 +2445,7 @@ _python_clean_compiled_modules() {
 					base_module_name="${base_module_name%\$py.class}"
 					py_file="${compiled_file%__pycache__/*}${base_module_name}.py"
 				else
-					py_file="${compiled_file%\$py.class}"
+					py_file="${compiled_file%\$py.class}.py"
 				fi
 				if [[ "${EBUILD_PHASE}" == "postinst" ]]; then
 					[[ -f "${py_file}" && "${compiled_file}" -nt "${py_file}" ]] && continue
