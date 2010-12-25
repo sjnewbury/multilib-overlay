@@ -1,8 +1,8 @@
---- /usr/portage/media-gfx/graphviz/graphviz-2.26.3-r2.ebuild	2010-03-31 04:36:03.000000000 +0200
-+++ ./media-gfx/graphviz/graphviz-2.26.3-r2.ebuild	2010-04-21 00:01:59.000000000 +0200
-@@ -26,6 +26,7 @@
- 	>=media-libs/jpeg-6b
+--- /usr/portage/media-gfx/graphviz/graphviz-2.26.3-r2.ebuild	2010-11-13 21:06:51.000000000 +0100
++++ ./media-gfx/graphviz/graphviz-2.26.3-r2.ebuild	2010-12-25 01:09:24.000000000 +0100
+@@ -28,6 +28,7 @@
  	>=media-libs/libpng-1.2.10
+ 	virtual/jpeg
  	virtual/libiconv
 +	gnome-base/librsvg
  	cairo?	(
