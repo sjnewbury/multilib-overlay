@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libfpx/libfpx-1.3.0-r1.ebuild,v 1.7 2010/11/28 14:26:13 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libfpx/libfpx-1.3.0-r1.ebuild,v 1.8 2010/12/10 16:29:09 flameeyes Exp $
 
 EAPI=2
 inherit eutils flag-o-matic libtool multilib-native
@@ -22,8 +22,10 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
+	append-ldflags -Wl,--no-undefined
 	econf \
-		--disable-dependency-tracking
+		--disable-dependency-tracking \
+		LIBS="-lstdc++ -lm"
 }
 
 multilib-native_src_install_internal() {
