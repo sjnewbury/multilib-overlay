@@ -187,7 +187,7 @@ multilib-native_src_configure_internal() {
 		--with-optim="${CFLAGS}" \
 		${myconf}
 
-	# install in /usr/libexec always, instead of using /usr/lib/cups, as that
+	# install in /usr/libexec always, instead of using /usr$(get_libdir)cups, as that
 	# makes more sense when facing multilib support.
 	sed -i -e 's:SERVERBIN.*:SERVERBIN = "$(BUILDROOT)"/usr/libexec/cups:' Makedefs
 	sed -i -e 's:#define CUPS_SERVERBIN.*:#define CUPS_SERVERBIN "/usr/libexec/cups":' config.h
@@ -280,11 +280,11 @@ multilib-native_pkg_postinst_internal() {
 		echo
 	fi
 
-	if [ -e "${ROOT}"/usr/lib/cups ] ; then
+	if [ -e "${ROOT}"/usr/$(get_libdir)/cups ] ; then
 		echo
-		ewarn "/usr/lib/cups exists - You need to remerge every ebuild that"
-		ewarn "installed into /usr/lib/cups and /etc/cups, qfile is in portage-utils:"
-		ewarn "# FEATURES=-collision-protect emerge -va1 \$(qfile -qC /usr/lib/cups /etc/cups | sed -e \"s:net-print/cups$::\")"
+		ewarn "/usr/$(get_libdir)/cups exists - You need to remerge every ebuild that"
+		ewarn "installed into /usr/$(get_libdir)/cups and /etc/cups, qfile is in portage-utils:"
+		ewarn "# FEATURES=-collision-protect emerge -va1 \$(qfile -qC /usr/$(get_libdir)/cups /etc/cups | sed -e \"s:net-print/cups$::\")"
 		echo
 		ewarn "FEATURES=-collision-protect is needed to overwrite the compatibility"
 		ewarn "symlinks installed by this package, it won't be needed on later merges."
@@ -292,9 +292,9 @@ multilib-native_pkg_postinst_internal() {
 		echo
 
 		# place symlinks to make the update smoothless
-		for i in "${ROOT}"/usr/lib/cups/{backend,filter}/* ; do
-			if [ "${i/\*}" == "${i}" ] && ! [ -e ${i/lib/libexec} ] ; then
-				ln -s ${i} ${i/lib/libexec}
+		for i in "${ROOT}"/usr/$(get_libdir)/cups/{backend,filter}/* ; do
+			if [ "${i/\*}" == "${i}" ] && ! [ -e ${i/$(get_libdir)/libexec} ] ; then
+				ln -s ${i} ${i/$(get_libdir)/libexec}
 			fi
 		done
 	fi
