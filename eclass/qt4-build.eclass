@@ -23,9 +23,9 @@ inherit base eutils multilib toolchain-funcs flag-o-matic versionator
 MY_PV=${PV/_/-}
 if version_is_at_least 4.5.99999999; then
 	MY_P=qt-everywhere-opensource-src-${MY_PV}
-	[[ ${CATEGORY}/${PN} != x11-libs/qt-xmlpatterns ]] &&
-		[[ ${CATEGORY}/${PN} != x11-themes/qgtkstyle ]] &&
-		IUSE="+exceptions"
+	[[ ${CATEGORY}/${PN} != x11-libs/qt-xmlpatterns ]] && 
+		[[ ${CATEGORY}/${PN} != x11-themes/qgtkstyle ]] && 
+			IUSE="+exceptions"
 else
 	MY_P=qt-x11-opensource-src-${MY_PV}
 fi

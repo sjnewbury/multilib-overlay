@@ -2,7 +2,7 @@
 +++ ./eclass/qt4-build.eclass	2010-07-17 21:44:52.000000000 +0200
 @@ -2,6 +2,12 @@
  # Distributed under the terms of the GNU General Public License v2
- # $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.83 2010/09/05 09:25:08 hwoarang Exp $
+ # $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.87 2010/11/13 20:50:57 wired Exp $
  
 +export EMULTILIB_SAVE_VARS="QTBASEDIR QTPREFIXDIR QTBINDIR QTLIBDIR \
 +		QMAKE_LIBDIR_QT QTPCDIR QTDATADIR QTDOCDIR QTHEADERDIR \
@@ -13,7 +13,7 @@
  # @ECLASS: qt4-build.eclass
  # @MAINTAINER:
  # Ben de Groot <yngwin@gentoo.org>,
-@@ -397,6 +406,7 @@
+@@ -399,6 +408,7 @@
  	fix_includes
  	# remove .la files since we are building only shared Qt libraries
  	find "${D}"${QTLIBDIR} -name "*.la" -print0 | xargs -0 rm 
