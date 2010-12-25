@@ -1,6 +1,6 @@
---- /usr/portage/media-libs/xvid/xvid-1.2.2-r2.ebuild	2010-05-24 21:06:01.000000000 +0200
-+++ ./media-libs/xvid/xvid-1.2.2-r2.ebuild	2010-06-20 23:39:23.000000000 +0200
-@@ -29,7 +29,8 @@
+--- /usr/portage/media-libs/xvid/xvid-1.2.2-r2.ebuild	2010-10-30 18:06:41.000000000 +0200
++++ ./media-libs/xvid/xvid-1.2.2-r2.ebuild	2010-12-25 01:26:52.000000000 +0100
+@@ -28,7 +28,8 @@
  S=${WORKDIR}/${MY_PN}/build/generic
  
  src_prepare() {
