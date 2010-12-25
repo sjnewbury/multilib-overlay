@@ -1,6 +1,6 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-dns/c-ares/c-ares-1.5.3.ebuild,v 1.7 2009/02/04 21:35:03 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-dns/c-ares/c-ares-1.5.3.ebuild,v 1.8 2010/12/11 09:43:37 dragonheart Exp $
 
 inherit multilib-native
 
@@ -14,6 +14,7 @@ KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE=""
 
 DEPEND=""
+RDEPEND=""
 
 multilib-native_src_compile_internal() {
 	econf --enable-shared || die
