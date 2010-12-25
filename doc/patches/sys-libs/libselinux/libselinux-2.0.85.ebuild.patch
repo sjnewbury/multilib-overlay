@@ -1,5 +1,5 @@
---- /usr/portage/sys-libs/libselinux/libselinux-2.0.85.ebuild	2010-02-14 20:06:25.000000000 +0100
-+++ ./sys-libs/libselinux/libselinux-2.0.85.ebuild	2010-03-14 16:58:58.000000000 +0100
+--- /usr/portage/sys-libs/libselinux/libselinux-2.0.85.ebuild	2010-09-30 01:07:18.000000000 +0200
++++ ./sys-libs/libselinux/libselinux-2.0.85.ebuild	2010-12-25 02:13:49.000000000 +0100
 @@ -25,10 +25,7 @@
  RDEPEND="=sys-libs/libsepol-${SEPOL_VER}*
  	ruby? ( dev-lang/ruby )"
@@ -10,5 +10,5 @@
 -
 +src_prepare() {
  	[ ! -z "${BUGFIX_PATCH}" ] && epatch "${BUGFIX_PATCH}"
+ 	epatch "${FILESDIR}"/${P}-headers.patch #338302
  
- 	# fix up paths for multilib
