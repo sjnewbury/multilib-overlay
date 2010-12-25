@@ -245,7 +245,6 @@ net-dns/avahi
 net-dns/c-ares
 net-dns/libidn
 net-fs/samba
-# net-fs/samba-libs	does not exist any more
 net-libs/adns
 net-libs/gnutls
 net-libs/gssdp
@@ -315,7 +314,6 @@ sys-libs/zlib
 virtual/acl
 # virtual/fam not in portage but needed to get lib32 deps
 virtual/glu
-virtual/glut
 virtual/jpeg
 # virtual/krb5 not in portage but needed to get lib32 deps
 virtual/libffi
