@@ -143,9 +143,9 @@ multilib-native_src_unpack_internal() {
 			mv "${WORKDIR}"/test/sys "${S}"/test/
 		fi
 	fi
+}
 
-	cd "${S}"
-
+multilib-native_src_prepare_internal() {
 	# patches go here...
 
 	# backport some patches
@@ -185,7 +185,7 @@ multilib-native_src_unpack_internal() {
 	fi
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	filter-flags -fprefetch-loop-arrays
 
 	econf \
@@ -201,8 +201,6 @@ multilib-native_src_compile_internal() {
 		$(use_enable extras) \
 		--disable-introspection
 	# we don't have gobject-introspection in portage tree
-
-	emake || die "compiling udev failed"
 }
 
 multilib-native_src_install_internal() {
