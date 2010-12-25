@@ -1,5 +1,5 @@
---- /usr/portage/media-libs/freetype/freetype-1.4_pre20080316-r2.ebuild	2010-03-31 04:36:03.000000000 +0200
-+++ ./media-libs/freetype/freetype-1.4_pre20080316-r2.ebuild	2010-04-15 22:46:28.000000000 +0200
+--- /usr/portage/media-libs/freetype/freetype-1.4_pre20080316-r2.ebuild	2010-10-10 19:06:00.000000000 +0200
++++ ./media-libs/freetype/freetype-1.4_pre20080316-r2.ebuild	2010-12-25 01:11:43.000000000 +0100
 @@ -21,10 +21,7 @@
  
  S="${WORKDIR}"/${PN}
@@ -12,7 +12,7 @@
  	# remove unneeded include for BSD (#104016)
  	epatch "${FILESDIR}"/freetype-1.4_pre-malloc.patch
  
-@@ -70,23 +67,34 @@
+@@ -72,23 +69,34 @@
  	done
  }
  
