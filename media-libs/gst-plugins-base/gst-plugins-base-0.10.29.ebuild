@@ -31,9 +31,7 @@ GST_PLUGINS_BUILD=""
 
 DOCS="AUTHORS README RELEASE"
 
-multilib-native_src_unpack_internal() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-make-382.patch
 	eautoreconf
 }

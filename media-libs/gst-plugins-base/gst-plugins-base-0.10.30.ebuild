@@ -31,7 +31,7 @@ GST_PLUGINS_BUILD=""
 
 DOCS="AUTHORS NEWS README RELEASE"
 
-multilib-native_src_unpack_internal() {
+src_preparek() {
 	unpack ${A}
 	cd "${S}"
 	epatch "${FILESDIR}"/${PN}-0.10.29-make-382.patch
@@ -40,7 +40,7 @@ multilib-native_src_unpack_internal() {
 	eautoreconf
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# gst doesnt handle opts well, last tested with 0.10.15
 	strip-flags
 	replace-flags "-O3" "-O2"
@@ -49,7 +49,6 @@ multilib-native_src_compile_internal() {
 		$(use_enable introspection) \
 		$(use_enable nls) \
 		$(use_enable orc)
-	emake || die "emake failed."
 }
 
 multilib-native_src_install_internal() {

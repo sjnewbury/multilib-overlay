@@ -1,0 +1,28 @@
+--- /usr/portage/media-libs/gst-plugins-base/gst-plugins-base-0.10.30.ebuild	2010-11-22 12:36:05.000000000 +0100
++++ ./media-libs/gst-plugins-base/gst-plugins-base-0.10.30.ebuild	2010-12-25 01:16:36.000000000 +0100
+@@ -31,7 +31,7 @@
+ 
+ DOCS="AUTHORS NEWS README RELEASE"
+ 
+-src_unpack() {
++src_preparek() {
+ 	unpack ${A}
+ 	cd "${S}"
+ 	epatch "${FILESDIR}"/${PN}-0.10.29-make-382.patch
+@@ -40,7 +40,7 @@
+ 	eautoreconf
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	# gst doesnt handle opts well, last tested with 0.10.15
+ 	strip-flags
+ 	replace-flags "-O3" "-O2"
+@@ -49,7 +49,6 @@
+ 		$(use_enable introspection) \
+ 		$(use_enable nls) \
+ 		$(use_enable orc)
+-	emake || die "emake failed."
+ }
+ 
+ src_install() {
