@@ -1,0 +1,26 @@
+--- /usr/portage/media-libs/nas/nas-1.9.2-r1.ebuild	2010-10-31 12:08:59.000000000 +0100
++++ ./media-libs/nas/nas-1.9.2-r1.ebuild	2010-12-25 01:24:51.000000000 +0100
+@@ -26,17 +26,19 @@
+ 	app-text/rman
+ 	x11-proto/xproto"
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	epatch "${FILESDIR}"/${P}-asneeded.patch \
+ 		"${FILESDIR}"/${P}-implicit-inet_ntoa-amd64.patch
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	xmkmf || die "xmkmf failed"
+ 	touch doc/man/lib/tmp.{_man,man}
++}
++
++src_compile() {
+ 	emake \
++		LIBDIR="/usr/$(get_libdir)/X11" \
+ 		MAKE="${MAKE:-gmake}" \
+ 		CDEBUGFLAGS="${CFLAGS}" \
+ 		CXXDEBUFLAGS="${CXXFLAGS}" \

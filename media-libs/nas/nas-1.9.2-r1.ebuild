@@ -28,17 +28,19 @@ DEPEND="${RDEPEND}
 	app-text/rman
 	x11-proto/xproto"
 
-multilib-native_src_unpack_internal() {
-	unpack ${A}
-	cd "${S}"
+multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${P}-asneeded.patch \
 		"${FILESDIR}"/${P}-implicit-inet_ntoa-amd64.patch
 }
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	xmkmf || die "xmkmf failed"
 	touch doc/man/lib/tmp.{_man,man}
+}
+
+multilib-native_src_compile_internal() {
 	emake \
+		LIBDIR="/usr/$(get_libdir)/X11" \
 		MAKE="${MAKE:-gmake}" \
 		CDEBUGFLAGS="${CFLAGS}" \
 		CXXDEBUFLAGS="${CXXFLAGS}" \
