@@ -30,6 +30,7 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	dev-util/pkgconfig[lib32?]
+	dev-libs/check[lib32?]
 "
 
 multilib-native_src_prepare_internal() {

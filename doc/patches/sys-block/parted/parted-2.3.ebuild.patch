@@ -1,12 +1,10 @@
---- /usr/portage/sys-block/parted/parted-2.3.ebuild	2010-07-12 11:37:11.000000000 +0200
-+++ ./sys-block/parted/parted-2.3.ebuild	2010-07-17 19:56:15.000000000 +0200
-@@ -27,7 +27,8 @@
- 	device-mapper? ( || (
- 		>=sys-fs/lvm2-2.02.45
- 		sys-fs/device-mapper )
--	)"
-+	)
-+	dev-libs/check"
+--- /usr/portage/sys-block/parted/parted-2.3.ebuild	2010-10-29 18:07:18.000000000 +0200
++++ ./sys-block/parted/parted-2.3.ebuild	2010-12-25 01:58:58.000000000 +0100
+@@ -30,6 +30,7 @@
+ DEPEND="
+ 	${RDEPEND}
+ 	dev-util/pkgconfig
++	dev-libs/check
+ "
  
  src_prepare() {
- 	# Remove tests known to FAIL instead of SKIP without OS/userland support
