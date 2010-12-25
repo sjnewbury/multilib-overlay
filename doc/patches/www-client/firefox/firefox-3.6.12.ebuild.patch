@@ -1,5 +1,5 @@
---- /usr/portage/www-client/firefox/firefox-3.6.9.ebuild	2010-10-13 02:38:02.000000000 +0200
-+++ ./www-client/firefox/firefox-3.6.9.ebuild	2010-12-25 02:18:33.000000000 +0100
+--- /usr/portage/www-client/firefox/firefox-3.6.12.ebuild	2010-10-13 02:38:02.000000000 +0200
++++ ./www-client/firefox/firefox-3.6.12.ebuild	2010-12-25 02:18:41.000000000 +0100
 @@ -120,11 +120,13 @@
  src_unpack() {
  	unpack firefox-${MY_PV}.source.tar.bz2 ${PATCH}.tar.bz2

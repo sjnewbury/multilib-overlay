@@ -120,11 +120,13 @@ multilib-native_pkg_setup_internal() {
 multilib-native_src_unpack_internal() {
 	unpack firefox-${MY_PV}.source.tar.bz2 ${PATCH}.tar.bz2
 
-	linguas
-	for X in ${linguas}; do
-		# FIXME: Add support for unpacking xpis to portage
-		[[ ${X} != "en" ]] && xpi_unpack "${P}-${X}.xpi"
-	done
+	if is_final_abi; then
+		linguas
+		for X in ${linguas}; do
+			# FIXME: Add support for unpacking xpis to portage
+			[[ ${X} != "en" ]] && xpi_unpack "${P}-${X}.xpi"
+		done
+	fi
 }
 
 multilib-native_src_prepare_internal() {
