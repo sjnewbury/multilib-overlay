@@ -1,0 +1,93 @@
+--- /usr/portage/sys-libs/ncurses/ncurses-5.7-r6.ebuild	2010-11-15 12:55:07.000000000 +0100
++++ ./sys-libs/ncurses/ncurses-5.7-r6.ebuild	2010-12-25 02:14:53.000000000 +0100
+@@ -23,9 +23,7 @@
+ 
+ S=${WORKDIR}/${MY_P}
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
++src_prepare() {
+ 	[[ -n ${PV_SNAP} ]] && epatch "${WORKDIR}"/${MY_P}-${PV_SNAP}-patch.sh
+ 	epatch "${FILESDIR}"/${PN}-5.6-gfbsd.patch
+ 	epatch "${FILESDIR}"/${PN}-5.7-emacs.patch #270527
+@@ -34,11 +32,18 @@
+ 	epatch "${FILESDIR}"/${PN}-5.7-rxvt-unicode-9.09.patch #192083
+ 	epatch "${FILESDIR}"/${P}-hashdb-open.patch #245370
+ 	sed -i '/with_no_leaks=yes/s:=.*:=$enableval:' configure #305889
++
++	# Becaus of adding -L/usr/$(get_lib_dir) to LDFLAGS we see a bug when
++	# upgrading this lib. This is because the buildsystem try to link against the old
++	# version installed in the system. This patch should fix that
++	epatch "${FILESDIR}"/${PN}-5.7-ldflags-multilib-overlay.patch 
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	unset TERMINFO #115036
+-	tc-export BUILD_CC
++	# The ebuild keeps failing if this variable is set when a
++	# crossdev compiler is installed so is better to remove it
++	#tc-export BUILD_CC
+ 	export BUILD_CPPFLAGS+=" -D_GNU_SOURCE" #214642
+ 
+ 	# when cross-compiling, we need to build up our own tic
+@@ -55,14 +60,14 @@
+ 	fi
+ 
+ 	make_flags=""
+-	do_compile narrowc
+-	use unicode && do_compile widec --enable-widec --includedir=/usr/include/ncursesw
++	do_configure narrowc
++	use unicode && do_configure widec --enable-widec --includedir=/usr/include/ncursesw
+ }
+-do_compile() {
++do_configure() {
+ 	ECONF_SOURCE=${S}
+ 
+-	mkdir "${WORKDIR}"/$1
+-	cd "${WORKDIR}"/$1
++	mkdir "${WORKDIR}"/$1.${ABI}
++	cd "${WORKDIR}"/$1.${ABI}
+ 	shift
+ 
+ 	# The chtype/mmask-t settings below are to retain ABI compat
+@@ -106,14 +111,24 @@
+ 		${conf_abi} \
+ 		"$@" \
+ 		|| die "configure failed"
++}
+ 
++src_compile() {
+ 	# A little hack to fix parallel builds ... they break when
+ 	# generating sources so if we generate the sources first (in
+ 	# non-parallel), we can then build the rest of the package
+ 	# in parallel.  This is not really a perf hit since the source
+ 	# generation is quite small.  -vapier
++	cd "${WORKDIR}"/narrowc.${ABI}
++	einfo "Compiling regular ncurses in ${WORKDIR}/narrowc.${ABI} ..."
+ 	emake -j1 sources || die "make sources failed"
+-	emake ${make_flags} || die "make ${make_flags} failed"
++	emake || die "make failed"
++	if use unicode ; then
++		cd "${WORKDIR}"/widec.${ABI}
++		einfo "Compiling unicode ncurses in ${WORKDIR}/widec.${ABI} .."
++		emake -j1 sources || die "make sources failed"
++		emake ${make_flags} || die "make ${make_flags} failed"
++	fi
+ }
+ 
+ src_install() {
+@@ -122,10 +137,10 @@
+ 
+ 	# install unicode version second so that the binaries in /usr/bin
+ 	# support both wide and narrow
+-	cd "${WORKDIR}"/narrowc
++	cd "${WORKDIR}"/narrowc.${ABI}
+ 	emake DESTDIR="${D}" install || die "make narrowc install failed"
+ 	if use unicode ; then
+-		cd "${WORKDIR}"/widec
++		cd "${WORKDIR}"/widec.${ABI}
+ 		emake DESTDIR="${D}" install || die "make widec install failed"
+ 	fi
+ 
