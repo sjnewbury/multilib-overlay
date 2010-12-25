@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8.2.ebuild,v 1.1 2010/11/10 12:57:16 dagger Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8.2-r2.ebuild,v 1.1 2010/12/17 12:17:05 dagger Exp $
 
 EAPI="2"
 
@@ -78,6 +78,15 @@ multilib-native_pkg_setup_internal() {
 		fi
 
 	fi
+}
+
+multilib-native_src_prepare_internal() {
+	# dbus policy patch
+	epatch "${FILESDIR}/${P}-confchanges.patch"
+	# accept "gw" in /etc/conf.d/net (bug #339215)
+	epatch "${FILESDIR}/${P}-accept-gw.patch"
+	# Backports #1
+	epatch "${FILESDIR}/${P}-1.patch"
 }
 
 multilib-native_src_configure_internal() {
