@@ -20,7 +20,7 @@ RDEPEND=">=dev-libs/glib-2.25.12:2[lib32?]
 	>=x11-libs/gtk+-2.20:2[lib32?]
 	>=gnome-base/gconf-2[lib32?]
 	>=dev-db/sqlite-3.5[lib32?]
-	>=dev-libs/libgdata-0.6.3
+	>=dev-libs/libgdata-0.6.3[lib32?]
 	>=dev-libs/libical-0.43[lib32?]
 	>=net-libs/libsoup-2.4:2.4[lib32?]
 	>=dev-libs/libxml2-2[lib32?]
@@ -52,6 +52,7 @@ multilib-native_pkg_setup_internal() {
 		$(use_enable gnome-keyring)
 		$(use_enable ipv6)
 		$(use_with kerberos krb5 /usr)
+		$(use_with kerberos krb5-libs /usr/$(get_libdir) )
 		$(use_with ldap openldap)
 		$(use_enable ssl ssl)
 		$(use_enable ssl smime)

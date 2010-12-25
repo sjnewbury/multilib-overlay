@@ -1,0 +1,10 @@
+--- /usr/portage/gnome-extra/evolution-data-server/evolution-data-server-2.32.1.ebuild	2010-11-16 20:03:21.000000000 +0100
++++ ./gnome-extra/evolution-data-server/evolution-data-server-2.32.1.ebuild	2010-12-25 01:07:09.000000000 +0100
+@@ -52,6 +52,7 @@
+ 		$(use_enable gnome-keyring)
+ 		$(use_enable ipv6)
+ 		$(use_with kerberos krb5 /usr)
++		$(use_with kerberos krb5-libs /usr/$(get_libdir) )
+ 		$(use_with ldap openldap)
+ 		$(use_enable ssl ssl)
+ 		$(use_enable ssl smime)
