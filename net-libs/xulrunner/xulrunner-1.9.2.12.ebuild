@@ -214,7 +214,7 @@ multilib-native_src_install_internal() {
 
 	# env.d file for ld search path
 	dodir /etc/env.d
-	echo "LDPATH=${EPREFIX}/${MOZLIBDIR}" > "${ED}"/etc/env.d/08xulrunner || die "env.d failed"
+	echo "LDPATH=${EPREFIX}/${MOZLIBDIR}" > "${ED}"/etc/env.d/08xulrunner-${ABI} || die "env.d failed"
 
 	# Add our defaults to xulrunner and out of firefox
 	cp "${FILESDIR}"/xulrunner-default-prefs.js \
@@ -229,6 +229,11 @@ multilib-native_src_install_internal() {
 		java-pkg_regjar "${ED}/${SDKDIR}/lib/MozillaGlue.jar"
 		java-pkg_regjar "${ED}/${SDKDIR}/lib/MozillaInterfaces.jar"
 	fi
+
+	# each ABI should generate exactly one /etc/gre.d/*.system.conf file
+	for conf in "${D}"/etc/gre.d/*.system.conf ; do
+		mv "${conf}" "${conf%.conf}-${ABI}.conf"
+	done
 }
 
 multilib-native_pkg_postinst_internal() {
