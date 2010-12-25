@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.22.ebuild,v 1.4 2010/11/30 22:01:55 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.22.ebuild,v 1.6 2010/12/22 06:22:26 ford_prefect Exp $
 
 EAPI=3
 
@@ -18,7 +18,7 @@ IUSE="+alsa avahi +caps jack lirc oss tcpd +X hal dbus libsamplerate gnome bluet
 
 RDEPEND="app-admin/eselect-esd
 	X? (
-		|| ( <x11-libs/libX11-1.4.0[xcb,lib32?] >=x11-libs/libX11-1.4.0[lib32?] )
+		|| ( >=x11-libs/libX11-1.4.0[lib32?] <x11-libs/libX11-1.4.0[xcb,lib32?] )
 		x11-libs/xcb-util[lib32?]
 		x11-libs/libSM[lib32?]
 		x11-libs/libICE[lib32?]
@@ -29,7 +29,6 @@ RDEPEND="app-admin/eselect-esd
 	alsa? ( >=media-libs/alsa-lib-1.0.19[lib32?] )
 	glib? ( >=dev-libs/glib-2.4.0[lib32?] )
 	avahi? ( >=net-dns/avahi-0.6.12[dbus,lib32?] )
-	>=dev-libs/liboil-0.3.0[lib32?]
 	jack? ( >=media-sound/jack-audio-connection-kit-0.100[lib32?] )
 	tcpd? ( sys-apps/tcp-wrappers[lib32?] )
 	lirc? ( app-misc/lirc[lib32?] )
@@ -49,7 +48,6 @@ RDEPEND="app-admin/eselect-esd
 	>=media-libs/audiofile-0.2.6-r1[lib32?]
 	>=media-libs/speex-1.2_beta[lib32?]
 	>=media-libs/libsndfile-1.0.20[lib32?]
-	>=dev-libs/liboil-0.3.6[lib32?]
 	sys-libs/gdbm[lib32?]
 	>=sys-devel/libtool-2.2.4[lib32?]" # it's a valid RDEPEND, libltdl.so is used
 
