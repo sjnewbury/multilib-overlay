@@ -1,14 +1,14 @@
---- /usr/portage/eclass/toolchain.eclass	2010-07-06 00:35:48.000000000 +0200
-+++ ./eclass/toolchain.eclass	2010-07-17 21:46:05.000000000 +0200
-@@ -158,6 +158,7 @@
- 			tc_version_is_at_least "4.0" && IUSE="${IUSE} objc-gc mudflap"
- 			tc_version_is_at_least "4.1" && IUSE="${IUSE} objc++"
- 			tc_version_is_at_least "4.2" && IUSE="${IUSE} openmp"
-+			tc_version_is_at_least "4.2" && IUSE="${IUSE} nsplugin"
- 			tc_version_is_at_least "4.3" && IUSE="${IUSE} fixed-point"
+--- /usr/portage/eclass/toolchain.eclass	2010-11-21 22:35:45.000000000 +0100
++++ ./eclass/toolchain.eclass	2010-12-25 03:12:13.000000000 +0100
+@@ -162,6 +162,7 @@
+ 			tc_version_is_at_least "4.0" && IUSE+=" objc-gc mudflap"
+ 			tc_version_is_at_least "4.1" && IUSE+=" objc++"
+ 			tc_version_is_at_least "4.2" && IUSE+=" openmp"
++			tc_version_is_at_least "4.2" && IUSE+=" nsplugin"
+ 			tc_version_is_at_least "4.3" && IUSE+=" fixed-point"
  			if tc_version_is_at_least "4.4" ; then
- 				IUSE="${IUSE} graphite"
-@@ -1112,7 +1113,7 @@
+ 				IUSE+=" graphite"
+@@ -1116,7 +1117,7 @@
  			done
  	fi
  
@@ -17,7 +17,7 @@
  }
  
  gcc-library-configure() {
-@@ -1191,7 +1192,14 @@
+@@ -1207,7 +1208,14 @@
  	if ! is_gcj ; then
  		confgcc="${confgcc} --disable-libgcj"
  	elif use gtk ; then
@@ -33,7 +33,7 @@
  	fi
  
  	case $(tc-arch) in
-@@ -1921,10 +1929,24 @@
+@@ -1944,10 +1952,24 @@
  		mv -f "${D}"${PREFIX}/lib/libgcj.spec "${D}"${LIBPATH}/libgcj.spec
  
  	# SLOT up libgcj.pc (and let gcc-config worry about links)
