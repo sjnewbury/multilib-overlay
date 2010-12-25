@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.30.3.ebuild,v 1.3 2010/11/14 22:43:27 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.30.3.ebuild,v 1.4 2010/12/21 22:06:14 eva Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -13,7 +13,7 @@ HOMEPAGE="http://www.gnome.org/projects/evolution/"
 LICENSE="GPL-2 LGPL-2 OPENLDAP"
 SLOT="2.0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="crypt doc gstreamer kerberos ldap networkmanager nntp pda profile python ssl"
+IUSE="crypt doc gstreamer kerberos ldap networkmanager nntp pda python ssl"
 # pst
 # mono - disabled because it just crashes on startup :S
 
@@ -90,9 +90,9 @@ multilib-native_pkg_setup_internal() {
 		$(use_enable networkmanager nm)
 		$(use_enable nntp)
 		$(use_enable gstreamer audio-inline)
-		--disable-pst-import
 		$(use_enable pda pilot-conduits)
-		$(use_enable profile profiling)
+		--disable-profiling
+		--disable-pst-import
 		$(use_enable python)
 		$(use_with ldap openldap)
 		$(use_with kerberos krb5 /usr)

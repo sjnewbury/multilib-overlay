@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.32.1.ebuild,v 1.3 2010/11/25 18:08:54 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.32.1.ebuild,v 1.4 2010/12/21 22:06:14 eva Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -16,7 +16,7 @@ HOMEPAGE="http://www.gnome.org/projects/evolution/"
 LICENSE="GPL-2 LGPL-2 OPENLDAP"
 SLOT="2.0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
-IUSE="clutter connman crypt doc gstreamer kerberos ldap networkmanager profile python ssl"
+IUSE="clutter connman crypt doc gstreamer kerberos ldap networkmanager python ssl"
 
 # We need a graphical pinentry frontend to be able to ask for the GPG
 # password from inside evolution, bug 160302
@@ -34,7 +34,7 @@ RDEPEND=">=dev-libs/glib-2.25.12:2[lib32?]
 	media-libs/libcanberra[gtk,lib32?]
 	>=x11-libs/libnotify-0.3[lib32?]
 	>=gnome-extra/evolution-data-server-${PV}[weather,lib32?]
-	>=gnome-extra/gtkhtml-3.31.90[lib32?]
+	>=gnome-extra/gtkhtml-3.31.90:3.14[lib32?]
 	>=gnome-base/gconf-2[lib32?]
 	>=gnome-base/libgnomecanvas-2[lib32?]
 	dev-libs/atk[lib32?]
@@ -43,9 +43,9 @@ RDEPEND=">=dev-libs/glib-2.25.12:2[lib32?]
 	>=media-gfx/gtkimageview-1.6[lib32?]
 	>=x11-misc/shared-mime-info-0.22
 	>=x11-themes/gnome-icon-theme-2.30.2.1
-	>=dev-libs/libgdata-0.4
+	>=dev-libs/libgdata-0.4[lib32?]
 
-	clutter? ( media-libs/clutter[gtk] )
+	clutter? ( media-libs/clutter:1.0[gtk] )
 	connman? ( net-misc/connman )
 	crypt? ( || (
 				  ( >=app-crypt/gnupg-2.0.1-r2[lib32?]
@@ -92,7 +92,7 @@ multilib-native_pkg_setup_internal() {
 		$(use_enable networkmanager nm)
 		$(use_enable connman)
 		$(use_enable gstreamer audio-inline)
-		$(use_enable profile profiling)
+		--disable-profiling
 		--disable-pst-import
 		$(use_enable python)
 		$(use_with clutter)
