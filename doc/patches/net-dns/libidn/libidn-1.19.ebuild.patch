@@ -1,6 +1,6 @@
---- /usr/portage/net-dns/libidn/libidn-1.19.ebuild	2010-07-09 18:07:03.000000000 +0200
-+++ ./net-dns/libidn/libidn-1.19.ebuild	2010-07-11 18:47:03.000000000 +0200
-@@ -30,7 +30,7 @@
+--- /usr/portage/net-dns/libidn/libidn-1.19.ebuild	2010-10-11 22:37:43.000000000 +0200
++++ ./net-dns/libidn/libidn-1.19.ebuild	2010-12-25 01:29:31.000000000 +0100
+@@ -33,7 +33,7 @@
  	rm "${S}/java/${P}.jar" || die
  }
  
@@ -9,7 +9,7 @@
  	econf \
  		$(use_enable nls) \
  		$(use_enable java) \
-@@ -41,7 +41,9 @@
+@@ -44,7 +44,9 @@
  		--with-packager-version="r${PR}" \
  		--with-packager-bug-reports="https://bugs.gentoo.org" \
  		|| die
