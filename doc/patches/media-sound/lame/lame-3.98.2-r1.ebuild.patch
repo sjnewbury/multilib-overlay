@@ -1,5 +1,5 @@
---- /usr/portage/media-sound/lame/lame-3.98.2-r1.ebuild	2010-03-31 04:36:03.000000000 +0200
-+++ ./media-sound/lame/lame-3.98.2-r1.ebuild	2010-04-04 16:16:29.000000000 +0200
+--- /usr/portage/media-sound/lame/lame-3.98.2-r1.ebuild	2010-10-04 17:36:09.000000000 +0200
++++ ./media-sound/lame/lame-3.98.2-r1.ebuild	2010-12-25 01:27:10.000000000 +0100
 @@ -23,10 +23,7 @@
  	dev-util/pkgconfig
  	mmx? ( dev-lang/nasm )"
@@ -12,7 +12,7 @@
  	# The frontened tries to link staticly, but we prefer shared libs
  	epatch "${FILESDIR}"/${PN}-3.98-shared-frontend.patch
  
-@@ -49,7 +46,7 @@
+@@ -51,7 +48,7 @@
  	epunt_cxx # embedded bug #74498
  }
  
@@ -21,7 +21,7 @@
  	use sndfile && myconf="--with-fileio=sndfile"
  	# The user sets compiler optimizations... But if you'd like
  	# lame to choose it's own... uncomment one of these (experiMENTAL)
-@@ -63,8 +60,6 @@
+@@ -65,8 +62,6 @@
  		$(use_enable mmx nasm) \
  		$(use_enable mp3rtp) \
  		${myconf} || die "econf failed"
