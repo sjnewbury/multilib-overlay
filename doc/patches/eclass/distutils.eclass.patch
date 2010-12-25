@@ -1,5 +1,5 @@
---- /usr/portage/eclass/distutils.eclass	2010-05-25 17:35:50.000000000 +0200
-+++ ./eclass/distutils.eclass	2010-06-03 14:10:23.000000000 +0200
+--- /usr/portage/eclass/distutils.eclass	2010-12-24 16:05:41.000000000 +0100
++++ ./eclass/distutils.eclass	2010-12-25 03:06:30.000000000 +0100
 @@ -23,7 +23,11 @@
  esac
  
@@ -13,7 +13,7 @@
  	RDEPEND="${DEPEND}"
  fi
  
-@@ -294,6 +298,24 @@
+@@ -317,6 +321,24 @@
  		die "${FUNCNAME}() can be used only in src_install() phase"
  	fi
  
@@ -38,7 +38,7 @@
  	_python_initialize_prefix_variables
  	_python_set_color_variables
  
-@@ -390,6 +412,27 @@
+@@ -418,6 +440,27 @@
  		done
  	fi
  
@@ -64,5 +64,5 @@
 +	fi
 +	einfo Using ${python}
  	if [[ -n "${PYTHON_MODNAME}" ]]; then
- 		if ! has "${EAPI:-0}" 0 1 2 || [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
- 			python_mod_optimize ${PYTHON_MODNAME}
+ 		if ! has "${EAPI:-0}" 0 1 2 || _python_package_supporting_installation_for_multiple_python_abis; then
+ 			python_mod_cleanup ${PYTHON_MODNAME}

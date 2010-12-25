@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/distutils.eclass,v 1.77 2010/10/10 19:23:20 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/distutils.eclass,v 1.79 2010/12/24 15:05:24 arfrever Exp $
 
 # @ECLASS: distutils.eclass
 # @MAINTAINER:
@@ -29,6 +29,24 @@ if [[ -z "$(declare -p PYTHON_DEPEND 2> /dev/null)" ]]; then
 		DEPEND="dev-lang/python"
 	fi
 	RDEPEND="${DEPEND}"
+fi
+
+if [[ -n "${PYTHON_DEPRECATION_WARNINGS}" ]]; then
+	if has "${EAPI:-0}" 0 1 && [[ -n "${SUPPORT_PYTHON_ABIS}" ]]; then
+		ewarn
+		ewarn "\"${EBUILD}\":"
+		ewarn "Deprecation Warning: Usage of distutils.eclass in packages supporting installation"
+		ewarn "for multiple Python ABIs in EAPI <=1 is deprecated and will be banned on 2011-06-01."
+		ewarn "The ebuild needs to be fixed. Please report a bug, if it has not been already reported."
+		ewarn
+	elif has "${EAPI:-0}" 0 1 2 && [[ -z "${SUPPORT_PYTHON_ABIS}" ]]; then
+		ewarn
+		ewarn "\"${EBUILD}\":"
+		ewarn "Deprecation Warning: Usage of distutils.eclass in packages not supporting installation"
+		ewarn "for multiple Python ABIs in EAPI <=2 is deprecated and will be banned on 2011-06-01."
+		ewarn "The ebuild needs to be fixed. Please report a bug, if it has not been already reported."
+		ewarn
+	fi
 fi
 
 # 'python' variable is deprecated. Use PYTHON() instead.
@@ -74,7 +92,7 @@ if [[ -z "${DISTUTILS_DISABLE_TEST_DEPENDENCY}" ]]; then
 		DEPEND+="${DEPEND:+ }test? ( dev-python/nose )"
 	elif [[ "${DISTUTILS_SRC_TEST}" == "py.test" ]]; then
 		IUSE="test"
-		DEPEND+="${DEPEND:+ }test? ( dev-python/py )"
+		DEPEND+="${DEPEND:+ }test? ( dev-python/pytest )"
 	# trial requires an argument, which is usually equal to "${PN}".
 	elif [[ "${DISTUTILS_SRC_TEST}" =~ ^trial(\ .*)?$ ]]; then
 		IUSE="test"
@@ -90,11 +108,16 @@ fi
 # @DESCRIPTION:
 # Set this to disable renaming of Python scripts containing versioned shebangs
 # and generation of wrapper scripts.
+if [[ -n "${DISTUTILS_DISABLE_VERSIONING_OF_PYTHON_SCRIPTS}" ]]; then
+	ewarn
+	ewarn "\"${EBUILD}\":"
+	ewarn "Deprecation Warning: DISTUTILS_DISABLE_VERSIONING_OF_PYTHON_SCRIPTS is deprecated"
+	ewarn "and will be banned on 2011-02-01. Use PYTHON_NONVERSIONED_EXECUTABLES=(\".*\")."
+	ewarn "The ebuild needs to be fixed. Please report a bug, if it has not been already reported."
+	ewarn
 
-# @ECLASS-VARIABLE: DISTUTILS_NONVERSIONED_PYTHON_SCRIPTS
-# @DESCRIPTION:
-# List of paths to Python scripts, relative to ${ED}, which are excluded from
-# renaming and generation of wrapper scripts.
+	PYTHON_NONVERSIONED_EXECUTABLES=(".*")
+fi
 
 # @ECLASS-VARIABLE: DOCS
 # @DESCRIPTION:
@@ -320,48 +343,20 @@ distutils_src_install() {
 	_python_set_color_variables
 
 	if _python_package_supporting_installation_for_multiple_python_abis; then
-		if [[ -z "${DISTUTILS_DISABLE_VERSIONING_OF_PYTHON_SCRIPTS}" && "${BASH_VERSINFO[0]}" -ge 4 ]]; then
-			declare -A wrapper_scripts=()
-
-			rename_scripts_with_versioned_shebangs() {
-				if [[ -d "${ED}usr/bin" ]]; then
-					cd "${ED}usr/bin"
-
-					local nonversioned_file file
-					for file in *; do
-						if [[ -f "${file}" && ! "${file}" =~ [[:digit:]]+\.[[:digit:]]+(-jython)?$ && "$(head -n1 "${file}")" =~ ^'#!'.*(python|jython-)[[:digit:]]+\.[[:digit:]]+ ]]; then
-							for nonversioned_file in "${DISTUTILS_NONVERSIONED_PYTHON_SCRIPTS[@]}"; do
-								[[ "${nonversioned_file}" == "/usr/bin/${file}" ]] && continue 2
-							done
-							mv "${file}" "${file}-${PYTHON_ABI}" || die "Renaming of '${file}' failed"
-							wrapper_scripts+=(["${ED}usr/bin/${file}"]=)
-						fi
-					done
-				fi
-			}
-		fi
-
 		distutils_installation() {
 			_distutils_hook pre
 
 			local setup_file
 			for setup_file in "${DISTUTILS_SETUP_FILES[@]-setup.py}"; do
-				echo ${_BOLD}"$(PYTHON)" "${setup_file}" "${DISTUTILS_GLOBAL_OPTIONS[@]}" $([[ -z "${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES}" ]] && echo build -b "$(_distutils_get_build_dir)") install --root="${D}" --no-compile "$@"${_NORMAL}
-				"$(PYTHON)" "${setup_file}" "${DISTUTILS_GLOBAL_OPTIONS[@]}" $([[ -z "${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES}" ]] && echo build -b "$(_distutils_get_build_dir)") install --root="${D}" --no-compile "$@" || return "$?"
+				echo ${_BOLD}"$(PYTHON)" "${setup_file}" "${DISTUTILS_GLOBAL_OPTIONS[@]}" $([[ -z "${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES}" ]] && echo build -b "$(_distutils_get_build_dir)") install --no-compile --root="${T}/images/${PYTHON_ABI}" "$@"${_NORMAL}
+				"$(PYTHON)" "${setup_file}" "${DISTUTILS_GLOBAL_OPTIONS[@]}" $([[ -z "${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES}" ]] && echo build -b "$(_distutils_get_build_dir)") install --no-compile --root="${T}/images/${PYTHON_ABI}" "$@" || return "$?"
 			done
-
-			if [[ -z "${DISTUTILS_DISABLE_VERSIONING_OF_PYTHON_SCRIPTS}" && "${BASH_VERSINFO[0]}" -ge 4 ]]; then
-				rename_scripts_with_versioned_shebangs
-			fi
 
 			_distutils_hook post
 		}
 		python_execute_function ${DISTUTILS_USE_SEPARATE_SOURCE_DIRECTORIES:+-s} distutils_installation "$@"
 
-		if [[ -z "${DISTUTILS_DISABLE_VERSIONING_OF_PYTHON_SCRIPTS}" && "${#wrapper_scripts[@]}" -ne 0 && "${BASH_VERSINFO[0]}" -ge 4 ]]; then
-			python_generate_wrapper_scripts "${!wrapper_scripts[@]}"
-		fi
-		unset wrapper_scripts
+		python_merge_intermediate_installation_images "${T}/images"
 	else
 		# Mark the package to be rebuilt after a Python upgrade.
 		python_need_rebuild
@@ -412,27 +407,6 @@ distutils_pkg_postinst() {
 		done
 	fi
 
-	if has "${EAPI:-0}" 0 1 2; then
-		if is_final_abi || (! has_multilib_profile); then
-			if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
-				python=python${PYTHON_SLOT_VERSION}
-			else
-				python=python
-			fi
-		else
-			[[ -z $(get_abi_var SETARCH_ARCH ${ABI}) ]] && die "SETARCH_ARCH_${ABI} is missing in your portage profile take a look at http://wiki.github.com/sjnewbury/multilib-overlay to get further information"
-			if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
-				python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) python${PYTHON_SLOT_VERSION}-${ABI}"
-			elif [[ -n "${PYTHON}" ]]; then
-				python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) ${PYTHON}"
-			else
-				python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) python"
-			fi	
-		fi
-	else
-		python="die"
-	fi
-	einfo Using ${python}
 	if [[ -n "${PYTHON_MODNAME}" ]]; then
 		if ! has "${EAPI:-0}" 0 1 2 || _python_package_supporting_installation_for_multiple_python_abis; then
 			python_mod_optimize ${PYTHON_MODNAME}
@@ -466,6 +440,27 @@ distutils_pkg_postrm() {
 		done
 	fi
 
+	if has "${EAPI:-0}" 0 1 2; then
+		if is_final_abi || (! has_multilib_profile); then
+			if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
+				python=python${PYTHON_SLOT_VERSION}
+			else
+				python=python
+			fi
+		else
+			[[ -z $(get_abi_var SETARCH_ARCH ${ABI}) ]] && die "SETARCH_ARCH_${ABI} is missing in your portage profile take a look at http://wiki.github.com/sjnewbury/multilib-overlay to get further information"
+			if [ -n "${PYTHON_SLOT_VERSION}" ] ; then
+				python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) python${PYTHON_SLOT_VERSION}-${ABI}"
+			elif [[ -n "${PYTHON}" ]]; then
+				python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) ${PYTHON}"
+			else
+				python="setarch $(get_abi_var SETARCH_ARCH ${ABI}) python"
+			fi	
+		fi
+	else
+		python="die"
+	fi
+	einfo Using ${python}
 	if [[ -n "${PYTHON_MODNAME}" ]]; then
 		if ! has "${EAPI:-0}" 0 1 2 || _python_package_supporting_installation_for_multiple_python_abis; then
 			python_mod_cleanup ${PYTHON_MODNAME}
