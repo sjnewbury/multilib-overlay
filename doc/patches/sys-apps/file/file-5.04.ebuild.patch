@@ -1,6 +1,6 @@
---- /usr/portage/sys-apps/file/file-5.04.ebuild	2010-02-14 20:06:25.000000000 +0100
-+++ ./sys-apps/file/file-5.04.ebuild	2010-04-04 13:24:02.000000000 +0200
-@@ -23,8 +23,9 @@
+--- /usr/portage/sys-apps/file/file-5.04.ebuild	2010-11-28 18:37:13.000000000 +0100
++++ ./sys-apps/file/file-5.04.ebuild	2010-12-25 01:55:05.000000000 +0100
+@@ -20,8 +20,9 @@
  
  src_unpack() {
  	unpack ${P}.tar.gz
@@ -11,8 +11,8 @@
  	epatch "${FILESDIR}"/${PN}-4.15-libtool.patch #99593
  
  	elibtoolize
-@@ -39,11 +40,14 @@
- #	sed -i '/^pkgdatadir/s:/@PACKAGE@::' $(find -name Makefile.in)
+@@ -33,11 +34,14 @@
+ 	mv python/README{,.python}
  }
  
 -src_compile() {
