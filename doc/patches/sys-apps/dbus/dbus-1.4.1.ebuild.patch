@@ -1,5 +1,5 @@
---- /usr/portage/sys-apps/dbus/dbus-1.4.0.ebuild	2010-09-20 19:08:40.000000000 +0200
-+++ ./sys-apps/dbus/dbus-1.4.0.ebuild	2010-09-21 23:11:13.000000000 +0200
+--- /usr/portage/sys-apps/dbus/dbus-1.4.1.ebuild	2010-09-20 19:08:40.000000000 +0200
++++ ./sys-apps/dbus/dbus-1.4.1.ebuild	2010-09-21 23:11:13.000000000 +0200
 @@ -38,11 +38,6 @@
  	)
  "
@@ -46,7 +46,7 @@
 +	TBD=${WORKDIR}/${P}-tests-build-${ABI}
 +
  	cd "${TBD}"
- 	DBUS_VERBOSE=1 make check || die "make check failed"
+ 	DBUS_VERBOSE=1 Xmake check || die "make check failed"
  }
  
  src_install() {

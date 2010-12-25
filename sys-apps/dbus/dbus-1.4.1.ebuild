@@ -1,10 +1,10 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/dbus/dbus-1.2.24-r2.ebuild,v 1.2 2010/09/13 21:23:52 reavertm Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/dbus/dbus-1.4.1.ebuild,v 1.5 2010/12/24 12:52:29 ssuominen Exp $
 
 EAPI="2"
 
-inherit eutils multilib flag-o-matic multilib-native
+inherit autotools eutils multilib flag-o-matic virtualx multilib-native
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="http://dbus.freedesktop.org/"
@@ -12,25 +12,31 @@ SRC_URI="http://dbus.freedesktop.org/releases/dbus/${P}.tar.gz"
 
 LICENSE="|| ( GPL-2 AFL-2.1 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
-IUSE="debug doc selinux test X"
+KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~mips ~ppc ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd"
+IUSE="debug doc selinux static-libs test X"
 
-RDEPEND="X? ( x11-libs/libXt[lib32?] x11-libs/libX11[lib32?] )
-	selinux? ( sys-libs/libselinux[lib32?]
-				sec-policy/selinux-dbus )
+CDEPEND="
+	X? (
+		x11-libs/libX11[lib32?]
+		x11-libs/libXt[lib32?]
+	)
+	selinux? (
+		sys-libs/libselinux[lib32?]
+		sec-policy/selinux-dbus
+	)
+"
+RDEPEND="${CDEPEND}
+	!<sys-apps/dbus-0.91
 	>=dev-libs/expat-1.95.8[lib32?]
-	!<sys-apps/dbus-0.91"
-DEPEND="${RDEPEND}
+"
+DEPEND="${CDEPEND}
 	dev-util/pkgconfig[lib32?]
 	doc? (
 		app-doc/doxygen
+		app-text/docbook-xml-dtd:4.1.2
 		app-text/xmlto
-		app-text/docbook-xml-dtd:4.1.2 )"
-
-# out of sources build directory
-BD=${WORKDIR}/${P}-build
-# out of sources build dir for make check
-TBD=${WORKDIR}/${P}-tests-build
+	)
+"
 
 multilib-native_pkg_setup_internal() {
 	enewgroup messagebus
@@ -38,15 +44,30 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
+	# Delete pregenerated files from tarball wrt #337989 (testsuite fails)
+	find test/data -type f -name '*.service' -exec rm -f '{}' +
+	find test/data -type f -name 'debug-*.conf' -exec rm -f '{}' +
+
+	# Remove CFLAGS that is not supported by all gcc, bug #274456
+	sed 's/-Wno-pointer-sign//g' -i configure.in configure || die
+
 	# Tests were restricted because of this
 	sed -e 's/.*bus_dispatch_test.*/printf ("Disabled due to excess noise\\n");/' \
-		-e '/"dispatch"/d' -i "${S}/bus/test-main.c" || die "sed failed"
+		-e '/"dispatch"/d' -i "${S}/bus/test-main.c" || die
 
-	# Thread safety patch, upstream #17754
-	epatch "${FILESDIR}/${PN}-1.2.24-thread-safety.patch"
+	epatch "${FILESDIR}"/${PN}-1.4.0-asneeded.patch
+
+	# required for asneeded patch but also for bug 263909, cross-compile so
+	# don't remove eautoreconf
+	eautoreconf
 }
 
 multilib-native_src_configure_internal() {
+	# out of sources build directory
+	BD=${WORKDIR}/${P}-build-${ABI}
+	# out of sources build dir for make check
+	TBD=${WORKDIR}/${P}-tests-build-${ABI}
+
 	local my_conf
 
 	# so we can get backtraces from apps
@@ -61,6 +82,8 @@ multilib-native_src_configure_internal() {
 		$(use_enable kernel_FreeBSD kqueue)
 		$(use_enable selinux)
 		$(use_enable selinux libaudit)
+		$(use_enable static-libs static)
+		--enable-shared
 		--with-xml=expat
 		--with-system-pid-file=/var/run/dbus.pid
 		--with-system-socket=/var/run/dbus/system_bus_socket
@@ -88,6 +111,11 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_compile_internal() {
+	# out of sources build directory
+	BD=${WORKDIR}/${P}-build-${ABI}
+	# out of sources build dir for make check
+	TBD=${WORKDIR}/${P}-tests-build-${ABI}
+
 	# after the compile, it uses a selinuxfs interface to
 	# check if the SELinux policy has the right support
 	use selinux && addwrite /selinux/access
@@ -109,11 +137,21 @@ multilib-native_src_compile_internal() {
 }
 
 src_test() {
+	# out of sources build directory
+	BD=${WORKDIR}/${P}-build-${ABI}
+	# out of sources build dir for make check
+	TBD=${WORKDIR}/${P}-tests-build-${ABI}
+
 	cd "${TBD}"
-	DBUS_VERBOSE=1 make check || die "make check failed"
+	DBUS_VERBOSE=1 Xmake check || die "make check failed"
 }
 
 multilib-native_src_install_internal() {
+	# out of sources build directory
+	BD=${WORKDIR}/${P}-build-${ABI}
+	# out of sources build dir for make check
+	TBD=${WORKDIR}/${P}-tests-build-${ABI}
+
 	# initscript
 	newinitd "${FILESDIR}"/dbus.init-1.0 dbus || die "newinitd failed"
 
@@ -146,6 +184,9 @@ multilib-native_src_install_internal() {
 		cd "${S}"
 		dohtml doc/*.html || die "dohtml failed"
 	fi
+
+	# Remove .la files
+	find "${D}" -type f -name '*.la' -exec rm -f '{}' +
 }
 
 multilib-native_pkg_postinst_internal() {
@@ -158,13 +199,7 @@ multilib-native_pkg_postinst_internal() {
 	elog
 	ewarn "You must restart D-Bus \`/etc/init.d/dbus restart\` to run"
 	ewarn "the new version of the daemon."
-
-	if has_version x11-base/xorg-server[hal]; then
-		elog
-		ewarn "You are currently running X with the hal useflag enabled"
-		ewarn "restarting the dbus service WILL restart X as well"
-		ebeep 5
-	fi
+	ewarn "Don't do this while X is running because it will restart your X as well."
 
 	# Ensure unique id is generated
 	dbus-uuidgen --ensure="${ROOT}"/var/lib/dbus/machine-id
