@@ -1,6 +1,6 @@
---- /usr/portage/net-libs/openslp/openslp-1.2.1-r1.ebuild	2010-01-22 10:08:02.000000000 +0100
-+++ ./net-libs/openslp/openslp-1.2.1-r1.ebuild	2010-04-03 23:22:41.000000000 +0200
-@@ -19,10 +19,7 @@
+--- /usr/portage/net-libs/openslp/openslp-1.2.1-r1.ebuild	2010-12-02 02:37:12.000000000 +0100
++++ ./net-libs/openslp/openslp-1.2.1-r1.ebuild	2010-12-25 01:30:34.000000000 +0100
+@@ -17,16 +17,12 @@
  DEPEND="dev-libs/openssl"
  RDEPEND="${DEPEND}"
  
@@ -10,9 +10,7 @@
 -
 +src_prepare() {
  	epatch "${FILESDIR}"/${P}-fbsd.patch
- 	eautomake
- 
-@@ -30,7 +27,6 @@
+ 	eautoreconf
  }
  
  src_compile() {
