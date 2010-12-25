@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-dns/avahi/avahi-0.6.27-r1.ebuild,v 1.2 2010/08/11 14:18:15 ford_prefect Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-dns/avahi/avahi-0.6.27-r1.ebuild,v 1.3 2010/12/14 00:27:52 swegener Exp $
 
 EAPI="3"
 
@@ -25,8 +25,7 @@ RDEPEND=">=dev-libs/libdaemon-0.11-r1[lib32?]
 	gdbm? ( sys-libs/gdbm[lib32?] )
 	qt4? ( x11-libs/qt-core:4[lib32?] )
 	gtk? (
-		>=x11-libs/gtk+-2.4.0:2[lib32?]
-		>=gnome-base/libglade-2.4.0[lib32?]
+		>=x11-libs/gtk+-2.14.0:2[lib32?]
 	)
 	dbus? (
 		>=sys-apps/dbus-0.30[lib32?]
