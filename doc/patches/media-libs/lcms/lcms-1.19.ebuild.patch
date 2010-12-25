@@ -1,6 +1,6 @@
---- ./media-libs/lcms/lcms-1.19.ebuild.orig	2010-02-28 17:12:43.000000000 +0100
-+++ ./media-libs/lcms/lcms-1.19.ebuild	2010-02-28 17:13:50.000000000 +0100
-@@ -17,7 +17,8 @@
+--- /usr/portage/media-libs/lcms/lcms-1.19.ebuild	2010-09-28 18:37:01.000000000 +0200
++++ ./media-libs/lcms/lcms-1.19.ebuild	2010-12-25 01:17:33.000000000 +0100
+@@ -16,7 +16,8 @@
  
  RDEPEND="tiff? ( media-libs/tiff )
  	jpeg? ( virtual/jpeg )
