@@ -1,0 +1,12 @@
+--- /usr/portage/x11-libs/libdrm/libdrm-2.4.22.ebuild	2010-12-23 13:09:17.000000000 +0100
++++ ./x11-libs/libdrm/libdrm-2.4.22.ebuild	2010-12-25 02:22:48.000000000 +0100
+@@ -24,7 +24,8 @@
+ IUSE="${IUSE_VIDEO_CARDS} +libkms"
+ RESTRICT="test" # see bug #236845
+ 
+-RDEPEND="dev-libs/libpthread-stubs"
++RDEPEND="dev-libs/libpthread-stubs
++	sys-fs/udev"
+ DEPEND="${RDEPEND}"
+ 
+ pkg_setup() {
