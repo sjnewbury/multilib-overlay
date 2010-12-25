@@ -1,8 +1,9 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gconf/gconf-2.26.2-r1.ebuild,v 1.11 2010/12/18 23:13:40 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gconf/gconf-2.32.0-r1.ebuild,v 1.1 2010/12/16 22:44:54 eva Exp $
 
-EAPI="2"
+EAPI="3"
+GCONF_DEBUG="yes"
 
 inherit eutils gnome2 multilib-native
 
@@ -16,32 +17,34 @@ SRC_URI="mirror://gnome/sources/${MY_PN}/${PVP[0]}.${PVP[1]}/${MY_P}.tar.bz2"
 
 LICENSE="LGPL-2"
 SLOT="2"
-KEYWORDS="alpha amd64 arm ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
-IUSE="debug doc ldap"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+IUSE="debug doc +introspection ldap policykit"
 
-RDEPEND=">=dev-libs/glib-2.14[lib32?]
-	>=x11-libs/gtk+-2.8.16[lib32?]
+RDEPEND=">=dev-libs/glib-2.25.9:2[lib32?]
+	>=x11-libs/gtk+-2.14:2[lib32?]
 	>=dev-libs/dbus-glib-0.74[lib32?]
 	>=sys-apps/dbus-1[lib32?]
 	>=gnome-base/orbit-2.4[lib32?]
 	>=dev-libs/libxml2-2[lib32?]
-	ldap? ( net-nds/openldap[lib32?] )"
+	introspection? ( >=dev-libs/gobject-introspection-0.9.5 )
+	ldap? ( net-nds/openldap[lib32?] )
+	policykit? ( sys-auth/polkit[lib32?] )"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.35
 	>=dev-util/pkgconfig-0.9[lib32?]
-	>=dev-util/gtk-doc-am-1.10
 	doc? ( >=dev-util/gtk-doc-1 )"
-
-DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 S="${WORKDIR}/${MY_P}"
 
 multilib-native_pkg_setup_internal() {
+	DOCS="AUTHORS ChangeLog NEWS README TODO"
 	G2CONF="${G2CONF}
 		--enable-gtk
 		--disable-static
+		--enable-gsettings-backend
+		$(use_enable introspection)
 		$(use_with ldap openldap)
-		--disable-defaults-service"
+		$(use_enable policykit defaults-service)"
 	kill_gconf
 
 	# Need host's IDL compiler for cross or native build, bug #262747
@@ -51,18 +54,12 @@ multilib-native_pkg_setup_internal() {
 multilib-native_src_prepare_internal() {
 	gnome2_src_prepare
 
-	# Do not start gconfd when installing schemas, fix bug #238276, upstream ?
+	# Do not start gconfd when installing schemas, fix bug #238276, upstream #631983
 	epatch "${FILESDIR}/${PN}-2.24.0-no-gconfd.patch"
 
-	# Fix intltoolize broken file, see upstream #577133
-	sed "s:'\^\$\$lang\$\$':\^\$\$lang\$\$:g" -i po/Makefile.in.in || die "sed failed"
+	# Do not crash in gconf_entry_set_value() when entry pointer is NULL, upstream #631985
+	epatch "${FILESDIR}/${PN}-2.28.0-entry-set-value-sigsegv.patch"
 }
-
-# Can't run tests, missing script.
-#src_test() {
-#	emake -C tests || die "make tests failed"
-#	sh "${S}"/tests/runtests.sh || die "running tests failed"
-#}
 
 multilib-native_src_install_internal() {
 	gnome2_src_install
@@ -73,8 +70,9 @@ multilib-native_src_install_internal() {
 	keepdir /etc/gconf/gconf.xml.system
 
 	echo 'CONFIG_PROTECT_MASK="/etc/gconf"' > 50gconf
+	echo 'GSETTINGS_BACKEND="gconf"' >> 50gconf
 	doenvd 50gconf || die "doenv failed"
-	dodir /root/.gconfd
+	dodir /root/.gconfd || die
 }
 
 multilib-native_pkg_preinst_internal() {
