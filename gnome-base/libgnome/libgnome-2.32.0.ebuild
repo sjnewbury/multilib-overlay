@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/libgnome/libgnome-2.32.0.ebuild,v 1.2 2010/10/21 21:33:15 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/libgnome/libgnome-2.32.0.ebuild,v 1.3 2010/12/11 22:34:13 pacho Exp $
 
 EAPI="3"
 GCONF_DEBUG="yes"
@@ -39,7 +39,7 @@ PDEPEND="gnome-base/gvfs"
 multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
 		--disable-schemas-install
-		--enable-sound
+		--enable-canberra
 		$(use_enable esd)"
 	DOCS="AUTHORS ChangeLog NEWS README"
 }
