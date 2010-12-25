@@ -1,0 +1,33 @@
+--- /usr/portage/x11-libs/openmotif/openmotif-2.2.3-r10.ebuild	2010-10-12 10:37:51.000000000 +0200
++++ ./x11-libs/openmotif/openmotif-2.2.3-r10.ebuild	2010-12-25 02:26:30.000000000 +0100
+@@ -28,10 +28,7 @@
+ 
+ S=${WORKDIR}/${MY_P}
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	EPATCH_SUFFIX=patch epatch
+ 
+ 	# This replaces deprecated, obsoleted and now invalid AC_DEFINE
+@@ -46,7 +43,7 @@
+ 	eautoreconf
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	# get around some LANG problems in make (#15119)
+ 	unset LANG
+ 
+@@ -60,6 +57,9 @@
+ 	append-flags -fno-strict-aliasing
+ 
+ 	econf --with-x || die "econf failed"
++}
++
++src_compile() {
+ 	emake -j1 || die "emake failed"
+ }
+ 

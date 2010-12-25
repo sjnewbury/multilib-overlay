@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/openmotif/openmotif-2.3.3.ebuild,v 1.12 2010/10/10 16:39:42 ulm Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/openmotif/openmotif-2.3.3.ebuild,v 1.13 2010/12/08 20:11:29 ulm Exp $
 
 EAPI="3"
 
@@ -156,7 +156,7 @@ multilib-native_pkg_postinst_internal() {
 	If you have binary-only applications requiring libXm.so.3, you may
 	therefore create a symlink from libXm.so.3 to libXm.so.4.
 	Please note, however, that there will be no Gentoo support for this.
-	Alternatively, you may install x11-libs/openmotif-compat-2.2* for
+	Alternatively, you may install slot 2.2 of x11-libs/openmotif for
 	the Open Motif 2.2 libraries.
 	EOF
 }
