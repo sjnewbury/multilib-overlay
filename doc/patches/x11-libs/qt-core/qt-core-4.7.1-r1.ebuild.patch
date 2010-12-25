@@ -1,0 +1,9 @@
+--- /usr/portage/x11-libs/qt-core/qt-core-4.7.1-r1.ebuild	2010-11-19 02:27:29.000000000 +0100
++++ ./x11-libs/qt-core/qt-core-4.7.1-r1.ebuild	2010-12-25 02:33:06.000000000 +0100
+@@ -175,4 +175,6 @@
+ 
+ 	# Framework magic
+ 	fix_includes
++
++	prep_ml_includes
+ }

@@ -1,9 +1,9 @@
---- /usr/portage/x11-libs/qt-core/qt-core-4.7.0.ebuild	2010-09-21 16:41:15.000000000 +0200
-+++ ./x11-libs/qt-core/qt-core-4.7.0.ebuild	2010-09-21 23:15:09.000000000 +0200
-@@ -161,4 +161,6 @@
- qt_windows.h}
+--- /usr/portage/x11-libs/qt-core/qt-core-4.7.0.ebuild	2010-11-06 10:38:05.000000000 +0100
++++ ./x11-libs/qt-core/qt-core-4.7.0.ebuild	2010-12-25 02:32:05.000000000 +0100
+@@ -174,4 +174,6 @@
  
- 	keepdir "${QTSYSCONFDIR}"
+ 	# Framework magic
+ 	fix_includes
 +
 +	prep_ml_includes
  }

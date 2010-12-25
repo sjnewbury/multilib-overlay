@@ -1,9 +1,0 @@
---- /usr/portage/x11-libs/qt-core/qt-core-4.5.3-r2.ebuild	2010-07-11 16:07:36.000000000 +0200
-+++ ./x11-libs/qt-core/qt-core-4.5.3-r2.ebuild	2010-07-17 20:06:14.000000000 +0200
-@@ -215,4 +215,6 @@
- qt_windows.h}
- 
- 	keepdir "${QTSYSCONFDIR}"
-+
-+	prep_ml_includes
- }
