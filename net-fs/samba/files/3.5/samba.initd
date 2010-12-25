@@ -1,7 +1,7 @@
 #!/sbin/runscript
-# Copyright 1999-2007 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License, v2 or later
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/files/3.5/samba.initd,v 1.1 2010/03/01 16:19:54 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/files/3.5/samba.initd,v 1.2 2010/12/20 20:35:07 vostorga Exp $
 
 opts="reload"
 
@@ -32,8 +32,14 @@ signal_do() {
 	done
 	return ${result}
 }
+
+mkdir_sambadirs() {
+	[ -d /var/run/samba ] || mkdir -p /var/run/samba
+}
+
 start() {
 	${my_service_PRE}
+	mkdir_sambadirs
 	signal_do start && return 0
 	
 	eerror "Error: starting services (see system logs)"

@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.4.9.ebuild,v 1.7 2010/10/24 16:42:17 halcy0n Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.4.9.ebuild,v 1.9 2010/12/23 17:41:50 vostorga Exp $
 
 EAPI="2"
 
@@ -70,7 +70,13 @@ fi
 
 use cups && BINPROGS="${BINPROGS} bin/smbspool"
 use ldb && BINPROGS="${BINPROGS} bin/ldbedit bin/ldbsearch bin/ldbadd bin/ldbdel bin/ldbmodify bin/ldbrename";
-use winbind && BINPROGS="${BINPROGS} bin/wbinfo"
+
+if use winbind ; then
+	BINPROGS="${BINPROGS} bin/wbinfo"
+	mymod_shared="--with-shared-modules=idmap_rid,idmap_hash"
+	use ldap && mymod_shared="${mymod_shared},idmap_adex,idmap_ldap"
+	use ads && mymod_shared="${mymod_shared},idmap_ad"
+fi
 
 S="${WORKDIR}/${MY_P}/source3"
 
@@ -82,7 +88,7 @@ S="${WORKDIR}/${MY_P}/source3"
 CONFDIR="${FILESDIR}/$(get_version_component_range 1-2)"
 
 multilib-native_pkg_setup_internal() {
-	 if use winbind &&
+	if use winbind &&
 		[[ $(tc-getCC)$ == *gcc* ]] &&
 		[[ $(gcc-major-version)$(gcc-minor-version) -lt 43 ]]
 	then
@@ -104,6 +110,8 @@ multilib-native_src_prepare_internal() {
 	sed -i \
 		-e 's|LDSHFLAGS="|LDSHFLAGS="\\${LDFLAGS} |g' \
 		configure || die "sed failed"
+
+	epatch "${CONFDIR}"/${P}-kerberos-dummy.patch
 }
 
 multilib-native_src_configure_internal() {
@@ -176,6 +184,7 @@ multilib-native_src_configure_internal() {
 		$(use_with aio aio-support) \
 		--with-sendfile-support \
 		$(use_with winbind) \
+		${mymod_shared} \
 		--without-included-popt \
 		--without-included-iniparser
 }
@@ -273,6 +282,16 @@ multilib-native_src_install_internal() {
 		dosym libnss_wins.so /usr/$(get_libdir)/libnss_wins.so.2
 		dolib.so ../nsswitch/libnss_winbind.so
 		dosym libnss_winbind.so /usr/$(get_libdir)/libnss_winbind.so.2
+		einfo "install libwbclient related manpages"
+		doman ../docs/manpages/idmap_rid.8
+		doman ../docs/manpages/idmap_hash.8
+		if use ldap ; then
+			doman ../docs/manpages/idmap_adex.8
+			doman ../docs/manpages/idmap_ldap.8
+		fi
+		if use ads ; then
+			doman ../docs/manpages/idmap_ad.8
+		fi
 	fi
 
 	# install binaries
