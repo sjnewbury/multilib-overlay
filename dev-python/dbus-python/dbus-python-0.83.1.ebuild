@@ -1,11 +1,12 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/dbus-python/dbus-python-0.83.1.ebuild,v 1.5 2010/05/22 11:16:15 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/dbus-python/dbus-python-0.83.1.ebuild,v 1.6 2010/12/24 13:22:30 arfrever Exp $
 
 EAPI="3"
 PYTHON_DEPEND="2"
 PYTHON_EXPORT_PHASE_FUNCTIONS="1"
 SUPPORT_PYTHON_ABIS="1"
+RESTRICT_PYTHON_ABIS="3.* *-jython"
 
 inherit eutils multilib python multilib-native
 
@@ -26,7 +27,6 @@ DEPEND="${RDEPEND}
 	doc? ( =dev-python/epydoc-3* )
 	test? ( dev-python/pygobject[lib32?] )
 	dev-util/pkgconfig[lib32?]"
-RESTRICT_PYTHON_ABIS="3.*"
 
 multilib-native_src_prepare_internal() {
 	# Disable compiling of .pyc files.
