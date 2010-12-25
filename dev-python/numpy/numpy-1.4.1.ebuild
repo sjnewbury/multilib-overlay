@@ -1,11 +1,11 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.4.1.ebuild,v 1.7 2010/07/25 17:06:03 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/numpy/numpy-1.4.1.ebuild,v 1.8 2010/12/19 16:41:54 arfrever Exp $
 
 EAPI="3"
 PYTHON_DEPEND="2"
 SUPPORT_PYTHON_ABIS="1"
-RESTRICT_PYTHON_ABIS="3.*"
+RESTRICT_PYTHON_ABIS="3.* *-jython"
 
 inherit distutils eutils flag-o-matic toolchain-funcs versionator multilib-native
 
