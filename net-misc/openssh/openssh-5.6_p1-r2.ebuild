@@ -133,6 +133,9 @@ multilib-native_src_prepare_internal() {
 	echo "#define SSH_RELEASE ${v}" >>"${f}"
 	cp "${f}" version.h
 
+	# Use CC not LD otherwise invalid LDFLAGS get passed to ld
+	sed -i -e 's:$(LD):$(CC):' Makefile.in || die
+
 	eautoreconf
 }
 

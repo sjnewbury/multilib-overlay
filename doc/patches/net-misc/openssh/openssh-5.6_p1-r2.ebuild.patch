@@ -1,0 +1,12 @@
+--- /usr/portage/net-misc/openssh/openssh-5.6_p1-r2.ebuild	2010-12-04 18:37:04.000000000 +0100
++++ ./net-misc/openssh/openssh-5.6_p1-r2.ebuild	2010-12-25 01:42:23.000000000 +0100
+@@ -133,6 +133,9 @@
+ 	echo "#define SSH_RELEASE ${v}" >>"${f}"
+ 	cp "${f}" version.h
+ 
++	# Use CC not LD otherwise invalid LDFLAGS get passed to ld
++	sed -i -e 's:$(LD):$(CC):' Makefile.in || die
++
+ 	eautoreconf
+ }
+ 
