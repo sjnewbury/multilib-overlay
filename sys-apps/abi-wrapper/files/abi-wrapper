@@ -1,20 +1,28 @@
 #!/bin/sh
- 
+
 # Please be careful to keep this file sh compatible
- 
+
+hardcoded_abis="@HARDCODED_ABIS@"
 if [ "${ABI}" ]; then
-	abi=${ABI}
-elif [ "${DEFAULT_ABI}" ]; then
-	abi=${DEFAULT_ABI}
-else
+	for abi in ${hardcoded_abis}; do
+		[ "${abi}" = "${ABI}" ] && break
+		abi=
+	done
+fi
+if [ ! "${abi}" -a "${DEFAULT_ABI}" ]; then
+	for abi in ${hardcoded_abis}; do
+		[ "${abi}" = "${DEFAULT_ABI}" ] && break
+		abi=
+	done
+fi
+if [ ! "${abi}" ]; then
 	# we're called from outside portage, so use the hardcoded abi list
-	hardcoded_abis="PLACEHOLDER_FOR_HARDCODED_ABIS"
 	for abi in ${hardcoded_abis}; do
 		[ -f "${0}-${abi}" ] && break
 		abi=
 	done
 fi
- 
+
 if [ -f "${0}-${abi}" ]; then
 	exec "${0}-${abi}" ${1+"$@"}
 else
