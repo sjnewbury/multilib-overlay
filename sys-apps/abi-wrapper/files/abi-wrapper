@@ -3,6 +3,7 @@
 # Please be careful to keep this file sh compatible
 
 hardcoded_abis="@HARDCODED_ABIS@"
+abi=
 if [ "${ABI}" ]; then
 	for abi in ${hardcoded_abis}; do
 		[ "${abi}" = "${ABI}" ] && break
