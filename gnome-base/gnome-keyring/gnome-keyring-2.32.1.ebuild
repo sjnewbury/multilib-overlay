@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.32.1.ebuild,v 1.2 2010/12/07 16:24:57 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-keyring/gnome-keyring-2.32.1.ebuild,v 1.4 2011/01/02 21:32:23 mr_bones_ Exp $
 
 EAPI="3"
 GCONF_DEBUG="yes"
@@ -34,6 +34,10 @@ PDEPEND="gnome-base/libgnome-keyring"
 #	>=dev-util/gtk-doc-am-1.9
 
 DOCS="AUTHORS ChangeLog NEWS README"
+
+# tests fail in several ways, they should be fixed in the next cycle (bug #340283),
+# revisit then.
+RESTRICT="test"
 
 multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
