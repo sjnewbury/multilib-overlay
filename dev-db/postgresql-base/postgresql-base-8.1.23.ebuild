@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/postgresql-base/postgresql-base-8.2.18.ebuild,v 1.7 2011/01/02 15:29:51 klausman Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/postgresql-base/postgresql-base-8.1.23.ebuild,v 1.1 2011/01/06 12:23:35 patrick Exp $
 
 EAPI="2"
 
@@ -8,7 +8,7 @@ WANT_AUTOMAKE="none"
 
 inherit eutils multilib versionator autotools multilib-native
 
-KEYWORDS="alpha amd64 ~arm hppa ~ia64 ppc ~s390 ~sh ~sparc x86"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~s390 ~sh ~sparc ~x86"
 
 DESCRIPTION="PostgreSQL libraries and clients"
 HOMEPAGE="http://www.postgresql.org/"
@@ -20,7 +20,7 @@ IUSE_LINGUAS="
 	linguas_hr linguas_hu linguas_it linguas_ko linguas_nb linguas_pl
 	linguas_pt_BR linguas_ro linguas_ru linguas_sk linguas_sl linguas_sv
 	linguas_tr linguas_zh_CN linguas_zh_TW"
-IUSE="doc kerberos nls pam pg-intdatetime readline ssl threads zlib ldap ${IUSE_LINGUAS}"
+IUSE="doc kerberos nls pam pg-intdatetime readline ssl threads zlib ${IUSE_LINGUAS}"
 RESTRICT="test"
 
 wanted_languages() {
@@ -39,8 +39,7 @@ RDEPEND="kerberos? ( virtual/krb5[lib32?] )
 	!!dev-db/postgresql-libs
 	!!dev-db/postgresql-client
 	!!dev-db/libpq
-	!!dev-db/postgresql
-	ldap? ( net-nds/openldap[lib32?] )"
+	!!dev-db/postgresql"
 DEPEND="${RDEPEND}
 	sys-devel/flex[lib32?]
 	>=sys-devel/bison-1.875
@@ -73,19 +72,17 @@ multilib-native_src_configure_internal() {
 		--with-locale-dir=/usr/share/postgresql-${SLOT}/locale \
 		--mandir=/usr/share/postgresql-${SLOT}/man \
 		--without-docdir \
-		--enable-depend \
 		--without-tcl \
 		--without-perl \
 		--without-python \
-		$(use_with readline) \
 		$(use_with kerberos krb5) \
 		"$(use_enable nls nls "$(wanted_languages)")" \
 		$(use_with pam) \
 		$(use_enable pg-intdatetime integer-datetimes ) \
+		$(use_with readline) \
 		$(use_with ssl openssl) \
 		$(use_enable threads thread-safety) \
 		$(use_with zlib) \
-		$(use_with ldap) \
 		|| die "configure failed"
 }
 
@@ -127,11 +124,11 @@ postgres_symlinks=(
 )
 __EOF__
 
-	cat >"${T}/50postgresql-95-${SLOT}" <<-__EOF__
+	cat >"${T}/50postgresql-96-${SLOT}" <<-__EOF__
 		LDPATH=/usr/$(get_libdir)/postgresql-${SLOT}/$(get_libdir)
 		MANPATH=/usr/share/postgresql-${SLOT}/man
 	__EOF__
-	doenvd "${T}/50postgresql-95-${SLOT}"
+	doenvd "${T}/50postgresql-96-${SLOT}"
 
 	keepdir /etc/postgresql-${SLOT}
 
