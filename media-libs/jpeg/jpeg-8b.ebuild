@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/jpeg/jpeg-8b.ebuild,v 1.9 2010/08/29 18:14:18 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/jpeg/jpeg-8b.ebuild,v 1.10 2011/01/06 00:03:56 ssuominen Exp $
 
 EAPI="3"
 
@@ -45,7 +45,6 @@ multilib-native_src_configure_internal() {
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
 	dodoc change.log example.c README *.txt
-	# Do this after -Wl,--as-needed has been default for long enough,
-	# to minimize the impact for users. Uncomment 01-01-2011.
-	# find "${ED}" -name '*.la' -exec rm -f '{}' +
+
+	find "${ED}" -name '*.la' -exec rm -f '{}' +
 }
