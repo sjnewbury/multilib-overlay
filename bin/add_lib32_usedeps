@@ -139,6 +139,8 @@ sed -i "
 	s/\][[:space:]]*\"/\]\"/
 	#remove space between atom and usedep
 	s/[[:space:]]*\[/[/g 
+	#remove space if a [[ ]] is used
+	s/\][[:space:]]*\]/\]\]/g
 	#merge two usedeps
 	s/\]\[/,/g 
 	#remove double useflags
