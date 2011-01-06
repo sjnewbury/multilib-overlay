@@ -1,10 +1,10 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-fs/e2fsprogs/e2fsprogs-1.41.11.ebuild,v 1.8 2010/07/08 15:46:06 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-fs/e2fsprogs/e2fsprogs-1.41.14.ebuild,v 1.2 2011/01/03 21:18:58 grobian Exp $
 
-EAPI="2"
+EAPI="3"
 
-inherit eutils flag-o-matic toolchain-funcs multilib multilib-native
+inherit eutils flag-o-matic multilib toolchain-funcs multilib-native
 
 DESCRIPTION="Standard EXT2/EXT3/EXT4 filesystem utilities"
 HOMEPAGE="http://e2fsprogs.sourceforge.net/"
@@ -12,7 +12,7 @@ SRC_URI="mirror://sourceforge/e2fsprogs/${P}.tar.gz"
 
 LICENSE="GPL-2 BSD"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 -x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 -x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~m68k-mint"
 IUSE="nls elibc_FreeBSD"
 
 RDEPEND="~sys-libs/${PN}-libs-${PV}[lib32?]
@@ -24,21 +24,27 @@ DEPEND="${RDEPEND}
 	sys-apps/texinfo"
 
 multilib-native_pkg_setup_internal() {
-	if [[ ! -e ${ROOT}/etc/mtab ]] ; then
+	if [[ ! -e ${EROOT}/etc/mtab ]] ; then
 		# add some crap to deal with missing /etc/mtab #217719
 		ewarn "No /etc/mtab file, creating one temporarily"
-		echo "${PN} crap for src_test" > "${ROOT}"/etc/mtab
+		echo "${PN} crap for src_test" > "${EROOT}"/etc/mtab
 	fi
 }
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-1.38-tests-locale.patch #99766
 	epatch "${FILESDIR}"/${PN}-1.41.8-makefile.patch
+	epatch "${FILESDIR}"/${PN}-1.41.12-getpagesize.patch
 	epatch "${FILESDIR}"/${PN}-1.40-fbsd.patch
 	# use symlinks rather than hardlinks
 	sed -i \
 		-e 's:$(LN) -f $(DESTDIR).*/:$(LN_S) -f :' \
 		{e2fsck,misc}/Makefile.in || die
+	epatch "${FILESDIR}"/${PN}-1.41.12-darwin-makefile.patch
+	if [[ ${CHOST} == *-mint* ]] ; then
+		epatch "${FILESDIR}"/${PN}-1.41-mint.patch
+		epatch "${FILESDIR}"/${PN}-1.41.12-mint-blkid.patch
+	fi
 	# blargh ... trick e2fsprogs into using e2fsprogs-libs
 	rm -rf doc
 	sed -i -r \
@@ -65,14 +71,15 @@ multilib-native_src_configure_internal() {
 	# building on other Gentoo/*BSD we prefer elf-naming scheme.
 	local libtype
 	case ${CHOST} in
-		*-darwin*) libtype=bsd;;
-		*)         libtype=elf;;
+		*-darwin*) libtype=--enable-bsd-shlibs  ;;
+		*-mint*)   libtype=                     ;;
+		*)         libtype=--enable-elf-shlibs  ;;
 	esac
 
 	ac_cv_path_LDCONFIG=: \
 	econf \
-		--with-root-prefix=/ \
-		--enable-${libtype}-shlibs \
+		--with-root-prefix="${EPREFIX}/" \
+		${libtype} \
 		$(tc-has-tls || echo --disable-tls) \
 		--without-included-gettext \
 		$(use_enable nls) \
@@ -99,9 +106,9 @@ multilib-native_src_compile_internal() {
 }
 
 multilib-native_pkg_preinst_internal() {
-	if [[ -r ${ROOT}/etc/mtab ]] ; then
-		if [[ $(<"${ROOT}"/etc/mtab) == "${PN} crap for src_test" ]] ; then
-			rm -f "${ROOT}"/etc/mtab
+	if [[ -r ${EROOT}/etc/mtab ]] ; then
+		if [[ $(<"${EROOT}"/etc/mtab) == "${PN} crap for src_test" ]] ; then
+			rm -f "${EROOT}"/etc/mtab
 		fi
 	fi
 }
@@ -111,7 +118,7 @@ multilib-native_src_install_internal() {
 	# econf above (i.e. multilib) will screw up the default #276465
 	emake \
 		STRIP=: \
-		root_libdir="/$(get_libdir)" \
+		root_libdir="${EPREFIX}/usr/$(get_libdir)" \
 		DESTDIR="${D}" \
 		install install-libs || die
 	dodoc README RELEASE-NOTES
@@ -119,25 +126,21 @@ multilib-native_src_install_internal() {
 	insinto /etc
 	doins "${FILESDIR}"/e2fsck.conf || die
 
-	# make sure symlinks are relative, not absolute, for cross-compiling
-	cd "${D}"/usr/$(get_libdir)
-	local x l
-	for x in lib* ; do
-		l=$(readlink "${x}")
-		[[ ${l} == /* ]] || continue
-		rm -f "${x}"
-		ln -s "../..${l}" "${x}"
-	done
+	# Move shared libraries to /lib/, install static libraries to
+	# /usr/lib/, and install linker scripts to /usr/lib/.
+	set -- "${ED}"/usr/$(get_libdir)/*.a
+	set -- ${@/*\/lib}
+	gen_usr_ldscript -a "${@/.a}"
 
 	if use elibc_FreeBSD ; then
 		# Install helpers for us
 		into /
 		dosbin "${S}"/fsck_ext2fs || die
-		doman "${FILESDIR}"/fsck_ext2fs.8
+		doman "${FILESDIR}"/fsck_ext2fs.8 || die
 
 		# filefrag is linux only
 		rm \
-			"${D}"/usr/sbin/filefrag \
-			"${D}"/usr/share/man/man8/filefrag.8 || die
+			"${ED}"/usr/sbin/filefrag \
+			"${ED}"/usr/share/man/man8/filefrag.8 || die
 	fi
 }
