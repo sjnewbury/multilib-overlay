@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/gnome-doc-utils/gnome-doc-utils-0.20.2.ebuild,v 1.4 2010/12/31 23:50:12 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/gnome-doc-utils/gnome-doc-utils-0.20.3.ebuild,v 1.2 2010/12/31 23:50:12 arfrever Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -11,7 +11,7 @@ RESTRICT_PYTHON_ABIS="3.* *-jython"
 inherit gnome2 python multilib-native
 
 DESCRIPTION="A collection of documentation utilities for the Gnome project"
-HOMEPAGE="http://www.gnome.org/"
+HOMEPAGE="http://live.gnome.org/GnomeDocUtils"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
@@ -29,8 +29,6 @@ DEPEND="${RDEPEND}
 	app-text/scrollkeeper-dtd"
 # dev-libs/glib needed for eautofoo, bug #255114.
 
-DOCS="AUTHORS ChangeLog NEWS README"
-
 # FIXME: Highly broken with parallel make, see bug #286889
 MAKEOPTS="${MAKEOPTS} -j1"
 
@@ -38,6 +36,7 @@ MAKEOPTS="${MAKEOPTS} -j1"
 # to AT_M4DIR="tools m4", bug #224609 (m4 removes glib build time dep)
 
 multilib-native_pkg_setup_internal() {
+	DOCS="AUTHORS ChangeLog NEWS README"
 	G2CONF="${G2CONF} --disable-scrollkeeper"
 	python_pkg_setup
 }
