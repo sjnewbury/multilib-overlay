@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-crypt/mit-krb5/mit-krb5-1.9_beta3.ebuild,v 1.1 2010/12/20 21:24:57 eras Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-crypt/mit-krb5/mit-krb5-1.9.ebuild,v 1.1 2010/12/30 08:07:09 eras Exp $
 
 EAPI=2
 
@@ -80,7 +80,6 @@ multilib-native_src_install_internal() {
 	dodoc doc/*.ps
 	doinfo doc/*.info*
 	dohtml -r doc/*
-	rm -rf gnats
 
 	# die if we cannot respect a USE flag
 	if use doc ; then
