@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/ruby/ruby-1.9.2.ebuild,v 1.1 2010/08/24 18:08:09 a3li Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/ruby/ruby-1.9.2.ebuild,v 1.3 2011/01/06 10:10:38 ssuominen Exp $
 
 EAPI=2
 
@@ -49,7 +49,7 @@ RDEPEND="
 	ncurses? ( sys-libs/ncurses[lib32?] )
 	readline?  ( sys-libs/readline[lib32?] )
 	yaml? ( dev-libs/libyaml )
-	dev-libs/libffi[lib32?]
+	virtual/libffi[lib32?]
 	sys-libs/zlib[lib32?]
 	>=app-admin/eselect-ruby-20100402
 	!=dev-lang/ruby-cvs-${SLOT}*
@@ -63,8 +63,6 @@ DEPEND="${RDEPEND}"
 PDEPEND="
 	rdoc? ( >=dev-ruby/rdoc-2.5.11[ruby_targets_ruby19] )
 	xemacs? ( app-xemacs/ruby-modes )"
-
-PROVIDE="virtual/ruby"
 
 multilib-native_src_prepare_internal() {
 	EPATCH_FORCE="yes" EPATCH_SUFFIX="patch" \
