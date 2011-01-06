@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.2.5.ebuild,v 1.9 2010/12/29 22:41:40 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.2.6.ebuild,v 1.1 2011/01/04 21:54:01 pacho Exp $
 
 EAPI="3"
 
@@ -13,9 +13,9 @@ SRC_URI="http://www.webkitgtk.org/${MY_P}.tar.gz"
 
 LICENSE="LGPL-2 LGPL-2.1 BSD"
 SLOT="2"
-KEYWORDS="alpha amd64 arm ia64 ~ppc sparc x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
 # geoclue is missing
-IUSE="aqua coverage debug doc +gstreamer introspection"
+IUSE="aqua coverage debug doc +gstreamer introspection +jit"
 
 # use sqlite, svg by default
 # dependency on >=x11-libs/gtk+-2.13 for gail
@@ -56,10 +56,10 @@ multilib-native_src_prepare_internal() {
 
 	# intermediate MacPorts hack while upstream bug is not fixed properly
 	# https://bugs.webkit.org/show_bug.cgi?id=28727
-	use aqua && epatch "${FILESDIR}"/${P}-darwin-quartz.patch
+	use aqua && epatch "${FILESDIR}"/${PN}-1.2.5-darwin-quartz.patch
 
 	# Fix build on Darwin8 (10.4 Tiger)
-	epatch "${FILESDIR}"/${P}-darwin8.patch
+	epatch "${FILESDIR}"/${PN}-1.2.5-darwin8.patch
 
 	# Don't force -O2
 	sed -i 's/-O2//g' "${S}"/configure.ac || die "sed failed"
@@ -87,6 +87,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable debug)
 		$(use_enable gstreamer video)
 		$(use_enable introspection)
+		$(use_enable jit)
 		$(use aqua && echo "--with-font-backend=pango --with-target=quartz")"
 		# Disable web-sockets per bug #326547
 
