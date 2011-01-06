@@ -1,0 +1,29 @@
+From 55cf284749f3e3c56440b2f535956161657cd150 Mon Sep 17 00:00:00 2001
+From: Carlos Garcia Campos <carlosgc@gnome.org>
+Date: Sun, 12 Dec 2010 11:54:47 +0000
+Subject: printing: Set new print operation settings before emitting custom-widget-apply signal
+
+So that custom settings can be added from the custom-widget-apply
+callback.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=637069
+---
+diff --git a/gtk/gtkprintoperation-unix.c b/gtk/gtkprintoperation-unix.c
+index dbf6228..4528036 100644
+--- a/gtk/gtkprintoperation-unix.c
++++ b/gtk/gtkprintoperation-unix.c
+@@ -659,7 +659,11 @@ handle_print_response (GtkWidget *dialog,
+       settings = gtk_print_unix_dialog_get_settings (GTK_PRINT_UNIX_DIALOG (pd));
+       page_setup = gtk_print_unix_dialog_get_page_setup (GTK_PRINT_UNIX_DIALOG (pd));
+       page_setup_set = gtk_print_unix_dialog_get_page_setup_set (GTK_PRINT_UNIX_DIALOG (pd));
+-      
++
++      /* Set new print settings now so that custom-widget options
++       * can be added to the settings in the callback
++       */
++      gtk_print_operation_set_print_settings (rdata->op, settings);
+       g_signal_emit_by_name (rdata->op, "custom-widget-apply", rdata->op->priv->custom_widget);
+     }
+   
+--
+cgit v0.8.3.1
