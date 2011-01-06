@@ -5,13 +5,14 @@ echo_red() {
 }
 
 check() {
-	if [[ "" != "$(sed -n "/src_unpack/,/^\}/ { s/epatch\|\<sed\|eautoconf/foo/g ; T end; p; :end d}" $1)" ]];then
+	local PYTHON_WORKAROUND="s/emake python//g ; t end;" # python ebuild is calling emake in src_configure
+	if [[ "" != "$(sed -n "/\(_\|^\)src_unpack/,/^\}/ { s/epatch\|\<sed\|eautoconf/foo/g ; T end; p; :end d}" $1)" ]];then
 		echo_red "$1 contains epatch sed or eautoconf in src_unpack"
 	fi
-	if [[ "" != "$(sed -n "/src_configure/,/^\}/ { s/emake/foo/g ; T end; p; :end d}" $1)" ]];then
+	if [[ "" != "$(sed -n "/src_configure/,/^\}/ { ${PYTHON_WORKAROUND} s/emake/foo/g ; T end; p; :end d}" $1)" ]];then
 		echo_red "$1 contains emake in src_configure"
 	fi
-	if [[ "" != "$(sed -n "/src_compile/,/^\}/ { s/econf/foo/g ; T end; p; :end d}" $1)" ]];then
+	if [[ "" != "$(sed -n "/src_compile/,/^\}/ { s/\<econf/foo/g ; T end; p; :end d}" $1)" ]];then
 		echo_red "$1 contains econf in src_compile"
 	fi
 }
