@@ -1,10 +1,10 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libatasmart/libatasmart-0.17.ebuild,v 1.15 2010/10/29 06:21:49 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libatasmart/libatasmart-0.17.ebuild,v 1.16 2011/01/03 23:45:37 eva Exp $
 
 EAPI="2"
 
-inherit multilib-native
+inherit base multilib-native
 
 DESCRIPTION="Lean and small library for ATA S.M.A.R.T. hard disks"
 HOMEPAGE="http://0pointer.de/blog/projects/being-smart.html"
@@ -17,6 +17,8 @@ IUSE=""
 
 RDEPEND="sys-fs/udev[lib32?]"
 DEPEND="${RDEPEND}"
+
+PATCHES=("${FILESDIR}/${PN}-0.17-strpool-uninit.patch")
 
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
