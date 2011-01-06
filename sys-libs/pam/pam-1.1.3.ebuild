@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/pam/pam-1.1.3.ebuild,v 1.12 2010/12/12 06:02:39 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/pam/pam-1.1.3.ebuild,v 1.13 2010/12/30 18:15:23 flameeyes Exp $
 
 EAPI="3"
 
@@ -13,8 +13,7 @@ HOMEPAGE="http://www.kernel.org/pub/linux/libs/pam/"
 DESCRIPTION="Linux-PAM (Pluggable Authentication Modules)"
 
 SRC_URI="mirror://kernel/linux/libs/pam/library/${MY_P}.tar.bz2
-	mirror://kernel/linux/libs/pam/documentation/${MY_P}-docs.tar.bz2
-	http://dev.gentoo.org/~flameeyes/patches/pam/${MY_P}-intralinking.patch.bz2"
+	mirror://kernel/linux/libs/pam/documentation/${MY_P}-docs.tar.bz2"
 
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
@@ -81,9 +80,6 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
-	epatch "${WORKDIR}"/${MY_P}-intralinking.patch
-	eautoreconf
-
 	elibtoolize
 }
 
@@ -116,11 +112,6 @@ multilib-native_src_configure_internal() {
 		--with-db-uniquename=-$(db_findver sys-libs/db) \
 		--disable-prelude \
 		${myconf}
-
-	# This is a dirty dirty hack, but ensures that relinking is _not_
-	# applied, which could cause the package to link against a
-	# pre-installed copy of libpam rather than the one just built.
-	sed -i -e 's/need_relink=yes/need_relink=no/' libtool || die
 }
 
 multilib-native_src_compile_internal() {
