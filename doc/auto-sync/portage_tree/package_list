@@ -256,7 +256,7 @@ net-libs/libsoup
 net-libs/libsoup-gnome
 net-libs/libssh2
 net-libs/openslp
-# net-libs/webkit-gtk   we have only packages from a overlay
+net-libs/webkit-gtk 
 net-libs/xulrunner
 net-misc/curl
 net-misc/networkmanager
