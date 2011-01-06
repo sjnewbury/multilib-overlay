@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-admin/gamin/gamin-0.1.10.ebuild,v 1.9 2010/01/01 19:29:34 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-admin/gamin/gamin-0.1.10.ebuild,v 1.10 2011/01/06 11:04:49 ssuominen Exp $
 
 EAPI="2"
 
@@ -20,5 +20,3 @@ RDEPEND="!app-admin/fam
 DEPEND=""
 
 PDEPEND=">=app-admin/gam-server-0.1.10"
-
-PROVIDE="virtual/fam"
