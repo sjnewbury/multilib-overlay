@@ -20,7 +20,7 @@ IUSE="doc debug alisp python"
 
 RDEPEND="python? ( dev-lang/python[lib32?] )"
 DEPEND="${RDEPEND}
-	>=media-sound/alsa-headers-${PV%[[:lower:] ]}
+	>=media-sound/alsa-headers-${PV%[[:lower:]]}
 	doc? ( >=app-doc/doxygen-1.2.6 )"
 
 IUSE_PCM_PLUGIN="copy linear route mulaw alaw adpcm rate plug multi shm file
