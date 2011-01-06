@@ -1,8 +1,8 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gvfs/gvfs-1.6.4-r2.ebuild,v 1.6 2010/12/27 21:13:44 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gvfs/gvfs-1.6.6-r1.ebuild,v 1.2 2011/01/04 23:50:16 mr_bones_ Exp $
 
-EAPI="2"
+EAPI="3"
 GCONF_DEBUG="no"
 
 inherit autotools bash-completion gnome2 eutils multilib-native
@@ -12,7 +12,7 @@ HOMEPAGE="http://www.gnome.org"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 arm ia64 ~ppc ppc64 sh sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="archive avahi bluetooth cdda doc fuse gdu gnome gnome-keyring gphoto2 hal
 +http iphone samba +udev"
 
@@ -37,9 +37,9 @@ RDEPEND=">=dev-libs/glib-2.23.4[lib32?]
 	udev? (
 		cdda? ( >=dev-libs/libcdio-0.78.2[-minimal,lib32?] )
 		>=sys-fs/udev-145[extras,lib32?] )
-	hal? (
+	hal? ( !udev? (
 		cdda? ( >=dev-libs/libcdio-0.78.2[-minimal,lib32?] )
-		>=sys-apps/hal-0.5.10[lib32?] )
+		>=sys-apps/hal-0.5.10[lib32?] ) )
 	http? ( >=net-libs/libsoup-gnome-2.26.0[lib32?] )
 	samba? ( || ( >=net-fs/samba-3.4.6[smbclient,lib32?]
 			<=net-fs/samba-3.3[lib32?] ) )"
@@ -49,8 +49,6 @@ DEPEND="${RDEPEND}
 	dev-util/gtk-doc-am
 	doc? ( >=dev-util/gtk-doc-1 )"
 
-DOCS="AUTHORS ChangeLog NEWS README TODO"
-
 multilib-native_pkg_setup_internal() {
 	if use cdda && ! use hal && ! use udev; then
 		ewarn "You have \"+cdda\", but you have \"-hal\" and \"-udev\""
@@ -58,6 +56,7 @@ multilib-native_pkg_setup_internal() {
 	fi
 
 	G2CONF="${G2CONF}
+		--disable-hal
 		--enable-udev
 		--disable-bash-completion
 		--with-dbus-service-dir=/usr/share/dbus-1/services
@@ -71,20 +70,20 @@ multilib-native_pkg_setup_internal() {
 		$(use_enable gphoto2)
 		$(use_enable iphone afc)
 		$(use_enable udev gudev)
-		$(use_enable hal)
 		$(use_enable http)
 		$(use_enable gnome-keyring keyring)
 		$(use_enable samba)"
+
+	if use hal && ! use udev; then
+		G2CONF="${G2CONF} --enable-hal"
+		ewarn "Enabling deprecated hal support. This will override udev support."
+	fi
+
+	DOCS="AUTHORS ChangeLog NEWS README TODO"
 }
 
 multilib-native_src_prepare_internal() {
 	gnome2_src_prepare
-
-	# sftp: fix poll() timeout, bug #339695
-	epatch "${FILESDIR}/${P}-sftp-timeout.patch"
-
-	# Fix file truncation on open; bug #344079
-	epatch "${FILESDIR}/${P}-O_TRUNC-fix.patch"
 
 	# Conditional patching purely to avoid eautoreconf
 	use gphoto2 && epatch "${FILESDIR}/${PN}-1.2.2-gphoto2-stricter-checks.patch"
