@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-arch/xz-utils/xz-utils-9999.ebuild,v 1.6 2010/06/19 00:36:37 abcd Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-arch/xz-utils/xz-utils-9999.ebuild,v 1.7 2011/01/06 02:49:41 vapier Exp $
 
 # Remember: we cannot leverage autotools in this ebuild in order
 #           to avoid circular deps with autotools
@@ -15,7 +15,7 @@ if [[ ${PV} == "9999" ]] ; then
 else
 	MY_P="${PN/-utils}-${PV/_}"
 	SRC_URI="http://tukaani.org/xz/${MY_P}.tar.gz"
-	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 	S=${WORKDIR}/${MY_P}
 	EXTRA_DEPEND=
 fi
@@ -29,7 +29,7 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 IUSE="nls static-libs +threads"
 
-RDEPEND="!app-arch/lzma
+RDEPEND="!<app-arch/lzma-4.63
 	!app-arch/lzma-utils
 	!<app-arch/p7zip-4.57"
 DEPEND="${RDEPEND}
@@ -44,7 +44,6 @@ fi
 
 multilib-native_src_configure_internal() {
 	econf \
-		--enable-dynamic=yes \
 		$(use_enable nls) \
 		$(use_enable threads) \
 		$(use_enable static-libs static)

@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-arch/xz-utils/xz-utils-5.0.0.ebuild,v 1.2 2010/10/26 14:43:14 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-arch/xz-utils/xz-utils-5.0.0.ebuild,v 1.3 2011/01/06 02:49:41 vapier Exp $
 
 # Remember: we cannot leverage autotools in this ebuild in order
 #           to avoid circular deps with autotools
@@ -29,7 +29,7 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 IUSE="nls static-libs +threads"
 
-RDEPEND="!app-arch/lzma
+RDEPEND="!<app-arch/lzma-4.63
 	!app-arch/lzma-utils
 	!<app-arch/p7zip-4.57"
 DEPEND="${RDEPEND}
