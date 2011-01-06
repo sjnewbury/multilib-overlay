@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/dbus-glib/dbus-glib-0.92.ebuild,v 1.1 2010/11/10 16:49:58 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/dbus-glib/dbus-glib-0.92.ebuild,v 1.4 2010/12/29 21:11:30 tampakrap Exp $
 
 EAPI=2
 inherit bash-completion multilib-native
@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="bash-completion debug doc static-libs test"
 
-RDEPEND=">=sys-apps/dbus-1.1[lib32?]
+RDEPEND=">=sys-apps/dbus-1.4.1[lib32?]
 	>=dev-libs/glib-2.26[lib32?]
 	>=dev-libs/expat-1.95.8[lib32?]"
 DEPEND="${RDEPEND}
