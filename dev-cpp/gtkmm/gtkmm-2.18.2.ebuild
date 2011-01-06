@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-cpp/gtkmm/gtkmm-2.18.2.ebuild,v 1.8 2010/05/11 19:48:46 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-cpp/gtkmm/gtkmm-2.18.2.ebuild,v 1.9 2011/01/02 18:50:24 pacho Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -28,7 +28,7 @@ DEPEND="${RDEPEND}
 		dev-libs/libxslt[lib32?]
 		app-doc/doxygen )"
 
-DOCS="AUTHORS CHANGES ChangeLog PORTING NEWS README"
+DOCS="AUTHORS ChangeLog PORTING NEWS README"
 
 multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF}
