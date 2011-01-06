@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libv4l/libv4l-0.8.1.ebuild,v 1.7 2010/12/22 13:42:29 klausman Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libv4l/libv4l-0.8.1.ebuild,v 1.8 2011/01/04 00:52:12 xmw Exp $
 
 EAPI=3
 inherit linux-info multilib toolchain-funcs multilib-native
@@ -13,7 +13,7 @@ SRC_URI="http://linuxtv.org/downloads/v4l-utils/${MY_P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ~ppc ppc64 ~sparc x86"
+KEYWORDS="alpha amd64 arm hppa ~ppc ppc64 sparc x86"
 IUSE=""
 
 RDEPEND=""
