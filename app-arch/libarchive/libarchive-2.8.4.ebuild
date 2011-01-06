@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-arch/libarchive/libarchive-2.8.4.ebuild,v 1.3 2010/12/18 01:42:13 leio Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-arch/libarchive/libarchive-2.8.4.ebuild,v 1.4 2010/12/31 09:18:02 ferringb Exp $
 
 EAPI="2"
 
@@ -31,6 +31,7 @@ DEPEND="${RDEPEND}
 		virtual/os-headers )"
 
 multilib-native_src_prepare_internal() {
+	epatch "$FILESDIR"/libarchive-disable-lzma-size-test.patch
 	elibtoolize
 	epunt_cxx
 }
