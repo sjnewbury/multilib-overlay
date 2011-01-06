@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-vfs/gnome-vfs-2.24.4.ebuild,v 1.1 2010/10/02 11:55:03 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-vfs/gnome-vfs-2.24.4.ebuild,v 1.3 2010/12/29 03:22:01 ssuominen Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -45,7 +45,6 @@ DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.9[lib32?]
 	>=dev-util/gtk-doc-am-1.13
 	doc? ( >=dev-util/gtk-doc-1 )"
-PDEPEND="hal? ( >=gnome-base/gnome-mount-0.6 )"
 
 DOCS="AUTHORS ChangeLog HACKING NEWS README TODO"
 
@@ -65,13 +64,6 @@ multilib-native_pkg_setup_internal() {
 		$(use_enable samba)
 		$(use_enable ssl openssl)"
 		# Useless ? --enable-http-neon
-
-	if use hal ; then
-		G2CONF="${G2CONF}
-			--with-hal-mount=/usr/bin/gnome-mount
-			--with-hal-umount=/usr/bin/gnome-umount
-			--with-hal-eject=/usr/bin/gnome-eject"
-	fi
 
 	# this works because of the order of configure parsing
 	# so should always be behind the use_enable options
