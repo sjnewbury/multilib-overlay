@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.2.6.ebuild,v 1.1 2011/01/04 21:54:01 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.2.6.ebuild,v 1.2 2011/01/08 11:23:01 xarthisius Exp $
 
 EAPI="3"
 
@@ -77,6 +77,9 @@ multilib-native_src_configure_internal() {
 
 	# Sigbuses on SPARC with mcpu
 	use sparc && filter-flags "-mcpu=*" "-mtune=*"
+
+	# https://bugs.webkit.org/show_bug.cgi?id=42070 , #301634
+	use ppc64 && append-flags "-mminimal-toc"
 
 	local myconf
 
