@@ -1,0 +1,28 @@
+Add support for powerpc64-* hosts
+
+--- configure.ac
++++ configure.ac
+@@ -154,6 +154,10 @@
+ 	TARGET=X86_DARWIN; TARGETDIR=x86
+ 	;;
+ 
++  powerpc64-*-darwin*)
++	TARGET=POWERPC_DARWIN; TARGETDIR=powerpc
++	;;
++
+   x86_64-*-cygwin* | x86_64-*-mingw*)
+ 	TARGET=X86_WIN64; TARGETDIR=x86
+ 	;;
+--- configure
++++ configure
+@@ -12254,6 +12254,10 @@
+ 	TARGET=X86_DARWIN; TARGETDIR=x86
+ 	;;
+ 
++  powerpc64-*-darwin*)
++	TARGET=POWERPC_DARWIN; TARGETDIR=powerpc
++	;;
++
+   x86_64-*-cygwin* | x86_64-*-mingw*)
+ 	TARGET=X86_WIN64; TARGETDIR=x86
+ 	;;

@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libffi/libffi-3.0.9-r1.ebuild,v 1.1 2010/12/18 09:10:53 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libffi/libffi-3.0.9-r1.ebuild,v 1.2 2011/01/06 19:52:33 grobian Exp $
 
 inherit eutils libtool multilib-native
 
@@ -21,6 +21,7 @@ multilib-native_src_unpack_internal() {
 	cd "${S}"
 
 	epatch "${FILESDIR}"/${P}-interix.patch \
+		"${FILESDIR}"/${P}-powerpc64-darwin.patch \
 		"${FILESDIR}"/${P}-irix.patch \
 		"${FILESDIR}"/${P}-arm-oabi.patch \
 		"${FILESDIR}"/${P}-define-generic-symbols-carefully.patch
