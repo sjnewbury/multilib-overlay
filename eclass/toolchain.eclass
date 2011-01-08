@@ -1,6 +1,6 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.443 2010/11/21 21:26:22 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.446 2011/01/08 07:44:13 dirtyepic Exp $
 #
 # Maintainer: Toolchain Ninjas <toolchain@gentoo.org>
 
@@ -168,7 +168,7 @@ else
 				IUSE+=" graphite"
 				[[ -n ${SPECS_VER} ]] && IUSE+=" nossp"
 			fi
-			tc_version_is_at_least "4.5" && IUSE+=" lto"
+			[[ ${GCC_BRANCH_VER} == 4.5 ]] && IUSE+=" lto"
 		fi
 	fi
 
@@ -873,11 +873,11 @@ gcc-compiler_pkg_postinst() {
 
 	if ! is_crosscompile ; then
 		# hack to prevent collisions between SLOT
-		[[ ! -d ${ROOT}/lib/rcscripts/awk ]] \
-			&& mkdir -p "${ROOT}"/lib/rcscripts/awk
+		[[ ! -d ${ROOT}/$(get_libdir)/rcscripts/awk ]] \
+			&& mkdir -p "${ROOT}"/$(get_libdir)/rcscripts/awk
 		[[ ! -d ${ROOT}/sbin ]] \
 			&& mkdir -p "${ROOT}"/sbin
-		cp "${ROOT}/${DATAPATH}"/fixlafiles.awk "${ROOT}"/lib/rcscripts/awk/ || die "installing fixlafiles.awk"
+		cp "${ROOT}/${DATAPATH}"/fixlafiles.awk "${ROOT}"/$(get_libdir)/rcscripts/awk/ || die "installing fixlafiles.awk"
 		cp "${ROOT}/${DATAPATH}"/fix_libtool_files.sh "${ROOT}"/sbin/ || die "installing fix_libtool_files.sh"
 
 		[[ ! -d ${ROOT}/usr/bin ]] \
@@ -895,7 +895,7 @@ gcc-compiler_pkg_postinst() {
 gcc-compiler_pkg_prerm() {
 	# Don't let these files be uninstalled #87647
 	touch -c "${ROOT}"/sbin/fix_libtool_files.sh \
-		"${ROOT}"/lib/rcscripts/awk/fixlafiles.awk
+		"${ROOT}"/$(get_libdir)/rcscripts/awk/fixlafiles.awk
 }
 
 gcc-compiler_pkg_postrm() {
@@ -1334,17 +1334,29 @@ gcc_do_configure() {
 	# users to control this feature in the event they need the support.
 	tc_version_is_at_least "4.3" && confgcc="${confgcc} $(use_enable fixed-point)"
 
-	# graphite support was added in 4.4, which depends upon external libraries
-	# for optimizations.  This option allows users to determine if they want
-	# these optimizations and libraries pulled in
-	tc_version_is_at_least "4.4" && \
-		confgcc="${confgcc} $(use_with graphite ppl) $(use_with graphite cloog)"
+	# Graphite support was added in 4.4, which depends on external libraries
+	# for optimizations.  Up to 4.6 we use cloog-ppl (cloog fork with Parma PPL
+	# backend).  Later versions will use upstream cloog with the ISL backend.  We
+	# disable the PPL version check so we can use >=ppl-0.11.
+	if tc_version_is_at_least "4.4"; then
+		confgcc="${confgcc} $(use_with graphite ppl)"
+		confgcc="${confgcc} $(use_with graphite cloog)"
+		if use graphite; then
+			confgcc="${confgcc} --disable-ppl-version-check"
+			# this will be removed when cloog-ppl-0.15.10 goes stable
+			if has_version '>=dev-libs/cloog-ppl-0.15.10'; then
+				confgcc="${confgcc} --with-cloog-include=/usr/include/cloog-ppl"
+			else
+				confgcc="${confgcc} --with-cloog-include=/usr/include/cloog"
+			fi
+		fi
+	fi
 
-	# lto support was added in 4.5, which depends upon elfutils.  This allows
-	# users to enable that option, and pull in the additional library
-	tc_version_is_at_least "4.5" && \
-		confgcc="${confgcc} $(use_enable lto)"
-
+	# LTO support was added in 4.5, which depends upon elfutils.  This allows
+	# users to enable that option, and pull in the additional library.  In 4.6,
+	# the dependency is no longer required.
+	[[ ${GCC_BRANCH_VER} == 4.5 ]] && confgcc="${confgcc} $(use_enable lto)"
+	[[ ${GCC_BRANCH_VER} > 4.5 ]] && confgcc="${confgcc} --enable-lto"
 
 	[[ $(tc-is-softfloat) == "yes" ]] && confgcc="${confgcc} --with-float=soft"
 	[[ $(tc-is-hardfloat) == "yes" ]] && confgcc="${confgcc} --with-float=hard"
