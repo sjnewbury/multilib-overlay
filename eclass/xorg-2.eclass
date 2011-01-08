@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/xorg-2.eclass,v 1.20 2010/11/09 18:25:00 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/xorg-2.eclass,v 1.21 2011/01/06 11:01:59 scarabeus Exp $
 #
 # @ECLASS: xorg-2.eclass
 # @MAINTAINER:
@@ -45,7 +45,7 @@ inherit eutils base libtool multilib toolchain-funcs flag-o-matic autotools \
 
 EXPORTED_FUNCTIONS="src_unpack src_compile src_install pkg_postinst pkg_postrm"
 case "${EAPI:-0}" in
-	3) EXPORTED_FUNCTIONS="${EXPORTED_FUNCTIONS} src_prepare src_configure" ;;
+	3|4) EXPORTED_FUNCTIONS="${EXPORTED_FUNCTIONS} src_prepare src_configure" ;;
 	*) die "EAPI-UNSUPPORTED" ;;
 esac
 
@@ -69,7 +69,6 @@ BASE_INDIVIDUAL_URI="http://xorg.freedesktop.org/releases/individual"
 # doc, data, util, driver, font, lib, proto, xserver. Set above the
 # inherit to override the default autoconfigured module.
 if [[ -z ${MODULE} ]]; then
-	MODULE=""
 	case ${CATEGORY} in
 		app-doc)             MODULE="doc"     ;;
 		media-fonts)         MODULE="font"    ;;
@@ -79,13 +78,14 @@ if [[ -z ${MODULE} ]]; then
 		x11-base)            MODULE="xserver" ;;
 		x11-proto)           MODULE="proto"   ;;
 		x11-libs)            MODULE="lib"     ;;
+		*)                   MODULE=""        ;;
 	esac
 fi
 
 # @ECLASS-VARIABLE: PACKAGE_NAME
 # @DESCRIPTION:
-# For git checkout git repository migth differ from package name
-# so it can be overriden via this variable.
+# For git checkout the git repository migth differ from package name.
+# This variable can be used for proper directory specification
 : ${PACKAGE_NAME:=${PN}}
 
 if [[ -n ${GIT_ECLASS} ]]; then
@@ -184,13 +184,17 @@ has dri ${IUSE//+} && DEPEND+=" dri? ( >=x11-base/xorg-server-1.6.3.901-r2[-mini
 # @DESCRIPTION:
 # Setup prefix compat
 xorg-2_pkg_setup() {
-	[[ ${FONT} == yes ]] && font_pkg_setup
+	debug-print-function ${FUNCNAME} "$@"
+
+	[[ ${FONT} == yes ]] && font_pkg_setup "$@"
 }
 
 # @FUNCTION: xorg-2_src_unpack
 # @DESCRIPTION:
 # Simply unpack source code.
 xorg-2_src_unpack() {
+	debug-print-function ${FUNCNAME} "$@"
+
 	if [[ -n ${GIT_ECLASS} ]]; then
 		git_src_unpack
 	else
@@ -204,19 +208,23 @@ xorg-2_src_unpack() {
 # @DESCRIPTION:
 # Apply all patches
 xorg-2_patch_source() {
+	debug-print-function ${FUNCNAME} "$@"
+
 	# Use standardized names and locations with bulk patching
 	# Patch directory is ${WORKDIR}/patch
 	# See epatch() in eutils.eclass for more documentation
 	EPATCH_SUFFIX=${EPATCH_SUFFIX:=patch}
 
 	[[ -d "${EPATCH_SOURCE}" ]] && epatch
-	base_src_prepare
+	base_src_prepare "$@"
 }
 
 # @FUNCTION: xorg-2_reconf_source
 # @DESCRIPTION:
 # Run eautoreconf if necessary, and run elibtoolize.
 xorg-2_reconf_source() {
+	debug-print-function ${FUNCNAME} "$@"
+
 	case ${CHOST} in
 		*-interix* | *-aix* | *-winnt*)
 			# some hosts need full eautoreconf
@@ -233,6 +241,8 @@ xorg-2_reconf_source() {
 # @DESCRIPTION:
 # Prepare a package after unpacking, performing all X-related tasks.
 xorg-2_src_prepare() {
+	debug-print-function ${FUNCNAME} "$@"
+
 	[[ -n ${GIT_ECLASS} ]] && git_src_prepare
 	xorg-2_patch_source
 	xorg-2_reconf_source
@@ -242,6 +252,8 @@ xorg-2_src_prepare() {
 # @DESCRIPTION:
 # If a font package, perform any necessary configuration steps
 xorg-2_font_configure() {
+	debug-print-function ${FUNCNAME} "$@"
+
 	if has nls ${IUSE//+} && ! use nls; then
 		FONT_OPTIONS+="
 			--disable-iso8859-2
@@ -268,6 +280,8 @@ xorg-2_font_configure() {
 # @DESCRIPTION:
 # Set up CFLAGS for a debug build
 xorg-2_flags_setup() {
+	debug-print-function ${FUNCNAME} "$@"
+
 	# Win32 require special define
 	[[ ${CHOST} == *-winnt* ]] && append-cppflags -DWIN32 -D__STDC__
 	# hardened ldflags
@@ -285,6 +299,7 @@ xorg-2_flags_setup() {
 # @DESCRIPTION:
 # Perform any necessary pre-configuration steps, then run configure
 xorg-2_src_configure() {
+	debug-print-function ${FUNCNAME} "$@"
 	local myopts=""
 
 	xorg-2_flags_setup
@@ -310,7 +325,9 @@ xorg-2_src_configure() {
 # @DESCRIPTION:
 # Compile a package, performing all X-related tasks.
 xorg-2_src_compile() {
-	base_src_compile
+	debug-print-function ${FUNCNAME} "$@"
+
+	base_src_compile "$@"
 }
 
 # @FUNCTION: xorg-2_src_install
@@ -318,6 +335,8 @@ xorg-2_src_compile() {
 # Install a built package to ${D}, performing any necessary steps.
 # Creates a ChangeLog from git if using live ebuilds.
 xorg-2_src_install() {
+	debug-print-function ${FUNCNAME} "$@"
+
 	if [[ ${CATEGORY} == x11-proto ]]; then
 		emake \
 			${PN/proto/}docdir=${EPREFIX}/usr/share/doc/${PF} \
@@ -338,7 +357,7 @@ xorg-2_src_install() {
 	fi
 
 	if [[ -e "${S}"/ChangeLog ]]; then
-		dodoc "${S}"/ChangeLog
+		dodoc "${S}"/ChangeLog || die "dodoc failed"
 	fi
 	# @VARIABLE: DOCS
 	# @DESCRIPTION:
@@ -362,7 +381,9 @@ xorg-2_src_install() {
 # Run X-specific post-installation tasks on the live filesystem. The
 # only task right now is some setup for font packages.
 xorg-2_pkg_postinst() {
-	[[ -n ${FONT} ]] && setup_fonts
+	debug-print-function ${FUNCNAME} "$@"
+
+	[[ -n ${FONT} ]] && setup_fonts "$@"
 }
 
 # @FUNCTION: xorg-2_pkg_postrm
@@ -370,15 +391,17 @@ xorg-2_pkg_postinst() {
 # Run X-specific post-removal tasks on the live filesystem. The only
 # task right now is some cleanup for font packages.
 xorg-2_pkg_postrm() {
-	if [[ -n ${FONT} ]]; then
-		font_pkg_postrm
-	fi
+	debug-print-function ${FUNCNAME} "$@"
+
+	[[ -n ${FONT} ]] && font_pkg_postrm "$@"
 }
 
 # @FUNCTION: setup_fonts
 # @DESCRIPTION:
 # Generates needed files for fonts and fixes font permissions
 setup_fonts() {
+	debug-print-function ${FUNCNAME} "$@"
+
 	create_fonts_scale
 	create_fonts_dir
 	font_pkg_postinst
@@ -389,6 +412,8 @@ setup_fonts() {
 # Don't let the package install generated font files that may overlap
 # with other packages. Instead, they're generated in pkg_postinst().
 remove_font_metadata() {
+	debug-print-function ${FUNCNAME} "$@"
+
 	if [[ ${FONT_DIR} != Speedo && ${FONT_DIR} != CID ]]; then
 		einfo "Removing font metadata"
 		rm -rf "${ED}"/usr/share/fonts/${FONT_DIR}/fonts.{scale,dir,cache-1}
@@ -399,6 +424,8 @@ remove_font_metadata() {
 # @DESCRIPTION:
 # Create fonts.scale file, used by the old server-side fonts subsystem.
 create_fonts_scale() {
+	debug-print-function ${FUNCNAME} "$@"
+
 	if [[ ${FONT_DIR} != Speedo && ${FONT_DIR} != CID ]]; then
 		ebegin "Generating font.scale"
 			mkfontscale \
@@ -412,6 +439,8 @@ create_fonts_scale() {
 # @DESCRIPTION:
 # Create fonts.dir file, used by the old server-side fonts subsystem.
 create_fonts_dir() {
+	debug-print-function ${FUNCNAME} "$@"
+
 	ebegin "Generating fonts.dir"
 			mkfontdir \
 				-e "${EROOT}"/usr/share/fonts/encodings \
