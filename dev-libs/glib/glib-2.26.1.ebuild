@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.26.1.ebuild,v 1.2 2010/12/16 18:09:21 grobian Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.26.1.ebuild,v 1.3 2011/01/11 16:23:49 pacho Exp $
 
 EAPI="3"
 
@@ -149,5 +149,13 @@ multilib-native_pkg_preinst_internal() {
 			ewarn "You must rebuild gobject-introspection so that the installed"
 			ewarn "typelibs and girs are regenerated for the new APIs in glib"
 		fi
+	fi
+}
+
+multilib-native_pkg_postinst_internal() {
+	# Inform users about possible breakage when updating glib and not dbus-glib, bug #297483
+	if has_version dev-libs/dbus-glib; then
+		ewarn "If you experience a breakage after updating dev-libs/glib try"
+		ewarn "rebuilding dev-libs/dbus-glib"
 	fi
 }
