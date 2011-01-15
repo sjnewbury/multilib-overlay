@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.9-r1.ebuild,v 1.1 2010/12/11 17:46:46 chithanh Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.10.ebuild,v 1.1 2011/01/12 00:14:54 chithanh Exp $
 
 EAPI=3
 
@@ -134,7 +134,6 @@ multilib-native_src_prepare_internal() {
 		EPATCH_SUFFIX="patch" \
 		epatch
 	fi
-	epatch "${FILESDIR}/${P}-libdrm-2.4.23-nouveau-api.patch"
 	# FreeBSD 6.* doesn't have posix_memalign().
 	if [[ ${CHOST} == *-freebsd6.* ]]; then
 		sed -i \
@@ -171,6 +170,9 @@ multilib-native_src_configure_internal() {
 
 		# ATI code
 		driver_enable video_cards_radeon radeon r200 r300 r600
+		driver_enable video_cards_mach64 mach64
+		driver_enable video_cards_mga mga
+		driver_enable video_cards_r128 r128
 
 		driver_enable video_cards_savage savage
 		driver_enable video_cards_sis sis
@@ -243,7 +245,7 @@ multilib-native_src_install_internal() {
 
 	# Install config file for eselect mesa
 	insinto /usr/share/mesa
-	newins "${FILESDIR}/eselect-mesa.conf.7.9" eselect-mesa.conf || die
+	newins "${FILESDIR}/eselect-mesa.conf.7.10" eselect-mesa.conf || die
 
 	# Move libGL and others from /usr/lib to /usr/lib/opengl/blah/lib
 	# because user can eselect desired GL provider.
