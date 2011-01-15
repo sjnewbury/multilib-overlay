@@ -5,7 +5,7 @@
  DOCS="AUTHORS NEWS README RELEASE"
  
 -src_unpack() {
-+src_preparek() {
++src_prepare() {
  	unpack ${A}
  	cd "${S}"
  	epatch "${FILESDIR}"/${PN}-0.10.29-make-382.patch
