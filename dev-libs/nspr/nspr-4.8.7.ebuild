@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.8.6-r1.ebuild,v 1.1 2010/10/11 15:18:26 anarchy Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.8.7.ebuild,v 1.1 2011/01/14 13:37:10 anarchy Exp $
 
 EAPI=3
 
@@ -27,9 +27,9 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-4.7.1-solaris.patch
 	epatch "${FILESDIR}"/${PN}-4.7.4-solaris.patch
 	epatch "${FILESDIR}"/${PN}-4.8.3-aix-gcc.patch
-	epatch "${FILESDIR}"/${PN}-4.8.3-aix-soname.patch
+	# Patch needs updating
+	#epatch "${FILESDIR}"/${PN}-4.8.3-aix-soname.patch
 	epatch "${FILESDIR}"/${PN}-4.8.4-darwin-install_name.patch
-	epatch "${FILESDIR}"/${PN}-4.8-parallel-fixup.patch
 	# make sure it won't find Perl out of Prefix
 	sed -i -e "s/perl5//g" mozilla/nsprpub/configure || die
 
