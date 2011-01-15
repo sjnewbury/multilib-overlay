@@ -1,0 +1,48 @@
+--- /usr/portage/dev-libs/cyrus-sasl/cyrus-sasl-2.1.23-r2.ebuild	2011-01-10 21:08:26.000000000 +0100
++++ ./dev-libs/cyrus-sasl/cyrus-sasl-2.1.23-r2.ebuild	2011-01-15 18:22:09.000000000 +0100
+@@ -26,7 +26,7 @@
+ 	ntlm_unsupported_patch? ( >=net-fs/samba-3.0.9 )
+ 	pam? ( virtual/pam )
+ 	postgres? ( dev-db/postgresql-base )
+-	sqlite? ( dev-db/sqlite )
++	sqlite? ( dev-db/sqlite:0 )
+ 	ssl? ( >=dev-libs/openssl-0.9.6d )"
+ DEPEND="${RDEPEND}
+ 	java? ( >=virtual/jdk-1.4 )"
+@@ -47,10 +47,7 @@
+ 	java-pkg-opt-2_pkg_setup
+ }
+ 
+-src_unpack() {
+-	unpack ${A}
+-	cd "${S}"
+-
++src_prepare() {
+ 	# Fix default port name for rimap auth mechanism.
+ 	sed -e '/define DEFAULT_REMOTE_SERVICE/s:imap:imap2:' \
+ 		-i saslauthd/auth_rimap.c || die "sed failed"
+@@ -80,9 +77,13 @@
+ 	# Recreate configure.
+ 	rm -f "${S}/config/libtool.m4" || die "rm libtool.m4 failed"
+ 	AT_M4DIR="${S}/cmulocal ${S}/config" eautoreconf
++
++	# search in the correct dir for libs else .la file will messup everything
++	sed -i "/LIB_MYSQL/ s@/lib@/$(get_libdir)@g" configure
++	sed -i "/LIB_SQLITE/ s@/lib@/$(get_libdir)@g" configure
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	# Fix QA issues.
+ 	append-flags -fno-strict-aliasing
+ 	append-cppflags -D_XOPEN_SOURCE -D_XOPEN_SOURCE_EXTENDED -D_BSD_SOURCE -DLDAP_DEPRECATED
+@@ -147,7 +148,9 @@
+ 		$(use_with sqlite) \
+ 		$(use_enable srp) \
+ 		${myconf} || die "econf failed"
++}
+ 
++src_compile() {
+ 	# We force -j1 for bug #110066.
+ 	emake -j1 || die "emake failed"
+ 
