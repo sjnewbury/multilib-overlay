@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libgphoto2/libgphoto2-2.4.10.ebuild,v 1.1 2010/11/21 22:29:53 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libgphoto2/libgphoto2-2.4.10.ebuild,v 1.2 2011/01/12 22:14:05 eva Exp $
 
 # TODO
 # 1. Track upstream bug --disable-docs does not work.
@@ -72,10 +72,7 @@ RDEPEND="${RDEPEND}
 
 multilib-native_pkg_setup_internal() {
 	if ! echo "${USE}" | grep "cameras_" > /dev/null 2>&1; then
-		einfo "libgphoto2 supports: all ${IUSE_CAMERAS}"
-		einfo "All camera drivers will be built since you did not specify"
-		einfo "via the CAMERAS variable what camera you use."
-		einfo "NOTICE: Upstream will not support you if you do not compile all camera drivers first"
+		einfo "No camera drivers will be built since you did not specify any."
 	fi
 
 	if use cameras_template || use cameras_sipix_blink; then
@@ -116,17 +113,23 @@ multilib-native_src_prepare_internal() {
 multilib-native_src_configure_internal() {
 	local cameras
 	local cam
+	local cam_warn=no
 	for cam in ${IUSE_CAMERAS} ; do
-		use "cameras_${cam}" && cameras="${cameras},${cam}"
+		if use "cameras_${cam}"; then
+			cameras="${cameras},${cam}"
+		else
+			cam_warn=yes
+		fi
 	done
 
-	[ -z "${cameras}" ] \
-		&& cameras="all" \
-		|| cameras="${cameras:1}"
-
-	einfo "Enabled camera drivers: ${cameras}"
-	[ "${cameras}" != "all" ] && \
+	if [ "${cam_warn}" = "yes" ]; then
+		[ -z "${cameras}" ] || cameras="${cameras:1}"
+		einfo "Enabled camera drivers: ${cameras:-none}"
 		ewarn "Upstream will not support you if you do not compile all camera drivers first"
+	else
+		cameras="all"
+		einfo "Enabled camera drivers: all"
+	fi
 
 	econf \
 		--disable-docs \
