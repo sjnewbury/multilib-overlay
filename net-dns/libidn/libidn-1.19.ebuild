@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-dns/libidn/libidn-1.19.ebuild,v 1.11 2010/10/11 20:32:03 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-dns/libidn/libidn-1.19.ebuild,v 1.12 2011/01/09 16:51:34 jer Exp $
 
 EAPI="2"
 
@@ -41,6 +41,7 @@ multilib-native_src_configure_internal() {
 		$(use_enable java) \
 		$(use_enable mono csharp mono) \
 		$(use_enable static-libs static) \
+		--disable-valgrind-tests \
 		--with-lispdir="${SITELISP}/${PN}" \
 		--with-packager="Gentoo" \
 		--with-packager-version="r${PR}" \
