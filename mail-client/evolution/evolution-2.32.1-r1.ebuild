@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.32.1-r1.ebuild,v 1.1 2011/01/01 18:06:57 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.32.1-r1.ebuild,v 1.2 2011/01/12 11:17:53 pacho Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -38,7 +38,6 @@ RDEPEND=">=dev-libs/glib-2.25.12:2[lib32?]
 	>=gnome-extra/evolution-data-server-${PV}-r1[weather]
 	>=gnome-extra/gtkhtml-3.31.90:3.14[lib32?]
 	>=gnome-base/gconf-2[lib32?]
-	>=gnome-base/libgnomecanvas-2[lib32?]
 	dev-libs/atk[lib32?]
 	>=dev-libs/libxml2-2.7.3[lib32?]
 	>=net-libs/libsoup-2.4:2.4[lib32?]
