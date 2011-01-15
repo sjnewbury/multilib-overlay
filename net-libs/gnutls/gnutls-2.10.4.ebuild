@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/gnutls/gnutls-2.10.4.ebuild,v 1.1 2010/12/27 17:48:15 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/gnutls/gnutls-2.10.4.ebuild,v 1.3 2011/01/10 20:57:46 arfrever Exp $
 
 EAPI="3"
 
@@ -70,7 +70,7 @@ multilib-native_src_prepare_internal() {
 multilib-native_src_configure_internal() {
 	local myconf
 	use bindist && myconf="--without-lzo" || myconf="$(use_with lzo)"
-	[[ "${VALGRIND_TESTS}" == "0" ]] && myconf+=" --disable-valgrind-tests"
+	[[ "${VALGRIND_TESTS}" != "1" ]] && myconf+=" --disable-valgrind-tests"
 
 	econf --htmldir=/usr/share/doc/${P}/html \
 		$(use_enable cxx) \
@@ -79,6 +79,16 @@ multilib-native_src_configure_internal() {
 		$(use_enable nls) \
 		$(use_with zlib) \
 		${myconf}
+}
+
+src_test() {
+	if has_version dev-util/valgrind && [[ "${VALGRIND_TESTS}" != "1" ]]; then
+		elog
+		elog "You can set VALGRIND_TESTS=\"1\" to enable Valgrind tests."
+		elog
+	fi
+
+	default
 }
 
 multilib-native_src_install_internal() {
