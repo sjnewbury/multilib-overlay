@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-crypt/gnupg/gnupg-2.0.16.ebuild,v 1.2 2010/09/30 18:56:21 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-crypt/gnupg/gnupg-2.0.17.ebuild,v 1.1 2011/01/14 23:44:35 arfrever Exp $
 
 EAPI="3"
 
@@ -20,7 +20,7 @@ COMMON_DEPEND_LIBS="
 	>=dev-libs/libassuan-2[lib32?]
 	>=dev-libs/libgcrypt-1.4[lib32?]
 	>=dev-libs/libgpg-error-1.7[lib32?]
-	>=dev-libs/libksba-1.0.2[lib32?]
+	>=dev-libs/libksba-1.0.7[lib32?]
 	>=dev-libs/pth-1.3.7[lib32?]
 	>=net-misc/curl-7.10[lib32?]
 	adns? ( >=net-libs/adns-1.4[lib32?] )
@@ -31,7 +31,7 @@ COMMON_DEPEND_LIBS="
 	ldap? ( net-nds/openldap[lib32?] )"
 COMMON_DEPEND_BINS="|| ( app-crypt/pinentry app-crypt/pinentry-qt )"
 
-# existence of bins are checked during configure
+# Existence of executables is checked during configuration.
 DEPEND="${COMMON_DEPEND_LIBS}
 	${COMMON_DEPEND_BINS}
 	static? ( >=dev-libs/libassuan-2[static-libs,lib32?] )
@@ -46,29 +46,51 @@ RDEPEND="!static? ( ${COMMON_DEPEND_LIBS} )
 	selinux? ( sec-policy/selinux-gnupg )
 	nls? ( virtual/libintl )"
 
+multilib-native_pkg_setup_internal() {
+	if { use openct || use pcsc-lite; } && ! use smartcard; then
+		ewarn "You have openct or pcsc-lite enabled but do not"
+		ewarn "have smartcard support enabled. This will not affect"
+		ewarn "the building of this package, but it may affect others."
+	fi
+}
+
 multilib-native_src_configure_internal() {
+	local want_scdaemon="0"
+	if use openct || use pcsc-lite || use smartcard; then
+		want_scdaemon="1"
+	fi
+
 	# 'USE=static' support was requested:
 	# gnupg1: bug #29299
 	# gnupg2: bug #159623
-	use static && append-ldflags -static
+	if use static; then
+		append-ldflags -static
+		# bug #219423
+		if [[ "${want_scdaemon}" -eq 1 ]]; then
+			die "Upstream explicitly disallows static builds when combining with smartcard support: http://www.mail-archive.com/gnupg-users@gnupg.org/msg10851.html"
+		fi
+	fi
+
+	[[ "${want_scdaemon}" -eq 1 ]] && myconf="--enable-scdaemon" || myconf="--disable-scdaemon"
 
 	econf \
 		--docdir="${EPREFIX}/usr/share/doc/${PF}" \
 		--enable-gpg \
 		--enable-gpgsm \
 		--enable-agent \
+		${myconf} \
 		$(use_with adns) \
 		$(use_enable bzip2) \
-		$(use_enable smartcard scdaemon) \
 		$(use_enable !elibc_SunOS symcryptrun) \
 		$(use_enable nls) \
 		$(use_enable ldap) \
 		$(use_with caps capabilities) \
-		CC_FOR_BUILD=$(tc-getBUILD_CC)
+		CC_FOR_BUILD="$(tc-getBUILD_CC)"
 }
 
 multilib-native_src_compile_internal() {
 	emake || die "emake failed"
+
 	if use doc; then
 		cd doc
 		emake html || die "emake html failed"
@@ -77,7 +99,7 @@ multilib-native_src_compile_internal() {
 
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
-	dodoc ChangeLog NEWS README THANKS TODO VERSION
+	dodoc ChangeLog NEWS README THANKS TODO VERSION || die "dodoc failed"
 
 	mv "${ED}usr/share/gnupg/help"* "${ED}usr/share/doc/${PF}"
 	ecompressdir "/usr/share/doc/${PF}"
@@ -91,7 +113,11 @@ multilib-native_src_install_internal() {
 	echo ".so man1/gpg2.1" > "${ED}usr/share/man/man1/gpg.1"
 	echo ".so man1/gpgv2.1" > "${ED}usr/share/man/man1/gpgv.1"
 
-	use doc && dohtml doc/gnupg.html/* doc/*jpg doc/*png
+	echo "CONFIG_PROTECT=/usr/share/gnupg/qualified.txt" >>"${ED}etc/env.d/30gnupg"
+
+	if use doc; then
+		dohtml doc/gnupg.html/* doc/*jpg doc/*png || die "dohtml failed"
+	fi
 }
 
 multilib-native_pkg_postinst_internal() {
