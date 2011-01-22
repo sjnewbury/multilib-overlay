@@ -155,7 +155,6 @@ media-libs/aalib
 media-libs/alsa-lib
 media-libs/audiofile
 media-libs/babl
-media-libs/capseo
 media-libs/exempi
 media-libs/faac
 media-libs/faad2

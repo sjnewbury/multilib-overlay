@@ -52,9 +52,6 @@ sys-fs/device-mapper/device-mapper-1.02.22-r4.ebuild
 sys-fs/device-mapper/device-mapper-1.02.22-r5.ebuild
 sys-fs/device-mapper/device-mapper-1.02.24.ebuild
 dev-lang/python/python-2.4.6.ebuild
-media-libs/capseo/capseo-0.3.0_pre200706031.ebuild
-media-libs/capseo/capseo-0.3.0_pre200712251.ebuild 
-media-libs/capseo/capseo-0.3.0_pre200712251-r1.ebuild
 dev-db/postgresql-base/postgresql-base-8.1.21-r1.ebuild
 dev-db/postgresql-base/postgresql-base-8.2.17-r1.ebuild
 dev-db/postgresql-base/postgresql-base-8.3.11-r1.ebuild
