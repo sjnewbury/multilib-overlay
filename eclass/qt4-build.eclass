@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.87 2010/11/13 20:50:57 wired Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.88 2011/01/20 23:08:09 spatz Exp $
 
 export EMULTILIB_SAVE_VARS="QTBASEDIR QTPREFIXDIR QTBINDIR QTLIBDIR \
 		QMAKE_LIBDIR_QT QTPCDIR QTDATADIR QTDOCDIR QTHEADERDIR \
@@ -226,13 +226,13 @@ qt4-build_src_prepare() {
 	fi
 
 	# Bug 282984 && Bug 295530
-	sed -e "s:\(^SYSTEM_VARIABLES\):CC="$(tc-getCC)"\nCXX="$(tc-getCXX)"\nCFLAGS=\"${CFLAGS}\"\nCXXFLAGS=\"${CXXFLAGS}\"\nLDFLAGS=\"${LDFLAGS}\"\n\1:" \
+	sed -e "s:\(^SYSTEM_VARIABLES\):CC=\"$(tc-getCC)\"\nCXX=\"$(tc-getCXX)\"\nCFLAGS=\"${CFLAGS}\"\nCXXFLAGS=\"${CXXFLAGS}\"\nLDFLAGS=\"${LDFLAGS}\"\n\1:" \
 		-i configure || die "sed qmake compilers failed"
 	# bug 321335
 	if version_is_at_least 4.6; then
 		find ./config.tests/unix -name "*.test" -type f -exec grep -lZ \$MAKE '{}' \; | \
 			xargs -0 \
-			sed -e "s:\(\$MAKE\):\1 CC="$(tc-getCC)" CXX="$(tc-getCXX)" LD="$(tc-getCXX)" LINK="$(tc-getCXX)":g" \
+			sed -e "s:\(\$MAKE\):\1 CC=\"$(tc-getCC)\" CXX=\"$(tc-getCXX)\" LD=\"$(tc-getCXX)\" LINK=\"$(tc-getCXX)\":g" \
 				-i || die "sed test compilers failed"
 	fi
 
