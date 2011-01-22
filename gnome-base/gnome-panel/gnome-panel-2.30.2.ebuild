@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-panel/gnome-panel-2.30.2.ebuild,v 1.9 2010/10/17 15:17:24 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-panel/gnome-panel-2.30.2.ebuild,v 1.10 2011/01/15 19:54:58 nirbheek Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -20,7 +20,7 @@ RDEPEND="dev-lang/python[lib32?]
 	>=x11-libs/pango-1.15.4[lib32?]
 	>=dev-libs/glib-2.18.0[lib32?]
 	>=x11-libs/gtk+-2.19.7[lib32?]
-	>=dev-libs/libgweather-2.27.90[lib32?]
+	>=dev-libs/libgweather-2.27.90:2[lib32?]
 	dev-libs/libxml2[lib32?]
 	>=gnome-base/libbonoboui-2.1.1[lib32?]
 	>=gnome-base/orbit-2.4[lib32?]
