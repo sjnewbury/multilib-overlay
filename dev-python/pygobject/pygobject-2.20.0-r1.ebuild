@@ -1,11 +1,11 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pygobject/pygobject-2.20.0-r1.ebuild,v 1.2 2010/10/02 18:10:15 grobian Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pygobject/pygobject-2.20.0-r1.ebuild,v 1.3 2011/01/17 18:09:36 arfrever Exp $
 
 EAPI="2"
 SUPPORT_PYTHON_ABIS="1"
 PYTHON_DEPEND="2:2.5"
-RESTRICT_PYTHON_ABIS="2.4 3.*"
+RESTRICT_PYTHON_ABIS="2.4 3.* *-jython"
 
 inherit alternatives autotools gnome2 python virtualx multilib-native
 
