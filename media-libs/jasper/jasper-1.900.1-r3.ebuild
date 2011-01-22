@@ -24,7 +24,8 @@ DEPEND="${RDEPEND}
 multilib-native_src_prepare_internal() {
 	epatch "${WORKDIR}"/${P}-fixes-20081208.patch
 
-	elibtoolize
+	# when we run eautoreconf instead of elibtoolize we avoid problems with finding libs
+	eautoreconf
 }
 
 multilib-native_src_configure_internal() {

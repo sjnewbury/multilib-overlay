@@ -1,6 +1,6 @@
---- /usr/portage/media-libs/jasper/jasper-1.900.1-r3.ebuild	2010-02-21 08:05:48.000000000 +0100
-+++ ./media-libs/jasper/jasper-1.900.1-r3.ebuild	2010-05-06 22:24:18.000000000 +0200
-@@ -19,20 +19,21 @@
+--- /usr/portage/media-libs/jasper/jasper-1.900.1-r3.ebuild	2010-09-16 19:36:01.000000000 +0200
++++ ./media-libs/jasper/jasper-1.900.1-r3.ebuild	2011-01-22 14:16:20.000000000 +0100
+@@ -19,20 +19,22 @@
  DEPEND="${RDEPEND}
  		app-arch/unzip"
  
@@ -10,7 +10,9 @@
 +src_prepare() {
  	epatch "${WORKDIR}"/${P}-fixes-20081208.patch
  
- 	elibtoolize
+-	elibtoolize
++	# when we run eautoreconf instead of elibtoolize we avoid problems with finding libs
++	eautoreconf
  }
  
 -src_compile() {
