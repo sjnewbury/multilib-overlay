@@ -1,10 +1,10 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/sane-backends/sane-backends-1.0.21-r1.ebuild,v 1.3 2010/11/16 21:00:45 phosphan Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/sane-backends/sane-backends-1.0.21-r1.ebuild,v 1.4 2011/01/21 20:52:27 phosphan Exp $
 
 EAPI="2"
 
-inherit eutils flag-o-matic multilib-native
+inherit eutils flag-o-matic multilib multilib-native
 
 # gphoto and v4l are handled by their usual USE flags.
 # The pint backend was disabled because I could not get it to compile.
@@ -209,8 +209,8 @@ multilib-native_src_install_internal() {
 		cd ../..
 	fi
 	cd tools/udev
-	dodir /etc/udev/rules.d
-	insinto /etc/udev/rules.d
+	dodir /$(get_libdir)/udev/rules.d
+	insinto /$(get_libdir)/udev/rules.d
 	newins libsane.rules 41-libsane.rules
 	cd ../..
 	dodoc NEWS AUTHORS ChangeLog* README README.linux
