@@ -1,11 +1,12 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/file/file-5.03.ebuild,v 1.10 2010/02/04 18:25:47 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/file/file-5.05.ebuild,v 1.2 2011/01/18 21:36:39 arfrever Exp $
 
 EAPI="2"
 
-PYTHON_DEPEND="python? 2"
+PYTHON_DEPEND="python? *"
 SUPPORT_PYTHON_ABIS="1"
+RESTRICT_PYTHON_ABIS="*-jython"
 
 inherit eutils distutils libtool flag-o-matic multilib-native
 
@@ -16,30 +17,21 @@ SRC_URI="ftp://ftp.astron.com/pub/file/${P}.tar.gz
 
 LICENSE="as-is"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="python"
 
-DEPEND=""
-RDEPEND=""
-RESTRICT_PYTHON_ABIS="3.*"
+PYTHON_MODNAME="magic.py"
 
 multilib-native_src_unpack_internal() {
 	unpack ${P}.tar.gz
-}
+}	
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}"/${PN}-4.15-libtool.patch #99593
-
 	elibtoolize
 	epunt_cxx
 
-	# make sure python links against the current libmagic #54401
-	sed -i "/library_dirs/s:'\.\./src':'../src/.libs':" python/setup.py
 	# dont let python README kill main README #60043
 	mv python/README{,.python}
-
-	# only one data file, so put it into /usr/share/misc/
-#	sed -i '/^pkgdatadir/s:/@PACKAGE@::' $(find -name Makefile.in)
 }
 
 multilib-native_src_configure_internal() {
@@ -56,7 +48,7 @@ multilib-native_src_compile_internal() {
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${D}" install || die "make install failed"
+	emake DESTDIR="${D}" install || die
 	dodoc ChangeLog MAINT README
 
 	use python && cd python && distutils_src_install
