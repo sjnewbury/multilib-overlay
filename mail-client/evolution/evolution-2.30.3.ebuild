@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.30.3.ebuild,v 1.4 2010/12/21 22:06:14 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.30.3.ebuild,v 1.8 2011/01/20 10:36:46 pacho Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -12,7 +12,7 @@ HOMEPAGE="http://www.gnome.org/projects/evolution/"
 
 LICENSE="GPL-2 LGPL-2 OPENLDAP"
 SLOT="2.0"
-KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~ia64 ~ppc ~ppc64 ~sparc x86 ~x86-fbsd"
 IUSE="crypt doc gstreamer kerberos ldap networkmanager nntp pda python ssl"
 # pst
 # mono - disabled because it just crashes on startup :S
@@ -27,13 +27,14 @@ RDEPEND=">=dev-libs/glib-2.22[lib32?]
 	>=gnome-extra/evolution-data-server-$(get_version_component_range 1-2)[weather]
 	>=gnome-base/gnome-desktop-2.26[lib32?]
 	>=gnome-extra/gtkhtml-3.29.6[lib32?]
+	<gnome-extra/gtkhtml-3.31[lib32?]
 	>=gnome-base/gconf-2[lib32?]
 	>=gnome-base/libgnomecanvas-2[lib32?]
 	dev-libs/atk[lib32?]
 	>=dev-libs/dbus-glib-0.74[lib32?]
 	>=dev-libs/libunique-1.1.2[lib32?]
 	>=dev-libs/libxml2-2.7.3[lib32?]
-	>=dev-libs/libgweather-2.25.3[lib32?]
+	>=dev-libs/libgweather-2.25.3:2[lib32?]
 	>=net-libs/libsoup-2.4[lib32?]
 	>=media-gfx/gtkimageview-1.6[lib32?]
 	media-libs/libcanberra[gtk,lib32?]

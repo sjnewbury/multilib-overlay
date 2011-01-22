@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.30.2-r1.ebuild,v 1.10 2010/10/17 15:34:52 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.30.2-r1.ebuild,v 1.11 2011/01/15 19:56:39 nirbheek Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -33,7 +33,7 @@ RDEPEND=">=dev-libs/glib-2.22[lib32?]
 	>=dev-libs/dbus-glib-0.74[lib32?]
 	>=dev-libs/libunique-1.1.2[lib32?]
 	>=dev-libs/libxml2-2.7.3[lib32?]
-	>=dev-libs/libgweather-2.25.3[lib32?]
+	>=dev-libs/libgweather-2.25.3:2[lib32?]
 	>=net-libs/libsoup-2.4[lib32?]
 	>=media-gfx/gtkimageview-1.6[lib32?]
 	media-libs/libcanberra[gtk,lib32?]
