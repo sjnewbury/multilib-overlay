@@ -1,8 +1,8 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.26.0-r1.ebuild,v 1.1 2010/10/17 15:12:35 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.26.1-r1.ebuild,v 1.1 2011/01/17 17:58:59 pacho Exp $
 
-EAPI="2"
+EAPI="3"
 
 inherit autotools gnome.org libtool eutils flag-o-matic pax-utils multilib-native
 
@@ -42,6 +42,21 @@ multilib-native_src_prepare_internal() {
 		fi
 	fi
 
+	# gsettings.m4: Fix rules to work when there are no schemas, bug #350020
+	epatch "${FILESDIR}/${PN}-2.26.1-gsettings-rules.patch"
+
+	# Deprecation check in tests/testglib.c, upstream bug #635093
+	epatch "${FILESDIR}/${P}-deprecation-tests.patch"
+
+	# Can't read GSettings:backend property, upstream bug #636100
+	epatch "${FILESDIR}/${P}-gsettings-read.patch"
+
+	# Cannot send a locked message with PRESERVE_SERIAL flag, upstream bug #632544
+	epatch "${FILESDIR}/${P}-locked-message.patch"
+
+	# GDBus message idle can execute while flushes are pending, upstream bug #635626
+	epatch "${FILESDIR}/${P}-gdbus-flushes.patch"
+
 	# Don't fail gio tests when ran without userpriv, upstream bug 552912
 	# This is only a temporary workaround, remove as soon as possible
 	epatch "${FILESDIR}/${PN}-2.18.1-workaround-gio-test-failure-without-userpriv.patch"
@@ -67,14 +82,11 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${PN}-2.26.0-disable-locale-sensitive-test.patch"
 	epatch "${FILESDIR}/${PN}-2.26.0-disable-volumemonitor-broken-test.patch"
 
-	# Don't unref data->message if it is NULL, fixes evince-2.32 crash
-	epatch "${FILESDIR}/${P}-unref-null.patch"
-
-	# Don't call close() on -1 in testglib.c
-	epatch "${FILESDIR}/${P}-not-close.patch"
-
-	# Prevent error pileup
-	epatch "${FILESDIR}/${P}-error-pileup.patch"
+	if ! use test; then
+		# don't waste time building tests
+		sed 's/^\(SUBDIRS =.*\)tests\(.*\)$/\1\2/' -i Makefile.am Makefile.in \
+			|| die "sed failed"
+	fi
 
 	# Needed for the punt-python-check patch.
 	# Also needed to prevent croscompile failures, see bug #267603
@@ -113,18 +125,18 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "Installation failed"
 
 	# Do not install charset.alias even if generated, leave it to libiconv
-	rm -f "${D}/usr/lib/charset.alias"
+	rm -f "${ED}/usr/lib/charset.alias"
 
 	# Don't install gdb python macros, bug 291328
-	rm -rf "${D}/usr/share/gdb/" "${D}/usr/share/glib-2.0/gdb/"
+	rm -rf "${ED}/usr/share/gdb/" "${ED}/usr/share/glib-2.0/gdb/"
 
 	dodoc AUTHORS ChangeLog* NEWS* README || die "dodoc failed"
 
 	insinto /usr/share/bash-completion
 	for f in gdbus gsettings; do
-		newins "${D}/etc/bash_completion.d/${f}-bash-completion.sh" ${f} || die
+		newins "${ED}/etc/bash_completion.d/${f}-bash-completion.sh" ${f} || die
 	done
-	rm -rf "${D}/etc"
+	rm -rf "${ED}/etc"
 }
 
 src_test() {
@@ -152,5 +164,13 @@ multilib-native_pkg_preinst_internal() {
 			ewarn "You must rebuild gobject-introspection so that the installed"
 			ewarn "typelibs and girs are regenerated for the new APIs in glib"
 		fi
+	fi
+}
+
+multilib-native_pkg_postinst_internal() {
+	# Inform users about possible breakage when updating glib and not dbus-glib, bug #297483
+	if has_version dev-libs/dbus-glib; then
+		ewarn "If you experience a breakage after updating dev-libs/glib try"
+		ewarn "rebuilding dev-libs/dbus-glib"
 	fi
 }
