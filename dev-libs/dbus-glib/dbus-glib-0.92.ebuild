@@ -1,9 +1,10 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/dbus-glib/dbus-glib-0.92.ebuild,v 1.4 2010/12/29 21:11:30 tampakrap Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/dbus-glib/dbus-glib-0.92.ebuild,v 1.5 2011/01/19 20:20:59 eva Exp $
 
 EAPI=2
-inherit bash-completion multilib-native
+
+inherit eutils bash-completion multilib-native
 
 DESCRIPTION="D-Bus bindings for glib"
 HOMEPAGE="http://dbus.freedesktop.org/"
@@ -31,6 +32,11 @@ BD=${WORKDIR}/${P}-build
 TBD=${WORKDIR}/${P}-tests-build
 
 BASHCOMPLETION_NAME="dbus"
+
+multilib-native_src_prepare_internal() {
+	# Apply upstream patch to fix build with FEATURES="userpriv", bug #
+	epatch "${FILESDIR}/${P}-userpriv-fix.patch"
+}
 
 multilib-native_src_configure_internal() {
 	local my_conf

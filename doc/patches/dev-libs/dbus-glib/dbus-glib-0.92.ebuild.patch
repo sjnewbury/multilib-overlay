@@ -1,6 +1,6 @@
---- /usr/portage/dev-libs/dbus-glib/dbus-glib-0.92.ebuild	2010-11-10 17:49:58.000000000 +0100
-+++ ./dev-libs/dbus-glib/dbus-glib-0.92.ebuild	2010-12-25 00:43:24.000000000 +0100
-@@ -44,15 +44,15 @@
+--- /usr/portage/dev-libs/dbus-glib/dbus-glib-0.92.ebuild	2011-01-19 21:36:02.000000000 +0100
++++ ./dev-libs/dbus-glib/dbus-glib-0.92.ebuild	2011-01-22 14:25:47.000000000 +0100
+@@ -50,15 +50,15 @@
  		$(use_enable doc gtk-doc)
  		--with-html-dir=/usr/share/doc/${PF}/html"
  
@@ -22,7 +22,7 @@
  		ECONF_SOURCE="${S}" econf \
  			${my_conf} \
  			$(use_enable test checks) \
-@@ -63,26 +63,26 @@
+@@ -69,26 +69,26 @@
  }
  
  src_compile() {
