@@ -1,14 +1,14 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.12.2-r6.ebuild,v 1.6 2011/01/22 11:19:07 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.12.3.ebuild,v 1.1 2011/01/22 09:41:54 tove Exp $
 
 EAPI=3
 
 inherit eutils alternatives flag-o-matic toolchain-funcs multilib multilib-native
 
-PATCH_VER=9
+PATCH_VER=1
 
-PERL_OLDVERSEN="5.12.1 5.12.0"
+PERL_OLDVERSEN="5.12.2 5.12.1 5.12.0"
 
 SHORT_PV="${PV%.*}"
 MY_P="perl-${PV/_rc/-RC}"
@@ -18,7 +18,7 @@ DESCRIPTION="Larry Wall's Practical Extraction and Report Language"
 
 SRC_URI="
 	mirror://cpan/src/${MY_P}.tar.bz2
-	mirror://cpan/authors/id/J/JE/JESSE/${MY_P}.tar.bz2
+	mirror://cpan/authors/id/R/RJ/RJBS/${MY_P}.tar.bz2
 	mirror://gentoo/${MY_P}-${PATCH_VER}.tar.bz2
 	http://dev.gentoo.org/~tove/files/${MY_P}-${PATCH_VER}.tar.bz2"
 #	mirror://cpan/src/${MY_P}.tar.bz2
@@ -27,7 +27,7 @@ HOMEPAGE="http://www.perl.org/"
 
 LICENSE="|| ( Artistic GPL-1 GPL-2 GPL-3 )"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="berkdb build debug doc gdbm ithreads"
 
 COMMON_DEPEND="berkdb? ( sys-libs/db[lib32?] )
@@ -51,7 +51,7 @@ dual_scripts() {
 	src_remove_dual_scripts perl-core/Encode             2.39    enc2xs piconv
 	src_remove_dual_scripts perl-core/ExtUtils-MakeMaker 6.56    instmodsh
 	src_remove_dual_scripts perl-core/Module-Build       0.3603  config_data
-	src_remove_dual_scripts perl-core/Module-CoreList    2.38    corelist
+	src_remove_dual_scripts perl-core/Module-CoreList    2.43    corelist
 	src_remove_dual_scripts perl-core/PodParser          1.37    pod2usage podchecker podselect
 	src_remove_dual_scripts perl-core/Test-Harness       3.17    prove
 	src_remove_dual_scripts perl-core/podlators          2.3.1   pod2man pod2text
@@ -130,7 +130,7 @@ multilib-native_src_prepare_internal() {
 	EPATCH_SOURCE="${WORKDIR}/perl-patch" \
 	EPATCH_SUFFIX="diff" \
 	EPATCH_FORCE="yes" \
-	EPATCH_OPTS+=-p1 \
+	EPATCH_OPTS="-p1" \
 	epatch
 
 	src_prepare_update_patchlevel_h
@@ -356,7 +356,7 @@ multilib-native_pkg_postinst_internal() {
 	if [[ "${ROOT}" = "/" ]] ; then
 		local INC DIR file
 		INC=$(perl -e 'for $line (@INC) { next if $line eq "."; next if $line =~ m/'${MY_PV}'|etc|local|perl$/; print "$line\n" }')
-		ebegin "Removing old .ph files"
+		einfo "Removing old .ph files"
 		for DIR in ${INC} ; do
 			if [[ -d "${DIR}" ]] ; then
 				for file in $(find "${DIR}" -name "*.ph" -type f ) ; do
@@ -375,7 +375,8 @@ multilib-native_pkg_postinst_internal() {
 			ebegin "Generating ConfigLocal.pm (ignore any error)"
 			enc2xs -C
 		fi
-		ebegin "Converting C header files to the corresponding Perl format (ignore any error)"
+
+		einfo "Converting C header files to the corresponding Perl format (ignore any error)"
 		pushd /usr/include >/dev/null
 			h2ph -Q -a -d ${ARCH_LIB} \
 				asm/termios.h syscall.h syslimits.h syslog.h sys/ioctl.h \
