@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/gnome-disk-utility/gnome-disk-utility-2.32.0.ebuild,v 1.4 2011/01/17 15:33:12 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/gnome-disk-utility/gnome-disk-utility-2.32.0-r1.ebuild,v 1.1 2011/01/17 18:30:12 ssuominen Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -31,6 +31,7 @@ CDEPEND="
 	nautilus? ( >=gnome-base/nautilus-2.24[lib32?] )
 "
 RDEPEND="${CDEPEND}
+	x11-misc/xdg-utils
 	fat? ( sys-fs/dosfstools )
 	!!sys-apps/udisks"
 DEPEND="${CDEPEND}
@@ -56,6 +57,10 @@ multilib-native_pkg_setup_internal() {
 }
 
 multilib-native_src_prepare_internal() {
+	sed -i \
+		-e '/printf/s:nautilus:xdg-open:' \
+		src/palimpsest/gdu-section-volumes.c || die #350919
+
 	# Keep avahi optional, upstream bug #631986
 	epatch "${FILESDIR}/${PN}-2.30.1-optional-avahi.patch"
 
