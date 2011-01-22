@@ -1,11 +1,11 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pygtk/pygtk-2.17.0.ebuild,v 1.9 2011/01/08 01:36:01 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pygtk/pygtk-2.17.0.ebuild,v 1.11 2011/01/19 20:12:48 eva Exp $
 
 EAPI="2"
 PYTHON_DEPEND="2:2.6"
 SUPPORT_PYTHON_ABIS="1"
-RESTRICT_PYTHON_ABIS="2.4 2.5 3.*"
+RESTRICT_PYTHON_ABIS="2.4 2.5 3.* *-jython"
 PYTHON_EXPORT_PHASE_FUNCTIONS="1"
 
 inherit alternatives autotools eutils flag-o-matic gnome.org python virtualx multilib-native
@@ -56,6 +56,7 @@ src_test() {
 
 	testing() {
 		cd tests
+		export XDG_CONFIG_HOME="${T}/$(PYTHON --ABI)"
 		Xemake check-local
 	}
 	python_execute_function -s testing

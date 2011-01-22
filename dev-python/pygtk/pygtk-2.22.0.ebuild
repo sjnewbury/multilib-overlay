@@ -1,11 +1,12 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pygtk/pygtk-2.16.0-r1.ebuild,v 1.12 2010/07/12 16:58:23 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pygtk/pygtk-2.22.0.ebuild,v 1.2 2011/01/19 20:12:48 eva Exp $
 
-EAPI="2"
-PYTHON_DEPEND="2:2.6"
+EAPI="3"
+GCONF_DEBUG="no"
+PYTHON_DEPEND="2:2.5"
 SUPPORT_PYTHON_ABIS="1"
-RESTRICT_PYTHON_ABIS="2.4 2.5 3.*"
+RESTRICT_PYTHON_ABIS="2.4 3.* *-jython"
 PYTHON_EXPORT_PHASE_FUNCTIONS="1"
 
 inherit alternatives autotools eutils flag-o-matic gnome.org python virtualx multilib-native
@@ -15,16 +16,16 @@ HOMEPAGE="http://www.pygtk.org/"
 
 LICENSE="LGPL-2.1"
 SLOT="2"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 IUSE="doc examples"
 
-RDEPEND=">=dev-libs/glib-2.8.0[lib32?]
-	>=x11-libs/pango-1.16.0[lib32?]
-	>=dev-libs/atk-1.12.0[lib32?]
-	>=x11-libs/gtk+-2.13.6[lib32?]
-	>=gnome-base/libglade-2.5.0[lib32?]
+RDEPEND=">=dev-libs/glib-2.8:2[lib32?]
+	>=x11-libs/pango-1.16[lib32?]
+	>=dev-libs/atk-1.12[lib32?]
+	>=x11-libs/gtk+-2.22:2[lib32?]
+	>=gnome-base/libglade-2.5[lib32?]
 	>=dev-python/pycairo-1.0.2[lib32?]
-	>=dev-python/pygobject-2.16.1[lib32?]
+	>=dev-python/pygobject-2.21.3:2[lib32?]
 	dev-python/numpy[lib32?]"
 
 DEPEND="${RDEPEND}
@@ -37,8 +38,8 @@ multilib-native_src_prepare_internal() {
 	# Fix declaration of codegen in .pc
 	epatch "${FILESDIR}/${PN}-2.13.0-fix-codegen-location.patch"
 
-	# Fix a crash in gdk.color_from_hsv
-	epatch "${FILESDIR}/${P}-gdkcolor-fix.patch"
+	# Broken test, upstream bug #636589
+	epatch "${FILESDIR}/${PN}-2.22.0-disable-broken-tests.patch"
 
 	# Disable pyc compiling
 	mv "${S}"/py-compile "${S}"/py-compile.orig
@@ -59,6 +60,7 @@ src_test() {
 
 	testing() {
 		cd tests
+		export XDG_CONFIG_HOME="${T}/$(PYTHON --ABI)"
 		Xemake check-local
 	}
 	python_execute_function -s testing
@@ -67,12 +69,12 @@ src_test() {
 multilib-native_src_install_internal() {
 	python_src_install
 	python_clean_installation_image
-	dodoc AUTHORS ChangeLog INSTALL MAPPING NEWS README THREADS TODO
+	dodoc AUTHORS ChangeLog INSTALL MAPPING NEWS README THREADS TODO || die
 
 	if use examples; then
 		rm examples/Makefile*
 		insinto /usr/share/doc/${PF}
-		doins -r examples
+		doins -r examples || die
 	fi
 }
 
