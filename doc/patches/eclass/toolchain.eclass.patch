@@ -8,7 +8,7 @@
  			tc_version_is_at_least "4.3" && IUSE+=" fixed-point"
  			if tc_version_is_at_least "4.4" ; then
  				IUSE+=" graphite"
-@@ -1116,7 +1117,7 @@
+@@ -1123,7 +1124,7 @@
  			done
  	fi
  
@@ -17,7 +17,7 @@
  }
  
  gcc-library-configure() {
-@@ -1207,7 +1208,14 @@
+@@ -1214,7 +1215,14 @@
  	if ! is_gcj ; then
  		confgcc="${confgcc} --disable-libgcj"
  	elif use gtk ; then
@@ -33,7 +33,7 @@
  	fi
  
  	case $(tc-arch) in
-@@ -1956,10 +1964,24 @@
+@@ -1966,10 +1974,24 @@
  		mv -f "${D}"${PREFIX}/lib/libgcj.spec "${D}"${LIBPATH}/libgcj.spec
  
  	# SLOT up libgcj.pc (and let gcc-config worry about links)

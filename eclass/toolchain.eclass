@@ -1,6 +1,6 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.446 2011/01/08 07:44:13 dirtyepic Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/toolchain.eclass,v 1.449 2011/01/18 07:00:50 dirtyepic Exp $
 #
 # Maintainer: Toolchain Ninjas <toolchain@gentoo.org>
 
@@ -57,7 +57,7 @@ is_crosscompile() {
 	[[ ${CHOST} != ${CTARGET} ]]
 }
 
-tc_version_is_at_least() { version_is_at_least "$1" "${2:-${GCC_PV}}" ; }
+tc_version_is_at_least() { version_is_at_least "$1" "${2:-${GCC_RELEASE_VER}}" ; }
 
 
 GCC_PV=${TOOLCHAIN_GCC_PV:-${PV}}
@@ -169,6 +169,7 @@ else
 				[[ -n ${SPECS_VER} ]] && IUSE+=" nossp"
 			fi
 			[[ ${GCC_BRANCH_VER} == 4.5 ]] && IUSE+=" lto"
+			tc_version_is_at_least "4.6" && IUSE+=" go"
 		fi
 	fi
 
@@ -827,6 +828,12 @@ gcc_pkg_setup() {
 
 		# we dont want to use the installed compiler's specs to build gcc!
 		unset GCC_SPECS
+
+		if use nocxx ; then
+			use go && ewarn 'Go requires a C++ compiler, disabled due to USE="nocxx"'
+			use objc++ && ewarn 'Obj-C++ requires a C++ compiler, disabled due to USE="nocxx"'
+			use gcj && ewarn 'GCJ requires a C++ compiler, disabled due to USE="nocxx"'
+		fi
 	fi
 
 	want_libssp && libc_has_ssp && \
@@ -1259,6 +1266,7 @@ gcc-compiler-configure() {
 	is_cxx && GCC_LANG="${GCC_LANG},c++"
 	is_d   && GCC_LANG="${GCC_LANG},d"
 	is_gcj && GCC_LANG="${GCC_LANG},java"
+	is_go  && GCC_LANG="${GCC_LANG},go"
 	if is_objc || is_objcxx ; then
 		GCC_LANG="${GCC_LANG},objc"
 		if tc_version_is_at_least "4.0" ; then
@@ -1421,8 +1429,6 @@ gcc_do_configure() {
 		case ${CHOST} in
 			mingw*|*-mingw*|*-cygwin)
 				confgcc="${confgcc} --enable-threads=win32" ;;
-			*-mint*)
-				confgcc="${confgcc} --disable-threads" ;;
 			*)
 				confgcc="${confgcc} --enable-threads=posix" ;;
 		esac
@@ -1839,7 +1845,7 @@ gcc-compiler_src_install() {
 	# These should be symlinks
 	dodir /usr/bin
 	cd "${D}"${BINPATH}
-	for x in cpp gcc g++ c++ g77 gcj gcjh gfortran ; do
+	for x in cpp gcc g++ c++ g77 gcj gcjh gfortran gccgo ; do
 		# For some reason, g77 gets made instead of ${CTARGET}-g77...
 		# this should take care of that
 		[[ -f ${x} ]] && mv ${x} ${CTARGET}-${x}
@@ -1936,6 +1942,10 @@ gcc-compiler_src_install() {
 		doins "${module}"
 		rm "${module}"
 	done
+
+	# Don't scan .gox files for executable stacks - false positives
+	export QA_EXECSTACK="usr/lib*/go/*/*.gox"
+	export QA_WX_LOAD="usr/lib*/go/*/*.gox"
 }
 
 gcc_slot_java() {
@@ -2504,7 +2514,12 @@ is_fortran() {
 
 is_gcj() {
 	gcc-lang-supported java || return 1
-	use gcj
+	! use nocxx && use gcj
+}
+
+is_go() {
+	gcc-lang-supported go || return 1
+	! use nocxx && use go
 }
 
 is_libffi() {
@@ -2519,7 +2534,7 @@ is_objc() {
 
 is_objcxx() {
 	gcc-lang-supported 'obj-c++' || return 1
-	use objc++
+	! use nocxx && use objc++
 }
 
 is_ada() {
