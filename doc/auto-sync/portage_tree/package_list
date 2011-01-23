@@ -32,6 +32,7 @@ app-text/hunspell
 app-text/libpaper
 app-text/opensp
 app-text/poppler
+app-text/texlive-core
 dev-cpp/atkmm
 dev-cpp/cairomm
 dev-cpp/glibmm
@@ -321,6 +322,7 @@ virtual/libusb
 virtual/mysql
 virtual/opengl
 # virtual/pam not in portage but needed to get lib32 deps
+virtual/tex-base
 # www-client/epiphany			only 9999 version
 # www-client/epiphany-extensions	only 9999 version
 www-client/firefox
