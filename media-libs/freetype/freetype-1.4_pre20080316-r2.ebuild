@@ -72,33 +72,28 @@ multilib-native_src_prepare_internal() {
 }
 
 multilib-native_src_configure_internal() {
+	# to configure contrib we must have compiled the core already
+	# thus we do all in the compile step
+	:
+}
+
+multilib-native_src_compile_internal() {
 	use kpathsea && kpathseaconf="--with-kpathsea-lib=/usr/$(get_libdir) --with-kpathsea-include=/usr/include"
 
 	# core
 	einfo "Building core library..."
 	econf $(use_enable nls) || die "econf failed"
-
-	# contrib
-	cd "${S}"/freetype1-contrib/ttf2pk
-	einfo "Building ttf2pk..."
-	econf ${kpathseaconf} || die "econf ttf2pk failed"
-	for x in ttf2bdf ttf2pfb ttfbanner; do
-		cd "${S}"/freetype1-contrib/${x}
-		einfo "Building ${x}..."
-		econf || die "econf ${x} failed"
-	done
-}
-
-multilib-native_src_compile_internal() {
 	emake || die "emake failed"
 
 	# contrib
 	cd "${S}"/freetype1-contrib/ttf2pk
 	einfo "Building ttf2pk..."
+	econf ${kpathseaconf} || die "econf ttf2pk failed"
 	emake || die "emake ttf2pk failed"
 	for x in ttf2bdf ttf2pfb ttfbanner; do
 		cd "${S}"/freetype1-contrib/${x}
 		einfo "Building ${x}..."
+		econf || die "econf ${x} failed"
 		emake || die "emake ${x} failed"
 	done
 }

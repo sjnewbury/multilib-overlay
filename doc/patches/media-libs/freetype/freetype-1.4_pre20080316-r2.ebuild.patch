@@ -1,5 +1,5 @@
 --- /usr/portage/media-libs/freetype/freetype-1.4_pre20080316-r2.ebuild	2010-10-10 19:06:00.000000000 +0200
-+++ ./media-libs/freetype/freetype-1.4_pre20080316-r2.ebuild	2010-12-25 01:11:43.000000000 +0100
++++ ./media-libs/freetype/freetype-1.4_pre20080316-r2.ebuild	2011-01-23 17:50:33.000000000 +0100
 @@ -21,10 +21,7 @@
  
  S="${WORKDIR}"/${PN}
@@ -12,41 +12,16 @@
  	# remove unneeded include for BSD (#104016)
  	epatch "${FILESDIR}"/freetype-1.4_pre-malloc.patch
  
-@@ -72,23 +69,34 @@
+@@ -72,6 +69,12 @@
  	done
  }
  
--src_compile() {
 +src_configure() {
- 	use kpathsea && kpathseaconf="--with-kpathsea-lib=/usr/$(get_libdir) --with-kpathsea-include=/usr/include"
- 
- 	# core
- 	einfo "Building core library..."
- 	econf $(use_enable nls) || die "econf failed"
--	emake || die "emake failed"
- 
- 	# contrib
- 	cd "${S}"/freetype1-contrib/ttf2pk
- 	einfo "Building ttf2pk..."
- 	econf ${kpathseaconf} || die "econf ttf2pk failed"
--	emake || die "emake ttf2pk failed"
- 	for x in ttf2bdf ttf2pfb ttfbanner; do
- 		cd "${S}"/freetype1-contrib/${x}
- 		einfo "Building ${x}..."
- 		econf || die "econf ${x} failed"
-+	done
++	# to configure contrib we must have compiled the core already
++	# thus we do all in the compile step
++	:
 +}
 +
-+src_compile() {
-+	emake || die "emake failed"
-+
-+	# contrib
-+	cd "${S}"/freetype1-contrib/ttf2pk
-+	einfo "Building ttf2pk..."
-+	emake || die "emake ttf2pk failed"
-+	for x in ttf2bdf ttf2pfb ttfbanner; do
-+		cd "${S}"/freetype1-contrib/${x}
-+		einfo "Building ${x}..."
- 		emake || die "emake ${x} failed"
- 	done
- }
+ src_compile() {
+ 	use kpathsea && kpathseaconf="--with-kpathsea-lib=/usr/$(get_libdir) --with-kpathsea-include=/usr/include"
+ 
