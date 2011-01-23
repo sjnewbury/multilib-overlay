@@ -15,7 +15,7 @@ SLOT="1"
 KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd"
 IUSE="doc nls kpathsea"
 
-COMMON_DEPEND="kpathsea? ( virtual/tex-base )"
+COMMON_DEPEND="kpathsea? ( virtual/tex-base[lib32?] )"
 RDEPEND="${COMMON_DEPEND}
 	nls? ( sys-devel/gettext[lib32?] )"
 DEPEND="${COMMON_DEPEND}
