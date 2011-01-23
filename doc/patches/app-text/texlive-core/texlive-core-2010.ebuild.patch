@@ -1,0 +1,36 @@
+--- /usr/portage/app-text/texlive-core/texlive-core-2010.ebuild	2010-10-30 21:05:47.000000000 +0200
++++ ./app-text/texlive-core/texlive-core-2010.ebuild	2011-01-24 00:38:35.000000000 +0100
+@@ -95,9 +95,14 @@
+ 
+ S="${WORKDIR}/${MY_PV}"
+ 
+-src_prepare() {
++src_unpack() {
++	# we have to do this in the unpack phase
++	multilib-native_check_inherited_funcs src_unpack
++
+ 	mv "${WORKDIR}"/texmf* "${S}" || die "failed to move texmf files"
++}
+ 
++src_prepare() {
+ 	EPATCH_SUFFIX="patch" epatch "${WORKDIR}/patches"
+ 
+ 	elibtoolize
+@@ -238,11 +243,15 @@
+ 	# by texmf-update
+ 	rm -f "${D}${TEXMF_PATH}/web2c/fmtutil.cnf"
+ 
+-	texlive-common_handle_config_files
++	if is_final_abi ; then
++		texlive-common_handle_config_files
++	fi
+ 
+ 	keepdir /usr/share/texmf-site
+ 
+-	dosym /etc/texmf/web2c/updmap.cfg ${TEXMF_PATH}/web2c/updmap.cfg
++	if is_final_abi ; then
++		dosym /etc/texmf/web2c/updmap.cfg ${TEXMF_PATH}/web2c/updmap.cfg
++	fi
+ 
+ 	# the virtex symlink is not installed
+ 	# The links has to be relative, since the targets

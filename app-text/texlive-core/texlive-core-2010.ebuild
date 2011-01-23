@@ -95,9 +95,14 @@ PDEPEND=">=dev-tex/luatex-0.63"
 
 S="${WORKDIR}/${MY_PV}"
 
-multilib-native_src_prepare_internal() {
-	mv "${WORKDIR}"/texmf* "${S}" || die "failed to move texmf files"
+multilib-native_src_unpack_internal() {
+	# we have to do this in the unpack phase
+	multilib-native_check_inherited_funcs src_unpack
 
+	mv "${WORKDIR}"/texmf* "${S}" || die "failed to move texmf files"
+}
+
+multilib-native_src_prepare_internal() {
 	EPATCH_SUFFIX="patch" epatch "${WORKDIR}/patches"
 
 	elibtoolize
@@ -238,11 +243,15 @@ multilib-native_src_install_internal() {
 	# by texmf-update
 	rm -f "${D}${TEXMF_PATH}/web2c/fmtutil.cnf"
 
-	texlive-common_handle_config_files
+	if is_final_abi ; then
+		texlive-common_handle_config_files
+	fi
 
 	keepdir /usr/share/texmf-site
 
-	dosym /etc/texmf/web2c/updmap.cfg ${TEXMF_PATH}/web2c/updmap.cfg
+	if is_final_abi ; then
+		dosym /etc/texmf/web2c/updmap.cfg ${TEXMF_PATH}/web2c/updmap.cfg
+	fi
 
 	# the virtex symlink is not installed
 	# The links has to be relative, since the targets
