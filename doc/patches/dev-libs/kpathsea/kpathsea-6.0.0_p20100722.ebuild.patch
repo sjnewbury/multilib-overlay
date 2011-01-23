@@ -1,0 +1,15 @@
+--- /usr/portage/dev-libs/kpathsea/kpathsea-6.0.0_p20100722.ebuild	2010-12-15 20:05:57.000000000 +0100
++++ ./dev-libs/kpathsea/kpathsea-6.0.0_p20100722.ebuild	2011-01-23 19:46:17.000000000 +0100
+@@ -78,8 +78,10 @@
+ 	# by texmf-update
+ 	rm -f "${D}${TEXMF_PATH}/web2c/fmtutil.cnf"
+ 
+-	dosym /etc/texmf/web2c/fmtutil.cnf ${TEXMF_PATH}/web2c/fmtutil.cnf
+-	dosym /etc/texmf/web2c/texmf.cnf ${TEXMF_PATH}/web2c/texmf.cnf
++	if is_final_abi ; then
++		dosym /etc/texmf/web2c/fmtutil.cnf ${TEXMF_PATH}/web2c/fmtutil.cnf
++		dosym /etc/texmf/web2c/texmf.cnf ${TEXMF_PATH}/web2c/texmf.cnf
++	fi
+ 
+ 	# Keep it as that's where the formats will go
+ 	keepdir /var/lib/texmf

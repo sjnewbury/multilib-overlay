@@ -78,8 +78,10 @@ multilib-native_src_install_internal() {
 	# by texmf-update
 	rm -f "${D}${TEXMF_PATH}/web2c/fmtutil.cnf"
 
-	dosym /etc/texmf/web2c/fmtutil.cnf ${TEXMF_PATH}/web2c/fmtutil.cnf
-	dosym /etc/texmf/web2c/texmf.cnf ${TEXMF_PATH}/web2c/texmf.cnf
+	if is_final_abi ; then
+		dosym /etc/texmf/web2c/fmtutil.cnf ${TEXMF_PATH}/web2c/fmtutil.cnf
+		dosym /etc/texmf/web2c/texmf.cnf ${TEXMF_PATH}/web2c/texmf.cnf
+	fi
 
 	# Keep it as that's where the formats will go
 	keepdir /var/lib/texmf
