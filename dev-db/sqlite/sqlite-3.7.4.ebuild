@@ -37,11 +37,14 @@ amalgamation() {
 	use !tcl && use !test
 }
 
-multilib-native_pkg_setup_internal() {
+multilib-native_src_unpack_internal() {
+	# the mulitlib eclass can handle changes of S only when they are done in global scope
+	multilib-native_check_inherited_funcs src_unpack
+
 	if amalgamation; then
-		S="${WORKDIR}/${PN}-autoconf-${MY_PV}"
+		mv "${WORKDIR}/${PN}-autoconf-${MY_PV}" "${S}"
 	else
-		S="${WORKDIR}/${PN}-src-${MY_PV}"
+		mv "${WORKDIR}/${PN}-src-${MY_PV}" "${S}"
 	fi
 }
 

@@ -1,0 +1,20 @@
+--- /usr/portage/dev-db/sqlite/sqlite-3.7.4.ebuild	2010-12-12 20:32:45.000000000 +0100
++++ ./dev-db/sqlite/sqlite-3.7.4.ebuild	2011-01-23 14:37:57.000000000 +0100
+@@ -37,11 +37,14 @@
+ 	use !tcl && use !test
+ }
+ 
+-pkg_setup() {
++src_unpack() {
++	# the mulitlib eclass can handle changes of S only when they are done in global scope
++	multilib-native_check_inherited_funcs src_unpack
++
+ 	if amalgamation; then
+-		S="${WORKDIR}/${PN}-autoconf-${MY_PV}"
++		mv "${WORKDIR}/${PN}-autoconf-${MY_PV}" "${S}"
+ 	else
+-		S="${WORKDIR}/${PN}-src-${MY_PV}"
++		mv "${WORKDIR}/${PN}-src-${MY_PV}" "${S}"
+ 	fi
+ }
+ 
