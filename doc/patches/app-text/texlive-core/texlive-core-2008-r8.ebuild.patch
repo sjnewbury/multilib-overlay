@@ -1,0 +1,32 @@
+--- /usr/portage/app-text/texlive-core/texlive-core-2008-r8.ebuild	2010-05-15 18:06:04.000000000 +0200
++++ ./app-text/texlive-core/texlive-core-2008-r8.ebuild	2011-01-23 15:16:49.000000000 +0100
+@@ -92,7 +92,9 @@
+ 	unpack ${A}
+ 	cd "${S}"
+ 	mv "${WORKDIR}"/texmf* "${S}" || die "failed to move texmf files"
++}
+ 
++src_prepare() {
+ 	EPATCH_SUFFIX="patch" epatch "${WORKDIR}/patches"
+ 
+ 	elibtoolize
+@@ -101,7 +103,7 @@
+ 	AT_M4DIR="." eautoreconf
+ }
+ 
+-src_compile() {
++src_configure() {
+ 	# Too many regexps use A-Z a-z constructs, what causes problems with locales
+ 	# that don't have the same alphabetical order than ascii. Bug #242430
+ 	# So we set LC_ALL to C in order to avoid problems.
+@@ -149,7 +151,10 @@
+ 		--disable-largefile \
+ 		--enable-shared \
+ 		$(use_with X x) \
++
++}
+ 
++src_compile() {
+ 	emake texmf=${TEXMF_PATH:-/usr/share/texmf} || die "emake failed"
+ 
+ 	# Mimic updmap --syncwithtrees to enable only fonts installed
