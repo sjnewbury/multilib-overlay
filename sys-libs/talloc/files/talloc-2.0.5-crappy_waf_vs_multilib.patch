@@ -1,0 +1,11 @@
+--- wafadmin/Tools/python.py.orig	2011-01-24 14:26:07.425552231 +0100
++++ wafadmin/Tools/python.py	2011-01-24 14:26:51.855822636 +0100
+@@ -179,7 +179,7 @@
+ 		env['LIB_PYEXT']=env['LIB_PYEMBED']
+ 	python_config=conf.find_program('python%s-config'%('.'.join(env['PYTHON_VERSION'].split('.')[:2])),var='PYTHON_CONFIG')
+ 	if not python_config:
+-		python_config=conf.find_program('python-config-%s'%('.'.join(env['PYTHON_VERSION'].split('.')[:2])),var='PYTHON_CONFIG')
++		python_config=conf.find_program('python-config-%s'%('-'.join(env['ABI'])),var='PYTHON_CONFIG')
+ 	includes=[]
+ 	if python_config:
+ 		for incstr in Utils.cmd_output("%s %s --includes"%(python,python_config)).strip().split():
