@@ -1,28 +1,32 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-0.8.17.ebuild,v 1.11 2011/02/02 15:59:25 halcy0n Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-0.9.35.ebuild,v 1.1 2011/01/23 23:06:19 eva Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
+PYTHON_DEPEND="2:2.6"
 
-inherit autotools eutils gnome2 linux-info virtualx multilib-native
+inherit eutils gnome2 linux-info python virtualx multilib-native
 
 DESCRIPTION="A tagging metadata database, search tool and indexer"
-HOMEPAGE="http://projects.gnome.org/tracker/"
+HOMEPAGE="http://www.tracker-project.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~ia64 ~ppc64 ~sparc ~x86"
+KEYWORDS="~alpha ~amd64 ~x86"
 # USE="doc" is managed by eclass.
-IUSE="applet doc eds exif flac gnome-keyring gsf gstreamer gtk hal iptc +jpeg kmail laptop mp3 nautilus pdf playlist rss strigi test +tiff +vorbis xine +xml xmp"
+IUSE="applet doc eds exif flac gif gnome-keyring gsf gstreamer gtk hal iptc +jpeg laptop mp3 nautilus networkmanager pdf playlist rss strigi test +tiff upnp +vorbis xine +xml xmp"
 
-# Automagic, gconf, uuid, and probably more
-# TODO: quill support
+# Test suite highly disfunctional, loops forever
+# putting aside for now
+RESTRICT="test"
+
+# TODO: rest -> flickr, qt vs. gdk
+# vala is built with debug by default (see VALAFLAGS)
 RDEPEND="
 	>=app-i18n/enca-1.9[lib32?]
-	>=dev-db/sqlite-3.6.16[threadsafe,lib32?]
-	>=dev-libs/dbus-glib-0.82-r1[lib32?]
-	>=dev-libs/glib-2.24:2[lib32?]
+	>=dev-db/sqlite-3.7[threadsafe,lib32?]
+	>=dev-libs/glib-2.26:2[lib32?]
 	|| (
 		>=media-gfx/imagemagick-5.2.1[png,jpeg=,lib32?]
 		media-gfx/graphicsmagick[imagemagick,png,jpeg=] )
@@ -32,19 +36,22 @@ RDEPEND="
 
 	applet? (
 		|| ( gnome-base/gnome-panel[bonobo,lib32?] <gnome-base/gnome-panel-2.32[lib32?] )
-		>=x11-libs/libnotify-0.4.3[lib32?]
 		>=x11-libs/gtk+-2.18:2[lib32?] )
 	eds? (
-		>=mail-client/evolution-2.25.5[lib32?]
-		>=gnome-extra/evolution-data-server-2.25.5[lib32?] )
+		>=mail-client/evolution-2.29.1[lib32?]
+		>=gnome-extra/evolution-data-server-2.29.1[lib32?] )
 	exif? ( >=media-libs/libexif-0.6[lib32?] )
 	flac? ( >=media-libs/flac-1.2.1[lib32?] )
+	gif? ( media-libs/giflib[lib32?] )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-2.26[lib32?] )
 	gsf? (
 		app-text/odt2txt
 		>=gnome-extra/libgsf-1.13[lib32?] )
-	gstreamer? ( >=media-libs/gstreamer-0.10.12[lib32?] )
-	!gstreamer? ( !xine? ( || ( media-video/totem media-video/mplayer ) ) )
+	upnp? ( >=media-libs/gupnp-dlna-0.5 )
+	!upnp? (
+		gstreamer? ( >=media-libs/gstreamer-0.10.12[lib32?] )
+		!gstreamer? ( !xine? ( || ( media-video/totem media-video/mplayer ) ) )
+	)
 	gtk? (
 		>=dev-libs/libgee-0.3[lib32?]
 		>=x11-libs/gtk+-2.18:2[lib32?] )
@@ -53,10 +60,11 @@ RDEPEND="
 	laptop? (
 		hal? ( >=sys-apps/hal-0.5[lib32?] )
 		!hal? ( >=sys-power/upower-0.9 ) )
-	mp3? ( >=media-libs/id3lib-3.8.3[lib32?] )
+	mp3? ( >=media-libs/taglib-1.6 )
 	nautilus? (
 		gnome-base/nautilus[lib32?]
 		>=x11-libs/gtk+-2.18:2[lib32?] )
+	networkmanager? ( >=net-misc/networkmanager-0.8[lib32?] )
 	pdf? (
 		>=x11-libs/cairo-1[lib32?]
 		>=app-text/poppler-0.12.3-r3[cairo,utils,lib32?]
@@ -70,18 +78,21 @@ RDEPEND="
 	xml? ( >=dev-libs/libxml2-2.6[lib32?] )
 	xmp? ( >=media-libs/exempi-2.1[lib32?] )"
 DEPEND="${RDEPEND}
-	>=dev-util/intltool-0.35
-	>=sys-devel/gettext-0.14[lib32?]
+	>=dev-util/intltool-0.40
+	>=sys-devel/gettext-0.17[lib32?]
 	>=dev-util/pkgconfig-0.20[lib32?]
-	>=dev-util/gtk-doc-am-1.8
-	applet? ( dev-lang/vala:0[lib32?] )
+	applet? ( >=dev-lang/vala-0.11.4:0.12[lib32?] )
 	gtk? (
-		dev-lang/vala:0[lib32?]
+		app-office/dia
+		>=dev-lang/vala-0.11.4:0.12[lib32?]
 		>=dev-libs/libgee-0.3[lib32?] )
 	doc? (
 		>=dev-util/gtk-doc-1.8
 		media-gfx/graphviz[lib32?] )
-	test? ( sys-apps/dbus[X,lib32?] )"
+	test? (
+		>=dev-libs/dbus-glib-0.82-r1[lib32?]
+		>=sys-apps/dbus-1.3.1[X,lib32?] )
+"
 
 function inotify_enabled() {
 	if linux_config_exists; then
@@ -101,7 +112,9 @@ multilib-native_pkg_setup_internal() {
 
 	inotify_enabled
 
-	if use gstreamer ; then
+	if use upnp ; then
+		G2CONF="${G2CONF} --enable-video-extractor=gupnp-dlna"
+	elif use gstreamer ; then
 		G2CONF="${G2CONF}
 			--enable-video-extractor=gstreamer
 			--enable-gstreamer-tagreadbin"
@@ -119,9 +132,16 @@ multilib-native_pkg_setup_internal() {
 		G2CONF="${G2CONF} --disable-hal --disable-upower"
 	fi
 
+	if use applet || use gtk; then
+		G2CONF="${G2CONF} VALAC=$(type -P valac-0.12)"
+	fi
+
+	# unicode-support: libunistring, libicu or glib ?
 	G2CONF="${G2CONF}
-		--disable-unac
+		--enable-tracker-fts
 		--with-enca
+		--with-unicode-support=glib
+		--enable-guarantee-metadata
 		$(use_enable applet tracker-status-icon)
 		$(use_enable applet tracker-search-bar)
 		$(use_enable eds miner-evolution)
@@ -131,51 +151,46 @@ multilib-native_pkg_setup_internal() {
 		$(use_enable gsf libgsf)
 		$(use_enable gtk tracker-explorer)
 		$(use_enable gtk tracker-preferences)
-		$(use_enable gtk tracker-search-tool)
+		$(use_enable gtk tracker-needle)
 		$(use_enable iptc libiptcdata)
 		$(use_enable jpeg libjpeg)
-		$(use_enable kmail miner-kmail)
-		$(use_enable mp3 id3lib)
+		$(use_enable mp3 taglib)
 		$(use_enable nautilus nautilus-extension)
-		$(use_enable pdf poppler-glib)
+		$(use_enable networkmanager network-manager)
+		$(use_enable pdf poppler)
 		$(use_enable playlist)
 		$(use_enable rss miner-rss)
 		$(use_enable strigi libstreamanalyzer)
-		$(use_enable test unit-tests)
 		$(use_enable test functional-tests)
+		$(use_enable test unit-tests)
 		$(use_enable tiff libtiff)
 		$(use_enable vorbis libvorbis)
 		$(use_enable xml libxml2)
 		$(use_enable xmp exempi)"
-		# FIXME: useless without quill (extract mp3 albumart...)
+		# FIXME: handle gdk vs qt for mp3 thumbnail extract
 		# $(use_enable gtk gdkpixbuf)
 
 	DOCS="AUTHORS ChangeLog NEWS README"
+
+	python_set_active_version 2
 }
 
 multilib-native_src_prepare_internal() {
-	gnome2_src_prepare
-
 	# Fix build failures with USE=strigi
 	epatch "${FILESDIR}/${PN}-0.8.0-strigi.patch"
 
-	# Fix build failures with eds-2.32
-	epatch "${FILESDIR}/${PN}-0.8.17-build-with-eds232.patch"
+	# Fix functional tests scripts
+	find "${S}" -name "*.pyc" -delete
+	python_convert_shebangs 2 "${S}"/tests/tracker-writeback/*.py
+	python_convert_shebangs 2 "${S}"/tests/functional-tests/*.py
+	python_convert_shebangs 2 "${S}"/utils/data-generators/cc/{*.py,generate}
+	python_convert_shebangs 2 "${S}"/utils/gtk-sparql/*.py
+	python_convert_shebangs 2 "${S}"/examples/rss-reader/*.py
 
 	# FIXME: report broken tests
-	epatch "${FILESDIR}/${PN}-0.8.17-tests-fixes.patch"
 	sed -e '/\/libtracker-miner\/tracker-password-provider\/setting/,+1 s:^\(.*\)$:/*\1*/:' \
 		-e '/\/libtracker-miner\/tracker-password-provider\/getting/,+1 s:^\(.*\)$:/*\1*/:' \
 		-i tests/libtracker-miner/tracker-password-provider-test.c || die
-
-	# Build with upower instead of devicekit-power
-	epatch "${FILESDIR}/${PN}-0.8.17-use-upower.patch"
-
-	# Fix build against poppler-0.16
-	epatch "${FILESDIR}/${PN}-0.8.17-poppler-0.16.patch"
-
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautoreconf
 }
 
 src_test() {
@@ -186,5 +201,5 @@ src_test() {
 multilib-native_src_install_internal() {
 	gnome2_src_install
 	# Tracker and none of the plugins it provides needs la files
-	find "${D}" -name "*.la" -delete || die
+	find "${ED}" -name "*.la" -delete || die
 }

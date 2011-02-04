@@ -1,12 +1,12 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-9999.ebuild,v 1.32 2011/01/13 00:17:06 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-9999.ebuild,v 1.33 2011/01/23 23:06:19 eva Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
-PYTHON_DEPEND="2"
+PYTHON_DEPEND="2:2.6"
 
-inherit autotools git gnome2 linux-info python multilib-native
+inherit autotools git gnome2 linux-info python virtualx multilib-native
 
 DESCRIPTION="A tagging metadata database, search tool and indexer"
 HOMEPAGE="http://www.tracker-project.org/"
@@ -45,7 +45,7 @@ RDEPEND="
 	gsf? (
 		app-text/odt2txt
 		>=gnome-extra/libgsf-1.13[lib32?] )
-	upnp? ( >=media-libs/gupnp-dlna-0.3 )
+	upnp? ( >=media-libs/gupnp-dlna-0.5 )
 	!upnp? (
 		gstreamer? ( >=media-libs/gstreamer-0.10.12[lib32?] )
 		!gstreamer? ( !xine? ( || ( media-video/totem media-video/mplayer ) ) )
@@ -81,10 +81,10 @@ DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.20[lib32?]
 	dev-util/gtk-doc-am
 	>=dev-util/gtk-doc-1.8
-	applet? ( >=dev-lang/vala-0.11.2:0.12[lib32?] )
+	applet? ( >=dev-lang/vala-0.11.4:0.12[lib32?] )
 	gtk? (
 		app-office/dia
-		>=dev-lang/vala-0.11.2:0.12[lib32?]
+		>=dev-lang/vala-0.11.4:0.12[lib32?]
 		>=dev-libs/libgee-0.3[lib32?] )
 	doc? (
 		media-gfx/graphviz[lib32?] )
@@ -150,7 +150,7 @@ multilib-native_pkg_setup_internal() {
 		$(use_enable gsf libgsf)
 		$(use_enable gtk tracker-explorer)
 		$(use_enable gtk tracker-preferences)
-		$(use_enable gtk tracker-search-tool)
+		$(use_enable gtk tracker-needle)
 		$(use_enable iptc libiptcdata)
 		$(use_enable jpeg libjpeg)
 		$(use_enable mp3 taglib)
