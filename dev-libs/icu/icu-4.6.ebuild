@@ -1,10 +1,10 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/icu/icu-4.6.ebuild,v 1.7 2011/01/15 14:41:58 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/icu/icu-4.6.ebuild,v 1.8 2011/01/28 16:36:14 arfrever Exp $
 
 EAPI="3"
 
-inherit versionator multilib-native
+inherit eutils versionator multilib-native
 
 MAJOR_MINOR_VERSION="$(get_version_component_range 1-2)"
 MICRO_VERSION="$(get_version_component_range 3)"
@@ -49,6 +49,8 @@ multilib-native_src_prepare_internal() {
 	for variable in ARFLAGS CFLAGS CPPFLAGS CXXFLAGS FFLAGS LDFLAGS; do
 		sed -i -e "/^${variable} =.*/s:@${variable}@::" config/Makefile.inc.in || die "sed failed"
 	done
+
+	epatch "${FILESDIR}/${P}-pkgdata.patch"
 }
 
 multilib-native_src_configure_internal() {
