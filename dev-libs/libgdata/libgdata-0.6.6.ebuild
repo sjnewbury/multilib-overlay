@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libgdata/libgdata-0.6.6.ebuild,v 1.1 2010/12/15 22:16:19 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libgdata/libgdata-0.6.6.ebuild,v 1.2 2011/01/23 17:35:17 eva Exp $
 
 EAPI="3"
 GCONF_DEBUG="yes"
@@ -43,6 +43,7 @@ multilib-native_src_prepare_internal() {
 }
 
 src_test() {
+	unset ORBIT_SOCKETDIR
 	unset DBUS_SESSION_BUS_ADDRESS
 	dbus-launch emake check || die "emake check failed"
 }
