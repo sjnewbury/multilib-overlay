@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/libXpm/libXpm-3.5.9.ebuild,v 1.8 2010/12/31 20:07:26 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/libXpm/libXpm-3.5.9.ebuild,v 1.9 2011/01/22 15:59:32 grobian Exp $
 
 EAPI=3
 inherit xorg-2 flag-o-matic multilib-native
@@ -18,10 +18,14 @@ RDEPEND="x11-libs/libX11[lib32?]
 DEPEND="${RDEPEND}
 	sys-devel/gettext[lib32?]"
 
-multilib-native_src_compile_internal() {
+multilib-native_src_configure_internal() {
 	# the gettext configure check and code in sxpm are incorrect; they assume
 	# gettext being in libintl, whereas Solaris has gettext by default
 	# resulting in libintl not being added to LIBS
 	[[ ${CHOST} == *-solaris* ]] && append-libs -lintl
+	xorg-2_src_configure
+}
+
+multilib-native_src_compile_internal() {
 	xorg-2_src_compile
 }
