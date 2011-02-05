@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8.1-r6.ebuild,v 1.2 2010/08/23 23:12:24 dagger Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8.1-r6.ebuild,v 1.3 2011/01/31 15:17:30 ssuominen Exp $
 
 EAPI="2"
 
@@ -67,6 +67,9 @@ sysfs_deprecated_check() {
 }
 
 multilib-native_pkg_setup_internal() {
+	# FIXME. Required by -confchanges.patch, but the patch is invalid as
+	# ConsoleKit and PolicyKit is enough to get authorization.
+	enewgroup plugdev
 
 	if use kernel_linux; then
 		get_version

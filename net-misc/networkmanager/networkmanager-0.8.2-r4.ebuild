@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8.2-r2.ebuild,v 1.2 2011/01/31 15:17:30 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8.2-r4.ebuild,v 1.2 2011/01/31 15:17:30 ssuominen Exp $
 
 EAPI="2"
 
@@ -88,6 +88,9 @@ multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/${P}-confchanges.patch"
 	# accept "gw" in /etc/conf.d/net (bug #339215)
 	epatch "${FILESDIR}/${P}-accept-gw.patch"
+	# fix shared connection wrt bug #350476
+	# fix parsing dhclient.conf wrt bug #352638
+	epatch "${FILESDIR}/${P}-shared-connection.patch"
 	# Backports #1
 	epatch "${FILESDIR}/${P}-1.patch"
 }

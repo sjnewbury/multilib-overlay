@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8-r1.ebuild,v 1.10 2010/10/28 09:08:46 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/networkmanager/networkmanager-0.8-r1.ebuild,v 1.11 2011/01/31 15:17:30 ssuominen Exp $
 
 EAPI="2"
 
@@ -52,6 +52,12 @@ DEPEND="${RDEPEND}
 	doc? ( >=dev-util/gtk-doc-1.8 )"
 
 S=${WORKDIR}/${MY_P}
+
+multilib-native_pkg_setup_internal() {
+	# FIXME. Required by -confchanges.patch, but the patch is invalid as
+	# ConsoleKit and PolicyKit is enough to get authorization.
+	enewgroup plugdev
+}
 
 multilib-native_src_prepare_internal() {
 	# Fix up the dbus conf file to use plugdev group
