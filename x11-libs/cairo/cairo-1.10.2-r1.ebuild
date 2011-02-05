@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/cairo/cairo-1.10.2-r1.ebuild,v 1.1 2011/01/13 19:07:12 spatz Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/cairo/cairo-1.10.2-r1.ebuild,v 1.3 2011/01/23 11:02:44 grobian Exp $
 
 EAPI=3
 
@@ -80,8 +80,12 @@ multilib-native_src_configure_internal() {
 	local myopts
 
 	[[ ${CHOST} == *-interix* ]] && append-flags -D_REENTRANT
-	# http://bugs.freedesktop.org/show_bug.cgi?id=15463
-	[[ ${CHOST} == *-solaris* ]] && append-flags -D_POSIX_PTHREAD_SEMANTICS
+
+	# tracing fails to compile, because Solaris' libelf doesn't do large files
+	[[ ${CHOST} == *-solaris* ]] && myopts+=" --disable-trace"
+
+	# 128-bits long arithemetic functions are missing
+	[[ ${CHOST} == powerpc*-*-darwin* ]] && filter-flags -mcpu=*
 
 	#gets rid of fbmmx.c inlining warnings
 	append-flags -finline-limit=1200
