@@ -1,8 +1,8 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-themes/gtk-engines-xfce/gtk-engines-xfce-2.6.0.ebuild,v 1.12 2010/01/06 19:35:09 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-themes/gtk-engines-xfce/gtk-engines-xfce-2.6.0.ebuild,v 1.13 2011/02/04 18:02:46 ssuominen Exp $
 
-EAPI=2
+EAPI=3
 MY_PN=gtk-xfce-engine
 inherit xfconf multilib-native
 
@@ -23,5 +23,7 @@ S=${WORKDIR}/${MY_PN}-${PV}
 
 multilib-native_pkg_setup_internal() {
 	DOCS="AUTHORS ChangeLog NEWS README"
-	XFCONF="--disable-dependency-tracking"
+	XFCONF=(
+		--disable-dependency-tracking
+		)
 }
