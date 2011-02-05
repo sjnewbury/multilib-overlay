@@ -281,7 +281,6 @@ sys-apps/pciutils
 sys-apps/tcp-wrappers
 sys-apps/util-linux
 sys-auth/nss_ldap
-sys-auth/policykit
 sys-auth/polkit
 sys-devel/flex
 sys-devel/gettext
