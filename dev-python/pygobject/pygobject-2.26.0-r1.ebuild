@@ -1,12 +1,13 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pygobject/pygobject-2.26.0-r1.ebuild,v 1.3 2011/01/17 18:09:36 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pygobject/pygobject-2.26.0-r1.ebuild,v 1.6 2011/01/28 19:45:20 arfrever Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
 SUPPORT_PYTHON_ABIS="1"
 PYTHON_DEPEND="2:2.5"
 RESTRICT_PYTHON_ABIS="2.4 3.* *-jython"
+PYTHON_USE_WITH="threads="
 
 inherit alternatives autotools gnome2 python virtualx multilib-native
 
@@ -16,7 +17,7 @@ HOMEPAGE="http://www.pygtk.org/"
 LICENSE="LGPL-2.1"
 SLOT="2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
-IUSE="doc cairo examples +introspection libffi test"
+IUSE="doc cairo examples +introspection libffi test +threads"
 
 RDEPEND=">=dev-libs/glib-2.22.4:2[lib32?]
 	!<dev-python/pygtk-2.13
@@ -40,6 +41,7 @@ multilib-native_pkg_setup_internal() {
 		$(use_enable doc docs)
 		$(use_enable cairo)
 		$(use_enable introspection)
+		$(use_enable threads thread)
 		$(use_with libffi ffi)"
 }
 
@@ -60,6 +62,9 @@ multilib-native_src_prepare_internal() {
 
 	# Fix crash in instance property; bug# 344459
 	epatch "${FILESDIR}/${PN}-2.26.0-nocrash.patch"
+
+	# Disable calls to PyGILState_* when threads are disabled
+	epatch "${FILESDIR}/${PN}-2.26.0-disabled-threads.patch"
 
 	# disable pyc compiling
 	mv py-compile py-compile.orig
