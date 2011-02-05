@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.2.6.ebuild,v 1.8 2011/01/15 13:56:26 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.2.6.ebuild,v 1.9 2011/01/23 14:42:06 armin76 Exp $
 
 EAPI="3"
 
@@ -13,7 +13,7 @@ SRC_URI="http://www.webkitgtk.org/${MY_P}.tar.gz"
 
 LICENSE="LGPL-2 LGPL-2.1 BSD"
 SLOT="2"
-KEYWORDS="~alpha amd64 arm ~ia64 ppc ~ppc64 ~sparc x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
+KEYWORDS="alpha amd64 arm ia64 ppc ~ppc64 sparc x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
 # geoclue is missing
 IUSE="aqua coverage debug doc +gstreamer introspection +jit test"
 
