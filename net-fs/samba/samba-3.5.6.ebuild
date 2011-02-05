@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.5.6.ebuild,v 1.4 2010/12/23 17:41:50 vostorga Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-3.5.6.ebuild,v 1.5 2011/01/28 15:23:12 vostorga Exp $
 
 EAPI="2"
 
@@ -23,6 +23,7 @@ DEPEND="dev-libs/popt[lib32?]
 	!net-fs/samba-client
 	!net-fs/samba-libs
 	!net-fs/samba-server
+	!net-fs/cifs-utils
 	sys-libs/talloc[lib32?]
 	sys-libs/tdb[lib32?]
 	virtual/libiconv
