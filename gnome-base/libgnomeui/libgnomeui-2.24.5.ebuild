@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+po# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/libgnomeui/libgnomeui-2.24.4.ebuild,v 1.5 2011/01/30 18:51:07 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/libgnomeui/libgnomeui-2.24.5.ebuild,v 1.2 2011/02/03 23:31:03 eva Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -12,7 +12,7 @@ HOMEPAGE="http://library.gnome.org/devel/libgnomeui/stable/"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 arm ia64 ~mips ~ppc ~ppc64 sh sparc x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~sparc-solaris ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~sparc-solaris ~x86-solaris"
 IUSE="doc test"
 
 # gtk+-2.14 dep instead of 2.12 ensures system doesn't loose VFS capabilities in GtkFilechooser
@@ -22,8 +22,8 @@ RDEPEND=">=dev-libs/libxml2-2.4.20[lib32?]
 	>=gnome-base/libbonoboui-2.13.1[lib32?]
 	>=gnome-base/gconf-2[lib32?]
 	>=x11-libs/pango-1.1.2[lib32?]
-	>=dev-libs/glib-2.16[lib32?]
-	>=x11-libs/gtk+-2.14[lib32?]
+	>=dev-libs/glib-2.16:2[lib32?]
+	>=x11-libs/gtk+-2.14:2[lib32?]
 	>=gnome-base/gnome-vfs-2.7.3[lib32?]
 	>=gnome-base/libglade-2[lib32?]
 	>=gnome-base/gnome-keyring-0.4[lib32?]
