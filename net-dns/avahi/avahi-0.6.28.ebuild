@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-dns/avahi/avahi-0.6.28.ebuild,v 1.5 2010/12/14 00:27:52 swegener Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-dns/avahi/avahi-0.6.28.ebuild,v 1.6 2011/01/23 20:24:45 swegener Exp $
 
 EAPI="3"
 
@@ -92,6 +92,8 @@ multilib-native_src_prepare_internal() {
 	sed -i\
 		-e "s:\\.\\./\\.\\./\\.\\./doc/avahi-docs/html/:../../../doc/${PF}/html/:" \
 		doxygen_to_devhelp.xsl || die
+
+	epatch "${FILESDIR}"/netlink-request-all-matches-when-requesting-interface.patch
 }
 
 multilib-native_src_configure_internal() {
