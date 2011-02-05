@@ -1,0 +1,52 @@
+http://git.videolan.org/?p=x264.git;a=commitdiff;h=7f5771a13aec5a8a724e0d0c9d761f5a82e74af0
+https://bugs.gentoo.org/343893
+
+--- a/common/ppc/dct.c
++++ b/common/ppc/dct.c
+@@ -91,14 +91,14 @@ void x264_sub8x8_dct_altivec( int16_t dct[4][16], uint8_t *pix1, uint8_t *pix2 )
+     VEC_DCT( dct0v, dct1v, dct2v, dct3v, tmp0v, tmp1v, tmp2v, tmp3v );
+     VEC_DCT( dct4v, dct5v, dct6v, dct7v, tmp4v, tmp5v, tmp6v, tmp7v );
+ 
+-    vec_st(vec_perm(tmp0v, tmp1v, permHighv), 0,   dct);
+-    vec_st(vec_perm(tmp2v, tmp3v, permHighv), 16,  dct);
+-    vec_st(vec_perm(tmp4v, tmp5v, permHighv), 32,  dct);
+-    vec_st(vec_perm(tmp6v, tmp7v, permHighv), 48,  dct);
+-    vec_st(vec_perm(tmp0v, tmp1v, permLowv),  64,  dct);
+-    vec_st(vec_perm(tmp2v, tmp3v, permLowv),  80,  dct);
+-    vec_st(vec_perm(tmp4v, tmp5v, permLowv),  96,  dct);
+-    vec_st(vec_perm(tmp6v, tmp7v, permLowv),  112, dct);
++    vec_st(vec_perm(tmp0v, tmp1v, permHighv), 0,   *dct);
++    vec_st(vec_perm(tmp2v, tmp3v, permHighv), 16,  *dct);
++    vec_st(vec_perm(tmp4v, tmp5v, permHighv), 32,  *dct);
++    vec_st(vec_perm(tmp6v, tmp7v, permHighv), 48,  *dct);
++    vec_st(vec_perm(tmp0v, tmp1v, permLowv),  64,  *dct);
++    vec_st(vec_perm(tmp2v, tmp3v, permLowv),  80,  *dct);
++    vec_st(vec_perm(tmp4v, tmp5v, permLowv),  96,  *dct);
++    vec_st(vec_perm(tmp6v, tmp7v, permLowv),  112, *dct);
+ }
+ 
+ void x264_sub16x16_dct_altivec( int16_t dct[16][16], uint8_t *pix1, uint8_t *pix2 )
+--- a/common/ppc/mc.c
++++ b/common/ppc/mc.c
+@@ -460,8 +460,8 @@ static void mc_chroma_altivec_8xh( uint8_t *dstu, uint8_t *dstv, int i_dst_strid
+         dstv_16h = vec_sr( dstv_16h, shiftv );
+         dstv_16l = vec_sr( dstv_16l, shiftv );
+ 
+-        dstuv = vec_perm( dstv_16h, dstv_16l, perm0v );
+-        dstvv = vec_perm( dstv_16h, dstv_16l, perm1v );
++        dstuv = (vec_u8_t)vec_perm( dstv_16h, dstv_16l, perm0v );
++        dstvv = (vec_u8_t)vec_perm( dstv_16h, dstv_16l, perm1v );
+ 
+         VEC_STORE8( dstuv, dstu );
+         VEC_STORE8( dstvv, dstv );
+@@ -498,8 +498,8 @@ static void mc_chroma_altivec_8xh( uint8_t *dstu, uint8_t *dstv, int i_dst_strid
+         dstv_16h = vec_sr( dstv_16h, shiftv );
+         dstv_16l = vec_sr( dstv_16l, shiftv );
+ 
+-        dstuv = vec_perm( dstv_16h, dstv_16l, perm0v );
+-        dstvv = vec_perm( dstv_16h, dstv_16l, perm1v );
++        dstuv = (vec_u8_t)vec_perm( dstv_16h, dstv_16l, perm0v );
++        dstvv = (vec_u8_t)vec_perm( dstv_16h, dstv_16l, perm1v );
+ 
+         VEC_STORE8( dstuv, dstu );
+         VEC_STORE8( dstvv, dstv );

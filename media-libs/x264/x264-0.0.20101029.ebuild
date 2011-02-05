@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/x264/x264-0.0.20101029.ebuild,v 1.3 2010/12/09 16:03:49 rich0 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/x264/x264-0.0.20101029.ebuild,v 1.4 2011/01/26 15:50:27 xarthisius Exp $
 
 EAPI=2
 inherit eutils multilib toolchain-funcs versionator multilib-native
@@ -25,7 +25,8 @@ S=${WORKDIR}/${MY_P}
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-nostrip.patch \
-		"${FILESDIR}"/${PN}-onlylib-20100605.patch
+		"${FILESDIR}"/${PN}-onlylib-20100605.patch \
+		"${FILESDIR}"/${PN}-altivec.patch
 }
 
 multilib-native_src_configure_internal() {
