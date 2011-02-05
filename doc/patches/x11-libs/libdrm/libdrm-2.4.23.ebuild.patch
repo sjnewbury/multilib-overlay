@@ -1,5 +1,5 @@
---- /usr/portage/x11-libs/libdrm/libdrm-2.4.23.ebuild	2010-12-10 20:18:18.000000000 +0100
-+++ ./x11-libs/libdrm/libdrm-2.4.23.ebuild	2010-12-25 02:23:15.000000000 +0100
+--- /usr/portage/x11-libs/libdrm/libdrm-2.4.23.ebuild	2011-01-27 18:01:15.000000000 +0100
++++ ./x11-libs/libdrm/libdrm-2.4.23.ebuild	2011-02-05 01:27:54.000000000 +0100
 @@ -24,7 +24,8 @@
  IUSE="${IUSE_VIDEO_CARDS} +libkms"
  RESTRICT="test" # see bug #236845
@@ -9,4 +9,4 @@
 +	sys-fs/udev"
  DEPEND="${RDEPEND}"
  
- pkg_setup() {
+ PATCHES=(
