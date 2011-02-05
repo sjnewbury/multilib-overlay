@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/freeglut/freeglut-2.6.0.ebuild,v 1.12 2010/12/05 14:53:07 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/freeglut/freeglut-2.6.0.ebuild,v 1.13 2011/01/26 18:09:59 grobian Exp $
 
 EAPI="2"
 
@@ -20,6 +20,7 @@ RDEPEND="
 	virtual/opengl[lib32?]
 	virtual/glu[lib32?]
 	>=x11-libs/libXi-1.3[lib32?]
+	x11-libs/libXxf86vm[lib32?]
 "
 DEPEND="${RDEPEND}"
 
