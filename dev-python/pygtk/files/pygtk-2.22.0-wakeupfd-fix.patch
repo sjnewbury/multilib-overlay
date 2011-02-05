@@ -1,0 +1,26 @@
+From 4cbd3c031289775f365c247f949d91facac4ba82 Mon Sep 17 00:00:00 2001
+From: Dieter Verfaillie <dieterv@optionexplicit.be>
+Date: Thu, 03 Feb 2011 12:44:10 +0000
+Subject: Fix pygtk_main_watch_check, copied from pygobject/glib/pygmainloop.c:pyg_signal_watch_check.
+
+Fixes bug 640738 and 638780.
+---
+diff --git a/gtk/gtk.override b/gtk/gtk.override
+index 75018f4..94309a6 100644
+--- a/gtk/gtk.override
++++ b/gtk/gtk.override
+@@ -1151,9 +1151,10 @@ pygtk_main_watch_check(GSource *source)
+ #ifdef HAVE_PYSIGNAL_SETWAKEUPFD
+     PySignalWatchSource *real_source = (PySignalWatchSource *)source;
+     GPollFD *poll_fd = &real_source->fd;
+-    int data_size = 0;
++    unsigned char dummy;
++    gssize ret;
+     if (poll_fd->revents & G_IO_IN)
+-        data_size = read(poll_fd->fd, 0, 1);
++        ret = read(poll_fd->fd, &dummy, 1);
+ #endif
+ 
+     state = pyg_gil_state_ensure();
+--
+cgit v0.8.3.1
