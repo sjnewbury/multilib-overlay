@@ -1,8 +1,8 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/gimp/gimp-2.6.10.ebuild,v 1.2 2010/11/07 19:09:13 anarchy Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/gimp/gimp-2.6.10.ebuild,v 1.3 2011/01/28 18:02:17 arfrever Exp $
 
-EAPI=2
+EAPI="3"
 PYTHON_DEPEND="python? 2:2.5"
 
 inherit eutils gnome2 fdo-mime multilib python multilib-native
@@ -82,14 +82,20 @@ multilib-native_pkg_setup_internal() {
 
 	if use python; then
 		python_set_active_version 2
+		python_pkg_setup
 	fi
+}
+
+multilib-native_src_prepare_internal() {
+	echo '#!/bin/sh' > py-compile
+	gnome2_src_prepare
 }
 
 multilib-native_src_install_internal() {
 	gnome2_src_install
 
 	if use python; then
-		python_convert_shebangs -r $(python_get_version) "${D}"
+		python_convert_shebangs -r $(python_get_version) "${ED}"
 		python_need_rebuild
 	fi
 }

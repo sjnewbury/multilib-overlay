@@ -1,8 +1,8 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/gimp/gimp-9999.ebuild,v 1.31 2010/11/07 19:09:13 anarchy Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/gimp/gimp-9999.ebuild,v 1.32 2011/01/28 18:02:17 arfrever Exp $
 
-EAPI=2
+EAPI="3"
 PYTHON_DEPEND="python? 2:2.5"
 
 inherit git eutils gnome2 fdo-mime multilib python multilib-native
@@ -56,16 +56,6 @@ DEPEND="${RDEPEND}
 
 DOCS="AUTHORS ChangeLog* HACKING NEWS README*"
 
-multilib-native_src_prepare_internal() {
-	sed -i -e 's:\$srcdir/configure:#:g' autogen.sh
-	./autogen.sh
-	gnome2_src_prepare
-}
-
-multilib-native_src_unpack_internal() {
-	git_src_unpack
-}
-
 multilib-native_pkg_setup_internal() {
 	G2CONF="--enable-default-binary \
 		--with-x \
@@ -94,14 +84,26 @@ multilib-native_pkg_setup_internal() {
 
 	if use python; then
 		python_set_active_version 2
+		python_pkg_setup
 	fi
+}
+
+multilib-native_src_unpack_internal() {
+	git_src_unpack
+}
+
+multilib-native_src_prepare_internal() {
+	echo '#!/bin/sh' > py-compile
+	sed -i -e 's:\$srcdir/configure:#:g' autogen.sh
+	./autogen.sh
+	gnome2_src_prepare
 }
 
 multilib-native_src_install_internal() {
 	gnome2_src_install
 
 	if use python; then
-		python_convert_shebangs -r $(python_get_version) "${D}"
+		python_convert_shebangs -r $(python_get_version) "${ED}"
 		python_need_rebuild
 	fi
 }
