@@ -10,7 +10,7 @@ LICENSE="GPL-2"
 
 KEYWORDS="-* amd64 amd64-linux"
 SLOT="0"
-IUSE="-nodep +alsa"
+IUSE="-nodep +alsa pulseaudio"
 
 
 RDEPEND="

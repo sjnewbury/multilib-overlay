@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.27.93.ebuild,v 1.1 2011/02/04 00:10:58 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.28.0.ebuild,v 1.1 2011/02/08 20:57:21 nirbheek Exp $
 
 EAPI="3"
 PYTHON_DEPEND="2"
