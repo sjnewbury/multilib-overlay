@@ -17,7 +17,7 @@ RDEPEND="
 !nodep? (
 	dev-libs/atk[lib32]
 	x11-libs/cairo[lib32]
-	x11-libs/gtk+[lib32]
+	x11-libs/gtk+:2[lib32]
 	x11-libs/pango[lib32]
 	x11-themes/gtk-engines[lib32]
 	xfce? ( x11-themes/gtk-engines-xfce[lib32] )
