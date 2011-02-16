@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/portage/portage-2.2.0_alpha1.ebuild,v 1.1 2010/10/23 11:44:32 zmedico Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/portage/portage-2.2.0_alpha24.ebuild,v 1.1 2011/02/15 18:59:27 zmedico Exp $
 
 # Require EAPI 2 since we now require at least python-2.6 (for python 3
 # syntax support) which also requires EAPI 2.
@@ -9,20 +9,21 @@ inherit eutils git multilib python
 
 EGIT_REPO_URI="git://git.overlays.gentoo.org/proj/portage.git"
 EGIT_BRANCH="multilib"
-EGIT_COMMIT="fe27fedc76de4cb436cee6421f8966d89c3cdcc9"
+EGIT_COMMIT="583b1dbc4d40488759f9683d281dba9b05793491"
 DESCRIPTION="Portage is the package management and distribution system for Gentoo"
 HOMEPAGE="http://www.gentoo.org/proj/en/portage/index.xml"
 LICENSE="GPL-2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
 PROVIDE="virtual/portage"
 SLOT="0"
-IUSE="build doc epydoc +ipc linguas_pl python3 selinux"
+IUSE="build doc epydoc +ipc linguas_pl python2 python3 selinux"
 
 python_dep="python3? ( =dev-lang/python-3* )
-	!python3? (
-		build? ( || ( dev-lang/python:2.8 dev-lang/python:2.7 dev-lang/python:2.6 ) )
-		!build? ( || ( dev-lang/python:2.8 dev-lang/python:2.7 dev-lang/python:2.6 >=dev-lang/python-3 ) )
-	)"
+	!python2? ( !python3? (
+		build? ( || ( dev-lang/python:2.7 dev-lang/python:2.6 ) )
+		!build? ( || ( dev-lang/python:2.7 dev-lang/python:2.6 >=dev-lang/python-3 ) )
+	) )
+	python2? ( !python3? ( || ( dev-lang/python:2.7 dev-lang/python:2.6 ) ) )"
 
 # The pysqlite blocker is for bug #282760.
 DEPEND="${python_dep}
@@ -40,7 +41,7 @@ RDEPEND="${python_dep}
 	elibc_glibc? ( >=sys-apps/sandbox-2.2 )
 	elibc_uclibc? ( >=sys-apps/sandbox-2.2 )
 	>=app-misc/pax-utils-0.1.17
-	selinux? ( sys-libs/libselinux )
+	selinux? ( || ( >=sys-libs/libselinux-2.0.94[python] <sys-libs/libselinux-2.0.94 ) )
 	!<app-shells/bash-3.2_p17
 	>=sys-apps/abi-wrapper-1.0-r2"
 PDEPEND="
@@ -56,7 +57,11 @@ compatible_python_is_selected() {
 }
 
 pkg_setup() {
-	if ! use python3 && ! compatible_python_is_selected ; then
+	if use python2 && use python3 ; then
+		ewarn "Both python2 and python3 USE flags are enabled, but only one"
+		ewarn "can be in the shebangs. Using python3."
+	fi
+	if ! use python2 && ! use python3 && ! compatible_python_is_selected ; then
 		ewarn "Attempting to select a compatible default python interpreter"
 		local x success=0
 		for x in /usr/bin/python2.* ; do
@@ -78,6 +83,8 @@ pkg_setup() {
 
 	if use python3; then
 		python_set_active_version 3
+	elif use python2; then
+		python_set_active_version 2
 	fi
 }
 
@@ -107,6 +114,9 @@ src_prepare() {
 	if use python3; then
 		einfo "Converting shebangs for python3..."
 		python_convert_shebangs -r 3 .
+	elif use python2; then
+		einfo "Converting shebangs for python2..."
+		python_convert_shebangs -r 2 .
 	fi
 }
 
@@ -220,7 +230,7 @@ src_install() {
 		doman -i18n=pl_PL.UTF-8 "${S_PL}"/man/pl_PL.UTF-8/*.[0-9] || die
 	fi
 
-	dodoc "${S}"/{NEWS,RELEASE-NOTES}
+	dodoc "${S}"/{ChangeLog,NEWS,RELEASE-NOTES}
 	use doc && dohtml -r "${S}"/doc/*
 	use epydoc && dohtml -r "${WORKDIR}"/api
 
