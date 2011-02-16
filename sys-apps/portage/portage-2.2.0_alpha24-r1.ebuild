@@ -230,7 +230,7 @@ src_install() {
 		doman -i18n=pl_PL.UTF-8 "${S_PL}"/man/pl_PL.UTF-8/*.[0-9] || die
 	fi
 
-	dodoc "${S}"/{ChangeLog,NEWS,RELEASE-NOTES}
+	dodoc "${S}"/{NEWS,RELEASE-NOTES}
 	use doc && dohtml -r "${S}"/doc/*
 	use epydoc && dohtml -r "${WORKDIR}"/api
 
