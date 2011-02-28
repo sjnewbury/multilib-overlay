@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/x264/x264-0.0.20101029.ebuild,v 1.5 2011/02/24 12:33:41 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/x264/x264-0.0.20110223.ebuild,v 1.1 2011/02/24 13:25:45 aballier Exp $
 
 EAPI=2
 inherit eutils multilib toolchain-funcs versionator multilib-native
@@ -13,7 +13,7 @@ SRC_URI="http://ftp.videolan.org/pub/videolan/x264/snapshots/${MY_P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~mips ~ppc ~ppc64 ~sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="debug +threads pic"
 
 RDEPEND=""
@@ -25,8 +25,7 @@ S=${WORKDIR}/${MY_P}
 
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/${PN}-nostrip.patch \
-		"${FILESDIR}"/${PN}-onlylib-20100605.patch \
-		"${FILESDIR}"/${PN}-altivec.patch
+		"${FILESDIR}"/${PN}-onlylib-20100605.patch
 }
 
 multilib-native_src_configure_internal() {
@@ -46,7 +45,7 @@ multilib-native_src_configure_internal() {
 		--disable-lavf \
 		--disable-swscale \
 		--disable-gpac \
-		$(use threads || echo "--disable-pthread") \
+		$(use threads || echo "--disable-thread") \
 		--enable-pic \
 		--enable-shared \
 		--extra-asflags="${ASFLAGS}" \
