@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/alsa-lib/alsa-lib-1.0.22.ebuild,v 1.2 2010/01/15 00:09:26 abcd Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/alsa-lib/alsa-lib-1.0.22.ebuild,v 1.3 2011/02/17 17:26:29 sping Exp $
 
 EAPI="2"
 
@@ -83,8 +83,8 @@ multilib-native_src_install_internal() {
 }
 
 multilib-native_pkg_postinst_internal() {
-	elog "Please try in-kernel ALSA drivers instead of the alsa-drivers ebuild."
-	elog "If alsa-drivers works for you where a *recent* kernel does not, we want "
+	elog "Please try in-kernel ALSA drivers instead of the alsa-driver ebuild."
+	elog "If alsa-driver works for you where a *recent* kernel does not, we want "
 	elog "to know about this. Our e-mail address is alsa-bugs@gentoo.org"
 	elog "However, if you notice no sound output or instability, please try to "
 	elog "upgrade your kernel to a newer version first."

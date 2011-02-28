@@ -1,13 +1,15 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/alsa-lib/alsa-lib-1.0.22-r1.ebuild,v 1.2 2011/02/17 17:26:29 sping Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/alsa-lib/alsa-lib-1.0.24.1.ebuild,v 1.3 2011/02/17 17:26:29 sping Exp $
 
-EAPI="2"
+EAPI=3
 
-inherit eutils libtool multilib-native
+PYTHON_DEPEND="python? 2"
 
-MY_P="${P/_rc/rc}"
-S="${WORKDIR}/${MY_P}"
+inherit eutils libtool python multilib multilib-native
+
+MY_P=${P/_rc/rc}
+S=${WORKDIR}/${MY_P}
 
 DESCRIPTION="Advanced Linux Sound Architecture Library"
 HOMEPAGE="http://www.alsa-project.org/"
@@ -16,12 +18,11 @@ SRC_URI="mirror://alsaproject/lib/${MY_P}.tar.bz2"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~amd64-linux ~x86-linux"
-IUSE="doc debug alisp python"
+IUSE="doc debug alisp python static-libs"
 
-RDEPEND="python? ( dev-lang/python[lib32?] )"
-DEPEND="${RDEPEND}
-	>=media-sound/alsa-headers-${PV}
+DEPEND=">=media-sound/alsa-headers-1.0.24
 	doc? ( >=app-doc/doxygen-1.2.6 )"
+RDEPEND=""
 
 IUSE_PCM_PLUGIN="copy linear route mulaw alaw adpcm rate plug multi shm file
 null empty share meter mmap_emul hooks lfloat ladspa dmix dshare dsnoop asym iec958
@@ -38,10 +39,13 @@ multilib-native_pkg_setup_internal() {
 		ewarn "are going to *misbehave* !"
 		epause 5
 	fi
+
+	if use python; then
+		python_set_active_version 2
+	fi
 }
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}/${P}-fd-leak.patch"
 	elibtoolize
 	epunt_cxx
 }
@@ -51,7 +55,7 @@ multilib-native_src_configure_internal() {
 	use elibc_uclibc && myconf="--without-versioned"
 
 	econf \
-		--enable-static \
+		$(use_enable static-libs static) \
 		--enable-shared \
 		--disable-resmgr \
 		--enable-rawmidi \
@@ -62,12 +66,11 @@ multilib-native_src_configure_internal() {
 		$(use_enable python) \
 		--with-pcm-plugins="${ALSA_PCM_PLUGINS}" \
 		--disable-dependency-tracking \
-		${myconf} \
-		|| die "configure failed"
+		${myconf}
 }
 
 multilib-native_src_compile_internal() {
-	emake || die "make failed"
+	emake || die
 
 	if use doc; then
 		emake doc || die "failed to generate docs"
@@ -77,7 +80,10 @@ multilib-native_src_compile_internal() {
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${D}" install || die "make install failed"
+	emake DESTDIR="${D}" install || die
+
+	find "${ED}" -name '*.la' -exec rm -f {} +
+	find "${ED}"/usr/$(get_libdir)/alsa-lib -name '*.a' -exec rm -f {} +
 
 	dodoc ChangeLog TODO || die
 	use doc && dohtml -r doc/doxygen/html/*
