@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/gnome-vfs-python/gnome-vfs-python-2.28.1.ebuild,v 1.8 2011/01/30 19:44:48 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/gnome-vfs-python/gnome-vfs-python-2.28.1.ebuild,v 1.9 2011/02/26 13:23:54 eva Exp $
 
 EAPI="2"
 
@@ -8,6 +8,9 @@ GCONF_DEBUG="no"
 
 G_PY_PN="gnome-python"
 G_PY_BINDINGS="gnomevfs gnomevfsbonobo pyvfsmodule"
+SUPPORT_PYTHON_ABIS="1"
+PYTHON_DEPEND="2"
+RESTRICT_PYTHON_ABIS="3.*"
 
 inherit gnome-python-common multilib-native
 
