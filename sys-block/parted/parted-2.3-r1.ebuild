@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-block/parted/parted-2.3-r1.ebuild,v 1.1 2011/01/29 05:45:06 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-block/parted/parted-2.3-r1.ebuild,v 1.2 2011/02/21 17:09:57 vapier Exp $
 
 EAPI="3"
 
@@ -34,6 +34,8 @@ DEPEND="
 "
 
 multilib-native_src_prepare_internal() {
+	epatch "${FILESDIR}"/${P}-git-version-gen.patch #355045
+
 	# Remove tests known to FAIL instead of SKIP without OS/userland support
 	sed -i libparted/tests/Makefile.am \
 		-e 's|t3000-symlink.sh||g' || die "sed failed"
