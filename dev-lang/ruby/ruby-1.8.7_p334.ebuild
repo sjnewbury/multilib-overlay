@@ -1,22 +1,18 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/ruby/ruby-1.9.2.ebuild,v 1.4 2011/02/26 14:34:33 xarthisius Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/ruby/ruby-1.8.7_p334.ebuild,v 1.6 2011/02/26 16:49:24 armin76 Exp $
 
 EAPI=2
 
-#PATCHSET=
-
 inherit autotools eutils flag-o-matic multilib versionator multilib-native
 
-RUBYPL=$(get_version_component_range 4)
-
-MY_P="${PN}-$(get_version_component_range 1-3)-p${RUBYPL:-0}"
+MY_P="${PN}-$(replace_version_separator 3 '-')"
 S=${WORKDIR}/${MY_P}
 
 SLOT=$(get_version_component_range 1-2)
 MY_SUFFIX=$(delete_version_separator 1 ${SLOT})
-# 1.9.2 still uses 1.9.1
-RUBYVERSION=1.9.1
+# 1.8 and 1.9 series disagree on this
+RUBYVERSION=$(get_version_component_range 1-2)
 
 if [[ -n ${PATCHSET} ]]; then
 	if [[ ${PVR} == ${PV} ]]; then
@@ -30,51 +26,35 @@ fi
 
 DESCRIPTION="An object-oriented scripting language"
 HOMEPAGE="http://www.ruby-lang.org/"
-SRC_URI="mirror://ruby/${MY_P}.tar.bz2
+SRC_URI="mirror://ruby/${SLOT}/${MY_P}.tar.bz2
 		 http://dev.gentoo.org/~flameeyes/ruby-team/${PN}-patches-${PATCHSET}.tar.bz2"
 
 LICENSE="|| ( Ruby GPL-2 )"
-KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
-IUSE="berkdb debug doc examples gdbm ipv6 +rdoc rubytests socks5 ssl tk xemacs ncurses +readline yaml" #libedit
-
-# libedit support is removed everywhere because of this upstream bug:
-# http://redmine.ruby-lang.org/issues/show/3698
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
+IUSE="+berkdb debug doc examples +gdbm ipv6 rubytests socks5 ssl threads tk xemacs ncurses +readline libedit"
 
 RDEPEND="
 	berkdb? ( sys-libs/db[lib32?] )
 	gdbm? ( sys-libs/gdbm[lib32?] )
-	ssl? ( dev-libs/openssl[lib32?] )
+	ssl? ( >=dev-libs/openssl-0.9.8m[lib32?] )
 	socks5? ( >=net-proxy/dante-1.1.13[lib32?] )
-	tk? ( dev-lang/tk[threads,lib32?] )
+	tk? ( dev-lang/tk[threads=,lib32?] )
 	ncurses? ( sys-libs/ncurses[lib32?] )
-	readline?  ( sys-libs/readline[lib32?] )
-	yaml? ( dev-libs/libyaml )
-	virtual/libffi[lib32?]
+	libedit? ( dev-libs/libedit[lib32?] )
+	!libedit? ( readline? ( sys-libs/readline[lib32?] ) )
 	sys-libs/zlib[lib32?]
-	>=app-admin/eselect-ruby-20100402
+	>=app-admin/eselect-ruby-20100603
 	!=dev-lang/ruby-cvs-${SLOT}*
 	!<dev-ruby/rdoc-2
-	!<dev-ruby/rubygems-1.3.7-r4
 	!dev-ruby/rexml"
-#	libedit? ( dev-libs/libedit )
-#	!libedit? ( readline? ( sys-libs/readline ) )
-
 DEPEND="${RDEPEND}"
-PDEPEND="
-	rdoc? ( >=dev-ruby/rdoc-2.5.11[ruby_targets_ruby19] )
-	xemacs? ( app-xemacs/ruby-modes )"
+PDEPEND="xemacs? ( app-xemacs/ruby-modes )"
+
+PROVIDE="virtual/ruby"
 
 multilib-native_src_prepare_internal() {
 	EPATCH_FORCE="yes" EPATCH_SUFFIX="patch" \
 		epatch "${WORKDIR}/patches"
-
-	einfo "Unbundling gems..."
-	rm -r \
-		{bin,lib}/rake \
-		{lib,ext}/racc* \
-		ext/json \
-		bin/gem \
-		|| die "removal failed"
 
 	# Fix a hardcoded lib path in configure script
 	sed -i -e "s:\(RUBY_LIB_PREFIX=\"\${prefix}/\)lib:\1$(get_libdir):" \
@@ -108,24 +88,22 @@ multilib-native_src_configure_internal() {
 	# ipv6 hack, bug 168939. Needs --enable-ipv6.
 	use ipv6 || myconf="${myconf} --with-lookup-order-hack=INET"
 
-#	if use libedit; then
-#		einfo "Using libedit to provide readline extension"
-#		myconf="${myconf} --enable-libedit --with-readline"
-#	elif use readline; then
-#		einfo "Using readline to provide readline extension"
-#		myconf="${myconf} --with-readline"
-#	else
-#		myconf="${myconf} --without-readline"
-#	fi
-	myconf="${myconf} $(use_with readline)"
+	if use libedit; then
+		einfo "Using libedit to provide readline extension"
+		myconf="${myconf} --enable-libedit --with-readline"
+	elif use readline; then
+		einfo "Using readline to provide readline extension"
+		myconf="${myconf} --with-readline"
+	else
+		myconf="${myconf} --without-readline"
+	fi
 
 	econf \
-		--program-suffix=${MY_SUFFIX} \
-		--with-soname=ruby${MY_SUFFIX} \
+		--program-suffix="${MY_SUFFIX}" \
 		--enable-shared \
-		--enable-pthread \
 		$(use_enable socks5 socks) \
 		$(use_enable doc install-doc) \
+		$(use_enable threads pthread) \
 		--enable-ipv6 \
 		$(use_enable debug) \
 		$(use_with berkdb dbm) \
@@ -133,8 +111,8 @@ multilib-native_src_configure_internal() {
 		$(use_with ssl openssl) \
 		$(use_with tk) \
 		$(use_with ncurses curses) \
-		$(use_with yaml psych) \
 		${myconf} \
+		--with-sitedir=/usr/$(get_libdir)/ruby/site_ruby \
 		--enable-option-checking=no \
 		|| die "econf failed"
 }
@@ -176,10 +154,8 @@ multilib-native_src_install_internal() {
 
 	emake DESTDIR="${D}" install || die "make install failed"
 
-	# Remove installed rubygems copy
-	rm -r "${D}/usr/$(get_libdir)/ruby/${RUBYVERSION}/rubygems" || die "rm rubygems failed"
-	rm -r "${D}/usr/$(get_libdir)/ruby/${RUBYVERSION}"/rdoc* || die "rm rdoc failed"
-	rm -r "${D}/usr/bin/"{ri,rdoc}"${MY_SUFFIX}" || die "rm rdoc bins failed"
+	keepdir $(${MINIRUBY} -rrbconfig -e "print Config::CONFIG['sitelibdir']")
+	keepdir $(${MINIRUBY} -rrbconfig -e "print Config::CONFIG['sitearchdir']")
 
 	if use doc; then
 		make DESTDIR="${D}" install-doc || die "make install-doc failed"
@@ -195,7 +171,7 @@ multilib-native_src_install_internal() {
 	dosym "libruby${MY_SUFFIX}$(get_libname ${PV%_*})" \
 		"/usr/$(get_libdir)/libruby$(get_libname ${PV%_*})"
 
-	dodoc ChangeLog NEWS doc/NEWS-1.8.7 README* ToDo || die
+	dodoc ChangeLog NEWS README* ToDo || die
 
 	if use rubytests; then
 		pushd test
