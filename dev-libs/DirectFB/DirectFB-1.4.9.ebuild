@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/DirectFB/DirectFB-1.4.5.ebuild,v 1.8 2011/02/25 19:31:02 signals Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/DirectFB/DirectFB-1.4.9.ebuild,v 1.1 2011/02/21 01:05:55 vapier Exp $
 
 EAPI=2
 inherit eutils toolchain-funcs multilib-native
@@ -31,7 +31,7 @@ SRC_URI="http://directfb.org/downloads/Core/${PN}-${PV:0:3}/${P}.tar.gz
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 -mips ppc ppc64 sh -sparc x86"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 -mips ~ppc ~ppc64 ~sh -sparc ~x86"
 IUSE="debug doc fbcon gif jpeg mmx png sdl sse static-libs sysfs truetype v4l v4l2 X zlib ${IUV} ${IUD}"
 
 RDEPEND="sdl? ( media-libs/libsdl[lib32?] )
@@ -49,7 +49,13 @@ multilib-native_src_prepare_internal() {
 	epatch \
 		"${FILESDIR}"/${PN}-1.2.7-CFLAGS.patch \
 		"${FILESDIR}"/${PN}-1.2.0-headers.patch \
-		"${FILESDIR}"/${PN}-1.1.1-pkgconfig.patch
+		"${FILESDIR}"/${PN}-1.1.1-pkgconfig.patch \
+		"${FILESDIR}"/${PN}-1.4.9-libpng-1.5.patch
+
+	# the media subdir uses sqrt(), so make sure it links in -lm
+	sed -i \
+		-e '/libdirectfb_media_la_LIBADD/s:$: -lm:' \
+		src/media/Makefile.in || die
 
 	# Avoid invoking `ld` directly #300779
 	find . -name Makefile.in -exec sed -i \
@@ -113,9 +119,7 @@ multilib-native_pkg_postinst_internal() {
 	ewarn "Please run \"revdep-rebuild\" which can be"
 	ewarn "found by emerging the package 'gentoolkit'."
 	ewarn
-	ewarn "If you have an ALPS touchpad, then you might"
-	ewarn "get your mouse unexpectedly set in absolute"
-	ewarn "mode in all DirectFB applications."
-	ewarn "This can be fixed by removing linuxinput from"
-	ewarn "INPUT_DEVICES."
+	ewarn "If you have an ALPS touchpad, then you might get your mouse"
+	ewarn "unexpectedly set in absolute mode in all DirectFB applications."
+	ewarn "This can be fixed by removing linuxinput from INPUT_DEVICES."
 }
