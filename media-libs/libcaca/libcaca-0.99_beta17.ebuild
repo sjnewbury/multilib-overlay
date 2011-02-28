@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libcaca/libcaca-0.99_beta17.ebuild,v 1.19 2011/01/20 18:23:14 xarthisius Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libcaca/libcaca-0.99_beta17.ebuild,v 1.20 2011/02/09 07:53:31 radhermit Exp $
 
 EAPI=2
 inherit autotools flag-o-matic mono multilib java-pkg-opt-2 multilib-native
@@ -50,6 +50,10 @@ multilib-native_src_prepare_internal() {
 
 	if ! use truetype; then
 		sed -i -e '/PKG_CHECK_MODULES/s:ftgl:dIsAbLe&:' configure.ac || die
+	fi
+
+	if use imlib && ! use X; then
+		append-cflags -DX_DISPLAY_MISSING
 	fi
 
 	eautoreconf
