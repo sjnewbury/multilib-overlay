@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/vte/vte-0.26.2.ebuild,v 1.5 2011/01/30 19:18:18 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/vte/vte-0.26.2.ebuild,v 1.6 2011/02/22 23:03:24 arfrever Exp $
 
 EAPI="3"
 GCONF_DEBUG="yes"
@@ -48,5 +48,5 @@ multilib-native_pkg_setup_internal() {
 
 multilib-native_src_install_internal() {
 	gnome2_src_install
-	python_clean_installation_image
+	use python && python_clean_installation_image
 }
