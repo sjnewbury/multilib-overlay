@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-arch/libarchive/libarchive-2.8.3.ebuild,v 1.5 2011/02/14 00:41:04 ferringb Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-arch/libarchive/libarchive-2.8.3-r1.ebuild,v 1.1 2011/02/14 13:29:07 ferringb Exp $
 
 EAPI="2"
 
@@ -14,7 +14,7 @@ SRC_URI="http://${PN}.googlecode.com/files/${P}.tar.gz
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
-IUSE="static static-libs acl xattr kernel_linux +bzip2 +lzma +zlib"
+IUSE="static static-libs acl xattr kernel_linux +bzip2 +lzma +zlib expat"
 
 COMPRESS_LIBS_DEPEND="lzma? ( app-arch/xz-utils[lib32?] )
 		bzip2? ( app-arch/bzip2[lib32?] )
@@ -22,7 +22,8 @@ COMPRESS_LIBS_DEPEND="lzma? ( app-arch/xz-utils[lib32?] )
 
 RDEPEND="!dev-libs/libarchive
 	dev-libs/openssl[lib32?]
-	|| ( dev-libs/libxml2[lib32?] dev-libs/expat[lib32?] )
+	!expat? ( dev-libs/libxml2[lib32?] )
+	expat? ( dev-libs/expat[lib32?] )
 	acl? ( virtual/acl[lib32?] )
 	xattr? ( kernel_linux? ( sys-apps/attr[lib32?] ) )
 	!static? ( ${COMPRESS_LIBS_DEPEND} )"
@@ -62,6 +63,8 @@ multilib-native_src_configure_internal() {
 		$(use_with zlib) \
 		$(use_with bzip2 bz2lib) $(use_with lzma) \
 		$(use_enable static-libs static) \
+		$(use_with expat expat) \
+		$(use_with !expat xml2)
 		--without-lzmadec \
 		${myconf} \
 		--disable-dependency-tracking
