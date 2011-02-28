@@ -1,13 +1,14 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/libnotify/libnotify-0.7.1.ebuild,v 1.2 2011/01/29 12:59:42 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/libnotify/libnotify-0.7.1.ebuild,v 1.6 2011/02/07 16:50:41 ssuominen Exp $
 
-EAPI="3"
-
+EAPI=3
 inherit autotools eutils gnome.org multilib-native
 
 DESCRIPTION="Notifications library"
 HOMEPAGE="http://www.galago-project.org/"
+SRC_URI="${SRC_URI}
+	mirror://gentoo/introspection-20110205.m4.tar.bz2"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
@@ -28,18 +29,28 @@ PDEPEND="|| (
 	kde-base/knotify
 )"
 
+multilib-native_src_unpack_internal() {
+	# If gobject-introspection is installed, we don't need the extra .m4
+	if has_version "dev-libs/gobject-introspection"; then
+		unpack ${P}.tar.bz2
+	else
+		unpack ${A}
+	fi
+}
+
 multilib-native_src_prepare_internal() {
 	# Add configure switch for gtk+:3 based tests
 	# and make tests build only when needed
-	epatch "${FILESDIR}/${PN}-0.7.1-gtk3-tests.patch"
+	epatch "${FILESDIR}"/${PN}-0.7.1-gtk3-tests.patch
 
-	eautoreconf
+	AT_M4DIR=${WORKDIR} eautoreconf
 }
 
 multilib-native_src_configure_internal() {
 	econf \
 		--disable-static \
 		--disable-dependency-tracking \
+		$(use_enable introspection) \
 		$(use_enable test tests)
 }
 
