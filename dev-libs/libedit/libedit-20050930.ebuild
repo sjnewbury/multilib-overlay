@@ -1,6 +1,6 @@
-# Copyright 1999-2006 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libedit/libedit-20050930.ebuild,v 1.6 2006/11/17 03:27:21 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libedit/libedit-20050930.ebuild,v 1.7 2011/02/06 12:37:00 leio Exp $
 
 EAPI="2"
 
@@ -12,7 +12,7 @@ SRC_URI="mirror://gentoo/${P}.tar.bz2"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k mips ppc ppc64 s390 sh x86"
+KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh x86"
 IUSE=""
 RESTRICT="test"
 
