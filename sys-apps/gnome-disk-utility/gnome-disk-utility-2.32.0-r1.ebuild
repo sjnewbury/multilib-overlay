@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/gnome-disk-utility/gnome-disk-utility-2.32.0-r1.ebuild,v 1.1 2011/01/17 18:30:12 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/gnome-disk-utility/gnome-disk-utility-2.32.0-r1.ebuild,v 1.4 2011/02/26 19:20:13 eva Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -13,13 +13,13 @@ SRC_URI="http://hal.freedesktop.org/releases/${P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
+KEYWORDS="~alpha amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc x86"
 IUSE="avahi doc fat gnome-keyring nautilus remote-access"
 
 CDEPEND="
 	>=dev-libs/glib-2.22:2[lib32?]
 	>=dev-libs/dbus-glib-0.74[lib32?]
-	>=dev-libs/libunique-1[lib32?]
+	>=dev-libs/libunique-1:1[lib32?]
 	>=x11-libs/gtk+-2.20:2[lib32?]
 	=sys-fs/udisks-1.0*[remote-access?]
 	>=dev-libs/libatasmart-0.14[lib32?]
