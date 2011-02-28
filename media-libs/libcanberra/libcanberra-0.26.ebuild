@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libcanberra/libcanberra-0.26.ebuild,v 1.1 2010/10/09 16:04:02 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libcanberra/libcanberra-0.26.ebuild,v 1.3 2011/02/24 20:35:01 tomka Exp $
 
 EAPI="3"
 inherit gnome2-utils libtool multilib-native
@@ -11,7 +11,7 @@ SRC_URI="http://0pointer.de/lennart/projects/${PN}/${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
 IUSE="alsa gstreamer +gtk oss pulseaudio +sound tdb"
 
 COMMON_DEPEND="media-libs/libvorbis[lib32?]
