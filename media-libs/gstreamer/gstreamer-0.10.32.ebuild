@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/gstreamer/gstreamer-0.10.31.ebuild,v 1.6 2011/02/27 15:33:17 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/gstreamer/gstreamer-0.10.32.ebuild,v 1.1 2011/02/24 05:18:57 leio Exp $
 
 EAPI=2
 
@@ -15,10 +15,10 @@ SRC_URI="http://${PN}.freedesktop.org/src/${PN}/${P}.tar.bz2"
 
 LICENSE="LGPL-2"
 SLOT=${PV_MAJ_MIN}
-KEYWORDS="~alpha amd64 arm ~hppa ~ia64 ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="+introspection nls test"
 
-RDEPEND=">=dev-libs/glib-2.20:2[lib32?]
+RDEPEND=">=dev-libs/glib-2.22:2[lib32?]
 	dev-libs/libxml2[lib32?]
 	introspection? ( >=dev-libs/gobject-introspection-0.6.3 )
 	!<media-libs/gst-plugins-base-0.10.26"
