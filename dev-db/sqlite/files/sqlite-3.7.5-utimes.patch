@@ -1,0 +1,35 @@
+--- configure.ac
++++ configure.ac
+@@ -127,7 +127,7 @@
+ #########
+ # Figure out whether or not we have these functions
+ #
+-AC_CHECK_FUNCS([usleep fdatasync localtime_r gmtime_r localtime_s])
++AC_CHECK_FUNCS([usleep utimes fdatasync localtime_r gmtime_r localtime_s])
+ 
+ #########
+ # By default, we use the amalgamation (this may be changed below...)
+--- src/os_unix.c
++++ src/os_unix.c
+@@ -122,6 +122,9 @@
+ #ifndef SQLITE_OMIT_WAL
+ #include <sys/mman.h>
+ #endif
++#ifndef HAVE_UTIMES
++#include <utime.h>
++#endif
+ 
+ #if SQLITE_ENABLE_LOCKING_STYLE
+ # include <sys/ioctl.h>
+@@ -1610,7 +1613,11 @@
+     pFile->eFileLock = eFileLock;
+ #if !OS_VXWORKS
+     /* Always update the timestamp on the old file */
++#ifdef HAVE_UTIMES
+     utimes(zLockFile, NULL);
++#else
++    utime(zLockFile, NULL);
++#endif
+ #endif
+     return SQLITE_OK;
+   }
