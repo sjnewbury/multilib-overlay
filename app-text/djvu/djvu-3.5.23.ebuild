@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/djvu/djvu-3.5.23.ebuild,v 1.1 2010/10/15 14:06:47 pva Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/djvu/djvu-3.5.23.ebuild,v 1.2 2011/02/09 14:54:50 scarabeus Exp $
 
 EAPI="2"
 inherit fdo-mime autotools flag-o-matic multilib-native
@@ -70,10 +70,12 @@ multilib-native_src_install_internal() {
 
 	# Install desktop files.
 	cd desktopfiles
-	insinto /usr/share/icons/hicolor/22x22/mimetypes && newins hi22-djvu.png image-vnd.djvu.png || die
-	insinto	/usr/share/icons/hicolor/32x32/mimetypes && newins hi32-djvu.png image-vnd.djvu.png || die
-	insinto	/usr/share/icons/hicolor/48x48/mimetypes && newins hi48-djvu.png image-vnd.djvu.png || die
-	insinto	/usr/share/mime/packages && doins djvulibre-mime.xml || die
+	for i in {22,32,48}; do
+		insinto /usr/share/icons/hicolor/${i}x${i}/mimetypes
+		newins hi${i}-djvu.png image-vnd.djvu.png || die
+	done
+	insinto /usr/share/mime/packages
+	doins djvulibre-mime.xml || die
 }
 
 multilib-native_pkg_postinst_internal() {
