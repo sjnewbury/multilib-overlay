@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.22.ebuild,v 1.8 2011/01/09 17:50:40 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/pulseaudio/pulseaudio-0.9.22.ebuild,v 1.9 2011/02/11 08:49:58 radhermit Exp $
 
 EAPI=3
 
@@ -19,7 +19,7 @@ IUSE="+alsa avahi +caps jack lirc oss tcpd +X dbus libsamplerate gnome bluetooth
 RDEPEND="app-admin/eselect-esd
 	X? (
 		|| ( >=x11-libs/libX11-1.4.0[lib32?] <x11-libs/libX11-1.4.0[xcb,lib32?] )
-		x11-libs/xcb-util[lib32?]
+		>=x11-libs/xcb-util-0.3.1[lib32?]
 		x11-libs/libSM[lib32?]
 		x11-libs/libICE[lib32?]
 		x11-libs/libXtst[lib32?]
