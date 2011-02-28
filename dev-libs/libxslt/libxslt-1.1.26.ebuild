@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libxslt/libxslt-1.1.26.ebuild,v 1.14 2010/12/31 23:53:28 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libxslt/libxslt-1.1.26.ebuild,v 1.17 2011/02/26 17:32:39 arfrever Exp $
 
 EAPI="2"
 PYTHON_DEPEND="python? 2"
@@ -20,6 +20,7 @@ IUSE="crypt debug python"
 
 DEPEND=">=dev-libs/libxml2-2.6.27[lib32?]
 	crypt?  ( >=dev-libs/libgcrypt-1.1.42[lib32?] )"
+RDEPEND="${DEPEND}"
 
 multilib-native_pkg_setup_internal() {
 	if use python; then
@@ -30,7 +31,8 @@ multilib-native_pkg_setup_internal() {
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}"/libxslt.m4-${P}.patch \
 		"${FILESDIR}"/${PN}-1.1.23-parallel-install.patch \
-		"${FILESDIR}"/${P}-undefined.patch
+		"${FILESDIR}"/${P}-undefined.patch \
+		"${FILESDIR}"/${P}-disable_static_modules.patch
 
 	# Python bindings are built/tested/installed manually.
 	sed -e "s/@PYTHON_SUBDIR@//" -i Makefile.am || die "sed failed"
@@ -63,7 +65,8 @@ multilib-native_src_compile_internal() {
 		python_copy_sources python
 		building() {
 			emake PYTHON_INCLUDES="$(python_get_includedir)" \
-				PYTHON_SITE_PACKAGES="$(python_get_sitedir)"
+				PYTHON_SITE_PACKAGES="$(python_get_sitedir)" \
+				PYTHON_VERSION="$(python_get_version)"
 		}
 		python_execute_function -s --source-dir python building
 	fi
