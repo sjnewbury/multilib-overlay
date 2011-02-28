@@ -1,11 +1,11 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.24.0.ebuild,v 1.1 2011/02/09 17:18:19 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.24.1.ebuild,v 1.2 2011/02/27 09:35:27 pacho Exp $
 
 EAPI="3"
 PYTHON_DEPEND="2:2.4"
 
-inherit eutils flag-o-matic gnome.org libtool python virtualx multilib-native
+inherit eutils flag-o-matic gnome.org libtool python virtualx autotools multilib-native
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="http://www.gtk.org/"
