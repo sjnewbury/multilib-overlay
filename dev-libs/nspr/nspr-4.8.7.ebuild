@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.8.7.ebuild,v 1.1 2011/01/14 13:37:10 anarchy Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/nspr/nspr-4.8.7.ebuild,v 1.2 2011/02/27 10:14:49 grobian Exp $
 
 EAPI=3
 
@@ -43,9 +43,9 @@ multilib-native_src_configure_internal() {
 
 	echo > "${T}"/test.c
 	$(tc-getCC) -c "${T}"/test.c -o "${T}"/test.o
-	case $(file "${T}"/test.o) in
-		*64-bit*|*ppc64*|*x86_64*) myconf="${myconf} --enable-64bit";;
-		*32-bit*|*ppc*|*i386*|*"RISC System/6000"*) ;;
+	case $(scanelf -BF'%M' "${T}"/test.o)$(scanmacho -BF'%M' "${T}"/test.o) in
+		ELFCLASS64*|POWERPC64*|X86_64*) myconf="${myconf} --enable-64bit";;
+		ELFCLASS32*|POWERPC*|I386*|ARM*) ;;
 		*) die "Failed to detect whether your arch is 64bits or 32bits, disable distcc if you're using it, please";;
 	esac
 
