@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-devel/libtool/libtool-9999.ebuild,v 1.4 2009/09/13 14:46:53 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-devel/libtool/libtool-9999.ebuild,v 1.5 2011/02/19 17:29:31 vapier Exp $
 
 inherit eutils multilib-native
 
@@ -20,8 +20,8 @@ KEYWORDS=""
 IUSE="vanilla"
 
 RDEPEND="sys-devel/gnuconfig
-	>=sys-devel/autoconf-2.62
-	>=sys-devel/automake-1.10.1"
+	>=sys-devel/autoconf-2.65
+	>=sys-devel/automake-1.11.1"
 DEPEND="${RDEPEND}
 	sys-apps/help2man"
 

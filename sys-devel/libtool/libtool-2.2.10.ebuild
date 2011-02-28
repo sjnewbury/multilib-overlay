@@ -1,8 +1,8 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-devel/libtool/libtool-2.2.10.ebuild,v 1.10 2010/11/13 12:02:17 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-devel/libtool/libtool-2.2.10.ebuild,v 1.11 2011/02/22 21:43:50 vapier Exp $
 
-EAPI="3"
+EAPI="2" #356089
 
 LIBTOOLIZE="true" #225559
 inherit eutils autotools multilib multilib-native
