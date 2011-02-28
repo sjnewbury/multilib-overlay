@@ -1,17 +1,18 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.26.1-r1.ebuild,v 1.5 2011/02/24 18:40:08 tomka Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/glib/glib-2.28.1.ebuild,v 1.1 2011/02/19 14:20:33 nirbheek Exp $
 
 EAPI="3"
+PYTHON_DEPEND="2"
 
-inherit autotools gnome.org libtool eutils flag-o-matic pax-utils multilib-native
+inherit autotools gnome.org libtool eutils flag-o-matic pax-utils python virtualx multilib-native
 
 DESCRIPTION="The GLib library of C routines"
 HOMEPAGE="http://www.gtk.org/"
 
 LICENSE="LGPL-2"
 SLOT="2"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="debug doc fam +introspection selinux +static-libs test xattr"
 
 RDEPEND="virtual/libiconv
@@ -21,16 +22,19 @@ RDEPEND="virtual/libiconv
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.16[lib32?]
 	>=sys-devel/gettext-0.11[lib32?]
-	>=dev-util/gtk-doc-am-1.13
 	doc? (
 		>=dev-libs/libxslt-1.0[lib32?]
 		>=dev-util/gtk-doc-1.13
 		~app-text/docbook-xml-dtd-4.1.2 )
 	test? ( >=sys-apps/dbus-1.2.14[lib32?] )"
-PDEPEND="introspection? ( dev-libs/gobject-introspection )"
+PDEPEND="introspection? ( dev-libs/gobject-introspection )
+	!<gnome-base/gvfs-1.6.4-r990" # Earlier versions do not work with glib
 
-# eautoreconf needs gtk-doc-am
 # XXX: Consider adding test? ( sys-devel/gdb ); assert-msg-test tries to use it
+
+multilib-native_pkg_setup_internal() {
+	python_set_active_version 2
+}
 
 multilib-native_src_prepare_internal() {
 	if use ia64 ; then
@@ -41,27 +45,6 @@ multilib-native_src_prepare_internal() {
 			epatch "${FILESDIR}/glib-2.10.3-ia64-atomic-ops.patch"
 		fi
 	fi
-
-	# gsettings.m4: Fix rules to work when there are no schemas, bug #350020
-	epatch "${FILESDIR}/${PN}-2.26.1-gsettings-rules.patch"
-
-	# Fix compilation on several arches, bug #351387
-	epatch "${FILESDIR}/${PN}-2.26.1-gatomic-header.patch"
-
-	# Remove a test that seems to fail depending on time of day
-	epatch "${FILESDIR}/${PN}-2.26.1-gdatetime-test.patch"
-
-	# Deprecation check in tests/testglib.c, upstream bug #635093
-	epatch "${FILESDIR}/${P}-deprecation-tests.patch"
-
-	# Can't read GSettings:backend property, upstream bug #636100
-	epatch "${FILESDIR}/${P}-gsettings-read.patch"
-
-	# Cannot send a locked message with PRESERVE_SERIAL flag, upstream bug #632544
-	epatch "${FILESDIR}/${P}-locked-message.patch"
-
-	# GDBus message idle can execute while flushes are pending, upstream bug #635626
-	epatch "${FILESDIR}/${P}-gdbus-flushes.patch"
 
 	# Don't fail gio tests when ran without userpriv, upstream bug 552912
 	# This is only a temporary workaround, remove as soon as possible
@@ -76,9 +59,6 @@ multilib-native_src_prepare_internal() {
 
 	# Fix test failure when upgrading from 2.22 to 2.24, upstream bug 621368
 	epatch "${FILESDIR}/${PN}-2.24-assert-test-failure.patch"
-
-	# skip tests that require writing to /root/.dbus, upstream bug ???
-	epatch "${FILESDIR}/${PN}-2.25-skip-tests-with-dbus-keyring.patch"
 
 	# Do not try to remove files on live filesystem, upstream bug #619274
 	sed 's:^\(.*"/desktop-app-info/delete".*\):/*\1*/:' \
@@ -115,17 +95,15 @@ multilib-native_src_configure_internal() {
 
 	# Always use internal libpcre, bug #254659
 	econf ${myconf} \
-		$(use_enable xattr) \
-		$(use_enable doc man) \
-		$(use_enable doc gtk-doc) \
-		$(use_enable fam) \
-		$(use_enable selinux) \
-		$(use_enable static-libs static) \
-		--enable-regex \
-		--with-pcre=internal \
-		--with-threads=posix \
-		--disable-dtrace \
-		--disable-systemtap
+		  $(use_enable xattr) \
+		  $(use_enable doc man) \
+		  $(use_enable doc gtk-doc) \
+		  $(use_enable fam) \
+		  $(use_enable selinux) \
+		  $(use_enable static-libs static) \
+		  --enable-regex \
+		  --with-pcre=internal \
+		  --with-threads=posix
 }
 
 multilib-native_src_install_internal() {
@@ -151,8 +129,13 @@ src_test() {
 	unset DBUS_SESSION_BUS_ADDRESS
 	export XDG_CONFIG_DIRS=/etc/xdg
 	export XDG_DATA_DIRS=/usr/local/share:/usr/share
+	export G_DBUS_COOKIE_SHA1_KEYRING_DIR="${T}/temp"
 	export XDG_DATA_HOME="${T}"
 	unset GSETTINGS_BACKEND # bug 352451
+
+	# Related test is a bit nitpicking
+	mkdir "$G_DBUS_COOKIE_SHA1_KEYRING_DIR/temp"
+	chmod 0700  "$G_DBUS_COOKIE_SHA1_KEYRING_DIR/temp"
 
 	# Hardened: gdb needs this, bug #338891
 	if host-is-pax ; then
@@ -160,7 +143,8 @@ src_test() {
 			|| die "Hardened adjustment failed"
 	fi
 
-	emake check || die "tests failed"
+	# Need X for dbus-launch session X11 initialization
+	Xemake check || die "tests failed"
 }
 
 multilib-native_pkg_preinst_internal() {
