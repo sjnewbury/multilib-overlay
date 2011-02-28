@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gvfs/gvfs-1.6.6-r1.ebuild,v 1.5 2011/01/30 18:45:16 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gvfs/gvfs-1.6.6-r1.ebuild,v 1.6 2011/02/25 22:02:49 eva Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -95,6 +95,11 @@ multilib-native_src_prepare_internal() {
 	fi
 
 	use gphoto2 || use archive && eautoreconf
+
+	# Disable API deprecation
+	sed 's/-DG_DISABLE_DEPRECATED//' \
+		-i */*/Makefile.am */*/Makefile.in */Makefile.am */Makefile.in \
+		|| die "sed failed"
 }
 
 multilib-native_src_install_internal() {
