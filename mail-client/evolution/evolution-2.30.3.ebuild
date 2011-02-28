@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.30.3.ebuild,v 1.9 2011/01/30 19:38:03 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.30.3.ebuild,v 1.10 2011/02/05 16:15:21 ssuominen Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -38,7 +38,7 @@ RDEPEND=">=dev-libs/glib-2.22[lib32?]
 	>=net-libs/libsoup-2.4[lib32?]
 	>=media-gfx/gtkimageview-1.6[lib32?]
 	media-libs/libcanberra[gtk,lib32?]
-	x11-libs/libnotify[lib32?]
+	<x11-libs/libnotify-0.7[lib32?]
 	>=x11-misc/shared-mime-info-0.22
 	>=x11-themes/gnome-icon-theme-2.20
 

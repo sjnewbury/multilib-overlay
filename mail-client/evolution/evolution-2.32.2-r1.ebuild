@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.32.1-r1.ebuild,v 1.4 2011/02/05 14:24:38 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.32.2-r1.ebuild,v 1.3 2011/02/27 15:12:39 eva Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -12,8 +12,6 @@ MY_MAJORV=$(get_version_component_range 1-2)
 
 DESCRIPTION="Integrated mail, addressbook and calendaring functionality"
 HOMEPAGE="http://www.gnome.org/projects/evolution/"
-
-SRC_URI="${SRC_URI} mirror://gentoo/${P}-patches.tar.bz2"
 
 LICENSE="GPL-2 LGPL-2 OPENLDAP"
 SLOT="2.0"
@@ -30,12 +28,12 @@ PINENTRY_DEPEND="|| ( app-crypt/pinentry[gtk] app-crypt/pinentry-qt app-crypt/pi
 # pst is not mature enough and changes API/ABI frequently
 RDEPEND=">=dev-libs/glib-2.25.12:2[lib32?]
 	>=x11-libs/gtk+-2.20.0:2[lib32?]
-	>=dev-libs/libunique-1.1.2[lib32?]
+	>=dev-libs/libunique-1.1.2:1[lib32?]
 	>=gnome-base/gnome-desktop-2.26:2[lib32?]
 	>=dev-libs/libgweather-2.25.3:2[lib32?]
 	media-libs/libcanberra[gtk,lib32?]
 	>=x11-libs/libnotify-0.3[lib32?]
-	>=gnome-extra/evolution-data-server-${PV}-r1[weather]
+	>=gnome-extra/evolution-data-server-${PV}[weather,lib32?]
 	>=gnome-extra/gtkhtml-3.31.90:3.14[lib32?]
 	>=gnome-base/gconf-2[lib32?]
 	dev-libs/atk[lib32?]
@@ -132,13 +130,10 @@ multilib-native_pkg_setup_internal() {
 multilib-native_src_prepare_internal() {
 	gnome2_src_prepare
 
-	epatch "${FILESDIR}"/${P}-libnotify-0.7.patch
+	epatch "${FILESDIR}"/${PN}-2.32.1-libnotify-0.7.patch
 
 	# Fix invalid use of la file in contact-editor, upstream bug #635002
 	epatch "${FILESDIR}/${PN}-2.32.0-wrong-lafile-usage.patch"
-
-	# Apply upstream patches committed to gnome-2.32 branch
-	epatch "${WORKDIR}"/${P}-patches/*.patch
 
 	# Use NSS/NSPR only if 'ssl' is enabled.
 	if use ssl ; then
@@ -148,7 +143,7 @@ multilib-native_src_prepare_internal() {
 	fi
 
 	# Fix compilation flags crazyness
-	sed -e 's/CFLAGS="$CFLAGS $WARNING_FLAGS"//' \
+	sed -e 's/-D.*_DISABLE_DEPRECATED//' \
 		-i configure.ac configure || die "sed 1 failed"
 
 	intltoolize --force --copy --automake || die "intltoolize failed"
