@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-cpp/pangomm/pangomm-2.26.2.ebuild,v 1.7 2011/01/04 18:12:19 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-cpp/pangomm/pangomm-2.26.2.ebuild,v 1.8 2011/02/21 10:01:07 eva Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -12,7 +12,7 @@ HOMEPAGE="http://www.gtkmm.org"
 
 LICENSE="LGPL-2.1"
 SLOT="2.4"
-KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
+KEYWORDS="ppc ppc64"
 IUSE="doc"
 
 RDEPEND=">=x11-libs/pango-1.23.0[lib32?]
