@@ -1,13 +1,12 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-misc/notification-daemon/notification-daemon-0.5.0.ebuild,v 1.1 2011/01/24 23:22:25 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-misc/notification-daemon/notification-daemon-0.5.0.ebuild,v 1.2 2011/02/05 10:48:18 ssuominen Exp $
 
-EAPI="3"
-GCONF_DEBUG="no"
+EAPI=3
+GCONF_DEBUG=no
+inherit eutils gnome2 multilib-native
 
-inherit gnome2 multilib-native
-
-DESCRIPTION="Notifications daemon"
+DESCRIPTION="Notification daemon"
 HOMEPAGE="http://www.galago-project.org/"
 
 LICENSE="GPL-2"
@@ -35,7 +34,12 @@ multilib-native_pkg_setup_internal() {
 	G2CONF="${G2CONF} --disable-static"
 }
 
+multilib-native_src_prepare_internal() {
+	epatch "${FILESDIR}"/${P}-libnotify-0.7.patch
+	gnome2_src_prepare
+}
+
 multilib-native_src_install_internal() {
 	gnome2_src_install
-	find "${ED}" -name "*.la" -delete || die "la files removal failed"
+	find "${ED}" -name "*.la" -delete
 }
