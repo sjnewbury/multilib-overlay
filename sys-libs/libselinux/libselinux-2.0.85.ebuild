@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-libs/libselinux/libselinux-2.0.85.ebuild,v 1.4 2010/09/29 22:58:55 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-libs/libselinux/libselinux-2.0.85.ebuild,v 1.5 2011/02/08 17:13:18 arfrever Exp $
 
 EAPI="2"
 
@@ -60,9 +60,9 @@ multilib-native_src_install_internal() {
 }
 
 multilib-native_pkg_postinst_internal() {
-	python_mod_optimize $(python_get_sitedir)
+	python_mod_optimize $(python_get_sitedir)/selinux
 }
 
 multilib-native_pkg_postrm_internal() {
-	python_mod_cleanup $(python_get_sitedir)
+	python_mod_cleanup $(python_get_sitedir)/selinux
 }
