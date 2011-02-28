@@ -1,8 +1,8 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-auth/polkit/polkit-0.99-r1.ebuild,v 1.5 2011/02/23 23:26:44 hwoarang Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-auth/polkit/polkit-0.100.ebuild,v 1.2 2011/02/23 14:05:34 ssuominen Exp $
 
-EAPI=2
+EAPI="3"
 inherit eutils pam multilib-native
 
 DESCRIPTION="Policy framework for controlling privileges for system-wide services"
@@ -11,12 +11,12 @@ SRC_URI="http://hal.freedesktop.org/releases/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="debug doc examples gtk +introspection kde nls pam"
 
 RDEPEND=">=dev-libs/glib-2.25.12[lib32?]
 	dev-libs/expat[lib32?]
-	introspection? ( dev-libs/gobject-introspection )
+	introspection? ( >=dev-libs/gobject-introspection-0.6.2 )
 	pam? ( virtual/pam[lib32?] )"
 DEPEND="${RDEPEND}
 	!!>=sys-auth/policykit-0.92
@@ -38,11 +38,8 @@ multilib-native_src_configure_internal() {
 	local myauth="--with-authfw=shadow"
 	use pam && myauth="--with-authfw=pam --with-pam-module-dir=$(getpam_mod_dir)"
 
-	# We define libexecdir due to fdo bug #22951
-	# easier to maintain than patching everything
 	econf \
-		--libexecdir='${exec_prefix}/libexec/polkit-1' \
-		--localstatedir=/var \
+		--localstatedir="${EPREFIX}"/var \
 		--disable-dependency-tracking \
 		--disable-static \
 		$(use_enable debug verbose-mode) \
