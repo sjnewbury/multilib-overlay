@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libdvdcss/libdvdcss-1.2.10.ebuild,v 1.9 2010/01/15 09:29:16 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libdvdcss/libdvdcss-1.2.10.ebuild,v 1.10 2011/02/27 14:49:17 aballier Exp $
 
 inherit eutils autotools multilib-native
 
@@ -13,7 +13,12 @@ SLOT="1.2"
 KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x86-solaris"
 IUSE="doc"
 
-DEPEND="doc? ( app-doc/doxygen virtual/latex-base )"
+DEPEND="doc? (
+	app-doc/doxygen
+	virtual/latex-base
+	dev-tex/xcolor
+	|| ( dev-texlive/texlive-latexextra app-text/ptex )
+	)"
 RDEPEND=""
 
 multilib-native_src_unpack_internal() {
