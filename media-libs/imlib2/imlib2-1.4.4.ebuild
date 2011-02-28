@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/imlib2/imlib2-1.4.4.ebuild,v 1.8 2011/01/02 20:11:45 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/imlib2/imlib2-1.4.4.ebuild,v 1.9 2011/02/19 19:43:42 vapier Exp $
 
 EAPI="2"
 
@@ -22,6 +22,10 @@ DEPEND="=media-libs/freetype-2*[lib32?]
 	tiff? ( >=media-libs/tiff-3.5.5[lib32?] )
 	X? ( x11-libs/libXext[lib32?] x11-proto/xextproto )
 	mp3? ( media-libs/libid3tag[lib32?] )"
+
+multilib-native_src_prepare_internal() {
+	epatch "${FILESDIR}"/${P}-libpng-1.5.patch #354989
+}
 
 multilib-native_src_configure_internal() {
 	# imlib2 has diff configure options for x86/amd64 mmx
