@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/sane-backends/sane-backends-1.0.21-r1.ebuild,v 1.8 2011/01/30 17:53:14 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/sane-backends/sane-backends-1.0.21-r1.ebuild,v 1.10 2011/02/25 08:52:40 xarthisius Exp $
 
 EAPI="2"
 
@@ -110,16 +110,16 @@ RDEPEND="
 	sane_backends_mustek_pp? ( sys-libs/libieee1284[lib32?] )
 	usb? ( virtual/libusb:0[lib32?] )
 	gphoto2? (
-				media-libs/libgphoto2[lib32?]
-				virtual/jpeg[lib32?]
-			)
+		media-libs/libgphoto2[lib32?]
+		virtual/jpeg[lib32?]
+	)
 	v4l? ( media-libs/libv4l[lib32?] )"
 
 DEPEND="${RDEPEND}
 	v4l? ( sys-kernel/linux-headers )
 	doc? (
 		virtual/latex-base
-		|| ( dev-texlive/texlive-latexextra app-text/tetex app-text/ptex )
+		|| ( dev-texlive/texlive-latexextra app-text/ptex )
 	)
 	>=sys-apps/sed-4"
 
@@ -134,7 +134,7 @@ SRC_URI="http://alioth.debian.org/frs/download.php/3258/${P}.tar.gz
 	ftp://ftp.sane-project.org/pub/sane/${P}/${P}-i18n.patch"
 SLOT="0"
 LICENSE="GPL-2 public-domain"
-KEYWORDS="alpha amd64 arm hppa ia64 ~ppc ~ppc64 sparc x86"
+KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sparc x86"
 
 # the blank is intended - an empty string would result in building ALL backends.
 BACKENDS=" "
@@ -178,10 +178,8 @@ multilib-native_src_configure_internal() {
 		$(use_with gphoto2) \
 		$(use_enable ipv6) \
 		$(use_enable avahi) \
-		${myconf} || die "econf failed"
-}
+		${myconf}
 
-multilib-native_src_compile_internal() {
 	emake VARTEXFONTS="${T}/fonts" || die
 
 	if use usb; then
