@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.87.ebuild,v 1.2 2011/01/28 17:06:25 mr_bones_ Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.87.ebuild,v 1.3 2011/02/27 20:47:52 hwoarang Exp $
 
 EAPI="3"
 
@@ -17,7 +17,7 @@ SRC_URI="mirror://kernel/linux/bluetooth/${P}.tar.gz
 	http://dev.gentoo.org/~pacho/bluez/oui-${OUIDATE}.txt"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~hppa ~ppc ~ppc64 ~x86"
+KEYWORDS="amd64 ~arm ~hppa ~ppc ~ppc64 ~x86"
 
 IUSE="alsa attrib caps +consolekit cups debug gstreamer maemo6 health old-daemons pcmcia pnat test-programs usb"
 

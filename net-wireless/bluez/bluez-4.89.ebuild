@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.82.ebuild,v 1.5 2011/02/20 17:39:16 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/bluez-4.89.ebuild,v 1.2 2011/02/26 12:31:44 ssuominen Exp $
 
 EAPI="3"
 
@@ -9,12 +9,15 @@ inherit multilib eutils multilib-native
 DESCRIPTION="Bluetooth Tools and System Daemons for Linux"
 HOMEPAGE="http://www.bluez.org/"
 
-OUIDATE="20101219" # Needed because of bug #345263
+# Because of oui.txt changing from time to time without noticement, we need to supply it
+# ourselves instead of using http://standards.ieee.org/regauth/oui/oui.txt directly.
+# See bugs #345263 and #349473 for reference.
+OUIDATE="20110221" # Needed because of bug #345263
 SRC_URI="mirror://kernel/linux/bluetooth/${P}.tar.gz
-	http://standards.ieee.org/regauth/oui/oui.txt -> oui-${OUIDATE}.txt"
+	http://dev.gentoo.org/~pacho/bluez/oui-${OUIDATE}.txt"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 arm hppa ~ppc ~ppc64 x86"
+KEYWORDS="~amd64 ~arm ~hppa ~ppc ~ppc64 ~x86"
 
 IUSE="alsa attrib caps +consolekit cups debug gstreamer maemo6 health old-daemons pcmcia pnat test-programs usb"
 
@@ -28,7 +31,7 @@ CDEPEND="alsa? (
 	usb? ( dev-libs/libusb[lib32?] )
 	cups? ( net-print/cups[lib32?] )
 	>=sys-fs/udev-146[extras,lib32?]
-	>=dev-libs/glib-2.14[lib32?]
+	>=dev-libs/glib-2.14:2[lib32?]
 	sys-apps/dbus[lib32?]
 	media-libs/libsndfile[lib32?]
 	>=dev-libs/libnl-1.1[lib32?]
@@ -38,7 +41,7 @@ DEPEND="sys-devel/flex[lib32?]
 	>=dev-util/pkgconfig-0.20[lib32?]
 	${CDEPEND}"
 RDEPEND="${CDEPEND}
-	consolekit? ( sys-auth/pambase[consolekit] )
+	consolekit? ( sys-auth/consolekit )
 	test-programs? (
 		dev-python/dbus-python[lib32?]
 		dev-python/pygobject[lib32?] )"
@@ -93,7 +96,7 @@ multilib-native_src_configure_internal() {
 }
 
 multilib-native_src_install_internal() {
-	emake DESTDIR="${ED}" install || die "make install failed"
+	emake DESTDIR="${D}" install || die "make install failed"
 
 	dodoc AUTHORS ChangeLog README || die
 
