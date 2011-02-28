@@ -1,13 +1,13 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/libXtst/libXtst-1.2.0.ebuild,v 1.7 2010/12/31 20:09:16 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/libXtst/libXtst-1.2.0.ebuild,v 1.9 2011/02/14 23:22:40 xarthisius Exp $
 
 EAPI=3
 inherit xorg-2 multilib-native
 
 DESCRIPTION="X.Org Xtst library"
 
-KEYWORDS="~alpha amd64 arm hppa ~ia64 ~mips ~ppc ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris ~x86-winnt"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris ~x86-winnt"
 IUSE="doc"
 
 RDEPEND="x11-libs/libX11[lib32?]
