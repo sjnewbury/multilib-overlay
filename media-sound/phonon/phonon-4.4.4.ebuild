@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.4.4.ebuild,v 1.1 2011/01/23 05:21:17 reavertm Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/phonon/phonon-4.4.4.ebuild,v 1.2 2011/02/26 20:53:57 dilfridge Exp $
 
 EAPI="3"
 
@@ -19,6 +19,7 @@ COMMON_DEPEND="
 	>=x11-libs/qt-core-4.6.0:4[lib32?]
 	>=x11-libs/qt-dbus-4.6.0:4[lib32?]
 	>=x11-libs/qt-gui-4.6.0:4[lib32?]
+	>=x11-libs/qt-test-4.6.0:4[lib32?]
 	pulseaudio? (
 		dev-libs/glib:2[lib32?]
 		>=media-sound/pulseaudio-0.9.21[glib,lib32?]
