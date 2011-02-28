@@ -1,0 +1,30 @@
+From 1df74d886d764115944d40fbc79bfd51ec7d714a Mon Sep 17 00:00:00 2001
+From: Paul Howarth <paul@city-fan.org>
+Date: Fri, 17 Dec 2010 19:07:45 +0100
+Subject: [PATCH 01/90] tftpd: avoid buffer overflow report from glibc
+
+---
+ tests/server/tftpd.c |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/tests/server/tftpd.c b/tests/server/tftpd.c
+index b9a0562..701b3e9 100644
+--- a/tests/server/tftpd.c
++++ b/tests/server/tftpd.c
+@@ -1291,9 +1291,11 @@ static void nak(int error)
+     pe->e_msg = strerror(error - 100);
+     tp->th_code = EUNDEF;   /* set 'undef' errorcode */
+   }
+-  strcpy(tp->th_msg, pe->e_msg);
+   length = (int)strlen(pe->e_msg);
+-  tp->th_msg[length] = '\0';
++
++  /* we use memcpy() instead of strcpy() in order to avoid buffer overflow
++   * report from glibc with FORTIFY_SOURCE */
++  memcpy(tp->th_msg, pe->e_msg, length + 1);
+   length += 5;
+   if (swrite(peer, &buf.storage[0], length) != length)
+     logmsg("nak: fail\n");
+-- 
+1.7.4.rc2
+
