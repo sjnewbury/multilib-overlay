@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/portage/portage-2.2.0_alpha24.ebuild,v 1.1 2011/02/15 18:59:27 zmedico Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/portage/portage-2.2.0_alpha26.ebuild,v 1.1 2011/03/02 05:33:15 zmedico Exp $
 
 # Require EAPI 2 since we now require at least python-2.6 (for python 3
 # syntax support) which also requires EAPI 2.
@@ -187,14 +187,16 @@ src_install() {
 		rm "${S}"/bin/ebuild-helpers/sed || die "Failed to remove sed wrapper"
 	fi
 
-	local x symlinks
+	local x symlinks files
 
 	cd "$S" || die "cd failed"
 	for x in $(find bin -type d) ; do
 		exeinto $portage_base/$x || die "exeinto failed"
 		cd "$S"/$x || die "cd failed"
-		doexe $(find . -mindepth 1 -maxdepth 1 -type f ! -type l) || \
-			die "doexe failed"
+		files=$(find . -mindepth 1 -maxdepth 1 -type f ! -type l)
+		if [ -n "$files" ] ; then
+			doexe $files || die "doexe failed"
+		fi
 		symlinks=$(find . -mindepth 1 -maxdepth 1 -type l)
 		if [ -n "$symlinks" ] ; then
 			cp -P $symlinks "$D$portage_base/$x" || die "cp failed"
