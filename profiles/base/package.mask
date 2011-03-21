@@ -1,3 +1,0 @@
-#Masking until sandbox is fixed,
-# bug 342983
->=app-arch/tar-1.24
