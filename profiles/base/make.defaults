@@ -11,3 +11,6 @@ USE="${USE} multilib"
 # set a default for $PKG_CONFIG to avoid a collision with crossdev-wrappers
 # suggested by and thanks to ohnobinki
 PKG_CONFIG="/usr/bin/pkg-config"
+
+CDEFINE_amd64="__x86_64__"
+CDEFINE_x86="__i386__"
