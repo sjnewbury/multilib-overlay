@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gconf/gconf-2.28.1.ebuild,v 1.9 2010/10/08 19:43:38 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gconf/gconf-2.28.1.ebuild,v 1.10 2011/03/16 10:24:45 nirbheek Exp $
 
 EAPI="2"
 
@@ -19,12 +19,12 @@ SLOT="2"
 KEYWORDS="alpha amd64 arm ia64 ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="debug doc ldap policykit"
 
-RDEPEND=">=dev-libs/glib-2.14[lib32?]
-	>=x11-libs/gtk+-2.14[lib32?]
+RDEPEND=">=dev-libs/glib-2.14:2[lib32?]
+	>=x11-libs/gtk+-2.14:2[lib32?]
 	>=dev-libs/dbus-glib-0.74[lib32?]
 	>=sys-apps/dbus-1[lib32?]
-	>=gnome-base/orbit-2.4[lib32?]
-	>=dev-libs/libxml2-2[lib32?]
+	>=gnome-base/orbit-2.4:2[lib32?]
+	>=dev-libs/libxml2-2:2[lib32?]
 	ldap? ( net-nds/openldap[lib32?] )
 	policykit? ( sys-auth/polkit[lib32?] )"
 DEPEND="${RDEPEND}
