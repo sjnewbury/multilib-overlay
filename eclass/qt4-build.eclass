@@ -1,6 +1,6 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.88 2011/01/20 23:08:09 spatz Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/qt4-build.eclass,v 1.90 2011/03/10 23:45:51 wired Exp $
 
 export EMULTILIB_SAVE_VARS="QTBASEDIR QTPREFIXDIR QTBINDIR QTLIBDIR \
 		QMAKE_LIBDIR_QT QTPCDIR QTDATADIR QTDOCDIR QTHEADERDIR \
@@ -341,13 +341,13 @@ qt4-build_src_configure() {
 
 	# Disable SSE4.x, since auto-detection is currently broken
 	# Upstream bug http://bugreports.qt.nokia.com/browse/QTBUG-13623
-	if version_is_at_least 4.7.1; then
-		myconf+=" -no-sse4.1 -no-sse4.2"
-	fi
+	[[ ${PV} == "4.7.1" ]] && myconf+=" -no-sse4.1 -no-sse4.2"
 
 	echo ./configure ${myconf}
 	./configure ${myconf} || die "./configure failed"
 	myconf=""
+
+	prepare_directories ${QT4_TARGET_DIRECTORIES}
 }
 
 # @FUNCTION: qt4-build_src_compile
@@ -502,6 +502,25 @@ standard_configure_options() {
 	echo "${myconf}"
 }
 
+# @FUNCTION: prepare_directories
+# @USAGE: < directories >
+# @DESCRIPTION:
+# Generates makefiles for the directories set in $QT4_TARGET_DIRECTORIES
+prepare_directories() {
+	for x in "$@"; do
+		pushd "${S}"/${x} >/dev/null
+		einfo "running qmake in: $x"
+		# avoid running over the maximum argument number, bug #299810
+		{
+			echo "${S}"/mkspecs/common/*.conf
+			find "${S}" -name '*.pr[io]'
+		} | xargs sed -i -e "s:\$\$\[QT_INSTALL_LIBS\]:${EPREFIX}/usr/$(get_libdir)/qt4:g" || die
+		"${S}"/bin/qmake "LIBS+=-L${QTLIBDIR}" "CONFIG+=nostrip" || die "qmake failed"
+		popd >/dev/null
+	done
+}
+
+
 # @FUNCTION: build_directories
 # @USAGE: < directories >
 # @DESCRIPTION:
@@ -509,12 +528,6 @@ standard_configure_options() {
 build_directories() {
 	for x in "$@"; do
 		pushd "${S}"/${x} >/dev/null
-		# avoid running over the maximum argument number, bug #299810
-		{
-			echo "${S}"/mkspecs/common/*.conf
-			find "${S}" -name '*.pr[io]'
-		} | xargs sed -i -e "s:\$\$\[QT_INSTALL_LIBS\]:${EPREFIX}/usr/$(get_libdir)/qt4:g" || die
-		"${S}"/bin/qmake "LIBS+=-L${QTLIBDIR}" "CONFIG+=nostrip" || die "qmake failed"
 		emake CC="$(tc-getCC)" \
 			CXX="$(tc-getCXX)" \
 			LINK="$(tc-getCXX)" || die "emake failed"
