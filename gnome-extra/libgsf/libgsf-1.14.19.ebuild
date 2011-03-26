@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/libgsf/libgsf-1.14.19.ebuild,v 1.5 2011/02/26 16:49:18 arfrever Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-extra/libgsf/libgsf-1.14.19.ebuild,v 1.10 2011/03/23 08:21:45 nirbheek Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -17,20 +17,20 @@ SRC_URI="${SRC_URI}
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
 IUSE="bzip2 doc gnome gtk python thumbnail"
 
 RDEPEND="
-	>=dev-libs/glib-2.16[lib32?]
-	>=dev-libs/libxml2-2.4.16[lib32?]
+	>=dev-libs/glib-2.16:2[lib32?]
+	>=dev-libs/libxml2-2.4.16:2[lib32?]
 	sys-libs/zlib[lib32?]
 	bzip2? ( app-arch/bzip2[lib32?] )
 	gnome? ( >=gnome-base/libbonobo-2[lib32?] )
-	gtk? ( >=x11-libs/gtk+-2[lib32?] )
+	gtk? ( x11-libs/gtk+:2[lib32?] )
 	python? (
-		>=dev-python/pygobject-2.10[lib32?]
-		>=dev-python/pygtk-2.10[lib32?] )
-	thumbnail? ( >=gnome-base/gconf-2[lib32?] )"
+		>=dev-python/pygobject-2.10:2[lib32?]
+		>=dev-python/pygtk-2.10:2[lib32?] )
+	thumbnail? ( >=gnome-base/gconf-2:2[lib32?] )"
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig[lib32?]
