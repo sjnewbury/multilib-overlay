@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-3.1.2-r4.ebuild,v 1.13 2010/12/27 15:35:17 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-3.1.2-r4.ebuild,v 1.14 2011/03/18 21:52:31 vapier Exp $
 
 EAPI="3"
 
@@ -255,8 +255,6 @@ multilib-native_src_install_internal() {
 	fi
 
 	use threads || rm -fr "${ED}$(python_get_libdir)/multiprocessing"
-
-	prep_ml_includes $(python_get_includedir)
 
 	dodoc Misc/{ACKS,HISTORY,NEWS} || die "dodoc failed"
 

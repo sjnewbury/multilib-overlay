@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.5.4-r4.ebuild,v 1.26 2010/12/16 16:14:40 neurogeek Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/python/python-2.5.4-r4.ebuild,v 1.27 2011/03/18 21:52:31 vapier Exp $
 
 EAPI="2"
 
@@ -257,8 +257,6 @@ multilib-native_src_install_internal() {
 		use sqlite || rm -fr "${ED}$(python_get_libdir)/"{sqlite3,test/test_sqlite*}
 		use tk || rm -fr "${ED}usr/bin/idle${SLOT}" "${ED}$(python_get_libdir)/"{idlelib,lib-tk}
 	fi
-
-	prep_ml_includes $(python_get_includedir)
 
 	dodoc Misc/{ACKS,HISTORY,NEWS} || die "dodoc failed"
 
