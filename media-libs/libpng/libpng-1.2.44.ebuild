@@ -1,10 +1,11 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libpng/libpng-1.2.44.ebuild,v 1.6 2010/07/19 01:06:05 josejx Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/libpng/libpng-1.2.44.ebuild,v 1.8 2011/02/13 08:52:18 grobian Exp $
 
 # this ebuild is only for the libpng12.so.0 SONAME for ABI compat
 
-EAPI=3
+EAPI="3"
+
 inherit multilib libtool multilib-native
 
 DESCRIPTION="Portable Network Graphics library"
@@ -22,8 +23,8 @@ DEPEND="${RDEPEND}
 	app-arch/xz-utils[lib32?]"
 
 multilib-native_pkg_setup_internal() {
-	if [[ -e ${ROOT}/usr/$(get_libdir)/libpng12.so.0 ]]; then
-		rm -f "${ROOT}"/usr/$(get_libdir)/libpng12.so.0
+	if [[ -e ${EROOT}/usr/$(get_libdir)/libpng12.so.0 ]] ; then
+		rm -f "${EROOT}"/usr/$(get_libdir)/libpng12.so.0
 	fi
 }
 
@@ -37,9 +38,12 @@ multilib-native_src_configure_internal() {
 		--disable-static
 }
 
+multilib-native_src_compile_internal() {
+	emake libpng12.la || die
+}
+
 multilib-native_src_install_internal() {
-	exeinto /usr/$(get_libdir)
-	doexe .libs/libpng12.so.0 || die
+	newlib.so .libs/libpng12.so.0.* libpng12.so.0 || die
 
 	prep_ml_binaries $(find "${D}"usr/bin/ -type f $(for i in $(get_install_abis); do echo "-not -name "*-$i""; done)| sed "s!${D}!!g")
 }
