@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/gst-plugins-base/gst-plugins-base-0.10.32.ebuild,v 1.1 2011/02/24 06:32:41 leio Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/gst-plugins-base/gst-plugins-base-0.10.32.ebuild,v 1.3 2011/03/18 21:58:37 eva Exp $
 
 EAPI=2
 
@@ -34,12 +34,16 @@ DOCS="AUTHORS NEWS README RELEASE"
 multilib-native_src_unpack_internal() {
 	gnome2_src_unpack
 	epatch "$FILESDIR/${PN}-0.10.31-fix-tag-test-linking.patch"
+	epatch "$FILESDIR/${P}-fix-tests-encodebin.patch"
 }
 
 multilib-native_src_compile_internal() {
 	# gst doesnt handle opts well, last tested with 0.10.15
 	strip-flags
 	replace-flags "-O3" "-O2"
+
+	# Avoid sandbox violation with USE="introspection", bug #356283
+	export GST_REGISTRY=${T}/registry.cache.xml
 
 	gst-plugins-base_src_configure \
 		$(use_enable introspection) \
