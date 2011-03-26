@@ -1,0 +1,46 @@
+diff --git a/src/nm-manager.c b/src/nm-manager.c
+index afcc6ad..9bd5354 100644
+--- a/src/nm-manager.c
++++ b/src/nm-manager.c
+@@ -4364,10 +4364,11 @@ dispose (GObject *object)
+ 
+ 	/* Unregister property filter */
+ 	bus = nm_dbus_manager_get_connection (priv->dbus_mgr);
+-	g_assert (bus);
+-	dbus_connection = dbus_g_connection_get_connection (bus);
+-	g_assert (dbus_connection);
+-	dbus_connection_remove_filter (dbus_connection, prop_filter, manager);
++	if (bus) {
++		dbus_connection = dbus_g_connection_get_connection (bus);
++		g_assert (dbus_connection);
++		dbus_connection_remove_filter (dbus_connection, prop_filter, manager);
++	}
+ 	g_object_unref (priv->dbus_mgr);
+ 
+ 	if (priv->bluez_mgr)
+--
+cgit v0.8.3-6-g21f6
+
+diff --git a/src/nm-policy.c b/src/nm-policy.c
+index b5c2129..5355703 100644
+--- a/src/nm-policy.c
++++ b/src/nm-policy.c
+@@ -1222,15 +1222,6 @@ nm_policy_destroy (NMPolicy *policy)
+ 	}
+ 	g_slist_free (policy->dev_signal_ids);
+ 
+-	/* Rewrite /etc/hosts on exit to ensure we don't leave stale IP addresses
+-	 * lying around.  FIXME: this will take out a valid IP address of an
+-	 * ethernet device we're leaving active (ie, a connection we can "assume"
+-	 * when NM starts again).
+-	 */
+-	policy->default_device4 = NULL;
+-	policy->default_device6 = NULL;
+-	update_system_hostname (policy, NULL, NULL);
+-
+ 	g_free (policy->orig_hostname);
+ 	g_free (policy->cur_hostname);
+ 
+--
+cgit v0.8.3-6-g21f6
+

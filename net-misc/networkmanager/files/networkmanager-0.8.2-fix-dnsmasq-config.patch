@@ -1,0 +1,32 @@
+From b05b77fa2668df4a4d8830685b138b4c57b1e777 Mon Sep 17 00:00:00 2001
+From: Dan Williams <dcbw@redhat.com>
+Date: Sat, 05 Mar 2011 05:52:44 +0000
+Subject: dnsmasq: send no config file instead of a bogus one (lp:725041) (debian #615082)
+
+---
+diff --git a/src/dnsmasq-manager/nm-dnsmasq-manager.c b/src/dnsmasq-manager/nm-dnsmasq-manager.c
+index 701c078..3ca4b21 100644
+--- a/src/dnsmasq-manager/nm-dnsmasq-manager.c
++++ b/src/dnsmasq-manager/nm-dnsmasq-manager.c
+@@ -278,17 +278,10 @@ create_dm_cmd_line (const char *iface,
+ 	/* dnsmasq may read from it's default config file location, which if that
+ 	 * location is a valid config file, it will combine with the options here
+ 	 * and cause undesirable side-effects.  Like sending bogus IP addresses
+-	 * as the gateway or whatever.  So give dnsmasq a bogus config file
+-	 * location to avoid screwing up the configuration we're passing to it.
++	 * as the gateway or whatever.  So tell dnsmasq not to use any config file
++	 * at all.
+ 	 */
+-	memset (buf, 0, sizeof (buf));
+-	strcpy (buf, "/tmp/");
+-	for (i = 5; i < 15; i++)
+-		buf[i] = (char) (g_random_int_range ((guint32) 'a', (guint32) 'z') & 0xFF);
+-	strcat (buf, ".conf");
+-
+ 	nm_cmd_line_add_string (cmd, "--conf-file");
+-	nm_cmd_line_add_string (cmd, buf);
+ 
+ 	nm_cmd_line_add_string (cmd, "--no-hosts");
+ 	nm_cmd_line_add_string (cmd, "--keep-in-foreground");
+--
+cgit v0.8.3-6-g21f6
