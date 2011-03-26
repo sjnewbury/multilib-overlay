@@ -1,11 +1,11 @@
 #!/sbin/runscript
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/files/bluetooth-init.d,v 1.1 2010/09/07 11:00:27 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-wireless/bluez/files/bluetooth-init.d,v 1.2 2011/03/20 16:57:35 pacho Exp $
 
 depend() {
 	after coldplug
-	need dbus localmount
+	need dbus localmount hostname
 }
 
 start() {
