@@ -1,0 +1,21 @@
+commit 4f62b490427d4643e49b84610f4da916b14177c0
+Author: Matthias Schwarzott <zzam@gentoo.org>
+Date:   Sat Mar 19 11:14:36 2011 +0100
+
+    initd: Remove noopenvz from init-script.
+    
+    Bug #346885
+
+diff --git a/rc/openrc/udev b/rc/openrc/udev
+index 23fc39c..88a4a42 100644
+--- a/rc/openrc/udev
++++ b/rc/openrc/udev
+@@ -23,7 +23,7 @@ depend()
+ 		before checkfs fsck
+ 
+ 		# udev does not work inside vservers
+-		keyword novserver nolxc noopenvz
++		keyword novserver nolxc
+ 	fi
+ }
+ 
