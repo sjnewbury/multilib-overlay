@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/ruby/ruby-1.9.2.ebuild,v 1.4 2011/02/26 14:34:33 xarthisius Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/ruby/ruby-1.9.2.ebuild,v 1.6 2011/03/07 12:20:13 armin76 Exp $
 
 EAPI=2
 
@@ -34,7 +34,7 @@ SRC_URI="mirror://ruby/${MY_P}.tar.bz2
 		 http://dev.gentoo.org/~flameeyes/ruby-team/${PN}-patches-${PATCHSET}.tar.bz2"
 
 LICENSE="|| ( Ruby GPL-2 )"
-KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 IUSE="berkdb debug doc examples gdbm ipv6 +rdoc rubytests socks5 ssl tk xemacs ncurses +readline yaml" #libedit
 
 # libedit support is removed everywhere because of this upstream bug:
@@ -91,6 +91,8 @@ multilib-native_src_configure_internal() {
 	# In many places aliasing rules are broken; play it safe
 	# as it's risky with newer compilers to leave it as it is.
 	append-flags -fno-strict-aliasing
+	# SuperH needs this
+	use sh && append-flags -mieee
 
 	# Socks support via dante
 	if use socks5 ; then

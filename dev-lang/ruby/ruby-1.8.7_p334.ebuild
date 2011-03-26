@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/ruby/ruby-1.8.7_p334.ebuild,v 1.6 2011/02/26 16:49:24 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/ruby/ruby-1.8.7_p334.ebuild,v 1.7 2011/03/13 19:19:13 graaff Exp $
 
 EAPI=2
 
@@ -49,8 +49,6 @@ RDEPEND="
 	!dev-ruby/rexml"
 DEPEND="${RDEPEND}"
 PDEPEND="xemacs? ( app-xemacs/ruby-modes )"
-
-PROVIDE="virtual/ruby"
 
 multilib-native_src_prepare_internal() {
 	EPATCH_FORCE="yes" EPATCH_SUFFIX="patch" \
