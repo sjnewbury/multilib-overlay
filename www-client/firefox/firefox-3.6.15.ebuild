@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/firefox/firefox-3.6.9.ebuild,v 1.9 2010/10/13 00:10:16 anarchy Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/firefox/firefox-3.6.15.ebuild,v 1.8 2011/03/18 17:20:11 armin76 Exp $
 EAPI="3"
 WANT_AUTOCONF="2.1"
 
@@ -17,7 +17,7 @@ MAJ_PV="${PV/_*/}" # Without the _rc and _beta stuff
 DESKTOP_PV="3.6"
 MY_PV="${PV/_rc/rc}" # Handle beta for SRC_URI
 XUL_PV="${MAJ_XUL_PV}${MAJ_PV/${DESKTOP_PV}/}" # Major + Minor version no.s
-PATCH="${PN}-3.6-patches-0.2"
+PATCH="${PN}-3.6-patches-0.4"
 
 DESCRIPTION="Firefox Web Browser"
 HOMEPAGE="http://www.mozilla.com/firefox"
@@ -25,7 +25,7 @@ HOMEPAGE="http://www.mozilla.com/firefox"
 KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 ~sparc x86 ~amd64-linux ~ia64-linux ~x86-linux ~sparc-solaris ~x64-solaris ~x86-solaris"
 SLOT="0"
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
-IUSE="+alsa bindist +ipc java libnotify system-sqlite wifi"
+IUSE="+alsa bindist gnome +ipc java libnotify system-sqlite wifi"
 
 REL_URI="http://releases.mozilla.org/pub/mozilla.org/firefox/releases"
 SRC_URI="${REL_URI}/${MY_PV}/source/firefox-${MY_PV}.source.tar.bz2
@@ -49,13 +49,17 @@ done
 
 RDEPEND="
 	>=sys-devel/binutils-2.16.1
-	>=dev-libs/nss-3.12.7[lib32?]
+	>=dev-libs/nss-3.12.8[lib32?]
 	>=dev-libs/nspr-4.8.6[lib32?]
 	>=app-text/hunspell-1.2[lib32?]
-	system-sqlite? ( >=dev-db/sqlite-3.6.22-r2[fts3,secure-delete,lib32?] )
+	system-sqlite? ( >=dev-db/sqlite-3.7.1[fts3,secure-delete,lib32?] )
 	alsa? ( media-libs/alsa-lib[lib32?] )
 	>=x11-libs/cairo-1.8.8[X,lib32?]
 	x11-libs/pango[X,lib32?]
+	gnome? ( >=gnome-base/gnome-vfs-2.16.3[lib32?]
+		>=gnome-base/libgnomeui-2.16.1[lib32?]
+		>=gnome-base/gconf-2.16.0[lib32?]
+		>=gnome-base/libgnome-2.16.0[lib32?] )
 	wifi? ( net-wireless/wireless-tools )
 	libnotify? ( >=x11-libs/libnotify-0.4[lib32?] )
 	~net-libs/xulrunner-${XUL_PV}[ipc=,java=,wifi=,libnotify=,system-sqlite=,lib32?]"
@@ -120,13 +124,11 @@ multilib-native_pkg_setup_internal() {
 multilib-native_src_unpack_internal() {
 	unpack firefox-${MY_PV}.source.tar.bz2 ${PATCH}.tar.bz2
 
-	if is_final_abi; then
-		linguas
-		for X in ${linguas}; do
-			# FIXME: Add support for unpacking xpis to portage
-			[[ ${X} != "en" ]] && xpi_unpack "${P}-${X}.xpi"
-		done
-	fi
+	linguas
+	for X in ${linguas}; do
+		# FIXME: Add support for unpacking xpis to portage
+		[[ ${X} != "en" ]] && xpi_unpack "${P}-${X}.xpi"
+	done
 }
 
 multilib-native_src_prepare_internal() {
@@ -160,6 +162,7 @@ multilib-native_src_configure_internal() {
 	# It doesn't compile on alpha without this LDFLAGS
 	use alpha && append-ldflags "-Wl,--no-relax"
 
+	mozconfig_annotate '' --enable-crypto
 	mozconfig_annotate '' --enable-extensions="${MEXTENSIONS}"
 	mozconfig_annotate '' --enable-application=browser
 	mozconfig_annotate '' --disable-mailnews
@@ -192,6 +195,8 @@ multilib-native_src_configure_internal() {
 	mozconfig_annotate '' --with-system-libxul
 	mozconfig_annotate '' --with-libxul-sdk="${EPREFIX}"/usr/$(get_libdir)/xulrunner-devel-${MAJ_XUL_PV}
 
+	mozconfig_use_enable gnome gnomevfs
+	mozconfig_use_enable gnome gnomeui
 	mozconfig_use_enable ipc # +ipc, upstream default
 	mozconfig_use_enable libnotify
 	mozconfig_use_enable java javaxpcom

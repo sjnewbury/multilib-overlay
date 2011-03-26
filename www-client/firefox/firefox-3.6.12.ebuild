@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/firefox/firefox-3.6.12.ebuild,v 1.8 2010/11/14 12:46:33 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/firefox/firefox-3.6.12.ebuild,v 1.9 2011/03/14 06:54:47 nirbheek Exp $
 EAPI="3"
 WANT_AUTOCONF="2.1"
 
@@ -25,7 +25,7 @@ HOMEPAGE="http://www.mozilla.com/firefox"
 KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sparc x86 ~amd64-linux ~ia64-linux ~x86-linux ~sparc-solaris ~x64-solaris ~x86-solaris"
 SLOT="0"
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
-IUSE="+alsa bindist +ipc java libnotify system-sqlite wifi"
+IUSE="+alsa bindist gnome +ipc java libnotify system-sqlite wifi"
 
 REL_URI="http://releases.mozilla.org/pub/mozilla.org/firefox/releases"
 SRC_URI="${REL_URI}/${MY_PV}/source/firefox-${MY_PV}.source.tar.bz2
@@ -56,6 +56,10 @@ RDEPEND="
 	alsa? ( media-libs/alsa-lib[lib32?] )
 	>=x11-libs/cairo-1.8.8[X,lib32?]
 	x11-libs/pango[X,lib32?]
+	gnome? ( >=gnome-base/gnome-vfs-2.16.3[lib32?]
+		>=gnome-base/libgnomeui-2.16.1[lib32?]
+		>=gnome-base/gconf-2.16.0[lib32?]
+		>=gnome-base/libgnome-2.16.0[lib32?] )
 	wifi? ( net-wireless/wireless-tools )
 	libnotify? ( >=x11-libs/libnotify-0.4[lib32?] )
 	~net-libs/xulrunner-${XUL_PV}[ipc=,java=,wifi=,libnotify=,system-sqlite=,lib32?]"
@@ -162,6 +166,7 @@ multilib-native_src_configure_internal() {
 	# It doesn't compile on alpha without this LDFLAGS
 	use alpha && append-ldflags "-Wl,--no-relax"
 
+	mozconfig_annotate '' --enable-crypto
 	mozconfig_annotate '' --enable-extensions="${MEXTENSIONS}"
 	mozconfig_annotate '' --enable-application=browser
 	mozconfig_annotate '' --disable-mailnews
@@ -194,6 +199,8 @@ multilib-native_src_configure_internal() {
 	mozconfig_annotate '' --with-system-libxul
 	mozconfig_annotate '' --with-libxul-sdk="${EPREFIX}"/usr/$(get_libdir)/xulrunner-devel-${MAJ_XUL_PV}
 
+	mozconfig_use_enable gnome gnomevfs
+	mozconfig_use_enable gnome gnomeui
 	mozconfig_use_enable ipc # +ipc, upstream default
 	mozconfig_use_enable libnotify
 	mozconfig_use_enable java javaxpcom
