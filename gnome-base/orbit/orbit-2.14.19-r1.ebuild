@@ -1,10 +1,11 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/orbit/orbit-2.14.19.ebuild,v 1.6 2011/03/22 19:21:03 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/orbit/orbit-2.14.19-r1.ebuild,v 1.1 2011/03/12 18:59:48 pacho Exp $
 
 EAPI="3"
+GCONF_DEBUG="yes"
 
-inherit gnome2 toolchain-funcs multilib-native
+inherit gnome2 toolchain-funcs autotools multilib-native
 
 MY_PN="ORBit2"
 MY_P="${MY_PN}-${PV}"
@@ -16,19 +17,18 @@ SRC_URI="mirror://gnome/sources/${MY_PN}/${PVP[0]}.${PVP[1]}/${MY_P}.tar.bz2"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="2"
-KEYWORDS="alpha amd64 arm ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="doc test"
 
-RDEPEND=">=dev-libs/glib-2.8[lib32?]
+RDEPEND=">=dev-libs/glib-2.8:2[lib32?]
 	>=dev-libs/libIDL-0.8.2[lib32?]"
 
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.18[lib32?]
 	doc? ( >=dev-util/gtk-doc-1 )"
 
-DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README* TODO"
-
 multilib-native_pkg_setup_internal() {
+	DOCS="AUTHORS ChangeLog HACKING MAINTAINERS NEWS README* TODO"
 	if use test; then
 		if ! use debug; then
 			elog "USE=debug is required for the test feature. Auto-enabling."
@@ -46,6 +46,15 @@ multilib-native_src_prepare_internal() {
 
 	# Do not mess with CFLAGS
 	sed 's/-ggdb -O0//' -i configure.in configure || die "sed 2 failed"
+
+	if ! use test; then
+		sed -i -e 's/test //' Makefile.am || die
+	fi
+
+	# Drop failing test, bug #331709
+	sed -i -e 's/test-mem //' test/Makefile.am || die
+
+	eautoreconf
 }
 
 multilib-native_src_compile_internal() {
