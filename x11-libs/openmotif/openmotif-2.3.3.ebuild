@@ -1,8 +1,8 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/openmotif/openmotif-2.3.3.ebuild,v 1.15 2011/01/29 10:58:47 ulm Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/openmotif/openmotif-2.3.3.ebuild,v 1.17 2011/03/07 11:04:25 ulm Exp $
 
-EAPI="3"
+EAPI=3
 
 inherit autotools eutils flag-o-matic multilib multilib-native
 
@@ -100,9 +100,6 @@ multilib-native_src_configure_internal() {
 	# bug #80421
 	filter-flags -ftracer
 
-	# multilib includes don't work right in this package...
-	has_multilib_profile && append-flags "-I$(get_ml_incdir)"
-
 	# feel free to fix properly if you care
 	append-flags -fno-strict-aliasing
 
@@ -142,6 +139,9 @@ multilib-native_src_install_internal() {
 		mv "${ED}"/usr/share/Xm/* "${ED}"/usr/share/doc/${PF}/demos
 	fi
 	rm -rf "${ED}"/usr/share/Xm
+
+	# don't install libtool archives
+	rm -f "${ED}"/usr/$(get_libdir)/*.la
 
 	dodoc BUGREPORT ChangeLog README RELEASE RELNOTES TODO
 }
