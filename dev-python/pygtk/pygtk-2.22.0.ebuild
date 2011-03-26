@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/pygtk/pygtk-2.22.0.ebuild,v 1.2 2011/01/19 20:12:48 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-python/pygtk/pygtk-2.22.0.ebuild,v 1.3 2011/03/16 10:14:30 nirbheek Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -23,7 +23,7 @@ RDEPEND=">=dev-libs/glib-2.8:2[lib32?]
 	>=x11-libs/pango-1.16[lib32?]
 	>=dev-libs/atk-1.12[lib32?]
 	>=x11-libs/gtk+-2.22:2[lib32?]
-	>=gnome-base/libglade-2.5[lib32?]
+	>=gnome-base/libglade-2.5:2.0[lib32?]
 	>=dev-python/pycairo-1.0.2[lib32?]
 	>=dev-python/pygobject-2.21.3:2[lib32?]
 	dev-python/numpy[lib32?]"
