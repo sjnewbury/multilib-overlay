@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gvfs/gvfs-1.6.6-r1.ebuild,v 1.8 2011/03/22 19:14:47 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gvfs/gvfs-1.6.7.ebuild,v 1.1 2011/03/22 00:38:08 nirbheek Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -12,7 +12,7 @@ HOMEPAGE="http://www.gnome.org"
 
 LICENSE="LGPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 arm ia64 ppc ppc64 sh sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="archive avahi bluetooth cdda doc fuse gdu gnome gnome-keyring gphoto2 hal
 +http iphone samba +udev"
 
@@ -28,7 +28,7 @@ RDEPEND=">=dev-libs/glib-2.23.4[lib32?]
 		dev-libs/dbus-glib[lib32?]
 		net-wireless/bluez[lib32?]
 		dev-libs/expat[lib32?] )
-	fuse? ( sys-fs/fuse[lib32?] )
+	fuse? ( >=sys-fs/fuse-2.8.0[lib32?] )
 	gdu? ( >=sys-apps/gnome-disk-utility-2.29[lib32?] )
 	gnome? ( >=gnome-base/gconf-2.0[lib32?] )
 	gnome-keyring? ( >=gnome-base/gnome-keyring-1.0[lib32?] )
