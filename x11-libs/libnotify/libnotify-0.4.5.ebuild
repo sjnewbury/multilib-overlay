@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/libnotify/libnotify-0.4.5.ebuild,v 1.17 2011/01/24 23:48:36 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/libnotify/libnotify-0.4.5.ebuild,v 1.18 2011/03/13 11:50:46 ssuominen Exp $
 
 EAPI=2
 
@@ -23,6 +23,7 @@ DEPEND="${RDEPEND}
 PDEPEND="|| (
 	x11-misc/notification-daemon
 	xfce-extra/xfce4-notifyd
+	x11-misc/notify-osd
 	>=x11-wm/awesome-3.4.4
 	kde-base/knotify
 )"
