@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-0.9.8r.ebuild,v 1.3 2011/02/24 20:37:19 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/openssl/openssl-0.9.8r.ebuild,v 1.4 2011/03/16 03:39:10 vapier Exp $
 
 # this ebuild is only for the libcrypto.so.0.9.8 and libssl.so.0.9.8 SONAME for ABI compat
 
@@ -120,9 +120,9 @@ multilib-native_src_compile_internal() {
 		-e 's:-m[a-z0-9]* ::g' \
 	)
 	sed -i \
-		-e "/^LIBDIR=/s:=.*:=$(get_libdir):" \
-		-e "/^CFLAG/s:=.*:=${CFLAG} ${CFLAGS}:" \
-		-e "/^SHARED_LDFLAGS=/s:$: ${LDFLAGS}:" \
+		-e "/^LIBDIR=/s|=.*|=$(get_libdir)|" \
+		-e "/^CFLAG/s|=.*|=${CFLAG} ${CFLAGS}|" \
+		-e "/^SHARED_LDFLAGS=/s|$| ${LDFLAGS}|" \
 		Makefile || die
 
 	# depend is needed to use $confopts
