@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/util-linux/util-linux-9999.ebuild,v 1.17 2010/12/01 22:31:35 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/util-linux/util-linux-9999.ebuild,v 1.18 2011/03/12 06:33:25 vapier Exp $
 
 EAPI="2"
 
@@ -18,14 +18,13 @@ if [[ ${PV} == "9999" ]] ; then
 	SRC_URI=""
 	#KEYWORDS=""
 else
-	SRC_URI="mirror://kernel/linux/utils/util-linux/v${PV:0:4}/${MY_P}.tar.bz2
-		loop-aes? ( http://loop-aes.sourceforge.net/updates/util-linux-ng-2.18-20100706.diff.bz2 )"
+	SRC_URI="mirror://kernel/linux/utils/util-linux/v${PV:0:4}/${MY_P}.tar.bz2"
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 fi
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="+cramfs crypt loop-aes nls old-linux perl selinux slang uclibc unicode"
+IUSE="+cramfs crypt nls old-linux perl selinux slang uclibc unicode"
 
 RDEPEND="!sys-process/schedutils
 	!sys-apps/setarch
@@ -44,8 +43,6 @@ multilib-native_src_prepare_internal() {
 	if [[ ${PV} == "9999" ]] ; then
 		autopoint --force
 		eautoreconf
-	else
-		use loop-aes && epatch "${WORKDIR}"/util-linux-ng-*.diff
 	fi
 	use uclibc && sed -i -e s/versionsort/alphasort/g -e s/strverscmp.h/dirent.h/g mount/lomount.c
 	elibtoolize
