@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/faac/faac-1.28-r1.ebuild,v 1.10 2010/09/16 00:54:42 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/faac/faac-1.28-r1.ebuild,v 1.11 2011/03/06 11:29:18 xarthisius Exp $
 
 EAPI=2
 inherit autotools eutils multilib-native
@@ -18,7 +18,8 @@ RDEPEND=">=media-libs/libmp4v2-1.9.0[lib32?]"
 DEPEND="${RDEPEND}"
 
 multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}"/${P}-external-libmp4v2.patch
+	epatch "${FILESDIR}"/${P}-external-libmp4v2.patch \
+		"${FILESDIR}"/${P}-altivec.patch
 	eautoreconf
 	epunt_cxx
 }
