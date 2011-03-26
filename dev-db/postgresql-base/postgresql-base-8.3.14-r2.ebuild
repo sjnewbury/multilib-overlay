@@ -1,32 +1,43 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/postgresql-base/postgresql-base-8.3.14.ebuild,v 1.7 2011/03/06 17:49:40 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/postgresql-base/postgresql-base-8.3.14-r2.ebuild,v 1.1 2011/03/24 11:19:25 titanofold Exp $
 
-EAPI="2"
+EAPI="3"
 
 WANT_AUTOMAKE="none"
 
-inherit eutils multilib versionator autotools multilib-native
+inherit autotools eutils multilib prefix versionator multilib-native
 
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
+SLOT="$(get_version_component_range 1-2)"
+
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 
 DESCRIPTION="PostgreSQL libraries and clients"
 HOMEPAGE="http://www.postgresql.org/"
-SRC_URI="mirror://postgresql/source/v${PV}/postgresql-${PV}.tar.bz2"
+SRC_URI="mirror://postgresql/source/v${PV}/postgresql-${PV}.tar.bz2
+		 http://dev.gentoo.org/~titanofold/postgresql-patches-${SLOT}.tbz2"
 LICENSE="POSTGRESQL"
-SLOT="$(get_version_component_range 1-2)"
-IUSE_LINGUAS="
-	linguas_af linguas_cs linguas_de linguas_es linguas_fa linguas_fr
-	linguas_hr linguas_hu linguas_it linguas_ko linguas_nb linguas_pl
-	linguas_pt_BR linguas_ro linguas_ru linguas_sk linguas_sl linguas_sv
-	linguas_tr linguas_zh_CN linguas_zh_TW"
-IUSE="doc kerberos nls pam pg-intdatetime readline ssl threads zlib ldap ${IUSE_LINGUAS}"
+
+S=${WORKDIR}/postgresql-${PV}
+
+# No tests to be done for clients and libraries
 RESTRICT="test"
 
+LINGUAS="af cs de es fa fr hr hu it ko nb pl pt_BR ro ru sk sl sv tr zh_CN zh_TW"
+IUSE="doc kerberos nls pam pg-intdatetime readline ssl threads zlib ldap"
+
+for lingua in ${LINGUAS} ; do
+	IUSE+=" linguas_${lingua}"
+done
+
 wanted_languages() {
-	for u in ${IUSE_LINGUAS} ; do
-		use $u && echo -n "${u#linguas_} "
+	local enable_langs
+
+	for lingua in ${LINGUAS} ; do
+		use linguas_${lingua} && enable_langs+="${lingua} "
 	done
+
+	echo -n ${enable_langs}
 }
 
 RDEPEND="kerberos? ( virtual/krb5[lib32?] )
@@ -47,13 +58,14 @@ DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext[lib32?] )"
 PDEPEND="doc? ( ~dev-db/postgresql-docs-${PV} )"
 
-S="${WORKDIR}/postgresql-${PV}"
-
 multilib-native_src_prepare_internal() {
+	epatch "${WORKDIR}/autoconf.patch" \
+		"${WORKDIR}/base.patch" \
+		"${WORKDIR}/darwin.patch" \
+		"${WORKDIR}/SuperH.patch" \
+		"${WORKDIR}/relax_ssl_perms.patch"
 
-	epatch "${FILESDIR}/postgresql-${SLOT}-common.patch" \
-		"${FILESDIR}/postgresql-${SLOT}-base.patch" \
-		"${FILESDIR}/postgresql-8.x-relax_ssl_perms.patch"
+	eprefixify src/include/pg_config_manual.h
 
 	# to avoid collision - it only should be installed by server
 	rm "${S}/src/backend/nls.mk"
@@ -66,12 +78,12 @@ multilib-native_src_prepare_internal() {
 
 multilib-native_src_configure_internal() {
 	export LDFLAGS_SL="${LDFLAGS}"
-	econf --prefix=/usr/$(get_libdir)/postgresql-${SLOT} \
-		--datadir=/usr/share/postgresql-${SLOT} \
-		--sysconfdir=/etc/postgresql-${SLOT} \
-		--includedir=/usr/include/postgresql-${SLOT} \
-		--with-locale-dir=/usr/share/postgresql-${SLOT}/locale \
-		--mandir=/usr/share/postgresql-${SLOT}/man \
+	econf --prefix=${EROOT%/}/usr/$(get_libdir)/postgresql-${SLOT} \
+		--datadir=${EROOT%/}/usr/share/postgresql-${SLOT} \
+		--sysconfdir=${EROOT%/}/etc/postgresql-${SLOT} \
+		--includedir=${EROOT%/}/usr/include/postgresql-${SLOT} \
+		--with-locale-dir=${EROOT%/}/usr/share/postgresql-${SLOT}/locale \
+		--mandir=${EROOT%/}/usr/share/postgresql-${SLOT}/man \
 		--without-docdir \
 		--enable-depend \
 		--without-tcl \
@@ -102,9 +114,10 @@ multilib-native_src_install_internal() {
 	insinto /usr/include/postgresql-${SLOT}/postmaster
 	doins "${S}"/src/include/postmaster/*.h
 	dodir /usr/share/postgresql-${SLOT}/man/man1
-	tar -zxf "${S}/doc/man.tar.gz" -C "${D}"/usr/share/postgresql-${SLOT}/man man1/{ecpg,pg_config}.1
+	tar -zxf "${S}/doc/man.tar.gz" -C "${ED}"/usr/share/postgresql-${SLOT}/man man1/{ecpg,pg_config}.1
 
-	rm "${D}/usr/share/postgresql-${SLOT}/man/man1"/{initdb,ipcclean,pg_controldata,pg_ctl,pg_resetxlog,pg_restore,postgres,postmaster}.1
+	rm "${ED}/usr/share/postgresql-${SLOT}/man/man1"/{initdb,ipcclean,pg_controldata,pg_ctl,pg_resetxlog,pg_restore,postgres,postmaster}.1
+	fowners root:0 /usr/share/postgresql-${SLOT}/man/man1/{ecpg,pg_config}.1
 	dodoc README HISTORY doc/{README.*,TODO,bug.template}
 
 	cd "${S}/contrib"
@@ -113,24 +126,24 @@ multilib-native_src_install_internal() {
 
 	dodir /etc/eselect/postgresql/slots/${SLOT}
 
-	IDIR="/usr/include/postgresql-${SLOT}"
-	cat > "${D}/etc/eselect/postgresql/slots/${SLOT}/base" <<-__EOF__
+	IDIR="${EROOT%/}/usr/include/postgresql-${SLOT}"
+	cat > "${ED}/etc/eselect/postgresql/slots/${SLOT}/base" <<-__EOF__
 postgres_ebuilds="\${postgres_ebuilds} ${PF}"
-postgres_prefix=/usr/$(get_libdir)/postgresql-${SLOT}
-postgres_datadir=/usr/share/postgresql-${SLOT}
-postgres_bindir=/usr/$(get_libdir)/postgresql-${SLOT}/bin
+postgres_prefix=${EROOT%/}/usr/$(get_libdir)/postgresql-${SLOT}
+postgres_datadir=${EROOT%/}/usr/share/postgresql-${SLOT}
+postgres_bindir=${EROOT%/}/usr/$(get_libdir)/postgresql-${SLOT}/bin
 postgres_symlinks=(
-	${IDIR} /usr/include/postgresql
-	${IDIR}/libpq-fe.h /usr/include/libpq-fe.h
-	${IDIR}/pg_config_manual.h /usr/include/pg_config_manual.h
-	${IDIR}/libpq /usr/include/libpq
-	${IDIR}/postgres_ext.h /usr/include/postgres_ext.h
+	${IDIR} ${EROOT%/}/usr/include/postgresql
+	${IDIR}/libpq-fe.h ${EROOT%/}/usr/include/libpq-fe.h
+	${IDIR}/pg_config_manual.h ${EROOT%/}/usr/include/pg_config_manual.h
+	${IDIR}/libpq ${EROOT%/}/usr/include/libpq
+	${IDIR}/postgres_ext.h ${EROOT%/}/usr/include/postgres_ext.h
 )
 __EOF__
 
 	cat >"${T}/50postgresql-94-${SLOT}" <<-__EOF__
-		LDPATH=/usr/$(get_libdir)/postgresql-${SLOT}/$(get_libdir)
-		MANPATH=/usr/share/postgresql-${SLOT}/man
+		LDPATH=${EROOT%/}/usr/$(get_libdir)/postgresql-${SLOT}/$(get_libdir)
+		MANPATH=${EROOT%/}/usr/share/postgresql-${SLOT}/man
 	__EOF__
 	doenvd "${T}/50postgresql-94-${SLOT}"
 
@@ -142,7 +155,8 @@ __EOF__
 multilib-native_pkg_postinst_internal() {
 	eselect postgresql update
 	[[ "$(eselect postgresql show)" = "(none)" ]] && eselect postgresql set ${SLOT}
-	elog "If you need a global psqlrc-file, you can place it in '${ROOT}/etc/postgresql-${SLOT}/'."
+	elog "If you need a global psqlrc-file, you can place it in:"
+	elog "    ${EROOT%/}/etc/postgresql-${SLOT}/"
 }
 
 multilib-native_pkg_postrm_internal() {
