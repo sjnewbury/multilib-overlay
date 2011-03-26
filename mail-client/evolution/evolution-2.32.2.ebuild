@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.32.2.ebuild,v 1.4 2011/02/24 20:33:02 tomka Exp $
+# $Header: /var/cvsroot/gentoo-x86/mail-client/evolution/evolution-2.32.2.ebuild,v 1.8 2011/03/22 19:34:47 ranger Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -15,7 +15,7 @@ HOMEPAGE="http://www.gnome.org/projects/evolution/"
 
 LICENSE="GPL-2 LGPL-2 OPENLDAP"
 SLOT="2.0"
-KEYWORDS="~alpha amd64 ~ia64 ~ppc ~ppc64 ~sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 ia64 ppc ppc64 sparc x86 ~x86-fbsd"
 
 # connman is not ready to be stabilized, bug #353440
 IUSE="clutter crypt doc gstreamer kerberos ldap networkmanager python ssl"
@@ -30,14 +30,14 @@ PINENTRY_DEPEND="|| ( app-crypt/pinentry[gtk] app-crypt/pinentry-qt app-crypt/pi
 # pst is not mature enough and changes API/ABI frequently
 RDEPEND=">=dev-libs/glib-2.25.12:2[lib32?]
 	>=x11-libs/gtk+-2.20.0:2[lib32?]
-	>=dev-libs/libunique-1.1.2[lib32?]
+	>=dev-libs/libunique-1.1.2:1[lib32?]
 	>=gnome-base/gnome-desktop-2.26:2[lib32?]
 	>=dev-libs/libgweather-2.25.3:2[lib32?]
 	media-libs/libcanberra[gtk,lib32?]
 	>=x11-libs/libnotify-0.3[lib32?]
 	>=gnome-extra/evolution-data-server-${PV}[weather,lib32?]
 	>=gnome-extra/gtkhtml-3.31.90:3.14[lib32?]
-	>=gnome-base/gconf-2[lib32?]
+	>=gnome-base/gconf-2:2[lib32?]
 	dev-libs/atk[lib32?]
 	>=dev-libs/libxml2-2.7.3[lib32?]
 	>=net-libs/libsoup-2.4:2.4[lib32?]
@@ -52,8 +52,8 @@ RDEPEND=">=dev-libs/glib-2.25.12:2[lib32?]
 					${PINENTRY_DEPEND} )
 				  =app-crypt/gnupg-1.4*[lib32?] ) )
 	gstreamer? (
-		>=media-libs/gstreamer-0.10[lib32?]
-		>=media-libs/gst-plugins-base-0.10[lib32?] )
+		>=media-libs/gstreamer-0.10:0.10[lib32?]
+		>=media-libs/gst-plugins-base-0.10:0.10[lib32?] )
 	kerberos? ( virtual/krb5[lib32?] )
 	ldap? ( >=net-nds/openldap-2[lib32?] )
 	networkmanager? ( >=net-misc/networkmanager-0.7[lib32?] )
