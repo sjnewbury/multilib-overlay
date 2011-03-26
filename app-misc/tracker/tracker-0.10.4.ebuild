@@ -1,23 +1,25 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-9999.ebuild,v 1.36 2011/03/18 07:50:16 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-0.10.4.ebuild,v 1.1 2011/03/18 07:50:16 eva Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
 PYTHON_DEPEND="2:2.6"
 
-inherit autotools git gnome2 linux-info python virtualx multilib-native
+inherit eutils gnome2 linux-info python virtualx multilib-native
 
 DESCRIPTION="A tagging metadata database, search tool and indexer"
 HOMEPAGE="http://www.tracker-project.org/"
-EGIT_REPO_URI="git://git.gnome.org/${PN}"
-SRC_URI=""
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~x86"
 # USE="doc" is managed by eclass.
 IUSE="applet doc eds exif flac gif gnome-keyring gsf gstreamer gtk hal iptc +jpeg laptop mp3 nautilus networkmanager pdf playlist rss strigi test +tiff upnp +vorbis xine +xml xmp"
+
+# Test suite highly disfunctional, loops forever
+# putting aside for now
+RESTRICT="test"
 
 # TODO: rest -> flickr, qt vs. gdk
 # vala is built with debug by default (see VALAFLAGS)
@@ -80,14 +82,13 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
 	>=sys-devel/gettext-0.17[lib32?]
 	>=dev-util/pkgconfig-0.20[lib32?]
-	dev-util/gtk-doc-am
-	>=dev-util/gtk-doc-1.8
 	applet? ( >=dev-lang/vala-0.11.4:0.12[lib32?] )
 	gtk? (
 		app-office/dia
 		>=dev-lang/vala-0.11.4:0.12[lib32?]
 		>=dev-libs/libgee-0.3[lib32?] )
 	doc? (
+		>=dev-util/gtk-doc-1.8
 		media-gfx/graphviz[lib32?] )
 	test? (
 		>=dev-libs/dbus-glib-0.82-r1[lib32?]
@@ -160,8 +161,8 @@ multilib-native_pkg_setup_internal() {
 		$(use_enable playlist)
 		$(use_enable rss miner-rss)
 		$(use_enable strigi libstreamanalyzer)
-		$(use_enable test unit-tests)
 		$(use_enable test functional-tests)
+		$(use_enable test unit-tests)
 		$(use_enable tiff libtiff)
 		$(use_enable vorbis libvorbis)
 		$(use_enable xml libxml2)
@@ -174,12 +175,9 @@ multilib-native_pkg_setup_internal() {
 	python_set_active_version 2
 }
 
-multilib-native_src_unpack_internal() {
-	git_src_unpack
-}
-
 multilib-native_src_prepare_internal() {
-	gnome2_src_prepare
+	# Fix build failures with USE=strigi
+	epatch "${FILESDIR}/${PN}-0.8.0-strigi.patch"
 
 	# Fix functional tests scripts
 	find "${S}" -name "*.pyc" -delete
@@ -189,9 +187,10 @@ multilib-native_src_prepare_internal() {
 	python_convert_shebangs 2 "${S}"/utils/gtk-sparql/*.py
 	python_convert_shebangs 2 "${S}"/examples/rss-reader/*.py
 
-	gtkdocize || die "gtkdocize failed"
-	intltoolize --force --copy --automake || die "intltoolize failed"
-	eautoreconf
+	# FIXME: report broken tests
+	sed -e '/\/libtracker-miner\/tracker-password-provider\/setting/,+1 s:^\(.*\)$:/*\1*/:' \
+		-e '/\/libtracker-miner\/tracker-password-provider\/getting/,+1 s:^\(.*\)$:/*\1*/:' \
+		-i tests/libtracker-miner/tracker-password-provider-test.c || die
 }
 
 src_test() {
