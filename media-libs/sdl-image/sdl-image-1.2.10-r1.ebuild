@@ -1,10 +1,10 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/sdl-image/sdl-image-1.2.10-r1.ebuild,v 1.11 2010/07/27 02:34:57 mr_bones_ Exp $
-
+# $Header: /var/cvsroot/gentoo-x86/media-libs/sdl-image/sdl-image-1.2.10-r1.ebuild,v 1.12 2011/03/25 11:24:15 tupone Exp $
 EAPI=2
 
-inherit multilib-native
+inherit base multilib-native
+
 MY_P="${P/sdl-/SDL_}"
 DESCRIPTION="image file loading library"
 HOMEPAGE="http://www.libsdl.org/projects/SDL_image/"
@@ -20,8 +20,11 @@ DEPEND="sys-libs/zlib[lib32?]
 	png? ( >=media-libs/libpng-1.4[lib32?] )
 	jpeg? ( virtual/jpeg[lib32?] )
 	tiff? ( media-libs/tiff[lib32?] )"
+RDEPEND="${DEPEND}"
 
 S=${WORKDIR}/${MY_P}
+
+PATCHES=( "${FILESDIR}"/${P}-libpng15.patch )
 
 multilib-native_src_configure_internal() {
 	econf \
