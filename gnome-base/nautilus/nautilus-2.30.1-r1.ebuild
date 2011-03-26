@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/nautilus/nautilus-2.30.1-r1.ebuild,v 1.9 2010/10/17 15:15:02 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/nautilus/nautilus-2.30.1-r1.ebuild,v 1.10 2011/03/16 17:08:06 nirbheek Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -15,18 +15,18 @@ SLOT="0"
 KEYWORDS="alpha amd64 arm ia64 ppc ppc64 sh sparc x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
 IUSE="doc gnome xmp"
 
-RDEPEND=">=dev-libs/glib-2.24.0[lib32?]
-	>=gnome-base/gnome-desktop-2.29.91[lib32?]
+RDEPEND=">=dev-libs/glib-2.24.0:2[lib32?]
+	>=gnome-base/gnome-desktop-2.29.91:2[lib32?]
 	>=x11-libs/pango-1.1.2[lib32?]
-	>=x11-libs/gtk+-2.20.0[lib32?]
-	>=dev-libs/libxml2-2.4.7[lib32?]
+	>=x11-libs/gtk+-2.20.0:2[lib32?]
+	>=dev-libs/libxml2-2.4.7:2[lib32?]
 	>=media-libs/libexif-0.5.12[lib32?]
-	>=gnome-base/gconf-2.0[lib32?]
-	dev-libs/libunique[lib32?]
+	>=gnome-base/gconf-2.0:2[lib32?]
+	dev-libs/libunique:1[lib32?]
 	dev-libs/dbus-glib[lib32?]
 	x11-libs/libXft[lib32?]
 	x11-libs/libXrender[lib32?]
-	xmp? ( >=media-libs/exempi-2[lib32?] )"
+	xmp? ( media-libs/exempi:2[lib32?] )"
 
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5[lib32?]

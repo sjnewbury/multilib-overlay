@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/nautilus/nautilus-2.32.2.1.ebuild,v 1.4 2011/02/27 15:10:14 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/nautilus/nautilus-2.32.2.1.ebuild,v 1.8 2011/03/22 19:20:31 ranger Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -12,21 +12,21 @@ HOMEPAGE="http://live.gnome.org/Nautilus"
 
 LICENSE="GPL-2 LGPL-2 FDL-1.1"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
+KEYWORDS="alpha amd64 arm ia64 ppc ppc64 sh sparc x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux"
 IUSE="doc gnome +introspection xmp"
 
-RDEPEND=">=dev-libs/glib-2.25.9[lib32?]
+RDEPEND=">=dev-libs/glib-2.25.9:2[lib32?]
 	>=gnome-base/gnome-desktop-2.29.91:2[lib32?]
 	>=x11-libs/pango-1.1.2[lib32?]
 	>=x11-libs/gtk+-2.22:2[introspection?,lib32?]
-	>=dev-libs/libxml2-2.4.7[lib32?]
+	>=dev-libs/libxml2-2.4.7:2[lib32?]
 	>=media-libs/libexif-0.5.12[lib32?]
-	>=gnome-base/gconf-2[lib32?]
+	>=gnome-base/gconf-2:2[lib32?]
 	dev-libs/libunique:1[lib32?]
 	x11-libs/libXext[lib32?]
 	x11-libs/libXrender[lib32?]
 	introspection? ( >=dev-libs/gobject-introspection-0.6.4 )
-	xmp? ( >=media-libs/exempi-2[lib32?] )"
+	xmp? ( media-libs/exempi:2[lib32?] )"
 
 DEPEND="${RDEPEND}
 	>=dev-lang/perl-5[lib32?]
