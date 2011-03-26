@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/eclass/xorg-2.eclass,v 1.22 2011/01/15 17:55:21 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/xorg-2.eclass,v 1.39 2011/03/19 15:02:47 scarabeus Exp $
 #
 # @ECLASS: xorg-2.eclass
 # @MAINTAINER:
@@ -26,7 +26,6 @@ GIT_ECLASS=""
 if [[ ${PV} == *9999* ]]; then
 	GIT_ECLASS="git"
 	XORG_EAUTORECONF="yes"
-	SRC_URI=""
 fi
 
 # If we're a font package, but not the font.alias one
@@ -40,13 +39,13 @@ if [[ ${PN} == font* \
 	FONT_ECLASS="font"
 fi
 
-inherit eutils base libtool multilib toolchain-funcs flag-o-matic autotools \
+inherit autotools-utils eutils libtool multilib toolchain-funcs flag-o-matic autotools \
 	${FONT_ECLASS} ${GIT_ECLASS}
 
 EXPORTED_FUNCTIONS="src_unpack src_compile src_install pkg_postinst pkg_postrm"
 case "${EAPI:-0}" in
 	3|4) EXPORTED_FUNCTIONS="${EXPORTED_FUNCTIONS} src_prepare src_configure" ;;
-	*) die "EAPI-UNSUPPORTED" ;;
+	*) die "EAPI=${EAPI} is not supported" ;;
 esac
 
 # exports must be ALWAYS after inherit
@@ -61,37 +60,44 @@ HOMEPAGE="http://xorg.freedesktop.org/"
 # before inheriting this eclass.
 : ${XORG_EAUTORECONF:="no"}
 
-# Set up SRC_URI for individual modular releases
-BASE_INDIVIDUAL_URI="http://xorg.freedesktop.org/releases/individual"
-# @ECLASS-VARIABLE: MODULE
+# @ECLASS-VARIABLE: XORG_BASE_INDIVIDUAL_URI
+# @DESCRIPTION:
+# Set up SRC_URI for individual modular releases. If set to an empty
+# string, no SRC_URI will be provided by the eclass.
+: ${XORG_BASE_INDIVIDUAL_URI="http://xorg.freedesktop.org/releases/individual"}
+
+# @ECLASS-VARIABLE: XORG_MODULE
 # @DESCRIPTION:
 # The subdirectory to download source from. Possible settings are app,
 # doc, data, util, driver, font, lib, proto, xserver. Set above the
 # inherit to override the default autoconfigured module.
-if [[ -z ${MODULE} ]]; then
+if [[ -z ${XORG_MODULE} ]]; then
 	case ${CATEGORY} in
-		app-doc)             MODULE="doc"     ;;
-		media-fonts)         MODULE="font"    ;;
-		x11-apps|x11-wm)     MODULE="app"     ;;
-		x11-misc|x11-themes) MODULE="util"    ;;
-		x11-drivers)         MODULE="driver"  ;;
-		x11-base)            MODULE="xserver" ;;
-		x11-proto)           MODULE="proto"   ;;
-		x11-libs)            MODULE="lib"     ;;
-		*)                   MODULE=""        ;;
+		app-doc)             XORG_MODULE=doc/     ;;
+		media-fonts)         XORG_MODULE=font/    ;;
+		x11-apps|x11-wm)     XORG_MODULE=app/     ;;
+		x11-misc|x11-themes) XORG_MODULE=util/    ;;
+		x11-base)            XORG_MODULE=xserver/ ;;
+		x11-drivers)         XORG_MODULE=driver/  ;;
+		x11-proto)           XORG_MODULE=proto/   ;;
+		x11-libs)            XORG_MODULE=lib/     ;;
+		*)                   XORG_MODULE=         ;;
 	esac
 fi
 
-# @ECLASS-VARIABLE: PACKAGE_NAME
+# backcompat, remove when everything in main tree fixed
+[[ -n ${MODULE} ]] && XORG_MODULE=${MODULE} && ewarn "$CATEGORY/$P is using MODULE variable, please migrate to XORG_MODULE to preserve namespace."
+
+# @ECLASS-VARIABLE: XORG_PACKAGE_NAME
 # @DESCRIPTION:
-# For git checkout the git repository migth differ from package name.
+# For git checkout the git repository might differ from package name.
 # This variable can be used for proper directory specification
-: ${PACKAGE_NAME:=${PN}}
+: ${XORG_PACKAGE_NAME:=${PN}}
 
 if [[ -n ${GIT_ECLASS} ]]; then
-	EGIT_REPO_URI="git://anongit.freedesktop.org/git/xorg/${MODULE}/${PACKAGE_NAME}"
-else
-	SRC_URI+=" ${BASE_INDIVIDUAL_URI}/${MODULE}/${P}.tar.bz2"
+	: ${EGIT_REPO_URI:="git://anongit.freedesktop.org/git/xorg/${XORG_MODULE}${XORG_PACKAGE_NAME}"}
+elif [[ -n ${XORG_BASE_INDIVIDUAL_URI} ]]; then
+	SRC_URI="${XORG_BASE_INDIVIDUAL_URI}/${XORG_MODULE}${P}.tar.bz2"
 fi
 
 : ${SLOT:=0}
@@ -108,9 +114,9 @@ EAUTORECONF_DEPEND+="
 	>=sys-devel/libtool-2.2.6a
 	sys-devel/m4"
 if [[ ${PN} != util-macros ]] ; then
-	EAUTORECONF_DEPEND+=" >=x11-misc/util-macros-1.11.0"
+	EAUTORECONF_DEPEND+=" >=x11-misc/util-macros-1.12.0"
 	# Required even by xorg-server
-	[[ ${PN} == "font-util" ]] || EAUTORECONF_DEPEND+=" >=media-fonts/font-util-1.1.1-r1"
+	[[ ${PN} == "font-util" ]] || EAUTORECONF_DEPEND+=" >=media-fonts/font-util-1.2.0"
 fi
 WANT_AUTOCONF="latest"
 WANT_AUTOMAKE="latest"
@@ -127,7 +133,7 @@ if [[ ${FONT} == yes ]]; then
 		x11-apps/mkfontscale
 		x11-apps/mkfontdir"
 	PDEPEND+=" media-fonts/font-alias"
-	DEPEND+=" >=media-fonts/font-util-1.1.1-r1"
+	DEPEND+=" >=media-fonts/font-util-1.2.0"
 
 	# @ECLASS-VARIABLE: FONT_DIR
 	# @DESCRIPTION:
@@ -176,9 +182,98 @@ fi
 
 DEPEND+=" >=dev-util/pkgconfig-0.23"
 
-# Check deps on xorg-server
-has dri ${IUSE//+} && DEPEND+=" dri? ( >=x11-base/xorg-server-1.6.3.901-r2[-minimal] )"
-[[ -n "${DRIVER}" ]] && DEPEND+=" x11-base/xorg-server[xorg]"
+# @ECLASS-VARIABLE: XORG_DRI
+# @DESCRIPTION:
+# Possible values are "always" or the value of the useflag DRI capabilities
+# are required for. Default value is "no"
+#
+# Eg. XORG_DRI="opengl" will pull all dri dependant deps for opengl useflag
+: ${XORG_DRI:="no"}
+
+DRI_COMMON_DEPEND="
+	x11-base/xorg-server[-minimal]
+	x11-libs/libdrm[lib32?]
+"
+DRI_DEPEND="
+	x11-proto/xf86driproto
+	x11-proto/glproto
+	x11-proto/dri2proto[lib32?]
+"
+case ${XORG_DRI} in
+	no)
+		;;
+	always)
+		COMMON_DEPEND+=" ${DRI_COMMON_DEPEND}"
+		DEPEND+=" ${DRI_DEPEND}"
+		;;
+	*)
+		COMMON_DEPEND+=" ${XORG_DRI}? ( ${DRI_COMMON_DEPEND} )"
+		DEPEND+=" ${XORG_DRI}? ( ${DRI_DEPEND} )"
+		IUSE+=" ${XORG_DRI}"
+		;;
+esac
+unset DRI_DEPEND
+unset DRI_COMMONDEPEND
+
+if [[ -n "${DRIVER}" ]]; then
+	COMMON_DEPEND+="
+		x11-base/xorg-server[xorg]
+	"
+fi
+if [[ -n "${DRIVER}" && ${PN} == xf86-video-* ]]; then
+	COMMON_DEPEND+="
+		x11-libs/libpciaccess
+	"
+	# we also needs some protos and libs in all cases
+	DEPEND+="
+		x11-proto/fontsproto
+		x11-proto/randrproto
+		x11-proto/renderproto
+		x11-proto/videoproto
+		x11-proto/xextproto
+		x11-proto/xineramaproto
+		x11-proto/xproto
+	"
+fi
+
+# @ECLASS-VARIABLE: XORG_DOC
+# @DESCRIPTION:
+# Possible values are "always" or the value of the useflag doc packages
+# are required for. Default value is "no"
+#
+# Eg. XORG_DOC="manual" will pull all doc dependant deps for manual useflag
+: ${XORG_DOC:="no"}
+
+DOC_DEPEND="
+	doc? (
+		app-text/asciidoc
+		app-text/xmlto
+		app-doc/doxygen
+		app-text/docbook-xml-dtd:4.1.2
+		app-text/docbook-xml-dtd:4.2
+		app-text/docbook-xml-dtd:4.3
+	)
+"
+case ${XORG_DOC} in
+	no)
+		;;
+	always)
+		DEPEND+=" ${DOC_DEPEND}"
+		;;
+	*)
+		DEPEND+=" ${XORG_DOC}? ( ${DOC_DEPEND} )"
+		IUSE+=" ${XORG_DOC}"
+		;;
+esac
+unset DOC_DEPEND
+
+DEPEND+=" ${COMMON_DEPEND}"
+RDEPEND+=" ${COMMON_DEPEND}"
+unset COMMON_DEPEND
+
+debug-print "${LINENO} ${ECLASS} ${FUNCNAME}: DEPEND=${DEPEND}"
+debug-print "${LINENO} ${ECLASS} ${FUNCNAME}: RDEPEND=${RDEPEND}"
+debug-print "${LINENO} ${ECLASS} ${FUNCNAME}: PDEPEND=${PDEPEND}"
 
 # @FUNCTION: xorg-2_pkg_setup
 # @DESCRIPTION:
@@ -216,7 +311,7 @@ xorg-2_patch_source() {
 	EPATCH_SUFFIX=${EPATCH_SUFFIX:=patch}
 
 	[[ -d "${EPATCH_SOURCE}" ]] && epatch
-	base_src_prepare "$@"
+	autotools-utils_src_prepare "$@"
 }
 
 # @FUNCTION: xorg-2_reconf_source
@@ -255,24 +350,29 @@ xorg-2_font_configure() {
 	debug-print-function ${FUNCNAME} "$@"
 
 	if has nls ${IUSE//+} && ! use nls; then
-		FONT_OPTIONS+="
-			--disable-iso8859-2
-			--disable-iso8859-3
-			--disable-iso8859-4
-			--disable-iso8859-5
-			--disable-iso8859-6
-			--disable-iso8859-7
-			--disable-iso8859-8
-			--disable-iso8859-9
-			--disable-iso8859-10
-			--disable-iso8859-11
-			--disable-iso8859-12
-			--disable-iso8859-13
-			--disable-iso8859-14
-			--disable-iso8859-15
-			--disable-iso8859-16
-			--disable-jisx0201
-			--disable-koi8-r"
+		if grep -q -s "disable-all-encodings" ${ECONF_SOURCE:-.}/configure; then
+			FONT_OPTIONS+="
+				--disable-all-encodings"
+		else
+			FONT_OPTIONS+="
+				--disable-iso8859-2
+				--disable-iso8859-3
+				--disable-iso8859-4
+				--disable-iso8859-5
+				--disable-iso8859-6
+				--disable-iso8859-7
+				--disable-iso8859-8
+				--disable-iso8859-9
+				--disable-iso8859-10
+				--disable-iso8859-11
+				--disable-iso8859-12
+				--disable-iso8859-13
+				--disable-iso8859-14
+				--disable-iso8859-15
+				--disable-iso8859-16
+				--disable-jisx0201
+				--disable-koi8-r"
+		fi
 	fi
 }
 
@@ -300,26 +400,23 @@ xorg-2_flags_setup() {
 # Perform any necessary pre-configuration steps, then run configure
 xorg-2_src_configure() {
 	debug-print-function ${FUNCNAME} "$@"
-	local myopts=""
 
 	xorg-2_flags_setup
-	[[ -n "${FONT}" ]] && xorg-2_font_configure
 
 	# @VARIABLE: CONFIGURE_OPTIONS
 	# @DESCRIPTION:
 	# Any options to pass to configure
 	# @DEFAULT_UNSET
 	CONFIGURE_OPTIONS=${CONFIGURE_OPTIONS:=""}
-	if [[ -x ${ECONF_SOURCE:-.}/configure ]]; then
-		if has static-libs ${IUSE//+}; then
-			myopts+=" $(use_enable static-libs static)"
-		fi
-		econf \
-			--disable-dependency-tracking \
-			${FONT_OPTIONS} \
-			${CONFIGURE_OPTIONS} \
-			${myopts}
-	fi
+
+	[[ -n "${FONT}" ]] && xorg-2_font_configure
+	local myeconfargs=(
+		--disable-dependency-tracking
+		${CONFIGURE_OPTIONS}
+		${FONT_OPTIONS}
+	)
+
+	autotools-utils_src_configure "$@"
 }
 
 # @FUNCTION: xorg-2_src_compile
@@ -328,7 +425,7 @@ xorg-2_src_configure() {
 xorg-2_src_compile() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	base_src_compile "$@"
+	autotools-utils_src_compile "$@"
 }
 
 # @FUNCTION: xorg-2_src_install
@@ -339,16 +436,12 @@ xorg-2_src_install() {
 	debug-print-function ${FUNCNAME} "$@"
 
 	if [[ ${CATEGORY} == x11-proto ]]; then
-		emake \
-			${PN/proto/}docdir=${EPREFIX}/usr/share/doc/${PF} \
-			docdir=${EPREFIX}/usr/share/doc/${PF} \
-			DESTDIR="${D}" \
-			install || die "emake install failed"
+		autotools-utils_src_install \
+			${PN/proto/}docdir="${EPREFIX}/usr/share/doc/${PF}" \
+			docdir="${EPREFIX}/usr/share/doc/${PF}"
 	else
-		emake \
-			docdir=${EPREFIX}/usr/share/doc/${PF} \
-			DESTDIR="${D}" \
-			install || die "emake install failed"
+		autotools-utils_src_install \
+			docdir="${EPREFIX}/usr/share/doc/${PF}"
 	fi
 
 	if [[ -n ${GIT_ECLASS} ]]; then
@@ -360,19 +453,9 @@ xorg-2_src_install() {
 	if [[ -e "${S}"/ChangeLog ]]; then
 		dodoc "${S}"/ChangeLog || die "dodoc failed"
 	fi
-	# @VARIABLE: DOCS
-	# @DESCRIPTION:
-	# Any documentation to install
-	# @DEFAULT_UNSET
-	if [[ -n ${DOCS} ]]; then
-		dodoc ${DOCS} || die "dodoc failed"
-	fi
 
-	# Don't install libtool archives for server modules
-	if [[ -e "${D%/}${EPREFIX}/usr/$(get_libdir)/xorg/modules" ]]; then
-		find "${D%/}${EPREFIX}/usr/$(get_libdir)/xorg/modules" -name '*.la' \
-			-exec rm -f {} ';'
-	fi
+	# Don't install libtool archives (even with static-libs)
+	remove_libtool_files all
 
 	[[ -n ${FONT} ]] && remove_font_metadata
 }
