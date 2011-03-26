@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.10.1.ebuild,v 1.21 2010/03/31 18:49:57 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/perl/perl-5.10.1.ebuild,v 1.22 2011/03/07 11:35:06 tove Exp $
 
 EAPI=2
 
@@ -189,7 +189,6 @@ multilib-native_src_configure_internal() {
 	fi
 
 	local inclist=$(for v in ${PERL_OLDVERSEN}; do echo -n "${v} ${v}/${myarch}${mythreading}"; done )
-	[[ -n "${ABI}" ]] && myconf "-Dusrinc=$(get_ml_incdir)"
 
 	[[ ${ELIBC} == "FreeBSD" ]] && myconf "-Dlibc=/usr/$(get_libdir)/libc.a"
 
