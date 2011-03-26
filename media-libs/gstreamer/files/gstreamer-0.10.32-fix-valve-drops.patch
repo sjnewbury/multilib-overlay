@@ -1,0 +1,22 @@
+From 2cfc7adcb11b9ada2b087d3dc5c0fc43214bf9cd Mon Sep 17 00:00:00 2001
+From: Olivier Crête <olivier.crete@collabora.co.uk>
+Date: Fri, 28 Jan 2011 20:36:33 +0000
+Subject: valve: Only set discont on the first buffer after drops
+
+Reset the discont member after setting discont on the first buffer after
+dropping.
+---
+diff --git a/plugins/elements/gstvalve.c b/plugins/elements/gstvalve.c
+index fdc175f..ae905f4 100644
+--- a/plugins/elements/gstvalve.c
++++ b/plugins/elements/gstvalve.c
+@@ -184,6 +184,7 @@ gst_valve_chain (GstPad * pad, GstBuffer * buffer)
+     if (valve->discont) {
+       buffer = gst_buffer_make_metadata_writable (buffer);
+       GST_BUFFER_FLAG_SET (buffer, GST_BUFFER_FLAG_DISCONT);
++      valve->discont = FALSE;
+     }
+ 
+     ret = gst_pad_push (valve->srcpad, buffer);
+--
+cgit v0.8.3-6-g21f6

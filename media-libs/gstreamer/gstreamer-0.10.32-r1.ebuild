@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/gstreamer/gstreamer-0.10.31.ebuild,v 1.9 2011/03/13 09:24:30 xarthisius Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/gstreamer/gstreamer-0.10.32-r1.ebuild,v 1.1 2011/03/12 09:11:38 nirbheek Exp $
 
 EAPI=2
 
@@ -15,10 +15,10 @@ SRC_URI="http://${PN}.freedesktop.org/src/${PN}/${P}.tar.bz2"
 
 LICENSE="LGPL-2"
 SLOT=${PV_MAJ_MIN}
-KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="+introspection nls test"
 
-RDEPEND=">=dev-libs/glib-2.20:2[lib32?]
+RDEPEND=">=dev-libs/glib-2.22:2[lib32?]
 	dev-libs/libxml2[lib32?]
 	introspection? ( >=dev-libs/gobject-introspection-0.6.3 )
 	!<media-libs/gst-plugins-base-0.10.26"
@@ -42,6 +42,12 @@ multilib-native_src_configure_internal() {
 		$(use_enable test tests) \
 		--with-package-name="GStreamer ebuild for Gentoo" \
 		--with-package-origin="http://packages.gentoo.org/package/media-libs/gstreamer"
+}
+
+multilib-native_src_prepare_internal() {
+	# Fix voice/video calling: taken from upstream, drop for next release
+	epatch "${FILESDIR}/${P}-fix-valve-drops.patch"
+	default_src_prepare
 }
 
 multilib-native_src_install_internal() {
