@@ -1,32 +1,34 @@
-From 882da7d7385e51024bc64a08a21cfd86cc55f3d1 Mon Sep 17 00:00:00 2001
-From: Andy Whitcroft <apw@canonical.com>
-Date: Tue, 18 Jan 2011 10:30:58 +0000
-Subject: [PATCH] netlink: request all matches when requesting interface and address lists
+From: Pablo Neira Ayuso <pablo@netfilter.org>
+Date: Fri, 18 Feb 2011 17:58:21 +0000 (+0100)
+Subject: netlink: fix wrong use of netlink flags for dump operations
+X-Git-Tag: v0.6.29~17
+X-Git-Url: http://git.0pointer.de/?p=avahi.git;a=commitdiff_plain;h=65cb5c100eb1e5891f145be0b89aaa3c2d2e4317
 
-When requesting the a full list of interfaces and addresses for the machine
-avahi uses a wild card netlink search.  This is done via a NLM_F_ROOT
-request.  However we do not correctly request NLM_F_MATCH indicating
-we want all matches.  This leads to the requests returning EINVAL on
-v2.6.38-rc1 and later kernels and to the daemon hanging during startup.
+netlink: fix wrong use of netlink flags for dump operations
 
-Prior to v2.6.38-rc1 bugs in the kernel caused NLM_F_ROOT to incorrectly
-imply NLM_F_MATCH, see the commit below for details:
+The avahi-daemon uses a wrong flag combination to operate with
+rtnetlink. This patch fixes the problems.
 
-    commit 0ab03c2b1478f2438d2c80204f7fef65b1bca9cf
-    Author: Jan Engelhardt <jengelh@medozas.de>
-    Date:   Fri Jan 7 03:15:05 2011 +0000
-
-	netlink: test for all flags of the NLM_F_DUMP composite
-
-Add the missing NLM_F_MATCH.
-
-Signed-off-by: Andy Whitcroft <apw@canonical.com>
+No need to set NLM_F_ACK since the dump operation already includes
+the trailing NLMSG_DONE message that informs about the end of the
+dump operation.
 ---
- avahi-core/iface-linux.c |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
 
+diff --git a/avahi-autoipd/iface-linux.c b/avahi-autoipd/iface-linux.c
+index fc27829..83e9e41 100644
+--- a/avahi-autoipd/iface-linux.c
++++ b/avahi-autoipd/iface-linux.c
+@@ -262,7 +262,7 @@ int iface_get_initial_state(State *state) {
+     n->nlmsg_len = NLMSG_LENGTH(sizeof(*ifi));
+     n->nlmsg_type = RTM_GETLINK;
+     n->nlmsg_seq = seq;
+-    n->nlmsg_flags = NLM_F_MATCH|NLM_F_REQUEST|NLM_F_ACK;
++    n->nlmsg_flags = NLM_F_REQUEST|NLM_F_DUMP;
+     n->nlmsg_pid = 0;
+ 
+     ifi = NLMSG_DATA(n);
 diff --git a/avahi-core/iface-linux.c b/avahi-core/iface-linux.c
-index a1b7f73..9a0bbb6 100644
+index a1b7f73..4d12f73 100644
 --- a/avahi-core/iface-linux.c
 +++ b/avahi-core/iface-linux.c
 @@ -53,7 +53,7 @@ static int netlink_list_items(AvahiNetlink *nl, uint16_t type, unsigned *ret_seq
@@ -34,10 +36,7 @@ index a1b7f73..9a0bbb6 100644
      n->nlmsg_len = NLMSG_LENGTH(sizeof(struct rtgenmsg));
      n->nlmsg_type = type;
 -    n->nlmsg_flags = NLM_F_ROOT|NLM_F_REQUEST;
-+    n->nlmsg_flags = NLM_F_MATCH|NLM_F_ROOT|NLM_F_REQUEST;
++    n->nlmsg_flags = NLM_F_REQUEST|NLM_F_DUMP;
      n->nlmsg_pid = 0;
  
      gen = NLMSG_DATA(n);
--- 
-1.7.1
-
