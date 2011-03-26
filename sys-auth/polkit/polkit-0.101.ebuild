@@ -1,9 +1,9 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-auth/polkit/polkit-0.99-r1.ebuild,v 1.10 2011/03/22 21:12:38 xarthisius Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-auth/polkit/polkit-0.101.ebuild,v 1.2 2011/03/15 18:02:39 nirbheek Exp $
 
-EAPI=2
-inherit eutils pam multilib-native
+EAPI=3
+inherit pam multilib-native
 
 DESCRIPTION="Policy framework for controlling privileges for system-wide services"
 HOMEPAGE="http://hal.freedesktop.org/docs/polkit/"
@@ -11,38 +11,30 @@ SRC_URI="http://hal.freedesktop.org/releases/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="debug doc examples gtk +introspection kde nls pam"
 
-RDEPEND=">=dev-libs/glib-2.25.12[lib32?]
+RDEPEND=">=dev-libs/glib-2.28[lib32?]
 	dev-libs/expat[lib32?]
-	introspection? ( dev-libs/gobject-introspection )
+	introspection? ( >=dev-libs/gobject-introspection-0.6.2 )
 	pam? ( virtual/pam[lib32?] )"
 DEPEND="${RDEPEND}
-	!!>=sys-auth/policykit-0.92
-	!<sys-auth/policykit-0.92
+	!!sys-auth/policykit
 	dev-libs/libxslt[lib32?]
 	app-text/docbook-xsl-stylesheets
 	dev-util/pkgconfig[lib32?]
 	>=dev-util/intltool-0.36
 	doc? ( >=dev-util/gtk-doc-1.13 )"
 PDEPEND=">=sys-auth/consolekit-0.4[policykit]
-	gtk? ( || ( >=gnome-extra/polkit-gnome-0.96-r1 lxde-base/lxpolkit ) )
+	gtk? ( || ( >=gnome-extra/polkit-gnome-0.101 lxde-base/lxpolkit ) )
 	kde? ( || ( sys-auth/polkit-kde-agent sys-auth/polkit-kde ) )"
-
-multilib-native_src_prepare_internal() {
-	epatch "${FILESDIR}"/${PN}-0.96-getcwd.patch
-}
 
 multilib-native_src_configure_internal() {
 	local myauth="--with-authfw=shadow"
 	use pam && myauth="--with-authfw=pam --with-pam-module-dir=$(getpam_mod_dir)"
 
-	# We define libexecdir due to fdo bug #22951
-	# easier to maintain than patching everything
 	econf \
-		--libexecdir='${exec_prefix}/libexec/polkit-1' \
-		--localstatedir=/var \
+		--localstatedir="${EPREFIX}"/var \
 		--disable-dependency-tracking \
 		--disable-static \
 		$(use_enable debug verbose-mode) \
@@ -59,7 +51,7 @@ multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die
 	dodoc docs/TODO HACKING NEWS README
 
-	find "${D}" -name '*.la' -exec rm -f '{}' +
+	find "${D}" -name '*.la' -exec rm -f {} +
 
 	# We disable example compilation above, and handle it here
 	if use examples; then
