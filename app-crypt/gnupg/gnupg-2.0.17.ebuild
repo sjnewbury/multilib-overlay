@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-crypt/gnupg/gnupg-2.0.17.ebuild,v 1.4 2011/02/19 19:14:01 hwoarang Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-crypt/gnupg/gnupg-2.0.17.ebuild,v 1.9 2011/03/23 20:37:17 xarthisius Exp $
 
 EAPI="3"
 
@@ -13,7 +13,7 @@ SRC_URI="mirror://gnupg/gnupg/${P}.tar.bz2"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd ~x64-freebsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="alpha amd64 ~arm hppa ~ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~x86-fbsd ~x64-freebsd ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 IUSE="adns bzip2 caps doc ldap nls openct pcsc-lite static selinux smartcard"
 
 COMMON_DEPEND_LIBS="
@@ -104,21 +104,24 @@ multilib-native_src_compile_internal() {
 
 multilib-native_src_install_internal() {
 	emake DESTDIR="${D}" install || die "emake install failed"
-	dodoc ChangeLog NEWS README THANKS TODO VERSION || die "dodoc failed"
+	emake DESTDIR="${D}" -f doc/Makefile uninstall-nobase_dist_docDATA || die
+	rm -r "${ED}usr/share/gnupg/help"* || die
 
-	mv "${ED}usr/share/gnupg/help"* "${ED}usr/share/doc/${PF}"
-	ecompressdir "/usr/share/doc/${PF}"
+	dodoc ChangeLog NEWS README THANKS TODO VERSION doc/FAQ doc/DETAILS \
+	doc/HACKING doc/TRANSLATE doc/OpenPGP doc/KEYSERVER doc/help* || die "dodoc failed"
 
-	dosym gpg2 /usr/bin/gpg
-	dosym gpgv2 /usr/bin/gpgv
-	dosym gpg2keys_hkp /usr/libexec/gpgkeys_hkp
-	dosym gpg2keys_finger /usr/libexec/gpgkeys_finger
-	dosym gpg2keys_curl /usr/libexec/gpgkeys_curl
-	use ldap && dosym gpg2keys_ldap /usr/libexec/gpgkeys_ldap
+	dosym gpg2 /usr/bin/gpg || die
+	dosym gpgv2 /usr/bin/gpgv || die
+	dosym gpg2keys_hkp /usr/libexec/gpgkeys_hkp || die
+	dosym gpg2keys_finger /usr/libexec/gpgkeys_finger || die
+	dosym gpg2keys_curl /usr/libexec/gpgkeys_curl || die
+	if use ldap; then
+		dosym gpg2keys_ldap /usr/libexec/gpgkeys_ldap || die
+	fi
 	echo ".so man1/gpg2.1" > "${ED}usr/share/man/man1/gpg.1"
 	echo ".so man1/gpgv2.1" > "${ED}usr/share/man/man1/gpgv.1"
 
-	dodir /etc/env.d
+	dodir /etc/env.d || die
 	echo "CONFIG_PROTECT=/usr/share/gnupg/qualified.txt" >>"${ED}etc/env.d/30gnupg"
 
 	if use doc; then
