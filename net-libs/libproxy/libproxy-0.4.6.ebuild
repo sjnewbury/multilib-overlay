@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/libproxy/libproxy-0.4.6.ebuild,v 1.14 2011/02/20 12:30:07 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/libproxy/libproxy-0.4.6.ebuild,v 1.15 2011/03/21 23:18:54 nirbheek Exp $
 
 EAPI="2"
 PYTHON_DEPEND="python? 2:2.5"
@@ -17,12 +17,12 @@ KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd"
 IUSE="gnome kde mono networkmanager perl python test webkit xulrunner"
 
 RDEPEND="
-	gnome? ( gnome-base/gconf[lib32?] )
+	gnome? ( gnome-base/gconf:2[lib32?] )
 	kde? ( >=kde-base/kdelibs-4.3 )
 	mono? ( dev-lang/mono )
 	networkmanager? ( net-misc/networkmanager[lib32?] )
 	perl? (	dev-lang/perl[lib32?] )
-	webkit? ( net-libs/webkit-gtk[lib32?] )
+	webkit? ( net-libs/webkit-gtk:2[lib32?] )
 	xulrunner? ( >=net-libs/xulrunner-1.9.1:1.9[lib32?] )"
 
 DEPEND="${RDEPEND}
