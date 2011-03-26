@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-themes/gtk-engines-murrine/gtk-engines-murrine-0.98.0.ebuild,v 1.1 2010/09/22 15:23:20 nirbheek Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-themes/gtk-engines-murrine/gtk-engines-murrine-0.98.0.ebuild,v 1.2 2011/03/06 23:08:33 nirbheek Exp $
 
 EAPI="2"
 
@@ -18,7 +18,7 @@ KEYWORDS="~amd64 ~ppc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86
 IUSE="+themes animation-rtl"
 
 # pixman and cairo aren't checked for in configure, but are #include-ed
-RDEPEND=">=x11-libs/gtk+-2.18[lib32?]
+RDEPEND=">=x11-libs/gtk+-2.18:2[lib32?]
 	x11-libs/cairo[lib32?]
 	x11-libs/pixman[lib32?]"
 PDEPEND="themes? ( x11-themes/murrine-themes )"
