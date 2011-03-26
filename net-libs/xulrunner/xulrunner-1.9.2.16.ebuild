@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.13-r1.ebuild,v 1.1 2011/01/02 22:28:37 betelgeuse Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.16.ebuild,v 1.2 2011/03/25 18:07:42 angelos Exp $
 
 EAPI="3"
 WANT_AUTOCONF="2.1"
@@ -17,10 +17,10 @@ HOMEPAGE="http://developer.mozilla.org/en/docs/XULRunner"
 SRC_URI="http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${MY_PV}/source/firefox-${MY_PV}.source.tar.bz2
 	http://dev.gentoo.org/~anarchy/mozilla/patchsets/${PATCH}.tar.bz2"
 
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux ~sparc-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux ~sparc-solaris ~x64-solaris ~x86-solaris"
 SLOT="1.9"
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
-IUSE="+alsa debug +ipc libnotify system-sqlite wifi"
+IUSE="+alsa debug gnome +ipc libnotify system-sqlite wifi"
 
 RDEPEND="
 	>=sys-devel/binutils-2.16.1
@@ -34,6 +34,10 @@ RDEPEND="
 	x11-libs/libXt[lib32?]
 	x11-libs/pixman[lib32?]
 	>=dev-libs/libevent-1.4.7
+	gnome? ( >=gnome-base/gnome-vfs-2.16.3[lib32?]
+		>=gnome-base/libgnomeui-2.16.1[lib32?]
+		>=gnome-base/gconf-2.16.0[lib32?]
+		>=gnome-base/libgnome-2.16.0[lib32?] )
 	wifi? ( net-wireless/wireless-tools )
 	libnotify? ( >=x11-libs/libnotify-0.4[lib32?] )"
 
@@ -67,7 +71,7 @@ multilib-native_src_prepare_internal() {
 
 	epatch "${FILESDIR}/bug-606109.patch"
 	epatch "${FILESDIR}/fix-animated-gifs.patch"
-	epatch "${FILESDIR}/cups-1.4.4-fixup.patch"
+	epatch "${FILESDIR}/libnotify-0.7.patch"
 
 	eprefixify \
 		extensions/java/xpcom/interfaces/org/mozilla/xpcom/Mozilla.java \
@@ -119,6 +123,7 @@ multilib-native_src_configure_internal() {
 	# It doesn't compile on alpha without this LDFLAGS
 	use alpha && append-ldflags "-Wl,--no-relax"
 
+	mozconfig_annotate '' --enable-crypto
 	mozconfig_annotate '' --with-default-mozilla-five-home="${MOZLIBDIR}"
 	mozconfig_annotate '' --enable-extensions="${MEXTENSIONS}"
 	mozconfig_annotate '' --enable-application=xulrunner
@@ -151,6 +156,8 @@ multilib-native_src_configure_internal() {
 	mozconfig_annotate '' --with-system-bz2
 	mozconfig_annotate '' --with-system-libevent="${EPREFIX}"/usr
 
+	mozconfig_use_enable gnome gnomevfs
+	mozconfig_use_enable gnome gnomeui
 	mozconfig_use_enable ipc # +ipc, upstream default
 	mozconfig_use_enable libnotify
 	mozconfig_use_enable java javaxpcom
@@ -214,7 +221,7 @@ multilib-native_src_install_internal() {
 
 	# env.d file for ld search path
 	dodir /etc/env.d
-	echo "LDPATH=${EPREFIX}/${MOZLIBDIR}" > "${ED}"/etc/env.d/08xulrunner-${ABI} || die "env.d failed"
+	echo "LDPATH=${EPREFIX}/${MOZLIBDIR}" > "${ED}"/etc/env.d/08xulrunner || die "env.d failed"
 
 	# Add our defaults to xulrunner and out of firefox
 	cp "${FILESDIR}"/xulrunner-default-prefs.js \
@@ -229,11 +236,6 @@ multilib-native_src_install_internal() {
 		java-pkg_regjar "${ED}/${SDKDIR}/lib/MozillaGlue.jar"
 		java-pkg_regjar "${ED}/${SDKDIR}/lib/MozillaInterfaces.jar"
 	fi
-
-	# each ABI should generate exactly one /etc/gre.d/*.system.conf file
-	for conf in "${D}"/etc/gre.d/*.system.conf ; do
-		mv "${conf}" "${conf%.conf}-${ABI}.conf"
-	done
 }
 
 multilib-native_pkg_postinst_internal() {

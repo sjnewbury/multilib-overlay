@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.12.ebuild,v 1.8 2010/11/14 12:44:53 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/xulrunner/xulrunner-1.9.2.12.ebuild,v 1.9 2011/03/14 06:54:45 nirbheek Exp $
 
 EAPI="3"
 WANT_AUTOCONF="2.1"
@@ -20,7 +20,7 @@ SRC_URI="http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${MY_PV}/s
 KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sparc x86 ~amd64-linux ~x86-linux ~sparc-solaris ~x64-solaris ~x86-solaris"
 SLOT="1.9"
 LICENSE="|| ( MPL-1.1 GPL-2 LGPL-2.1 )"
-IUSE="+alsa debug +ipc libnotify system-sqlite wifi"
+IUSE="+alsa debug gnome +ipc libnotify system-sqlite wifi"
 
 RDEPEND="
 	>=sys-devel/binutils-2.16.1
@@ -34,6 +34,10 @@ RDEPEND="
 	x11-libs/libXt[lib32?]
 	x11-libs/pixman[lib32?]
 	>=dev-libs/libevent-1.4.7
+	gnome? ( >=gnome-base/gnome-vfs-2.16.3[lib32?]
+		>=gnome-base/libgnomeui-2.16.1[lib32?]
+		>=gnome-base/gconf-2.16.0[lib32?]
+		>=gnome-base/libgnome-2.16.0[lib32?] )
 	wifi? ( net-wireless/wireless-tools )
 	libnotify? ( >=x11-libs/libnotify-0.4[lib32?] )"
 
@@ -119,6 +123,7 @@ multilib-native_src_configure_internal() {
 	# It doesn't compile on alpha without this LDFLAGS
 	use alpha && append-ldflags "-Wl,--no-relax"
 
+	mozconfig_annotate '' --enable-crypto
 	mozconfig_annotate '' --with-default-mozilla-five-home="${MOZLIBDIR}"
 	mozconfig_annotate '' --enable-extensions="${MEXTENSIONS}"
 	mozconfig_annotate '' --enable-application=xulrunner
@@ -151,6 +156,8 @@ multilib-native_src_configure_internal() {
 	mozconfig_annotate '' --with-system-bz2
 	mozconfig_annotate '' --with-system-libevent="${EPREFIX}"/usr
 
+	mozconfig_use_enable gnome gnomevfs
+	mozconfig_use_enable gnome gnomeui
 	mozconfig_use_enable ipc # +ipc, upstream default
 	mozconfig_use_enable libnotify
 	mozconfig_use_enable java javaxpcom
