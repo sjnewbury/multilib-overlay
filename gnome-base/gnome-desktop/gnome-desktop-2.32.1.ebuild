@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-desktop/gnome-desktop-2.32.1.ebuild,v 1.4 2011/02/24 18:57:44 tomka Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/gnome-desktop/gnome-desktop-2.32.1.ebuild,v 1.8 2011/03/22 19:09:49 ranger Exp $
 
 EAPI="3"
 GCONF_DEBUG="yes"
@@ -12,13 +12,13 @@ HOMEPAGE="http://www.gnome.org/"
 
 LICENSE="GPL-2 FDL-1.1 LGPL-2"
 SLOT="2"
-KEYWORDS="~alpha amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~x86-solaris"
+KEYWORDS="alpha amd64 arm ia64 ppc ppc64 sh sparc x86 ~x86-fbsd ~x86-interix ~amd64-linux ~x86-linux ~x86-solaris"
 IUSE="doc"
 
 RDEPEND=">=x11-libs/gtk+-2.18:2[lib32?]
 	>=dev-libs/glib-2.19.1:2[lib32?]
 	>=x11-libs/libXrandr-1.2[lib32?]
-	>=gnome-base/gconf-2[lib32?]
+	>=gnome-base/gconf-2:2[lib32?]
 	>=x11-libs/startup-notification-0.5[lib32?]"
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
