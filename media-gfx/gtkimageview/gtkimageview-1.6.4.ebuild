@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/gtkimageview/gtkimageview-1.6.4.ebuild,v 1.20 2010/01/31 17:42:22 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/gtkimageview/gtkimageview-1.6.4.ebuild,v 1.21 2011/03/12 10:36:48 radhermit Exp $
 
 EAPI="2"
 
@@ -18,7 +18,7 @@ IUSE="doc examples"
 # tests do not work with userpriv
 RESTRICT="userpriv"
 
-RDEPEND=">=x11-libs/gtk+-2.6[lib32?]"
+RDEPEND=">=x11-libs/gtk+-2.6:2[lib32?]"
 DEPEND="${DEPEND}
 	gnome-base/gnome-common
 	dev-util/gtk-doc-am
