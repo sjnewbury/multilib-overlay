@@ -1,12 +1,12 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/texlive-core/texlive-core-2010.ebuild,v 1.2 2010/10/30 18:46:04 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/texlive-core/texlive-core-2010-r1.ebuild,v 1.1 2011/03/01 11:03:13 aballier Exp $
 
 EAPI=3
 
 inherit eutils flag-o-matic toolchain-funcs libtool texlive-common multilib-native
 
-PATCHLEVEL="20"
+PATCHLEVEL="23"
 TL_SOURCE_VERSION=20100722
 MY_PV=${PN%-core}-${TL_SOURCE_VERSION}-source
 
@@ -95,14 +95,9 @@ PDEPEND=">=dev-tex/luatex-0.63"
 
 S="${WORKDIR}/${MY_PV}"
 
-multilib-native_src_unpack_internal() {
-	# we have to do this in the unpack phase
-	multilib-native_check_inherited_funcs src_unpack
-
-	mv "${WORKDIR}"/texmf* "${S}" || die "failed to move texmf files"
-}
-
 multilib-native_src_prepare_internal() {
+	mv "${WORKDIR}"/texmf* "${S}" || die "failed to move texmf files"
+
 	EPATCH_SUFFIX="patch" epatch "${WORKDIR}/patches"
 
 	elibtoolize
@@ -243,15 +238,11 @@ multilib-native_src_install_internal() {
 	# by texmf-update
 	rm -f "${D}${TEXMF_PATH}/web2c/fmtutil.cnf"
 
-	if is_final_abi ; then
-		texlive-common_handle_config_files
-	fi
+	texlive-common_handle_config_files
 
 	keepdir /usr/share/texmf-site
 
-	if is_final_abi ; then
-		dosym /etc/texmf/web2c/updmap.cfg ${TEXMF_PATH}/web2c/updmap.cfg
-	fi
+	dosym /etc/texmf/web2c/updmap.cfg ${TEXMF_PATH}/web2c/updmap.cfg
 
 	# the virtex symlink is not installed
 	# The links has to be relative, since the targets
@@ -297,9 +288,7 @@ multilib-native_pkg_preinst_internal() {
 }
 
 multilib-native_pkg_postinst_internal() {
-	if [ "$ROOT" = "/" ] ; then
-		/usr/sbin/texmf-update
-	fi
+	etexmf-update
 
 	elog
 	elog "If you have configuration files in /etc/texmf to merge,"
