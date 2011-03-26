@@ -1,26 +1,27 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-crypt/heimdal/heimdal-1.3.3-r1.ebuild,v 1.10 2011/03/25 07:27:23 eras Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-crypt/heimdal/heimdal-1.4.1_pre20110304.ebuild,v 1.2 2011/03/13 03:45:13 eras Exp $
 
 EAPI=2
+# PYTHON_BDEPEND="2"
 VIRTUALX_REQUIRED="manual"
 
-inherit libtool virtualx eutils toolchain-funcs multilib-native
+inherit autotools db-use eutils libtool python toolchain-funcs virtualx multilib-native
 
-#RESTRICT="test"
-
+MY_P="${P}"
 DESCRIPTION="Kerberos 5 implementation from KTH"
 HOMEPAGE="http://www.h5l.org/"
-SRC_URI="http://www.h5l.org/dist/src/${P}.tar.gz"
+SRC_URI="http://www.h5l.org/dist/src/${MY_P}.tar.bz2"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86"
-IUSE="afs +berkdb hdb-ldap ipv6 otp pkinit ssl threads test X"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86"
+IUSE="afs +berkdb caps hdb-ldap ipv6 otp +pkinit ssl threads test X"
 
 RDEPEND="ssl? ( dev-libs/openssl[lib32?] )
 	berkdb? ( sys-libs/db[lib32?] )
 	!berkdb? ( sys-libs/gdbm[lib32?] )
+	caps? ( sys-libs/libcap-ng[lib32?] )
 	>=dev-db/sqlite-3.5.7[lib32?]
 	>=sys-libs/e2fsprogs-libs-1.41.11[lib32?]
 	afs? ( net-fs/openafs )
@@ -28,19 +29,32 @@ RDEPEND="ssl? ( dev-libs/openssl[lib32?] )
 	!!app-crypt/mit-krb5"
 
 DEPEND="${RDEPEND}
+	=dev-lang/python-2*[lib32?]
 	dev-util/pkgconfig[lib32?]
 	>=sys-devel/autoconf-2.62
 	test? ( X? ( ${VIRTUALX_DEPEND} ) )"
 
+S="${WORKDIR}/${PN}"
+
+multilib-native_pkg_setup_internal() {
+	python_set_active_version 2
+	python_pkg_setup
+}
+
 multilib-native_src_prepare_internal() {
 	epatch "${FILESDIR}/heimdal_db5.patch"
-	epatch "${FILESDIR}/heimdal_testsuite.patch"
-	epatch "${FILESDIR}/heimdal_testsuite_extra.patch"
 	epatch "${FILESDIR}/heimdal_disable-check-iprop.patch"
-	epatch "${FILESDIR}/heimdal_openssl-1.patch"
+	epatch "${FILESDIR}/heimdal_link_order.patch"
+	eautoreconf
 }
 
 multilib-native_src_configure_internal() {
+	local myconf=""
+	if use berkdb; then
+		myconf="--with-berkeley-db --with-berkeley-db-include=$(db_includedir)"
+	else
+		myconf="--without-berkeley-db"
+	fi
 	econf \
 		--enable-kcm \
 		--disable-osfc2 \
@@ -50,15 +64,16 @@ multilib-native_src_configure_internal() {
 		--with-sqlite3=/usr \
 		--libexecdir=/usr/sbin \
 		$(use_enable afs afs-support) \
-		$(use_enable berkdb berkeley-db) \
 		$(use_enable otp) \
 		$(use_enable pkinit kx509) \
 		$(use_enable pkinit pk-init) \
 		$(use_enable threads pthread-support) \
+		$(use_with caps capng) \
 		$(use_with hdb-ldap openldap /usr) \
 		$(use_with ipv6) \
 		$(use_with ssl openssl /usr) \
-		$(use_with X x)
+		$(use_with X x) \
+		${myconf}
 }
 
 multilib-native_src_compile_internal() {
@@ -91,10 +106,15 @@ multilib-native_src_install_internal() {
 	mv "${D}"/usr/share/man/man5/{,k}ftpusers.5
 	mv "${D}"/usr/share/man/man5/{,k}login.access.5
 
-	newinitd "${FILESDIR}"/heimdal-kdc.initd heimdal-kdc
-	newinitd "${FILESDIR}"/heimdal-kadmind.initd heimdal-kadmind
-	newinitd "${FILESDIR}"/heimdal-kpasswdd.initd heimdal-kpasswdd
-	newinitd "${FILESDIR}"/heimdal-kcm.initd heimdal-kcm
+	newinitd "${FILESDIR}"/heimdal-kdc.initd-r1 heimdal-kdc
+	newinitd "${FILESDIR}"/heimdal-kadmind.initd-r1 heimdal-kadmind
+	newinitd "${FILESDIR}"/heimdal-kpasswdd.initd-r1 heimdal-kpasswdd
+	newinitd "${FILESDIR}"/heimdal-kcm.initd-r1 heimdal-kcm
+
+	newconfd "${FILESDIR}"/heimdal-kdc.confd heimdal-kdc
+	newconfd "${FILESDIR}"/heimdal-kadmind.confd heimdal-kadmind
+	newconfd "${FILESDIR}"/heimdal-kpasswdd.confd heimdal-kpasswdd
+	newconfd "${FILESDIR}"/heimdal-kcm.confd heimdal-kcm
 
 	insinto /etc
 	newins "${FILESDIR}"/krb5.conf krb5.conf.example
@@ -111,11 +131,10 @@ multilib-native_src_install_internal() {
 }
 
 multilib-native_pkg_preinst_internal() {
-
 	if has_version "=${CATEGORY}/${PN}-1.3.2*" ; then
 		if use hdb-ldap ; then
 			ewarn "Schema name changed to hdb.schema to follow upstream."
-			ewarn "Please check you slapd conf file to make sure"
+			ewarn "Please check your slapd conf file to make sure"
 			ewarn "that the correct schema file is included."
 		fi
 	fi
