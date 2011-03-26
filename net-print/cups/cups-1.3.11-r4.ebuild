@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.3.11-r4.ebuild,v 1.1 2010/12/01 13:03:55 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.3.11-r4.ebuild,v 1.4 2011/03/19 17:56:31 ssuominen Exp $
 
 EAPI=2
 inherit autotools eutils flag-o-matic multilib pam multilib-native
@@ -29,7 +29,7 @@ COMMON_DEPEND="
 	dbus? ( sys-apps/dbus[lib32?] )
 	gnutls? ( net-libs/gnutls[lib32?] )
 	java? ( >=virtual/jre-1.4 )
-	jpeg? ( >=media-libs/jpeg-6b[lib32?] )
+	jpeg? ( virtual/jpeg[lib32?] )
 	kerberos? ( virtual/krb5[lib32?] )
 	ldap? ( net-nds/openldap[lib32?] )
 	pam? ( virtual/pam[lib32?] )
@@ -51,7 +51,6 @@ DEPEND="${COMMON_DEPEND}"
 RDEPEND="${COMMON_DEPEND}
 	!<net-print/foomatic-filters-ppds-20070501
 	!<net-print/hplip-1.7.4a-r1
-	!virtual/lpr
 	X? ( x11-misc/xdg-utils )
 "
 PDEPEND="
@@ -73,8 +72,6 @@ PDEPEND="
 	)
 	samba? ( >=net-fs/samba-3.0.8 )
 "
-
-PROVIDE="virtual/lpr"
 
 # upstream includes an interactive test which is a nono for gentoo.
 # therefore, since the printing herd has bigger fish to fry, for now,

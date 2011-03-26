@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.4.6.ebuild,v 1.1 2011/01/13 01:59:49 tgurr Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.4.6.ebuild,v 1.2 2011/03/19 17:54:11 ssuominen Exp $
 
 EAPI=3
 
@@ -62,8 +62,6 @@ PDEPEND="
 	app-text/ghostscript-gpl[cups]
 	>=app-text/poppler-0.12.3-r3[utils]
 "
-
-PROVIDE="virtual/lpr"
 
 # upstream includes an interactive test which is a nono for gentoo.
 RESTRICT="test"
