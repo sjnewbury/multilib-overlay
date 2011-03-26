@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-0.6_p25767.ebuild,v 1.4 2010/12/09 16:11:56 rich0 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-0.6_p25767.ebuild,v 1.5 2011/03/10 03:50:26 radhermit Exp $
 
 EAPI="2"
 
@@ -97,7 +97,6 @@ multilib-native_src_configure_internal() {
 	done
 	use bzip2 || myconf="${myconf} --disable-bzlib"
 	use sdl || myconf="${myconf} --disable-ffplay"
-	use static-libs || myconf="${myconf} --disable-static"
 
 	use custom-cflags && myconf="${myconf} --disable-optimizations"
 	use cpudetection && myconf="${myconf} --enable-runtime-cpudetect"
@@ -227,8 +226,9 @@ multilib-native_src_configure_internal() {
 		--libdir=/usr/$(get_libdir) \
 		--shlibdir=/usr/$(get_libdir) \
 		--mandir=/usr/share/man \
-		--enable-static --enable-shared \
+		--enable-shared \
 		--cc="$(tc-getCC)" \
+		$(use_enable static-libs static) \
 		${myconf} || die
 }
 

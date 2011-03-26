@@ -1,13 +1,13 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999.ebuild,v 1.30 2011/01/29 20:03:52 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999.ebuild,v 1.32 2011/03/21 11:37:03 aballier Exp $
 
 EAPI="2"
 
 SCM=""
 if [ "${PV#9999}" != "${PV}" ] ; then
 	SCM="git"
-	EGIT_REPO_URI="git://git.ffmpeg.org/ffmpeg.git"
+	EGIT_REPO_URI="git://git.videolan.org/ffmpeg.git"
 fi
 
 inherit eutils flag-o-matic multilib toolchain-funcs ${SCM} multilib-native
@@ -93,7 +93,6 @@ multilib-native_src_configure_internal() {
 	done
 	use bzip2 || myconf="${myconf} --disable-bzlib"
 	use sdl || myconf="${myconf} --disable-ffplay"
-	use static-libs || myconf="${myconf} --disable-static"
 
 	use custom-cflags && myconf="${myconf} --disable-optimizations"
 	use cpudetection && myconf="${myconf} --enable-runtime-cpudetect"
@@ -223,8 +222,9 @@ multilib-native_src_configure_internal() {
 		--libdir=/usr/$(get_libdir) \
 		--shlibdir=/usr/$(get_libdir) \
 		--mandir=/usr/share/man \
-		--enable-static --enable-shared \
+		--enable-shared \
 		--cc="$(tc-getCC)" \
+		$(use_enable static-libs static) \
 		${myconf} || die
 }
 
