@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/xine-lib/xine-lib-1.1.19.ebuild,v 1.9 2011/01/10 15:41:56 xarthisius Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/xine-lib/xine-lib-1.1.19.ebuild,v 1.10 2011/03/06 11:12:36 radhermit Exp $
 
 EAPI=3
 inherit eutils flag-o-matic toolchain-funcs multilib multilib-native
@@ -63,9 +63,9 @@ RDEPEND="X? ( x11-libs/libXext[lib32?]
 	>=media-video/ffmpeg-0.4.9_p20070129[lib32?]
 	modplug? ( >=media-libs/libmodplug-0.8.8.1[lib32?] )
 	nls? ( virtual/libintl )
-	gtk? ( =x11-libs/gtk+-2*[lib32?] )
+	gtk? ( x11-libs/gtk+:2[lib32?] )
 	pulseaudio? ( media-sound/pulseaudio[lib32?] )
-	truetype? ( =media-libs/freetype-2*[lib32?] media-libs/fontconfig[lib32?] )
+	truetype? ( media-libs/freetype:2[lib32?] media-libs/fontconfig[lib32?] )
 	virtual/libiconv
 	wavpack? ( >=media-sound/wavpack-4.31[lib32?] )
 	musepack? ( >=media-sound/musepack-tools-444[lib32?] )
