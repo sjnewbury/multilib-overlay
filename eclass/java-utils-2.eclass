@@ -6,7 +6,7 @@
 #
 # Licensed under the GNU General Public License, v2
 #
-# $Header: /var/cvsroot/gentoo-x86/eclass/java-utils-2.eclass,v 1.135 2010/04/28 19:40:40 caster Exp $
+# $Header: /var/cvsroot/gentoo-x86/eclass/java-utils-2.eclass,v 1.139 2011/03/26 00:43:12 serkan Exp $
 
 # -----------------------------------------------------------------------------
 # @eclass-begin
@@ -308,6 +308,9 @@ java-pkg_doexamples() {
 			doins -r "$@"
 		) || die "Installing examples failed"
 	fi
+
+	# Let's make a symlink to the directory we have everything else under
+	dosym "${dest}" "${JAVA_PKG_SHAREPATH}/examples" || die
 }
 
 # -----------------------------------------------------------------------------
@@ -1897,21 +1900,18 @@ java-pkg_ant-tasks-depend() {
 	fi
 }
 
+
 # ------------------------------------------------------------------------------
-# @ebuild-function ejunit
+# @internal-function ejunit_
 #
-# Junit wrapper function. Makes it easier to run the tests and checks for
+# Internal Junit wrapper function. Makes it easier to run the tests and checks for
 # dev-java/junit in DEPEND. Launches the tests using junit.textui.TestRunner.
 #
-# Examples:
-# ejunit -cp build/classes org.blinkenlights.jid3.test.AllTests
-# ejunit org.blinkenlights.jid3.test.AllTests
-#
-# @param $1 - -cp or -classpath
-# @param $2 - classpath; junit and recorded dependencies get appended
+# @param $1 - junit package (junit or junit-4)
+# @param $2 - -cp or -classpath
+# @param $3 - classpath; junit and recorded dependencies get appended
 # @param $@ - the rest of the parameters are passed to java
-# ------------------------------------------------------------------------------
-ejunit() {
+ejunit_() {
 	debug-print-function ${FUNCNAME} $*
 
 	local pkgs
@@ -1921,7 +1921,10 @@ ejunit() {
 		done
 	fi
 
-	local cp=$(java-pkg_getjars --with-dependencies junit${pkgs})
+	local junit=${1}
+	shift 1
+
+	local cp=$(java-pkg_getjars --with-dependencies ${junit}${pkgs})
 	if [[ ${1} = -cp || ${1} = -classpath ]]; then
 		cp="${2}:${cp}"
 		shift 2
@@ -1930,8 +1933,55 @@ ejunit() {
 	fi
 
 	local runner=junit.textui.TestRunner
+	if [[ "${junit}" == "junit-4" ]] ; then
+		runner=org.junit.runner.JUnitCore
+	fi
 	debug-print "Calling: java -cp \"${cp}\" -Djava.awt.headless=true ${runner} ${@}"
 	java -cp "${cp}" -Djava.awt.headless=true ${runner} "${@}" || die "Running junit failed"
+}
+
+# ------------------------------------------------------------------------------
+# @ebuild-function ejunit
+#
+# Junit wrapper function. Makes it easier to run the tests and checks for
+# dev-java/junit in DEPEND. Launches the tests using org.junit.runner.JUnitCore.
+#
+# Examples:
+# ejunit -cp build/classes org.blinkenlights.jid3.test.AllTests
+# ejunit org.blinkenlights.jid3.test.AllTests
+# ejunit org.blinkenlights.jid3.test.FirstTest \
+#         org.blinkenlights.jid3.test.SecondTest
+#
+# @param $1 - -cp or -classpath
+# @param $2 - classpath; junit and recorded dependencies get appended
+# @param $@ - the rest of the parameters are passed to java
+# ------------------------------------------------------------------------------
+ejunit() {
+	debug-print-function ${FUNCNAME} $*
+
+	ejunit_ "junit" "${@}"
+}
+
+# ------------------------------------------------------------------------------
+# @ebuild-function ejunit4
+#
+# Junit4 wrapper function. Makes it easier to run the tests and checks for
+# dev-java/junit:4 in DEPEND. Launches the tests using junit.textui.TestRunner.
+#
+# Examples:
+# ejunit4 -cp build/classes org.blinkenlights.jid3.test.AllTests
+# ejunit4 org.blinkenlights.jid3.test.AllTests
+# ejunit4 org.blinkenlights.jid3.test.FirstTest \
+#         org.blinkenlights.jid3.test.SecondTest
+#
+# @param $1 - -cp or -classpath
+# @param $2 - classpath; junit and recorded dependencies get appended
+# @param $@ - the rest of the parameters are passed to java
+# ------------------------------------------------------------------------------
+ejunit4() {
+	debug-print-function ${FUNCNAME} $*
+
+	ejunit_ "junit-4" "${@}"
 }
 
 # ------------------------------------------------------------------------------
