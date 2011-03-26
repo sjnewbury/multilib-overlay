@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.9.1.ebuild,v 1.8 2011/03/05 17:57:50 xarthisius Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mesa/mesa-7.10.1.ebuild,v 1.4 2011/03/26 10:28:28 fauli Exp $
 
 EAPI=3
 
@@ -25,7 +25,7 @@ FOLDER="${PV/_rc*/}"
 DESCRIPTION="OpenGL-like graphic library for Linux"
 HOMEPAGE="http://mesa3d.sourceforge.net/"
 
-SRC_PATCHES="mirror://gentoo/${P}-gentoo-patches-01.tar.bz2"
+#SRC_PATCHES="mirror://gentoo/${P}-gentoo-patches-01.tar.bz2"
 if [[ $PV = 9999* ]]; then
 	SRC_URI="${SRC_PATCHES}"
 else
@@ -35,7 +35,7 @@ fi
 
 LICENSE="LGPL-2 kilgard"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ppc ppc64 ~sh ~sparc x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~sparc-solaris ~x64-solaris ~x86-solaris"
 
 INTEL_CARDS="intel"
 RADEON_CARDS="radeon"
@@ -45,7 +45,7 @@ for card in ${VIDEO_CARDS}; do
 done
 
 IUSE="${IUSE_VIDEO_CARDS}
-	+classic debug +gallium gles llvm motif +nptl pic selinux kernel_FreeBSD"
+	+classic debug +gallium gles llvm motif +nptl pic selinux kernel_FreeBSD hardened"
 
 LIBDRM_DEPSTRING=">=x11-libs/libdrm-2.4.23"
 # keep correct libdrm and dri2proto dep
@@ -135,11 +135,20 @@ multilib-native_src_prepare_internal() {
 		EPATCH_SUFFIX="patch" \
 		epatch
 	fi
+
+	# bug 240956
+	[[ ${PV} != 9999* ]] && epatch "${FILESDIR}"/glx_ro_text_segm.patch
+
 	# FreeBSD 6.* doesn't have posix_memalign().
 	if [[ ${CHOST} == *-freebsd6.* ]]; then
 		sed -i \
 			-e "s/-DHAVE_POSIX_MEMALIGN//" \
 			configure.ac || die
+	fi
+	# Solaris needs some recent POSIX stuff in our case
+	if [[ ${CHOST} == *-solaris* ]] ; then
+		sed -i -e "s/-DSVR4/-D_POSIX_C_SOURCE=200112L/" configure.ac || die
+		sed -i -e 's/uint/unsigned int/g' src/egl/drivers/glx/egl_glx.c || die
 	fi
 
 	# In order for mesa to complete it's build process we need to use a tool
@@ -171,6 +180,9 @@ multilib-native_src_configure_internal() {
 
 		# ATI code
 		driver_enable video_cards_radeon radeon r200 r300 r600
+		driver_enable video_cards_mach64 mach64
+		driver_enable video_cards_mga mga
+		driver_enable video_cards_r128 r128
 
 		driver_enable video_cards_savage savage
 		driver_enable video_cards_sis sis
@@ -211,6 +223,9 @@ multilib-native_src_configure_internal() {
 		fi
 	fi
 
+	# bug 240956
+	use x86 && myconf="${myconf} $(use_enable hardened glx-rts)"
+
 	# --with-driver=dri|xlib|osmesa || do we need osmesa?
 	econf \
 		--disable-option-checking \
@@ -236,29 +251,29 @@ multilib-native_src_install_internal() {
 	fi
 	# Remove redundant headers
 	# GLUT thing
-	rm -f "${D}"/usr/include/GL/glut*.h || die "Removing glut include failed."
+	rm -f "${ED}"/usr/include/GL/glut*.h || die "Removing glut include failed."
 	# Glew includes
-	rm -f "${D}"/usr/include/GL/{glew,glxew,wglew}.h \
+	rm -f "${ED}"/usr/include/GL/{glew,glxew,wglew}.h \
 		|| die "Removing glew includes failed."
 
 	# Install config file for eselect mesa
 	insinto /usr/share/mesa
-	newins "${FILESDIR}/eselect-mesa.conf.7.9" eselect-mesa.conf || die
+	newins "${FILESDIR}/eselect-mesa.conf.7.10" eselect-mesa.conf || die
 
 	# Move libGL and others from /usr/lib to /usr/lib/opengl/blah/lib
 	# because user can eselect desired GL provider.
 	ebegin "Moving libGL and friends for dynamic switching"
 		dodir /usr/$(get_libdir)/opengl/${OPENGL_DIR}/{lib,extensions,include}
 		local x
-		for x in "${D}"/usr/$(get_libdir)/libGL.{la,a,so*}; do
+		for x in "${ED}"/usr/$(get_libdir)/libGL.{la,a,so*}; do
 			if [ -f ${x} -o -L ${x} ]; then
-				mv -f "${x}" "${D}"/usr/$(get_libdir)/opengl/${OPENGL_DIR}/lib \
+				mv -f "${x}" "${ED}"/usr/$(get_libdir)/opengl/${OPENGL_DIR}/lib \
 					|| die "Failed to move ${x}"
 			fi
 		done
-		for x in "${D}"/usr/include/GL/{gl.h,glx.h,glext.h,glxext.h}; do
+		for x in "${ED}"/usr/include/GL/{gl.h,glx.h,glext.h,glxext.h}; do
 			if [ -f ${x} -o -L ${x} ]; then
-				mv -f "${x}" "${D}"/usr/$(get_libdir)/opengl/${OPENGL_DIR}/include \
+				mv -f "${x}" "${ED}"/usr/$(get_libdir)/opengl/${OPENGL_DIR}/include \
 					|| die "Failed to move ${x}"
 			fi
 		done
@@ -270,7 +285,7 @@ multilib-native_src_install_internal() {
 			dodir /usr/$(get_libdir)/mesa
 			for x in ${gallium_drivers[@]}; do
 				if [ -f "${S}/$(get_libdir)/gallium/${x}" ]; then
-					mv -f "${D}/usr/$(get_libdir)/dri/${x}" "${D}/usr/$(get_libdir)/dri/${x/_dri.so/g_dri.so}" \
+					mv -f "${ED}/usr/$(get_libdir)/dri/${x}" "${ED}/usr/$(get_libdir)/dri/${x/_dri.so/g_dri.so}" \
 						|| die "Failed to move ${x}"
 					insinto "/usr/$(get_libdir)/dri/"
 					if [ -f "${S}/$(get_libdir)/${x}" ]; then
@@ -279,13 +294,13 @@ multilib-native_src_install_internal() {
 					fi
 				fi
 			done
-			for x in "${D}"/usr/$(get_libdir)/dri/*.so; do
+			for x in "${ED}"/usr/$(get_libdir)/dri/*.so; do
 				if [ -f ${x} -o -L ${x} ]; then
 					mv -f "${x}" "${x/dri/mesa}" \
 						|| die "Failed to move ${x}"
 				fi
 			done
-			pushd "${D}"/usr/$(get_libdir)/dri || die "pushd failed"
+			pushd "${ED}"/usr/$(get_libdir)/dri || die "pushd failed"
 			ln -s ../mesa/*.so . || die "Creating symlink failed"
 			# remove symlinks to drivers known to eselect
 			for x in ${gallium_drivers[@]}; do
