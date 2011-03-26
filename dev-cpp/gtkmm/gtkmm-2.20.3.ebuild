@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-cpp/gtkmm/gtkmm-2.20.3.ebuild,v 1.8 2011/01/04 18:13:43 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-cpp/gtkmm/gtkmm-2.20.3.ebuild,v 1.9 2011/03/06 23:20:53 nirbheek Exp $
 
 EAPI="2"
 GCONF_DEBUG="no"
@@ -15,10 +15,10 @@ SLOT="2.4"
 KEYWORDS="alpha amd64 arm hppa ia64 ppc ppc64 sh sparc x86 ~x86-fbsd ~x86-freebsd ~amd64-linux ~x86-linux ~x86-solaris"
 IUSE="doc examples test"
 
-RDEPEND=">=dev-cpp/glibmm-2.24[lib32?]
-	>=x11-libs/gtk+-2.20.0[lib32?]
+RDEPEND=">=dev-cpp/glibmm-2.24:2[lib32?]
+	>=x11-libs/gtk+-2.20.0:2[lib32?]
 	>=dev-cpp/cairomm-1.2.2[lib32?]
-	>=dev-cpp/pangomm-2.26[lib32?]
+	>=dev-cpp/pangomm-2.26:2.4[lib32?]
 	>=dev-libs/atk-1.12[lib32?]
 	dev-libs/libsigc++:2[lib32?]"
 DEPEND="${RDEPEND}
