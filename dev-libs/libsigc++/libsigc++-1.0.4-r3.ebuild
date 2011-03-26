@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libsigc++/libsigc++-1.0.4-r3.ebuild,v 1.15 2010/09/13 11:40:08 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libsigc++/libsigc++-1.0.4-r3.ebuild,v 1.16 2011/03/08 13:47:54 pacho Exp $
 
 inherit eutils multilib-native
 
@@ -14,6 +14,7 @@ KEYWORDS="alpha amd64 arm hppa ia64 ppc sh sparc x86"
 IUSE="debug"
 
 DEPEND=""
+RDEPEND=""
 
 multilib-native_src_unpack_internal() {
 	unpack ${A}

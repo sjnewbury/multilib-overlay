@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libsigc++/libsigc++-2.2.7.ebuild,v 1.7 2011/03/22 20:01:26 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libsigc++/libsigc++-2.2.9.ebuild,v 1.1 2011/03/08 13:47:54 pacho Exp $
 
 EAPI="3"
 
@@ -11,8 +11,8 @@ HOMEPAGE="http://libsigc.sourceforge.net/"
 
 LICENSE="LGPL-2.1"
 SLOT="2"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
-IUSE="doc test"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x64-solaris ~x86-solaris"
+IUSE="doc static-libs test"
 
 # Needs mm-common for eautoreconf
 multilib-native_src_prepare_internal() {
@@ -30,9 +30,8 @@ multilib-native_src_prepare_internal() {
 multilib-native_src_configure_internal() {
 	filter-flags -fno-exceptions
 
-	local myconf="$myconf $(use_enable doc documentation)"
-
-	econf ${myconf} || die "econf failed."
+	econf $(use_enable doc documentation) \
+		$(use_enable static-libs static)
 }
 
 multilib-native_src_install_internal() {
