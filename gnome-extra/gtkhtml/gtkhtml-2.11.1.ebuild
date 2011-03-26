@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-extra/gtkhtml/gtkhtml-2.11.1.ebuild,v 1.13 2010/07/20 02:20:21 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-extra/gtkhtml/gtkhtml-2.11.1.ebuild,v 1.14 2011/03/23 08:16:40 nirbheek Exp $
 
 EAPI="2"
 
@@ -21,9 +21,9 @@ IUSE="accessibility test"
 
 # gnome-vfs is only needed to run testgtkhtml (1/3 tests)
 
-RDEPEND=">=x11-libs/gtk+-2.13.0[lib32?]
-	>=dev-libs/libxml2-2.4.16[lib32?]
-	test? ( >=gnome-base/gnome-vfs-2[lib32?] )"
+RDEPEND=">=x11-libs/gtk+-2.13.0:2[lib32?]
+	>=dev-libs/libxml2-2.4.16:2[lib32?]
+	test? ( >=gnome-base/gnome-vfs-2:2[lib32?] )"
 DEPEND="${RDEPEND}
 	 >=dev-util/pkgconfig-0.12.0[lib32?]"
 
