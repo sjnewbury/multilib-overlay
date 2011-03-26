@@ -1,6 +1,6 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/gnome-base/librsvg/librsvg-2.26.3.ebuild,v 1.10 2010/10/17 14:46:16 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/gnome-base/librsvg/librsvg-2.26.3.ebuild,v 1.11 2011/03/16 10:52:40 nirbheek Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -17,11 +17,11 @@ IUSE="doc tools zlib"
 
 RDEPEND=">=media-libs/fontconfig-1.0.1[lib32?]
 	>=media-libs/freetype-2[lib32?]
-	>=x11-libs/gtk+-2.16[lib32?]
-	>=dev-libs/glib-2.15.4[lib32?]
+	>=x11-libs/gtk+-2.16:2[lib32?]
+	>=dev-libs/glib-2.15.4:2[lib32?]
 	>=x11-libs/cairo-1.2[lib32?]
 	>=x11-libs/pango-1.10[lib32?]
-	>=dev-libs/libxml2-2.4.7[lib32?]
+	>=dev-libs/libxml2-2.4.7:2[lib32?]
 	>=dev-libs/libcroco-0.6.1[lib32?]
 	zlib? ( >=gnome-extra/libgsf-1.6[lib32?] )"
 DEPEND="${RDEPEND}
