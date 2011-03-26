@@ -38,10 +38,8 @@ multilib-native_src_prepare_internal() {
 		"${FILESDIR}"/${P}-malloc.patch \
 		"${FILESDIR}"/${P}-missing-init.patch
 
-	cd "${S}"
+	cd "${WORKDIR}"
 	epatch "${DISTDIR}"/${P}-gtkm4.patch.bz2
-	mv "${S}/${P}/"* "${S}/"
-	rmdir "${S}/${P}"
 	rm "${S}/acinclude.m4"
 
 	cd "${S}"
