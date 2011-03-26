@@ -1,12 +1,12 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/hal/hal-0.5.14-r4.ebuild,v 1.4 2011/01/25 14:40:40 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/hal/hal-0.5.14-r4.ebuild,v 1.5 2011/03/21 19:51:48 ssuominen Exp $
 
 EAPI="2"
 
 inherit eutils linux-info autotools flag-o-matic multilib multilib-native
 
-PATCH_VERSION="4"
+PATCH_VERSION="5"
 
 MY_P=${P/_/}
 S=${WORKDIR}/${MY_P}
@@ -14,7 +14,7 @@ PATCHNAME="${MY_P}-gentoo-patches-${PATCH_VERSION}"
 DESCRIPTION="Hardware Abstraction Layer"
 HOMEPAGE="http://www.freedesktop.org/wiki/Software/hal"
 SRC_URI="http://hal.freedesktop.org/releases/${MY_P}.tar.bz2
-	 http://dev.gentoo.org/~dang/files/${PATCHNAME}.tar.bz2"
+	 http://dev.gentoo.org/~ssuominen/${PATCHNAME}.tar.bz2"
 
 LICENSE="|| ( GPL-2 AFL-2.0 )"
 SLOT="0"
