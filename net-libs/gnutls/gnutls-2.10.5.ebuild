@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/gnutls/gnutls-2.10.4.ebuild,v 1.9 2011/02/28 23:10:11 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/gnutls/gnutls-2.10.5.ebuild,v 1.2 2011/03/22 14:39:59 arfrever Exp $
 
 EAPI="3"
 
@@ -26,14 +26,14 @@ fi
 # GPL-3 for the gnutls-extras library and LGPL for the gnutls library.
 LICENSE="LGPL-2.1 GPL-3"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="bindist +cxx doc examples guile lzo nls test zlib"
 
 RDEPEND=">=dev-libs/libgcrypt-1.4.0[lib32?]
 	>=dev-libs/libtasn1-0.3.4[lib32?]
 	nls? ( virtual/libintl )
 	guile? ( >=dev-scheme/guile-1.8[networking] )
-	zlib? ( >=sys-libs/zlib-1.1[lib32?] )
+	zlib? ( >=sys-libs/zlib-1.2.3.1[lib32?] )
 	!bindist? ( lzo? ( >=dev-libs/lzo-2 ) )"
 DEPEND="${RDEPEND}
 	sys-devel/libtool[lib32?]
