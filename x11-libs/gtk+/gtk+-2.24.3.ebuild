@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.22.1-r1.ebuild,v 1.11 2011/03/22 19:48:00 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-libs/gtk+/gtk+-2.24.3.ebuild,v 1.1 2011/03/18 19:09:17 eva Exp $
 
 EAPI="3"
 PYTHON_DEPEND="2:2.4"
@@ -12,8 +12,8 @@ HOMEPAGE="http://www.gtk.org/"
 
 LICENSE="LGPL-2"
 SLOT="2"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 sh sparc x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
-IUSE="aqua cups debug doc examples +introspection jpeg jpeg2k tiff test vim-syntax xinerama"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86 ~x86-fbsd ~x86-freebsd ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+IUSE="aqua cups debug doc examples +introspection test vim-syntax xinerama"
 
 # NOTE: cairo[svg] dep is due to bug 291283 (not patched to avoid eautoreconf)
 RDEPEND="!aqua? (
@@ -28,14 +28,14 @@ RDEPEND="!aqua? (
 		x11-libs/libXcomposite[lib32?]
 		x11-libs/libXdamage[lib32?]
 		>=x11-libs/cairo-1.6[X,svg,lib32?]
-		x11-libs/gdk-pixbuf:2[X,introspection?,jpeg?,jpeg2k?,tiff?,lib32?]
+		x11-libs/gdk-pixbuf:2[X,introspection?,lib32?]
 	)
 	aqua? (
 		>=x11-libs/cairo-1.6[aqua,svg,lib32?]
-		x11-libs/gdk-pixbuf:2[introspection?,jpeg?,jpeg2k?,tiff?,lib32?]
+		x11-libs/gdk-pixbuf:2[introspection?,lib32?]
 	)
 	xinerama? ( x11-libs/libXinerama[lib32?] )
-	>=dev-libs/glib-2.25.10[lib32?]
+	>=dev-libs/glib-2.27.3[lib32?]
 	>=x11-libs/pango-1.20[introspection?,lib32?]
 	>=dev-libs/atk-1.29.2[introspection?,lib32?]
 	media-libs/fontconfig[lib32?]
@@ -85,9 +85,6 @@ multilib-native_src_prepare_internal() {
 
 	# Don't break inclusion of gtkclist.h, upstream bug 536767
 	epatch "${FILESDIR}/${PN}-2.14.3-limit-gtksignal-includes.patch"
-
-	# Set new print operation settings before emitting custom-widget-apply signal, upstream bug #637069
-	epatch "${FILESDIR}/${PN}-2.22.1-print-settings.patch"
 
 	# Create symlinks to old icons until apps are ported, bug #339319
 	epatch "${FILESDIR}/${PN}-2.22.1-old-icons.patch"
