@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libgdata/libgdata-0.6.6.ebuild,v 1.2 2011/01/23 17:35:17 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libgdata/libgdata-0.6.6.ebuild,v 1.3 2011/03/16 10:11:45 nirbheek Exp $
 
 EAPI="3"
 GCONF_DEBUG="yes"
@@ -18,7 +18,7 @@ IUSE="doc gnome +introspection"
 # gtk+ is needed for gdk
 RDEPEND=">=dev-libs/glib-2.19:2[lib32?]
 	>=x11-libs/gtk+-2:2[lib32?]
-	>=dev-libs/libxml2-2[lib32?]
+	>=dev-libs/libxml2-2:2[lib32?]
 	>=net-libs/libsoup-2.26.1:2.4[lib32?]
 	gnome? ( >=net-libs/libsoup-gnome-2.26.1:2.4[lib32?] )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.7 )"
