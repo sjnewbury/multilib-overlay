@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/gnome-disk-utility/gnome-disk-utility-2.32.1.ebuild,v 1.5 2011/02/26 19:39:09 eva Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/gnome-disk-utility/gnome-disk-utility-2.32.1.ebuild,v 1.6 2011/03/09 22:38:46 eva Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -36,6 +36,7 @@ RDEPEND="${CDEPEND}
 DEPEND="${CDEPEND}
 	sys-devel/gettext[lib32?]
 	gnome-base/gnome-common
+	app-text/docbook-xml-dtd:4.1.2
 	app-text/scrollkeeper
 	app-text/gnome-doc-utils[lib32?]
 
