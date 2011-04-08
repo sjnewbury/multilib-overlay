@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-0.8.17.ebuild,v 1.11 2011/02/02 15:59:25 halcy0n Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-misc/tracker/tracker-0.8.17.ebuild,v 1.12 2011/03/27 08:11:39 ssuominen Exp $
 
 EAPI="3"
 GCONF_DEBUG="no"
@@ -14,7 +14,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc64 ~sparc ~x86"
 # USE="doc" is managed by eclass.
-IUSE="applet doc eds exif flac gnome-keyring gsf gstreamer gtk hal iptc +jpeg kmail laptop mp3 nautilus pdf playlist rss strigi test +tiff +vorbis xine +xml xmp"
+IUSE="applet doc eds exif flac gnome-keyring gsf gstreamer gtk iptc +jpeg kmail laptop mp3 nautilus pdf playlist rss strigi test +tiff +vorbis xine +xml xmp"
 
 # Automagic, gconf, uuid, and probably more
 # TODO: quill support
@@ -50,9 +50,7 @@ RDEPEND="
 		>=x11-libs/gtk+-2.18:2[lib32?] )
 	iptc? ( media-libs/libiptcdata[lib32?] )
 	jpeg? ( virtual/jpeg:0[lib32?] )
-	laptop? (
-		hal? ( >=sys-apps/hal-0.5[lib32?] )
-		!hal? ( >=sys-power/upower-0.9 ) )
+	laptop? ( >=sys-power/upower-0.9 )
 	mp3? ( >=media-libs/id3lib-3.8.3[lib32?] )
 	nautilus? (
 		gnome-base/nautilus[lib32?]
@@ -112,9 +110,9 @@ multilib-native_pkg_setup_internal() {
 		G2CONF="${G2CONF} --enable-video-extractor=external"
 	fi
 
-	# hal and upower are used for AC power detection
+	# upower is used for AC power detection
 	if use laptop; then
-		G2CONF="${G2CONF} $(use_enable hal) $(use_enable !hal upower)"
+		G2CONF="${G2CONF} --disable-hal --enable-upower"
 	else
 		G2CONF="${G2CONF} --disable-hal --disable-upower"
 	fi
