@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-arch/libarchive/libarchive-2.8.4-r1.ebuild,v 1.6 2011/03/27 14:34:31 klausman Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-arch/libarchive/libarchive-2.8.4-r1.ebuild,v 1.7 2011/05/02 13:15:06 tomka Exp $
 
 EAPI="2"
 
@@ -13,7 +13,7 @@ SRC_URI="http://${PN}.googlecode.com/files/${P}.tar.gz
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ~ia64 ~mips ppc ppc64 ~sh ~sparc ~x86 ~sparc-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ~ia64 ~mips ppc ppc64 ~sh ~sparc x86 ~sparc-fbsd ~x86-fbsd"
 IUSE="static static-libs acl xattr kernel_linux +bzip2 +lzma +zlib expat"
 
 COMPRESS_LIBS_DEPEND="lzma? ( app-arch/xz-utils[lib32?] )
