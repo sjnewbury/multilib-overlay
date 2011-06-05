@@ -1,6 +1,0 @@
-#!/bin/bash
-cd /var/db/pkg
-for i in */*/IUSE; do grep multilib_abi_amd64 $i>/dev/null || echo $(cat $i) multilib_abi_amd64 > $i ; done
-for i in */*/USE; do grep multilib_abi_amd64 $i>/dev/null || echo $(cat $i) multilib_abi_amd64 > $i ; done
-sed -i -e "s:lib32:multilib_abi_x86:g" */*/IUSE */*/USE
-touch */*

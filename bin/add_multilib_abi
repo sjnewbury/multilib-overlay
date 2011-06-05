@@ -1,7 +1,84 @@
 #!/bin/bash
-cd /var/db/pkg
-for i in */*/IUSE; do grep multilib_abi_amd64 $i>/dev/null || echo $(cat $i) multilib_abi_amd64 multilib_abi_x86 > $i ; done
-for i in */*; do ! [[ -e $i/IUSE ]] && echo "multilib_abi_amd64 multilib_abi_x86" > $i/IUSE ; done
-for i in */*/USE; do grep multilib_abi_amd64 $i>/dev/null || echo $(cat $i) multilib_abi_amd64 > $i ; done
-for i in */*; do ! [[ -e $i/USE ]] && echo "multilib_abi_amd64" > $i/USE ; done
+
+echo -n "Loading portage envvars..." >&2
+ROOT=$(portageq envvar ROOT)
+DEFAULT_ABI=$(portageq envvar DEFAULT_ABI)
+MULTILIB_ABIS=$(portageq envvar MULTILIB_ABIS)
+
+if [[ -z ${DEFAULT_ABI} || -z ${MULTILIB_ABIS} ]]; then
+	echo >&2
+	echo "I cannot get proper DEFAULT_ABI and MULTILIB_ABIS values. Have you installed" >&2
+	echo "portage-multilib correctly and setup the profile as described in" >&2
+	echo "$(dirname "${0}")/../portage-multilib-instructions?" >&2
+	exit 1
+fi
+echo " done" >&2
+
+iuse=
+environments=environment.bz2
+for abi in ${MULTILIB_ABIS}; do
+	iuse+=" multilib_abi_${abi}"
+	environments+=" environment.${abi}.bz2"
+done
+iuse=${iuse## }
+
+echo "Expanding IUSE to include: ${iuse}"
+echo "If USE doesn't contain any multilib flags, it will be expanded to include: multilib_abi_${DEFAULT_ABI}"
+
+cd ${ROOT}var/db/pkg
+for pkg in */*; do
+	has_lib32=""
+	has_lib32_abi=""
+	if [[ -e ${pkg}/USE ]]; then
+		grep -qe 'lib32' ${pkg}/USE && has_lib32_abi=" x86"
+		grep -qe 'multilib_abi_[^ ]' ${pkg}/USE || echo $(cat ${pkg}/USE | sed -e s/lib32/multilib_abi_x86/) multilib_abi_${DEFAULT_ABI} > ${pkg}/USE
+	else
+		echo multilib_abi_${DEFAULT_ABI} > ${pkg}/USE
+	fi
+	if [[ -e ${pkg}/IUSE ]]; then
+		grep -qe 'multilib_abi_[^ ]' ${pkg}/IUSE || echo $(cat ${pkg}/IUSE | sed -e s/lib32//) ${iuse} > ${pkg}/IUSE
+	else
+		echo ${iuse} > ${pkg}/IUSE
+	fi
+
+	if ! [[ -e ${pkg}/MULTILIB_ABIS ]]; then
+		echo ${DEFAULT_ABI} ${has_lib32_abi} > ${pkg}/MULTILIB_ABIS
+	fi
+
+	# Just go for converting RDEPEND properly too... (though we can't
+	# correct the RDEPEND in environment without trouble because it's
+	# multiline unless if we actually source it and re-serialize
+	# it...). eix tells me that no packages have lib32 in their names,
+	# so this should be safe ;-).
+	[[ -e ${pkg}/RDEPEND ]] \
+		&& sed -i -e s/lib32/multilib_abi_x86/g ${pkg}/RDEPEND
+
+	# Expensive but necessary hacking to fix up the `die "Unable to
+	# determine profile ABIs"...' in pkg_postrm(). Let's skip testing
+	# IUSE.
+	if ! bzgrep -qe '^declare -. USE=.*[" ]multilib_abi_[^ ]' ${pkg}/environment.bz2; then
+		for env in ${environments}; do
+			[[ -e ${pkg}/${env} ]] || continue
+
+			# Pull the newly-calculated (or already-existent)
+			# multilib-relevant values from ${pkg}/USE. This is required
+			# to support both new users and people who had run the
+			# old/broken add_multilib_abi script.
+			pkg_use=
+			for a_pkg_use in $(grep -oe 'multilib_abi_[^ ]*' ${pkg}/USE); do
+				pkg_use+=" ${a_pkg_use}"
+			done
+			pkg_use=${pkg_use## }
+
+			bzcat ${pkg}/${env} \
+				| sed \
+				-e "s/^declare -. USE=\"/&${pkg_use} /" \
+				-e "s/^declare -. IUSE=\"/&${iuse} /" \
+				-e '/^declare -. I*USE="/s/lib32//' \
+				| bzip2 -c \
+				> ${pkg}/${env}.new \
+				&& mv ${pkg}/${env}.new ${pkg}/${env}
+		done
+	fi
+done
 touch */*

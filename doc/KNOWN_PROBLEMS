@@ -1,2 +1,3 @@
 -kde-3.* packages fail to build, if their dependencies dont have .la files
--packages in NO_AUTO_FLAG var in profiles/base/make.defaults (including the above) dont build with lib32 useflag or dont build the right way
+-packages in NO_AUTO_FLAG var in profiles/base/make.defaults (including the above) dont build with the appropriate multilib_abi_* useflags or dont build the right way
+-old installations of portage-multilib may experience an issue where die() is called during pkg_postrm() with the message ``Could not determine your profile ABIs''. Re-run bin/add_multilib_abi to fix this.
