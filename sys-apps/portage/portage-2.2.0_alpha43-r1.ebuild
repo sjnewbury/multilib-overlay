@@ -9,14 +9,13 @@ inherit eutils git multilib python
 
 EGIT_REPO_URI="git://git.overlays.gentoo.org/proj/portage.git"
 EGIT_BRANCH="multilib"
-EGIT_COMMIT="b286d42bd10fc263092bbe675a318e2ec29faa29"
+EGIT_COMMIT="725033094da621d2b319f8666b2af7f3b7cb3465"
 DESCRIPTION="Portage is the package management and distribution system for Gentoo"
 HOMEPAGE="http://www.gentoo.org/proj/en/portage/index.xml"
 LICENSE="GPL-2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
-PROVIDE="virtual/portage"
 SLOT="0"
-IUSE="build doc epydoc +ipc linguas_pl python2 python3 selinux"
+IUSE="build doc epydoc +ipc +less linguas_pl python2 python3 selinux"
 
 python_dep="python3? ( =dev-lang/python-3* )
 	!python2? ( !python3? (
@@ -36,7 +35,6 @@ RDEPEND="${python_dep}
 	!build? ( >=sys-apps/sed-4.0.5
 		>=app-shells/bash-3.2_p17
 		>=app-admin/eselect-1.2 )
-	dev-util/lafilefixer
 	elibc_FreeBSD? ( sys-freebsd/freebsd-bin )
 	elibc_glibc? ( >=sys-apps/sandbox-2.2 )
 	elibc_uclibc? ( >=sys-apps/sandbox-2.2 )
@@ -46,6 +44,7 @@ RDEPEND="${python_dep}
 	>=sys-apps/abi-wrapper-1.0-r2"
 PDEPEND="
 	!build? (
+		less? ( sys-apps/less )
 		>=net-misc/rsync-2.6.4
 		userland_GNU? ( >=sys-apps/coreutils-6.4 )
 	)"
@@ -57,6 +56,10 @@ compatible_python_is_selected() {
 }
 
 pkg_setup() {
+	# Bug #359731 - Die early if get_libdir fails.
+	[[ -z $(get_libdir) ]] && \
+		die "get_libdir returned an empty string"
+
 	if use python2 && use python3 ; then
 		ewarn "Both python2 and python3 USE flags are enabled, but only one"
 		ewarn "can be in the shebangs. Using python3."
@@ -204,7 +207,7 @@ src_install() {
 	done
 
 	cd "$S" || die "cd failed"
-	for x in $(find pym/* -type d) ; do
+	for x in $(find pym/* -type d ! -path "pym/portage/tests*") ; do
 		insinto $portage_base/$x || die "insinto failed"
 		cd "$S"/$x || die "cd failed"
 		# __pycache__ directories contain no py files
@@ -222,9 +225,6 @@ src_install() {
 		[ ! -L "${x}" ] && continue
 		die "symlink to directory will cause upgrade/downgrade issues: '${x}'"
 	done
-
-	exeinto ${portage_base}/pym/portage/tests
-	doexe  "${S}"/pym/portage/tests/runTests || die
 
 	doman "${S}"/man/*.[0-9]
 	if use linguas_pl; then
