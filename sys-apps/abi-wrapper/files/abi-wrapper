@@ -10,7 +10,7 @@ if [ "${ABI}" ]; then
 		abi=
 	done
 fi
-if [ ! "${abi}" -a "${DEFAULT_ABI}" ]; then
+if [ \( ! "${abi}" \) -a "${DEFAULT_ABI}" ]; then
 	for abi in ${hardcoded_abis}; do
 		[ "${abi}" = "${DEFAULT_ABI}" ] && break
 		abi=
