@@ -5,11 +5,11 @@
 # Require EAPI 2 since we now require at least python-2.6 (for python 3
 # syntax support) which also requires EAPI 2.
 EAPI=2
-inherit eutils git multilib python
+inherit eutils git-2 multilib python
 
 EGIT_REPO_URI="git://git.overlays.gentoo.org/proj/portage.git"
 EGIT_BRANCH="multilib"
-EGIT_COMMIT="2a700978cad3adb6261821d5a95528de4d711b56"
+EGIT_COMMIT="6047c312b9e02bfb205783476ac3e61d5295a20b"
 DESCRIPTION="Portage is the package management and distribution system for Gentoo"
 HOMEPAGE="http://www.gentoo.org/proj/en/portage/index.xml"
 LICENSE="GPL-2"
