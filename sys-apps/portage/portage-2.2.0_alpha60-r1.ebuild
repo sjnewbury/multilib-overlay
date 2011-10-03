@@ -29,7 +29,7 @@ DEPEND="${python_dep}
 	!build? ( >=sys-apps/sed-4.0.5 )
 	doc? ( app-text/xmlto ~app-text/docbook-xml-dtd-4.4 )
 	epydoc? ( >=dev-python/epydoc-2.0 !<=dev-python/pysqlite-2.4.1 )
-	>=sys-apps/abi-wrapper-1.0-r2"
+	>=sys-apps/abi-wrapper-1.0-r5"
 # Require sandbox-2.2 for bug #288863.
 RDEPEND="${python_dep}
 	!build? ( >=sys-apps/sed-4.0.5
@@ -41,7 +41,7 @@ RDEPEND="${python_dep}
 	>=app-misc/pax-utils-0.1.17
 	selinux? ( || ( >=sys-libs/libselinux-2.0.94[python] <sys-libs/libselinux-2.0.94 ) )
 	!<app-shells/bash-3.2_p17
-	>=sys-apps/abi-wrapper-1.0-r2"
+	>=sys-apps/abi-wrapper-1.0-r5"
 PDEPEND="
 	!build? (
 		less? ( sys-apps/less )
