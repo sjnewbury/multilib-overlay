@@ -16,5 +16,8 @@ src_unpack() {
 	sed "s/@HARDCODED_ABIS@/${abis}/" "${FILESDIR}"/abi-wrapper > "${WORKDIR}"/abi-wrapper
 }
 src_install() {
+	into /
 	dobin abi-wrapper || die
+	insinto /usr/bin
+	ln -s ../../bin/abi-wrapper "${D}"usr/bin/abi-wrapper || die
 }
