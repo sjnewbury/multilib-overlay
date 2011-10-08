@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-apps/portage/portage-2.2.0_alpha26.ebuild,v 1.1 2011/03/02 05:33:15 zmedico Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-apps/portage/portage-2.2.0_alpha63.ebuild,v 1.1 2011/10/07 18:15:42 zmedico Exp $
 
 # Require EAPI 2 since we now require at least python-2.6 (for python 3
 # syntax support) which also requires EAPI 2.
@@ -9,20 +9,22 @@ inherit eutils git-2 multilib python
 
 EGIT_REPO_URI="git://git.overlays.gentoo.org/proj/portage.git"
 EGIT_BRANCH="multilib"
-EGIT_COMMIT="54fbc12eec26f21aaa4a993167b51ba963cdf04f"
+EGIT_COMMIT="f783fc9318abfb1f2265967aeb26c8eb7d257de5"
 DESCRIPTION="Portage is the package management and distribution system for Gentoo"
 HOMEPAGE="http://www.gentoo.org/proj/en/portage/index.xml"
 LICENSE="GPL-2"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
 SLOT="0"
-IUSE="build doc epydoc +ipc +less linguas_pl python2 python3 selinux"
+IUSE="build doc epydoc +ipc linguas_pl python2 python3 selinux"
 
+# Import of the io module in python-2.6 raises ImportError for the
+# thread module if threading is disabled.
 python_dep="python3? ( =dev-lang/python-3* )
 	!python2? ( !python3? (
-		build? ( || ( dev-lang/python:2.7 dev-lang/python:2.6 ) )
-		!build? ( || ( dev-lang/python:2.7 dev-lang/python:2.6 >=dev-lang/python-3 ) )
+		build? ( || ( dev-lang/python:2.7 dev-lang/python:2.6[threads] ) )
+		!build? ( || ( dev-lang/python:2.7 dev-lang/python:2.6[threads] >=dev-lang/python-3 ) )
 	) )
-	python2? ( !python3? ( || ( dev-lang/python:2.7 dev-lang/python:2.6 ) ) )"
+	python2? ( !python3? ( || ( dev-lang/python:2.7 dev-lang/python:2.6[threads] ) ) )"
 
 # The pysqlite blocker is for bug #282760.
 DEPEND="${python_dep}
@@ -41,10 +43,10 @@ RDEPEND="${python_dep}
 	>=app-misc/pax-utils-0.1.17
 	selinux? ( || ( >=sys-libs/libselinux-2.0.94[python] <sys-libs/libselinux-2.0.94 ) )
 	!<app-shells/bash-3.2_p17
+	!<app-admin/logrotate-3.8.0
 	>=sys-apps/abi-wrapper-1.0-r5"
 PDEPEND="
 	!build? (
-		less? ( sys-apps/less )
 		>=net-misc/rsync-2.6.4
 		userland_GNU? ( >=sys-apps/coreutils-6.4 )
 	)"
@@ -151,8 +153,7 @@ src_compile() {
 src_test() {
 	# make files executable, in case they were created by patch
 	find bin -type f | xargs chmod +x
-	PYTHONPATH=${S}/pym:${PYTHONPATH:+:}${PYTHONPATH} \
-		./pym/portage/tests/runTests || die "test(s) failed"
+	./pym/portage/tests/runTests || die "test(s) failed"
 }
 
 src_install() {
@@ -219,6 +220,18 @@ src_install() {
 		fi
 	done
 
+	# We install some minimal tests for use as a preinst sanity check.
+	# These tests must be able to run without a full source tree and
+	# without relying on a previous portage instance being installed.
+	cd "$S" || die "cd failed"
+	exeinto $portage_base/pym/portage/tests || die
+	doexe pym/portage/tests/runTests || die
+	insinto $portage_base/pym/portage/tests || die
+	doins pym/portage/tests/*.py || die
+	insinto $portage_base/pym/portage/tests/lint || die
+	doins pym/portage/tests/lint/*.py || die
+	doins pym/portage/tests/lint/__test__ || die
+
 	# Symlinks to directories cause up/downgrade issues and the use of these
 	# modules outside of portage is probably negligible.
 	for x in "${D}${portage_base}/pym/"{cache,elog_modules} ; do
@@ -262,6 +275,15 @@ src_install() {
 }
 
 pkg_preinst() {
+	if [[ $ROOT == / ]] ; then
+		# Run some minimal tests as a sanity check.
+		local test_runner=$(find "$D" -name runTests)
+		if [[ -n $test_runner && -x $test_runner ]] ; then
+			einfo "Running preinst sanity tests..."
+			"$test_runner" || die "preinst sanity tests failed"
+		fi
+	fi
+
 	if ! use build && ! has_version dev-python/pycrypto && \
 		! has_version '>=dev-lang/python-2.6[ssl]' ; then
 		ewarn "If you are an ebuild developer and you plan to commit ebuilds"
